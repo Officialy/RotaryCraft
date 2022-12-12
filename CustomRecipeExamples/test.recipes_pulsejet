@@ -1,5 +1,0 @@
-{
-	type = "test1"
-	input = "minecraft:stone"
-	output = "minecraft:redstone"
-}
