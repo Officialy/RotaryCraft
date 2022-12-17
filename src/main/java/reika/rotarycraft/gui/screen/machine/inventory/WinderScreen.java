@@ -18,24 +18,25 @@ import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.GuiOneSlotScreen;
 import reika.rotarycraft.blockentities.BlockEntityWinder;
+import reika.rotarycraft.blockentities.engine.BlockEntityPerformanceEngine;
 import reika.rotarycraft.gui.container.machine.inventory.WinderMenu;
 import reika.rotarycraft.registry.PacketRegistry;
 
 public class WinderScreen extends GuiOneSlotScreen<BlockEntityWinder, WinderMenu> {
-    private final BlockEntityWinder Winder;
+    private final BlockEntityWinder winder;
     //private Level level = ModLoader.getMinecraftInstance().theWorld;
 
     int x;
     int y;
     private boolean input;
 
-    public WinderScreen(int id, Inventory inv, BlockEntityWinder te) {
-        super(inv, new WinderMenu(id, inv, te), null);
-        Winder = te;
+    public WinderScreen(WinderMenu container, Inventory inventory, Component title) {
+        super(inventory, container, title);
+        winder = (BlockEntityWinder) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 166;
-        inventory = inv;
-        input = te.winding;
+        this.inventory = inventory;
+        input = winder.winding;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class WinderScreen extends GuiOneSlotScreen<BlockEntityWinder, WinderMenu
     }
 
     protected void actionPerformed(Button button) {
-        ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.WINDERTOGGLE.ordinal(), Winder, PacketTarget.server);
+        ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.WINDERTOGGLE.ordinal(), winder, PacketTarget.server);
         input = !input;
         this.init();
     }

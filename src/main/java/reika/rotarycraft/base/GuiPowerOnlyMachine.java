@@ -11,13 +11,14 @@ import reika.dragonapi.base.CoreMenu;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
+import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 
-public abstract class GuiPowerOnlyMachine extends MachineScreen {
+public abstract class GuiPowerOnlyMachine<E extends RotaryCraftBlockEntity, T extends CoreMenu<E>> extends MachineScreen<E, T> {
 
     private static final ResourceLocation POWER_ONLY = new ResourceLocation(RotaryCraft.MODID + "textures/gui/power_only.png");
     BlockEntityPowerReceiver pwr;
 
-    public GuiPowerOnlyMachine(CoreMenu inv, Inventory par1Container, Component component) {
+    public GuiPowerOnlyMachine(T inv, Inventory par1Container, Component component) {
         super(inv, par1Container, component);
         pwr = getBlockEntity();
     }

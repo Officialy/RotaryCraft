@@ -12,7 +12,7 @@
 //import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 //
 //import reika.dragonapi.ModList;
-//import reika.dragonapi.ASM.DependentMethodStripper.ModDependent;
+//import reika.dragonapi.asm.DependentMethodStripper.ModDependent;
 //import reika.dragonapi.Base.BlockEntityBase;
 //import reika.dragonapi.libraries.io.ReikaSoundHelper;
 //import reika.dragonapi.modinteract.DeepInteract.ItemCustomFocus;

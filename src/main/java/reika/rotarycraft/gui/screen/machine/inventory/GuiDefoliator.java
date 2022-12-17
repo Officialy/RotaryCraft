@@ -12,7 +12,7 @@
 //import net.minecraft.entity.player.Player;
 //
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerDefoliator;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerDefoliator;
 //import reika.rotarycraft.blockentities.level.BlockEntityDefoliator;
 //
 //public class GuiDefoliator extends GuiPowerOnlyMachine {

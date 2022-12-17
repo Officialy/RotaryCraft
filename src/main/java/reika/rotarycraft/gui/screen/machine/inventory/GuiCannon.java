@@ -23,7 +23,7 @@
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
 //import reika.rotarycraft.base.BlockEntity.BlockEntityLaunchCannon;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerCannon;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerCannon;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.BlockEntityItemCannon;
 //import reika.rotarycraft.blockentities.weaponry.BlockEntityTNTCannon;

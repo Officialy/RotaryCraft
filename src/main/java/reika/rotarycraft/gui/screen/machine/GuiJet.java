@@ -12,7 +12,7 @@
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiEngine;
 //
-//import reika.rotarycraft.containers.Machine.ContainerJet;
+//import reika.rotarycraft.gui.container.Machine.ContainerJet;
 //import reika.rotarycraft.registry.PacketRegistry;
 //
 //

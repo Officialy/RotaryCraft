@@ -28,7 +28,7 @@
 //import net.minecraftforge.fluids.FluidTankInfo;
 //import net.minecraftforge.fluids.IFluidHandler;
 //
-//import reika.dragonapi.ASM.APIStripper.Strippable;
+//import reika.dragonapi.asm.APIStripper.Strippable;
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -41,8 +41,8 @@
 //import net.minecraftforge.fluids.capability.IFluidHandler;
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.instantiable.StepTimer;
-//import reika.rotarycraft.API.Power.PowerGenerator;
-//import reika.rotarycraft.API.Power.ShaftMerger;
+//import reika.rotarycraft.api.Power.PowerGenerator;
+//import reika.rotarycraft.api.Power.ShaftMerger;
 //import reika.rotarycraft.auxiliary.PowerSourceList;
 //import reika.rotarycraft.auxiliary.RotaryAux;
 //import reika.rotarycraft.auxiliary.interfaces.PipeConnector;

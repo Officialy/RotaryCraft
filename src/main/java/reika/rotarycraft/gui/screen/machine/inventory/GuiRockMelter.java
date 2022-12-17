@@ -17,7 +17,7 @@
 //
 //import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerRockMelter;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerRockMelter;
 //import reika.rotarycraft.blockentities.production.BlockEntityLavaMaker;
 //
 //public class GuiRockMelter extends GuiPowerOnlyMachine {

@@ -24,7 +24,7 @@
 //import net.minecraftforge.common.util.Direction;
 //
 //import net.minecraftforge.energy.IEnergyStorage;
-//import reika.dragonapi.ASM.APIStripper.Strippable;
+//import reika.dragonapi.asm.APIStripper.Strippable;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 //import reika.dragonapi.libraries.World.ReikaWorldHelper;

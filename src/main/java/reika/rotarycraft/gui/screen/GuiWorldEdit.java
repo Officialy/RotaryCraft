@@ -17,7 +17,7 @@
 //import org.lwjgl.opengl.GL11;
 //
 //import reika.rotarycraft.RotaryCraft;
-//import reika.rotarycraft.containers.ContainerWorldEdit;
+//import reika.rotarycraft.gui.container.ContainerWorldEdit;
 //
 //
 //public class GuiWorldEdit extends Container {

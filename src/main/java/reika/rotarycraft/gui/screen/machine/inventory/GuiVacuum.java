@@ -19,7 +19,7 @@
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerVacuum;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerVacuum;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.BlockEntityVacuum;
 //

@@ -14,7 +14,7 @@
 //import net.minecraft.world.entity.player.Player;
 //import reika.rotarycraft.base.GuiNonPoweredMachine;
 //import reika.rotarycraft.base.blockentity.RemoteControlMachine;
-//import reika.rotarycraft.containers.Machine.ContainerRemoteControl;
+//import reika.rotarycraft.gui.container.Machine.ContainerRemoteControl;
 //import reika.rotarycraft.registry.RotaryMenuTypes;
 //
 //public class GuiRemoteControl extends GuiNonPoweredMachine {

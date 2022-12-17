@@ -17,7 +17,7 @@
 //
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerItemFilter;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerItemFilter;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.BlockEntityItemFilter;
 //import reika.rotarycraft.blockentities.BlockEntityItemFilter.MatchData;

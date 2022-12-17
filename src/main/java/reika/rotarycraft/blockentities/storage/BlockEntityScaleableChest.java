@@ -20,7 +20,7 @@
 //import reika.dragonapi.interfaces.blockentity.MultiPageInventory;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerScaleChest;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerScaleChest;
 //
 //import reika.rotarycraft.registry.MachineRegistry;
 //

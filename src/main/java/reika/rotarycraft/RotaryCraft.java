@@ -31,9 +31,11 @@ import reika.dragonapi.auxiliary.trackers.PlayerHandler;
 import reika.dragonapi.base.DragonAPIMod;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.auxiliary.*;
-import reika.rotarycraft.gui.screen.machine.GearboxScreen;
-import reika.rotarycraft.gui.screen.machine.ReservoirScreen;
-import reika.rotarycraft.gui.screen.machine.SteamScreen;
+import reika.rotarycraft.gui.screen.machine.*;
+import reika.rotarycraft.gui.screen.machine.inventory.GuiBigFurnace;
+import reika.rotarycraft.gui.screen.machine.inventory.GuiLandmine;
+import reika.rotarycraft.gui.screen.machine.inventory.GuiPerformance;
+import reika.rotarycraft.gui.screen.machine.inventory.WinderScreen;
 import reika.rotarycraft.registry.*;
 import reika.rotarycraft.registry.RotaryItems;
 
@@ -164,10 +166,16 @@ public class RotaryCraft extends DragonAPIMod {
     }
 
     public void clientSetup(final FMLClientSetupEvent event) {
-//        ScreenManager.registerFactory(RotaryCraft.MODID, GuiHandler::new);
         MenuScreens.register(RotaryMenus.STEAM_ENGINE.get(), SteamScreen::new);
         MenuScreens.register(RotaryMenus.GEARBOX.get(), GearboxScreen::new);
         MenuScreens.register(RotaryMenus.RESERVOIR.get(), ReservoirScreen::new);
+        MenuScreens.register(RotaryMenus.BEVEL.get(), GuiBevel::new);
+        MenuScreens.register(RotaryMenus.SORTER.get(), GuiSorter::new);
+        MenuScreens.register(RotaryMenus.BLOWER.get(), GuiBlower::new);
+        MenuScreens.register(RotaryMenus.LANDMINE.get(), GuiLandmine::new);
+        MenuScreens.register(RotaryMenus.PERFORMANCE_ENGINE.get(), GuiPerformance::new);
+        MenuScreens.register(RotaryMenus.WINDER.get(), WinderScreen::new);
+        MenuScreens.register(RotaryMenus.BIG_FURNACE.get(), GuiBigFurnace::new);
 
         RotaryRenders.registerBlockColors();
         event.enqueueWork(RotaryRenders::registerRenderLayers);

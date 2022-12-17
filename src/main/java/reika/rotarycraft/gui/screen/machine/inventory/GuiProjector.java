@@ -12,7 +12,7 @@
 //import net.minecraft.entity.player.Player;
 //
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerProjector;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerProjector;
 //import reika.rotarycraft.blockentities.decorative.BlockEntityProjector;
 //
 //public class GuiProjector extends GuiPowerOnlyMachine {

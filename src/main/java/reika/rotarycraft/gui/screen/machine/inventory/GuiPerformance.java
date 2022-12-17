@@ -14,15 +14,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.ScreenUtils;
 import reika.rotarycraft.base.EngineScreen;
+import reika.rotarycraft.blockentities.BlockEntitySorting;
 import reika.rotarycraft.blockentities.engine.BlockEntityPerformanceEngine;
 import reika.rotarycraft.gui.container.machine.inventory.PerformanceMenu;
 
-public class GuiPerformance extends EngineScreen {
+public class GuiPerformance extends EngineScreen<BlockEntityPerformanceEngine, PerformanceMenu> {
     private final BlockEntityPerformanceEngine engine;
 
-    public GuiPerformance(int inventoryId, Inventory p5ep, Component component, BlockEntityPerformanceEngine te) {
-        super(new PerformanceMenu(inventoryId, p5ep, te), p5ep, component);
-        engine = te;
+    public GuiPerformance(PerformanceMenu container, Inventory p5ep, Component title) {
+        super(container, p5ep, title);
+        engine = (BlockEntityPerformanceEngine) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 166;
     }

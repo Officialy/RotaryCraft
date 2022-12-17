@@ -15,7 +15,7 @@
 //import net.minecraftforge.client.gui.ScreenUtils;
 //import reika.rotarycraft.base.EngineScreen;
 //import reika.rotarycraft.blockentities.engine.BlockEntityGasEngine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerEthanol;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerEthanol;
 //
 //public class GuiEthanol extends EngineScreen {
 //    private final BlockEntityGasEngine engine;

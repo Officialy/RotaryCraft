@@ -13,7 +13,7 @@
 //import net.minecraft.world.Level;
 //
 //import reika.rotarycraft.base.GuiNonPoweredMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerWorktable;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerWorktable;
 //import reika.rotarycraft.blockentities.production.BlockEntityWorktable;
 //
 //public class GuiWorktable extends GuiNonPoweredMachine {

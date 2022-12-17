@@ -17,7 +17,7 @@
 //import org.lwjgl.opengl.GL11;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerObsidian;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerObsidian;
 //import reika.rotarycraft.blockentities.production.BlockEntityObsidianMaker;
 //
 //public class GuiObsidian extends GuiMachine {

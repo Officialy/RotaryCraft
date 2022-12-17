@@ -14,7 +14,7 @@
 //import net.minecraft.world.entity.player.Inventory;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
 //import reika.rotarycraft.blockentities.level.BlockEntityAerosolizer;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerAerosolizer;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerAerosolizer;
 //
 //public class GuiAerosolizer extends GuiPowerOnlyMachine {
 //    BlockEntityAerosolizer aero;

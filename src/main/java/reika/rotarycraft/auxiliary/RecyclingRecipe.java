@@ -40,7 +40,7 @@
 //    }
 //
 //    public ItemStack getCraftingResult(CraftingContainer ics) {
-//        return ReikaItemHelper.getSizedItemStack(RotaryItems.IRON_SCRAP.get().getDefaultInstance(), scrapValue);//ItemStacks.getScrap(scrapValue);
+//        return ReikaItemHelper.getSizedItemStack(RotaryItems.IRON_SCRAP.get().getDefaultInstance(), scrapValue);//RotaryItems.getScrap(scrapValue);
 //    }
 //
 //    @Override
@@ -60,7 +60,7 @@
 //
 //    @Override
 //    public ItemStack getResultItem() {
-//        return ReikaItemHelper.getSizedItemStack(RotaryItems.IRON_SCRAP.get().getDefaultInstance(), scrapValue);//ItemStacks.scrap;
+//        return ReikaItemHelper.getSizedItemStack(RotaryItems.IRON_SCRAP.get().getDefaultInstance(), scrapValue);//RotaryItems.scrap;
 //    }
 //
 //    @Override

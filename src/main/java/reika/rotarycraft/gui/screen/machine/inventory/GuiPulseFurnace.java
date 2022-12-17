@@ -16,7 +16,7 @@
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerPulseFurnace;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerPulseFurnace;
 //import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
 //
 //import cpw.mods.fml.relauncher.Side;

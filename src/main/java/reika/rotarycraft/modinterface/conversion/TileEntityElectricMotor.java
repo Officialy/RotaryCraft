@@ -18,8 +18,8 @@
 //import net.minecraftforge.common.util.Direction;
 //
 //import reika.dragonapi.ModList;
-//import reika.dragonapi.ASM.APIStripper.Strippable;
-//import reika.dragonapi.ASM.DependentMethodStripper.ModDependent;
+//import reika.dragonapi.asm.APIStripper.Strippable;
+//import reika.dragonapi.asm.DependentMethodStripper.ModDependent;
 //import reika.dragonapi.libraries.io.ReikaSoundHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 //import reika.dragonapi.libraries.registry.ReikaParticleHelper;
@@ -27,7 +27,7 @@
 //import reika.dragonapi.modinteract.ItemHandlers.IC2Handler;
 //import reika.dragonapi.modinteract.Power.ReikaEUHelper;
 //import reika.dragonapi.modinteract.power.ReikaEUHelper;
-//import reika.rotarycraft.API.Power.PowerGenerator;
+//import reika.rotarycraft.api.Power.PowerGenerator;
 //import reika.rotarycraft.api.power.PowerGenerator;
 //import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 //import reika.rotarycraft.base.blockentity.EnergyToPowerBase;

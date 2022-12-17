@@ -27,7 +27,7 @@
 //import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerHeater;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerHeater;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
 //

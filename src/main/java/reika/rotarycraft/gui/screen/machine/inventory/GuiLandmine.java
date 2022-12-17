@@ -14,13 +14,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine;
+import reika.rotarycraft.gui.container.machine.ContainerSorter;
 import reika.rotarycraft.gui.container.machine.inventory.LandmineMenu;
 
 public class GuiLandmine extends NonPoweredMachineScreen<BlockEntityLandmine, LandmineMenu> {
 
-    public GuiLandmine(int id, Inventory p5ep, Component component, FriendlyByteBuf te) {
-        super(new LandmineMenu(id, p5ep, te), p5ep, component);
-        inventory = p5ep;
+    public GuiLandmine(LandmineMenu container, Inventory inv, Component title) {
+        super(container, inv, title);
     }
 
     @Override

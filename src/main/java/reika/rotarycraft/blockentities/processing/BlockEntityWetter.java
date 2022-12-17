@@ -17,6 +17,7 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraftforge.fluids.FluidStack;
+//import reika.dragonapi.base.OneSlotMachine;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
 //import reika.rotarycraft.base.blockentity.InventoriedPowerLiquidReceiver;

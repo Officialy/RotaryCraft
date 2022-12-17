@@ -24,8 +24,8 @@ public class ReservoirScreen extends NonPoweredMachineScreen<BlockEntityReservoi
 
     private final BlockEntityReservoir reservoir;
 
-    public ReservoirScreen(ReservoirContainer container, Inventory inv, Component te) {
-        super(container, inv, te);
+    public ReservoirScreen(ReservoirContainer container, Inventory inv, Component title) {
+        super(container, inv, title);
         reservoir = (BlockEntityReservoir) inv.player.level.getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 96;

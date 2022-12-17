@@ -17,7 +17,7 @@
 //import reika.dragonapi.libraries.rendering.ReikaColorAPI;
 //import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerFillingStation;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerFillingStation;
 //import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
 //
 //public class GuiFillingStation extends GuiPowerOnlyMachine {

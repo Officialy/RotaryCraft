@@ -23,8 +23,8 @@
 //
 //import net.minecraftforge.fml.loading.FMLLoader;
 //import reika.dragonapi.ModList;
-//import reika.dragonapi.ASM.APIStripper.Strippable;
-//import reika.dragonapi.ASM.DependentMethodStripper.ModDependent;
+//import reika.dragonapi.asm.APIStripper.Strippable;
+//import reika.dragonapi.asm.DependentMethodStripper.ModDependent;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.registry.ReikaDyeHelper;

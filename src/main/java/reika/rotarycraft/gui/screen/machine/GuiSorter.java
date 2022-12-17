@@ -1,48 +1,51 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.guis.Machine;
-//
-//import net.minecraft.world.entity.player.Inventory;
-//import net.minecraft.world.item.ItemStack;
-//import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//
-//public class GuiSorter extends GuiPowerOnlyMachine {
-//
-//    private final BlockEntitySorting tile;
-//
-//    public GuiSorter(Inventory player, BlockEntitySorting te) {
-//        super(new ContainerSorter(player, te), te);
-//        tile = te;
-//        imageWidth = 176;
-//        imageHeight = 180;
-//        ep = player;
-//    }
-//
-//    @Override
-//    protected void drawGuiContainerForegroundLayer(int a, int b) {
-//        super.drawGuiContainerForegroundLayer(a, b);
-//        int dy = 22;
-//        int x = 8;
-//        int y = 18;
-//        int l = BlockEntitySorting.LENGTH;
-//        for (int k = 0; k < l * 3; k++) {
-//            ItemStack is = tile.getMapping(k);
-//            if (is != null) {
-//                api.drawItemStack(itemRender, font, is, x + k % l * 18, y + k / l * dy);
-//            }
-//        }
-//    }
-//
-//    @Override
-//    protected String getGuiTexture() {
-//        return "sortergui";
-//    }
-//
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.screen.machine;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import reika.rotarycraft.base.GuiPowerOnlyMachine;
+import reika.rotarycraft.blockentities.BlockEntitySorting;
+import reika.rotarycraft.gui.container.machine.ContainerSorter;
+
+public class GuiSorter extends GuiPowerOnlyMachine<BlockEntitySorting, ContainerSorter> {
+
+    private final BlockEntitySorting sorter;
+
+    public GuiSorter(ContainerSorter container, Inventory inv, Component title) {
+        super(container, inv, title);
+        sorter = (BlockEntitySorting) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
+        imageWidth = 176;
+        imageHeight = 180;
+        inventory = inv;
+    }
+
+    @Override
+    public void renderBackground(PoseStack stack) {
+        int dy = 22;
+        int x = 8;
+        int y = 18;
+        int l = BlockEntitySorting.LENGTH;
+        for (int k = 0; k < l * 3; k++) {
+            ItemStack is = sorter.getMapping(k);
+            if (is != null) {
+                api.drawItemStack(stack, this.itemRenderer, font, is, x + k % l * 18, y + k / l * dy);
+            }
+        }
+    }
+
+    @Override
+    protected String getGuiTexture() {
+        return "sortergui";
+    }
+
+}

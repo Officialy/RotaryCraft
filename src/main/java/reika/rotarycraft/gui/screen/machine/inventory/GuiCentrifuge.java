@@ -19,7 +19,7 @@
 //import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerCentrifuge;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerCentrifuge;
 //import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
 //
 //public class GuiCentrifuge extends GuiMachine {

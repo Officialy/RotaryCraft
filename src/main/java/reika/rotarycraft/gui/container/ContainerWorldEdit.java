@@ -7,7 +7,7 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.containers;
+//package reika.rotarycraft.gui.container;
 //
 //import net.minecraft.world.Container;
 //import net.minecraft.world.level.material.Fluid;
@@ -22,7 +22,7 @@
 //    /**
 //     * The crafting matrix inventory (3x3).
 //     */
-//    public InventoryCrafting craftMatrix = new InventoryCrafting(this, 1, 1);
+//    public CraftingMenu craftMatrix = new CraftingMenu(this, 1, 1);
 //
 //    public ContainerWorldEdit(Player player, Level par2World) {
 //        level = par2World;

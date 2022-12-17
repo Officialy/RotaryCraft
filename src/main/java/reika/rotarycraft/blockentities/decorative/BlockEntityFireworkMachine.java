@@ -406,7 +406,7 @@
 //                    }
 //
 //                    var18.put("Explosions", var25);
-//                    var18.setByte("Flight", (byte) var4);
+//                    var18.putByte("Flight", (byte) var4);
 //                    var15.put("Fireworks", var18);
 //                }
 //
@@ -448,7 +448,7 @@
 //                }
 //
 //                var18.putIntArray("Colors", var24);
-//                var18.setByte("Type", var21);
+//                var18.putByte("Type", var21);
 //                var15.put("Explosion", var18);
 //                field_92102_a.setTagCompound(var15);
 //                return field_92102_a;

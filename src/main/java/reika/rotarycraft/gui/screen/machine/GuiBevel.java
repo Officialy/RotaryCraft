@@ -21,6 +21,7 @@ import reika.dragonapi.base.CoreMenu;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
+import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.PacketRegistry;
@@ -39,12 +40,12 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
     private Direction out;
     //private Level level = ModLoader.getMinecraftInstance().theWorld;
 
-    public GuiBevel(int id, Inventory inventory, BlockEntityBevelGear gearBevel) {
-        super(new CoreMenu(RotaryMenus.BEVEL.get(), id, inventory, gearBevel, null), inventory, Component.literal("Bevel Gear"));
-        bevel = gearBevel;
+    public GuiBevel(CoreMenu<BlockEntityBevelGear> id, Inventory inventory, Component title) {
+        super(id, inventory, title);
+        bevel = (BlockEntityBevelGear) inventory.player.level.getBlockEntity(id.tile.getBlockPos());
         imageHeight = 192;
         this.inventory = inventory;
-        posn = gearBevel.direction;
+        posn = bevel.direction;
         this.getIOFromDirection();
     }
 
@@ -54,20 +55,20 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
         int j = (width - imageWidth) / 2 - 2;
         int k = (height - imageHeight) / 2 - 12;
 
-        ResourceLocation file = new ResourceLocation(RotaryCraft.MODID, "textures/gui/bevelgui2.png");
+        ResourceLocation file = new ResourceLocation(RotaryCraft.MODID, "textures/screen/bevelgui2.png");
         int px = 176;
-      /* todo  for (int i = 0; i < 6; i++) {
+       for (int i = 0; i < 6; i++) {
             String s = Direction.values()[i].name().substring(0, 1);
             if (true || BlockEntityBevelGear.isValid(Direction.values()[i], out)) {
                 if (in.ordinal() == i)
                     //id is i
                     //pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffTex, pResourceLocation, pTextureWidth, pTextureHeight, pOnPress, pMessage
                     //                                  x,               y,                 width,       height, u, v, display string, color, shadow?, filepath
-                    renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, s, 0, false, file, this::actionPerformed));
+                    renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, file, this::actionPerformed));
                 else
-                    renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px, i * 18, s, 0, false, file, this::actionPerformed));
+                    renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px, i * 18, file, this::actionPerformed)); //todo s is not used rn
             } else {
-                renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, 212, 0, s, 0, false, file, this::actionPerformed));
+                renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, 212, 0,file, this::actionPerformed));
             }
         }
         for (int i = 0; i < 6; i++) {
@@ -75,12 +76,12 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
             if (BlockEntityBevelGear.isValid(in, Direction.values()[i])) {
                 if (out.ordinal() == i)
                     //i + 6
-                    renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, s, 0, false, file, RotaryCraft.class));
+                    renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, file, this::actionPerformed));
                 else
-                    renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px, i * 18, s, 0, false, file, RotaryCraft.class));
+                    renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px, i * 18, file, this::actionPerformed)); //todo s is not used rn
             } else
-                renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, 212, 0, s, 0, false, file, RotaryCraft.class));
-        }*/
+                renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, 212, 0,file, this::actionPerformed));
+        }
     }
 
     public void getIOFromDirection() {
@@ -142,6 +143,6 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
 
     @Override
     protected String getGuiTexture() {
-        return "textures/gui/bevelgui2";
+        return "textures/screen/bevelgui2";
     }
 }

@@ -10,10 +10,9 @@ import reika.dragonapi.base.BlockEntityBase;
 import reika.dragonapi.base.CoreMenu;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
+import reika.rotarycraft.gui.container.ContainerHandCraft;
 import reika.rotarycraft.gui.container.machine.*;
-import reika.rotarycraft.gui.container.machine.inventory.LandmineMenu;
-import reika.rotarycraft.gui.container.machine.inventory.PerformanceMenu;
-import reika.rotarycraft.gui.container.machine.inventory.WinderMenu;
+import reika.rotarycraft.gui.container.machine.inventory.*;
 
 import java.util.function.Supplier;
 
@@ -39,7 +38,7 @@ public interface RotaryMenus {
 
 //    Supplier<MenuType<ContainerHeater>> HEATER = register("heater",     () -> IForgeMenuType.create(new ContainerHeater.Factory()));
 
-//    Supplier<MenuType<ContainerHandCraft>> HAND_CRAFT = register("landmine", ContainerHandCraft::new);
+    Supplier<MenuType<ContainerHandCraft>> HAND_CRAFT = register("hand_craft", ContainerHandCraft::new);
 
 
     Supplier<MenuType<SteamMenu>> STEAM_ENGINE = register("steam_engine", SteamMenu::new);
@@ -64,7 +63,9 @@ public interface RotaryMenus {
 
 //    Supplier<MenuType<ContainerCannon>> CANNON = register("cannon", () -> IForgeMenuType.create(new ContainerCannon.Factory()));
 
-//    Supplier<MenuType<ContainerAerosolizer>> AEROSOLIZER = register("aerosolizer",   () -> IForgeMenuType.create(new ContainerAerosolizer.Factory()));
+    Supplier<MenuType<ContainerAerosolizer>> AEROSOLIZER = register("aerosolizer", ContainerAerosolizer::new);
 
+    Supplier<MenuType<ContainerSorter>> SORTER = register("sorter", ContainerSorter::new);
+    Supplier<MenuType<ContainerBigFurnace>> BIG_FURNACE = register("aerosolizer", ContainerBigFurnace::new);
 
 }

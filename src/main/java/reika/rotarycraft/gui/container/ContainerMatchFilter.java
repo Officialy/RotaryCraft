@@ -7,23 +7,26 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.containers;
+//package reika.rotarycraft.gui.container;
 //
 //
 //import net.minecraft.world.Container;
 //import net.minecraft.world.entity.player.Player;
+//import net.minecraft.world.inventory.AbstractContainerMenu;
+//import net.minecraft.world.inventory.CraftingMenu;
 //import net.minecraft.world.inventory.Slot;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //
-//public class ContainerMatchFilter extends Container {
+//public class ContainerMatchFilter extends AbstractContainerMenu {
 //    private final Level level;
 //    /**
 //     * The crafting matrix inventory (3x3).
 //     */
-//    public InventoryCrafting craftMatrix = new InventoryCrafting(this, 1, 1);
+//    public CraftingMenu craftMatrix = new CraftingMenu(this, 1, 1);
 //
 //    public ContainerMatchFilter(Player player, Level par2World) {
+//        super(null, 0);
 //        level = par2World;
 //        int var6;
 //        int var7;
@@ -39,17 +42,18 @@
 //    }
 //
 //    @Override
-//    public void onContainerClosed(Player par1Player) {
-//        super.onContainerClosed(par1Player);
+//    public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
+//        return null;
 //    }
 //
 //    @Override
-//    public boolean canInteractWith(Player par1Player) {
+//    public boolean stillValid(Player p_38874_) {
 //        return true;
 //    }
 //
+///*
 //    @Override
 //    public ItemStack transferStackInSlot(Player par1Player, int par2) {
 //        return this.getSlot(0).getStack();
-//    }
+//    }*/
 //}

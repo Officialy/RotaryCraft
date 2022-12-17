@@ -24,8 +24,8 @@
 //import net.minecraftforge.fluids.FluidRegistry;
 //
 //import reika.dragonapi.ModList;
-//import reika.dragonapi.ASM.APIStripper.Strippable;
-//import reika.dragonapi.ASM.DependentMethodStripper.ModDependent;
+//import reika.dragonapi.asm.APIStripper.Strippable;
+//import reika.dragonapi.asm.DependentMethodStripper.ModDependent;
 //import reika.dragonapi.libraries.io.ReikaSoundHelper;
 //import reika.dragonapi.libraries.Java.ReikaRandomHelper;
 //import reika.dragonapi.libraries.java.ReikaRandomHelper;

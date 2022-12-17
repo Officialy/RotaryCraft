@@ -30,9 +30,14 @@ public class ContainerHandCraft extends AbstractContainerMenu {
     public CraftingContainer craftMatrix = new CraftingContainer(this, 3, 3);
 //    public Container craftResult = new InventoryCraftResult();
 
+
+    //Client
+    public ContainerHandCraft(int id, Inventory inv, FriendlyByteBuf data) {
+        this(id, inv, inv.player.level);
+    }
+    //Server
     public ContainerHandCraft(final int id, Inventory player, Level par2World) {
-        super(null, id);
-//     todo   super(RotaryMenus.HAND_CRAFT.get(), id);
+        super(RotaryMenus.HAND_CRAFT.get(), id);
         level = par2World;
 //   todo     this.addSlot(new SlotCrafting(player, craftMatrix, craftResult, 0, 124, 35));
         int var6;
@@ -48,9 +53,6 @@ public class ContainerHandCraft extends AbstractContainerMenu {
 //   todo     this.onCraftMatrixChanged(craftMatrix);
     }
 
-    public ContainerHandCraft(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, inv.player.level);
-    }
 
     @Override
     public void slotsChanged(Container pInventory) {
@@ -59,8 +61,13 @@ public class ContainerHandCraft extends AbstractContainerMenu {
 
 //    @Override
 //todo    public void onCraftMatrixChanged(Container par1IInventory) {
-//        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, level));
 //    }
+
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        //        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, level));
+    }
 
     @Override
     public void removed(Player player) {

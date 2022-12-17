@@ -18,7 +18,7 @@
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerFractionator;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerFractionator;
 //import reika.rotarycraft.blockentities.production.BlockEntityFractionator;
 //
 //public class GuiFractionator extends GuiMachine {

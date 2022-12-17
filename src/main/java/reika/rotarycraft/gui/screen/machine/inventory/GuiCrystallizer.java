@@ -19,7 +19,7 @@
 //import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerCrystallizer;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerCrystallizer;
 //import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
 //
 //public class GuiCrystallizer extends GuiMachine {

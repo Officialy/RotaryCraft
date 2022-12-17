@@ -134,6 +134,8 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> FILLER = register("filler", () -> new BlockFiller(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SPILLWAY = register("spillway", () -> new BlockSpillway(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> BEVEL_GEARS = register("bevel_gears", () -> new BlockBevelGears(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> SORTER = register("sorter", () -> new BlockSorter(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
 
     private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of(Material.STONE).strength(2.0F, 3.0F).sound(SoundType.METAL);
 

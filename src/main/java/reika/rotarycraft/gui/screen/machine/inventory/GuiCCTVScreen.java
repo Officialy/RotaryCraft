@@ -16,7 +16,7 @@
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.ContainerScreen;
+//import reika.rotarycraft.gui.container.Machine.ContainerScreen;
 //import reika.rotarycraft.blockentities.auxiliary.BlockEntityScreen;
 //
 //public class GuiCCTVScreen extends GuiMachine {

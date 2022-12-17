@@ -7,7 +7,7 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.containers;
+//package reika.rotarycraft.gui.container;
 //
 //import net.minecraft.network.FriendlyByteBuf;
 //import net.minecraft.world.Container;
@@ -27,7 +27,7 @@
 //    private static final int width = 3;
 //    private static final int height = 3;
 //
-//    private final InventoryCrafting craftMatrix = new InventoryCrafting(this, width, height);
+//    private final CraftingMenu craftMatrix = new CraftingMenu(this, width, height);
 //    private final BasicInventory craftResult = new InventoryResult();
 //    private final Level level;
 //    private final Player player;

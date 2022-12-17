@@ -27,7 +27,7 @@
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.auxiliary.RotaryItems;
 //import reika.rotarycraft.base.GuiNonPoweredMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerCVT;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerCVT;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 //import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear.CVTMode;

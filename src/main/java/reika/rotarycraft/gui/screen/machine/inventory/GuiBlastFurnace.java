@@ -17,7 +17,7 @@
 //import reika.dragonapi.libraries.io.ReikaPacketHelper;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiNonPoweredMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerBlastFurnace;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerBlastFurnace;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.production.BlockEntityBlastFurnace;
 //

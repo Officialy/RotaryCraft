@@ -218,6 +218,8 @@ public class RotaryBlockEntities {
     public static final RegistryObject<BlockEntityType<BlockEntityBevelGear>> BEVEL_GEARS = BLOCK_ENTITIES.register("bevel_gears", () ->
             BlockEntityType.Builder.of(BlockEntityBevelGear::new, RotaryBlocks.BEVEL_GEARS.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<BlockEntitySorting>> SORTER = BLOCK_ENTITIES.register("sorter", () ->
+            BlockEntityType.Builder.of(BlockEntitySorting::new, RotaryBlocks.SORTER.get()).build(null));
 
 
 

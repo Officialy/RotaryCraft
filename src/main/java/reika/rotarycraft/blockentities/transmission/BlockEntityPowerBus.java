@@ -237,7 +237,7 @@
 //
 //        NBT.putInt("in", this.getInputSide().ordinal());
 //
-//        NBT.setByte("mode", ReikaArrayHelper.booleanToByteBitflags(modes));
+//        NBT.putByte("mode", ReikaArrayHelper.booleanToByteBitflags(modes));
 //
 //        NBT.putInt("hx", hubX);
 //        NBT.putInt("hy", hubY);

@@ -22,11 +22,11 @@ import reika.rotarycraft.registry.RotaryMenus;
 
 public class BlowerMenu extends IOMachineMenu<BlockEntityBlower> {
 
-    private final BlockEntityBlower tile;
+    private final BlockEntityBlower blower;
 
     public BlowerMenu(int id, Inventory playerInv, FriendlyByteBuf byteBuf) {
         super(RotaryMenus.BLOWER.get(), id, playerInv, byteBuf);
-        tile = (BlockEntityBlower) playerInv.player.level.getBlockEntity(byteBuf.readBlockPos());
+        blower = (BlockEntityBlower) playerInv.player.level.getBlockEntity(byteBuf.readBlockPos());
 
         int dy = 18;
         int x = 8;
@@ -42,10 +42,10 @@ public class BlowerMenu extends IOMachineMenu<BlockEntityBlower> {
 
     @Override
     public void clicked(int id, int button, ClickType type, Player ep) {
-        boolean inGUI = id < tile.matchingItems.length && id >= 0;
+        boolean inGUI = id < blower.matchingItems.length && id >= 0;
         if (inGUI) {
             ItemStack held = ep.getMainHandItem();
-            tile.matchingItems[id] = ReikaItemHelper.getSizedItemStack(held, 1);
+            blower.matchingItems[id] = ReikaItemHelper.getSizedItemStack(held, 1);
 //            return held;
         } else {
             super.clicked(id, button, type, ep);

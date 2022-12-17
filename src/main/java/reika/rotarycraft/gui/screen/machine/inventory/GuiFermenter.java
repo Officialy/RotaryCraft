@@ -19,7 +19,7 @@
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.auxiliary.RotaryItems;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerFermenter;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerFermenter;
 //
 //import reika.rotarycraft.blockentities.production.BlockEntityFermenter;
 //

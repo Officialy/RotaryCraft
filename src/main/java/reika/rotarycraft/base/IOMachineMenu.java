@@ -32,7 +32,7 @@ public abstract class IOMachineMenu<T extends BlockEntityIOMachine> extends Core
 
     @Override
     public void broadcastChanges() {
-        super.broadcastChanges();
+//        super.broadcastChanges();
 
         /*todo for (Object ic : this.containerListeners) {
             if (ic instanceof ServerPlayer)

@@ -27,7 +27,7 @@
 //import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerTerraformer;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerTerraformer;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.level.BlockEntityTerraformer;
 //

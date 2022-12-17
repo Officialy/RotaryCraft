@@ -16,7 +16,7 @@
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerGrinder;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerGrinder;
 //import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 //
 //public class GuiGrinder extends GuiMachine {

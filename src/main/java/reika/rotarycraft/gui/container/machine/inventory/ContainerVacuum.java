@@ -7,7 +7,7 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.containers.machine.inventory;
+//package reika.rotarycraft.gui.container.machine.inventory;
 //
 //import reika.rotarycraft.blockentities.BlockEntityVacuum;
 //import net.minecraft.world.entity.player.Player;

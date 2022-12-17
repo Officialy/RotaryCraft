@@ -18,6 +18,7 @@ import reika.rotarycraft.renders.*;
 import reika.rotarycraft.renders.dm.RenderFin;
 import reika.rotarycraft.renders.m.RenderReservoir;
 import reika.rotarycraft.renders.m.RenderVanDeGraff;
+import reika.rotarycraft.renders.mi.RenderBigFurnace;
 import reika.rotarycraft.renders.mi.RenderLandmine;
 import reika.rotarycraft.renders.mi.RenderSmokeDetector;
 
@@ -59,6 +60,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation GEARBOX_BASE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "gearbox_base"), "main");
     public static final ModelLayerLocation MAGNETIC = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "magnetic"), "main");
     public static final ModelLayerLocation SOLAR_TOWER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "solar_tower"), "main");
+    public static final ModelLayerLocation BIGFURNACE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "big_furnace"), "main");
 
 
     public static void init(IEventBus bus) {
@@ -97,6 +99,7 @@ public class RotaryModelLayers {
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.JET_ENGINE.get(), RenderSEngine::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.HYDRO_ENGINE.get(), RenderSEngine::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.GEARBOX.get(), RenderGearbox::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.BIG_FURNACE.get(), RenderBigFurnace::new);
 
     }
 
@@ -136,5 +139,6 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(GEARBOX_16, Gearbox16Model::createLayer);
         event.registerLayerDefinition(MAGNETIC, MagneticModel::createLayer);
         event.registerLayerDefinition(SOLAR_TOWER, SolarModel::createLayer);
+        event.registerLayerDefinition(BIGFURNACE, BigFurnaceModel::createLayer);
     }
 }

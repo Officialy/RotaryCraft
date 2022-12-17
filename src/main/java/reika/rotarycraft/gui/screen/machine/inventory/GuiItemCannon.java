@@ -20,7 +20,7 @@
 //import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerItemCannon;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerItemCannon;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.BlockEntityItemCannon;
 //

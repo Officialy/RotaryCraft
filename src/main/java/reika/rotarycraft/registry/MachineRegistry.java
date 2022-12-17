@@ -142,7 +142,7 @@ public enum MachineRegistry implements TileEnum {
     BEAMMIRROR("machine.beammirror", RotaryBlocks.BEAM_MIRROR.get(), BlockEntityBeamMirror.class),
     MULTICLUTCH("machine.multiclutch", RotaryBlocks.MULTI_CLUTCH.get(), BlockEntityMultiClutch.class),
     //    TERRAFORMER("machine.terraformer", BlockRotaryCraftMachine.class, BlockEntityTerraformer.class),
-//    SORTING("machine.sorting", BlockRotaryCraftMachine.class, BlockEntitySorting.class),
+    SORTING("machine.sorting", RotaryBlocks.SORTER.get(), BlockEntitySorting.class),
 //    FUELENHANCER("machine.fuelenhancer", BlockRotaryCraftMachine.class, BlockEntityFuelConverter.class, "RenderFuelConverter"),
 //    ARROWGUN("machine.arrowgun", BlockRotaryCraftMachine.class, BlockEntityMachineGun.class),
     BOILER("machine.frictionboiler", RotaryBlocks.FRICTION_BOILER.get(), BlockEntityBoiler.class, PowerTypes.STEAM),

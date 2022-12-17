@@ -20,7 +20,7 @@
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiNonPoweredMachine;
-//import reika.rotarycraft.containers.Machine.Inventory.ContainerPowerBus;
+//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerPowerBus;
 //import reika.rotarycraft.registry.PacketRegistry;
 //import reika.rotarycraft.blockentities.transmission.BlockEntityPowerBus;
 //
