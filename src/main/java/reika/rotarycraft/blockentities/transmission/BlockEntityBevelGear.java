@@ -20,7 +20,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +33,7 @@ import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 import reika.rotarycraft.base.blockentity.BlockEntity1DTransmitter;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
-import reika.rotarycraft.gui.container.machine.BevelMenu;
+import reika.rotarycraft.gui.container.machine.BevelContainer;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
@@ -375,6 +374,6 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return new BevelMenu(p_39954_, p_39955_, this);
+        return new BevelContainer(p_39954_, p_39955_, this);
     }
 }

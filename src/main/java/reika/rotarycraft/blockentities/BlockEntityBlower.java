@@ -410,22 +410,21 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
         }
 
         public int removeItem(BlockEntity te, int amt, int slot, boolean remove) {
-            switch (this) {
-                case CHEST:
-                    IItemHandler ii = (IItemHandler) te;
-                    int items = 0;
-                    if (remove) {
-                        boolean flag = true;
-                        while (flag && amt > 0) {
-                            ReikaInventoryHelper.decrStack(slot, ii, 1);
-                            amt--;
-                            flag = ii.getStackInSlot(slot) != null;
-                            items++;
-                        }
-                        return items;
-                    } else {
-                        return ii.getStackInSlot(slot) != null ? Math.min(ii.getStackInSlot(slot).getCount(), amt) : 0;
+            if (this == InventoryType.CHEST) {
+                Container ii = (Container) te;
+                int items = 0;
+                if (remove) {
+                    boolean flag = true;
+                    while (flag && amt > 0) {
+                        ReikaInventoryHelper.decrStack(slot, ii, 1);
+                        amt--;
+                        flag = ii.getItem(slot) != null;
+                        items++;
                     }
+                    return items;
+                } else {
+                    return ii.getItem(slot) != null ? Math.min(ii.getItem(slot).getCount(), amt) : 0;
+                }
 //                case DSU:
 //                    IDeepStorageUnit dsu = (IDeepStorageUnit) te;
 //                    int has = dsu.getStoredItemType().getCount();

@@ -1,8 +1,6 @@
 package reika.rotarycraft.base.blocks.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,16 +12,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import reika.dragonapi.base.CoreMenu;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
-import reika.rotarycraft.blockentities.BlockEntityItemCannon;
-import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
-import reika.rotarycraft.registry.RotaryMenus;
 
 public class BlockBevelGears extends BlockBasicMachine {
 

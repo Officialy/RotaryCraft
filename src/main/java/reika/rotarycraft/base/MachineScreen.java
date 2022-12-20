@@ -13,13 +13,13 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.client.gui.ScreenUtils;
-import reika.dragonapi.base.CoreMenu;
+import reika.dragonapi.base.CoreContainer;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 
-public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends CoreMenu<E>> extends AbstractContainerScreen<T> {
+public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends CoreContainer<E>> extends AbstractContainerScreen<T> {
 
     protected static final ReikaGuiAPI api = ReikaGuiAPI.instance;
     protected final RotaryCraftBlockEntity tile = menu.tile;

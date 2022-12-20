@@ -16,15 +16,15 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 import reika.dragonapi.instantiable.gui.Slot.GhostSlot;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.base.IOMachineMenu;
+import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.BlockEntityBlower;
 import reika.rotarycraft.registry.RotaryMenus;
 
-public class BlowerMenu extends IOMachineMenu<BlockEntityBlower> {
+public class BlowerContainer extends IOMachineContainer<BlockEntityBlower> {
 
     private final BlockEntityBlower blower;
 
-    public BlowerMenu(int id, Inventory playerInv, FriendlyByteBuf byteBuf) {
+    public BlowerContainer(int id, Inventory playerInv, FriendlyByteBuf byteBuf) {
         super(RotaryMenus.BLOWER.get(), id, playerInv, byteBuf);
         blower = (BlockEntityBlower) playerInv.player.level.getBlockEntity(byteBuf.readBlockPos());
 

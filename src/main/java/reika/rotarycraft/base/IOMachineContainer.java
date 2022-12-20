@@ -10,22 +10,20 @@
 package reika.rotarycraft.base;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
-import reika.dragonapi.base.CoreMenu;
-import reika.rotarycraft.PacketHandlerCore;
+import reika.dragonapi.base.CoreContainer;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
 
-public abstract class IOMachineMenu<T extends BlockEntityIOMachine> extends CoreMenu<T> {
+public abstract class IOMachineContainer<T extends BlockEntityIOMachine> extends CoreContainer<T> {
 
     private final T ioTile;
 
-    public IOMachineMenu(MenuType<?> type, final int id, Inventory inv, FriendlyByteBuf buf) {
+    public IOMachineContainer(MenuType<?> type, final int id, Inventory inv, FriendlyByteBuf buf) {
         this(type, id, inv, (T) inv.player.level.getBlockEntity(buf.readBlockPos()));
     }
 
-    public IOMachineMenu(MenuType<?> type, final int id, Inventory inv, T tile) {
+    public IOMachineContainer(MenuType<?> type, final int id, Inventory inv, T tile) {
         super(type, id, inv, tile, inv);
         ioTile = tile;
     }

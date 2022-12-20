@@ -42,7 +42,7 @@
 //import reika.rotarycraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 //import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 //import reika.rotarycraft.registry.ConfigRegistry;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.registry.MachineRegistry;
 //
 //import ic2.api.energy.event.EnergyTileLoadEvent;

@@ -28,7 +28,7 @@
 //import reika.rotarycraft.auxiliary.RotaryItems;
 //import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
 //import reika.rotarycraft.gui.machine.inventory.GuiGrinder;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.blockentities.processing.TileEntityGrinder;
 //
 //import codechicken.nei.PositionedStack;
@@ -127,7 +127,7 @@
 //		ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 //		this.drawExtras(recipe);
 //		CachedRecipe c = arecipes.get(recipe);
-//		if (c.getIngredient() != null && c.getIngredient().item.getItem() == ItemRegistry.CANOLA.get()) {
+//		if (c.getIngredient() != null && c.getIngredient().item.getItem() == RotaryItems.CANOLA.get()) {
 //			ReikaGuiAPI.instance.drawTexturedModalRect(19, 10, 176, 71, 8, 55);
 //		}
 //	}

@@ -14,10 +14,10 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
-import reika.dragonapi.base.CoreMenu;
+import reika.dragonapi.base.CoreContainer;
 import reika.rotarycraft.base.blockentity.RemoteControlMachine;
 
-public class ContainerRemoteControl extends CoreMenu<RemoteControlMachine> {
+public class ContainerRemoteControl extends CoreContainer<RemoteControlMachine> {
 
     public ContainerRemoteControl(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf byteBuf) {
         super(type, id, playerInv, (RemoteControlMachine) playerInv.player.level.getBlockEntity(byteBuf.readBlockPos()), null);

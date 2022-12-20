@@ -18,11 +18,10 @@ import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.GuiOneSlotScreen;
 import reika.rotarycraft.blockentities.BlockEntityWinder;
-import reika.rotarycraft.blockentities.engine.BlockEntityPerformanceEngine;
-import reika.rotarycraft.gui.container.machine.inventory.WinderMenu;
+import reika.rotarycraft.gui.container.machine.inventory.WinderContainer;
 import reika.rotarycraft.registry.PacketRegistry;
 
-public class WinderScreen extends GuiOneSlotScreen<BlockEntityWinder, WinderMenu> {
+public class WinderScreen extends GuiOneSlotScreen<BlockEntityWinder, WinderContainer> {
     private final BlockEntityWinder winder;
     //private Level level = ModLoader.getMinecraftInstance().theWorld;
 
@@ -30,7 +29,7 @@ public class WinderScreen extends GuiOneSlotScreen<BlockEntityWinder, WinderMenu
     int y;
     private boolean input;
 
-    public WinderScreen(WinderMenu container, Inventory inventory, Component title) {
+    public WinderScreen(WinderContainer container, Inventory inventory, Component title) {
         super(inventory, container, title);
         winder = (BlockEntityWinder) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;

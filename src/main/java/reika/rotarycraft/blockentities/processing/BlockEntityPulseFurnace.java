@@ -18,6 +18,8 @@
 //import net.minecraft.world.item.Items;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Block;
+//import net.minecraft.world.level.block.Blocks;
+//import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.level.material.Fluids;
 //import net.minecraftforge.fluids.FluidStack;
@@ -54,7 +56,11 @@
 //    private int tickcount2 = 0;
 //    private int soundtick = 2000;
 //
-//    @Override
+//    public BlockEntityPulseFurnace(BlockPos pos, BlockState state) {
+//        super(RotaryBlockEntities.PULSE_JET_FURNACE.get(), pos, state);
+//    }
+//
+//
 //    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 //        return i == 2;
 //    }
@@ -63,6 +69,7 @@
 //        idle = (this.getRecipe() == null && omega > MINSPEED);
 //    }
 //
+//    @Override
 //    public int getContainerSize() {
 //        return 3;
 //    }
@@ -73,9 +80,9 @@
 //
 //        pulseFurnaceCookTime = NBT.getShort("CookTime");
 //
-//        water.load(NBT);
-//        fuel.load(NBT);
-//        accel.load(NBT);
+//        water.readFromNBT(NBT);
+//        fuel.readFromNBT(NBT);
+//        accel.readFromNBT(NBT);
 //
 //        temperature = NBT.getInt("temp");
 //    }
@@ -90,9 +97,9 @@
 //        super.writeSyncTag(NBT);
 //        NBT.putShort("CookTime", (short) pulseFurnaceCookTime);
 //
-//        water.saveAdditional(NBT);
-//        fuel.saveAdditional(NBT);
-//        accel.saveAdditional(NBT);
+//        water.writeToNBT(NBT);
+//        fuel.writeToNBT(NBT);
+//        accel.writeToNBT(NBT);
 //
 //        NBT.putInt("temp", temperature);
 //    }
@@ -219,7 +226,7 @@
 //            soundtick = 0;
 //            SoundRegistry.PULSEJET.playSoundAtBlock(world, pos, 1, 1);
 //        }
-//        PulseJetRecipe recipe = this.getRecipe();
+//        RecipesPulseFurnace.PulseJetRecipe recipe = this.getRecipe();
 //        if (recipe != null) {
 //            this.getFuel(world, pos);
 //        }
@@ -279,7 +286,7 @@
 //    /**
 //     * Returns true if the furnace can smelt an item, i.e. has a source item, destination stack isn't full, etc.
 //     */
-//    private PulseJetRecipe getRecipe() {
+//    private RecipesPulseFurnace.PulseJetRecipe getRecipe() {
 //        this.getPowerBelow();
 //        //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", power));
 //        if (power <= 0 || omega < MINSPEED)
@@ -289,7 +296,7 @@
 //        if (fuel.isEmpty())
 //            return null;
 //
-//        PulseJetRecipe rec = RecipesPulseFurnace.getRecipes().getSmeltingResult(inv[0]);
+//        RecipesPulseFurnace.PulseJetRecipe rec = RecipesPulseFurnace.getRecipes().getSmeltingResult(inv[0]);
 //        if (rec == null || rec.requiredTemperature > temperature)
 //            return null;
 //
@@ -302,7 +309,7 @@
 //    /**
 //     * Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack
 //     */
-//    private void smeltItem(PulseJetRecipe rec) {
+//    private void smeltItem(RecipesPulseFurnace.PulseJetRecipe rec) {
 //        this.smeltHeat();
 //        ReikaInventoryHelper.addOrSetStack(rec.getOutput(), inv, 2);
 //        ReikaInventoryHelper.decrStack(0, inv);
@@ -339,7 +346,6 @@
 //        return MachineRegistry.PULSEJET;
 //    }
 //
-//    @Override
 //    public boolean isItemValidForSlot(int slot, ItemStack is) {
 //        if (slot != 0)
 //            return false;
@@ -367,7 +373,22 @@
 //    }
 //
 //    @Override
-//    public int fill(Direction from, FluidStack resource, FluidAction action) {
+//    public int fill(Direction from, FluidStack resource, FluidAction doFill) {
+//        Fluid fluid = resource.getFluid();
+//        if (!this.canFill(from, fluid))
+//            return 0;
+//        if (fluid.equals(Fluids.WATER)) {
+//            return water.fill(resource, doFill);
+//        }
+//        if (fluid.equals(RotaryFluids.JET_FUEL)) {
+//            return fuel.fill(resource, doFill);
+//        }
+//        if (fluid.equals(RotaryFluids.OXYGEN)) {
+//            return accel.fill(resource, doFill);
+//        }
+//  /*   todo   if (fluid.equals(Fluids.getFluid("oxygen"))) {
+//            return accel.fill(resource, doFill);
+//        }*/
 //        return 0;
 //    }
 //
@@ -386,14 +407,14 @@
 //    }
 //
 //    public void overheat(Level world, BlockPos pos) {
-//        ReikaWorldHelper.overheat(world, pos, RotaryItems.HSLA_STEEL_SCRAP.copy(), 0, 17, true, 1.5F, false, RotaryConfig.COMMON.BLOCKDAMAGE.get(), 12F);
+//        ReikaWorldHelper.overheat(world, pos.getX(), pos.getY(), pos.getZ(), RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance(), 0, 17, true, 1.5F, false, ConfigRegistry.BLOCKDAMAGE.getState(), 12F);
 //    }
 //
 //    public int getAccelerant() {
 //        return accel.getLevel();
 //    }
 //
-//    public Fluid getAccelerantType() {
+//    public FluidStack getAccelerantType() {
 //        return accel.getActualFluid();
 //    }
 //
@@ -402,31 +423,10 @@
 //    }
 //
 //    @Override
-//    public int fill(Direction from, FluidStack resource, boolean doFill) {
-//        Fluid fluid = resource.getFluid();
-//        if (!this.canFill(from, fluid))
-//            return 0;
-//        if (fluid.equals(Fluids.WATER)) {
-//            return water.fill(resource, doFill);
-//        }
-//        if (fluid.equals(RotaryFluids.JET_FUEL)) {
-//            return fuel.fill(resource, doFill);
-//        }
-//        if (fluid.equals(RotaryFluids.OXYGEN)) {
-//            return accel.fill(resource, doFill);
-//        }
-//        if (fluid.equals(Fluids.getFluid("oxygen"))) {
-//            return accel.fill(resource, doFill);
-//        }
-//        return 0;
-//    }
-//
-//    @Override
 //    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
 //        return null;
 //    }
 //
-//    @Override
 //    public boolean canFill(Direction from, Fluid fluid) {
 //        if (fluid.equals(Fluids.WATER)) {
 //            return from.getStepY() == 0;
@@ -437,14 +437,9 @@
 //        if (fluid.equals(RotaryFluids.OXYGEN)) {
 //            return from.getStepY() == 0;
 //        }
-//        if (fluid.equals(Fluids.getFluid("oxygen"))) {
+//      /*  if (fluid.equals(Fluids.getFluid("oxygen"))) {
 //            return from.getStepY() == 0;
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean canDrain(Direction from, Fluid fluid) {
+//        }*/
 //        return false;
 //    }
 //
@@ -515,13 +510,8 @@
 //
 //    @Override
 //    public void onApplyTemperature(Level world, BlockPos pos, int temperature) {
-//        if (world.getBlock(pos) == Blocks.FIRE)
+//        if (world.getBlockState(pos).getBlock() == Blocks.FIRE)
 //            RotaryAdvancements.PULSEFIRE.triggerAchievement(this.getPlacer());
-//    }
-//
-//    @Override
-//    public int getContainerSize() {
-//        return 0;
 //    }
 //
 //    @Override

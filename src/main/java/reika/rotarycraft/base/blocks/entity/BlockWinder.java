@@ -13,13 +13,9 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.BlockEntityWinder;
-import reika.rotarycraft.gui.container.machine.inventory.WinderMenu;
 import reika.rotarycraft.registry.RotaryMenus;
 
 public class BlockWinder extends BlockBasicMachine {

@@ -19,14 +19,14 @@ import net.minecraft.world.item.ItemStack;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.GuiPowerOnlyMachine;
 import reika.rotarycraft.blockentities.BlockEntityBlower;
-import reika.rotarycraft.gui.container.machine.BlowerMenu;
+import reika.rotarycraft.gui.container.machine.BlowerContainer;
 
-public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerMenu> {
+public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerContainer> {
 
     private final BlockEntityBlower tile;
     private final boolean[] controls;
 
-    public GuiBlower(BlowerMenu container, Inventory inv, Component title) {
+    public GuiBlower(BlowerContainer container, Inventory inv, Component title) {
         super(container, inv, title);
         tile = (BlockEntityBlower) inv.player.level.getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;

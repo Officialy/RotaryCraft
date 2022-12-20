@@ -39,7 +39,7 @@
 //import reika.rotarycraft.gui.machine.inventory.GuiExtractor;
 //import reika.rotarycraft.modinterface.ItemCustomModOre;
 //import reika.rotarycraft.registry.ExtractorBonus;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.blockentities.processing.TileEntityExtractor;
 //
 //import codechicken.nei.PositionedStack;
@@ -64,7 +64,7 @@
 //
 //		private ItemStack getDust() {
 //			if (type instanceof ReikaOreHelper) {
-//				return ItemRegistry.EXTRACTS.getStackOfMetadata(type.ordinal());
+//				return RotaryItems.EXTRACTS.getStackOfMetadata(type.ordinal());
 //			}
 //			else if (type instanceof ModOreList) {
 //				return ExtractorModOres.getDustProduct((ModOreList)type);
@@ -79,7 +79,7 @@
 //
 //		private ItemStack getSlurry() {
 //			if (type instanceof ReikaOreHelper) {
-//				return ItemRegistry.EXTRACTS.getStackOfMetadata(type.ordinal()+8);
+//				return RotaryItems.EXTRACTS.getStackOfMetadata(type.ordinal()+8);
 //			}
 //			else if (type instanceof ModOreList) {
 //				return ExtractorModOres.getSlurryProduct((ModOreList)type);
@@ -94,7 +94,7 @@
 //
 //		private ItemStack getSolution() {
 //			if (type instanceof ReikaOreHelper) {
-//				return ItemRegistry.EXTRACTS.getStackOfMetadata(type.ordinal()+16);
+//				return RotaryItems.EXTRACTS.getStackOfMetadata(type.ordinal()+16);
 //			}
 //			else if (type instanceof ModOreList) {
 //				return ExtractorModOres.getSolutionProduct((ModOreList)type);
@@ -109,7 +109,7 @@
 //
 //		private ItemStack getFlakes() {
 //			if (type instanceof ReikaOreHelper) {
-//				return ItemRegistry.EXTRACTS.getStackOfMetadata(type.ordinal()+24);
+//				return RotaryItems.EXTRACTS.getStackOfMetadata(type.ordinal()+24);
 //			}
 //			else if (type instanceof ModOreList) {
 //				return ExtractorModOres.getFlakeProduct((ModOreList)type);
@@ -245,15 +245,15 @@
 //
 //	@Override
 //	public void loadCraftingRecipes(ItemStack result) {
-//		if (ItemRegistry.EXTRACTS.matchItem(result)) {
+//		if (RotaryItems.EXTRACTS.matchItem(result)) {
 //			arecipes.add(new ExtractorRecipe(RecipesExtractor.getOreFromExtract(result)));
 //		}
-//		else if (ItemRegistry.MODEXTRACTS.matchItem(result)) {
+//		else if (RotaryItems.MODEXTRACTS.matchItem(result)) {
 //			ModOreList mod = ModOreList.oreList[result.getItemDamage()/4];
 //			if (mod.existsInGame())
 //				arecipes.add(new ExtractorRecipe(mod));
 //		}
-//		else if (ItemRegistry.CUSTOMEXTRACT.matchItem(result)) {
+//		else if (RotaryItems.CUSTOMEXTRACT.matchItem(result)) {
 //			arecipes.add(new ExtractorRecipe(ItemCustomModOre.getExtractType(result)));
 //		}
 //		else if (ReikaItemHelper.matchStacks(result, RotaryItems.aluminumpowder)) {
@@ -273,15 +273,15 @@
 //		if (type != null) {
 //			arecipes.add(new ExtractorRecipe(type));
 //		}
-//		else if (ItemRegistry.EXTRACTS.matchItem(ingredient) && dmg < ReikaOreHelper.oreList.length*3) {
+//		else if (RotaryItems.EXTRACTS.matchItem(ingredient) && dmg < ReikaOreHelper.oreList.length*3) {
 //			arecipes.add(new ExtractorRecipe(RecipesExtractor.getOreFromExtract(ingredient)));
 //		}
-//		else if (ItemRegistry.MODEXTRACTS.matchItem(ingredient) && dmg%4 != 3) {
+//		else if (RotaryItems.MODEXTRACTS.matchItem(ingredient) && dmg%4 != 3) {
 //			ModOreList mod = ModOreList.oreList[dmg/4];
 //			if (mod.existsInGame())
 //				arecipes.add(new ExtractorRecipe(mod));
 //		}
-//		else if (ItemRegistry.CUSTOMEXTRACT.matchItem(ingredient) && dmg%4 != 3) {
+//		else if (RotaryItems.CUSTOMEXTRACT.matchItem(ingredient) && dmg%4 != 3) {
 //			arecipes.add(new ExtractorRecipe(ItemCustomModOre.getExtractType(ingredient)));
 //		}
 //	}

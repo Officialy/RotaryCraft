@@ -5,9 +5,9 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import reika.dragonapi.base.BlockEntityBase;
-import reika.dragonapi.base.CoreMenu;
+import reika.dragonapi.base.CoreContainer;
 
-public class OneSlotContainer<T extends BlockEntityBase> extends CoreMenu<T> {
+public class OneSlotContainer<T extends BlockEntityBase> extends CoreContainer<T> {
 
     private Container inv;
 

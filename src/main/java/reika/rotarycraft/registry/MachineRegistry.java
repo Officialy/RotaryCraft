@@ -14,7 +14,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -26,7 +25,6 @@ import reika.dragonapi.instantiable.data.immutable.ImmutableArray;
 import reika.dragonapi.instantiable.data.maps.BlockMap;
 import reika.dragonapi.interfaces.registry.TileEnum;
 import reika.dragonapi.modregistry.PowerTypes;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.ModDependency;
 import reika.rotarycraft.auxiliary.interfaces.*;
 import reika.rotarycraft.base.blockentity.*;
@@ -40,7 +38,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
-import reika.rotarycraft.blockentities.processing.BlockEntityBigFurnace;
+import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 import reika.rotarycraft.blockentities.production.*;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
@@ -57,7 +55,7 @@ import java.util.Locale;
  */
 public enum MachineRegistry implements TileEnum {
 
-//        BEDROCKBREAKER("machine.bedrock", BlockRotaryCraftMachine.class, BlockEntityBedrockBreaker.class, "RenderBedrockBreaker"),
+    //        BEDROCKBREAKER("machine.bedrock", BlockRotaryCraftMachine.class, BlockEntityBedrockBreaker.class, "RenderBedrockBreaker"),
     ENGINE("machine.engine", RotaryBlocks.STEAM_ENGINE.get(), BlockEntityEngine.class),
     FLYWHEEL("machine.flywheel", RotaryBlocks.HSLA_FLYWHEEL.get(), BlockEntityFlywheel.class),
     SHAFT("machine.shaft", RotaryBlocks.HSLA_SHAFT.get(), BlockEntityShaft.class),
@@ -78,7 +76,7 @@ public enum MachineRegistry implements TileEnum {
     RESERVOIR("machine.reservoir", RotaryBlocks.RESERVOIR.get(), BlockEntityReservoir.class),
     AEROSOLIZER("machine.aerosolizer", RotaryBlocks.AEROSOLIZER.get(), BlockEntityAerosolizer.class),
     //    EXTRACTOR("machine.extractor", BlockRotaryCraftMachine.class, BlockEntityExtractor.class, "RenderExtractor"),
-//    PULSEJET("machine.pulsejet", BlockRotaryCraftMachine.class, BlockEntityPulseFurnace.class, "RenderPulseFurnace"),
+//    PULSEJET("machine.pulsejet", RotaryBlocks.PULSE_JET_FURNACE.get(), BlockEntityPulseFurnace.class),
 //    COMPACTOR("machine.compactor", BlockRotaryCraftMachine.class, BlockEntityCompactor.class, "RenderCompactor"),
 //    FAN("machine.fan", BlockRotaryCraftMachine.class, BlockEntityFan.class, "RenderFan"),
     FUELLINE("machine.fuelline", RotaryBlocks.PIPING.get(), BlockEntityFuelLine.class),
@@ -124,7 +122,7 @@ public enum MachineRegistry implements TileEnum {
 //    LASERGUN("machine.lasergun", BlockRotaryCraftMachine.class, BlockEntityLaserGun.class, "RenderLaserGun"),
     ITEMCANNON("machine.itemcannon", RotaryBlocks.ITEM_CANNON.get(), BlockEntityItemCannon.class),
     LANDMINE("machine.landmine", RotaryBlocks.LANDMINE.get(), BlockEntityLandmine.class),
-    //    FRICTION("machine.friction", BlockRotaryCraftMachine.class, BlockEntityFurnaceHeater.class, "RenderFriction"),
+//    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class),
     BLOCKCANNON("machine.blockcannon", RotaryBlocks.BLOCK_CANNON.get(), BlockEntityBlockCannon.class),
     BUCKETFILLER("machine.bucketfiller", RotaryBlocks.BUCKET_FILLER.get(), BlockEntityBucketFiller.class),
     MIRROR("machine.mirror", RotaryBlocks.MIRROR.get(), BlockEntityMirror.class),
@@ -143,7 +141,7 @@ public enum MachineRegistry implements TileEnum {
     MULTICLUTCH("machine.multiclutch", RotaryBlocks.MULTI_CLUTCH.get(), BlockEntityMultiClutch.class),
     //    TERRAFORMER("machine.terraformer", BlockRotaryCraftMachine.class, BlockEntityTerraformer.class),
     SORTING("machine.sorting", RotaryBlocks.SORTER.get(), BlockEntitySorting.class),
-//    FUELENHANCER("machine.fuelenhancer", BlockRotaryCraftMachine.class, BlockEntityFuelConverter.class, "RenderFuelConverter"),
+    //    FUELENHANCER("machine.fuelenhancer", BlockRotaryCraftMachine.class, BlockEntityFuelConverter.class, "RenderFuelConverter"),
 //    ARROWGUN("machine.arrowgun", BlockRotaryCraftMachine.class, BlockEntityMachineGun.class),
     BOILER("machine.frictionboiler", RotaryBlocks.FRICTION_BOILER.get(), BlockEntityBoiler.class, PowerTypes.STEAM),
     STEAMTURBINE("machine.steamturbine", RotaryBlocks.STEAM_TURBINE.get(), BlockEntitySteam.class, PowerTypes.STEAM),
@@ -162,7 +160,7 @@ public enum MachineRegistry implements TileEnum {
 //    BELT("machine.belt", BlockRotaryCraftMachine.class, BlockEntityBeltHub.class, "RenderBelt"),
     VANDEGRAFF("machine.vandegraff", RotaryBlocks.VAN_DE_GRAFF.get(), BlockEntityVanDeGraff.class),
     //    DEFOLIATOR("machine.defoliator", BlockRotaryCraftMachine.class, BlockEntityDefoliator.class, "RenderDefoliator"),
-    BIGFURNACE("machine.bigfurnace", RotaryBlocks.BIG_FURNACE.get(), BlockEntityBigFurnace.class),
+    BIGFURNACE("machine.bigfurnace", RotaryBlocks.LAVA_SMELTORY.get(), BlockEntityLavaSmeltery.class),
     //    DISTILLER("machine.distiller", BlockRotaryCraftMachine.class, BlockEntityDistillery.class, "RenderDistillery"),
     SUCTION("machine.suction", RotaryBlocks.PIPING.get(), BlockEntitySuctionPipe.class),
     //    DYNAMO("machine.dynamo", BlockModEngine.class, BlockEntityDynamo.class, "RenderDynamo", PowerTypes.RF),
@@ -594,6 +592,10 @@ public enum MachineRegistry implements TileEnum {
             case ENGINE, GEARBOX, SHAFT, ADVANCEDGEARS, FLYWHEEL -> true;
             default -> false;
         };
+    }
+
+    public boolean canBeFrictionHeated() {
+        return FrictionHeatable.class.isAssignableFrom(te);
     }
 
     public int getNumberSubtypes() {

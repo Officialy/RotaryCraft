@@ -1,14 +1,10 @@
 package reika.rotarycraft.base.blocks.entity.engine;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.PacketUtils;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,14 +14,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.engine.BlockEntitySteamEngine;
-import reika.rotarycraft.gui.container.machine.SteamMenu;
-import reika.rotarycraft.registry.RotaryMenus;
 
 public class BlockSteamEngine extends BlockBasicMachine {
     public BlockSteamEngine(Properties properties) {

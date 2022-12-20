@@ -61,7 +61,7 @@
 //        ItemStack item = ep.inventory.getSelected();
 //        if (item == null)
 //            return false;
-//        return item.getItem() == Items.DIAMOND_PICKAXE || item.getItem() == ItemRegistry.BEDPICK.get();
+//        return item.getItem() == Items.DIAMOND_PICKAXE || item.getItem() == RotaryItems.BEDPICK.get();
 //    }
 //
 //    /**

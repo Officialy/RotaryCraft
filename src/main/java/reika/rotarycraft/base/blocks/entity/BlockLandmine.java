@@ -1,8 +1,6 @@
 package reika.rotarycraft.base.blocks.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,16 +16,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
-import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine;
-import reika.rotarycraft.gui.container.machine.GearboxMenu;
-import reika.rotarycraft.gui.container.machine.inventory.LandmineMenu;
-import reika.rotarycraft.registry.RotaryMenus;
 
 public class BlockLandmine extends BlockBasicMachine {
 

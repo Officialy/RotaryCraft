@@ -11,7 +11,7 @@
 //
 //import reika.dragonapi.libraries.ReikaEntityHelper;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.blockentities.surveying.BlockEntityMobRadar;
 //import cpw.mods.fml.relauncher.Side;
 //import cpw.mods.fml.relauncher.SideOnly;
@@ -90,7 +90,7 @@
 //        Player ep = te.getPlacer();
 //        if (ep == null)
 //            return;
-//        if (!ReikaInventoryHelper.checkForItem(ItemRegistry.MOTION.get(), ep.inventory.mainInventory))
+//        if (!ReikaInventoryHelper.checkForItem(RotaryItems.MOTION.get(), ep.inventory.mainInventory))
 //            return;
 //        if (mc.thePlayer.getCommandSenderName() != ep.getCommandSenderName())
 //            return;

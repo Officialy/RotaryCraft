@@ -7,11 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.ScreenUtils;
-import reika.dragonapi.base.CoreMenu;
+import reika.dragonapi.base.CoreContainer;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 
-public class GuiOneSlotScreen<E extends BlockEntityPowerReceiver, T extends CoreMenu<E>> extends MachineScreen<E, T> {
+public class GuiOneSlotScreen<E extends BlockEntityPowerReceiver, T extends CoreContainer<E>> extends MachineScreen<E, T> {
 
     public static final ResourceLocation ONE_SLOT = new ResourceLocation(RotaryCraft.MODID, "textures/gui/basic_gui_oneslot.png");
     public static final ResourceLocation POWERTAB = new ResourceLocation(RotaryCraft.MODID, "textures/gui/powertab.png");

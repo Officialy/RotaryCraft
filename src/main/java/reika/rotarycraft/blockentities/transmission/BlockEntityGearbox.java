@@ -14,23 +14,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
@@ -54,8 +49,7 @@ import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.BlockEntity1DTransmitter;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
-import reika.rotarycraft.gui.container.machine.BevelMenu;
-import reika.rotarycraft.gui.container.machine.GearboxMenu;
+import reika.rotarycraft.gui.container.machine.GearboxContainer;
 import reika.rotarycraft.registry.*;
 
 import java.util.ArrayList;
@@ -780,6 +774,6 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return new GearboxMenu(p_39954_, p_39955_, this);
+        return new GearboxContainer(p_39954_, p_39955_, this);
     }
 }

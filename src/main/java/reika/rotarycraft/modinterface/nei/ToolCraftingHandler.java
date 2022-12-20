@@ -21,7 +21,7 @@
 //import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.gui.machine.inventory.GuiWorktable;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //
 //import codechicken.nei.PositionedStack;
 //import codechicken.nei.recipe.GuiCraftingRecipe;
@@ -72,15 +72,15 @@
 //	@Override
 //	public void loadCraftingRecipes(ItemStack result) {
 //		isWorktable = false;
-//		ItemRegistry ir = ItemRegistry.getEntry(result);
+//		RotaryItems ir = RotaryItems.getEntry(result);
 //		if (result.getItemDamage() > 0) {
 //			if (ir != null && ir.isCharged()) {
 //				GuiCraftingRecipe.openRecipeGui("item", ir.get());
 //			}
 //		}
-//		else if (ir == ItemRegistry.BEDROCK_ALLOY_CHESTPLATE) {
-//			ItemStack jet = ItemRegistry.JETPACK.get();
-//			arecipes.add(new CraftingRecipe(ir.getEnchantedStack(), ItemRegistry.BEDCHEST.getEnchantedStack(), jet));
+//		else if (ir == RotaryItems.BEDROCK_ALLOY_CHESTPLATE) {
+//			ItemStack jet = RotaryItems.JETPACK.get();
+//			arecipes.add(new CraftingRecipe(ir.getEnchantedStack(), RotaryItems.BEDCHEST.getEnchantedStack(), jet));
 //			isWorktable = true;
 //		}
 //	}
@@ -88,9 +88,9 @@
 //	@Override
 //	public void loadUsageRecipes(ItemStack ingredient) {
 //		isWorktable = false;
-//		if (ingredient != null && ingredient.getItem() == ItemRegistry.BEDCHEST.get()) {
-//			ItemStack jet = ItemRegistry.JETPACK.get();
-//			arecipes.add(new CraftingRecipe(ItemRegistry.BEDROCK_ALLOY_CHESTPLATE.getEnchantedStack(), ItemRegistry.BEDCHEST.getEnchantedStack(), jet));
+//		if (ingredient != null && ingredient.getItem() == RotaryItems.BEDCHEST.get()) {
+//			ItemStack jet = RotaryItems.JETPACK.get();
+//			arecipes.add(new CraftingRecipe(RotaryItems.BEDROCK_ALLOY_CHESTPLATE.getEnchantedStack(), RotaryItems.BEDCHEST.getEnchantedStack(), jet));
 //			isWorktable = true;
 //		}
 //	}

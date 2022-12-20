@@ -37,7 +37,7 @@ import reika.dragonapi.interfaces.block.SemiUnbreakable;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.base.blockentity.BlockEntitySpringPowered;
-import reika.rotarycraft.gui.container.machine.inventory.LandmineMenu;
+import reika.rotarycraft.gui.container.machine.inventory.LandmineContainer;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryAdvancements;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -379,6 +379,6 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return new LandmineMenu(p_39954_, p_39955_, this);
+        return new LandmineContainer(p_39954_, p_39955_, this);
     }
 }

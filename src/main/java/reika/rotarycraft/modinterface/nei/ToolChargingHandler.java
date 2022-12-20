@@ -20,7 +20,7 @@
 //import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.gui.machine.inventory.GuiWorktable;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //
 //import codechicken.nei.PositionedStack;
 //import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -48,7 +48,7 @@
 //			int dy = 6;
 //			PositionedStack pos = new PositionedStack(new ItemStack(chargedTool.getItem(), 1, 0), dx, dy);
 //			dx += 18;
-//			PositionedStack pos2 = new PositionedStack(ItemRegistry.SPRING.getStackOfMetadata(chargedTool.getItemDamage()), dx, dy);
+//			PositionedStack pos2 = new PositionedStack(RotaryItems.SPRING.getStackOfMetadata(chargedTool.getItemDamage()), dx, dy);
 //			stacks.add(pos);
 //			stacks.add(pos2);
 //			return stacks;
@@ -58,7 +58,7 @@
 //		public ArrayList<PositionedStack> getOtherStacks()
 //		{
 //			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-//			PositionedStack stack = new PositionedStack(ItemRegistry.SPRING.get(), 111, 6);
+//			PositionedStack stack = new PositionedStack(RotaryItems.SPRING.get(), 111, 6);
 //			stacks.add(stack);
 //			return stacks;
 //		}
@@ -71,9 +71,9 @@
 //
 //	@Override
 //	public void loadUsageRecipes(ItemStack ingredient) {
-//		if (ingredient != null && ingredient.getItem() == ItemRegistry.SPRING.get()) {
-//			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-//				ItemRegistry ir = ItemRegistry.itemList[i];
+//		if (ingredient != null && ingredient.getItem() == RotaryItems.SPRING.get()) {
+//			for (int i = 0; i < RotaryItems.itemList.length; i++) {
+//				RotaryItems ir = RotaryItems.itemList[i];
 //				if (ir.isCharged() && !ir.isDummiedOut()) {
 //					arecipes.add(new ChargingRecipe(ir.get(), ingredient.getItemDamage()));
 //				}

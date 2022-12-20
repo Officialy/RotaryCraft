@@ -12,11 +12,11 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
-import reika.rotarycraft.base.IOMachineMenu;
+import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.level.BlockEntityAerosolizer;
 import reika.rotarycraft.registry.RotaryMenus;
 
-public class ContainerAerosolizer extends IOMachineMenu<BlockEntityAerosolizer> {
+public class ContainerAerosolizer extends IOMachineContainer<BlockEntityAerosolizer> {
     private BlockEntityAerosolizer aerosolizer;
 
     //Client

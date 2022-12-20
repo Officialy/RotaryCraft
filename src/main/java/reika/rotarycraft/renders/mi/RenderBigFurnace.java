@@ -9,7 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.renders.mi;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
@@ -21,20 +20,15 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.blockentities.processing.BlockEntityBigFurnace;
+import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 
-import net.minecraft.world.level.block.entity.BlockEntity;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
-import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.models.BigFurnaceModel;
-import reika.rotarycraft.models.ReservoirModel;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
-public class RenderBigFurnace extends RotaryTERenderer<BlockEntityBigFurnace> {
+public class RenderBigFurnace extends RotaryTERenderer<BlockEntityLavaSmeltery> {
 
     private BigFurnaceModel modelBigFurnace;
 
@@ -45,7 +39,7 @@ public class RenderBigFurnace extends RotaryTERenderer<BlockEntityBigFurnace> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntityBigFurnaceAt(BlockEntityBigFurnace tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+    public void renderBlockEntityBigFurnaceAt(BlockEntityLavaSmeltery tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
@@ -55,7 +49,7 @@ public class RenderBigFurnace extends RotaryTERenderer<BlockEntityBigFurnace> {
     }
 
     @Override
-    public void render(BlockEntityBigFurnace tile, float p_112308_, PoseStack stack, MultiBufferSource bufferSource, int light, int overlay) {
+    public void render(BlockEntityLavaSmeltery tile, float p_112308_, PoseStack stack, MultiBufferSource bufferSource, int light, int overlay) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityBigFurnaceAt( tile, stack, bufferSource, light);
         if (( tile).isInWorld()){// && MinecraftForgeClient.getRenderPass() == 1) {
@@ -66,7 +60,7 @@ public class RenderBigFurnace extends RotaryTERenderer<BlockEntityBigFurnace> {
 //        }
     }
 
-    private void renderLiquid(PoseStack stack, BlockEntityBigFurnace tr) {
+    private void renderLiquid(PoseStack stack, BlockEntityLavaSmeltery tr) {
 //        stack.translate(par2, par4, par6);
         if (!tr.isEmpty() && tr.isInWorld()) {
             Fluid f = Fluids.LAVA;

@@ -26,7 +26,7 @@
 //import reika.rotarycraft.registry.ExtractorBonus;
 //import reika.rotarycraft.registry.GearboxTypes;
 //import reika.rotarycraft.registry.GearboxTypes.GearPart;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.registry.MachineRegistry;
 //
 //import codechicken.nei.api.API;
@@ -139,8 +139,8 @@
 //				this.hideBlock(BlockRegistry.blockList[i].get());
 //		}
 //
-//		for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-//			ItemRegistry ir = ItemRegistry.itemList[i];
+//		for (int i = 0; i < RotaryItems.itemList.length; i++) {
+//			RotaryItems ir = RotaryItems.itemList[i];
 //			if (ir.isContinuousCreativeMetadatas()) {
 //				int max = ir.getNumberMetadatas()-1;
 //				Item id = ir.get();
@@ -166,8 +166,8 @@
 //				}
 //			}
 //		}
-//		API.setItemListEntries(ItemRegistry.GEARBOX.get(), li);
-//		API.setItemListEntries(ItemRegistry.GEARCRAFT.get(), li2);
+//		API.setItemListEntries(RotaryItems.GEARBOX.get(), li);
+//		API.setItemListEntries(RotaryItems.GEARCRAFT.get(), li2);
 //
 //		li = new ArrayList<>();
 //		for (int i = 0; i < MachineRegistry.machineList.length; i++) {
@@ -175,11 +175,11 @@
 //			if (m.isAvailableInCreativeInventory() && !m.hasCustomPlacerItem())
 //				li.add(m.getCraftedProduct());
 //		}
-//		API.setItemListEntries(ItemRegistry.MACHINE.get(), li);
+//		API.setItemListEntries(RotaryItems.MACHINE.get(), li);
 //
 //		if (RotaryCraft.getInstance().isLocked()) {
-//			for (int i = 0; i < ItemRegistry.itemList.length; i++) {
-//				ItemRegistry ir = ItemRegistry.itemList[i];
+//			for (int i = 0; i < RotaryItems.itemList.length; i++) {
+//				RotaryItems ir = RotaryItems.itemList[i];
 //				API.hideItem(new ItemStack(ir.get(), 1, OreDictionary.WILDCARD_VALUE));
 //			}
 //		}
@@ -192,7 +192,7 @@
 //				API.hideItem(ExtractorModOres.getSolutionProduct(ore));
 //				API.hideItem(ExtractorModOres.getFlakeProduct(ore));
 //
-//				ItemStack out = ItemRegistry.MODINGOTS.getStackOfMetadata(ore.ordinal()); //NOT SMELTED INGOT!
+//				ItemStack out = RotaryItems.MODINGOTS.getStackOfMetadata(ore.ordinal()); //NOT SMELTED INGOT!
 //				if (!ReikaItemHelper.isVanillaItem(out))
 //					API.hideItem(out);
 //				RotaryCraft.LOGGER.info("Hiding ore "+ore+" Extractor products from NEI, as the ore is unused or does not exist.");
@@ -200,8 +200,8 @@
 //		}
 //
 //		if (CustomExtractLoader.instance.getEntries().isEmpty()) {
-//			API.hideItem(ItemRegistry.CUSTOMEXTRACT.getStackOfMetadata(0));
-//			API.hideItem(ItemRegistry.CUSTOMINGOT.getStackOfMetadata(0));
+//			API.hideItem(RotaryItems.CUSTOMEXTRACT.getStackOfMetadata(0));
+//			API.hideItem(RotaryItems.CUSTOMINGOT.getStackOfMetadata(0));
 //		}
 //
 //		RotaryCraft.LOGGER.info("Done loading NEI compatibility.");

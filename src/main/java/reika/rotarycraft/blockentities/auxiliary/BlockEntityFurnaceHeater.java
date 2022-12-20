@@ -11,6 +11,7 @@
 //
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.core.Direction;
+//import net.minecraft.core.particles.ParticleTypes;
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.util.Mth;
 //import net.minecraft.world.item.ItemStack;
@@ -19,33 +20,38 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.FurnaceBlock;
 //import net.minecraft.world.level.block.entity.BlockEntity;
+//import net.minecraft.world.level.block.entity.BlockEntityType;
 //import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
-//import org.jetbrains.annotations.NotNull;
+//import net.minecraft.world.level.block.state.BlockState;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
-//import reika.rotarycraft.api.Interfaces.ThermalMachine;
+//import reika.rotarycraft.api.interfaces.ThermalMachine;
 //import reika.rotarycraft.auxiliary.RotaryAux;
 //import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 //import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
+//import reika.rotarycraft.auxiliary.recipemanagers.RecipesFrictionHeater;
 //import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 //
-//import reika.rotarycraft.registry.DifficultyEffects;
-//import reika.rotarycraft.registry.MachineRegistry;
-//import reika.rotarycraft.registry.SoundRegistry;
+//import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+//import reika.rotarycraft.registry.*;
 //
 //public class BlockEntityFurnaceHeater extends BlockEntityPowerReceiver implements TemperatureTE, ConditionalOperation {
 //
 //    public static final int MAXTEMP = 2000;
 //
-//    private FrictionRecipe activeRecipe;
+//    private RecipesFrictionHeater.FrictionRecipe activeRecipe;
 //    private BlockPos furnaceLocation;
 //
 //    private int temperature;
 //    private int smeltTime = 0;
 //    private int soundtick = 0;
+//
+//    public BlockEntityFurnaceHeater(BlockPos pos, BlockState state) {
+//        super(RotaryBlockEntities.FRICTION_HEATER.get(), pos, state);
+//    }
 //
 //    public static boolean isHijacked(FurnaceBlockEntity furn) {
 //        for (int i = 2; i < 6; i++) {
@@ -80,7 +86,7 @@
 //        if (temperature > MAXTEMP)
 //            temperature = MAXTEMP;
 //        if (temperature >= MAXTEMP)
-//            if (!world.isClientSide && RotaryConfig.COMMON.BLOCKDAMAGE.get() && DragonAPI.rand.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0)
+//            if (!world.isClientSide && ConfigRegistry.BLOCKDAMAGE.getState() && DragonAPI.rand.nextInt(DifficultyEffects.FURNACEMELT.getInt()) == 0)
 //                this.meltFurnace(world);
 //        if (temperature < Tamb)
 //            temperature = Tamb;
@@ -124,6 +130,16 @@
 //    @Override
 //    public int getThermalDamage() {
 //        return temperature * 5 / 1200;
+//    }
+//
+//    @Override
+//    public Block getBlockEntityBlockID() {
+//        return RotaryBlocks.FRICTION_HEATER.get();
+//    }
+//
+//    @Override
+//    public void updateEntity(Level world, BlockPos pos) {
+//
 //    }
 //
 //    //@Override
@@ -216,7 +232,7 @@
 //    }
 //
 //    private boolean canTileMake(FurnaceBlockEntity tile, ItemStack is) {
-//        ItemStack out = tile.getStackInSlot(2);
+//        ItemStack out = tile.getItem(2);
 //        if (out == null)
 //            return true;
 //        return ReikaItemHelper.matchStacks(is, out) && is.getCount() + out.getCount() <= is.getMaxStackSize();
@@ -237,9 +253,9 @@
 //        int fy = furnaceLocation.getY();
 //        int fz = furnaceLocation.getZ();
 //        if (in != null) {
-//            ItemStack out = tile.getStackInSlot(2);
+//            ItemStack out = tile.getItem(2);
 //            ItemStack smelt = FurnaceRecipes.smelting().getSmeltingResult(in);
-//            FrictionRecipe special = RecipesFrictionHeater.getRecipes().getSmelting(in, temperature);
+//            RecipesFrictionHeater.FrictionRecipe special = RecipesFrictionHeater.getRecipes().getSmelting(in, temperature);
 //            if (special != null && !this.canTileMake(tile, special.getOutput()))
 //                special = null;
 //            if (smelt != null || special != null) {
@@ -254,16 +270,16 @@
 //                    int xp = 0;
 //                    if (smelt != null && tile.canSmelt()) {
 //                        tile.smeltItem();
-//                        xp = Mth.ceil(FurnaceRecipes.smelting().func_151398_b(smelt));
+////todo                        xp = Mth.ceil(FurnaceRecipes.smelting().func_151398_b(smelt));
 //                    } else if (special != null) {
 //                        ItemStack out2 = special.getOutput();
 //                        ReikaInventoryHelper.decrStack(0, tile, 1);
 //                        int amt = out != null ? out.getCount() + out2.getCount() : out2.getCount();
 //                        out = ReikaItemHelper.getSizedItemStack(out2, amt);
-//                        tile.setInventorySlotContents(2, out);
+//                        tile.setItem(2, out);
 //                        xp = 1;
 //                    }
-//                    if (xp > 0 && RotaryConfig.COMMON.FRICTIONXP.getState()) {
+//                    if (xp > 0 && ConfigRegistry.FRICTIONXP.getState()) {
 //                        ReikaWorldHelper.splitAndSpawnXP(world, fx + 0.5, fy + 0.6, fz + 0.5, xp, 600);
 //                    }
 //                    smeltTime = 0;
@@ -281,45 +297,41 @@
 //            soundtick = 0;
 //        }
 //        // world.playLocalSound(x+0.5, y+0.5, z+0.5, "dig.gravel", 1F, 2F);
-//        switch (meta) {
-//            case 0:
-//                world.addParticle("crit", x, fy + DragonAPI.rand.nextDouble(), fz + DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble(), 0.4 * DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble());
-//                break;
-//            case 1:
-//                world.addParticle("crit", x + 1, fy + DragonAPI.rand.nextDouble(), fz + DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble(), 0.4 * DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble());
-//                break;
-//            case 2:
-//                world.addParticle("crit", fx + DragonAPI.rand.nextDouble(), fy + DragonAPI.rand.nextDouble(), z, -0.2 + 0.4 * DragonAPI.rand.nextDouble(), 0.4 * DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble());
-//                break;
-//            case 3:
-//                world.addParticle("crit", fx + DragonAPI.rand.nextDouble(), fy + DragonAPI.rand.nextDouble(), z + 1, -0.2 + 0.4 * DragonAPI.rand.nextDouble(), 0.4 * DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble());
-//                break;
+//        switch (world.getBlockState(pos).getValue(BlockRotaryCraftMachine.FACING)) {
+//            case NORTH ->
+//                    world.addParticle(ParticleTypes.CRIT, worldPosition.getX(), fy + DragonAPI.rand.nextDouble(), fz + DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble(), 0.4 * DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble());
+//            case EAST ->
+//                    world.addParticle(ParticleTypes.CRIT, worldPosition.getX() + 1, fy + DragonAPI.rand.nextDouble(), fz + DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble(), 0.4 * DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble());
+//            case SOUTH ->
+//                    world.addParticle(ParticleTypes.CRIT, fx + DragonAPI.rand.nextDouble(), fy + DragonAPI.rand.nextDouble(), worldPosition.getZ(), -0.2 + 0.4 * DragonAPI.rand.nextDouble(), 0.4 * DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble());
+//            case WEST ->
+//                    world.addParticle(ParticleTypes.CRIT, fx + DragonAPI.rand.nextDouble(), fy + DragonAPI.rand.nextDouble(), worldPosition.getZ() + 1, -0.2 + 0.4 * DragonAPI.rand.nextDouble(), 0.4 * DragonAPI.rand.nextDouble(), -0.2 + 0.4 * DragonAPI.rand.nextDouble());
 //        }
 //    }
 //
-//    private float getAccelerationFactor(FrictionRecipe rec) {
+//    private float getAccelerationFactor(RecipesFrictionHeater.FrictionRecipe rec) {
 //        float fac = temperature / (float) rec.requiredTemperature;
 //        return Math.min(1, (fac * fac) - 1);
 //    }
 //
 //    private void getFurnaceCoordinates(Level world, BlockPos pos) {
-//        furnaceLocation = new BlockPos(this).offset(this.getReadDirection().getOpposite(), 1);
+//        furnaceLocation = worldPosition.relative(this.getReadDirection().getOpposite(), 1); //todo check if furnace
 //    }
 //
 //    private void meltFurnace(Level world) {
-//        Block id = furnaceLocation.getBlock(world);
-//        if (id != Blocks.furnace && id != Blocks.lit_furnace)
+//        Block id = world.getBlockState(furnaceLocation).getBlock();
+//        if (id != Blocks.FURNACE)
 //            return;
-//        world.explode(null, furnaceLocation.xCoord + 0.5, furnaceLocation.yCoord + 0.5, furnaceLocation.zCoord + 0.5, 1F, false);
+//        world.explode(null, furnaceLocation.getX() + 0.5, furnaceLocation.getY() + 0.5, furnaceLocation.getZ() + 0.5, 1F, Level.ExplosionInteraction.BLOCK); //todo check explosioninteraction
 //        //world.setBlock(fx, fy, fz, Blocks.flowing_lava.blockID);
-//        furnaceLocation.setBlock(world, Blocks.AIR);
+//        world.setBlock(furnaceLocation, Blocks.AIR.defaultBlockState(), 3); //TODO: Check if this 3 is correct
 //        //ItemStack cobb = new ItemStack(Blocks.cobblestone);
 //        //for (int i = 0; i < 8; i++)
 //        //	ReikaItemHelper.dropItem(world, fx+par5Random.nextDouble(), fy+par5Random.nextDouble(), fz+par5Random.nextDouble(), cobb);
 //    }
 //
 //    public boolean hasFurnace() {
-//        return furnaceLocation != null && furnaceLocation.getBlockEntity(level) instanceof BlockEntityFurnace;
+//        return furnaceLocation != null && level.getBlockEntity(furnaceLocation) instanceof FurnaceBlockEntity;
 //    }
 //
 //    private int getBurnTimeFromTemperature() {
@@ -336,7 +348,7 @@
 //        return 1 + (int) Math.sqrt((Math.pow(2, ((temperature - 500) / 100F))));
 //    }
 //
-//    public FrictionRecipe getActiveRecipe() {
+//    public RecipesFrictionHeater.FrictionRecipe getActiveRecipe() {
 //        return activeRecipe;
 //    }
 //
@@ -345,7 +357,7 @@
 //        return false;
 //    }
 //
-//    //@Override
+//    @Override
 //    public int getRedstoneOverride() {
 //        return temperature / 100;
 //    }
@@ -356,7 +368,7 @@
 //        NBT.putInt("temp", temperature);
 //
 //        if (furnaceLocation != null)
-//            furnaceLocation.saveAdditional("furnLoc", NBT);
+//            NBT.putLong("furnLoc", furnaceLocation.asLong());
 //    }
 //
 //    @Override
@@ -365,7 +377,12 @@
 //        temperature = NBT.getInt("temp");
 //
 //        if (NBT.contains("furnLoc"))
-//            furnaceLocation = BlockPos.load("furnLoc", NBT);
+//            furnaceLocation = BlockPos.of(NBT.getLong("furnLoc"));
+//    }
+//
+//    @Override
+//    protected String getTEName() {
+//        return null;
 //    }
 //
 //    @Override
@@ -424,44 +441,6 @@
 //    @Override
 //    public int getMaxTemperature() {
 //        return MAXTEMP;
-//    }
-//
-//    @Override
-//    public int getSlots() {
-//        return 0;
-//    }
-//
-//    @NotNull
-//    @Override
-//    public ItemStack getStackInSlot(int slot) {
-//        return null;
-//    }
-//
-//    @NotNull
-//    @Override
-//    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-//        return null;
-//    }
-//
-//    @NotNull
-//    @Override
-//    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-//        return null;
-//    }
-//
-//    @Override
-//    public int getSlotLimit(int slot) {
-//        return 0;
-//    }
-//
-//    @Override
-//    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-//        return false;
-//    }
-//
-//    @Override
-//    public String getName() {
-//        return null;
 //    }
 //
 //    @Override

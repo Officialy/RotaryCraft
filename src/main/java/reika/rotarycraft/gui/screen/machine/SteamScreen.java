@@ -15,13 +15,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.ScreenUtils;
 import reika.rotarycraft.base.EngineScreen;
 import reika.rotarycraft.blockentities.engine.BlockEntitySteamEngine;
-import reika.rotarycraft.gui.container.machine.SteamMenu;
+import reika.rotarycraft.gui.container.machine.SteamContainer;
 
-public class SteamScreen extends EngineScreen<BlockEntitySteamEngine, SteamMenu> {
+public class SteamScreen extends EngineScreen<BlockEntitySteamEngine, SteamContainer> {
 
     private final BlockEntitySteamEngine steam;
 
-    public SteamScreen(SteamMenu container, Inventory inv, Component text) { //BlockEntitySteamEngine te
+    public SteamScreen(SteamContainer container, Inventory inv, Component text) { //BlockEntitySteamEngine te
         super(container, inv, text);
 //        steam = getBlockEntity(); //te;
         steam = (BlockEntitySteamEngine) inv.player.level.getBlockEntity(container.tile.getBlockPos());

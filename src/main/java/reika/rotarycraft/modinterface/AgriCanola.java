@@ -40,7 +40,7 @@
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.Blocks.BlockCanola;
 //import reika.rotarycraft.registry.BlockRegistry;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //
 //import cpw.mods.fml.relauncher.Side;
 //import cpw.mods.fml.relauncher.SideOnly;
@@ -64,7 +64,7 @@
 //
 //	@Override
 //	public ItemStack getSeed() {
-//		return ItemRegistry.CANOLA.get();
+//		return RotaryItems.CANOLA.get();
 //	}
 //
 //	@Override
@@ -87,8 +87,8 @@
 //		ArrayList<ItemStack> li = new ArrayList<>();
 //		int n = BlockCanola.getDrops(GAIN_FORTUNE_MAPPING[gain-1], rand);
 //		while (n > 0) {
-//			int rem = Math.min(n, ItemRegistry.CANOLA.get().getItemStackLimit());
-//			li.add(ItemRegistry.CANOLA.getCraftedProduct(rem));
+//			int rem = Math.min(n, RotaryItems.CANOLA.get().getItemStackLimit());
+//			li.add(RotaryItems.CANOLA.getCraftedProduct(rem));
 //			n -= rem;
 //		}
 //		return li;

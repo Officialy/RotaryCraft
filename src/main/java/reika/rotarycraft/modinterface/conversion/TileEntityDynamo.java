@@ -36,7 +36,7 @@
 //import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 //import reika.rotarycraft.Items.Tools.ItemEngineUpgrade.Upgrades;
 //import reika.rotarycraft.registry.ConfigRegistry;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.registry.MachineRegistry;
 //
 //import cofh.api.energy.IEnergyStorage;
@@ -187,7 +187,7 @@
 //
 //	@Override
 //	public boolean canUpgradeWith(ItemStack item) {
-//		return !upgraded && ItemRegistry.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.FLUX.ordinal();
+//		return !upgraded && RotaryItems.UPGRADE.matchItem(item) && item.getItemDamage() == Upgrades.FLUX.ordinal();
 //	}
 //
 //	@Override

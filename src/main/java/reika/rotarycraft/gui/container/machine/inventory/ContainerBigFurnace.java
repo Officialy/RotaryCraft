@@ -14,22 +14,21 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.base.IOMachineMenu;
-import reika.rotarycraft.blockentities.BlockEntitySorting;
-import reika.rotarycraft.blockentities.processing.BlockEntityBigFurnace;
+import reika.rotarycraft.base.IOMachineContainer;
+import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 import reika.rotarycraft.registry.RotaryMenus;
 
-public class ContainerBigFurnace extends IOMachineMenu<BlockEntityBigFurnace> {
-    private final BlockEntityBigFurnace te;
+public class ContainerBigFurnace extends IOMachineContainer<BlockEntityLavaSmeltery> {
+    private final BlockEntityLavaSmeltery te;
 
     //Client
     public ContainerBigFurnace(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityBigFurnace) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityLavaSmeltery) inv.player.level.getBlockEntity(data.readBlockPos()));
     }
 
-    public ContainerBigFurnace(int id, Inventory player, BlockEntityBigFurnace par2BlockEntityBigFurnace) {
-        super(RotaryMenus.BIG_FURNACE.get(), id, player, par2BlockEntityBigFurnace);
-        te = par2BlockEntityBigFurnace;
+    public ContainerBigFurnace(int id, Inventory player, BlockEntityLavaSmeltery par2BlockEntityLavaSmeltery) {
+        super(RotaryMenus.BIG_FURNACE.get(), id, player, par2BlockEntityLavaSmeltery);
+        te = par2BlockEntityLavaSmeltery;
 
         int dx = 18;
         int dy = 21;

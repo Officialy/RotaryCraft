@@ -9,26 +9,32 @@
 // ******************************************************************************/
 //package reika.rotarycraft.gui.container.machine.inventory;
 //
+//import net.minecraft.network.FriendlyByteBuf;
+//import net.minecraft.world.entity.player.Inventory;
 //import net.minecraft.world.inventory.CraftingContainer;
 //import net.minecraft.world.inventory.FurnaceResultSlot;
-//import net.minecraft.world.item.crafting.Recipe;
 //import net.minecraft.world.level.Level;
 //import reika.dragonapi.instantiable.gui.Slot.SlotApprovedItems;
 //
-//import net.minecraft.world.entity.player.Player;
 //import net.minecraft.world.inventory.Slot;
 //import net.minecraft.world.item.ItemStack;
 //import reika.dragonapi.interfaces.ReikaCraftingContainer;
 //import reika.rotarycraft.auxiliary.recipemanagers.WorktableRecipes;
 //import reika.rotarycraft.blockentities.production.BlockEntityWorktable;
 //import reika.rotarycraft.registry.RotaryItems;
+//import reika.rotarycraft.registry.RotaryMenus;
 //
-//public class ContainerWorktable extends ReikaCraftingContainer<WorktableRecipes.WorktableRecipe> {
+//public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorktable> {
 //
-//    private final BlockEntityWorktable table;
+//    private static BlockEntityWorktable table;
+//    //Client
+//    public ContainerWorktable(int id, Inventory inv, FriendlyByteBuf data) {
+//        this(id, inv, (BlockEntityWorktable) inv.player.level.getBlockEntity(data.readBlockPos()), inv.player.level, true);
+//        table = (BlockEntityWorktable) inv.player.level.getBlockEntity(data.readBlockPos());
+//    }
 //
-//    public ContainerWorktable(Player player, BlockEntityWorktable te, Level world, boolean gui) {
-//        super(player, te, world, gui);
+//    public ContainerWorktable(int id, Inventory inv, BlockEntityWorktable te, Level world, boolean gui) {
+//        super(RotaryMenus.WORKTABLE.get(), id, inv, null/*todo null for now*/, world, gui);
 //        int dx = 0;
 //        table = te;
 //
@@ -40,7 +46,7 @@
 //        dx += 96 - 28 + 4;
 //        for (int i = 0; i < 3; i++) {
 //            for (int j = 0; j < 3; j++) {
-//                this.addSlot(new FurnaceResultSlot(player, te, 9 + i * 3 + j, dx + 26 + j * 18, 17 + i * 18));
+//                this.addSlot(new FurnaceResultSlot(inv.player, te, 9 + i * 3 + j, dx + 26 + j * 18, 17 + i * 18));
 //            }
 //        }
 //
@@ -59,18 +65,59 @@
 //
 //        this.updateCraftMatrix();
 //
-//        this.addPlayerInventory(player);
-//        this.onCraftMatrixChanged();
+//        this.addPlayerInventory(inv);
+////        this.onCraftMatrixChanged();
 //    }
 //
 //    @Override
-//    protected WorktableRecipes.WorktableRecipe getRecipe(CraftingContainer craftMatrix, Level world) {
+//    protected BlockEntityWorktable getRecipe(CraftingContainer craftMatrix, Level world) {
 //        return WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
 //    }
 //
 //    @Override
-//    protected ItemStack getOutput(WorktableRecipes.WorktableRecipe wr) {
+//    protected ItemStack getOutput(BlockEntityWorktable wr) {
 //        return wr.isRecycling() ? wr.getRecycling().getResultItem() : wr.getOutput();
+//
+//    }
+//
+//    @Override
+//    public void clearContent() {
+//
+//    }
+//
+//    @Override
+//    public int getContainerSize() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public boolean isEmpty() {
+//        return false;
+//    }
+//
+//    @Override
+//    public ItemStack getItem(int p_18941_) {
+//        return null;
+//    }
+//
+//    @Override
+//    public ItemStack removeItem(int p_18942_, int p_18943_) {
+//        return null;
+//    }
+//
+//    @Override
+//    public ItemStack removeItemNoUpdate(int p_18951_) {
+//        return null;
+//    }
+//
+//    @Override
+//    public void setItem(int p_18944_, ItemStack p_18945_) {
+//
+//    }
+//
+//    @Override
+//    public void setChanged() {
+//
 //    }
 //
 //    /**

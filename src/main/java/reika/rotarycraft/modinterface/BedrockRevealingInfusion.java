@@ -20,7 +20,7 @@
 //
 //import reika.dragonapi.libraries.ReikaNBTHelper;
 //import reika.dragonapi.libraries.ReikaNBTHelper;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //
 //import reika.rotarycraft.registry.RotaryItems;
 //import thaumcraft.api.ThaumcraftApiHelper;
@@ -33,7 +33,7 @@
 //	private ItemStack cachedCentralInput;
 //
 //	public BedrockRevealingInfusion(int inst, AspectList al, ItemStack[] recipe) {
-//		super("BEDREVEAL", RotaryItems.BEDREVEAL.getEnchantedStack(), inst, al, ItemRegistry.BEDHELM.getEnchantedStack(), recipe);
+//		super("BEDREVEAL", RotaryItems.BEDREVEAL.getEnchantedStack(), inst, al, RotaryItems.BEDHELM.getEnchantedStack(), recipe);
 //		cachedCentralInput = this.getRecipeInput().copy();
 //	}
 //
@@ -82,7 +82,7 @@
 //
 //	@Override
 //	public Object getRecipeOutput(ItemStack input) {
-//		ItemStack is = ItemRegistry.BEDREVEAL.getEnchantedStack();
+//		ItemStack is = RotaryItems.BEDREVEAL.getEnchantedStack();
 //		ReikaNBTHelper.combineNBT(is.stackTagCompound, cachedCentralInput.stackTagCompound);
 //		return is;
 //	}

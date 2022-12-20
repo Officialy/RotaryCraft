@@ -30,6 +30,7 @@ public class RotaryItems {
     public static final RegistryObject<Item> GOLD_FLYWHEEL_CORE = ITEMS.register("gold_flywheel_core", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> TUNGSTEN_ALLOY_FLYWHEEL_CORE = ITEMS.register("tungsten_alloy_flywheel_core", () -> new Item(new Item.Properties()));
 //    public static final RegistryObject<Item> BEDROCK_ALLOY_FLYWHEEL_CORE = ITEMS.register("bedrock_alloy_flywheel_core", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> NETHERRACK_DUST = ITEMS.register("netherrack_dust", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<BucketItem> MOLTEN_HSLA_BUCKET = ITEMS.register("molten_hsla_bucket", () -> new BucketItem(RotaryFluids.HSLA_FLUID, new Item.Properties()));
 
@@ -112,6 +113,8 @@ public class RotaryItems {
     public static final RegistryObject<Item> SAW = ITEMS.register("saw", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> DRY_ICE = ITEMS.register("dry_ice", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SILICON = ITEMS.register("silicon", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SILICON_DUST = ITEMS.register("silicon_dust", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> INDUCTIVE_BLEND = ITEMS.register("inductive_blend", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ENDERIUM = ITEMS.register("enderium", () -> new Item(new Item.Properties()));
 
     //public static final RegistryObject<Item> MOTION = ITEMS.register("motion", ItemMotionTracker::new);
@@ -149,6 +152,7 @@ public class RotaryItems {
     public static final RegistryObject<Item> HSLA_STEEL_AXE = ITEMS.register("hsla_steel_axe", ItemSteelAxe::new);
     public static final RegistryObject<Item> HSLA_STEEL_SWORD = ITEMS.register("hsla_steel_sword", ItemSteelSword::new);
     public static final RegistryObject<Item> HSLA_STEEL_HOE = ITEMS.register("hsla_steel_hoe", ItemSteelHoe::new);
+    public static final RegistryObject<Item> HSLA_STEEL_SHEARS = ITEMS.register("hsla_steel_shears", ItemSteelShears::new);
 //    public static final RegistryObject<Item> HSLA_STEEL_SHIELD = ITEMS.register("hsla_steel_shield", () -> new ShieldItem(new Item.Properties()));
 
     public static final RegistryObject<Item> HSLA_STEEL_INGOT = ITEMS.register("hsla_steel_ingot", () -> new Item(new Item.Properties()));

@@ -119,7 +119,7 @@ public class BlockAdvGear extends BlockRotaryCraftMachine {
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
         BlockEntityAdvancedGear adv = null;//todo (BlockEntityAdvancedGear) builder.getLevel().getBlockEntity(pos);
-        ItemStack is = null;//todo ItemRegistry.ADVGEAR.getStackOfMetadata(adv.getBlockMetadata() / 4);
+        ItemStack is = null;//todo RotaryItems.ADVGEAR.getStackOfMetadata(adv.getBlockMetadata() / 4);
         if (adv.getGearType().storesEnergy()) {
             if (is.getTag() == null)
                 is.getOrCreateTag();

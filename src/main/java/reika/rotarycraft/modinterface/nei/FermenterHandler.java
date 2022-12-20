@@ -30,7 +30,7 @@
 //import reika.rotarycraft.auxiliary.recipemanagers.MulchMaterials;
 //import reika.rotarycraft.gui.machine.inventory.GuiFermenter;
 //import reika.rotarycraft.registry.ConfigRegistry;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //
 //import codechicken.nei.PositionedStack;
 //import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -50,7 +50,7 @@
 //		@Override
 //		public PositionedStack getResult() {
 //			int amt = input != null ? MulchMaterials.instance.getPlantValue(input) : 1;
-//			ItemStack is = output.getItem() == ItemRegistry.YEAST.get() ? output : ReikaItemHelper.getSizedItemStack(output, amt);
+//			ItemStack is = output.getItem() == RotaryItems.YEAST.get() ? output : ReikaItemHelper.getSizedItemStack(output, amt);
 //			return new PositionedStack(is, 111, 36);
 //		}
 //
@@ -64,11 +64,11 @@
 //		}
 //
 //		private ItemStack getTopSlot() {
-//			return output.getItem() == ItemRegistry.YEAST.get() ? new ItemStack(Items.sugar) : ItemRegistry.YEAST.get();
+//			return output.getItem() == RotaryItems.YEAST.get() ? new ItemStack(Items.sugar) : RotaryItems.YEAST.get();
 //		}
 //
 //		private ItemStack getBottomSlot() {
-//			return output.getItem() == ItemRegistry.YEAST.get() ? new ItemStack(Blocks.dirt) : input;
+//			return output.getItem() == RotaryItems.YEAST.get() ? new ItemStack(Blocks.dirt) : input;
 //		}
 //	}
 //
@@ -111,7 +111,7 @@
 //	public void loadCraftingRecipes(String outputId, Object... results) {
 //		if (outputId != null && outputId.equals("rcferment")) {
 //			if (ConfigRegistry.enableFermenterYeast())
-//				arecipes.add(new FermenterRecipe(null, ItemRegistry.YEAST.get()));
+//				arecipes.add(new FermenterRecipe(null, RotaryItems.YEAST.get()));
 //			Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
 //			for (ItemStack is : li)
 //				arecipes.add(new FermenterRecipe(is, ReikaItemHelper.getSizedItemStack(RotaryItems.sludge, MulchMaterials.instance.getPlantValue(is))));
@@ -135,14 +135,14 @@
 //				arecipes.add(new FermenterRecipe(is, RotaryItems.sludge.copy()));
 //			}
 //		}
-//		else if (result.getItem() == ItemRegistry.YEAST.get()) {
+//		else if (result.getItem() == RotaryItems.YEAST.get()) {
 //			if (ConfigRegistry.enableFermenterYeast())
 //				arecipes.add(new FermenterRecipe(null, result));
 //		}
 //	}
 //
 //	public boolean isEthanolIngredient(ItemStack is) {
-//		if (is.getItem() == ItemRegistry.YEAST.get())
+//		if (is.getItem() == RotaryItems.YEAST.get())
 //			return true;
 //		if (is.getItem() == Items.water_bucket)
 //			return true;
@@ -161,7 +161,7 @@
 //
 //	@Override
 //	public void loadUsageRecipes(ItemStack ingredient) {
-//		if (ItemRegistry.YEAST.matchItem(ingredient)) {
+//		if (RotaryItems.YEAST.matchItem(ingredient)) {
 //			Collection<ItemStack> li = MulchMaterials.instance.getAllValidPlants();
 //			for (ItemStack is : li) {
 //				arecipes.add(new FermenterRecipe(is, RotaryItems.sludge.copy()));
@@ -170,7 +170,7 @@
 //		else if (this.isEthanolIngredient(ingredient) || this.isYeastIngredient(ingredient)) {
 //			if (this.isYeastIngredient(ingredient)) {
 //				if (ConfigRegistry.enableFermenterYeast())
-//					arecipes.add(new FermenterRecipe(ingredient, ItemRegistry.YEAST.get()));
+//					arecipes.add(new FermenterRecipe(ingredient, RotaryItems.YEAST.get()));
 //			}
 //			else
 //				arecipes.add(new FermenterRecipe(ingredient, RotaryItems.sludge.copy()));

@@ -125,12 +125,12 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
     FREEWATER("Free Water Production Factor", 1F),
     SNEAKWINGS("Jetpack wings enable with sneak vs disable", false);
 
-    private String label;
+    private final String label;
     private boolean defaultState;
     private int defaultValue;
     private float defaultFloat;
     private String defaultString;
-    private Class type;
+    private final Class<?> type;
     private boolean enforcing = false;
 
     public static final ConfigRegistry[] optionList = values();
@@ -176,7 +176,7 @@ public enum ConfigRegistry implements SegmentedConfigList, SelectiveConfig, Inte
         return type == float.class;
     }
 
-    public Class getPropertyType() {
+    public Class<?> getPropertyType() {
         return type;
     }
 

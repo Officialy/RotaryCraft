@@ -14,21 +14,20 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
-import reika.dragonapi.base.CoreMenu;
-import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
+import reika.dragonapi.base.CoreContainer;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine;
 import reika.rotarycraft.registry.RotaryMenus;
 
-public class LandmineMenu extends CoreMenu<BlockEntityLandmine> {
+public class LandmineContainer extends CoreContainer<BlockEntityLandmine> {
 
     public final BlockEntityLandmine landmine;
 
     //Client
-    public LandmineMenu(int id, Inventory inv, FriendlyByteBuf data) {
+    public LandmineContainer(int id, Inventory inv, FriendlyByteBuf data) {
         this(id, inv, (BlockEntityLandmine) inv.player.level.getBlockEntity(data.readBlockPos()));
     }
 
-    public LandmineMenu(int id, Inventory inv, BlockEntityLandmine te) {
+    public LandmineContainer(int id, Inventory inv, BlockEntityLandmine te) {
         super(RotaryMenus.LANDMINE.get(), id, inv, te, null);
         this.landmine = te;
         Container ii = te;

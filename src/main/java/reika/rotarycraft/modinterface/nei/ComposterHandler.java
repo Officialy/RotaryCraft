@@ -25,7 +25,7 @@
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.auxiliary.RotaryItems;
 //import reika.rotarycraft.gui.machine.inventory.GuiComposter;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.blockentities.Farming.TileEntityComposter;
 //
 //import codechicken.nei.PositionedStack;
@@ -56,7 +56,7 @@
 //		public ArrayList<PositionedStack> getIngredients()
 //		{
 //			ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-//			stacks.add(new PositionedStack(ItemRegistry.YEAST.get(), 50, 45));
+//			stacks.add(new PositionedStack(RotaryItems.YEAST.get(), 50, 45));
 //			stacks.add(new PositionedStack(this.getEntry(), 50, 27));
 //			return stacks;
 //		}
@@ -128,7 +128,7 @@
 //		if (TileEntityComposter.getCompostValue(ingredient) > 0) {
 //			arecipes.add(new ComposterRecipe(ingredient));
 //		}
-//		else if (ItemRegistry.YEAST.matchItem(ingredient)) {
+//		else if (RotaryItems.YEAST.matchItem(ingredient)) {
 //			arecipes.add(new ComposterRecipe());
 //		}
 //	}

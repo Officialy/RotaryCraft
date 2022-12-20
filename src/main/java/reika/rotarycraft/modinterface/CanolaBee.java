@@ -42,7 +42,7 @@
 //import reika.rotarycraft.auxiliary.RotaryItems;
 //import reika.rotarycraft.registry.BlockRegistry;
 //import reika.rotarycraft.registry.ConfigRegistry;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //
 //import forestry.api.apiculture.EnumBeeChromosome;
 //import forestry.api.apiculture.FlowerManager;
@@ -73,7 +73,7 @@
 //		this.addProduct(ForestryHandler.Combs.DRIPPING.getItem(), 10);
 //		this.addProduct(ForestryHandler.Combs.STRINGY.getItem(), 2.5F);
 //		if (ConfigRegistry.enableBeeYeast()) {
-//			this.addSpecialty(ItemRegistry.YEAST.get(), 10);
+//			this.addSpecialty(RotaryItems.YEAST.get(), 10);
 //		}
 //	}
 //

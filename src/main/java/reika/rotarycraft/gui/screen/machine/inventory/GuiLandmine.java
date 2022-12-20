@@ -9,17 +9,15 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine.inventory;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine;
-import reika.rotarycraft.gui.container.machine.ContainerSorter;
-import reika.rotarycraft.gui.container.machine.inventory.LandmineMenu;
+import reika.rotarycraft.gui.container.machine.inventory.LandmineContainer;
 
-public class GuiLandmine extends NonPoweredMachineScreen<BlockEntityLandmine, LandmineMenu> {
+public class GuiLandmine extends NonPoweredMachineScreen<BlockEntityLandmine, LandmineContainer> {
 
-    public GuiLandmine(LandmineMenu container, Inventory inv, Component title) {
+    public GuiLandmine(LandmineContainer container, Inventory inv, Component title) {
         super(container, inv, title);
     }
 

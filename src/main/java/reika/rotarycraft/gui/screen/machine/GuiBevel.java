@@ -17,17 +17,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import reika.dragonapi.base.CoreMenu;
+import reika.dragonapi.base.CoreContainer;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
-import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.PacketRegistry;
-import reika.rotarycraft.registry.RotaryMenus;
 
-public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, CoreMenu<BlockEntityBevelGear>> {
+public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, CoreContainer<BlockEntityBevelGear>> {
     private final BlockEntityBevelGear bevel;
     /**
      * Side colors:
@@ -40,7 +38,7 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
     private Direction out;
     //private Level level = ModLoader.getMinecraftInstance().theWorld;
 
-    public GuiBevel(CoreMenu<BlockEntityBevelGear> id, Inventory inventory, Component title) {
+    public GuiBevel(CoreContainer<BlockEntityBevelGear> id, Inventory inventory, Component title) {
         super(id, inventory, title);
         bevel = (BlockEntityBevelGear) inventory.player.level.getBlockEntity(id.tile.getBlockPos());
         imageHeight = 192;

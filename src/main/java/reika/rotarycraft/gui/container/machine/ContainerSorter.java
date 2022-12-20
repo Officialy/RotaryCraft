@@ -16,11 +16,11 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 import reika.dragonapi.instantiable.gui.Slot.GhostSlot;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.base.IOMachineMenu;
+import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.BlockEntitySorting;
 import reika.rotarycraft.registry.RotaryMenus;
 
-public class ContainerSorter extends IOMachineMenu<BlockEntitySorting> {
+public class ContainerSorter extends IOMachineContainer<BlockEntitySorting> {
 
     private final BlockEntitySorting sorter;
     //Client

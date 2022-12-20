@@ -14,14 +14,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -29,16 +25,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
-import reika.rotarycraft.gui.container.machine.BevelMenu;
-import reika.rotarycraft.gui.container.machine.SteamMenu;
+import reika.rotarycraft.gui.container.machine.SteamContainer;
 import reika.rotarycraft.registry.*;
 
 public class BlockEntitySteamEngine extends BlockEntityEngine {
@@ -271,6 +264,6 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return new SteamMenu(p_39954_, p_39955_, this);
+        return new SteamContainer(p_39954_, p_39955_, this);
     }
 }

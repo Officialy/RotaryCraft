@@ -28,15 +28,11 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.auxiliary.trackers.KeyWatcher;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
-import reika.rotarycraft.gui.container.machine.GearboxMenu;
 import reika.rotarycraft.items.tools.ItemDebug;
 import reika.rotarycraft.items.tools.ItemMeter;
 import reika.rotarycraft.items.tools.ItemScrewdriver;
@@ -88,7 +84,7 @@ public class BlockGearbox extends BlockBasicMachine {
 //            return 0.01F;
 //        int mult = 1;
 //        if (ep.getInventory().getSelected() != null) {
-//            if (ep.getInventory().getSelected().getItem() == ItemRegistry.BEDPICK.get())
+//            if (ep.getInventory().getSelected().getItem() == RotaryItems.BEDPICK.get())
 //                mult = 2;
 //        }
 //        if (this.canHarvest(world, ep, pos))

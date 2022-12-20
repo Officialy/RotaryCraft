@@ -19,7 +19,7 @@
 //import reika.dragonapi.modinteract.DeepInteract.ReikaThaumHelper;
 //import reika.dragonapi.modinteract.ItemHandlers.AppEngHandler;
 //import reika.rotarycraft.RotaryCraft;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //
 //import cpw.mods.fml.relauncher.Side;
 //import cpw.mods.fml.relauncher.SideOnly;
@@ -47,7 +47,7 @@
 //
 //	@Override
 //	public boolean onLeftClick(Level world, int x, int y, int z, Player ep, ItemStack wand, Direction side) {
-//		ep.setCurrentItemOrArmor(0, ItemRegistry.SCREWDRIVER.get());
+//		ep.setCurrentItemOrArmor(0, RotaryItems.SCREWDRIVER.get());
 //		if (!MinecraftForge.EVENT_BUS.post(new PlayerInteractEvent(ep, Action.LEFT_CLICK_BLOCK, x, y, z, side.ordinal(), world)))
 //			world.getBlock(x, y, z).onBlockClicked(world, x, y, z, ep);
 //		ep.setCurrentItemOrArmor(0, wand);
@@ -59,7 +59,7 @@
 //	public ItemStack onFocusRightClick(ItemStack wand, Level world, Player player, BlockHitResult mov) {
 //		if (mov == null)
 //			return null;
-//		ItemStack is = ItemRegistry.SCREWDRIVER.get();
+//		ItemStack is = RotaryItems.SCREWDRIVER.get();
 //		boolean flag = false;
 //		int x = mov.blockX;
 //		int y = mov.blockY;
@@ -68,7 +68,7 @@
 //		float b = (float)mov.hitVec.yCoord;
 //		float c = (float)mov.hitVec.zCoord;
 //		boolean nativeTile = world.getBlockEntity(x, y, z) instanceof BlockEntityBase;
-//		if (ItemRegistry.SCREWDRIVER.get().onItemUse(is, player, world, x, y, z, mov.sideHit, a, b, c))
+//		if (RotaryItems.SCREWDRIVER.get().onItemUse(is, player, world, x, y, z, mov.sideHit, a, b, c))
 //			flag = nativeTile;
 //		if ((nativeTile || this.canMultiTool(wand)) && this.fakeScrewclick(world, x, y, z, player, mov, a, b, c, is))
 //			flag = true;

@@ -11,22 +11,19 @@ package reika.rotarycraft.gui.screen.machine.inventory;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.gui.ScreenUtils;
-import org.lwjgl.opengl.GL11;
 
 import reika.rotarycraft.base.GuiPowerOnlyMachine;
-import reika.rotarycraft.blockentities.processing.BlockEntityBigFurnace;
+import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerBigFurnace;
 
-public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityBigFurnace, ContainerBigFurnace> {
-    private final BlockEntityBigFurnace te;
+public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, ContainerBigFurnace> {
+    private final BlockEntityLavaSmeltery te;
 
     public GuiBigFurnace(ContainerBigFurnace container, Inventory inv, Component title) {
         super(container, inv, title);
-        te = (BlockEntityBigFurnace) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
+        te = (BlockEntityLavaSmeltery) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
         inventory = inv;
         imageWidth = 190;
         imageHeight = 207;

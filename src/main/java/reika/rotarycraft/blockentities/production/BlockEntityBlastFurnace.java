@@ -6,7 +6,8 @@
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
- ******************************************************************************/
+ ******************************************************************************//*
+
 package reika.rotarycraft.blockentities.production;
 
 import net.minecraft.core.BlockPos;
@@ -37,11 +38,9 @@ import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.FrictionHeatable;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
+import reika.rotarycraft.auxiliary.recipemanagers.RecipesBlastFurnace;
 import reika.rotarycraft.base.blockentity.InventoriedRCBlockEntity;
-import reika.rotarycraft.registry.DifficultyEffects;
-import reika.rotarycraft.registry.MachineRegistry;
-import reika.rotarycraft.registry.RotaryBlocks;
-import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.registry.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -65,7 +64,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
     public boolean leaveLastItem;
     private int temperature;
     private float xp;
-    private BlastFurnacePattern pattern;
+    private RecipesBlastFurnace.BlastFurnacePattern pattern;
 
     public BlockEntityBlastFurnace(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -76,10 +75,10 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         return this.getRecipe() != null || this.getCrafting() != null ? 1 : 0;
     }
 
-    private BlastCrafting getCrafting() {
+    private RecipesBlastFurnace.BlastCrafting getCrafting() {
         ItemStack[] center = new ItemStack[9];
         System.arraycopy(inv, 1, center, 0, 9);
-        BlastCrafting c = RecipesBlastFurnace.getRecipes().getCrafting(center, temperature);
+        RecipesBlastFurnace.BlastCrafting c = RecipesBlastFurnace.getRecipes().getCrafting(center, temperature);
 
         if (c != null && leaveLastItem) {
             for (int i = 1; i <= 9; i++) {
@@ -91,10 +90,10 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         return c;
     }
 
-    private BlastRecipe getRecipe() {
+    private RecipesBlastFurnace.BlastRecipe getRecipe() {
         ItemStack[] center = new ItemStack[9];
         System.arraycopy(inv, 1, center, 0, 9);
-        BlastRecipe rec = RecipesBlastFurnace.getRecipes().getRecipe(inv[CENTER_ADDITIVE], inv[LOWER_ADDITIVE], inv[UPPER_ADDITIVE], center, temperature);
+        RecipesBlastFurnace.BlastRecipe rec = RecipesBlastFurnace.getRecipes().getRecipe(inv[CENTER_ADDITIVE], inv[LOWER_ADDITIVE], inv[UPPER_ADDITIVE], center, temperature);
 
         if (rec == null)
             return null;
@@ -145,8 +144,8 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
             this.updateTemperature(world, pos);
         }
 
-        BlastRecipe rec = this.getRecipe();
-        BlastCrafting bc = this.getCrafting();
+        RecipesBlastFurnace.BlastRecipe rec = this.getRecipe();
+        RecipesBlastFurnace.BlastCrafting bc = this.getCrafting();
         if (bc != null) {
             pattern = bc;
             if (bc.speed <= 1 || level.getDayTime() % bc.speed == 0)
@@ -172,7 +171,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
 
     }
 
-    private void craft(BlastCrafting bc) {
+    private void craft(RecipesBlastFurnace.BlastCrafting bc) {
         smeltTime = 0;
         if (level.isClientSide)
             return;
@@ -196,7 +195,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         }
     }
 
-    private void make(BlastRecipe rec) {
+    private void make(RecipesBlastFurnace.BlastRecipe rec) {
         smeltTime = 0;
         if (level.isClientSide)
             return;
@@ -262,7 +261,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         return Mth.clamp(base * made * DifficultyEffects.BLASTCONSUME.getChance(), base, 1);
     }
 
-    private int getProducedFor(BlastRecipe rec) {
+    private int getProducedFor(RecipesBlastFurnace.BlastRecipe rec) {
         int num = 0;
         for (int i = 1; i < 10; i++) {
             if (inv[i] != null) {
@@ -273,8 +272,8 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         return rec.getNumberProduced(num);
     }
 
-    private RotaryAdvancements getAchievement(BlastRecipe rec) {
-        if (rec.isValidMainItem(RotaryItems.HSLA_STEEL_SCRAP))
+    private RotaryAdvancements getAchievement(RecipesBlastFurnace.BlastRecipe rec) {
+        if (rec.isValidMainItem(RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance()))
             return RotaryAdvancements.RECYCLE;
         if (ReikaItemHelper.matchStacks(rec.outputItem(), RotaryItems.HSLA_STEEL_INGOT))
             return RotaryAdvancements.MAKESTEEL;
@@ -288,7 +287,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
     }
 
     public void dropXP() {
-        ReikaWorldHelper.splitAndSpawnXP(level, xCoord + DragonAPI.rand.nextFloat(), yCoord + 1.25F, zCoord + DragonAPI.rand.nextFloat(), (int) xp);
+        ReikaWorldHelper.splitAndSpawnXP(level, worldPosition.getX() + DragonAPI.rand.nextFloat(), worldPosition.getY() + 1.25F, worldPosition.getZ() + DragonAPI.rand.nextFloat(), (int) xp);
         xp = 0;
     }
 
@@ -309,24 +308,24 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         if (num > maxfit)
             return false;
         if (f1 > num) {
-            inv[10].getCount() += num;
+            inv[10].setCount(+num);
             return true;
         } else {
-            inv[10].getCount() = inv[10].getMaxStackSize();
+            inv[10].setCount(inv[10].getMaxStackSize());
             num -= f1;
         }
         if (f2 > num) {
-            inv[12].getCount() += num;
+            inv[12].setCount(+num);
             return true;
         } else {
-            inv[12].getCount() = inv[12].getMaxStackSize();
+            inv[12].setCount(inv[12].getMaxStackSize());
             num -= f2;
         }
         if (f3 > num) {
-            inv[12].getCount() += num;
+            inv[12].setCount(+num);
             return true;
         } else {
-            inv[13].getCount() = inv[13].getMaxStackSize();
+            inv[13].setCount(inv[13].getMaxStackSize());
             num -= f3;
         }
         return true;
@@ -431,9 +430,9 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
 
     private boolean getSlotForItem(int slot, ItemStack is) {
         ItemStack patt = inv[PATTERN_SLOT];
-        if (RotaryItems.CRAFTPATTERN.matchItem(patt) && slot >= 1 && slot <= 9) {
-            return ItemCraftPattern.checkPatternForMatch(this, RecipeMode.BLASTFURN, slot, slot - 1, is, patt);
-        }
+//        todo if (RotaryItems.CRAFTPATTERN.matchItem(patt) && slot >= 1 && slot <= 9) {
+//            return ItemCraftPattern.checkPatternForMatch(this, RecipeMode.BLASTFURN, slot, slot - 1, is, patt);
+//        }
         //ReikaJavaLibrary.pConsole(slot+": "+lockedSlots[slot]);
         if (lockedSlots[slot])
             return false;
@@ -559,11 +558,6 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
     }
 
     @Override
-    public int getContainerSize() {
-        return 0;
-    }
-
-    @Override
     public boolean isEmpty() {
         return false;
     }
@@ -635,3 +629,4 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         return false;
     }
 }
+*/

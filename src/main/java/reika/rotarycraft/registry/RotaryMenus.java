@@ -2,14 +2,10 @@ package reika.rotarycraft.registry;
 
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import reika.dragonapi.base.BlockEntityBase;
-import reika.dragonapi.base.CoreMenu;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
 import reika.rotarycraft.gui.container.ContainerHandCraft;
 import reika.rotarycraft.gui.container.machine.*;
 import reika.rotarycraft.gui.container.machine.inventory.*;
@@ -24,15 +20,15 @@ public interface RotaryMenus {
         return REGISTRY.register(id, () -> new MenuType<>(factory));
     }
 
-    Supplier<MenuType<WinderMenu>> WINDER = register("winder", WinderMenu::new);
+    Supplier<MenuType<WinderContainer>> WINDER = register("winder", WinderContainer::new);
 
-    Supplier<MenuType<GearboxMenu>> GEARBOX = register("gearbox", GearboxMenu::new);
+    Supplier<MenuType<GearboxContainer>> GEARBOX = register("gearbox", GearboxContainer::new);
 
     Supplier<MenuType<ReservoirContainer>> RESERVOIR = register("reservoir", ReservoirContainer::new);
 
-    Supplier<MenuType<LandmineMenu>> LANDMINE = register("landmine", LandmineMenu::new);
+    Supplier<MenuType<LandmineContainer>> LANDMINE = register("landmine", LandmineContainer::new);
 
-    Supplier<MenuType<BlowerMenu>> BLOWER = register("blower", BlowerMenu::new);
+    Supplier<MenuType<BlowerContainer>> BLOWER = register("blower", BlowerContainer::new);
 
 //    Supplier<MenuType<ContainerEthanol>> GAS_ENGINE = register("gas_engine",      () -> IForgeMenuType.create(new ContainerEthanol.Factory()));
 
@@ -41,8 +37,8 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerHandCraft>> HAND_CRAFT = register("hand_craft", ContainerHandCraft::new);
 
 
-    Supplier<MenuType<SteamMenu>> STEAM_ENGINE = register("steam_engine", SteamMenu::new);
-    Supplier<MenuType<BevelMenu>> BEVEL = register("bevel", BevelMenu::new);
+    Supplier<MenuType<SteamContainer>> STEAM_ENGINE = register("steam_engine", SteamContainer::new);
+    Supplier<MenuType<BevelContainer>> BEVEL = register("bevel", BevelContainer::new);
 
 
 //    Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", GrinderMenu::new);
@@ -55,7 +51,7 @@ public interface RotaryMenus {
 
 //    Supplier<MenuType<ContainerExtractor>> EXTRACTOR = register("extractor", () -> IForgeMenuType.create(new ContainerExtractor.Factory()));
 
-    Supplier<MenuType<PerformanceMenu>> PERFORMANCE_ENGINE = register("performance_engine", PerformanceMenu::new);
+    Supplier<MenuType<PerformanceContainer>> PERFORMANCE_ENGINE = register("performance_engine", PerformanceContainer::new);
 
 //    Supplier<MenuType<ContainerItemCannon>> ITEM_CANNON = register("item_cannon",     () -> IForgeMenuType.create(new ContainerItemCannon.Factory()));
 
@@ -64,8 +60,9 @@ public interface RotaryMenus {
 //    Supplier<MenuType<ContainerCannon>> CANNON = register("cannon", () -> IForgeMenuType.create(new ContainerCannon.Factory()));
 
     Supplier<MenuType<ContainerAerosolizer>> AEROSOLIZER = register("aerosolizer", ContainerAerosolizer::new);
+//    Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);
 
     Supplier<MenuType<ContainerSorter>> SORTER = register("sorter", ContainerSorter::new);
-    Supplier<MenuType<ContainerBigFurnace>> BIG_FURNACE = register("aerosolizer", ContainerBigFurnace::new);
+    Supplier<MenuType<ContainerBigFurnace>> BIG_FURNACE = register("big_furnace", ContainerBigFurnace::new);
 
 }

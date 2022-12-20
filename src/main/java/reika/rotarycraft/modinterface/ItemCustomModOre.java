@@ -26,7 +26,7 @@
 //import reika.rotarycraft.auxiliary.recipemanagers.ExtractorModOres;
 //import reika.rotarycraft.auxiliary.recipemanagers.ExtractorModOres.ExtractorStage;
 //import reika.rotarycraft.base.AutoOreItem;
-//import reika.rotarycraft.registry.ItemRegistry;
+//import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.registry.RotaryItems;
 //
 //public class ItemCustomModOre extends AutoOreItem implements GradientBlend {

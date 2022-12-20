@@ -219,7 +219,7 @@
 //        for (int j = 0; j < inv.length; j++) {
 //            if (inv[j] != null) {
 //                if (ReikaItemHelper.areStacksCombinable(is, inv[j], Integer.MAX_VALUE)) {
-//                    if (ItemStack.areItemStackTagsEqual(is, inv[j])) {
+//                    if (ItemStack.isSameItemSameTags(is, inv[j])) {
 //                        if (inv[j].getCount() + size <= this.getInventoryStackLimit()) {
 //                            target = j;
 //                            j = inv.length;

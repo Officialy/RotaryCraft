@@ -13,17 +13,20 @@ package reika.rotarycraft.blockentities.processing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.XPProducer;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -33,10 +36,12 @@ import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.InventoriedPowerLiquidReceiver;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerBigFurnace;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 
-public class BlockEntityBigFurnace extends InventoriedPowerLiquidReceiver implements TemperatureTE, XPProducer, DiscreteFunction, ConditionalOperation {
+public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver implements TemperatureTE, XPProducer, DiscreteFunction, ConditionalOperation {
 
     public static final int HEIGHT = 2;
     public static final int WIDTH = 9;
@@ -50,13 +55,13 @@ public class BlockEntityBigFurnace extends InventoriedPowerLiquidReceiver implem
     private float xp;
     private int temperature;
 
-    public BlockEntityBigFurnace(BlockPos pos, BlockState state) {
+    public BlockEntityLavaSmeltery(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.BIG_FURNACE.get(), pos, state);
     }
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.LAVA_SMELTORY.get();
     }
 
     @Override
@@ -359,5 +364,15 @@ public class BlockEntityBigFurnace extends InventoriedPowerLiquidReceiver implem
     @Override
     public void clearContent() {
 
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.literal("Big Furnace");
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+        return new ContainerBigFurnace(p_39954_, p_39955_, this);
     }
 }

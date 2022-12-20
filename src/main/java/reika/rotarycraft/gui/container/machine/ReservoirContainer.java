@@ -12,13 +12,13 @@ package reika.rotarycraft.gui.container.machine;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fml.loading.FMLLoader;
-import reika.dragonapi.base.CoreMenu;
+import reika.dragonapi.base.CoreContainer;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.registry.RotaryMenus;
 
-public class ReservoirContainer extends CoreMenu<BlockEntityReservoir> {
+public class ReservoirContainer extends CoreContainer<BlockEntityReservoir> {
 
     private final BlockEntityReservoir reservoir;
 
@@ -28,7 +28,7 @@ public class ReservoirContainer extends CoreMenu<BlockEntityReservoir> {
     }
 
     public ReservoirContainer(int id, Inventory inv, BlockEntityReservoir te) {
-        super(RotaryMenus.RESERVOIR.get(), id, inv, te, null);
+        super(RotaryMenus.RESERVOIR.get(), id, inv, te, inv);
         this.reservoir = te;
     }
 

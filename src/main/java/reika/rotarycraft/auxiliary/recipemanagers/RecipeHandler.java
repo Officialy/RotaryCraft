@@ -11,11 +11,10 @@ import reika.dragonapi.instantiable.io.LuaBlock;
 import reika.dragonapi.instantiable.recipe.FlexibleIngredient;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.dragonapi.libraries.java.ReikaStringParser;
-import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
-import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ import java.util.Locale;
 
 public abstract class RecipeHandler implements FlexibleIngredient.IngredientIDHandler {
 
-    private static final boolean enableRegistries = RotaryConfig.COMMON.RECIPEMOD.get();
+    private static final boolean enableRegistries = ConfigRegistry.RECIPEMOD.getState();
 
     private final MultiMap<RecipeLevel, String> recipesByLevel = new MultiMap(MultiMap.CollectionType.HASHSET);
     private final HashMap<String, RecipeLevel> recipeLevels = new HashMap();
@@ -52,7 +51,7 @@ public abstract class RecipeHandler implements FlexibleIngredient.IngredientIDHa
     private String generateKey(MachineRecipe recipe) {
         String s = machine.name()+"$"+recipe.getClass().getSimpleName()+"#("+recipe.getUniqueID();
 //  todo      if (RotaryCraft.LOGGER.shouldDebug())
-//            ReikaJavaLibrary.pConsole("Recipe Loaded: "+recipe+"="+s);
+            ReikaJavaLibrary.pConsole("Recipe Loaded: "+recipe+"="+s);
         if (recipeKeys.containsValue(s)) {
             MachineRecipe pre = recipeKeys.inverse().get(s);
             if (pre == null || pre.equals(recipe)) {
@@ -76,10 +75,10 @@ public abstract class RecipeHandler implements FlexibleIngredient.IngredientIDHa
     }
 
     public final String fullIDForItems(Collection<KeyedItemStack> c) {
-        return this.fullIDKeys(c);
+        return fullIDKeys(c);
     }
 
-    protected static final String fullIDKeys(Collection<KeyedItemStack> c) {
+    protected static String fullIDKeys(Collection<KeyedItemStack> c) {
         StringBuilder sb = new StringBuilder();
         for (KeyedItemStack is : c) {
             sb.append(CustomRecipeList.fullID(is.getItemStack()));
@@ -88,7 +87,7 @@ public abstract class RecipeHandler implements FlexibleIngredient.IngredientIDHa
         return sb.toString();
     }
 
-    protected static final String fullID(Collection<ItemStack> c) {
+    protected static String fullID(Collection<ItemStack> c) {
         StringBuilder sb = new StringBuilder();
         for (ItemStack is : c) {
             sb.append(CustomRecipeList.fullID(is));
@@ -97,11 +96,11 @@ public abstract class RecipeHandler implements FlexibleIngredient.IngredientIDHa
         return sb.toString();
     }
 
-    protected static final String fullID(ItemStack is) {
+    protected static String fullID(ItemStack is) {
         return CustomRecipeList.fullID(is);
     }
 
-    protected final Collection getRecipes(RecipeLevel rl) {
+    protected final Collection<?> getRecipes(RecipeLevel rl) {
         return recipesByLevel.get(rl);
     }
 
@@ -182,7 +181,7 @@ public abstract class RecipeHandler implements FlexibleIngredient.IngredientIDHa
 
     }
 
-    private static enum RecipeModificationPower {
+    private enum RecipeModificationPower {
         FULL(RecipeLevel.CORE),
         STRONG(RecipeLevel.PROTECTED),
         NORMAL(RecipeLevel.PERIPHERAL),

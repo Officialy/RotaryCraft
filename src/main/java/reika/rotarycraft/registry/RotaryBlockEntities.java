@@ -5,7 +5,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.base.blockentity.BlockEntityAreaFiller;
 import reika.rotarycraft.blockentities.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
@@ -17,7 +16,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.BlockEntityPipe;
-import reika.rotarycraft.blockentities.processing.BlockEntityBigFurnace;
+import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 import reika.rotarycraft.blockentities.production.*;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
@@ -191,8 +190,8 @@ public class RotaryBlockEntities {
     public static final RegistryObject<BlockEntityType<BlockEntitySteam>> STEAM_TURBINE = BLOCK_ENTITIES.register("steam_turbine", () ->
             BlockEntityType.Builder.of(BlockEntitySteam::new, RotaryBlocks.STEAM_TURBINE.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityBigFurnace>> BIG_FURNACE = BLOCK_ENTITIES.register("big_furnace", () ->
-            BlockEntityType.Builder.of(BlockEntityBigFurnace::new, RotaryBlocks.BIG_FURNACE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityLavaSmeltery>> BIG_FURNACE = BLOCK_ENTITIES.register("big_furnace", () ->
+            BlockEntityType.Builder.of(BlockEntityLavaSmeltery::new, RotaryBlocks.LAVA_SMELTORY.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityParticleEmitter>> PARTICLE = BLOCK_ENTITIES.register("particle", () ->
             BlockEntityType.Builder.of(BlockEntityParticleEmitter::new, RotaryBlocks.PARTICLE.get()).build(null));
@@ -220,7 +219,10 @@ public class RotaryBlockEntities {
 
     public static final RegistryObject<BlockEntityType<BlockEntitySorting>> SORTER = BLOCK_ENTITIES.register("sorter", () ->
             BlockEntityType.Builder.of(BlockEntitySorting::new, RotaryBlocks.SORTER.get()).build(null));
+/*    public static final RegistryObject<BlockEntityType<BlockEntityFurnaceHeater>> FRICTION_HEATER = BLOCK_ENTITIES.register("friction_heater", () ->
+            BlockEntityType.Builder.of(BlockEntityFurnaceHeater::new, RotaryBlocks.FRICTION_HEATER.get()).build(null));*/
 
-
+//    public static final RegistryObject<BlockEntityType<BlockEntityPulseFurnace>> PULSE_JET_FURNACE = BLOCK_ENTITIES.register("pulse_jet_furnace", () ->
+//            BlockEntityType.Builder.of(BlockEntityPulseFurnace::new, RotaryBlocks.PULSE_JET_FURNACE.get()).build(null));
 
 }

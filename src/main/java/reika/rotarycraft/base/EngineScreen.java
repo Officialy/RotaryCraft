@@ -4,11 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import reika.dragonapi.base.CoreMenu;
+import reika.dragonapi.base.CoreContainer;
 import reika.dragonapi.libraries.mathsci.ReikaDateHelper;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 
-public abstract class EngineScreen<E extends BlockEntityEngine, T extends CoreMenu<E>> extends NonPoweredMachineScreen<E, T> {
+public abstract class EngineScreen<E extends BlockEntityEngine, T extends CoreContainer<E>> extends NonPoweredMachineScreen<E, T> {
 
     protected final BlockEntityEngine engine;
 

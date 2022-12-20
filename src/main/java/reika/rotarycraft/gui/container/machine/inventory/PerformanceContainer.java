@@ -12,18 +12,18 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
-import reika.rotarycraft.base.IOMachineMenu;
+import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.engine.BlockEntityPerformanceEngine;
 import reika.rotarycraft.registry.RotaryMenus;
 
-public class PerformanceMenu extends IOMachineMenu<BlockEntityPerformanceEngine> {
+public class PerformanceContainer extends IOMachineContainer<BlockEntityPerformanceEngine> {
     private final BlockEntityPerformanceEngine engine;
     //Client
-    public PerformanceMenu(int id, Inventory inv, FriendlyByteBuf data) {
+    public PerformanceContainer(int id, Inventory inv, FriendlyByteBuf data) {
         this(id, inv, (BlockEntityPerformanceEngine) inv.player.level.getBlockEntity(data.readBlockPos()));
     }
 
-    public PerformanceMenu(int id, Inventory inv, BlockEntityPerformanceEngine par2BlockEntityEngine) {
+    public PerformanceContainer(int id, Inventory inv, BlockEntityPerformanceEngine par2BlockEntityEngine) {
         super(RotaryMenus.PERFORMANCE_ENGINE.get(), id, inv, par2BlockEntityEngine);
         engine = par2BlockEntityEngine;
         int posX = engine.getBlockPos().getX();

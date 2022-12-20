@@ -6,7 +6,8 @@
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
- ******************************************************************************/
+ ******************************************************************************//*
+
 package reika.rotarycraft.auxiliary.recipemanagers;
 
 import java.lang.reflect.Method;
@@ -22,6 +23,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -34,6 +42,7 @@ import reika.dragonapi.Instantiable.Data.Collections.ChancedOutputList;
 import reika.dragonapi.Instantiable.Data.Collections.ChancedOutputList.ChanceExponentiator;
 import reika.dragonapi.Instantiable.Data.Collections.ChancedOutputList.ChanceManipulator;
 import reika.dragonapi.Instantiable.Data.Collections.ChancedOutputList.ItemWithChance;
+import reika.dragonapi.instantiable.data.collections.ChancedOutputList;
 import reika.dragonapi.instantiable.data.maps.ItemHashMap;
 import reika.dragonapi.instantiable.io.CustomRecipeList;
 import reika.dragonapi.instantiable.io.LuaBlock;
@@ -52,12 +61,14 @@ import reika.dragonapi.modinteract.ItemHandlers.ThaumItemHelper;
 import reika.dragonapi.modinteract.RecipeHandlers.ForestryRecipeHelper;
 import reika.dragonapi.ModRegistry.ModOreList;
 import reika.dragonapi.ModRegistry.ModWoodList;
+import reika.dragonapi.modregistry.ModOreList;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.RecipeInterface;
 import reika.rotarycraft.api.RecipeInterface.CentrifugeManager;
 import reika.rotarycraft.auxiliary.RotaryItems;
 import reika.rotarycraft.registry.DifficultyEffects;
-import reika.rotarycraft.registry.ItemRegistry;
+import reika.rotarycraft.registry.RotaryFluids;
+import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.MachineRegistry;
 
 import cpw.mods.fml.common.Loader;
@@ -82,22 +93,22 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		super(MachineRegistry.CENTRIFUGE);
 		RecipeInterface.centrifuge = this;
 
-		this.addRecipe(Items.magma_cream, null, RecipeLevel.PERIPHERAL, Items.slime_ball, 100, Items.blaze_powder, 100);
-		this.addRecipe(Items.melon, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.melon_seeds, 4), 100);
-		this.addRecipe(Blocks.pumpkin, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.pumpkin_seeds, 12), 100);
-		this.addRecipe(Items.wheat, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.wheat_seeds, 4), 100);
-		this.addRecipe(Blocks.gravel, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.flint), 50, new ItemStack(Blocks.sand), 75);
-		this.addRecipe(RotaryItems.netherrackdust, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.glowstone_dust), 25, new ItemStack(Items.gunpowder), 80, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 40);
-		this.addRecipe(Blocks.dirt, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.sand), 80, new ItemStack(Blocks.clay), 10, new ItemStack(Items.wheat_seeds), 2F, new ItemStack(Items.pumpkin_seeds), 0.125F, new ItemStack(Items.melon_seeds), 0.125F, new ItemStack(Blocks.sapling), 0.03125F, new ItemStack(Blocks.tallgrass, 1, 1), 0.0625F);
-		this.addRecipe(Items.blaze_powder, null, RecipeLevel.PERIPHERAL, new ItemStack(Items.gunpowder), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
+		this.addRecipe(Items.MAGMA_CREAM.getDefaultInstance(), null, RecipeLevel.PERIPHERAL, Items.SLIME_BALL, 100, Items.BLAZE_POWDER, 100);
+		this.addRecipe(Items.MELON.getDefaultInstance(), null, RecipeLevel.PERIPHERAL, new ItemStack(Items.MELON_SEEDS, 4), 100);
+		this.addRecipe(Blocks.PUMPKIN.asItem().getDefaultInstance(), null, RecipeLevel.PERIPHERAL, new ItemStack(Items.PUMPKIN_SEEDS, 12), 100);
+		this.addRecipe(Items.WHEAT.getDefaultInstance(), null, RecipeLevel.PERIPHERAL, new ItemStack(Items.WHEAT_SEEDS, 4), 100);
+		this.addRecipe(Blocks.GRAVEL.asItem().getDefaultInstance(), null, RecipeLevel.PERIPHERAL, new ItemStack(Items.FLINT), 50, new ItemStack(Blocks.SAND), 75);
+		this.addRecipe(RotaryItems.NETHERRACK_DUST.get().getDefaultInstance(), null, RecipeLevel.PERIPHERAL, new ItemStack(Items.GLOWSTONE_DUST), 25, new ItemStack(Items.GUNPOWDER), 80, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 40);
+		this.addRecipe(Blocks.DIRT, null, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.SAND), 80, new ItemStack(Blocks.CLAY), 10, new ItemStack(Items.WHEAT_SEEDS), 2F, new ItemStack(Items.PUMPKIN_SEEDS), 0.125F, new ItemStack(Items.MELON_SEEDS), 0.125F, new ItemStack(Blocks.SAPLING), 0.03125F, new ItemStack(Blocks.tallgrass, 1, 1), 0.0625F);
+		this.addRecipe(Items.BLAZE_POWDER.getDefaultInstance(), null, RecipeLevel.PERIPHERAL, new ItemStack(Items.GUNPOWDER), 100, ExtractorModOres.getSmeltedIngot(ModOreList.SULFUR), 75);
 
-		this.addRecipe(RotaryItems.sludge, null, RecipeLevel.CORE, 2, new Object[]{RotaryItems.cleansludge, 80, RotaryItems.cleansludge, 20, RotaryItems.compost, 25});
+//		this.addRecipe(RotaryItems.SLUDGE, null, RecipeLevel.CORE, 2, new Object[]{RotaryItems.CLEANSLUDGE, 80, RotaryItems.CLEANSLUDGE, 20, RotaryItems.COMPOST, 25});
 
-		this.addRecipe(RotaryItems.slipperyComb, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 50), 60, RecipeLevel.PROTECTED, RotaryItems.slipperyPropolis, 80);
-		this.addRecipe(RotaryItems.slipperyPropolis, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 150), 100, RecipeLevel.PROTECTED);
+//		this.addRecipe(RotaryItems.SLIPPERYCOMB, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 50), 60, RecipeLevel.PROTECTED, RotaryItems.SLIPPERY_PROPOLIS, 80);
+//		this.addRecipe(RotaryItems.SLIPPERYPROPOLIS, new FluidStack(FluidRegistry.getFluid("rc lubricant"), 150), 100, RecipeLevel.PROTECTED);
 
 		int amt = ReikaMathLibrary.roundUpToX(10, (int)(DifficultyEffects.CANOLA.getAverageAmount()*0.75F));
-		this.addRecipe(RotaryItems.canolaHusks, new FluidStack(FluidRegistry.getFluid("rc lubricant"), amt), 100, RecipeLevel.CORE);
+		this.addRecipe(RotaryItems.CANOLA_HUSKS.get().getDefaultInstance(), new FluidStack(RotaryFluids.LUBRICANT.get(), amt), 100, RecipeLevel.CORE);
 	}
 
 	public static class CentrifugeRecipe implements MachineRecipe {
@@ -113,7 +124,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			out = li;
 			fluid = fs;
 			maxStack = cycles;
-			hasNBT = is.stackTagCompound != null;
+			hasNBT = is.getTag() != null;
 		}
 
 		@Override
@@ -141,11 +152,11 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			return this.rollFluid(null);
 		}
 
-		public FluidStack rollFluid(ChanceManipulator c) {
+		public FluidStack rollFluid(ChancedOutputList.ChanceManipulator c) {
 			return fluid != null ? ReikaRandomHelper.doWithChance(c != null ? c.getChance(fluid.chance) : fluid.chance) ? fluid.fluid.copy() : null : null;
 		}
 
-		public Collection<ItemWithChance> getItems() {
+		public Collection<ChancedOutputList.ItemWithChance> getItems() {
 			return out.keySet();
 		}
 
@@ -153,9 +164,9 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			return this.rollItems(null);
 		}
 
-		public Collection<ItemStack> rollItems(ChanceManipulator c) {
+		public Collection<ItemStack> rollItems(ChancedOutputList.ChanceManipulator c) {
 			ArrayList<ItemStack> li = new ArrayList();
-			for (ItemWithChance is : this.getItems()) {
+			for (ChancedOutputList.ItemWithChance is : this.getItems()) {
 				float ch = is.getNormalizedChance();
 				if (c != null)
 					ch = c.getChance(ch);
@@ -186,7 +197,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 
 	public void addRecipe(ItemStack in, ChancedOutputList out, FluidOut fs, RecipeLevel rl, int stack) {
 		in = in.copy();
-		in.stackTagCompound = null; //clear NBT on inputs
+		in.setTag(null); //clear NBT on inputs
 		this.addDirectStackRecipe(in, out, fs, rl, stack);
 	}
 
@@ -194,7 +205,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		if (out.size() > 9)
 			throw new IllegalArgumentException("Too many output items for "+in.getDisplayName()+" centrifuge recipe; only 9 inventory slots!");
 		out.lock();
-		for (ItemWithChance isout : out.keySet())
+		for (ChancedOutputList.ItemWithChance isout : out.keySet())
 			if (!ReikaItemHelper.collectionContainsItemStack(outputs, isout.getItem()))
 				outputs.add(isout.getItem());
 		CentrifugeRecipe rec = new CentrifugeRecipe(in, out, fs, stack);
@@ -232,7 +243,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		ItemStack in = item.copy();
 		CentrifugeRecipe cr = recipeList.get(in);
 		if (cr != null && cr.hasNBT) {
-			if (!ItemStack.areItemStackTagsEqual(item, cr.in))
+			if (!ItemStack.isSameItemSameTags(item, cr.in))
 				return null;
 		}
 		return cr;
@@ -278,7 +289,8 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 	@Override
 	public void addPostLoadRecipes() {
 
-		if (ModList.FORESTRY.isLoaded()) {
+		*/
+/*if (ModList.FORESTRY.isLoaded()) {
 			for (ItemStack in : ForestryRecipeHelper.getInstance().getSqueezerRecipes()) {
 				ISqueezerRecipe out = ForestryRecipeHelper.getInstance().getSqueezerOutput(in);
 				FluidStack fs = out.getFluidOutput();
@@ -374,7 +386,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 					this.addRecipe(drop, new FluidStack(f, 20), 100, RecipeLevel.MODINTERACT);
 				}
 			}
-			 */
+
 		}
 
 		if (ReikaItemHelper.oreItemsExist("dustLead", "dustSilver")) {
@@ -440,8 +452,9 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			}
 		}
 
-		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass.asItemStack();
-		this.addRecipe(new ItemStack(Blocks.clay), new FluidStack(FluidRegistry.WATER, 20), 40, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.dirt), 100, RotaryItems.silicondust, 75, RotaryItems.ironoreflakes, 0.5F, RotaryItems.goldoreflakes, 0.2F, is, 2.5F);
+		ItemStack is = ModList.IC2.isLoaded() && IC2Handler.IC2Stacks.BIOCHAFF.getItem() != null ? IC2Handler.IC2Stacks.BIOCHAFF.getItem() : ReikaItemHelper.tallgrass.asItemStack();*//*
+
+//todo		this.addRecipe(new ItemStack(Blocks.CLAY), new FluidStack(Fluids.WATER, 20), 40, RecipeLevel.PERIPHERAL, new ItemStack(Blocks.DIRT), 100, RotaryItems.SILICON_DUST, 75, RotaryItems.IRON_ORE_FLAKES, 0.5F, RotaryItems.GOLD_ORE_FLAKES, 0.2F, is, 2.5F);
 
 		this.addGrassToSeeds();
 	}
@@ -455,14 +468,14 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 			ItemStack seed = (ItemStack)ReikaObfuscationHelper.get("seed", wi);
 			if (HarvestCraftHandler.getInstance().isSeedItem(seed)) //pollutes with 113435948745609 seeds
 				continue;
-			if (weights.size() >= (weights.containsKey(ItemRegistry.CANOLA.getItemInstance(), 0) ? 9 : 8))
+			if (weights.size() >= (weights.containsKey(RotaryItems.CANOLA.getItemInstance(), 0) ? 9 : 8))
 				continue;
 			total += wi.itemWeight;
 			weights.put(seed, wi.itemWeight);
 		}
 		for (ItemStack is : weights.keySet()) {
 			int wt = weights.get(is);
-			c.addItem(is, ItemRegistry.CANOLA.matchItem(is) ? 10 : wt/total);
+			c.addItem(is, RotaryItems.CANOLA.matchItem(is) ? 10 : wt/total);
 		}
 		this.addRecipe(ReikaItemHelper.tallgrass.asItemStack(), c, null, RecipeLevel.PERIPHERAL);
 		this.addRecipe(ReikaItemHelper.fern.asItemStack(), c, null, RecipeLevel.PERIPHERAL);
@@ -473,7 +486,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		return recipeList.removeValue((CentrifugeRecipe)recipe);
 	}
 
-	public static class ChanceRounder implements ChanceManipulator {
+	public static class ChanceRounder implements ChancedOutputList.ChanceManipulator {
 
 		private ChanceRounder() {
 
@@ -539,3 +552,4 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 		return true;
 	}
 }
+*/

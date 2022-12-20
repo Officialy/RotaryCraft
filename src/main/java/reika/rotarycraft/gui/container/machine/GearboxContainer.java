@@ -9,27 +9,23 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.container.machine;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.IContainerFactory;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.base.IOMachineMenu;
+import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
 import reika.rotarycraft.registry.RotaryMenus;
 
-public class GearboxMenu extends IOMachineMenu<BlockEntityGearbox> {
+public class GearboxContainer extends IOMachineContainer<BlockEntityGearbox> {
     private final BlockEntityGearbox gearbox;
 
     //Client
-    public GearboxMenu(int id, Inventory inv, FriendlyByteBuf data) {
+    public GearboxContainer(int id, Inventory inv, FriendlyByteBuf data) {
         this(id, inv, (BlockEntityGearbox) inv.player.level.getBlockEntity(data.readBlockPos()));
     }
 
-    public GearboxMenu(int id, Inventory inv, BlockEntityGearbox te) {
+    public GearboxContainer(int id, Inventory inv, BlockEntityGearbox te) {
         super(RotaryMenus.GEARBOX.get(), id, inv, te);
         gearbox = te;
         int posX = gearbox.getBlockPos().getX();

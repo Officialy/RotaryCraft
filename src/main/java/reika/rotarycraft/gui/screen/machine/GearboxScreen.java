@@ -16,12 +16,12 @@ import net.minecraftforge.client.gui.ScreenUtils;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
-import reika.rotarycraft.gui.container.machine.GearboxMenu;
+import reika.rotarycraft.gui.container.machine.GearboxContainer;
 
-public class GearboxScreen extends NonPoweredMachineScreen<BlockEntityGearbox, GearboxMenu> {
+public class GearboxScreen extends NonPoweredMachineScreen<BlockEntityGearbox, GearboxContainer> {
     private final BlockEntityGearbox gbx;
 
-    public GearboxScreen(GearboxMenu container, Inventory inv, Component component) {
+    public GearboxScreen(GearboxContainer container, Inventory inv, Component component) {
         super(container, inv, component);
 //        super(new ContainerGearbox(p5ep, Gearbox), Gearbox);
 

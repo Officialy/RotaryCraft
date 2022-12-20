@@ -191,7 +191,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
 //    @Override
 //    public boolean protectEntity(LivingEntity entity, ItemStack armor, String cause, boolean doProtect) {
 //        ItemStack head = entity.getEquipmentInSlot(4);
-//        ItemRegistry ir = head != null ? ItemRegistry.getEntry(head) : null;
+//        RotaryItems ir = head != null ? RotaryItems.getEntry(head) : null;
 //        return ir != null && ir.isBedrockArmor() && HelmetUpgrades.APIARIST.existsOn(head);
 //    }
 
