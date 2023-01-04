@@ -51,8 +51,7 @@ public class ReservoirScreen extends NonPoweredMachineScreen<BlockEntityReservoi
             int y = imageHeight / 2 - 13 - i2 + 35;
 
             IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(reservoir.getFluid().getFluid().defaultFluidState());
-            ResourceLocation tex = props.getStillTexture();
-            RenderSystem.setShaderTexture(0, tex);
+            RenderSystem.setShaderTexture(0, new ResourceLocation(props.getStillTexture().getNamespace(), "textures/" + props.getStillTexture().getPath() + ".png"));
             ScreenUtils.drawTexturedModalRect(pPoseStack, j + x, k + y, 16, i2, 8, 44 - i2, 0);
 //            this.drawTexturedModelRectFromIcon(x, y, tex, 8, i2);
         }

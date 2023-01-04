@@ -14,6 +14,7 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -48,6 +49,9 @@ public abstract class IORenderer {
             color[2] = 255;
         }
         renderBox(matrixStack, x, y, z, color);
+    }
+    public static void renderIO(PoseStack matrixStack, MultiBufferSource bufferSource, BlockEntity teb, BlockPos pos) {
+        renderIO(matrixStack, bufferSource, teb, pos.getX(), pos.getY(), pos.getZ());
     }
 
     public static void renderIO(PoseStack matrixStack, MultiBufferSource bufferSource, BlockEntity teb, double x, double y, double z) {

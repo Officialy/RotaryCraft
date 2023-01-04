@@ -73,20 +73,20 @@
 //                break;
 //            case MANUAL:
 //                if (ratio > 0)
-//                    renderables.add(new Button(1, j + imageWidth / 2 - 6, -1 + k + 64, 80, 20, "Speed"));
+//                    addRenderableWidget(new Button(1, j + imageWidth / 2 - 6, -1 + k + 64, 80, 20, "Speed"));
 //                else
-//                    renderables.add(new Button(1, j + imageWidth / 2 - 6, -1 + k + 64, 80, 20, "Torque"));
+//                    addRenderableWidget(new Button(1, j + imageWidth / 2 - 6, -1 + k + 64, 80, 20, "Torque"));
 //                input = new GuiTextField(font, j + imageWidth / 2 + 24, k + 39, 26, 16);
 //                input.setFocused(false);
 //                input.setMaxStringLength(3);
 //                break;
 //            case REDSTONE:
-//                renderables.add(new Button(1, j + imageWidth / 2 + 25, -1 + k + 44, 71, 20, ""));
-//                renderables.add(new Button(2, j + imageWidth / 2 + 25, -1 + k + 67, 71, 20, ""));
+//                addRenderableWidget(new Button(1, j + imageWidth / 2 + 25, -1 + k + 44, 71, 20, ""));
+//                addRenderableWidget(new Button(2, j + imageWidth / 2 + 25, -1 + k + 67, 71, 20, ""));
 //                break;
 //        }
 //
-//        renderables.add(new Button(0, j + imageWidth / 2 + 84, -1 + k + 19, 20, 20, ""));
+//        addRenderableWidget(new Button(0, j + imageWidth / 2 + 84, -1 + k + 19, 20, 20, ""));
 //    }
 //
 //    @Override

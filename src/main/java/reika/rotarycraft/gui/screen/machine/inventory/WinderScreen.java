@@ -44,9 +44,9 @@ public class WinderScreen extends GuiOneSlotScreen<BlockEntityWinder, WinderCont
         int var5 = (width - imageWidth) / 2;
         int var6 = (height - imageHeight) / 2;
         if (input)
-            renderables.add(new Button.Builder(Component.literal("Input Mode"), this::actionPerformed).size(var5 + imageWidth / 2 - 35, var6 + imageHeight / 2 - 26).pos(65, 20).build());
+            addRenderableWidget(new Button.Builder(Component.literal("Input Mode"), this::actionPerformed).size(var5 + imageWidth / 2 - 35, var6 + imageHeight / 2 - 26).pos(65, 20).build());
         else
-            renderables.add(new Button.Builder(Component.literal("Output Mode"), this::actionPerformed).size(var5 + imageWidth / 2 - 35, var6 + imageHeight / 2 - 26).pos(65, 20).build());
+            addRenderableWidget(new Button.Builder(Component.literal("Output Mode"), this::actionPerformed).size(var5 + imageWidth / 2 - 35, var6 + imageHeight / 2 - 26).pos(65, 20).build());
     }
 
     protected void actionPerformed(Button button) {

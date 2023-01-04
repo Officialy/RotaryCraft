@@ -13,15 +13,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.instantiable.MusicScore;
 import reika.dragonapi.instantiable.MusicScore.NoteData;
 import reika.dragonapi.instantiable.MusicScore.ScoreTrack;
@@ -35,6 +39,7 @@ import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.dragonapi.libraries.mathsci.ReikaMusicHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
+import reika.rotarycraft.gui.container.machine.MusicContainer;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryItems;
@@ -105,7 +110,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         return Collections.unmodifiableList(musicQueue[channel]);
     }
 
-    //@Override
+    @Override
     protected void onFirstTick(Level world, BlockPos pos) {
         if (this.hasSavedFile())
             this.read();
@@ -741,4 +746,13 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
 
     }
 
+    @Override
+    public Component getDisplayName() {
+        return Component.literal("Music Box");
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+        return new MusicContainer(p_39954_, p_39955_, this);
+    }
 }

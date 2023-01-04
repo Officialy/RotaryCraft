@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
-import reika.dragonapi.instantiable.gui.Slot.GhostSlot;
+import reika.dragonapi.instantiable.gui.slot.GhostSlot;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.BlockEntityBlower;

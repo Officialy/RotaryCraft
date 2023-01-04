@@ -52,7 +52,7 @@
 //        super.initGui();
 //        int j = (width - imageWidth) / 2 + 8;
 //        int k = (height - imageHeight) / 2 - 12;
-//        //this.renderables.add(new Button(0, j+imageWidth/2-48, -1+k+32, 80, 20, "Trajectory"));
+//        //this.addRenderableWidget(new Button(0, j+imageWidth/2-48, -1+k+32, 80, 20, "Trajectory"));
 //        input = new GuiTextField(font, j + imageWidth / 2 + 25, k + 26, 46, 16);
 //        input.setFocused(false);
 //        input.setMaxStringLength(6);

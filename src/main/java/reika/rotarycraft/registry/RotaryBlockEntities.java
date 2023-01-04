@@ -32,8 +32,10 @@ public class RotaryBlockEntities {
 
     public static final RegistryObject<BlockEntityType<BlockEntityShaft>> WOOD_SHAFT = BLOCK_ENTITIES.register("wood_shaft", () ->
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STEEL, pPos, pState), RotaryBlocks.WOOD_SHAFT.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityShaft>> STONE_SHAFT = BLOCK_ENTITIES.register("stone_shaft", () ->
+            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STONE, pPos, pState), RotaryBlocks.WOOD_SHAFT.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityShaft>> HSLA_SHAFT = BLOCK_ENTITIES.register("hsla_shaft", () ->
+    public static final RegistryObject<BlockEntityType<BlockEntityShaft>> HSLA_STEEL_SHAFT = BLOCK_ENTITIES.register("hsla_shaft", () ->
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STEEL, pPos, pState), RotaryBlocks.HSLA_SHAFT.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityShaft>> TUNGSTEN_SHAFT = BLOCK_ENTITIES.register("tungsten_shaft", () ->

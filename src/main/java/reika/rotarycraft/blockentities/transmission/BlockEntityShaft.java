@@ -12,25 +12,18 @@ package reika.rotarycraft.blockentities.transmission;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
-import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.ComplexIO;
 import reika.rotarycraft.api.power.ShaftMerger;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
@@ -62,7 +55,14 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
     private boolean isCrossForRender;
 
     public BlockEntityShaft(MaterialRegistry materialType, BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.WOOD_SHAFT.get(), pos, state);
+        super(switch (materialType){
+            case WOOD -> RotaryBlockEntities.WOOD_SHAFT.get();
+            case STONE -> RotaryBlockEntities.STONE_SHAFT.get();
+            case STEEL -> RotaryBlockEntities.HSLA_STEEL_SHAFT.get();
+            case TUNGSTEN -> RotaryBlockEntities.TUNGSTEN_SHAFT.get();
+            case DIAMOND -> RotaryBlockEntities.DIAMOND_SHAFT.get();
+            case BEDROCK -> RotaryBlockEntities.BEDROCK_SHAFT.get();
+        }, pos, state);
         if (materialType == null)
             materialType = MaterialRegistry.WOOD;
         this.materialType = materialType;

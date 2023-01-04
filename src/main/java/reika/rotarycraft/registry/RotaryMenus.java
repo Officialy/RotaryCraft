@@ -26,6 +26,7 @@ public interface RotaryMenus {
 
     Supplier<MenuType<ReservoirContainer>> RESERVOIR = register("reservoir", ReservoirContainer::new);
 
+
     Supplier<MenuType<LandmineContainer>> LANDMINE = register("landmine", LandmineContainer::new);
 
     Supplier<MenuType<BlowerContainer>> BLOWER = register("blower", BlowerContainer::new);
@@ -39,7 +40,7 @@ public interface RotaryMenus {
 
     Supplier<MenuType<SteamContainer>> STEAM_ENGINE = register("steam_engine", SteamContainer::new);
     Supplier<MenuType<BevelContainer>> BEVEL = register("bevel", BevelContainer::new);
-
+    Supplier<MenuType<MusicContainer>> MUSIC = register("music", MusicContainer::new);
 
 //    Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", GrinderMenu::new);
 
@@ -64,5 +65,6 @@ public interface RotaryMenus {
 
     Supplier<MenuType<ContainerSorter>> SORTER = register("sorter", ContainerSorter::new);
     Supplier<MenuType<ContainerBigFurnace>> BIG_FURNACE = register("big_furnace", ContainerBigFurnace::new);
+    Supplier<MenuType<ContainerCVT>> CVT = register("cvt", ContainerCVT::new);
 
 }

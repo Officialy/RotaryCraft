@@ -120,17 +120,17 @@ public class GuiHandbook extends Screen {
 //
 //        String file = HandbookRegistry.TOC.getTabImageFile();
 //        if (!this.isLimitedView()) {
-//            renderables.add(new ImagedButton(10, j - 20, 17 + k + 163, 20, 20, 220, 0, "-", 0, false, file, RotaryCraft.class)); //Prev Page
-//            renderables.add(new ImagedButton(11, j - 20, 17 + k + 143, 20, 20, 220, 20, "+", 0, false, file, RotaryCraft.class));    //Next page
-//            renderables.add(new ImagedButton(15, j - 20, 17 + k + 183, 20, 20, 220, 20, "<<", 0, false, file, RotaryCraft.class));    //First page
+//            addRenderableWidget(new ImagedButton(10, j - 20, 17 + k + 163, 20, 20, 220, 0, "-", 0, false, file, RotaryCraft.class)); //Prev Page
+//            addRenderableWidget(new ImagedButton(11, j - 20, 17 + k + 143, 20, 20, 220, 20, "+", 0, false, file, RotaryCraft.class));    //Next page
+//            addRenderableWidget(new ImagedButton(15, j - 20, 17 + k + 183, 20, 20, 220, 20, "<<", 0, false, file, RotaryCraft.class));    //First page
 //        }
-//        renderables.add(new Button(12, j + xSize - 27, k + 6, 20, 20, "X"));    //Close gui button
+//        addRenderableWidget(new Button(12, j + xSize - 27, k + 6, 20, 20, "X"));    //Close gui button
 //
 //        HandbookEntry h = this.getEntry();
 //
 //        if (h.hasSubpages() || ((h instanceof HandbookRegistry) && ((HandbookRegistry) h).getBonusSubpages() > 0)) {
-//            renderables.add(new Button(13, j + xSize - 27, k + 40, 20, 20, ">"));
-//            renderables.add(new Button(14, j + xSize - 27, k + 60, 20, 20, "<"));
+//            addRenderableWidget(new Button(13, j + xSize - 27, k + 40, 20, 20, ">"));
+//            addRenderableWidget(new Button(14, j + xSize - 27, k + 60, 20, 20, "<"));
 //        }
 //        if (!this.isLimitedView())
 //            this.addTabButtons(j, k);

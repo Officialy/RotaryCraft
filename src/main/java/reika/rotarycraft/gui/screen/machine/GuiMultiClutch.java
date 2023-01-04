@@ -7,7 +7,7 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.guis.Machine;
+//package reika.rotarycraft.gui.screen.machine;
 //
 //import java.awt.Color;
 //
@@ -44,7 +44,7 @@
 //        String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
 //
 //        for (int i = 0; i < 16; i++) {
-//            renderables.add(new ImageButton(i, j + 18 + 70 * (i / 8) + 15, k + 20 + 16 * (i % 8) - 1, 35, 9, 256 - 18, 256 - 62, file, RotaryCraft.class));
+//            addRenderableWidget(new ImageButton(i, j + 18 + 70 * (i / 8) + 15, k + 20 + 16 * (i % 8) - 1, 35, 9, 256 - 18, 256 - 62, file, RotaryCraft.class));
 //        }
 //    }
 //

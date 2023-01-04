@@ -26,7 +26,7 @@ public class ReservoirAPI {
 
     static {
         try {
-            Class c = Class.forName("reika.rotarycraft.blockentities.Storage.BlockEntityReservoir");
+            Class<?> c = Class.forName("reika.rotarycraft.blockentities.storage.BlockEntityReservoir");
             Field f = c.getDeclaredField("tankHandlers");
             f.setAccessible(true);
             list = (Collection<TankHandler>) f.get(null);

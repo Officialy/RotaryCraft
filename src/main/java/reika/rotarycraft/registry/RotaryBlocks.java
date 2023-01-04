@@ -136,7 +136,13 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> BEVEL_GEARS = register("bevel_gears", () -> new BlockBevelGears(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SORTER = register("sorter", () -> new BlockSorter(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> FRICTION_HEATER = register("friction_heater", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-    public static final RegistryObject<Block> PULSE_JET_FURNACE = register("pulse_jet_furnace", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
+//    public static final RegistryObject<Block> PULSE_JET_FURNACE = register("pulse_jet_furnace", () -> new BlockPulseJetFurnace(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
+    public static final RegistryObject<Block> COIL = register("coil", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5))); //todo blocks for these 4
+    public static final RegistryObject<Block> CVT = register("cvt", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> WORMGEAR = register("wormgear", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> HIGHGEAR = register("highgear", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
 
 
     private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of(Material.STONE).strength(2.0F, 3.0F).sound(SoundType.METAL);

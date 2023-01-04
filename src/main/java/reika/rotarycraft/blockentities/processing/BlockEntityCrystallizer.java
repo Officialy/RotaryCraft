@@ -14,11 +14,13 @@
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.core.Direction;
 //import net.minecraft.nbt.CompoundTag;
+//import net.minecraft.resources.ResourceLocation;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraftforge.fluids.FluidStack;
+//import net.minecraftforge.registries.ForgeRegistries;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.instantiable.StepTimer;
@@ -27,7 +29,6 @@
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
 //import reika.rotarycraft.auxiliary.RotaryAux;
-//import reika.rotarycraft.auxiliary.RotaryItems;
 //import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 //import reika.rotarycraft.auxiliary.interfaces.MultiOperational;
 //import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
@@ -198,8 +199,8 @@
 //        if (RotaryAux.isNextToIce(world, pos))
 //            Tamb -= 30;
 //
-//        ItemStack cryo = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
-//        if (ReikaItemHelper.matchStacks(RotaryItems.DRY_ICE, inv[1]) || (cryo != null && ReikaItemHelper.matchStacks(cryo, inv[1]))) {
+//        ItemStack cryo = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ModList.THERMALFOUNDATION.getModid(), "dustCryotheum")).getDefaultInstance();//GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
+//        if (ReikaItemHelper.matchStacks(RotaryItems.DRY_ICE.get().getDefaultInstance(), inv[1]) || (cryo != null && ReikaItemHelper.matchStacks(cryo, inv[1]))) {
 //            Tamb -= 40;
 //            if (temperature > Tamb + 4 || DragonAPI.rand.nextInt(20) == 0)
 //                ReikaInventoryHelper.decrStack(1, inv);

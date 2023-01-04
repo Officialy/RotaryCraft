@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
@@ -14,10 +15,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.client.gui.ScreenUtils;
 import reika.dragonapi.base.CoreContainer;
+import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
+import reika.rotarycraft.registry.GuiRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 
 public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends CoreContainer<E>> extends AbstractContainerScreen<T> {
 
@@ -31,7 +35,7 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
         super(container, inv, title);
         if (tile instanceof BlockEntityPowerReceiver)
             recv = (BlockEntityPowerReceiver) tile;
-
+        inventory = inv;
     }
 
     protected abstract String getGuiTexture();
@@ -62,24 +66,25 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
     @Override
     protected void init() {
         super.init();
-        renderables.clear();
+        clearWidgets();
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
         ResourceLocation file = new ResourceLocation(RotaryCraft.MODID, "textures/screen/buttons.png");
         //24000, 24001
-//       todo renderables.add(new ImageButton(j - 17, k + 4, 18, imageHeight - 12, 72, 0, file, 10, 10, pButton -> RotaryCraft.LOGGER.info("Button 1 pressed"), Component.translatable("Info")));// 0xffffff
-//        todo renderables.add(new ImageButton(j - 17, k + imageHeight - 8, 18, 4, 72, 252, file, 10, 10, pButton -> RotaryCraft.LOGGER.info("Button 2 pressed"), Component.translatable("Info")));//button 0xffffff
+        addRenderableWidget(new ImageButton(j - 17, k + 4, 18, imageHeight - 12, 72, 0, 0, file, 256, 256, pButton -> RotaryCraft.LOGGER.info("Button 1 pressed"), Component.translatable("Info")));// 0xffffff
+        addRenderableWidget(new ImageButton(j - 17, k + imageHeight - 8, 18, 4, 72, 252, 0, file, 256, 256, pButton -> RotaryCraft.LOGGER.info("Button 2 pressed"), Component.translatable("Info")));//button 0xffffff
+        //todo the 256 was 10, check reikas github
     }
 
-    //    @Override
-    protected void actionPerformedd(Button b) {
-//        todo if (b.id == 24000 || b.id == 24001) {
-//            ep.player.closeContainer();
-//            if (ReikaInventoryHelper.checkForItem(RotaryItems.HANDBOOK.get(), ep.player.getInventory()))
-//                ep.openMenu(RotaryCraft.getInstance(), GuiRegistry.LOADEDHANDBOOK.ordinal(), tile.getLevel(), tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
-//            else
-//                ep.openMenu(RotaryCraft.getInstance(), GuiRegistry.HANDBOOKPAGE.ordinal(), tile.getLevel(), tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
-//        }
+//    @Override
+    protected void actionPerformed(Button b, int id) {
+        if (id == 24000 || id == 24001) {
+            inventory.player.closeContainer();
+            // todoif (ReikaInventoryHelper.checkForItem(RotaryItems.HANDBOOK.get(), inventory))
+            // todo    inventory.player.openMenu(RotaryCraft.getInstance(), GuiRegistry.LOADEDHANDBOOK.ordinal(), tile.getLevel(), tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+            // todoelse
+            // todo    inventory.player.openMenu(RotaryCraft.getInstance(), GuiRegistry.HANDBOOKPAGE.ordinal(), tile.getLevel(), tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+        }
     }
 
     protected final boolean isClickTooSoon() {
@@ -91,7 +96,6 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
 
     @Override
     protected void renderLabels(PoseStack stack, int pMouseX, int pMouseY) {
-
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
 //        if (tile instanceof BlockEntityProjector)
@@ -123,11 +127,11 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
     }
 
     public final void refreshScreen() {
-        //int lastx = x;
-        //int lasty = y;
-        //mc.thePlayer.closeScreen();
-        //ModLoader.openGUI(player, new GuiReservoir(player, Reservoir));
-        //Mouse.setCursorPosition(lastx, lasty);
+        int lastx = this.getXSize();
+        int lasty = this.getYSize();
+        minecraft.player.closeContainer();
+//        ModLoader.openGUI(minecraft.player, new ReservoirScreen(minecraft.player, Reservoir));
+//        Mouse.setCursorPosition(lastx, lasty);
     }
 
     @Override
@@ -146,7 +150,9 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
             this.drawPowerTab(pPoseStack, j, k);
 
         if (inventory == null && !(this instanceof GuiOneSlotScreen))
-            RotaryCraft.LOGGER.error("Gui for " + tile.getName() + " did not set player entity!");
+            RotaryCraft.LOGGER.error("The Gui" + tile.getName() + "'s Player Inventory is null!");
+
+        this.renderLabels(pPoseStack, pX, pY);
     }
 
     protected abstract void drawPowerTab(PoseStack poseStack, int j, int k);

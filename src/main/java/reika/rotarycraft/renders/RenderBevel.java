@@ -19,6 +19,7 @@ import org.joml.Quaternionf;
 import org.lwjgl.opengl.GL11;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
@@ -46,6 +47,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         int var12 = 0;  //used to rotate the model into the Y direction
         int var13 = 0;  //used to rotate the model into the Z direction
         int dir = 1;
+//        RotaryCraft.LOGGER.info(tile.direction);
         if (tile.isInWorld()) {
             switch (tile.direction) {
                 case 0 -> {
@@ -201,11 +203,9 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
                 }
             }
 
-
             stack.mulPose(Axis.YP.rotationDegrees(var11));
             stack.mulPose(Axis.XP.rotationDegrees(var12));
             stack.mulPose(Axis.ZP.rotationDegrees(var13));
-
         } else {
             stack.mulPose(new Quaternionf(Axis.YP.rotationDegrees(90F)));
         }
@@ -217,7 +217,6 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
 //        if (tile.isInWorld())
 //            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         stack.popPose();
-//        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
@@ -225,7 +224,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityBevelAt(stack, tile, bufferSource, p_112311_);
         if (tile.isInWorld()) {// && MinecraftForgeClient.getRenderPass() == 1) {
-            //this.renderCompass(tile, par2, par4, par6);
+//            this.renderCompass(tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
             if (tile.iotick > 64 && ConfigRegistry.COLORBLIND.getState())
                 this.renderFaceNumbers(stack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
 //            else
@@ -249,35 +248,35 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
             double dy = 0;
             double dz = 0;
             switch (i) {
-                case 0:
+                case 0 -> {
                     rx = 90;
                     l = 0.07;
-                    break;
-                case 1:
+                }
+                case 1 -> {
                     rx = 90;
                     dy = 1;
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     rz = 180;
                     dy = 1;
                     dx = 1;
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     dz = 1;
                     l = 0.07;
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     ry = 90;
                     rz = 180;
                     dy = 1;
-                    break;
-                case 5:
+                }
+                case 5 -> {
                     ry = -90;
                     rz = 180;
                     dy = 1;
                     dx = 1;
                     dz = 1;
-                    break;
+                }
             }
             stack.translate(dx, 0, 0);
             stack.translate(0, dy, 0);

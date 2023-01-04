@@ -11,7 +11,7 @@ import reika.rotarycraft.registry.RotaryItems;
 public class RoCItemModelProvider extends ItemModelProvider {
 
     public RoCItemModelProvider(final DataGenerator generator, final ExistingFileHelper existingFileHelper) {
-        super(generator, RotaryCraft.MODID, existingFileHelper);
+        super(generator.getPackOutput(), RotaryCraft.MODID, existingFileHelper);
     }
 
     @Override

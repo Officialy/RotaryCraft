@@ -35,12 +35,12 @@
 //        super.init();
 //        int var5 = (width - imageWidth) / 2;
 //        int var6 = (height - imageHeight) / 2;
-//        //renderables.add(new Button(0, var5+imageWidth-1, var6+32, 43, 20, "Get XP"));
+//        //addRenderableWidget(new Button(0, var5+imageWidth-1, var6+32, 43, 20, "Get XP"));
 //        if (crafter.getMode() == CraftingMode.REQUEST) {
 //            for (int i = 0; i < BlockEntityAutoCrafter.SIZE; i++) {
 //                int dx = var5 + (i % 9) * BlockEntityAutoCrafter.SIZE + 7;
 //                int dy = i < 9 ? var6 + 13 : var6 + 75;
-//                renderables.add(new ImageButton(i, dx, dy, 18, 4, 176, 6, this.getGuiTexture(), RotaryCraft.class));
+//                addRenderableWidget(new ImageButton(i, dx, dy, 18, 4, 176, 6, this.getGuiTexture(), RotaryCraft.class));
 //            }
 //        }
 //
@@ -52,12 +52,12 @@
 //            text = null;
 //        }
 //
-//        //renderables.add(new ImageButton(-1, var5+imageWidth-25, var6+4, 18, 9, 176, 25, this.getGuiTexture(), RotaryCraft.class));
+//        //addRenderableWidget(new ImageButton(-1, var5+imageWidth-25, var6+4, 18, 9, 176, 25, this.getGuiTexture(), RotaryCraft.class));
 //        if (crafter.getMode() == CraftingMode.SUSTAIN) {
 //            for (int i = 0; i < BlockEntityAutoCrafter.SIZE; i++) {
 //                int dx = var5 + 8 + 18 * (i % 9);
 //                int dy = var6 + 37 + 62 * (i / 9);
-//                renderables.add(new ImageButton(40 + i, dx, dy, 16, 16, 195, 41, this.getGuiTexture(), RotaryCraft.class));
+//                addRenderableWidget(new ImageButton(40 + i, dx, dy, 16, 16, 195, 41, this.getGuiTexture(), RotaryCraft.class));
 //            }
 //        }
 //    }

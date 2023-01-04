@@ -160,7 +160,7 @@
 //        }
 //        Block b = world.getBlock(x, y, z);
 //        if (b instanceof ShearablePlant) {
-//            if (ep.isSneaking()) {
+//            if (ep.isShiftKeyDown()) {
 //                int r = this.getPlantRange();
 //                for (int i = -r; i <= r; i++) {
 //                    for (int j = -r; j <= r; j++) {
@@ -193,7 +193,7 @@
 //        if (world.isClientSide())
 //            return eff != null;
 //        if (eff != null) {
-//            int num = eff.onBreakAt(world, x, y, z, id, meta, ep, is, this, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is), ep.isSneaking());
+//            int num = eff.onBreakAt(world, x, y, z, id, meta, ep, is, this, ReikaEnchantmentHelper.getEnchantmentLevel(Enchantment.fortune, is), ep.isShiftKeyDown());
 //            if (this.isBreakable()) {
 //                int dmg = eff.doesDamagePerBlock(is, num);
 //                is.damageItem(dmg, ep);

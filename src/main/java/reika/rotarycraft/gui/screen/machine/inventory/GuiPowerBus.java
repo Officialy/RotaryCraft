@@ -52,7 +52,7 @@
 //            Direction dir = Direction.values()[i + 2];
 //            int u = tile.isSideSpeedMode(dir) ? 54 : 36;
 //            if (tile.canHaveItemInSlot(dir))
-//                renderables.add(new ImageButton(i, dx[i], dy[i], 18, 18, u, 36, file, RotaryCraft.class));
+//                addRenderableWidget(new ImageButton(i, dx[i], dy[i], 18, 18, u, 36, file, RotaryCraft.class));
 //        }
 //    }
 //

@@ -23,8 +23,6 @@ public class GearboxScreen extends NonPoweredMachineScreen<BlockEntityGearbox, G
 
     public GearboxScreen(GearboxContainer container, Inventory inv, Component component) {
         super(container, inv, component);
-//        super(new ContainerGearbox(p5ep, Gearbox), Gearbox);
-
         gbx = (BlockEntityGearbox) inv.player.level.getBlockEntity(container.tile.getBlockPos());
         inventory = inv;
         imageHeight = 84;
@@ -36,11 +34,9 @@ public class GearboxScreen extends NonPoweredMachineScreen<BlockEntityGearbox, G
     }
 
     //    @Override
-    protected void drawGuiContainerForegroundLayer(PoseStack stack, int a, int b) {
+    protected void drawGuiContainerForegroundLayer(PoseStack stack, int pMouseX, int pMouseY) {
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
-
-//        super.drawGuiContainerForegroundLayer(a, b);
 
         String s = gbx.isLiving() ? "Mana" : "Lubricant";
         font.draw(stack, s, 5, 12, 4210752);
@@ -71,11 +67,11 @@ public class GearboxScreen extends NonPoweredMachineScreen<BlockEntityGearbox, G
         String pw = RotaryAux.formatPower(gbx.power);
         font.draw(stack, pw, 150 - font.width(pw), 48, 0x000000);
 
-//      todo  if (!gbx.isLiving() && api.isMouseInBox(j + 23, j + 32, k + 20, k + 76)) {
-//            int mx = api.getMouseRealX();
-//            int my = api.getMouseRealY();
-//            api.drawTooltipAt(stack, font, String.format("%.1f/%d", gbx.getLubricant() / 1000F, gbx.getMaxLubricant() / 1000), mx - j, my - k);
-//        }
+       if (!gbx.isLiving() && api.isMouseInBox(j + 23, j + 32, k + 20, k + 76, pMouseX, pMouseY)) {
+            int mx = pMouseX;
+            int my = pMouseY;
+            api.drawTooltipAt(stack, font, String.format("%.1f/%d", gbx.getLubricant() / 1000F, gbx.getMaxLubricant() / 1000), mx - j, my - k);
+        }
     }
 
     @Override

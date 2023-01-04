@@ -73,23 +73,23 @@
 //                    MatchDisplay m = display.get(i);
 //                    int u = m.getSetting() == MatchType.MATCH ? 0 : 9;
 //                    int v = m.getSetting() == MatchType.MISMATCH ? 54 : 63;
-//                    renderables.add(new ImageButton(i, j + 30, k + 18 + i2 * 16, 9, 9, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
+//                    addRenderableWidget(new ImageButton(i, j + 30, k + 18 + i2 * 16, 9, 9, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
 //                }
 //            }
 //        }
-//        renderables.add(new Button(-1, j + 30, k + 100, 20, 20, "<"));
-//        renderables.add(new Button(-2, j + 50, k + 100, 20, 20, ">"));
+//        addRenderableWidget(new Button(-1, j + 30, k + 100, 20, 20, "<"));
+//        addRenderableWidget(new Button(-2, j + 50, k + 100, 20, 20, ">"));
 //        if (page == SettingType.NBT) {
 //            if (!display.isEmpty()) {
 //                for (int i = 0; i < 3; i++) {
 //                    int u = i == 0 ? 0 : 9;
 //                    int v = i == 1 ? 54 : 63;
-//                    renderables.add(new ImageButton(-5 - i, j + 30 + i * 10, k + 18 + 0, 9, 9, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
+//                    addRenderableWidget(new ImageButton(-5 - i, j + 30 + i * 10, k + 18 + 0, 9, 9, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
 //                }
 //            }
 //            if (display != null && display.size() > LINES) {
-//                renderables.add(new Button(-3, j + 70, k + 100, 20, 20, "+"));
-//                renderables.add(new Button(-4, j + 90, k + 100, 20, 20, "-"));
+//                addRenderableWidget(new Button(-3, j + 70, k + 100, 20, 20, "+"));
+//                addRenderableWidget(new Button(-4, j + 90, k + 100, 20, 20, "-"));
 //            }
 //        }
 //    }

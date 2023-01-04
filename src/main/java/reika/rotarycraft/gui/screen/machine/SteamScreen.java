@@ -23,7 +23,6 @@ public class SteamScreen extends EngineScreen<BlockEntitySteamEngine, SteamConta
 
     public SteamScreen(SteamContainer container, Inventory inv, Component text) { //BlockEntitySteamEngine te
         super(container, inv, text);
-//        steam = getBlockEntity(); //te;
         steam = (BlockEntitySteamEngine) inv.player.level.getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 79;
@@ -40,7 +39,7 @@ public class SteamScreen extends EngineScreen<BlockEntitySteamEngine, SteamConta
         int i3 = steam.getTempScaled(54);
 
         ScreenUtils.drawTexturedModalRect(poseStack, j + 49, k + 71 - i2, 193, 55 - i2, 5, i2, 0);
-        ScreenUtils.drawTexturedModalRect(poseStack, j + 119, k + 71 - i3, 177, 99 - i3, 9, i3, 0);
+        ScreenUtils.drawTexturedModalRect(poseStack, j + 119, k + 71 - i3, 177, 99 - i3, 9, i3, 0); //todo texture for these two??
     }
 
     @Override

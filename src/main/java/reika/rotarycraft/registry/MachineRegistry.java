@@ -21,10 +21,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.ModList;
+import reika.dragonapi.exception.RegistrationException;
 import reika.dragonapi.instantiable.data.immutable.ImmutableArray;
 import reika.dragonapi.instantiable.data.maps.BlockMap;
 import reika.dragonapi.interfaces.registry.TileEnum;
 import reika.dragonapi.modregistry.PowerTypes;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.ModDependency;
 import reika.rotarycraft.auxiliary.interfaces.*;
 import reika.rotarycraft.base.blockentity.*;
@@ -122,7 +124,7 @@ public enum MachineRegistry implements TileEnum {
 //    LASERGUN("machine.lasergun", BlockRotaryCraftMachine.class, BlockEntityLaserGun.class, "RenderLaserGun"),
     ITEMCANNON("machine.itemcannon", RotaryBlocks.ITEM_CANNON.get(), BlockEntityItemCannon.class),
     LANDMINE("machine.landmine", RotaryBlocks.LANDMINE.get(), BlockEntityLandmine.class),
-//    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class),
+    //    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class),
     BLOCKCANNON("machine.blockcannon", RotaryBlocks.BLOCK_CANNON.get(), BlockEntityBlockCannon.class),
     BUCKETFILLER("machine.bucketfiller", RotaryBlocks.BUCKET_FILLER.get(), BlockEntityBucketFiller.class),
     MIRROR("machine.mirror", RotaryBlocks.MIRROR.get(), BlockEntityMirror.class),
@@ -744,16 +746,20 @@ public enum MachineRegistry implements TileEnum {
     }
 
     static {
-        /*for (int i = 0; i < machineList.length; i++) {
+        for (int i = 0; i < machineList.length; i++) {
             var m = machineList.get(i);
             RotaryCraft.LOGGER.info("M on it's own: " + m);
             RotaryCraft.LOGGER.info("Name: " + m.getName());
-            var id = m.getBlockState().getBlock(); //todo Do a null check here
-            RotaryCraft.LOGGER.info("ID: " + id);
-            if (machineMappings.containsKey(id))
-                throw new RegistrationException(RotaryCraft.getInstance(), "ID conflict " + id + ": " + m + " & " + machineMappings.get(id));
-            machineMappings.put(id, m);
-        }*/
+            if (m.getBlockState() != null) {
+                var id = m.getBlockState().getBlock(); //todo Do a null check here
+                RotaryCraft.LOGGER.info("ID: " + id);
+//           todo     if (machineMappings.containsKey(id))
+//                    throw new RegistrationException(RotaryCraft.getInstance(), "BlockState conflict " + id + ": " + m + " & " + machineMappings.get(id));
+                machineMappings.put(id, m);
+            } else {
+                throw new RegistrationException(RotaryCraft.getInstance(), "BlockState is null for " + m);
+            }
+        }
     }
 
     public boolean isSolidBottom() {

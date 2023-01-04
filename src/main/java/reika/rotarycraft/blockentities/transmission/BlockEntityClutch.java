@@ -43,7 +43,6 @@ public class BlockEntityClutch extends BlockEntity1DTransmitter {
 
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
-
 //        this.getIOSides(world, pos, true);
         this.transferPower(world, pos);
         power = (long) omega * (long) torque;

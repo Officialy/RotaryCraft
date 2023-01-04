@@ -153,7 +153,7 @@ public class BlockGearbox extends BlockBasicMachine {
         }
 
         BlockEntityGearbox tile = (BlockEntityGearbox) level.getBlockEntity(pos);
-        //if (ep.isSneaking()) {
+        //if (ep.isShiftKeyDown()) {
         if (player.getMainHandItem() != null && KeyWatcher.instance.isKeyDown(player, KeyWatcher.Key.LCTRL) && player.getMainHandItem().getItem() == Items.BUCKET) {
             tile.clearLubricant();
             return InteractionResult.SUCCESS;

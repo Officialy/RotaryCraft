@@ -51,7 +51,7 @@
 //        super.initGui();
 //        int var5 = (width - imageWidth) / 2;
 //        int var6 = (height - imageHeight) / 2;
-//        renderables.add(new Button(0, var5 + imageWidth - 1, var6 + 32, 43, 20, "Get XP"));
+//        addRenderableWidget(new Button(0, var5 + imageWidth - 1, var6 + 32, 43, 20, "Get XP"));
 //    }
 //
 //    @Override

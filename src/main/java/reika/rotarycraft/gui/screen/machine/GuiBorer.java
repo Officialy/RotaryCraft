@@ -7,7 +7,7 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.guis.Machine;
+//package reika.rotarycraft.gui.screen.machine;
 //
 //import java.io.ByteArrayOutputStream;
 //import java.io.DataOutputStream;
@@ -54,13 +54,13 @@
 //                if (i == 3 && l == 4)
 //                    u = 36;
 //                if (dig[i][l])
-//                    renderables.add(new ImageButton(50 + i + 7 * l, j + 25 + 18 * i, k + 16 + 18 * l, 18, 18, u, 0, file, RotaryCraft.class));
+//                    addRenderableWidget(new ImageButton(50 + i + 7 * l, j + 25 + 18 * i, k + 16 + 18 * l, 18, 18, u, 0, file, RotaryCraft.class));
 //                else
-//                    renderables.add(new ImageButton(10 + i + 7 * l, j + 25 + 18 * i, k + 16 + 18 * l, 18, 18, u + 18, 0, file, RotaryCraft.class));
+//                    addRenderableWidget(new ImageButton(10 + i + 7 * l, j + 25 + 18 * i, k + 16 + 18 * l, 18, 18, u + 18, 0, file, RotaryCraft.class));
 //            }
 //
-//        renderables.add(new Button(j + 14, -1 + k + 116, 72, 20, Component.literal("Reset Pos'n"), (a) -> this.sendPacket(PacketRegistry.BORERRESET.ordinal()))); //8
-//        renderables.add(new Button(j + 14, k + 140, 148, 20, Component.literal("Toggle All"), (a) -> {
+//        addRenderableWidget(new Button(j + 14, -1 + k + 116, 72, 20, Component.literal("Reset Pos'n"), (a) -> this.sendPacket(PacketRegistry.BORERRESET.ordinal()))); //8
+//        addRenderableWidget(new Button(j + 14, k + 140, 148, 20, Component.literal("Toggle All"), (a) -> {
 //            this.sendPacket(PacketRegistry.BORERTOGGLEALL.ordinal());
 //            for (int i = 0; i < 5; i++) {
 //                for (int j = 0; j < 7; j++) {
@@ -70,9 +70,9 @@
 //        })); //6
 //
 //        if (drops)
-//            renderables.add(new Button(j + 90, -1 + k + 116, 72, 20, Component.literal("Drops On"), (a) -> this.toggleDrops())); //7 toggle
+//            addRenderableWidget(new Button(j + 90, -1 + k + 116, 72, 20, Component.literal("Drops On"), (a) -> this.toggleDrops())); //7 toggle
 //        else
-//            renderables.add(new Button(j + 90, -1 + k + 116, 72, 20, Component.literal("Drops Off"), (a) -> this.toggleDrops())); //7 toggle
+//            addRenderableWidget(new Button(j + 90, -1 + k + 116, 72, 20, Component.literal("Drops Off"), (a) -> this.toggleDrops())); //7 toggle
 //    }
 //
 //    public void toggleDrops() {

@@ -16,7 +16,7 @@ public class RoCBlockStateProvider extends BlockStateProvider {
     private final List<String> errors = new ArrayList<>();
 
     public RoCBlockStateProvider(final DataGenerator gen, final ExistingFileHelper exFileHelper) {
-        super(gen, RotaryCraft.MODID, exFileHelper);
+        super(gen.getPackOutput(), RotaryCraft.MODID, exFileHelper);
     }
 
     @Override

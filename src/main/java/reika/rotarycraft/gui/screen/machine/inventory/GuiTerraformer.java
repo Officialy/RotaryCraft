@@ -56,12 +56,12 @@
 //
 //        for (int i = 0; i < this.getNumberBiomesOnPage(); i++) {
 //            Biome b = targets.get(i + offset);
-//            renderables.add(new ImageButton(i, j + 8, k + 17 + 39 * i, 32, 32, 32 * (b.biomeID % 8), 32 * (b.biomeID / 8), , b.biomeName, 0xffffff, false, RotaryCraft.class));
+//            addRenderableWidget(new ImageButton(i, j + 8, k + 17 + 39 * i, 32, 32, 32 * (b.biomeID % 8), 32 * (b.biomeID / 8), , b.biomeName, 0xffffff, false, RotaryCraft.class));
 //        }
 //
 //		 ="/Reika/RotaryCraft/Textures/GUI/buttons.png";
-//        renderables.add(new ImageButton(100, j + 11, k + 6, 24, 12, 18, 110, , RotaryCraft.class));
-//        renderables.add(new ImageButton(101, j + 11, k + imageHeight - 14, 24, 12, 42, 110, , RotaryCraft.class));
+//        addRenderableWidget(new ImageButton(100, j + 11, k + 6, 24, 12, 18, 110, , RotaryCraft.class));
+//        addRenderableWidget(new ImageButton(101, j + 11, k + imageHeight - 14, 24, 12, 42, 110, , RotaryCraft.class));
 //    }
 //
 //    private int getNumberBiomesOnPage() {

@@ -36,8 +36,14 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.StepTimer;
@@ -47,6 +53,7 @@ import reika.dragonapi.interfaces.blockentity.OpenTopTank;
 import reika.dragonapi.interfaces.blockentity.PlaceNotification;
 import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.ReikaNBTHelper;
+import reika.dragonapi.libraries.io.ReikaSoundHelper;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -80,7 +87,19 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
     private final StepTimer flowTimer = new StepTimer(BlockEntityPiping.getTickDelay());
     private final StepTimer tempTimer = new StepTimer(20).stagger();
-    private final HybridTank tank = new HybridTank("reservoir", CAPACITY);
+    private final HybridTank tank = new HybridTank("reservoir", CAPACITY) {
+        @Override
+        protected void onContentsChanged() {
+            setChanged();
+        }
+
+        @Override
+        public boolean isFluidValid(FluidStack stack) {
+            return true; //todo ban specific fluids? blacklist?
+        }
+    };
+
+    private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
     public boolean isCovered = false;
     public boolean isCreative;
     private boolean[] adjacent = new boolean[10];
@@ -89,6 +108,25 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         super(RotaryBlockEntities.RESERVOIR.get(), pos, state);
     }
 
+    @Override
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (capability == ForgeCapabilities.FLUID_HANDLER)
+            return lazyFluidHandler.cast();
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        lazyFluidHandler = LazyOptional.of(() -> tank);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyFluidHandler.invalidate();
+    }
 //    private CompoundReservoir network;
 
     private static void addCreativeFluid(FluidStack fluid) {
@@ -177,6 +215,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     private void updateSides(Level world, BlockPos pos) {
+        RotaryCraft.LOGGER.info("Updating sides");
         adjacent[8] = MachineRegistry.getMachine(world, pos.getX(), pos.getY(), pos.getZ() - 1) == MachineRegistry.RESERVOIR;
         adjacent[4] = MachineRegistry.getMachine(world, pos.getX() - 1, pos.getY(), pos.getZ()) == MachineRegistry.RESERVOIR;
         adjacent[6] = MachineRegistry.getMachine(world, pos.getX() + 1, pos.getY(), pos.getZ()) == MachineRegistry.RESERVOIR;
@@ -261,9 +300,6 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         else if (isCreative)
             tank.addLiquid(CAPACITY, tank.getActualFluid().getFluid());
 
-//        if (!world.isClientSide && network != null)
-//        	network.tick();
-
         tempTimer.setCap(isCovered ? 30 : 20);
 
         tempTimer.update();
@@ -281,7 +317,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
                             int hiT = (int) (Tamb + dT / dd / 2D);
                             //ReikaJavaLibrary.pConsole(dT+" above "+Tamb+" @ "+temp+", h = "+hiT, Dist.DEDICATED_SERVER);
                             ReikaWorldHelper.temperatureEnvironment(world, new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k), hiT);
-//                            if (temp > 2500)
+//           todo                 if (temp > 2500)
 //                                ReikaSoundHelper.playSoundAtBlock(world, x + i, y + j, z + k, "DragonAPI.rand.fizz", 0.2F, 1F);
                         }
                     }
@@ -292,7 +328,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
                     world.setBlock(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()), Fluids.FLOWING_LAVA.defaultFluidState().createLegacyBlock(), 1);
                     world.setBlock(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1), Fluids.FLOWING_LAVA.defaultFluidState().createLegacyBlock(), 1);
                     world.setBlock(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), Fluids.FLOWING_LAVA.defaultFluidState().createLegacyBlock(), 1);
-//                    ReikaSoundHelper.playSoundAtBlock(world, pos, "DragonAPI.rand.fizz", 0.4F, 1F);
+//            todo        ReikaSoundHelper.playSoundAtBlock(world, pos, "DragonAPI.rand.fizz", 0.4F, 1F);
                 }
 
                 boolean hot = Tamb >= 300;
@@ -505,6 +541,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     public void addLiquid(int amt, Fluid f) {
+//        RotaryCraft.LOGGER.info("Adding "+amt+" of "+f+" to "+this);
         tank.addLiquid(amt, f);
     }
 
@@ -549,9 +586,10 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
     public int getFluidRenderColor() {
         FluidStack fs = tank.getFluid();
-        if (fs == null)
+        IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fs.getFluid());
+        if (fs.isEmpty())
             return 0xffffff;
-        int clr = fs.getTag() != null && fs.getTag().contains("renderColor") ? fs.getTag().getInt("renderColor") : 0xffffff;
+        int clr = fs.getTag() != null && fs.getTag().contains("renderColor") ? fs.getTag().getInt("renderColor") : props.getTintColor();
 //        if (this.isInWorld() && fs.getFluid().canBePlacedInWorld()) {
 //            clr = fs.getFluid().defaultFluidState().createLegacyBlock().colorMultiplier(level, xCoord, yCoord, zCoord);
 //        }
@@ -571,10 +609,10 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
             }
             if (f.getFluid().getFluidType().getTemperature() < 250)
                 e.hurt(DamageSource.WITHER, 1);
-//            if (e.isBurning() && ReikaFluidHelper.isFlammable(f)) {
-//                this.delete();
-//                level.explode(e, e.getY(), e.getY(), e.getZ(), 4F, true, true);
-//            }
+            if (e.isOnFire() && ReikaFluidHelper.isFlammable(f.getFluid().defaultFluidState())) {
+                this.delete();
+                level.explode(e, e.getY(), e.getY(), e.getZ(), 4F, true, Level.ExplosionInteraction.BLOCK);
+            }
 //            if (f.canBePlacedInWorld()) {
 //                Block b = f.getFluid().defaultFluidState().createLegacyBlock().getBlock();
 //                b.onEntityCollidedWithBlock(level, worldPosition, e);
@@ -622,7 +660,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     public ArrayList<String> getDisplayTags(CompoundTag nbt) {
-        ArrayList li = new ArrayList<>();
+        ArrayList<String> li = new ArrayList<>();
         FluidStack f = ReikaNBTHelper.getFluidFromNBT(nbt);
         if (f != null) {
             String fluid = f.getDisplayName().getString();
@@ -641,10 +679,10 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     public ArrayList<CompoundTag> getCreativeModeVariants() {
         ArrayList<CompoundTag> li = new ArrayList<>();
         li.add(null);
-        for (int i = 0; i < creativeFluids.size(); i++) {
+        for (FluidStack creativeFluid : creativeFluids) {
             CompoundTag nbt = new CompoundTag();
             nbt.putInt("lvl", CAPACITY);
-            ReikaNBTHelper.writeFluidToNBT(nbt, creativeFluids.get(i));
+            ReikaNBTHelper.writeFluidToNBT(nbt, creativeFluid);
             li.add(nbt);
         }
         return li;
@@ -659,7 +697,6 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
             tank.addLiquid(amt, f);
         return amt;
     }
-
     @Override
     public boolean hasAnInventory() {
         return false;
@@ -730,4 +767,5 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         }
 
     }
+
 }

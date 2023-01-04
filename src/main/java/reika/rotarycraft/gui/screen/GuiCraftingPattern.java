@@ -40,11 +40,11 @@
 //        renderables.clear();
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;
-//        renderables.add(new Button(0, j + 6, k + 6, 20, 20, ""));
+//        addRenderableWidget(new Button(0, j + 6, k + 6, 20, 20, ""));
 //
 //        String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
-//        renderables.add(new ImageButton(1, j + 4, k + 42, 24, 8, 18, 110, file, RotaryCraft.class));
-//        renderables.add(new ImageButton(2, j + 4, k + 61, 24, 8, 42, 110, file, RotaryCraft.class));
+//        addRenderableWidget(new ImageButton(1, j + 4, k + 42, 24, 8, 18, 110, file, RotaryCraft.class));
+//        addRenderableWidget(new ImageButton(2, j + 4, k + 61, 24, 8, 42, 110, file, RotaryCraft.class));
 //    }
 //
 //    @Override

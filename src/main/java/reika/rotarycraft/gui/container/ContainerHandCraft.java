@@ -10,16 +10,19 @@
 package reika.rotarycraft.gui.container;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.IContainerFactory;
 import reika.rotarycraft.registry.RotaryMenus;
+
+import java.util.Optional;
 
 public class ContainerHandCraft extends AbstractContainerMenu {
 
@@ -28,18 +31,21 @@ public class ContainerHandCraft extends AbstractContainerMenu {
      * The crafting matrix inventory (3x3).
      */
     public CraftingContainer craftMatrix = new CraftingContainer(this, 3, 3);
-//    public Container craftResult = new InventoryCraftResult();
-
+    public ResultContainer craftResult = new ResultContainer();
+    public Player player;
 
     //Client
     public ContainerHandCraft(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, inv.player.level);
+        this(id, inv, inv.player);
     }
+
     //Server
-    public ContainerHandCraft(final int id, Inventory player, Level par2World) {
+    public ContainerHandCraft(final int id, Inventory inventory, Player player) {
         super(RotaryMenus.HAND_CRAFT.get(), id);
-        level = par2World;
-//   todo     this.addSlot(new SlotCrafting(player, craftMatrix, craftResult, 0, 124, 35));
+        level = player.getLevel();
+        this.player = player;
+        this.addSlot(new ResultSlot(player, craftMatrix, craftResult, 0, 124, 35));
+
         int var6;
         int var7;
         for (var6 = 0; var6 < 3; ++var6)
@@ -47,26 +53,43 @@ public class ContainerHandCraft extends AbstractContainerMenu {
                 this.addSlot(new Slot(craftMatrix, var7 + var6 * 3, 30 + var7 * 18, 17 + var6 * 18));
         for (var6 = 0; var6 < 3; ++var6)
             for (var7 = 0; var7 < 9; ++var7)
-                this.addSlot(new Slot(player, var7 + var6 * 9 + 9, 8 + var7 * 18, 84 + var6 * 18));
+                this.addSlot(new Slot(inventory, var7 + var6 * 9 + 9, 8 + var7 * 18, 84 + var6 * 18));
         for (var6 = 0; var6 < 9; ++var6)
-            this.addSlot(new Slot(player, var6, 8 + var6 * 18, 142));
+            this.addSlot(new Slot(inventory, var6, 8 + var6 * 18, 142));
 //   todo     this.onCraftMatrixChanged(craftMatrix);
     }
 
 
     @Override
     public void slotsChanged(Container pInventory) {
-        super.slotsChanged(pInventory);
+        slotChangedCraftingGrid(this, level, player, this.craftMatrix, this.craftResult);
     }
 
-//    @Override
-//todo    public void onCraftMatrixChanged(Container par1IInventory) {
-//    }
+    protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_) {
+        if (!p_150548_.isClientSide) {
+            ServerPlayer serverplayer = (ServerPlayer) p_150549_;
+            ItemStack itemstack = ItemStack.EMPTY;
+            Optional<CraftingRecipe> optional = p_150548_.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, p_150550_, p_150548_);
+            if (optional.isPresent()) {
+                CraftingRecipe craftingrecipe = optional.get();
+                if (p_150551_.setRecipeUsed(p_150548_, serverplayer, craftingrecipe)) {
+                    ItemStack itemstack1 = craftingrecipe.assemble(p_150550_);
+                    if (itemstack1.isItemEnabled(p_150548_.enabledFeatures())) {
+                        itemstack = itemstack1;
+                    }
+                }
+            }
+
+            p_150551_.setItem(0, itemstack);
+            p_150547_.setRemoteSlot(0, itemstack);
+            serverplayer.connection.send(new ClientboundContainerSetSlotPacket(p_150547_.containerId, p_150547_.incrementStateId(), 0, itemstack));
+        }
+    }
 
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        //        craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, level));
+//        craftResult.setItem(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, level));
     }
 
     @Override
@@ -83,7 +106,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player pPlayer) {
-        return false;
+        return true;
     }
 
     @Override
@@ -129,12 +152,4 @@ public class ContainerHandCraft extends AbstractContainerMenu {
         return var3;
     }
 
-    public static class Factory implements IContainerFactory<ContainerHandCraft> {
-        @Override
-        public ContainerHandCraft create(final int id, final Inventory inv, final FriendlyByteBuf data) {
-            final Level world = inv.player.getCommandSenderWorld();
-
-            return new ContainerHandCraft(id, inv, world);
-        }
-    }
 }

@@ -8,7 +8,7 @@ import reika.rotarycraft.registry.RotaryMenus;
 
 public class BevelContainer extends IOMachineContainer<BlockEntityBevelGear> {
 
-    public final BlockEntityBevelGear steam;
+    public final BlockEntityBevelGear bevel;
 
     //Client
     public BevelContainer(int id, Inventory inv, FriendlyByteBuf data) {
@@ -17,7 +17,7 @@ public class BevelContainer extends IOMachineContainer<BlockEntityBevelGear> {
 
     public BevelContainer(int id, Inventory inv, BlockEntityBevelGear te) {
         super(RotaryMenus.BEVEL.get(), id, inv, te);
-        steam = te;
+        bevel = te;
     }
 
 }

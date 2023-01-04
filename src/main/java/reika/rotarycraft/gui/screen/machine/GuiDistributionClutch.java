@@ -7,7 +7,7 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.guis.Machine;
+//package reika.rotarycraft.gui.screen.machine;
 //
 //import com.mojang.blaze3d.vertex.PoseStack;
 //import net.minecraft.client.gui.components.Button;
@@ -61,7 +61,7 @@
 //        int y = k + dir.ordinal() * h;
 //        ImageButton gb = new ImageButton(idx, x, y, 9, 9, u, v, file, RotaryCraft.class);
 //        gb.enabled = enable;
-//        renderables.add(gb);
+//        addRenderableWidget(gb);
 //        selectedAmounts[idx] = new GuiTextField(font, x + 15, y - h / 2 + 6, 80, h - 4);
 //        selectedAmounts[idx].setMaxStringLength(10);
 //        selectedAmounts[idx].setFocused(false);

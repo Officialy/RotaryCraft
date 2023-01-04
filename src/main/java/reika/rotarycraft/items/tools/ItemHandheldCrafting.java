@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import reika.rotarycraft.base.ItemRotaryTool;
+import reika.rotarycraft.gui.container.ContainerHandCraft;
 
 public class ItemHandheldCrafting extends ItemRotaryTool implements MenuProvider {
 
@@ -43,7 +44,7 @@ public class ItemHandheldCrafting extends ItemRotaryTool implements MenuProvider
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return null;
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+        return new ContainerHandCraft(id, inventory, player);
     }
 }

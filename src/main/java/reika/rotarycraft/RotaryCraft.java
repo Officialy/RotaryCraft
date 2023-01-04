@@ -31,6 +31,7 @@ import reika.dragonapi.auxiliary.trackers.PlayerHandler;
 import reika.dragonapi.base.DragonAPIMod;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.auxiliary.*;
+import reika.rotarycraft.gui.screen.GuiHandCraft;
 import reika.rotarycraft.gui.screen.machine.*;
 import reika.rotarycraft.gui.screen.machine.inventory.GuiBigFurnace;
 import reika.rotarycraft.gui.screen.machine.inventory.GuiLandmine;
@@ -103,7 +104,7 @@ public class RotaryCraft extends DragonAPIMod {
         RotaryBlocks.ITEMS.register(modEventBus);
 
         LOGGER.info("RotaryCraft:" + " Creating Fluids!");
-//        RotaryFluids.FLUID_TYPES.register(modEventBus);
+        RotaryFluids.FLUID_TYPES.register(modEventBus);
         RotaryFluids.FLUIDS.register(modEventBus);
 
         LOGGER.info("RotaryCraft:" + " Creating Containers!");
@@ -176,6 +177,8 @@ public class RotaryCraft extends DragonAPIMod {
         MenuScreens.register(RotaryMenus.PERFORMANCE_ENGINE.get(), GuiPerformance::new);
         MenuScreens.register(RotaryMenus.WINDER.get(), WinderScreen::new);
         MenuScreens.register(RotaryMenus.BIG_FURNACE.get(), GuiBigFurnace::new);
+        MenuScreens.register(RotaryMenus.HAND_CRAFT.get(), GuiHandCraft::new);
+        MenuScreens.register(RotaryMenus.MUSIC.get(), GuiMusic::new);
 
         RotaryRenders.registerBlockColors();
         event.enqueueWork(RotaryRenders::registerRenderLayers);

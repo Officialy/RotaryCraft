@@ -7,7 +7,7 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.guis.Machine;
+//package reika.rotarycraft.gui.screen.machine;
 //
 //import net.minecraft.world.entity.player.Player;
 //import reika.dragonapi.base.CoreMenu;
@@ -42,7 +42,7 @@
 //        int j = (width - imageWidth) / 2 + 8;
 //        int k = (height - imageHeight) / 2 - 12;
 //        if (hasPower) {
-//            renderables.add(new Button(0, j + imageWidth / 2 - 48, -1 + k + 32, 80, 20, "Disable/Enable"));
+//            addRenderableWidget(new Button(0, j + imageWidth / 2 - 48, -1 + k + 32, 80, 20, "Disable/Enable"));
 //            input = new GuiTextField(font, j + imageWidth / 2 - 7, k + 59, 26, 16);
 //            input.setFocused(false);
 //            input.setMaxStringLength(3);

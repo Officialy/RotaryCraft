@@ -49,7 +49,6 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
     public final int getLiquidLevel() {
         return tank.getLevel();
     }
-
     public final FluidStack getContainedFluid() {
         return tank.getActualFluid();
     }

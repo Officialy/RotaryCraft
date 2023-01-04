@@ -7,7 +7,7 @@
 // * Distribution of the software in any form is only allowed with
 // * explicit, prior permission from the owner.
 // ******************************************************************************/
-//package reika.rotarycraft.guis.Machine;
+//package reika.rotarycraft.gui.screen.machine;
 //
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiEngine;
@@ -39,7 +39,7 @@
 //        if (jet != null) {
 //            int u = jet.burnerActive() ? 36 : 0;
 //            int v = jet.canAfterBurn() ? 72 : 90;
-//            renderables.add(new ImageButton(0, j + 32, k + 36, 36, 18, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
+//            addRenderableWidget(new ImageButton(0, j + 32, k + 36, 36, 18, u, v, "Textures/GUI/buttons.png", RotaryCraft.class));
 //        }
 //    }
 //

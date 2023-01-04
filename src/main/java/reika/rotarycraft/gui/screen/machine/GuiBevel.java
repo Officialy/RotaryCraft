@@ -36,7 +36,6 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
     private int posn;
     private Direction in;
     private Direction out;
-    //private Level level = ModLoader.getMinecraftInstance().theWorld;
 
     public GuiBevel(CoreContainer<BlockEntityBevelGear> id, Inventory inventory, Component title) {
         super(id, inventory, title);
@@ -55,30 +54,47 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
 
         ResourceLocation file = new ResourceLocation(RotaryCraft.MODID, "textures/screen/bevelgui2.png");
         int px = 176;
-       for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {
             String s = Direction.values()[i].name().substring(0, 1);
             if (true || BlockEntityBevelGear.isValid(Direction.values()[i], out)) {
                 if (in.ordinal() == i)
-                    //id is i
-                    //pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffTex, pResourceLocation, pTextureWidth, pTextureHeight, pOnPress, pMessage
-                    //                                  x,               y,                 width,       height, u, v, display string, color, shadow?, filepath
-                    renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, file, this::actionPerformed));
-                else
-                    renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px, i * 18, file, this::actionPerformed)); //todo s is not used rn
+                //id is i
+                //pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffTex, pResourceLocation, pTextureWidth, pTextureHeight, pOnPress, pMessage
+                //x,  y,  width,  height,    u,           v,           display    string,          color,          shadow?,    filepath
+                {
+                    int finalI = i;
+                    addRenderableWidget(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, 0,
+                            file, 256, 256, (button) -> actionPerformed(button, finalI), Component.literal(s)));
+                } else {
+                    int finalI1 = i;
+                    addRenderableWidget(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px, i * 18, 0,
+                            file, 256, 256, (button) -> actionPerformed(button, finalI1), Component.literal(s)));
+                }
             } else {
-                renderables.add(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, 212, 0,file, this::actionPerformed));
+                int finalI2 = i;
+                addRenderableWidget(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, 212, 0, 0,
+                        file, 256, 256, (button) -> actionPerformed(button, finalI2), Component.literal(s)));
             }
         }
         for (int i = 0; i < 6; i++) {
             String s = Direction.values()[i].name().substring(0, 1);
             if (BlockEntityBevelGear.isValid(in, Direction.values()[i])) {
                 if (out.ordinal() == i)
-                    //i + 6
-                    renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, file, this::actionPerformed));
-                else
-                    renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px, i * 18, file, this::actionPerformed)); //todo s is not used rn
-            } else
-                renderables.add(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, 212, 0,file, this::actionPerformed));
+                //i + 6
+                {
+                    int finalI2 = i;
+                    addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, 0,
+                            file, 256, 256, (button) -> actionPerformed(button, finalI2), Component.literal(s)));
+                } else {
+                    int finalI1 = i;
+                    addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px, i * 18, 0,
+                            file, 256, 256, (button) -> actionPerformed(button, finalI1), Component.literal(s)));
+                }
+            } else {
+                int finalI = i;
+                addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, 212, 0, 0,
+                        file, 256, 256, (button) -> actionPerformed(button, finalI), Component.literal(s)));
+            }
         }
     }
 
@@ -100,33 +116,35 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
         posn = BlockEntityBevelGear.getDirectionMap().inverse().get(new ImmutablePair<>(in, out));
     }
 
-
-    protected void actionPerformed(Button button) {
-       /* if (button.id < 6) {
-            in = Direction.values()[button.id];
+    @Override
+    protected void actionPerformed(Button button, int id) {
+        super.actionPerformed(button, id);
+        RotaryCraft.LOGGER.info("Button " + id + " pressed!");
+        if (id < 6) {
+            in = Direction.values()[id];
             if (!BlockEntityBevelGear.isValid(in, out))
                 out = in.getStepY() != 0 ? Direction.EAST : Direction.DOWN;
-        } else if (button.id < 24000) {
-            if (!BlockEntityBevelGear.isValid(in, Direction.values()[button.id - 6]))
+        } else if (id < 24000) {
+            if (!BlockEntityBevelGear.isValid(in, Direction.values()[id - 6]))
                 return;
-            out = Direction.values()[button.id - 6];
-        }*/
+            out = Direction.values()[id - 6];
+        }
         this.getDirectionFromIO();
         this.init();
         bevel.direction = posn;
         ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.ordinal(), bevel, posn);
     }
 
-    /**
-     * todo Draw the foreground layer for the GuiContainer (everything in front of the items)
-     */
-
-    protected void drawGuiContainerForegroundLayer(PoseStack poseStack, int a, int b) {
-        font.draw(poseStack, "Input Side", 24, 32, 4210752);
-        font.draw(poseStack, "Output Side", 99, 32, 4210752);
+    @Override
+    public void render(PoseStack poseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        super.render(poseStack, pMouseX, pMouseY, pPartialTick);
 
         int j = (width - imageWidth) / 2 - 2;
         int k = (height - imageHeight) / 2 - 12;
+
+        font.draw(poseStack, "Input Side", j + 24, k + 32, 4210752);
+        font.draw(poseStack, "Output Side", j + 99, k + 32, 4210752);
+
 
         if (ConfigRegistry.COLORBLIND.getState()) {
             for (int i = 0; i < 6; i++) {
@@ -141,6 +159,6 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Core
 
     @Override
     protected String getGuiTexture() {
-        return "textures/screen/bevelgui2";
+        return "bevelgui2";
     }
 }

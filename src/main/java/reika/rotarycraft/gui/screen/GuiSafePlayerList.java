@@ -52,11 +52,11 @@
 //        int dx = 10;//imageWidth/2-width/2;//(i/colsize)*width;
 //        for (int i = 0; i < playerList.clampedSize(); i++) {
 //            int dy = 12 + i * 22;
-//            renderables.add(new Button(i, j + dx, k + dy, width, 20, playerList.getEntryAtRelativeIndex(i)));
+//            addRenderableWidget(new Button(i, j + dx, k + dy, width, 20, playerList.getEntryAtRelativeIndex(i)));
 //        }
 //
-//        renderables.add(new Button(1000000, j + dx + width + 6, 11 + k, 20, 20, "^"));
-//        renderables.add(new Button(1000001, j + dx + width + 6, 11 + k + colsize * 20 - 5, 20, 20, "v"));
+//        addRenderableWidget(new Button(1000000, j + dx + width + 6, 11 + k, 20, 20, "^"));
+//        addRenderableWidget(new Button(1000001, j + dx + width + 6, 11 + k + colsize * 20 - 5, 20, 20, "v"));
 //    }
 //
 //    /**

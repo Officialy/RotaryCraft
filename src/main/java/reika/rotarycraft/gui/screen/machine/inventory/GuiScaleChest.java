@@ -56,8 +56,8 @@
 //        super.initGui();
 //        int j = (width - imageWidth) / 2 + 8;
 //        int k = (height - imageHeight) / 2 - 12;
-//        renderables.add(new Button(0, j + imageWidth - 9, k + 45, 40, 20, "Next"));
-//        renderables.add(new Button(1, j + imageWidth - 9, k + 65, 40, 20, "Back"));
+//        addRenderableWidget(new Button(0, j + imageWidth - 9, k + 45, 40, 20, "Next"));
+//        addRenderableWidget(new Button(1, j + imageWidth - 9, k + 65, 40, 20, "Back"));
 //    }
 //
 //    private void setValues() {

@@ -85,7 +85,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
             case DC -> {
                 VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid((DCModel.TEXTURE_LOCATION)));
 //                RotaryCraft.LOGGER.info(tile.getUpdateTag().getFloat("phi"));
-                dcModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, tile.getUpdateTag().getFloat("phi"));
+                dcModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
             }
             case WIND -> {
 //                stack.mulPose(new Quaternion(90, 0.0F, 1.0F, 0.0F));

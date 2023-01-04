@@ -51,7 +51,7 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
             int u = 176;
             if (controls[i])
                 u += 18;
-            renderables.add(new ImageButton(i, j + 25 + 36 * i, k + 64, 18, 18, u, 54 + 18 * i, s, this::actionPerformed));
+            addRenderableWidget(new ImageButton(i, j + 25 + 36 * i, k + 64, 18, 18, u, 54 + 18 * i, s, this::actionPerformed));
         }
     }
 

@@ -171,7 +171,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
     private static void registerDirection(Direction read, Direction write) {
         int idx = directions.size();
         directions.put(idx, new ImmutablePair<>(read, write));
-        RotaryCraft.LOGGER.info("Registered bevel direction #" + idx + ": " + read + " to " + write);
+//        RotaryCraft.LOGGER.info("Registered bevel direction #" + idx + ": " + read + " to " + write);
     }
 
     public static HashBiMap<Integer, ImmutablePair<Direction, Direction>> getDirectionMap() {
@@ -186,8 +186,8 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
     public void updateBlockEntity() {
         super.updateBlockEntity();
 
-        //if (this.getBlockEntityAge() == 0)
-        //    this.findRoute(level, worldPosition);
+        if (this.getBlockEntityAge() == 0)
+            this.findRoute(level, worldPosition);
 
         power = (long) omega * (long) torque;
         this.getIOSides(level, worldPosition);

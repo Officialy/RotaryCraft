@@ -316,14 +316,15 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
         return this.getCVTRatio();
     }
 
-    private int getCVTRatio() {
+    public int getCVTRatio() {
         switch (cvtMode) {
-            case AUTO:
-            case MANUAL:
+            case AUTO, MANUAL -> {
                 return ratio;
-            case REDSTONE:
+            }
+            case REDSTONE -> {
                 int ratio = this.getCVTState(this.hasRedstoneSignal()).gearRatio;
                 return (int) Math.signum(ratio) * Math.min(Math.abs(ratio), this.getMaxRatio());
+            }
         }
         return 1;
     }
@@ -347,7 +348,12 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return switch (this.getGearType()) {
+            case COIL -> RotaryBlocks.COIL.get();
+            case CVT -> RotaryBlocks.CVT.get();
+            case WORM -> RotaryBlocks.WORMGEAR.get();
+            case HIGH -> RotaryBlocks.HIGHGEAR.get();
+        };
     }
 
     @Override

@@ -64,7 +64,7 @@
 //                x = j + 8 + dx * 20;
 //                dy = 2 + (i - 12) / 8;
 //            }
-//            renderables.add(new ImageButton(i, x, k + 19 + dy * 20, 18, 18, 0, 36, , RotaryCraft.class));
+//            addRenderableWidget(new ImageButton(i, x, k + 19 + dy * 20, 18, 18, 0, 36, , RotaryCraft.class));
 //        }
 //    }
 //

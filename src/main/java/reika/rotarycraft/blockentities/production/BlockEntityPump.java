@@ -22,10 +22,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
@@ -40,11 +44,12 @@ import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.registry.*;
 
 import java.util.List;
 
-public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction {
+public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeConnector, DiscreteFunction {
 
     public final static int CAPACITY = 24 * 1000;
     /**
@@ -53,6 +58,8 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     public static final int FALLOFF = 256; //256W per 1 kPa
     private final BlockArray blocks = new BlockArray();
     private final HybridTank tank = new HybridTank("pump", CAPACITY);
+    private final LazyOptional<IFluidHandler> holder = LazyOptional.of(() -> tank);
+
     public int duplicationAmount;
     private int soundtick = 200;
     private int damage = 0;
@@ -71,7 +78,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         super.updateBlockEntity();
         soundtick++;
         tickcount++;
-//        this.getIOSides(world, pos);
+        this.getIOSides(getBlockState().getValue(BlockRotaryCraftMachine.FACING));
         this.getPower(true);
         power = (long) omega * (long) torque;
         BlockState idbelow = world.getBlockState(worldPosition.below());
@@ -92,7 +99,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         if (power >= MINPOWER && torque >= MINTORQUE && this.getFluidLevel() < CAPACITY && tickcount >= this.getOperationTime()) {
 //            int loc[] = this.findSourceBlock(world, pos);
             BlockPos loc = blocks.getNextAndMoveOn();
-            ReikaJavaLibrary.pConsole(loc.getX()+"  "+loc.getY()+"  "+loc.getZ()+"  for side "+ FMLLoader.getDist());
+            ReikaJavaLibrary.pConsole(loc.getX() + "  " + loc.getY() + "  " + loc.getZ() + "  for side " + FMLLoader.getDist());
             this.harvest(world, pos, loc);
             tickcount = 0;
             //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.liquidID));
@@ -104,6 +111,19 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         }
         if (power > MINPOWER && torque >= MINTORQUE)
             this.suckUpMobs(world, pos);
+    }
+
+    public void getIOSides(Direction dir) {
+        switch (dir) {
+            case EAST -> {
+                read = Direction.EAST;
+                read2 = Direction.WEST;
+            }
+            case NORTH -> {
+                read = Direction.NORTH;
+                read2 = Direction.SOUTH;
+            }
+        }
     }
 
     private void suckUpMobs(Level world, BlockPos pos) {
@@ -249,11 +269,6 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
-        return 0;
-    }
-
-    @Override
     public void onEMP() {
     }
 
@@ -261,13 +276,6 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
 //    public FluidStack drain(Direction from, FluidStack resource, boolean doDrain) {
 //        return this.canDrain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
 //    }
-
-    @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        if (from.getStepY() != 0)
-            return null;
-        return tank.drain(maxDrain, doDrain ? FluidAction.EXECUTE : FluidAction.SIMULATE);
-    }
 
 
 //    @Override
@@ -301,46 +309,28 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     }
 
     @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
+        if (from.getStepY() != 0)
+            return null;
+        return tank.drain(maxDrain, doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE);
+    }
+
+    @Override
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (capability == ForgeCapabilities.FLUID_HANDLER)
+            return holder.cast();
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
     public int getOperationTime() {
         return DurationRegistry.PUMP.getOperationTime(omega);
-    }
-
-    @Override
-    public int getTanks() {
-        return 1;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
-
-    @Override
-    public int getTankCapacity(int tank) {
-        return 24000;
-    }
-
-    @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        return false;
-    }
-
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 1000;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
     }
 
     @Override

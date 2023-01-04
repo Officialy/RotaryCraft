@@ -47,13 +47,13 @@
 //		int dx = 4;
 //		int inset = 21+dx;
 //		if (flexible) {
-//			renderables.add(new Button(0, SHIFT+j+inset-1+dx, k+getYSize()-30-48+0, 20, 20, "-"));;
-//			renderables.add(new Button(1, SHIFT+j+getXSize()-20-inset-dx, k+getYSize()-30-48+0, 20, 20, "+"));
+//			addRenderableWidget(new Button(0, SHIFT+j+inset-1+dx, k+getYSize()-30-48+0, 20, 20, "-"));;
+//			addRenderableWidget(new Button(1, SHIFT+j+getXSize()-20-inset-dx, k+getYSize()-30-48+0, 20, 20, "+"));
 //		}
-//		renderables.add(new Button(2, SHIFT+j+inset-10+dx, k+getYSize()-30-48+25, 20, 20, "-"));;
-//		renderables.add(new Button(3, SHIFT+j+getXSize()-20-inset-dx, k+getYSize()-30-48+25, 20, 20, "+"));
+//		addRenderableWidget(new Button(2, SHIFT+j+inset-10+dx, k+getYSize()-30-48+25, 20, 20, "-"));;
+//		addRenderableWidget(new Button(3, SHIFT+j+getXSize()-20-inset-dx, k+getYSize()-30-48+25, 20, 20, "+"));
 //
-//		renderables.add(new Button(4, SHIFT+j+getXSize()-20-inset-dx, k+getYSize()-30-48+50, 20, 20, ""));
+//		addRenderableWidget(new Button(4, SHIFT+j+getXSize()-20-inset-dx, k+getYSize()-30-48+50, 20, 20, ""));
 //
 //	}
 //

@@ -25,8 +25,8 @@ import java.util.function.Consumer;
 public class HslaFluidType extends FluidType {
 
     public static final ResourceLocation HSLA_FLUID_STILL_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/hsla_still");
-    public static final ResourceLocation HSLA_FLUID_FLOWING_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/hsla_flowing");
-    public static final ResourceLocation HSLA_FLUID_OVERLAY_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/hsla_fluid_overlay");
+    public static final ResourceLocation HSLA_FLUID_FLOWING_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/hsla_flow");
+    public static final ResourceLocation HSLA_FLUID_OVERLAY_TEXTURE = HSLA_FLUID_STILL_TEXTURE;
 
     public HslaFluidType() {
         super(FluidType.Properties.create()

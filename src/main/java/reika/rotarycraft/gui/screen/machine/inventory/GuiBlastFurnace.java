@@ -40,7 +40,7 @@
 //        int u = blast.leaveLastItem ? 54 : 42;
 //        String tip = blast.leaveLastItem ? "Leave one item" : "Consume all items";
 //        int v = 96;
-//        renderables.add(new ImageButton(0, j + 124, k + 20, 12, 12, u, v, "Textures/GUI/buttons.png", tip, 0xffffff, false, RotaryCraft.class));
+//        addRenderableWidget(new ImageButton(0, j + 124, k + 20, 12, 12, u, v, "Textures/GUI/buttons.png", tip, 0xffffff, false, RotaryCraft.class));
 //    }
 //
 //    @Override
