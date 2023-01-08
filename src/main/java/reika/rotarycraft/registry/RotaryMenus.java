@@ -66,5 +66,6 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerSorter>> SORTER = register("sorter", ContainerSorter::new);
     Supplier<MenuType<ContainerBigFurnace>> BIG_FURNACE = register("big_furnace", ContainerBigFurnace::new);
     Supplier<MenuType<ContainerCVT>> CVT = register("cvt", ContainerCVT::new);
+    Supplier<MenuType<ContainerFillingStation>> FILLING_STATION = register("filling_station", ContainerFillingStation::new);
 
 }

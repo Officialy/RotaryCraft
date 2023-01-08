@@ -52,7 +52,7 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> BEDROCK_GEARBOX_8x = register("bedrock_gearbox_8x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> BEDROCK_GEARBOX_16x = register("bedrock_gearbox_16x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> PIPING = register("piping", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
-
+    public static final RegistryObject<Block> FILLING_STATION = register("filling_station", () -> new BlockFillingStation(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> WOOD_SHAFT = register("wood_shaft", () -> new BlockShaft(MaterialRegistry.WOOD, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
     public static final RegistryObject<Block> STONE_SHAFT = register("stone_shaft", () -> new BlockShaft(MaterialRegistry.STONE, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
     public static final RegistryObject<Block> HSLA_SHAFT = register("hsla_shaft", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(20)));

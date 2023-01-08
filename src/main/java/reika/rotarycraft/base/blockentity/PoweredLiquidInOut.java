@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.java.ReikaStringParser;
@@ -25,7 +26,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import java.util.Locale;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements IFluidHandler { //}, PipeConnector, IPipeConnection {
+public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements PipeConnector {//, IPipeConnection {
 
     protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH)), this.getCapacity());
 
@@ -43,7 +44,7 @@ public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements IF
      */
     @NotNull
     @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
+    public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
         //return this.drain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
         return tank.drain(resource, action); //todo drain stuff
     }
@@ -60,7 +61,7 @@ public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements IF
      */
     @NotNull
     @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
+    public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
         //return this.drain(from, null) ? tank.drain(maxDrain, doDrain) : null;
         return tank.drain(maxDrain, action); //todo drain stuff
     }
@@ -101,7 +102,7 @@ public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements IF
      * @return Amount of resource that was (or would have been, if simulated) filled.
      */
     @Override
-    public int fill(FluidStack resource, FluidAction action) {
+    public int fill(FluidStack resource, IFluidHandler.FluidAction action) {
 //        if (!this.canFill(from, resource.getFluid()))
 //            return 0;
         return tank.fill(resource, action);

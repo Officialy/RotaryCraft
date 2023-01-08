@@ -7,6 +7,7 @@ import net.minecraftforge.registries.RegistryObject;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.blockentities.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
@@ -226,5 +227,9 @@ public class RotaryBlockEntities {
 
 //    public static final RegistryObject<BlockEntityType<BlockEntityPulseFurnace>> PULSE_JET_FURNACE = BLOCK_ENTITIES.register("pulse_jet_furnace", () ->
 //            BlockEntityType.Builder.of(BlockEntityPulseFurnace::new, RotaryBlocks.PULSE_JET_FURNACE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityFillingStation>> FILLING_STATION = BLOCK_ENTITIES.register("filling_station", () ->
+            BlockEntityType.Builder.of(BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()).build(null));
+
 
 }

@@ -25,12 +25,15 @@ public interface PipeConnector {
 
     /**
      * Side is relative to the piping block (so DOWN means the block is below the pipe); p is the pipe type
+     * Example of DOWN direction:
+     * [PIPE]
+     * [BLOCK]
      */
     boolean canConnectToPipeOnSide(MachineRegistry m, Direction side);
 
     int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action);
 
-    FluidStack drain(Direction from, int maxDrain, boolean doDrain);
+    FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain);
 
     BlockEntityPiping.Flow getFlowForSide(Direction side);
 }

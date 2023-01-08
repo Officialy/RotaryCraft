@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
@@ -27,7 +28,7 @@ import reika.rotarycraft.registry.MachineRegistry;
 import java.util.Locale;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFluidHandler, PipeConnector {//}, IPipeConnection {
+public abstract class PoweredLiquidIO extends PoweredLiquidBase implements PipeConnector {//}, IPipeConnection {
 
     protected final HybridTank output = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH) + "out"), this.getOutputCapacity());
     protected final HybridTank input = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH) + "in"), this.getInputCapacity());
@@ -44,21 +45,15 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
     public abstract Fluid getInputFluid();
 
     @Override
-    public final FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-//        if (this.canDrain(from, null))
-//            return output.drain(maxDrain, doDrain);
+    public final FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        if (this.canDrain(from, null))
+            return output.drain(maxDrain, doDrain);
         return null;
     }
 
-    @Override
-    public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
-
-    //    @Override
-    public final boolean canDrain(Direction from, Fluid fluid) {
-//        return this.canOutputTo(from) && ReikaFluidHelper.isFluidDrainableFromTank(fluid, output);
-        return true;
+//        @Override
+    public final boolean canDrain(Direction from, FluidStack fluid) {
+        return this.canOutputTo(from) && ReikaFluidHelper.isFluidDrainableFromTank(fluid, output);
     }
 
 //    @Override
@@ -90,7 +85,7 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
         input.addLiquid(amt, this.getInputFluid());
     }
 
-    //    @Override
+//        @Override
     public final boolean canFill(Direction from, Fluid fluid) {
         return this.canReceiveFrom(from) && this.isValidFluid(fluid);
     }
@@ -105,13 +100,6 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements IFlui
 
     public int getOutputCapacity() {
         return this.getCapacity();
-    }
-
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-//        if (!this.canFill(from, resource.getFluid()))
-//            return 0;
-        return input.fill(resource, action);
     }
 
     public abstract boolean canOutputTo(Direction to);
