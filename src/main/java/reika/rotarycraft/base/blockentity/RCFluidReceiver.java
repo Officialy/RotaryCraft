@@ -37,15 +37,10 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
 
     public abstract int getCapacity();
 
-    @Override
-    public final FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        return null;
-    }
-
     public abstract Fluid getInputFluid();
 
     public final int getFluidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public final Fluid getContainedFluid() {

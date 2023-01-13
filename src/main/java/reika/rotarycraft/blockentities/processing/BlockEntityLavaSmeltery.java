@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.XPProducer;
@@ -228,6 +229,16 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
     }
 
     @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
+    }
+
+    @Override
     public Fluid getInputFluid() {
         return null;
     }
@@ -264,7 +275,7 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
     }
 
     public int getLavaScaled(int i) {
-        return tank.getLevel() * i / tank.getCapacity();
+        return tank.getFluidLevel() * i / tank.getCapacity();
     }
 
     @Override

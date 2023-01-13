@@ -29,7 +29,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.SoundRegistry;
 
-public class BlockEntityMagnetEngine extends EnergyToPowerBase implements IEnergyStorage {//Handler because EnderIO uses it
+public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implements IEnergyStorage //Handler because EnderIO uses it
 
     public BlockEntityMagnetEngine(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.MAGNETOSTATIC_ENGINE.get(), pos, state);
@@ -96,12 +96,6 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase implements IEnerg
         return null;
     }
 
-    @Override
-    public int extractEnergy(int maxExtract, boolean simulate) {
-        return 0;
-    }
-
-    @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         if (/*this.canConnectEnergy(from) && */maxReceive >= this.getMinimumCurrent()) {
             int amt = Math.min(maxReceive, this.getMaxStorage() - storedEnergy);
@@ -130,16 +124,6 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase implements IEnerg
 //    }
 
     @Override
-    public int getEnergyStored() {
-        return storedEnergy;
-    }
-
-    @Override
-    public int getMaxEnergyStored() {
-        return this.getMaxStorage();
-    }
-
-    @Override
     public int getMaxStorage() {
         return 1 + this.getMinimumCurrent() * 200;//ReikaMathLibrary.intpow2(10, this.getTier());//TileEntityPneumaticEngine.maxMJ*10;
     }
@@ -161,16 +145,6 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase implements IEnerg
     @Override
     public int getPowerColor() {
         return 0xff0000;
-    }
-
-    @Override
-    public boolean canExtract() {
-        return false;
-    }
-
-    @Override
-    public boolean canReceive() {
-        return true;
     }
 
     @Override
@@ -224,7 +198,7 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase implements IEnerg
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
         return null;
     }
 

@@ -33,14 +33,4 @@ public class BlockMusicBox extends BlockBasicMachine {
         return new BlockEntityMusicBox(pPos, pState);
     }
 
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof BlockEntityMusicBox bevelGear && !level.isClientSide) {
-            NetworkHooks.openScreen((ServerPlayer) player, bevelGear, entity.getBlockPos());
-            return InteractionResult.SUCCESS;
-        }
-
-        return InteractionResult.PASS;
-    }
 }

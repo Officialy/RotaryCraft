@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -166,7 +165,7 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
     }
 
     public int getFluidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public Fluid getFluid() {
@@ -189,10 +188,9 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        return from == Direction.DOWN ? tank.drain(maxDrain, doDrain ? FluidAction.EXECUTE : FluidAction.SIMULATE) : null;
+    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+        return from == Direction.DOWN ? tank.drain(maxDrain, doDrain) : null;
     }
-
     //    @Override
     public boolean canDrain(Direction from, Fluid fluid) {
         return from == Direction.DOWN;

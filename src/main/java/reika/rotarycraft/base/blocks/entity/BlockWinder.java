@@ -38,15 +38,4 @@ public class BlockWinder extends BlockBasicMachine {
         });
     }
 
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof BlockEntityWinder && !level.isClientSide) {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
-            serverPlayer.connection.send(new ClientboundOpenScreenPacket(0, RotaryMenus.WINDER.get(), Component.literal("Winder")));
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.PASS;
-    }
-
 }

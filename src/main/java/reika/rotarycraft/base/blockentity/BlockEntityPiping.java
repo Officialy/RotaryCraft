@@ -338,7 +338,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                     PipeConnector pc = (PipeConnector) te;
                     Flow flow = pc.getFlowForSide(dir.getOpposite());
                     if (flow.canOutput) {
-                        FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, false);
+                        FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
                         if (fs != null) {
                             int level = this.getFluidLevel();
                             int todrain = this.getPipeIntake(fs.getAmount() - level);
@@ -346,7 +346,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                                 if (this.canIntakeFluid(fs.getFluid())) {
                                     this.addFluid(todrain);
                                     this.setFluid(fs.getFluid());
-                                    pc.drain(dir.getOpposite(), todrain, true);
+                                    pc.drain(dir.getOpposite(), todrain, IFluidHandler.FluidAction.EXECUTE);
                                     this.onIntake(te);
                                     //ReikaJavaLibrary.pConsole("Transferring "+todrain+", have "+this.getFluidLevel(), Dist.DEDICATED_SERVER);
                                 }

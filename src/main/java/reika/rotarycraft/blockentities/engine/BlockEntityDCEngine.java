@@ -62,7 +62,6 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
         if (soundtick < this.getSoundLength(1F / pitchMultiplier) && soundtick < 2000)
             return;
         soundtick = 0;
-
         SoundRegistry.ELECTRIC.playSoundAtBlock(world, pos, 0.125F * volume, 1F * pitchMultiplier);
     }
 
@@ -182,8 +181,14 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
         return 0;
     }
 
+
     @Override
     public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
     }
 }

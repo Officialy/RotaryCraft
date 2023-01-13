@@ -187,7 +187,7 @@
 //		ItemStack refiron = IC2Handler.IC2Stacks.REFINEDIRON.getItem();
 //		ItemStack refblock = ReikaItemHelper.lookupItem("IC2:blockMetal:5");
 //		if (ReikaItemHelper.matchStacks(refiron, out) || ReikaItemHelper.matchStacks(refblock, out)) {
-//			RotaryCraft.logger.log("Handling steel casting to refined iron, finding alternate.");
+//			RotaryCraft.LOGGER.info("Handling steel casting to refined iron, finding alternate.");
 //			String tag = null;
 //			int[] ids = OreDictionary.getOreIDs(out);
 //			for (int id : ids) {
@@ -197,7 +197,7 @@
 //					break;
 //				}
 //			}
-//			RotaryCraft.logger.log("OreDict tag is '"+tag+"'.");
+//			RotaryCraft.LOGGER.info("OreDict tag is '"+tag+"'.");
 //			if (tag == null)
 //				return out;
 //			List<ItemStack> ingots = OreDictionary.getOres(tag);
@@ -205,7 +205,7 @@
 //				for (ItemStack ing : ingots) {
 //					if (!ReikaItemHelper.matchStacks(refiron, ing) && !ReikaItemHelper.matchStacks(refblock, ing)) {
 //						out = ReikaItemHelper.getSizedItemStack(ing, out.stackSize);
-//						RotaryCraft.logger.log("Converting to "+out+" ("+fullID(out)+")");
+//						RotaryCraft.LOGGER.info("Converting to "+out+" ("+fullID(out)+")");
 //						break;
 //					}
 //				}

@@ -76,7 +76,7 @@ public class RenderMagnetic extends RotaryTERenderer<BlockEntityMagnetEngine> {
 
         VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.entityCutout(MagneticModel.TEXTURE_LOCATION));
         dynamoModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
-//        GL11.glRotatef(var11 + 180, 0.0F, 1.0F, 0.0F);
+//        stack.mulPose(var11 + 180, 0.0F, 1.0F, 0.0F);
 //        var14.renderAll(tile, null, -tile.phi, 0);
 //        this.closeGL(tile);
     }

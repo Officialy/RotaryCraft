@@ -232,6 +232,10 @@ public class RotaryItems {
     public static final RegistryObject<Item> CANOLA_SEEDS = ITEMS.register("canola_seeds", () -> new ItemNameBlockItem(RotaryBlocks.CANOLA.get(), new Item.Properties()));
     public static final RegistryObject<Item> CANOLA_HUSKS = ITEMS.register("canola_seed_husks", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> DENSE_CANOLA_SEEDS = ITEMS.register("dense_canola_seeds", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> TAR = ITEMS.register("tar", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> ALUMINUM_ALLOY_POWDER = ITEMS.register("aluminum_alloy_powder", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COAL_DUST = ITEMS.register("coal_dust", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> FLOUR = ITEMS.register("flour", () -> new Item(new Item.Properties()));
 
 //    public boolean isJetpack() {
 //        if (this == JETPACK || this == BEDROCK_JETPACK || this == HSLA_JETPACK)

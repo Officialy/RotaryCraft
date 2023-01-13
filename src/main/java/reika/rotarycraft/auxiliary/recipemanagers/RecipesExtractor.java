@@ -64,7 +64,7 @@
 //			for (ItemStack is : c) {
 //				if (recipeList.containsKey(is)) {
 //					ModOreList mod = (ModOreList)ExtractorModOres.getOreFromExtract(recipeList.get(is));
-//					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for Extractor registration as "+ore+" as it is already registered to "+mod);
+//					RotaryCraft.LOGGER.info("Ore "+is.getDisplayName()+" is being skipped for Extractor registration as "+ore+" as it is already registered to "+mod);
 //				}
 //				else {
 //					this.addRecipe(is, ExtractorModOres.getDustProduct(ore));
@@ -81,7 +81,7 @@
 //			Collection<ItemStack> c = e.getAllOreBlocks();
 //			for (ItemStack is : c) {
 //				if (recipeList.containsKey(is)) {
-//					RotaryCraft.logger.log("Ore "+is.getDisplayName()+" is being skipped for Extractor registration as "+e+" as it is already registered to "+recipeList.get(is));
+//					RotaryCraft.LOGGER.info("Ore "+is.getDisplayName()+" is being skipped for Extractor registration as "+e+" as it is already registered to "+recipeList.get(is));
 //				}
 //				else {
 //					this.addRecipe(is, ItemCustomModOre.getItem(i, ExtractorStage.DUST));

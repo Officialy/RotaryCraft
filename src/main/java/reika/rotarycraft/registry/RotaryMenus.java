@@ -42,7 +42,7 @@ public interface RotaryMenus {
     Supplier<MenuType<BevelContainer>> BEVEL = register("bevel", BevelContainer::new);
     Supplier<MenuType<MusicContainer>> MUSIC = register("music", MusicContainer::new);
 
-//    Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", GrinderMenu::new);
+    Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", ContainerGrinder::new);
 
 //    Supplier<MenuType<BlastFurnaceMenu>> BLAST_FURNACE = register("blast_furnace",   () -> IForgeMenuType.create(new BlastFurnaceMenu.Factory()));
 //
@@ -66,6 +66,6 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerSorter>> SORTER = register("sorter", ContainerSorter::new);
     Supplier<MenuType<ContainerBigFurnace>> BIG_FURNACE = register("big_furnace", ContainerBigFurnace::new);
     Supplier<MenuType<ContainerCVT>> CVT = register("cvt", ContainerCVT::new);
-    Supplier<MenuType<ContainerFillingStation>> FILLING_STATION = register("filling_station", ContainerFillingStation::new);
+//    Supplier<MenuType<ContainerFillingStation>> FILLING_STATION = register("filling_station", ContainerFillingStation::new);
 
 }

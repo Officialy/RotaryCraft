@@ -199,7 +199,7 @@
 //        if (RotaryAux.isNextToIce(world, pos))
 //            Tamb -= 30;
 //
-//        ItemStack cryo = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ModList.THERMALFOUNDATION.getModid(), "dustCryotheum")).getDefaultInstance();//GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustCryotheum", 1);
+//        ItemStack cryo = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ModList.THERMALFOUNDATION.getModid(), "dustCryotheum")).getDefaultInstance();//GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modid, "dustCryotheum", 1);
 //        if (ReikaItemHelper.matchStacks(RotaryItems.DRY_ICE.get().getDefaultInstance(), inv[1]) || (cryo != null && ReikaItemHelper.matchStacks(cryo, inv[1]))) {
 //            Tamb -= 40;
 //            if (temperature > Tamb + 4 || DragonAPI.rand.nextInt(20) == 0)

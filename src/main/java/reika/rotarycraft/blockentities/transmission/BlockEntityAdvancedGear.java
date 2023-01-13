@@ -18,31 +18,24 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
-import reika.dragonapi.instantiable.data.immutable.WorldLocation;
 import reika.dragonapi.interfaces.blockentity.PartialInventory;
 import reika.dragonapi.interfaces.blockentity.PartialTank;
 import reika.dragonapi.interfaces.blockentity.ToggleTile;
-import reika.dragonapi.libraries.io.ReikaSoundHelper;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
-import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.java.ReikaRandomHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -165,7 +158,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     }
 
     public int getLubricant() {
-        return lubricant.getLevel();
+        return lubricant.getFluidLevel();
     }
 
     public void addLubricant(int amt) {
@@ -177,7 +170,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     }
 
     public boolean canAcceptAnotherLubricantBucket() {
-        return lubricant.getLevel() + 1000 <= lubricant.getCapacity();
+        return lubricant.getFluidLevel() + 1000 <= lubricant.getCapacity();
     }
 
     //-ve ratio is torque mode for cvt
@@ -996,6 +989,11 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
     }
 
     @Override
+    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+        return null;
+    }
+
+    @Override
     public int getTanks() {
         return 0;
     }
@@ -1027,11 +1025,6 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
 
     @Override
     public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
-
-    @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
         return null;
     }
 

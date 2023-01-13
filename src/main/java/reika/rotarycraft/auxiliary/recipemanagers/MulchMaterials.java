@@ -57,10 +57,10 @@ public class MulchMaterials {
         }
 
         if (ModList.BOTANIA.isLoaded()) {
-            Item petal = GameRegistry.findItem(ModList.BOTANIA.modLabel, "petal");
-            Block flower = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "flower");
-            Block tallflower1 = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower1");
-            Block tallflower2 = GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower2");
+            Item petal = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ModList.BOTANIA.modid, "petal");
+            Block flower = ForgeRegistries.BLOCKS.getValue(new ResourceLocation((ModList.BOTANIA.modid, "flower");
+            Block tallflower1 = ForgeRegistries.BLOCKS.getValue(new ResourceLocation((ModList.BOTANIA.modid, "doubleFlower1");
+            Block tallflower2 = ForgeRegistries.BLOCKS.getValue(new ResourceLocation((ModList.BOTANIA.modid, "doubleFlower2");
             for (int i = 0; i < 16; i++) {
                 Block tall = i >= 8 ? tallflower2 : tallflower1;
                 int tallm = i%8;

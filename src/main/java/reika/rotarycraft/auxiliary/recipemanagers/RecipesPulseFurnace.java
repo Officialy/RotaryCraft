@@ -284,8 +284,8 @@
 //	@Override
 //	public void addPostLoadRecipes() {
 //	/*	if (ModList.THERMALFOUNDATION.isLoaded()) {
-//			ItemStack enderdust = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "dustEnderium", 1);
-//			ItemStack enderingot = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modLabel, "ingotEnderium", 1);
+//			ItemStack enderdust = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modid, "dustEnderium", 1);
+//			ItemStack enderingot = GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modid, "ingotEnderium", 1);
 //			if (enderdust == null || enderingot == null)
 //				RotaryCraft.LOGGER.error("No item found for TE3 enderium crafting!");
 //			else
@@ -420,7 +420,7 @@
 //					this.addRecycling(((ItemStack)items[i]).getItem(), ReikaItemHelper.getSizedItemStack(out, n[i]), RecipeLevel.MODINTERACT);
 //				}
 //				else {
-//					RotaryCraft.logger.logError("Could not find thaumium tool #"+i);
+//					RotaryCraft.LOGGER.error("Could not find thaumium tool #"+i);
 //				}
 //			}
 //		}

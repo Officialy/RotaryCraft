@@ -87,7 +87,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
 //            return meta & 3;
 //        if (id.getClass().getName().equals("vazkii.botania.common.block.BlockModDoubleFlower")) {
 //            meta &= 7;
-//            if (id == GameRegistry.findBlock(ModList.BOTANIA.modLabel, "doubleFlower2"))
+//            if (id == ForgeRegistries.BLOCKS.getValue(new ResourceLocation((ModList.BOTANIA.modid, "doubleFlower2"))
 //                ;//meta += 8;
 //            return meta;
 //        }

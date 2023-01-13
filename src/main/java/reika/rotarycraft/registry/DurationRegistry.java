@@ -16,7 +16,7 @@ import reika.rotarycraft.auxiliary.interfaces.OverrunExpression;
 
 public enum DurationRegistry {
 
-    //        GRINDER(MachineRegistry.GRINDER, 840, 60), //was 900, 60
+            GRINDER(MachineRegistry.GRINDER, 840, 60), //was 900, 60
 //    BEDROCK(MachineRegistry.BEDROCKBREAKER, 600, 30),
 //    BORER(MachineRegistry.BORER, 720, 40),
     BUCKETFILLER(MachineRegistry.BUCKETFILLER, 200, 20),

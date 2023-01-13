@@ -5,6 +5,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import reika.dragonapi.libraries.ReikaEnchantmentHelper;
 
 import java.util.*;
@@ -12,13 +13,9 @@ import java.util.*;
 public final class MachineEnchantmentHandler {
 
     private final HashMap<Enchantment, Integer> data = new HashMap<>();
-    private final HashSet<Integer> filters = new HashSet<>();
+    private final HashSet<Enchantment> filters = new HashSet<>();
 
-    public MachineEnchantmentHandler addFilter(Enchantment e) {
-        return this.addFilter(e);
-    }
-
-    public MachineEnchantmentHandler addFilter(int id) {
+    public MachineEnchantmentHandler addFilter(Enchantment id) {
         filters.add(id);
         return this;
     }
@@ -86,9 +83,7 @@ public final class MachineEnchantmentHandler {
 
     public ArrayList<Enchantment> getValidEnchantments() {
         ArrayList<Enchantment> li = new ArrayList<>();
-        for (int id : filters) {
-            li.add(Enchantment.byId(id));
-        }
+        li.addAll(filters);
         return li;
     }
 

@@ -52,7 +52,7 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> BEDROCK_GEARBOX_8x = register("bedrock_gearbox_8x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> BEDROCK_GEARBOX_16x = register("bedrock_gearbox_16x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> PIPING = register("piping", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
-    public static final RegistryObject<Block> FILLING_STATION = register("filling_station", () -> new BlockFillingStation(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
+//    public static final RegistryObject<Block> FILLING_STATION = register("filling_station", () -> new BlockFillingStation(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> WOOD_SHAFT = register("wood_shaft", () -> new BlockShaft(MaterialRegistry.WOOD, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
     public static final RegistryObject<Block> STONE_SHAFT = register("stone_shaft", () -> new BlockShaft(MaterialRegistry.STONE, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
     public static final RegistryObject<Block> HSLA_SHAFT = register("hsla_shaft", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
@@ -143,6 +143,7 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> CVT = register("cvt", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> WORMGEAR = register("wormgear", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> HIGHGEAR = register("highgear", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> GRINDER = register("grinder", () -> new BlockGrinder(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
 
 
     private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of(Material.STONE).strength(2.0F, 3.0F).sound(SoundType.METAL);

@@ -1,19 +1,22 @@
 package reika.rotarycraft;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import reika.rotarycraft.auxiliary.IORenderer;
-import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Tests {
 
@@ -31,11 +34,14 @@ public class Tests {
         public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
             if (!player.isShiftKeyDown() && player.level.isClientSide()) {
 //                IORenderer.renderIn(new PoseStack(), player.getOnPos(), 255);
-//                RotaryCraft.LOGGER.info("Rendering test item");
-
-                return InteractionResultHolder.success(this.getDefaultInstance());
+                RotaryCraft.LOGGER.info(ForgeRegistries.BLOCKS.tags()
+                        .getTag(Tags.Blocks.FENCE_GATES_WOODEN)
+                        .stream()
+                        .map(ItemStack::new)
+                        .toList());
+            return InteractionResultHolder.success(this.getDefaultInstance());
             } else if (player.isShiftKeyDown()) {
-//                RotaryCraft.LOGGER.info("machinemappings" + MachineRegistry.machineMappings);
+                RotaryCraft.LOGGER.info(RecipesGrinder.grinderRecipes);
                 return InteractionResultHolder.success(this.getDefaultInstance());
             }
 

@@ -61,7 +61,7 @@
 //            case 3 -> var11 = 270;
 //        }
 //
-//        GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
+//        stack.mulPose(var11, 0.0F, 1.0F, 0.0F);
 //        var14.renderAll(tile, null, -tile.phi, 0);
 //
 //        if (tile.isInWorld())

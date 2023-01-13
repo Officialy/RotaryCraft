@@ -446,7 +446,7 @@ public class RecipesCentrifuge extends RecipeHandler implements CentrifugeManage
 					this.addRecipe(phial, co, new FluidOut(fs, 100), RecipeLevel.MODINTERACT);
 				}
 				catch (Exception e) {
-					RotaryCraft.logger.logError("Could not determine XP value of enchanting phial!");
+					RotaryCraft.LOGGER.error("Could not determine XP value of enchanting phial!");
 					ReflectiveFailureTracker.instance.logModReflectiveFailure(new BasicModEntry("Automagy"), e);
 				}
 			}

@@ -87,7 +87,7 @@
 //            }
 //
 //            if (meta <= 3)
-//                GL11.glRotatef((float) var11 + 90, 0.0F, 1.0F, 0.0F);
+//                stack.mulPose((float) var11 + 90, 0.0F, 1.0F, 0.0F);
 //            else {
 //                stack.mulPose(new Quaternion(var11, 1F, 0F, 0.0F);
 //                stack.translate(0F, -1F, 1F);

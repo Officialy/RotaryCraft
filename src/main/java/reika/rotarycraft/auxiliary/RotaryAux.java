@@ -72,24 +72,8 @@ public class RotaryAux {
                 return false;
             return te.getEngineType().hasGui();
         }
-        if (m == MachineRegistry.SPLITTER) {
-            BlockEntitySplitter te = (BlockEntitySplitter) world.getBlockEntity(pos);
-            return true;//(te.getBlockMetadata() >= 8);
-        }
-//        if (m == MachineRegistry.SCREEN)
-//            return !ep.isCrouching();
-        if (FMLLoader.getDist() == Dist.CLIENT) {
-//            Object GUI = GuiHandler.instance.getClientGuiElement(GuiRegistry.MACHINE.ordinal(), ep, world, pos);
-//            if (GUI != null)
-//                 return true;
-            return true;
-        }
-        if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) {
-//            Object GUI = GuiHandler.instance.getServerGuiElement(GuiRegistry.MACHINE.ordinal(), ep, world, pos);
-//            return GUI != null;
-            return false;
-        }
-        return false;
+
+        return true; //todo check if machine has gui
     }
 
     public static boolean canHarvestSteelMachine(Player ep) {
@@ -349,9 +333,11 @@ public class RotaryAux {
         return String.format("%.0f/%.0f %s", amt, capacity, unit);
     }
 
+    @Deprecated(forRemoval = true)
+    //not needed anymore as theres a new registry for each type of shaft
     public static ItemStack getShaftCrossItem() {
         ItemStack is = new ItemStack(RotaryBlocks.SHAFT_CROSS.get());
-        //is.getOrCreateTag().putBoolean("cross", true); not needed anymore as theres a new registry for each type of shaft
+        //is.getOrCreateTag().putBoolean("cross", true);
         return is;
     }
 
@@ -361,4 +347,7 @@ public class RotaryAux {
 //            return true;
         return RotaryItems.SCREWDRIVER.get().getDefaultInstance() == is;
     }
+
+
+
 }

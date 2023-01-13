@@ -17,13 +17,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
@@ -36,7 +34,7 @@ import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
 
-public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, IFluidHandler, DiscreteFunction, ConditionalOperation {
+public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, DiscreteFunction, ConditionalOperation {
 
     public static final int CAPACITY = 24000;
     public static final Fluid WATER = Fluids.WATER;
@@ -172,10 +170,14 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
+    }
     public boolean canAccept(Fluid f) {
         return tank.isEmpty() || f.equals(tank.getActualFluid());
     }
@@ -193,13 +195,6 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
         tank.empty();
     }
 
-    @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        if (filling || from.getStepY() != 0)
-            return null;
-        return tank.drain(maxDrain, FluidAction.EXECUTE); //todo dodrain isnt used right now
-    }
-
     public boolean canDrain(Direction from, Fluid fluid) {
         return !filling && from.getStepY() == 0;// && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
     }
@@ -215,7 +210,7 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
     }
 
     public int getFluidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public Fluid getContainedFluid() {
@@ -235,44 +230,6 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
     @Override
     public String getOperationalStatus() {
         return this.areConditionsMet() ? "Operational" : "No Buckets";
-    }
-
-    @Override
-    public int getTanks() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
-
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
-
-    @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        return false;
-    }
-
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return this.canDrain(null, resource.getFluid()) ? tank.drain(resource.getAmount(), action) : null;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
     }
 
     @Override

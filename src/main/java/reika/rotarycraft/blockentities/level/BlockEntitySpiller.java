@@ -6,12 +6,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
@@ -21,7 +19,7 @@ import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 
-public class BlockEntitySpiller extends BlockEntityAreaFiller implements IFluidHandler, PipeConnector {
+public class BlockEntitySpiller extends BlockEntityAreaFiller implements PipeConnector {
 
     private final HybridTank tank = new HybridTank("flooder", 4000);
 
@@ -89,12 +87,12 @@ public class BlockEntitySpiller extends BlockEntityAreaFiller implements IFluidH
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
-        return this.canFill(from, resource.getFluid()) ? tank.fill(resource, action) : 0;
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
     }
 
@@ -120,12 +118,12 @@ public class BlockEntitySpiller extends BlockEntityAreaFiller implements IFluidH
 
     @Override
     protected boolean hasRemainingBlocks() {
-        return tank.getLevel() >= 1000;
+        return tank.getFluidLevel() >= 1000;
     }
 
     @Override
     protected void onBlockPlaced() {
-        tank.drain(1000, FluidAction.EXECUTE);
+        tank.drain(1000, IFluidHandler.FluidAction.EXECUTE);
     }
 
     @Override
@@ -151,44 +149,6 @@ public class BlockEntitySpiller extends BlockEntityAreaFiller implements IFluidH
     @Override
     protected boolean allowFluidOverwrite() {
         return false;
-    }
-
-    @Override
-    public int getTanks() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
-
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
-
-    @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        return false;
-    }
-
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
     }
 
     @Override

@@ -24,7 +24,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
@@ -48,7 +47,7 @@ import reika.rotarycraft.registry.RotaryFluids;
 import java.util.Collection;
 import java.util.List;
 
-public class BlockEntitySolarTower extends BlockEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, IFluidHandler, SolarPlantBlock {
+public class BlockEntitySolarTower extends BlockEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, SolarPlantBlock {
 
     public static final int GENOMEGA = 512;
     public static final int GENOMEGA_SODIUM = 4096;
@@ -178,7 +177,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         boolean water = tank.getActualFluid().getFluid() == Fluids.WATER;
         omega = water ? GENOMEGA : GENOMEGA_SODIUM;
         torque = this.getGenTorque(world, pos);
-        if (this.getArraySize() <= 0 || torque == 0 || tank.getLevel() < amt || (!water && temperature < 800)) {
+        if (this.getArraySize() <= 0 || torque == 0 || tank.getFluidLevel() < amt || (!water && temperature < 800)) {
             omega = 0;
             torque = 0;
         }
@@ -187,7 +186,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
             amt = (int) Math.max(1, amt * power / ((double) GENOMEGA_SODIUM * MAXTORQUE_SODIUM));
         }
         currentConsumption = amt;
-        if (power > 0 && tank.getLevel() > 0 && amt > 0) {
+        if (power > 0 && tank.getFluidLevel() > 0 && amt > 0) {
             if (!water) {
                 BlockEntity te = getAdjacentBlockEntity(Direction.DOWN);
                 if (te instanceof SodiumSolarOutput) {
@@ -289,7 +288,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
     }
 
     private void getTowerWater(Level world, BlockPos pos) {
-        int lvl = tank.getLevel();
+        int lvl = tank.getFluidLevel();
         Fluid f = tank.getActualFluid().getFluid();
         int cy = pos.getY() + 1;
         while (MachineRegistry.getMachine(world, new BlockPos(pos.getX(), cy, pos.getZ())) == MachineRegistry.SOLARTOWER) {
@@ -298,7 +297,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
             if (f == null && f2 != null)
                 f = f2;
             if (f2 != null && f.equals(f2)) {
-                lvl += tile.tank.getLevel();
+                lvl += tile.tank.getFluidLevel();
                 tile.tank.empty();
             }
             cy++;
@@ -360,9 +359,15 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
+    }
+
 
     @Override
     public void onEMP() {
@@ -429,54 +434,9 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         plant.invalidate(level);
     }
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
-
-    @Override
-    public int getTankCapacity(int tank) {
-        return 24000;
-    }
-
-    @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        return false;
-    }
-
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        if (!this.canFill(resource.getFluid()))
-            return 0;
-        return tank.fill(resource, action);
-    }
-
     //@Override
     public boolean canFill(Fluid fluid) {
         return fluid.equals(Fluids.WATER) || (fluid.equals(RotaryFluids.SODIUM) && this.canUseSodium());
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
-
-    @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        return null;
     }
 
     @Override

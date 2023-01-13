@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.decorative;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -25,25 +26,26 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.level.NoteBlockEvent;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.instantiable.MusicScore;
 import reika.dragonapi.instantiable.MusicScore.NoteData;
 import reika.dragonapi.instantiable.MusicScore.ScoreTrack;
 import reika.dragonapi.instantiable.io.MIDIInterface;
+import reika.dragonapi.instantiable.io.PacketTarget;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
 import reika.dragonapi.interfaces.blockentity.TriggerableAction;
 import reika.dragonapi.io.ReikaFileReader;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
+import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.dragonapi.libraries.mathsci.ReikaMusicHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 import reika.rotarycraft.gui.container.machine.MusicContainer;
-import reika.rotarycraft.registry.MachineRegistry;
-import reika.rotarycraft.registry.RotaryBlockEntities;
-import reika.rotarycraft.registry.RotaryItems;
-import reika.rotarycraft.registry.SoundRegistry;
+import reika.rotarycraft.registry.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -160,7 +162,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         }
     }
 
-    //@Override todo redstone stuff
+//    @Override todo redstone stuff
     protected void onPositiveRedstoneEdge() {
         isOneTimePlaying = true;
         this.startPlaying();
@@ -200,12 +202,12 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         if (!n.isRest()) {
             for (int i = 0; i < 3; i++)
                 n.play(level, worldPosition);
-            //ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.ordinal(), this, new PacketDistributor.PacketTarget.RadiusTarget(this, 32));
+            ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.ordinal(), this, new PacketTarget.RadiusTarget(this, 32));
         }
         playDelay[channel] = n.length.tickLength;
         playIndex[channel]++;
-        //NoteBlockEvent e = new NoteBlockEvent(this, n.pitch, n.getTickLength(), channel);
-        //MinecraftForge.EVENT_BUS.post(e); todo noteblock event
+//        NoteBlockEvent.Play e = new NoteBlockEvent.Play(this, n.pitch, n.getTickLength(), channel);
+//        MinecraftForge.EVENT_BUS.post(e); //todo noteblock event
     }
 
     @Override
@@ -329,7 +331,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     }
 
     public void save() {
-        if (level.isClientSide())
+        if (getLevel().isClientSide())
             return;
         try {
             File save = getLevel().getServer().getServerDirectory();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
@@ -467,7 +469,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     }
 
     private void deleteFiles(BlockPos pos) {
-        File save = getLevel().getServer().getServerDirectory();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
+        File save = Minecraft.getInstance().gameDirectory;//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
         //ReikaJavaLibrary.pConsole(musicFile);
         String name = "musicbox@" + String.format("%d,%d,%d", pos) + ".rcmusic";
         File f = new File(save.getPath() + "/RotaryCraft/" + name);
@@ -488,7 +490,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
 
 
     public void sendNote(int pitch, int channel, NoteLength len, Instrument voice) {
-        //ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICNOTE.ordinal(), this, pitch, channel, len.ordinal(), voice.ordinal()); todo send note
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICNOTE.ordinal(), this, pitch, channel, len.ordinal(), voice.ordinal());
     }
 
     /**
@@ -618,7 +620,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
             return notes[pitch % 12];
         }
 
-        protected static Note getFromSerialString(String s) {
+        private static Note getFromSerialString(String s) {
             if (s.equals("-"))
                 return null;
             String[] sgs = s.split(":");

@@ -13,9 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -25,7 +22,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -35,14 +31,12 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.instantiable.HybridTank;
@@ -53,7 +47,6 @@ import reika.dragonapi.interfaces.blockentity.OpenTopTank;
 import reika.dragonapi.interfaces.blockentity.PlaceNotification;
 import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.ReikaNBTHelper;
-import reika.dragonapi.libraries.io.ReikaSoundHelper;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -206,7 +199,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     public int getLiquidScaled(int par1) {
-        return (tank.getLevel() * par1) / CAPACITY;
+        return (tank.getFluidLevel() * par1) / CAPACITY;
     }
 
     @Override
@@ -355,7 +348,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     private void transferBetween(Level world, BlockPos pos) {
-        if (tank.getLevel() < CAPACITY) {
+        if (tank.getFluidLevel() < CAPACITY) {
             for (int i = 2; i < 6; i++) {
                 Direction dir = dirs[i];
                 if (this.adjacentOnSide(dir)) {
@@ -498,16 +491,16 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         return tank.fill(resource, doFill);
     }
 
-    //    @Override
+//        @Override
     public FluidStack drain(Direction from, FluidStack resource, boolean doDrain) {
         return this.canDrain(from, resource) ? tank.drain(resource.getAmount(), doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE) : null;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (from == Direction.UP)
             return null;
-        return tank.drain(maxDrain, doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE);
+        return tank.drain(maxDrain, doDrain);
     }
 
     //    @Override
@@ -525,7 +518,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     public int getFluidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public FluidStack getFluid() {
@@ -654,7 +647,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         if (f != tank.getActualFluid())
             return;
         int level = NBT.getInt("lvl");
-        tank.setContents(level + tank.getLevel(), f.getFluid());
+        tank.setContents(level + tank.getFluidLevel(), f.getFluid());
 
         isCovered = isCovered || NBT.getBoolean("cover");
     }

@@ -33,10 +33,7 @@ import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.auxiliary.*;
 import reika.rotarycraft.gui.screen.GuiHandCraft;
 import reika.rotarycraft.gui.screen.machine.*;
-import reika.rotarycraft.gui.screen.machine.inventory.GuiBigFurnace;
-import reika.rotarycraft.gui.screen.machine.inventory.GuiLandmine;
-import reika.rotarycraft.gui.screen.machine.inventory.GuiPerformance;
-import reika.rotarycraft.gui.screen.machine.inventory.WinderScreen;
+import reika.rotarycraft.gui.screen.machine.inventory.*;
 import reika.rotarycraft.registry.*;
 import reika.rotarycraft.registry.RotaryItems;
 
@@ -179,6 +176,7 @@ public class RotaryCraft extends DragonAPIMod {
         MenuScreens.register(RotaryMenus.BIG_FURNACE.get(), GuiBigFurnace::new);
         MenuScreens.register(RotaryMenus.HAND_CRAFT.get(), GuiHandCraft::new);
         MenuScreens.register(RotaryMenus.MUSIC.get(), GuiMusic::new);
+        MenuScreens.register(RotaryMenus.GRINDER.get(), GuiGrinder::new);
 
         RotaryRenders.registerBlockColors();
         event.enqueueWork(RotaryRenders::registerRenderLayers);

@@ -43,7 +43,7 @@ public abstract class BlockEntityFluidCannon extends BlockEntityAimedCannon impl
     }
 
     public final int getFluidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public final Fluid getContainedFluid() {

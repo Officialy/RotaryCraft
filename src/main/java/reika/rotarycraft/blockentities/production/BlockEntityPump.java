@@ -39,7 +39,6 @@ import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
@@ -269,6 +268,11 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     }
 
     @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
     public void onEMP() {
     }
 
@@ -284,7 +288,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
 //    }
 
     public int getFluidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public FluidStack getLiquid() {
@@ -308,16 +312,13 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         return side.getStepY() == 0 ? Flow.OUTPUT : Flow.NONE;
     }
 
-    @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
+
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (from.getStepY() != 0)
             return null;
-        return tank.drain(maxDrain, doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE);
+        return tank.drain(maxDrain, doDrain);
     }
 
     @Override

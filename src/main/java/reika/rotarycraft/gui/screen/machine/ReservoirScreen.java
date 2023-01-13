@@ -11,11 +11,13 @@ package reika.rotarycraft.gui.screen.machine;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.gui.ScreenUtils;
+import reika.dragonapi.libraries.rendering.ReikaColorAPI;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.gui.container.machine.ReservoirContainer;
@@ -34,15 +36,13 @@ public class ReservoirScreen extends NonPoweredMachineScreen<BlockEntityReservoi
 
     @Override
     protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pX, int pY) {
+        super.renderBg(pPoseStack, pPartialTick, pX, pY);
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
 
-        super.renderBg(pPoseStack, pPartialTick, pX, pY);
 
         if (api.isMouseInBox(j + 83, j + 92, k + 25, k + 70, pX, pY)) {
-            int mx = pX;
-            int my = pY;
-            api.drawTooltipAt(pPoseStack, font, String.format("%d/%d", reservoir.getFluidLevel(), BlockEntityReservoir.CAPACITY), mx, my);
+            api.drawTooltipAt(pPoseStack, font, String.format("%d/%d", reservoir.getFluidLevel(), BlockEntityReservoir.CAPACITY), pX, pY);
         }
 
         if (!reservoir.isEmpty()) {
@@ -51,10 +51,13 @@ public class ReservoirScreen extends NonPoweredMachineScreen<BlockEntityReservoi
             int y = imageHeight / 2 - 13 - i2 + 35;
 
             IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(reservoir.getFluid().getFluid().defaultFluidState());
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//            RenderSystem.setShaderColor(ReikaColorAPI.getRed(props.getTintColor()), ReikaColorAPI.getGreen(props.getTintColor()), ReikaColorAPI.getBlue(props.getTintColor()), ReikaColorAPI.getAlpha(props.getTintColor()));
             RenderSystem.setShaderTexture(0, new ResourceLocation(props.getStillTexture().getNamespace(), "textures/" + props.getStillTexture().getPath() + ".png"));
             ScreenUtils.drawTexturedModalRect(pPoseStack, j + x, k + y, 16, i2, 8, 44 - i2, 0);
 //            this.drawTexturedModelRectFromIcon(x, y, tex, 8, i2);
         }
+
     }
 
     @Override

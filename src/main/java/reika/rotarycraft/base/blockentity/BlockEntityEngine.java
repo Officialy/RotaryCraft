@@ -27,15 +27,12 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.ParallelTicker;
 import reika.dragonapi.interfaces.blockentity.PartialInventory;
 import reika.dragonapi.interfaces.blockentity.PartialTank;
-import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -114,7 +111,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     public final int getWaterScaled(int par1) {
-        return water.getLevel() * par1 / CAPACITY;
+        return water.getFluidLevel() * par1 / CAPACITY;
     }
 
     public int getMaxTemperature() {
@@ -422,7 +419,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 
         this.internalizeFuel();
         if (power > 0) {
-            RotaryCraft.LOGGER.debug("power > 0");
             timer.updateTicker("fuel");
             if (type.burnsFuel() && timer.checkCap("fuel") && this.canConsumeFuel())
                 this.consumeFuel();
@@ -621,11 +617,11 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public final int getRedstoneOverride() {
         if (type.burnsFuel()) {
             if (type.isEthanolFueled())
-                return 15 * fuel.getLevel() / FUELCAP;
+                return 15 * fuel.getFluidLevel() / FUELCAP;
             if (type.isJetFueled())
-                return 15 * fuel.getLevel() / FUELCAP;
+                return 15 * fuel.getFluidLevel() / FUELCAP;
             else
-                return 15 * water.getLevel() / FUELCAP;
+                return 15 * water.getFluidLevel() / FUELCAP;
         }
         return 0;
     }
@@ -773,11 +769,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         }
     }*/
 
-    @Override
-    public final FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        return null;
-    }
-
     //        @Override
     public final boolean canFill(Direction from, Fluid fluid) {
         if (isAirFluid(fluid)) {
@@ -827,7 +818,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     public final int getLube() {
-        return lubricant.getLevel();
+        return lubricant.getFluidLevel();
     }
 
     public final void setLube(int amt) {
@@ -843,7 +834,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     public final int getWater() {
-        return water.getLevel();
+        return water.getFluidLevel();
     }
 
     @Override

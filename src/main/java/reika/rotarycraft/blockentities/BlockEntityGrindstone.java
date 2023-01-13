@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.RotaryAux;
@@ -139,10 +140,14 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
+    }
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack is) {
         return is.isDamageableItem() && (is.getItem() instanceof ShearsItem || is.getItem() instanceof SwordItem);// || is.getItem() instanceof ItemTool);
@@ -212,44 +217,6 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     @Override
     public int getNumberConsecutiveOperations() {
         return DurationRegistry.GRINDSTONE.getNumberOperations(omega);
-    }
-
-    @Override
-    public int getTanks() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
-
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
-
-    @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        return false;
-    }
-
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
     }
 
     @Override

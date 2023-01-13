@@ -33,21 +33,7 @@ public class BlockReservoir extends BlockBasicMachine {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        super.use(state, level, pos, player, hand, hit);
-
-        BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof BlockEntityReservoir reservoir && !level.isClientSide()) {
-            NetworkHooks.openScreen((ServerPlayer) player, reservoir, entity.getBlockPos());
-            return InteractionResult.SUCCESS;
-        }
-
-        return InteractionResult.PASS;
-    }
-
-    @Override
     public void onPlace(BlockState p_60566_, Level p_60567_, BlockPos p_60568_, BlockState p_60569_, boolean p_60570_) {
-        super.onPlace(p_60566_, p_60567_, p_60568_, p_60569_, p_60570_);
         BlockEntity entity = p_60567_.getBlockEntity(p_60568_);
         if (entity instanceof BlockEntityReservoir reservoir) {
             reservoir.onPlaced();

@@ -143,7 +143,7 @@ public enum SoundRegistry implements SoundEnum {
     }
 
     public void playSound(Level world, BlockPos pos, float vol, float pitch) {
-        if (FMLLoader.getDist() != Dist.DEDICATED_SERVER)
+        if (FMLLoader.getDist().isClient())
             return;
 //        Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), pos, vol, pitch);
 //        PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);

@@ -50,7 +50,7 @@
 //                case NORTH -> var11 = 90;
 //            }
 //
-//            GL11.glRotatef((float) var11 + 90, 0.0F, 1.0F, 0.0F);
+//            stack.mulPose((float) var11 + 90, 0.0F, 1.0F, 0.0F);
 //            stack.mulPose(Axis.YP.rotationDegrees(var11 + 90));
 //        } else {
 ////            GL11.glEnable(GL11.GL_LIGHTING);

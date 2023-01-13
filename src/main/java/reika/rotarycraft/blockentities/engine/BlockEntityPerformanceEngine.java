@@ -24,11 +24,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.registry.*;
 
@@ -60,7 +58,7 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
 
     @Override
     protected void internalizeFuel() {
-        if (inv[0] != null && fuel.getLevel() + FluidType.BUCKET_VOLUME < FUELCAP) {
+        if (inv[0] != null && fuel.getFluidLevel() + FluidType.BUCKET_VOLUME < FUELCAP) {
             if (inv[0].getItem() == RotaryItems.ETHANOL.get()) {
                 ReikaInventoryHelper.decrStack(0, inv);
                 fuel.addLiquid(1000, RotaryFluids.ETHANOL.get());
@@ -125,7 +123,7 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
             temperature += Math.max((Tamb - temperature) / 40, 1);
         if (omega > 0 && torque > 0) { //If engine is on
             temperature += 1;
-            if (water.getLevel() > 0 && temperature > Tamb) {
+            if (water.getFluidLevel() > 0 && temperature > Tamb) {
                 water.removeLiquid(20);
                 temperature--;
             }
@@ -162,7 +160,7 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
 
     @Override
     public int getFuelLevel() {
-        return fuel.getLevel();
+        return fuel.getFluidLevel();
     }
 
     public int getAdditivesScaled(int par1) {
@@ -261,11 +259,6 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
-
-    @Override
     public boolean hasAnInventory() {
         return true;
     }
@@ -273,5 +266,15 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
     @Override
     public boolean hasATank() {
         return true;
+    }
+
+    @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
     }
 }

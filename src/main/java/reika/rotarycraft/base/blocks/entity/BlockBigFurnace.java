@@ -35,15 +35,4 @@ public class BlockBigFurnace extends BlockBasicMachine {
             ((BlockEntityLavaSmeltery) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
-
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof BlockEntityLavaSmeltery reservoir && !level.isClientSide) {
-            NetworkHooks.openScreen((ServerPlayer) player, reservoir, entity.getBlockPos());
-            return InteractionResult.SUCCESS;
-        }
-
-        return InteractionResult.PASS;
-    }
 }

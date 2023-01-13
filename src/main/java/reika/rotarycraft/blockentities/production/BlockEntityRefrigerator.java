@@ -17,9 +17,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.fluids.FluidStack;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
@@ -154,6 +154,11 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
     }
 
     @Override
+    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+        return null;
+    }
+
+    @Override
     public boolean isItemValidForSlot(int slot, ItemStack is) {
         return slot == 0 && ReikaItemHelper.matchStackWithBlock(is, Blocks.ICE.defaultBlockState());
     }
@@ -209,7 +214,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
     }
 
     public int getLiquidScaled(int i) {
-        return tank.getLevel() * i / tank.getCapacity();
+        return tank.getFluidLevel() * i / tank.getCapacity();
     }
 
     public void addAttachment(RefrigeratorAttachment te, Direction dir) {

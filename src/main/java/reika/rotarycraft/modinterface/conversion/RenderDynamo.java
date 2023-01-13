@@ -82,13 +82,13 @@
 //			}
 //
 //			if (tile.getBlockMetadata() < 2) {
-//				GL11.glRotatef(var11, 0, 0, 1);
+//				stack.mulPose(var11, 0, 0, 1);
 //				if (tile.getBlockMetadata() == 1)
 //					stack.translate(0, -2, 0);
 //			}
 //			else {
-//				GL11.glRotatef(90, 1, 0, 0);
-//				GL11.glRotatef(var11, 0, 0, 1);
+//				stack.mulPose(90, 1, 0, 0);
+//				stack.mulPose(var11, 0, 0, 1);
 //				stack.translate(0, -1, -1);
 //			}
 //		}

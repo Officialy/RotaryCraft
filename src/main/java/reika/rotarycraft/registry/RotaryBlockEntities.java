@@ -7,7 +7,6 @@ import net.minecraftforge.registries.RegistryObject;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.blockentities.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
@@ -17,6 +16,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.BlockEntityPipe;
+import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 import reika.rotarycraft.blockentities.production.*;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
@@ -228,8 +228,11 @@ public class RotaryBlockEntities {
 //    public static final RegistryObject<BlockEntityType<BlockEntityPulseFurnace>> PULSE_JET_FURNACE = BLOCK_ENTITIES.register("pulse_jet_furnace", () ->
 //            BlockEntityType.Builder.of(BlockEntityPulseFurnace::new, RotaryBlocks.PULSE_JET_FURNACE.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityFillingStation>> FILLING_STATION = BLOCK_ENTITIES.register("filling_station", () ->
-            BlockEntityType.Builder.of(BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()).build(null));
+//    public static final RegistryObject<BlockEntityType<BlockEntityFillingStation>> FILLING_STATION = BLOCK_ENTITIES.register("filling_station", () ->
+//            BlockEntityType.Builder.of(BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityGrinder>> GRINDER = BLOCK_ENTITIES.register("filling_station", () ->
+            BlockEntityType.Builder.of(BlockEntityGrinder::new, RotaryBlocks.GRINDER.get()).build(null));
 
 
 }

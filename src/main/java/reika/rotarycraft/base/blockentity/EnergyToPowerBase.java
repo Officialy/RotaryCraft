@@ -18,7 +18,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -367,7 +366,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
         nbt.putInt("tier", tier);
         nbt.putBoolean("efficient", efficient);
         nbt.putInt("energy", storedEnergy);
-        nbt.putInt("coolant", tank.getLevel());
+        nbt.putInt("coolant", tank.getFluidLevel());
         return nbt;
     }
 
@@ -543,7 +542,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     }
 
     public final int getLubricant() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public final int getMaxLubricant() {
@@ -551,14 +550,14 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     }
 
     public final int getLubricantScaled(int a) {
-        return tank.getLevel() * a / tank.getCapacity();
+        return tank.getFluidLevel() * a / tank.getCapacity();
     }
 
     @Override
     public final void updateTemperature(Level world, BlockPos pos) {
         int Tamb = tank.isEmpty() ? ReikaWorldHelper.getAmbientTemperatureAt(world, pos) : 25;
         if (power > 0) {
-            double d = tank.getLevel() >= 50 ? 0.00275 : 0.14;
+            double d = tank.getFluidLevel() >= 50 ? 0.00275 : 0.14;
             double inc = d * Math.sqrt(power) + ReikaMathLibrary.logbase(tier + 1, 2);
             //ReikaJavaLibrary.pConsole(inc);
             temperature += inc;

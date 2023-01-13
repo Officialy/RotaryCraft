@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.registry.*;
 
@@ -47,7 +46,7 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
 
     @Override
     public int getFuelLevel() {
-        return fuel.getLevel();
+        return fuel.getFluidLevel();
     }
 
     @Override
@@ -116,10 +115,9 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
         return "Microturbine";
     }
 
-    @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
+
+
+
 
     @Override
     public boolean hasAnInventory() {
@@ -134,5 +132,15 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
     @Override
     public int getAmbientTemperature() {
         return 0;
+    }
+
+    @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
     }
 }

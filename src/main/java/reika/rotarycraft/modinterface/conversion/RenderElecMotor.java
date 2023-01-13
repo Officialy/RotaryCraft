@@ -69,7 +69,7 @@
 //                break;
 //        }
 //
-//        GL11.glRotatef(var11, 0.0F, 1.0F, 0.0F);
+//        stack.mulPose(var11, 0.0F, 1.0F, 0.0F);
 //        var14.renderAll(tile, ReikaJavaLibrary.makeListFrom(5), tile.phi, 0);
 //
 //        this.closeGL(tile);

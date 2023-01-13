@@ -76,7 +76,7 @@
 //            }
 //        }
 //
-//        GL11.glRotatef((float) var11 + 90, 0.0F, 1.0F, 0.0F);
+//        stack.mulPose((float) var11 + 90, 0.0F, 1.0F, 0.0F);
 //        var14.renderAll(stack, tile, null, -tile.phi);
 //        if (tile.isInWorld()) {
 //            stack.translate(0, 1, -0.5);

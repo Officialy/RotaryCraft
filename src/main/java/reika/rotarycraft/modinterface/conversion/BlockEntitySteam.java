@@ -35,7 +35,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerator, SimpleProvider, /*IPipeConnection,*/ IFluidHandler, PipeConnector {
+public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerator, SimpleProvider, /*IPipeConnection,*/ PipeConnector {
 
 	public static final int CAPACITY = 300000;
 
@@ -151,10 +151,9 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 	}
 
 	@Override
-	public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
 		return null;
 	}
-
 	@Override
 	public boolean canFill(Direction from, Fluid fluid) {
 		return super.canFill(from, fluid) || from == this.getFacing() && fluid.equals(RotaryFluids.STEAM.get());

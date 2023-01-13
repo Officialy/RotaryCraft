@@ -11,9 +11,11 @@ package reika.rotarycraft.base.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,6 +31,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.ModList;
 import reika.dragonapi.base.BlockEntityBase;
@@ -73,19 +76,19 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
     /**
      * @param state The current state
-     * @param world The current world
-     * @param pos   Block position in world
+     * @param level The current level
+     * @param pos   Block position in level
      * @param ep    The player that right-clicked the block
      * @param pHand The hand that was used
      * @param pHit  The side the player hit the block on
      * @return
      */
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player ep, InteractionHand pHand, BlockHitResult pHit) {
-        super.use(state, world, pos, ep, pHand, pHit);
-        BlockEntity te = world.getBlockEntity(pos);
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player ep, InteractionHand pHand, BlockHitResult pHit) {
+        super.use(state, level, pos, ep, pHand, pHit);
+        RotaryCraftBlockEntity te = (RotaryCraftBlockEntity) level.getBlockEntity(pos);
         ItemStack is = ep.getMainHandItem();
-        MachineRegistry m = MachineRegistry.getMachine(world, pos);
+        MachineRegistry m = MachineRegistry.getMachine(level, pos);
 
         if (ep.isCrouching() && !(te instanceof BlockEntityCaveFinder))
             return InteractionResult.PASS;
@@ -285,7 +288,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                     ep.setItemSlot(EquipmentSlot.MAINHAND, null);
                             }
                             ((BlockEntityBase)te).syncAllData(true);
-                            if (!world.isClientSide)
+                            if (!level.isClientSide)
                                 ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
                             return InteractionResult.SUCCESS;
                         }
@@ -304,7 +307,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     int xp = ReikaXPFluidHelper.getXPForAmount(amt);
                     tr.removeLiquid(amt);
                     ep.giveExperiencePoints(xp); //todo might be levels
-                    ReikaSoundHelper.playSoundAtBlock(world, pos, SoundEvents.EXPERIENCE_ORB_PICKUP);
+                    ReikaSoundHelper.playSoundAtBlock(level, pos, SoundEvents.EXPERIENCE_ORB_PICKUP);
                     return InteractionResult.SUCCESS;
                 }
             } else {
@@ -331,7 +334,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                         ep.setItemSlot(EquipmentSlot.MAINHAND, ret.isEmpty() ? ReikaItemHelper.getSizedItemStack(is, size) : ItemStack.EMPTY);
                                     }
                                     ((BlockEntityBase) te).syncAllData(true);
-                                    if (!world.isClientSide)
+                                    if (!level.isClientSide)
                                         ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
                                     return InteractionResult.SUCCESS;
                                 } else if (f.getFluid().equals(tr.getFluid().getFluid())) {
@@ -341,7 +344,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                         ep.setItemSlot(EquipmentSlot.MAINHAND, ret.isEmpty() ? ReikaItemHelper.getSizedItemStack(is, size) : ItemStack.EMPTY);
                                     }
                                     ((BlockEntityBase) te).syncAllData(true);
-                                    if (!world.isClientSide)
+                                    if (!level.isClientSide)
                                         ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
                                     return InteractionResult.SUCCESS;
                                 }
@@ -361,7 +364,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                 if (!ep.isCreative())
                                     ep.setItemSlot(EquipmentSlot.MAINHAND, ReikaItemHelper.getSizedItemStack(is, size)); //todo check if this breaks lol
                                 ((BlockEntityBase) te).syncAllData(true);
-                                if (!world.isClientSide)
+                                if (!level.isClientSide)
                                     ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
                                 return true;
                             }
@@ -557,19 +560,26 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             BlockEntityMirror tm = (BlockEntityMirror) te;
             if (tm.broken) {
                 if (ReikaItemHelper.matchStacks(is, RotaryItems.MIRROR)) {
-                    tm.repair(world, pos);
+                    tm.repair(level, pos);
                     if (!ep.isCreative()) {
                         ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(is.getItem(), is.getCount() - 1));
                     }
-                    ((BlockEntityBase) te).syncAllData(true);
+                    te.syncAllData(true);
                     return InteractionResult.SUCCESS;
                 }
             }
         }
-        /*if (te != null && RotaryAux.hasGui(world, pos, ep) && ((RotaryCraftBlockEntity)te).isPlayerAccessible(ep)) {
-            ep.openGui(RotaryCraft.instance, GuiRegistry.MACHINE.ordinal(), world, pos);
+        if (te != null && RotaryAux.hasGui(level, pos, ep) && te.isPlayerAccessible(ep)) {
+            if (!level.isClientSide()) {
+                NetworkHooks.openScreen((ServerPlayer) ep, te, pos);
+            }
+            ep.swing(InteractionHand.MAIN_HAND, true);
+            /*if (te instanceof BlockEntityReservoir reservoir && !level.isClientSide()) {
+                NetworkHooks.openScreen((ServerPlayer) player, reservoir, entity.getBlockPos());
+                return InteractionResult.SUCCESS;
+            }*/
             return InteractionResult.SUCCESS;
-        }*/
+        }
         /*if (m == MachineRegistry.SCREEN) {
             BlockEntityScreen tc = (BlockEntityScreen)te;
             if (ep.isShiftKeyDown()) {

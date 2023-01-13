@@ -705,8 +705,8 @@ public class GuiHandbook extends Screen {
 //            double dz = 0;
 //            stack.translate(dx, dy, dz);
 //            GL11.glScaled(sc, -sc, sc);
-//            GL11.glRotatef(renderq, 1, 0, 0);
-//            GL11.glRotatef(r, 0, 1, 0);
+//            stack.mulPose(renderq, 1, 0, 0);
+//            stack.mulPose(r, 0, 1, 0);
 //            BlockEntityRendererDispatcher.instance.renderBlockEntityAt(te, -0.5, 0, -0.5, variable);
 //        } else {
 //            double dx = x;
@@ -714,8 +714,8 @@ public class GuiHandbook extends Screen {
 //            double dz = 0;
 //            stack.translate(dx, dy, dz);
 //            GL11.glScaled(sc, -sc, sc);
-//            GL11.glRotatef(renderq, 1, 0, 0);
-//            GL11.glRotatef(r, 0, 1, 0);
+//            stack.mulPose(renderq, 1, 0, 0);
+//            stack.mulPose(r, 0, 1, 0);
 //            ReikaTextureHelper.bindTerrainTexture();
 //            rb.renderBlockAsItem(m.getBlock(), m.getBlockMetadata(), 1);
 //        }

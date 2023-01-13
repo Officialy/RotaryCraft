@@ -11,7 +11,9 @@ package reika.rotarycraft.renders.dmi;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Quaternionf;
@@ -36,10 +38,9 @@ public class RenderWinder extends RotaryTERenderer<BlockEntityWinder> {
      * Renders the BlockEntity for the position.
      */
     public void renderBlockEntityWinderAt(PoseStack stack, BlockEntityWinder tile, MultiBufferSource bufferSource, int light) {
-        RenderSystem.setShaderTexture(0, new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/windertex.png"));
-
+        VertexConsumer tex = bufferSource.getBuffer(RenderType.entitySolid(new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/windertex.png")));
         boolean hasSpring = tile.getStackInSlot(0) != null && tile.getStackInSlot(0).getItem() instanceof ItemCoil;
-        winderModel.renderAll(stack, tile, ReikaJavaLibrary.makeListFrom(hasSpring), -tile.phi, 0);
+        winderModel.renderAll(stack, tex, light, tile, ReikaJavaLibrary.makeListFrom(hasSpring), -tile.phi, 0);
     }
 
     @Override

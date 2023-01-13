@@ -215,7 +215,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         }
 
         if (!world.isClientSide && power == 0 && this.isLiving() && DragonAPI.rand.nextInt(20) == 0) {
-            if (damage > 0 && (!type.needsLubricant() || tank.getLevel() >= 25)) {
+            if (damage > 0 && (!type.needsLubricant() || tank.getFluidLevel() >= 25)) {
                 this.repair(1);
                 if (type.needsLubricant()) {
                     tank.removeLiquid(25);
@@ -425,7 +425,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     public int getLubricantScaled(int par1) {
         if (this.getMaxLubricant() == 0)
             return 0;
-        return tank.getLevel() * par1 / this.getMaxLubricant();
+        return tank.getFluidLevel() * par1 / this.getMaxLubricant();
     }
 
     @Override
@@ -504,7 +504,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
 
 
     public int getRedstoneOverride() {
-        return this.getMaxLubricant() > 0 ? 15 * tank.getLevel() / this.getMaxLubricant() : 0;
+        return this.getMaxLubricant() > 0 ? 15 * tank.getFluidLevel() / this.getMaxLubricant() : 0;
     }
 
     @Override
@@ -532,21 +532,20 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     }
 
     @Override
-    public void onEMP() {
-    }
-
-    @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
         return null;
     }
 
+    @Override
+    public void onEMP() {
+    }
 
     public boolean canFill(Direction from, Fluid fluid) {
         return from != (isFlipped ? Direction.DOWN : Direction.UP) && fluid.equals(RotaryFluids.LUBRICANT.get()) && !this.isLiving();
     }
 
     public int getLubricant() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public void setLubricant(int amt) {
@@ -558,7 +557,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     }
 
     public boolean canTakeLubricant(int amt) {
-        return tank.getLevel() + amt <= this.getMaxLubricant();
+        return tank.getFluidLevel() + amt <= this.getMaxLubricant();
     }
 
     public void addLubricant(int amt) {
@@ -691,7 +690,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
 
     //    @Override
     public int getCurrentMana() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     //    @Override

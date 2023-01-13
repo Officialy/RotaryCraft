@@ -10,23 +10,54 @@
 package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.RotaryCraft;
+
+import javax.annotation.Nonnull;
 
 public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver implements Container {
 
     protected ItemStack[] inv = new ItemStack[this.getContainerSize()];
-
+    private ItemStackHandler itemHandler = createHandler();
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     public InventoriedPowerReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+    }
+    @Override
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (capability == ForgeCapabilities.ITEM_HANDLER)
+            return lazyItemHandler.cast();
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyItemHandler.invalidate();
     }
 
     protected void onInventoryChanged(int slot) {
@@ -98,7 +129,15 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
 
         NBT.put("Items", nbttaglist);
     }
+    @Override
+    public void deserializeNBT(CompoundTag nbt) {
+        super.deserializeNBT(nbt);
+    }
 
+    @Override
+    public CompoundTag serializeNBT() {
+        return super.serializeNBT();
+    }
     //    @Override
     public void load(CompoundTag NBT) {
 
@@ -117,5 +156,32 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
                 //Thread.dumpStack();
             }
         }
+    }
+
+
+    private ItemStackHandler createHandler() {
+        return new ItemStackHandler(getContainerSize()) {
+
+            @Override
+            protected void onContentsChanged(int slot) {
+                // To make sure the BE persists when the chunk is saved later we need to
+                // mark it changed every time the item handler changes
+                setChanged();
+            }
+
+            @Override
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                return stack.getItem() == Items.DIAMOND;
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                if (stack.getItem() != Items.DIAMOND) {
+                    return stack;
+                }
+                return super.insertItem(slot, stack, simulate);
+            }
+        };
     }
 }

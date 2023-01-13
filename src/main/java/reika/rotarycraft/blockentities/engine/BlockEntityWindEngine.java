@@ -201,10 +201,7 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
         return "windengine";
     }
 
-    @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
+
 
     @Override
     public boolean hasAnInventory() {
@@ -219,6 +216,16 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
     @Override
     public int getAmbientTemperature() {
         return 0;
+    }
+
+    @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
     }
 
     private static class WindClearanceCheck {

@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.auxiliary.interfaces.UpgradeableMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -60,7 +59,7 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
 
     @Override
     protected void internalizeFuel() {
-        if (inv[0] != null && fuel.getLevel() + FluidType.BUCKET_VOLUME <= FUELCAP) {
+        if (inv[0] != null && fuel.getFluidLevel() + FluidType.BUCKET_VOLUME <= FUELCAP) {
             if (inv[0].getItem() == RotaryItems.ETHANOL.get()) {
                 ReikaInventoryHelper.decrStack(0, inv);
                 fuel.addLiquid(1000, RotaryFluids.ETHANOL.get());
@@ -88,7 +87,7 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
 
     @Override
     public int getFuelLevel() {
-        return fuel.getLevel();
+        return fuel.getFluidLevel();
     }
 
     @Override
@@ -141,10 +140,7 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
         return "gasengine";
     }
 
-    @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
+
     @Override
     public boolean hasAnInventory() {
         return true;
@@ -158,5 +154,15 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
     @Override
     public int getAmbientTemperature() {
         return 0;
+    }
+
+    @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
     }
 }

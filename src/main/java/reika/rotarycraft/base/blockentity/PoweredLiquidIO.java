@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.java.ReikaStringParser;
@@ -62,11 +61,11 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements PipeC
 //    }
 
     public final int getInputLevel() {
-        return input.getLevel();
+        return input.getFluidLevel();
     }
 
     public final int getOutputLevel() {
-        return output.getLevel();
+        return output.getFluidLevel();
     }
 
     public final FluidStack getFluidInInput() {

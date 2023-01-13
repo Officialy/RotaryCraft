@@ -19,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -32,7 +31,6 @@ import reika.dragonapi.libraries.java.ReikaRandomHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.MultiOperational;
@@ -197,7 +195,7 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
         //ReikaJavaLibrary.pConsole(is);
         boolean obsid = ReikaItemHelper.matchStackWithBlock(is, Blocks.OBSIDIAN.defaultBlockState());
         int lavaamt = obsid ? 1000 : 50;
-        if (lava.getLevel() < lavaamt || water.getLevel() < 1000)
+        if (lava.getFluidLevel() < lavaamt || water.getFluidLevel() < 1000)
             return;
         ReikaInventoryHelper.addOrSetStack(is, inv, slot);
         if (!ReikaItemHelper.matchStackWithBlock(is, Blocks.COBBLESTONE.defaultBlockState()))
@@ -222,11 +220,11 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
     }
 
     public int getWaterScaled(int par1) {
-        return (water.getLevel() * par1) / CAPACITY;
+        return (water.getFluidLevel() * par1) / CAPACITY;
     }
 
     public int getLavaScaled(int par1) {
-        return (lava.getLevel() * par1) / CAPACITY;
+        return (lava.getFluidLevel() * par1) / CAPACITY;
     }
 
     /**
@@ -313,6 +311,11 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
     }
 
     @Override
+    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+        return null;
+    }
+
+    @Override
     public void addTemperature(int temp) {
         temperature += temp;
     }
@@ -326,11 +329,6 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
         temperature = temp;
     }
 
-    @Override
-    public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        return null;
-    }
-
     //    @Override
     public boolean canFill(Fluid fluid) {
 //        if (from.getStepY() != 0)
@@ -339,7 +337,7 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
     }
 
     public int getWater() {
-        return water.getLevel();
+        return water.getFluidLevel();
     }
 
     public void setWater(int amt) {
@@ -347,7 +345,7 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
     }
 
     public int getLava() {
-        return lava.getLevel();
+        return lava.getFluidLevel();
     }
 
     public void setLava(int amt) {

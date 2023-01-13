@@ -40,13 +40,6 @@ public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements
         return this.canDrain(resource.getFluid()) ? tank.drain(resource.getAmount(), action) : null;
     }
 
-    @Override
-    public final FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-//        if (this.canDrain(from, null))
-//            return tank.drain(maxDrain, doDrain ? FluidAction.EXECUTE : FluidAction.SIMULATE);
-        return null;
-    }
-
     public final boolean canDrain(Fluid fluid) {
 //        return this.canOutputTo(from) && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
         return true;
@@ -58,7 +51,7 @@ public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements
 //    }
 
     public final int getFluidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public Fluid getContainedFluid() {

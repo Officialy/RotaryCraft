@@ -153,11 +153,11 @@
 //			double dz = z;
 //			stack.translate(dx, dy, dz);
 //			GL11.glScaled(sc, -sc, sc);
-//			GL11.glRotatef(renderq, 1, 0, 0);
-//			GL11.glRotatef(r, 0, 1, 0);
+//			stack.mulPose(renderq, 1, 0, 0);
+//			stack.mulPose(r, 0, 1, 0);
 //			TileEntityRendererDispatcher.instance.renderTileEntityAt(te, -0.5, 0, -0.5, variable);
-//			GL11.glRotatef(-r, 0, 1, 0);
-//			GL11.glRotatef(-renderq, 1, 0, 0);
+//			stack.mulPose(-r, 0, 1, 0);
+//			stack.mulPose(-renderq, 1, 0, 0);
 //			stack.translate(-dx, -dy, -dz);
 //			GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
 //		}
@@ -167,12 +167,12 @@
 //			double dz = z;
 //			stack.translate(dx, dy, dz);
 //			GL11.glScaled(sc, -sc, sc);
-//			GL11.glRotatef(renderq, 1, 0, 0);
-//			GL11.glRotatef(r, 0, 1, 0);
+//			stack.mulPose(renderq, 1, 0, 0);
+//			stack.mulPose(r, 0, 1, 0);
 //			ReikaTextureHelper.bindTerrainTexture();
 //			rb.renderBlockAsItem(m.getBlock(), m.getBlockMetadata(), 1);
-//			GL11.glRotatef(-r, 0, 1, 0);
-//			GL11.glRotatef(-renderq, 1, 0, 0);
+//			stack.mulPose(-r, 0, 1, 0);
+//			stack.mulPose(-renderq, 1, 0, 0);
 //			GL11.glScaled(1D/sc, -1D/sc, 1D/sc);
 //			stack.translate(-dx, -dy, -dz);
 //		}
@@ -192,11 +192,11 @@
 //		PNEU1(MachineRegistry.PNEUENGINE, RotaryItems.impeller, "Upgrades To Tier 1"),
 //		PNEU2(MachineRegistry.PNEUENGINE, RotaryItems.turbine, "Upgrades To Tier 2"),
 //		PNEU3(MachineRegistry.PNEUENGINE, RotaryItems.compoundturb, "Upgrades To Tier 3"),
-//		MAGNETO1(MachineRegistry.MAGNETIC, GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "powerCoilGold", 1), "Upgrades To Tier 1"),
-//		MAGNETO2(MachineRegistry.MAGNETIC, GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "conduitEnergyReinforced", 1), "Upgrades To Tier 2"),
+//		MAGNETO1(MachineRegistry.MAGNETIC, GameRegistry.findItemStack(ModList.THERMALEXPANSION.modid, "powerCoilGold", 1), "Upgrades To Tier 1"),
+//		MAGNETO2(MachineRegistry.MAGNETIC, GameRegistry.findItemStack(ModList.THERMALEXPANSION.modid, "conduitEnergyReinforced", 1), "Upgrades To Tier 2"),
 //		MAGNETO3(MachineRegistry.MAGNETIC, RotaryItems.generator, "Upgrades To Tier 3"),
-//		MAGNETO4(MachineRegistry.MAGNETIC, GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellReinforced", 1), "Upgrades To Tier 4"),
-//		MAGNETO5(MachineRegistry.MAGNETIC, GameRegistry.findItemStack(ModList.THERMALEXPANSION.modLabel, "cellResonant", 1), "Upgrades To Tier 5");
+//		MAGNETO4(MachineRegistry.MAGNETIC, GameRegistry.findItemStack(ModList.THERMALEXPANSION.modid, "cellReinforced", 1), "Upgrades To Tier 4"),
+//		MAGNETO5(MachineRegistry.MAGNETIC, GameRegistry.findItemStack(ModList.THERMALEXPANSION.modid, "cellResonant", 1), "Upgrades To Tier 5");
 //
 //		private final ItemStack item;
 //		private final ItemStack machine;

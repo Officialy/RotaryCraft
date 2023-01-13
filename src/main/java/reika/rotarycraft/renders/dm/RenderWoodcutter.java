@@ -60,7 +60,7 @@
 //                    break;
 //            }
 //
-//            GL11.glRotatef((float) var11 - 90, 0.0F, 1.0F, 0.0F);
+//            stack.mulPose((float) var11 - 90, 0.0F, 1.0F, 0.0F);
 //
 //        }
 //        float var13;
@@ -100,7 +100,7 @@
 //                    var11 = 90;
 //                    break;
 //            }
-//            GL11.glRotatef((float) var11 - 90, 0.0F, 1.0F, 0.0F);
+//            stack.mulPose((float) var11 - 90, 0.0F, 1.0F, 0.0F);
 //            if (((BlockEntityWoodcutter) tile).getEnchantmentHandler().hasEnchantments())
 //                EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
 //        }

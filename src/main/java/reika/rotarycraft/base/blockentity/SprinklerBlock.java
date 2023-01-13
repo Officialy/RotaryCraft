@@ -165,11 +165,6 @@ public abstract class SprinklerBlock extends RotaryCraftBlockEntity implements P
     }
 
     @Override
-    public final FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        return null;
-    }
-
-    @Override
     public final Flow getFlowForSide(Direction side) {
         return side == this.getPipeDirection() ? Flow.INPUT : Flow.NONE;
     }

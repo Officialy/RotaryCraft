@@ -12,24 +12,20 @@ package reika.rotarycraft.modinterface.conversion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.modinteract.power.ReikaRailCraftHelper;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.auxiliary.interfaces.RCToModConverter;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.PoweredLiquidIO;
@@ -98,7 +94,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
         if (!world.isClientSide()) {
             int space = output.getRemainingSpace();
             if (space > 0) {
-                int mB = Math.min(space, Math.min(input.getLevel(), ReikaRailCraftHelper.getAmountConvertibleSteam(this.getInitTemp(), storedEnergy)));
+                int mB = Math.min(space, Math.min(input.getFluidLevel(), ReikaRailCraftHelper.getAmountConvertibleSteam(this.getInitTemp(), storedEnergy)));
                 if (mB > 0)
                     this.makeSteam(mB);
             }
@@ -108,7 +104,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
         if (te instanceof IFluidHandler) {
             IFluidHandler ic = (IFluidHandler) te;
             if (output.getFluid() != null) {
-                int amt = ic.fill(output.getFluid(), FluidAction.EXECUTE); //direction = down
+                int amt = ic.fill(output.getFluid(), IFluidHandler.FluidAction.EXECUTE); //direction = down
                 if (amt > 0)
                     output.removeLiquid(amt);
             }
@@ -138,7 +134,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
     }
 
     public int getWater() {
-        return input.getLevel();
+        return input.getFluidLevel();
     }
 
     @Override
@@ -214,9 +210,10 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
+
 
     @Override
     public Fluid getInputFluid() {
@@ -286,32 +283,6 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
     public String getUnitDisplay() {
         return "Steam";
     }
-
-    @Override
-    public int getTanks() {
-        return 0;
-    }
-
-    @Override
-    public @NotNull FluidStack getFluidInTank(int tank) {
-        return null;
-    }
-
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
-
-    @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        return false;
-    }
-
-    @Override
-    public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
-
     @Override
     public boolean hasAnInventory() {
         return false;

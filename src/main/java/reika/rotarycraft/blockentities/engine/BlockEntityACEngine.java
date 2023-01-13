@@ -184,10 +184,7 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     public boolean hasATank() {
         return false;
     }
-    @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
+
     @Override
     public int getAmbientTemperature() {
         return 0;
@@ -226,5 +223,15 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     @Override
     public void clearContent() {
 
+    }
+
+    @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
     }
 }

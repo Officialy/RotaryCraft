@@ -45,7 +45,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
 
     @Override
     public boolean canConsumeFuel() {
-        return water.getLevel() > 0 && temperature >= 100;
+        return water.getFluidLevel() > 0 && temperature >= 100;
     }
 
     @Override
@@ -162,7 +162,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
 
     @Override
     public int getFuelLevel() {
-        return water.getLevel();
+        return water.getFluidLevel();
     }
 
     @Override
@@ -252,10 +252,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
         return true;
     }
 
-    @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
+
 
     @Override
     public Component getDisplayName() {
@@ -265,5 +262,15 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     @Override
     public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new SteamContainer(p_39954_, p_39955_, this);
+    }
+
+    @Override
+    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return null;
     }
 }

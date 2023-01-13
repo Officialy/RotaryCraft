@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
@@ -26,17 +25,12 @@ import reika.rotarycraft.registry.MachineRegistry;
 import java.util.Locale;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements IFluidHandler, PipeConnector {//, IPipeConnection {
+public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements PipeConnector {//, IPipeConnection {
 
     protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH)), this.getCapacity());
 
     public PoweredLiquidReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    @Override
-    public final FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-        return null;
     }
 
     public abstract Fluid getInputFluid();
@@ -47,7 +41,7 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
 //    }
 
     public final int getLiquidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
     public final FluidStack getContainedFluid() {
         return tank.getActualFluid();
@@ -66,12 +60,6 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
         return f != null && f.equals(this.getInputFluid());
     }
 
-    @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
-        if (!this.canFill(from, resource.getFluid()))
-            return 0;
-        return tank.fill(resource, action);
-    }
 
     public abstract boolean canReceiveFrom(Direction from);
 

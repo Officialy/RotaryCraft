@@ -20,7 +20,6 @@ public class BlockAerosolizer extends BlockBasicMachine {
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityAerosolizer(pPos, pState);
-//        return null;
     }
 
     @Nullable

@@ -76,7 +76,6 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
         //todo the 256 was 10, check reikas github
     }
 
-//    @Override
     protected void actionPerformed(Button b, int id) {
         if (id == 24000 || id == 24001) {
             inventory.player.closeContainer();
@@ -96,8 +95,10 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
 
     @Override
     protected void renderLabels(PoseStack stack, int pMouseX, int pMouseY) {
-        int j = (width - imageWidth) / 2;
-        int k = (height - imageHeight) / 2;
+        int scaledWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        int scaleHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+        int j = (scaledWidth - imageWidth) / 2;
+        int k = (scaleHeight - imageHeight) / 2;
 //        if (tile instanceof BlockEntityProjector)
 //            font.draw(tile.getMultiValuedName(), 6, 6, 4210752);
 //        else if (tile instanceof BlockEntityScaleableChest)

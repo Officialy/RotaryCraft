@@ -12,10 +12,14 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+
+import java.util.ArrayList;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
-public class WinderModel extends Model {
+public class WinderModel extends RotaryModelBase {
 
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/windertex.png");
 
@@ -216,8 +220,39 @@ public class WinderModel extends Model {
     }
 
     @Override
-    public void renderToBuffer(PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-
-        root.render(stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
+        /*boolean has = (Boolean)conditions.get(0);
+        shape1.render(te, f5);
+        shape2.render(te, f5);
+        shape2a.render(te, f5);
+        shape3.render(te, f5);
+        shape3a.render(te, f5);
+        shape4.render(te, f5);
+        stack.translate(0, 1.0625, 0);
+        stack.glRotatef(phi, 0, 0, 1);
+        stack.translate(0, -1.0625, 0);
+        Shape5.render(te, f5);
+        Shape5a.render(te, f5);
+        stack.translate(0, 1.0625, 0);
+        stack.mulPose(-phi, 0, 0, 1);
+        stack.translate(0, -1.0625, 0);
+        if (!has)
+            return;
+        GL11.glScaled(-1, 1, 1);
+        GL11.glFrontFace(GL11.GL_CW);
+        Shape6.render(te, f5);
+        Shape6a.render(te, f5);
+        Shape6b.render(te, f5);
+        Shape6c.render(te, f5);
+        Shape6d.render(te, f5);
+        Shape6e.render(te, f5);
+        Shape6f.render(te, f5);
+        Shape6g.render(te, f5);
+        Shape6h.render(te, f5);
+        Shape6i.render(te, f5);
+        Shape6j.render(te, f5);
+        Shape6k.render(te, f5);
+        GL11.glScaled(-1, 1, 1);
+        GL11.glFrontFace(GL11.GL_CCW);*/
     }
 }

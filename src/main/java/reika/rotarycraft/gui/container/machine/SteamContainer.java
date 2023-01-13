@@ -55,7 +55,6 @@ public class SteamContainer extends IOMachineContainer<BlockEntitySteamEngine> {
     public void sendAllDataToRemote() {
         super.sendAllDataToRemote();
         ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, steam, "water");
-
     }
 
     @Override
@@ -63,11 +62,6 @@ public class SteamContainer extends IOMachineContainer<BlockEntitySteamEngine> {
         switch (pId) {
             case 1 -> BlockEntityEngine.temperature = pData;
         }
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return true;
     }
 
 }

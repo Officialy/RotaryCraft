@@ -12,7 +12,6 @@ package reika.rotarycraft.base.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.dragonapi.instantiable.HybridTank;
@@ -20,8 +19,6 @@ import reika.dragonapi.libraries.java.ReikaStringParser;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.Locale;
 
@@ -34,47 +31,10 @@ public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements Pi
         super(type, pos, state);
     }
 
-    /**
-     * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
-     *
-     * @param resource FluidStack representing the Fluid and maximum amount of fluid to be drained.
-     * @param action   If SIMULATE, drain will only be simulated.
-     * @return FluidStack representing the Fluid and amount that was (or would have been, if
-     * simulated) drained.
-     */
-    @NotNull
-    @Override
-    public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
-        //return this.drain(from, resource.getFluid()) ? tank.drain(resource.amount, doDrain) : null;
-        return tank.drain(resource, action); //todo drain stuff
-    }
-
-    /**
-     * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
-     * <p>
-     * This method is not Fluid-sensitive.
-     *
-     * @param maxDrain Maximum amount of fluid to drain.
-     * @param action   If SIMULATE, drain will only be simulated.
-     * @return FluidStack representing the Fluid and amount that was (or would have been, if
-     * simulated) drained.
-     */
-    @NotNull
-    @Override
-    public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
-        //return this.drain(from, null) ? tank.drain(maxDrain, doDrain) : null;
-        return tank.drain(maxDrain, action); //todo drain stuff
-    }
-
     public abstract Fluid getInputFluid();
 
-//    @Override
-//    public final FluidTankInfo[] getTankInfo(Direction from) {
-//        return new FluidTankInfo[]{tank.getInfo()};
-//    }
-
     public final int getFluidLevel() {
-        return tank.getLevel();
+        return tank.getFluidLevel();
     }
 
     public final Fluid getContainedFluid() {
@@ -92,20 +52,6 @@ public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements Pi
 
     public boolean isValidFluid(Fluid f) {
         return f != null && f.equals(this.getInputFluid());
-    }
-
-    /**
-     * Fills fluid into internal tanks, distribution is left entirely to the IFluidHandler.
-     *
-     * @param resource FluidStack representing the Fluid and maximum amount of fluid to be filled.
-     * @param action   If SIMULATE, fill will only be simulated.
-     * @return Amount of resource that was (or would have been, if simulated) filled.
-     */
-    @Override
-    public int fill(FluidStack resource, IFluidHandler.FluidAction action) {
-//        if (!this.canFill(from, resource.getFluid()))
-//            return 0;
-        return tank.fill(resource, action);
     }
 
     public abstract boolean canReceiveFrom(Direction from);

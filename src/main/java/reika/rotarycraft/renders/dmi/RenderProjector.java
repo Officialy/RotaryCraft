@@ -87,7 +87,7 @@
 //                    break;
 //            }
 //
-//            GL11.glRotatef((float) var11 + 180, 0.0F, 1.0F, 0.0F);
+//            stack.mulPose((float) var11 + 180, 0.0F, 1.0F, 0.0F);
 //        } else {
 //            GL11.glEnable(GL11.GL_LIGHTING);
 //        }
