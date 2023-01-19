@@ -22,6 +22,7 @@ import net.minecraft.world.level.material.Fluid;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
 
 import java.util.Arrays;
 
@@ -32,8 +33,8 @@ public class BlockEntityBypass extends BlockEntityPiping {
     private boolean[] forcedConnection = new boolean[6];
     private boolean[] tryForcedConnection = new boolean[6];
 
-    public BlockEntityBypass(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntityBypass(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.BYPASS.get(), pos, state);
     }
 
     @Override

@@ -42,7 +42,10 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
         super(RotaryBlockEntities.STEAM_ENGINE.get(), pos, state);
         type = EngineType.STEAM;
     }
-
+    @Override
+    public MachineRegistry getMachine() {
+        return MachineRegistry.STEAM_ENGINE;
+    }
     @Override
     public boolean canConsumeFuel() {
         return water.getFluidLevel() > 0 && temperature >= 100;
@@ -265,12 +268,12 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
     }
 }

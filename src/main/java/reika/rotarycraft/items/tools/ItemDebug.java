@@ -166,7 +166,7 @@ public class ItemDebug extends ItemRotaryTool {
 //                ReikaChatHelper.write(String.format("%s", tile.getFacing().toString()));
 //            }
 //        }
-        if (m == MachineRegistry.ENGINE) {
+        if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE) {
             BlockEntityEngine tile = (BlockEntityEngine) te;
             if (tile != null) {
                 ReikaChatHelper.write(String.format("%d  %d", tile.getWater(), BlockEntityEngine.temperature));

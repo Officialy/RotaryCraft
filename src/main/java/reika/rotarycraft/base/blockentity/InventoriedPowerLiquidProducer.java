@@ -258,7 +258,7 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
         return 0;
     }
 }

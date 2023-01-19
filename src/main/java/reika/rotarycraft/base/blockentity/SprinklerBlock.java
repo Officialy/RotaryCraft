@@ -152,7 +152,7 @@ public abstract class SprinklerBlock extends RotaryCraftBlockEntity implements P
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         if (!resource.getFluid().equals(Fluids.WATER))
             return 0;
         int toadd = Math.min(resource.getAmount(), this.getCapacity() - liquid);

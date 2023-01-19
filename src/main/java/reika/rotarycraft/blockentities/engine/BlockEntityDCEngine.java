@@ -36,7 +36,10 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
         super(RotaryBlockEntities.DC_ENGINE.get(), pos, state);
         type = EngineType.DC;
     }
-
+    @Override
+    public MachineRegistry getMachine() {
+        return MachineRegistry.DC_ENGINE;
+    }
     @Override
     protected void consumeFuel() {
 
@@ -183,12 +186,12 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
 
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
     }
 }

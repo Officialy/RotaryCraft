@@ -236,6 +236,14 @@ public class RotaryItems {
     public static final RegistryObject<Item> ALUMINUM_ALLOY_POWDER = ITEMS.register("aluminum_alloy_powder", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> COAL_DUST = ITEMS.register("coal_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLOUR = ITEMS.register("flour", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> CALCULATOR = ITEMS.register("calculator", () -> new ItemCalculator(new Item.Properties()));
+    public static final RegistryObject<Item> COKE = ITEMS.register("coke", () -> new ItemCalculator(new Item.Properties()));
+    public static final RegistryObject<Item> NITRATE = ITEMS.register("nitrate", () -> new ItemCalculator(new Item.Properties()));
+    public static final RegistryObject<Item> SALT = ITEMS.register("salt", () -> new ItemCalculator(new Item.Properties()));
+    public static final RegistryObject<Item> SILVERIODIDE = ITEMS.register("silveriodide", () -> new ItemCalculator(new Item.Properties()));
+
+
+
 
 //    public boolean isJetpack() {
 //        if (this == JETPACK || this == BEDROCK_JETPACK || this == HSLA_JETPACK)

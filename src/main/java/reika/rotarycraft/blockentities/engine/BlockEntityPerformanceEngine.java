@@ -42,7 +42,10 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
         super(RotaryBlockEntities.PERFORMANCE_ENGINE.get(), pos, state);
         type = EngineType.SPORT;
     }
-
+    @Override
+    public MachineRegistry getMachine() {
+        return MachineRegistry.PERFORMANCE_ENGINE;
+    }
     @Override
     public int getMaxTemperature() {
         return 240;
@@ -269,12 +272,12 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
     }
 }

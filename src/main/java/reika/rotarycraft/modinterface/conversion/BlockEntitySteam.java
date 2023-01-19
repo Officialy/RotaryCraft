@@ -14,7 +14,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -144,14 +143,14 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 	}
 
 	@Override
-	public int fill(Direction from, FluidStack resource, FluidAction doFill) {
+	public int fillPipe(Direction from, FluidStack resource, FluidAction doFill) {
 		if (super.canFill(from, resource.getFluid()))
-			return super.fill(from, resource, doFill);
+			return super.fillPipe(from, resource, doFill);
 		return this.canFill(from, resource.getFluid()) ? this.addEnergy(resource.getAmount(), doFill) : 0;
 	}
 
 	@Override
-	public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+	public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
 		return null;
 	}
 	@Override

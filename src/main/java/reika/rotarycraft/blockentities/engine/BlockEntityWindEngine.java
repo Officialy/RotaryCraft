@@ -26,10 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.libraries.ReikaDirectionHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
-import reika.rotarycraft.registry.EngineType;
-import reika.rotarycraft.registry.RotaryBlockEntities;
-import reika.rotarycraft.registry.RotaryBlocks;
-import reika.rotarycraft.registry.SoundRegistry;
+import reika.rotarycraft.registry.*;
 
 import java.util.List;
 
@@ -42,7 +39,10 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
         super(RotaryBlockEntities.WIND_ENGINE.get(), pos, state);
         type = EngineType.WIND;
     }
-
+    @Override
+    public MachineRegistry getMachine() {
+        return MachineRegistry.WIND_ENGINE;
+    }
     private void dealBladeDamage(Level world, BlockPos pos) {
         int c = 0;
         int d = 0;
@@ -219,12 +219,12 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
     }
 

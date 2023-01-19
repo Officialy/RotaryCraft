@@ -65,7 +65,7 @@ public class RenderMagnetic extends RotaryTERenderer<BlockEntityMagnetEngine> {
 
         Level level = tile.getLevel();
         boolean flag = level != null;
-        BlockState blockstate = flag ? tile.getBlockState() : RotaryBlocks.ENGINE.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
+        BlockState blockstate = flag ? tile.getBlockState() : RotaryBlocks.MAGNETOSTATIC_ENGINE.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
 
         float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
 

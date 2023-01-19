@@ -126,7 +126,7 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
         return 0;
     }
 

@@ -984,12 +984,12 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction doFill) {
+    public int fillPipe(Direction from, FluidStack resource, FluidAction doFill) {
         return this.canFill(from, resource.getFluid()) ? lubricant.fill(resource, doFill) : 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
         return null;
     }
 

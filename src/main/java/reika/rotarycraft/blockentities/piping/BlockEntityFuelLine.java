@@ -22,6 +22,7 @@ import net.minecraft.world.level.material.Fluid;
 import reika.rotarycraft.auxiliary.interfaces.PumpablePipe;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
 
 public class BlockEntityFuelLine extends BlockEntityPiping implements PumpablePipe {
@@ -29,8 +30,8 @@ public class BlockEntityFuelLine extends BlockEntityPiping implements PumpablePi
     private int fuel = 0;
     private Fluid fluid;
 
-    public BlockEntityFuelLine(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntityFuelLine(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.FUEL_LINE.get(), pos, state);
     }
 
     private boolean isAcceptableFuel(Fluid f) {

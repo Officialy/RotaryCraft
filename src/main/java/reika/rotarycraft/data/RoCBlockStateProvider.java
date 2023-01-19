@@ -32,7 +32,8 @@ public class RoCBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         LOGGER.info("Registering block states and models for RotaryCraft");
         Arrays.stream(MachineRegistry.values()).forEach(e -> {
-            simpleBlock(e.getBlockState().getBlock(), models().getExistingFile(new ResourceLocation(RotaryCraft.MODID, "block/blank.json")));
+//            RotaryCraft.LOGGER.info("Registering block state for " + e.getBlockState().getBlock());
+            simpleBlock(e.getBlockState().getBlock(), models().getExistingFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
         });
         // Register block states
 

@@ -20,14 +20,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
+import reika.rotarycraft.registry.RotaryBlockEntities;
 
 public class BlockEntityValve extends BlockEntityPiping {
 
     private Fluid fluid;
     private int level;
 
-    public BlockEntityValve(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntityValve(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.VALVE.get(), pos, state);
     }
 
     @Override

@@ -427,7 +427,7 @@
 //
 //	@Override
 //	public void overheat(Level world, int x, int y, int z) {
-//		world.setBlockToAir(x, y, z);
+//		world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 //		if (!world.isClientSide()) {
 //			world.explode(null, x+0.5, y+0.5, z+0.5, 4, true, Level.ExplosionInteraction.BLOCK);
 //			world.explode(null, x+0.5, y+0.5, z+0.5, 8, true, Level.ExplosionInteraction.BLOCK);

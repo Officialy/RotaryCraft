@@ -20,6 +20,7 @@ import reika.rotarycraft.blockentities.piping.BlockEntityPipe;
 
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class BlockPiping extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BlockEntityPipe(pos, state);
+        return new BlockEntityPipe(RotaryBlockEntities.PIPE.get(), pos, state);
     }
 
     @Nullable

@@ -33,7 +33,10 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
         super(RotaryBlockEntities.GAS_ENGINE.get(), pos, state);
         type = EngineType.GAS;
     }
-
+    @Override
+    public MachineRegistry getMachine() {
+        return MachineRegistry.GAS_ENGINE;
+    }
     @Override
     public void upgrade(ItemStack is) {
         CompoundTag NBT = new CompoundTag();
@@ -157,12 +160,12 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
     }
 }

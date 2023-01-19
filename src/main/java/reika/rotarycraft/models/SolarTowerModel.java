@@ -3,19 +3,17 @@ package reika.rotarycraft.models;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
-public class SolarModel extends Model {
+public class SolarTowerModel extends Model {
 
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/solartex.png");
 
@@ -39,7 +37,7 @@ public class SolarModel extends Model {
     private final ModelPart shape2a;
     private final ModelPart root;
 
-    public SolarModel(ModelPart modelPart) {
+    public SolarTowerModel(ModelPart modelPart) {
         super(RenderType::entityCutout);
         this.root = modelPart;
 

@@ -20,7 +20,6 @@ public class RoCDataProviders {
         final RoCItemModelProvider itemModelProvider = new RoCItemModelProvider(dataGenerator, existingFileHelper);
         dataGenerator.addProvider(true, itemModelProvider);
 
-        // Let blockstate provider see generated item models by passing its existing file helper
         dataGenerator.addProvider(true, new RoCBlockStateProvider(dataGenerator, itemModelProvider.existingFileHelper));
 
     }

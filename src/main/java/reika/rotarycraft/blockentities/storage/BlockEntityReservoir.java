@@ -208,7 +208,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     private void updateSides(Level world, BlockPos pos) {
-        RotaryCraft.LOGGER.info("Updating sides");
+//        RotaryCraft.LOGGER.info("Updating sides");
         adjacent[8] = MachineRegistry.getMachine(world, pos.getX(), pos.getY(), pos.getZ() - 1) == MachineRegistry.RESERVOIR;
         adjacent[4] = MachineRegistry.getMachine(world, pos.getX() - 1, pos.getY(), pos.getZ()) == MachineRegistry.RESERVOIR;
         adjacent[6] = MachineRegistry.getMachine(world, pos.getX() + 1, pos.getY(), pos.getZ()) == MachineRegistry.RESERVOIR;
@@ -485,7 +485,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction doFill) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction doFill) {
         if (from == Direction.UP)
             return 0;
         return tank.fill(resource, doFill);
@@ -497,7 +497,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (from == Direction.UP)
             return null;
         return tank.drain(maxDrain, doDrain);

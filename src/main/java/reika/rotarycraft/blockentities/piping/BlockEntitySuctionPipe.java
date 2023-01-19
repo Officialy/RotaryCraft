@@ -21,14 +21,15 @@ import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
+import reika.rotarycraft.registry.RotaryBlockEntities;
 
 public class BlockEntitySuctionPipe extends BlockEntityPiping {
 
     private Fluid fluid;
     private int level;
 
-    public BlockEntitySuctionPipe(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntitySuctionPipe(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.SUCTION.get(), pos, state);
     }
 
     @Override

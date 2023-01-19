@@ -519,7 +519,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
         if (this.canFill(from, resource.getFluid())) {
             int space = this.getMaxLubricant() - this.getLubricant();
             if (space > 0) {
@@ -532,7 +532,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
         return null;
     }
 

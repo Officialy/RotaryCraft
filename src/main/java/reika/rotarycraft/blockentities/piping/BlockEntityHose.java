@@ -25,6 +25,7 @@ import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.auxiliary.interfaces.PumpablePipe;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
 
 public class BlockEntityHose extends BlockEntityPiping implements PumpablePipe {
@@ -32,8 +33,8 @@ public class BlockEntityHose extends BlockEntityPiping implements PumpablePipe {
     private int lubricant = 0;
     private int burnIn = 0;
 
-    public BlockEntityHose(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntityHose(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.HOSE.get(), pos, state);
     }
 
     @Override

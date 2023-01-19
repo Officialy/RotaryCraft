@@ -80,16 +80,16 @@ public enum HandbookRegistry implements HandbookEntry {
 
     //---------------------ENGINES--------------------//
     ENGINEDESC("Power Supply", "Engines"),
-    DCENGINE(MachineRegistry.ENGINE, EngineType.DC),
-    WINDENGINE(MachineRegistry.ENGINE, EngineType.WIND),
-    STEAMENGINE(MachineRegistry.ENGINE, EngineType.STEAM),
-    GASENGINE(MachineRegistry.ENGINE, EngineType.GAS),
-    ACENGINE(MachineRegistry.ENGINE, EngineType.AC),
-    PERFENGINE(MachineRegistry.ENGINE, EngineType.SPORT),
-    //    HYDROENGINE(MachineRegistry.ENGINE, EngineType.HYDRO),
-    MICROTURB(MachineRegistry.ENGINE, EngineType.MICRO),
-//    JETENGINE(MachineRegistry.ENGINE, EngineType.JET),
-//    SOLAR(MachineRegistry.SOLARTOWER),
+    DCENGINE(MachineRegistry.DC_ENGINE, EngineType.DC),
+    WINDENGINE(MachineRegistry.WIND_ENGINE, EngineType.WIND),
+    STEAMENGINE(MachineRegistry.STEAM_ENGINE, EngineType.STEAM),
+    GASENGINE(MachineRegistry.GAS_ENGINE, EngineType.GAS),
+    ACENGINE(MachineRegistry.AC_ENGINE, EngineType.AC),
+    PERFENGINE(MachineRegistry.PERFORMANCE_ENGINE, EngineType.SPORT),
+    //        HYDROENGINE(MachineRegistry.ENGINE, EngineType.HYDRO),
+    MICROTURB(MachineRegistry.MICRO_TURBINE, EngineType.MICRO),
+    //    JETENGINE(MachineRegistry.ENGINE, EngineType.JET),
+    SOLAR(MachineRegistry.SOLARTOWER),
 
     //---------------------TRANSMISSION--------------------//
     TRANSDESC("Power Transfer", "Transmission"),
@@ -297,7 +297,7 @@ public enum HandbookRegistry implements HandbookEntry {
     SPAWNERS("Monster Spawners"),
     YEAST("Yeast"),
     ETHANOL("Ethanol"),
-    //BEDINGOT("Bedrock Alloy Ingot"),
+    BEDINGOT("Bedrock Alloy Ingot"),
     ALLOYING("Alloying"),
     SILVERINGOT("Silver Ingot"),
     SALT("Salt"),
@@ -421,7 +421,7 @@ public enum HandbookRegistry implements HandbookEntry {
     }
 
     public static int getScreen(MachineRegistry m, BlockEntity te) {
-        if (m == MachineRegistry.ENGINE)
+        if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE)
             return getEngineScreen(te);
         if (m == MachineRegistry.ADVANCEDGEARS)
             return TRANSDESC.getBaseScreen() + 1;
@@ -511,7 +511,7 @@ public enum HandbookRegistry implements HandbookEntry {
     }
 
     public static int getPage(MachineRegistry m, BlockEntity te) {
-        if (m == MachineRegistry.ENGINE)
+        if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE)
             return getEnginePage(te);
         if (m == MachineRegistry.ADVANCEDGEARS)
             return getAdvGearPage(te);
@@ -524,7 +524,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
     private static int getAdvGearPage(BlockEntity te) {
         return 1;
-//        return ((RotaryCraftBlockEntity) te).getBlockMetadata() / 4;
+//  todo      return ((RotaryCraftBlockEntity) te).getBlockMetadata() / 4;
     }
 
     private static int getEnginePage(BlockEntity te) {
@@ -663,7 +663,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
     public String getTabImageFile() {
         //return "/Reika/RotaryCraft/Textures/GUI/Handbook/tabs_"+this.getParent().name().toLowerCase()+".png";
-        return "/gui/handbook/tabs_" + TOC.getParent().name().toLowerCase(Locale.ENGLISH) + ".png";
+        return "/screen/handbook/tabs_" + TOC.getParent().name().toLowerCase(Locale.ENGLISH) + ".png";
     }
 
     public int getTabRow() {
@@ -742,12 +742,12 @@ public enum HandbookRegistry implements HandbookEntry {
             return "Table Of Contents";
         if (isParent)
             return title;
-        /*todo if (this.getParent() == ENGINEDESC) {
+        if (this.getParent() == ENGINEDESC) {
             if (this == SOLAR)
                 return MachineRegistry.SOLARTOWER.getName();
-            else
-                return RotaryNames.getEngineName(offset);
-        }*/
+//            todo else
+//                return RotaryNames.getEngineName(offset);
+        }
         if (this.isMachine() || this.getParent() == CONVERTERDESC)
             return machine.getName();
 //     todo   if (machine == MachineRegistry.ADVANCEDGEARS)
@@ -814,8 +814,8 @@ public enum HandbookRegistry implements HandbookEntry {
             return false;
 //        if (this == STRONGSPRING)
 //            return false;
-        //if (this == BEDINGOT)
-        //	return false;
+//        if (this == BEDINGOT)
+//        	return false;
         if (this == ALLOYING)
             return false;
         return this != COKE;
@@ -916,8 +916,8 @@ public enum HandbookRegistry implements HandbookEntry {
             li.add(RotaryItems.HSLA_BOOTS.get().getDefaultInstance());
             return li;
         }
-//  todo      if (this == SOLAR)
-//            return ReikaJavaLibrary.makeListFrom(MachineRegistry.SOLARTOWER.getCraftedProduct());
+        if (this == SOLAR)
+            return ReikaJavaLibrary.makeListFrom(MachineRegistry.SOLARTOWER.getBlockState().getBlock().asItem().getDefaultInstance());
         if (this.getParent() == ENGINEDESC)
             return ReikaJavaLibrary.makeListFrom(EngineType.engineList[offset].getCraftedProduct());
 /*  todo    if (machine == MachineRegistry.ADVANCEDGEARS)
@@ -950,18 +950,18 @@ public enum HandbookRegistry implements HandbookEntry {
             }
             return is;
         }*/
-        /*todo if (this == COKE)
-            return ReikaJavaLibrary.makeListFrom(RotaryItems.COKE);
+        if (this == COKE)
+            return ReikaJavaLibrary.makeListFrom(RotaryItems.COKE.get().getDefaultInstance());
         if (this == AMMONIUM)
-            return ReikaJavaLibrary.makeListFrom(RotaryItems.NITRATE);
+            return ReikaJavaLibrary.makeListFrom(RotaryItems.NITRATE.get().getDefaultInstance());
         if (this == SALT)
-            return ReikaJavaLibrary.makeListFrom(RotaryItems.SALT);
+            return ReikaJavaLibrary.makeListFrom(RotaryItems.SALT.get().getDefaultInstance());
         if (this == SILVERIODIDE)
-            return ReikaJavaLibrary.makeListFrom(RotaryItems.SILVERIODIDE);
+            return ReikaJavaLibrary.makeListFrom(RotaryItems.SILVERIODIDE.get().getDefaultInstance());
         if (this == EXPLOSIVES)
             return ReikaJavaLibrary.makeListFrom(RotaryItems.SHELL.get().getDefaultInstance());
-        if (this == MINECART)
-            return ReikaJavaLibrary.makeListFrom(RotaryItems.MINECART.get().getDefaultInstance());*/
+//    todo    if (this == MINECART)
+//            return ReikaJavaLibrary.makeListFrom(RotaryItems.MINECART.get().getDefaultInstance());
         return ReikaJavaLibrary.makeListFrom(RotaryItems.HSLA_PLATE.get().getDefaultInstance());
     }
 
@@ -1015,8 +1015,8 @@ public enum HandbookRegistry implements HandbookEntry {
             return new ItemStack(Items.BOOK);
         if (this == MATERIAL)
             return RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance();
-//        if (this == SHAFTS)
-//            return MachineRegistry.SHAFT.getCraftedMetadataProduct(3);
+        if (this == SHAFTS)
+            return RotaryBlocks.DIAMOND_SHAFT.get().asItem().getDefaultInstance();
 //        if (this == FLYWHEELS)
 //            return MachineRegistry.FLYWHEEL.getCraftedMetadataProduct(0);
 //        if (this == TIERS)
@@ -1045,42 +1045,42 @@ public enum HandbookRegistry implements HandbookEntry {
             return RotaryItems.SCREWDRIVER.get().getDefaultInstance();
         if (this == TRANS)
             return GearboxTypes.STEEL.getGearboxItem(8);
-//        if (this == CONVERTER)
-//            return MachineRegistry.MAGNETIC.getCraftedProduct();
+        if (this == CONVERTER)
+            return MachineRegistry.MAGNETIC.getBlockState().getBlock().asItem().getDefaultInstance();
 //        if (this == PRODMACHINES)
 //            return MachineRegistry.BEDROCKBREAKER.getCraftedProduct();
 //        if (this == PROCMACHINES)
 //            return MachineRegistry.EXTRACTOR.getCraftedProduct();
 //        if (this == FARMMACHINES)
 //            return MachineRegistry.FAN.getCraftedProduct();
-//        if (this == PIPEMACHINES)
-//            return MachineRegistry.FUELLINE.getCraftedProduct();
+        if (this == PIPEMACHINES)
+            return MachineRegistry.FUELLINE.getBlockState().getBlock().asItem().getDefaultInstance();
 //        if (this == ACCMACHINES)
 //            return MachineRegistry.FRICTION.getCraftedProduct();
 //        if (this == WEPMACHINES)
 //            return MachineRegistry.RAILGUN.getCraftedProduct();
-//        if (this == COSMACHINES)
-//            return MachineRegistry.MUSICBOX.getCraftedProduct();
+        if (this == COSMACHINES)
+            return MachineRegistry.MUSICBOX.getBlockState().getBlock().asItem().getDefaultInstance();
 //        if (this == SURVMACHINES)
 //            return MachineRegistry.GPR.getCraftedProduct();
-//        if (this == UTILMACHINES)
-//            return MachineRegistry.FLOODLIGHT.getCraftedProduct();
+        if (this == UTILMACHINES)
+            return MachineRegistry.FLOODLIGHT.getBlockState().getBlock().asItem().getDefaultInstance();
 //        if (this == TOOLS)
 //            return RotaryItems.MOTION.get().getDefaultInstance();
         if (this == RESOURCE)
             return RotaryItems.BEDROCK_DUST.get().getDefaultInstance();
 //        if (this == FLAKES)
-//            return RotaryItems.goldoreflakes;
-//        if (this == BEDTOOLS)
-//            return RotaryItems.BEDROCK_ALLOY_PICK.getEnchantedStack();
-//        if (this == BEDARMOR)
-//            return RotaryItems.BEDROCK_ALLOY_HELMET.getEnchantedStack();
-//        if (this == STEELTOOLS)
-//            return RotaryItems.HSLA_STEEL_PICKAXE.getEnchantedStack();
-//        if (this == STEELARMOR)
-//            return RotaryItems.HSLA_HELMET.getEnchantedStack();
-//        if (this == JETPACK)
-//            return RotaryItems.BEDROCK_ALLOY_CHESTPLATE.getEnchantedStack();
+//            return RotaryItems.GOLDOREFLAKES;
+       /* todo if (this == BEDTOOLS)
+            return RotaryItems.BEDROCK_ALLOY_PICK.getEnchantedStack();
+        if (this == BEDARMOR)
+            return RotaryItems.BEDROCK_ALLOY_HELMET.getEnchantedStack();
+        if (this == STEELTOOLS)
+            return RotaryItems.HSLA_STEEL_PICKAXE.getEnchantedStack();
+        if (this == STEELARMOR)
+            return RotaryItems.HSLA_HELMET.getEnchantedStack();
+        if (this == JETPACK)
+            return RotaryItems.BEDROCK_ALLOY_CHESTPLATE.getEnchantedStack();*/
         if (this == JUMPBOOTS)
             return RotaryItems.JUMP.get().getDefaultInstance();
         if (this.isCrafting())
@@ -1089,13 +1089,13 @@ public enum HandbookRegistry implements HandbookEntry {
             return this.getSmelting();
         if (this == STEELINGOT)
             return RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance();
-//        if (this == NETHERDUST)
-//            return RotaryItems.NETHERRACK_DUST;
+        if (this == NETHERDUST)
+            return RotaryItems.NETHERRACK_DUST.get().getDefaultInstance();
         if (this == SAWDUST)
             return RotaryItems.SAWDUST.get().getDefaultInstance();
-//        if (this == BEDDUST)
-//            return RotaryItems.BEDROCKDUST;
-//        if (this == EXTRACTS)
+        if (this == BEDDUST)
+            return RotaryItems.BEDROCK_DUST.get().getDefaultInstance();
+//        todo if (this == EXTRACTS)
 //            return RotaryItems.GOLDOREDUST;
 //        if (this == COMPACTS)
 //            return RotaryItems.PRISMANE;
@@ -1104,9 +1104,9 @@ public enum HandbookRegistry implements HandbookEntry {
         if (this == YEAST)
             return RotaryItems.SLUDGE.get().getDefaultInstance();
         if (this == SALT)
-//            return RotaryItems.SALT;
-//        if (this == ALUMINUM)
-//            return RotaryItems.ALUMINUM_POWDER;
+            return RotaryItems.SALT.get().getDefaultInstance();
+        if (this == ALUMINUM)
+            return RotaryItems.ALUMINUM_ALLOY_POWDER.get().getDefaultInstance();
 //        if (this == RAILGUNAMMO)
 //            return RotaryItems.RAILGUNAMMO.get().getDefaultInstance();
             if (this == CANOLA)
@@ -1115,14 +1115,14 @@ public enum HandbookRegistry implements HandbookEntry {
 //            return RotaryItems.SILVERINGOT;
 //        if (this == STRONGSPRING)
 //            return RotaryItems.STRONGCOIL.get().getDefaultInstance();
-        //if (this == BEDINGOT)
-        //	return RotaryItems.BEDROCK_ALLOY_INGOT;
+        if (this == BEDINGOT)
+        	return RotaryItems.BEDROCK_ALLOY_INGOT.get().getDefaultInstance();
         if (this == ALLOYING)
             return RotaryItems.BEDROCK_ALLOY_INGOT.get().getDefaultInstance();
-//        if (this == COKE)
-//            return RotaryItems.COKE;
+        if (this == COKE)
+            return RotaryItems.COKE.get().getDefaultInstance();
         if (this == ALERTS || this == PACKMODS)
-            ;//return RotaryItems.steelgear;
+            return RotaryItems.HSLA_STEEL_GEAR.get().getDefaultInstance();
         return null;
     }
 
@@ -1151,8 +1151,8 @@ public enum HandbookRegistry implements HandbookEntry {
             return true;
         if (this == COMPUTERCRAFT)
             return true;
-//    todo    if (this == ALERTS)
-//            return !HandbookNotifications.instance.getNewAlerts().isEmpty();
+        if (this == ALERTS)
+            return !HandbookNotifications.instance.getNewAlerts().isEmpty();
 //        if (this == PACKMODS)
 //            return PackModificationTracker.instance.modificationsExist(RotaryCraft.getInstance());
         return false;

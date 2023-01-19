@@ -27,7 +27,13 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.ParallelTicker;
@@ -69,6 +75,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     protected final HybridTank lubricant = new HybridTank("enginelube", LUBECAP);
     protected final HybridTank fuel = new HybridTank("enginefuel", FUELCAP);
     protected final HybridTank air = new HybridTank("engineoxygen", 1000);
+    protected final HybridTank[] tanks = {water, lubricant, fuel, air};
+    private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
     /**
      * For timing control
      */
@@ -82,6 +90,28 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 
     public BlockEntityEngine(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+    }
+
+    @Override
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (capability == ForgeCapabilities.FLUID_HANDLER)
+            return lazyFluidHandler.cast();
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        for (HybridTank tank : tanks) {
+            lazyFluidHandler = LazyOptional.of(() -> tank);
+        }
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyFluidHandler.invalidate();
     }
 
     static int getIntegratedGearTorque(int torque, int gear) {
@@ -160,7 +190,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             type = EngineType.WIND;
         } else if (RotaryBlocks.PERFORMANCE_ENGINE.get() == block) {
             type = EngineType.SPORT;
-        } else if (RotaryBlocks.MICROTURBINE.get() == block) {
+        } else if (RotaryBlocks.MICRO_TURBINE.get() == block) {
             type = EngineType.MICRO;
         }
     }
@@ -312,7 +342,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 //        }
         if (revup) {
             if (omega < maxspeed) {
-                ReikaJavaLibrary.pConsole(omega+"->"+(omega+2*(int)(ReikaMathLibrary.logbase(maxspeed, 2))), Dist.DEDICATED_SERVER);
+                ReikaJavaLibrary.pConsole(omega + "->" + (omega + 2 * (int) (ReikaMathLibrary.logbase(maxspeed, 2))), Dist.DEDICATED_SERVER);
                 omega += 4 * ReikaMathLibrary.logbase(maxspeed + 1, 2);
                 timer.setCap("fuel", Math.max(type.getFuelUnitDuration() / 4, 1)); //4x fuel burn while spinning up
                 if (omega > maxspeed)
@@ -320,7 +350,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             }
         } else {
             if (omega > 0) {
-                ReikaJavaLibrary.pConsole(omega+"->"+(omega-omega/128-1), Dist.DEDICATED_SERVER);
+                ReikaJavaLibrary.pConsole(omega + "->" + (omega - omega / 128 - 1), Dist.DEDICATED_SERVER);
                 omega -= omega / 256 + 1;
             }
         }
@@ -464,6 +494,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             }
         }
     }
+
     protected boolean canConsumeFuel() {
         return this.getFuelLevel() > 0;
     }
@@ -602,11 +633,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     @Override
-    public final MachineRegistry getMachine() {
-        return MachineRegistry.ENGINE;
-    }
-
-    @Override
     public final int getThermalDamage() {
         if (type.canHurtPlayer() && this.hasTemperature())
             return (temperature) / 100;
@@ -672,7 +698,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             }
         }
         if (type.requiresLubricant() && (p == MachineRegistry.HOSE || p == MachineRegistry.BEDPIPE)) {
-        //ReikaJavaLibrary.pConsole(this.getBlockMetadata()+":"+side.name());
+            //ReikaJavaLibrary.pConsole(this.getBlockMetadata()+":"+side.name());
             switch (side) {
                 case EAST:
 //                    return this.getBlockMetadata() == 0;

@@ -31,9 +31,9 @@ public interface PipeConnector {
      */
     boolean canConnectToPipeOnSide(MachineRegistry m, Direction side);
 
-    int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action);
+    int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action);
 
-    FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain);
+    FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain);
 
     BlockEntityPiping.Flow getFlowForSide(Direction side);
 }

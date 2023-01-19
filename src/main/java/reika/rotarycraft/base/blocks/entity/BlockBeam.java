@@ -92,7 +92,7 @@
 //    @Override
 //    public void onNeighborBlockChange(Level world, BlockPos pos, Block id) {
 //        if (id != Blocks.AIR) {
-//            world.setBlockToAir(x, y, z);
+//            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 //			/*
 //    		boolean px = true;
 //    		boolean py = true;
@@ -123,7 +123,7 @@
 //
 //    @Override
 //    public void updateTick(Level world, BlockPos pos, Random par5) {
-//        world.setBlockToAir(x, y, z);
+//        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 //    }
 //
 //    /**

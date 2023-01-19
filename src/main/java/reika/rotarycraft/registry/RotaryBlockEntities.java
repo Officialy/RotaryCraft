@@ -15,7 +15,7 @@ import reika.rotarycraft.blockentities.engine.*;
 import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
-import reika.rotarycraft.blockentities.piping.BlockEntityPipe;
+import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 import reika.rotarycraft.blockentities.production.*;
@@ -52,7 +52,7 @@ public class RotaryBlockEntities {
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityGearbox(GearboxTypes.STEEL, pPos, pState), RotaryBlocks.HSLA_GEARBOX_2x.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityMicroturbine>> MICROTURBINE = BLOCK_ENTITIES.register("microturbine", () ->
-            BlockEntityType.Builder.of(BlockEntityMicroturbine::new, RotaryBlocks.MICROTURBINE.get()).build(null));
+            BlockEntityType.Builder.of(BlockEntityMicroturbine::new, RotaryBlocks.MICRO_TURBINE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityPerformanceEngine>> PERFORMANCE_ENGINE = BLOCK_ENTITIES.register("performance_engine", () ->
             BlockEntityType.Builder.of(BlockEntityPerformanceEngine::new, RotaryBlocks.PERFORMANCE_ENGINE.get()).build(null));
@@ -93,7 +93,24 @@ public class RotaryBlockEntities {
             BlockEntityType.Builder.of(BlockEntityReservoir::new, RotaryBlocks.RESERVOIR.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityPipe>> PIPE = BLOCK_ENTITIES.register("pipe", () ->
-            BlockEntityType.Builder.of(BlockEntityPipe::new, RotaryBlocks.PIPING.get()).build(null));
+            BlockEntityType.Builder.of((pos, state) -> new BlockEntityPipe(RotaryBlockEntities.PIPE.get(), pos, state), RotaryBlocks.PIPE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityHose>> HOSE = BLOCK_ENTITIES.register("hose", () ->
+            BlockEntityType.Builder.of(BlockEntityHose::new, RotaryBlocks.HOSE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntitySeparatorPipe>> SEPARATION = BLOCK_ENTITIES.register("separation", () ->
+            BlockEntityType.Builder.of(BlockEntitySeparatorPipe::new, RotaryBlocks.SEPARATION.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityValve>> VALVE = BLOCK_ENTITIES.register("valve", () ->
+            BlockEntityType.Builder.of(BlockEntityValve::new, RotaryBlocks.VALVE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntitySuctionPipe>> SUCTION = BLOCK_ENTITIES.register("suction", () ->
+            BlockEntityType.Builder.of(BlockEntitySuctionPipe::new, RotaryBlocks.SUCTION.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityBypass>> BYPASS = BLOCK_ENTITIES.register("bypass", () ->
+            BlockEntityType.Builder.of(BlockEntityBypass::new, RotaryBlocks.BYPASS.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityFuelLine>> FUEL_LINE = BLOCK_ENTITIES.register("fuel_line", () ->
+            BlockEntityType.Builder.of(BlockEntityFuelLine::new, RotaryBlocks.FUEL_LINE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityBedrockPipe>> BEDROCK_PIPE = BLOCK_ENTITIES.register("bedrock_pipe", () ->
+            BlockEntityType.Builder.of(BlockEntityBedrockPipe::new, RotaryBlocks.BEDROCK_PIPE.get()).build(null));
+
 
     public static final RegistryObject<BlockEntityType<BlockEntityGasEngine>> GAS_ENGINE = BLOCK_ENTITIES.register("gas_engine", () ->
             BlockEntityType.Builder.of(BlockEntityGasEngine::new, RotaryBlocks.GAS_ENGINE.get()).build(null));

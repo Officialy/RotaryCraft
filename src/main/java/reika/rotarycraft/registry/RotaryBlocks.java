@@ -16,6 +16,7 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.CanolaBlock;
 import reika.rotarycraft.base.blocks.entity.*;
 import reika.rotarycraft.base.blocks.entity.engine.*;
+import reika.rotarycraft.base.blocks.entity.pipe.*;
 import reika.rotarycraft.base.blocks.entity.transmission.*;
 
 import java.util.function.Supplier;
@@ -26,7 +27,7 @@ public class RotaryBlocks {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RotaryCraft.MODID);
 
 
-    public static final RegistryObject<Block> ENGINE = register("engine", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
+//    public static final RegistryObject<Block> ENGINE = register("engine", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
 
     public static final RegistryObject<Block> GPR = register("gpr", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> WOOD_FLYWHEEL = register("wood_flywheel", () -> new BlockGearbox(GearboxTypes.WOOD, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
@@ -51,7 +52,6 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> BEDROCK_GEARBOX_4x = register("bedrock_gearbox_4x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> BEDROCK_GEARBOX_8x = register("bedrock_gearbox_8x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> BEDROCK_GEARBOX_16x = register("bedrock_gearbox_16x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
-    public static final RegistryObject<Block> PIPING = register("piping", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
 //    public static final RegistryObject<Block> FILLING_STATION = register("filling_station", () -> new BlockFillingStation(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> WOOD_SHAFT = register("wood_shaft", () -> new BlockShaft(MaterialRegistry.WOOD, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
     public static final RegistryObject<Block> STONE_SHAFT = register("stone_shaft", () -> new BlockShaft(MaterialRegistry.STONE, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
@@ -78,7 +78,7 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> LONS = register("lons", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SHIELD = register("shield", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> BEDROCK = register("bedrock", () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(-1)));
-    public static final RegistryObject<Block> COKE = register("coke", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> COKE = register("coke_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SHAFT_CROSS = register("cross", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SHAFT_MERGE = register("merge", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SPLITTER = register("splitter", () -> new BlockSplitter(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
@@ -88,12 +88,17 @@ public class RotaryBlocks {
 
     public static final RegistryObject<Block> MOB_HARVESTER = register("mob_harvester", () -> new BlockSmokeDetector(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> RESERVOIR = register("reservoir", () -> new BlockReservoir(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    //Engines
     public static final RegistryObject<Block> WIND_ENGINE = register("wind_engine", () -> new BlockWindEngine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> STEAM_ENGINE = register("steam_engine", () -> new BlockSteamEngine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> PERFORMANCE_ENGINE = register("performance_engine", () -> new BlockPerformanceEngine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-    public static final RegistryObject<Block> MICROTURBINE = register("microturbine", () -> new BlockMicroturbine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> MICRO_TURBINE = register("microturbine", () -> new BlockMicroturbine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> GAS_ENGINE = register("gas_engine", () -> new BlockGasEngine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> DC_ENGINE = register("dc_engine", () -> new BlockDCEngine(BlockBehaviour.Properties.of(Material.STONE).strength(5)));
+    public static final RegistryObject<Block> MAGNETOSTATIC_ENGINE = register("magnetostatic_engine", () -> new BlockMagnetEngine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> AC_ENGINE = register("ac_engine", () -> new BlockAcEngine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
+
     public static final RegistryObject<Block> PUMP = register("pump", () -> new BlockPump(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> AEROSOLIZER = register("aerosolizer", () -> new BlockAerosolizer(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> WINDER = register("winder", () -> new BlockAerosolizer(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
@@ -102,10 +107,10 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> MIRROR = register("mirror", () -> new BlockMirror(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> VAN_DE_GRAFF = register("van_de_graff", () -> new BlockVanDeGraff(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> LANDMINE = register("landmine", () -> new BlockLandmine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-    public static final RegistryObject<Block> AC_ENGINE = register("ac_engine", () -> new BlockAcEngine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
     public static final RegistryObject<Block> COOLING_FIN = register("cooling_fin", () -> new BlockCoolingFin(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> MUSIC_BOX = register("music_box", () -> new BlockMusicBox(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-    public static final RegistryObject<Block> MAGNETOSTATIC_ENGINE = register("magnetostatic_engine", () -> new BlockMagnetEngine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
     public static final RegistryObject<Block> ADVANCED_GEAR = register("advanced_gear", () -> new BlockAdvGear(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> HEAT_RAY = register("heat_ray", () -> new BlockHeatRay(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> OBSIDIAN_MAKER = register("obsidian_maker", () -> new BlockObsidianMaker(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
@@ -144,6 +149,25 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> WORMGEAR = register("wormgear", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> HIGHGEAR = register("highgear", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> GRINDER = register("grinder", () -> new BlockGrinder(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
+
+    public static final RegistryObject<Block> HOSE = register("hose", () -> new BlockHose(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> PIPE = register("pipe", () -> new BlockPipe(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> FUEL_LINE = register("fuel_line", () -> new BlockFuelLine(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> VALVE = register("valve", () -> new BlockValve(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> BYPASS = register("bypass", () -> new BlockBypass(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> SEPARATION = register("separation", () -> new BlockSeperation(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> SUCTION = register("suction", () -> new BlockSuction(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> BEDROCK_PIPE = register("bedrock_pipe", () -> new BlockBedrockPipe(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
+
+
+
+
+
+
+
+
 
 
     private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of(Material.STONE).strength(2.0F, 3.0F).sound(SoundType.METAL);

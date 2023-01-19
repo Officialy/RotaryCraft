@@ -16,8 +16,9 @@ public class RoCItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        ModelFile itemGenerated = getExistingFile(mcLoc("item/generated"));
-        RotaryItems.ITEMS.getEntries().forEach(e -> getBuilder(ForgeRegistries.ITEMS.getKey(e.get()).getNamespace()).parent(itemGenerated).texture("layer0", "item/" + ForgeRegistries.ITEMS.getKey(e.get()).getPath()));
+        RotaryItems.ITEMS.getEntries().forEach(e ->
+                this.basicItem(e.get())
+                );
 //        RotaryBlocks.ITEMS.getEntries().forEach(e -> getBuilder(e.get().getRegistryName().toString()).parent(itemGenerated).texture("layer0", "item/" + e.get().getRegistryName().getPath()));
     }
 

@@ -38,17 +38,6 @@ public class BlockSteamEngine extends BlockBasicMachine {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof BlockEntitySteamEngine engine && !level.isClientSide) {
-            NetworkHooks.openScreen((ServerPlayer) player, engine, entity.getBlockPos());
-            return InteractionResult.SUCCESS;
-        }
-
-        return InteractionResult.PASS;
-    }
-
-    @Override
     public VoxelShape getInteractionShape(BlockState p_60547_, BlockGetter p_60548_, BlockPos p_60549_) {
         return super.getInteractionShape(p_60547_, p_60548_, p_60549_);
     }

@@ -7,6 +7,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -17,6 +19,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
+import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 
@@ -30,14 +33,6 @@ public class BlockReservoir extends BlockBasicMachine {
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityReservoir(pPos, pState);
-    }
-
-    @Override
-    public void onPlace(BlockState p_60566_, Level p_60567_, BlockPos p_60568_, BlockState p_60569_, boolean p_60570_) {
-        BlockEntity entity = p_60567_.getBlockEntity(p_60568_);
-        if (entity instanceof BlockEntityReservoir reservoir) {
-            reservoir.onPlaced();
-        }
     }
 
     @Nullable

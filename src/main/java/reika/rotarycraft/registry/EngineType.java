@@ -226,7 +226,7 @@ public enum EngineType {
             case AC -> RotaryBlocks.AC_ENGINE.get().asItem();
             case SPORT -> RotaryBlocks.PERFORMANCE_ENGINE.get().asItem();
 //          case HYDRO -> RotaryBlocks.HYDROKINETIC_ENGINE.get().asItem();
-            case MICRO -> RotaryBlocks.MICROTURBINE.get().asItem();
+            case MICRO -> RotaryBlocks.MICRO_TURBINE.get().asItem();
 //          case JET -> RotaryBlocks.GAS_TURBINE.get().asItem();
         }
         return ItemStack.EMPTY;

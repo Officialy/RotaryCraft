@@ -507,7 +507,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction fluidaction) {
+    public int fillPipe(Direction from, FluidStack resource, FluidAction fluidaction) {
         return this.canFill(from, resource.getFluid()) ? tank.fill(resource, fluidaction) : 0;
     }
 

@@ -183,12 +183,12 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
         return 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
         return from == Direction.DOWN ? tank.drain(maxDrain, doDrain) : null;
     }
     //    @Override

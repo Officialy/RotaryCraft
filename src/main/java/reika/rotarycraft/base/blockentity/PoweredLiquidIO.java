@@ -44,7 +44,7 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements PipeC
     public abstract Fluid getInputFluid();
 
     @Override
-    public final FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public final FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (this.canDrain(from, null))
             return output.drain(maxDrain, doDrain);
         return null;

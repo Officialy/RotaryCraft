@@ -198,7 +198,7 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implement
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
         return null;
     }
 

@@ -21,14 +21,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
 
 public class BlockEntitySeparatorPipe extends BlockEntityPiping {
 
     private Fluid fluid;
     private int level;
 
-    public BlockEntitySeparatorPipe(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntitySeparatorPipe(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.SEPARATION.get(), pos, state);
     }
 
     @Override

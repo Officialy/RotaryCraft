@@ -26,10 +26,7 @@ import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.auxiliary.RedstoneCycleTracker;
 import reika.rotarycraft.auxiliary.interfaces.MagnetizationCore;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
-import reika.rotarycraft.registry.RotaryBlockEntities;
-import reika.rotarycraft.registry.RotaryBlocks;
-import reika.rotarycraft.registry.RotaryItems;
-import reika.rotarycraft.registry.SoundRegistry;
+import reika.rotarycraft.registry.*;
 
 public class BlockEntityACEngine extends BlockEntityEngine implements MagnetizationCore {
 
@@ -38,7 +35,10 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     public BlockEntityACEngine(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.AC_ENGINE.get(), pos, state);
     }
-
+    @Override
+    public MachineRegistry getMachine() {
+        return MachineRegistry.AC_ENGINE;
+    }
     @Override
     protected void consumeFuel() {
 
@@ -226,12 +226,12 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
     }
 }

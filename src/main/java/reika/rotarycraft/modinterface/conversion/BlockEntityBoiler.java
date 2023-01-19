@@ -210,7 +210,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 

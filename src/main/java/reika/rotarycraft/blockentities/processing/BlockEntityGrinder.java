@@ -57,7 +57,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     private static final OneWaySet<KeyedItemStack> lockedSeeds = new OneWaySet();
 
     static {
-        //addGrindableSeed(RotaryItems.CANOLA.get(), 1F);
+//        addGrindableSeed(RotaryItems.CANOLA.get(), 1F);
         grindableSeeds.put(RotaryItems.CANOLA_SEEDS.get(), 1F);
         lockedSeeds.add(new KeyedItemStack(RotaryItems.CANOLA_SEEDS.get()).lock());
         //addGrindableSeed(RotaryItems.CANOLA.getStackOfMetadata(2), 0.65F);
@@ -365,7 +365,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
@@ -374,7 +374,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (this.canDrain(from, null))
             return tank.drain(maxDrain, doDrain);
         return null;

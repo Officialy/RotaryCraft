@@ -9,18 +9,28 @@
  ******************************************************************************/
 package reika.rotarycraft.base.blocks;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,19 +43,29 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.ModList;
 import reika.dragonapi.base.BlockEntityBase;
+import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
+import reika.dragonapi.interfaces.blockentity.PlaceNotification;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.io.ReikaSoundHelper;
+import reika.dragonapi.libraries.level.ReikaWorldHelper;
+import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
+import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaDyeHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.dragonapi.modinteract.ReikaXPFluidHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.ItemStacks;
 import reika.rotarycraft.auxiliary.RotaryAux;
+import reika.rotarycraft.auxiliary.interfaces.CachedConnection;
 import reika.rotarycraft.auxiliary.interfaces.EnchantableMachine;
+import reika.rotarycraft.auxiliary.interfaces.PressureTE;
+import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
+import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
@@ -56,11 +76,9 @@ import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
-import reika.rotarycraft.registry.GearboxTypes;
-import reika.rotarycraft.registry.GuiRegistry;
-import reika.rotarycraft.registry.MachineRegistry;
-import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.registry.*;
 
+import java.util.List;
 import java.util.Random;
 
 public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
@@ -72,6 +90,67 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 //        this.setLightLevel(0F);
 //        if (par3Material == Material.METAL)
 //            this.setStepSound(soundTypeMetal);
+    }
+
+    @Override
+    public void setPlacedBy(Level world, BlockPos pos, BlockState pState, @Nullable LivingEntity e, ItemStack pStack) {
+        super.setPlacedBy(world, pos, pState, e, pStack);
+        RotaryCraftBlockEntity te = (RotaryCraftBlockEntity) world.getBlockEntity(pos);
+        if (e instanceof Player ep && te != null) {
+            te.setPlacer(ep);
+        }
+    }
+
+    @Override
+    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState p_60569_, boolean p_60570_) {
+        super.onPlace(state, world, pos, p_60569_, p_60570_);
+
+        RotaryCraftBlockEntity te = (RotaryCraftBlockEntity) world.getBlockEntity(pos);
+
+        if (te instanceof TemperatureTE) {
+            int Tb = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
+            ((TemperatureTE) te).setTemperature(Tb);
+        }
+        if (te instanceof PressureTE) {
+            ((PressureTE) te).addPressure(101);
+        }
+        if (te instanceof PlaceNotification)
+            ((PlaceNotification) te).onPlaced();
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
+        super.neighborChanged(state, world, pos, pBlock, pFromPos, pIsMoving);
+        MachineRegistry m = MachineRegistry.getMachine(world, pos);
+        if (m != null) {
+            BlockEntity te = world.getBlockEntity(pos);
+            if (m.cachesConnections()) {
+                CachedConnection tc = (CachedConnection) te;
+                tc.recomputeConnections(world, pos);
+            }
+            if (m == MachineRegistry.SMOKEDETECTOR) {
+                Block upid = world.getBlockState(pos.above()).getBlock();
+                if (upid == Blocks.AIR) {
+                    world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                    ItemStack is = MachineRegistry.SMOKEDETECTOR.getBlockState().getBlock().asItem().getDefaultInstance();
+                    if (!world.isClientSide)
+                        world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), is));
+                } //todo else if (!upid.isOpaqueCube()) {
+                world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                ItemStack is = MachineRegistry.SMOKEDETECTOR.getBlockState().getBlock().asItem().getDefaultInstance();
+                if (!world.isClientSide)
+                    world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), is));
+                // }
+            }
+            if (te instanceof AdjacentUpdateWatcher) {
+                ((AdjacentUpdateWatcher) te).onAdjacentUpdate(world, pos, state.getBlock());
+            }
+           /* if (m.hasTemperature()) {
+                TemperatureTE tr = (TemperatureTE) te;
+                int temp = Math.min(tr.getTemperature(), 800);
+                //ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temp);
+            }*/
+        }
     }
 
     /**
@@ -122,7 +201,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             if (((EnchantableMachine) te).getEnchantmentHandler().applyEnchants(is)) {
 //todo                if (!ep.isCreative())
 //                    ep.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                ((BlockEntityBase) te).syncAllData(true);
+                te.syncAllData(true);
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.FAIL;
@@ -135,7 +214,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 } else {
                     tile.saveMusicToDisk(is);
                 }
-                ((BlockEntityBase) te).syncAllData(true);
+                te.syncAllData(true);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -146,7 +225,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     tile.setBedrock();
                     if (!ep.isCreative())
                         is.setCount(is.getCount() - 1);
-                    ((BlockEntityBase) te).syncAllData(true);
+                    te.syncAllData(true);
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -159,7 +238,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     if (!ep.isCreative())
                         is.setCount(is.getCount() - 1);
                 }
-                ((BlockEntityBase) te).syncAllData(true);
+                te.syncAllData(true);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -569,17 +648,6 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 }
             }
         }
-        if (te != null && RotaryAux.hasGui(level, pos, ep) && te.isPlayerAccessible(ep)) {
-            if (!level.isClientSide()) {
-                NetworkHooks.openScreen((ServerPlayer) ep, te, pos);
-            }
-            ep.swing(InteractionHand.MAIN_HAND, true);
-            /*if (te instanceof BlockEntityReservoir reservoir && !level.isClientSide()) {
-                NetworkHooks.openScreen((ServerPlayer) player, reservoir, entity.getBlockPos());
-                return InteractionResult.SUCCESS;
-            }*/
-            return InteractionResult.SUCCESS;
-        }
         /*if (m == MachineRegistry.SCREEN) {
             BlockEntityScreen tc = (BlockEntityScreen)te;
             if (ep.isShiftKeyDown()) {
@@ -595,13 +663,203 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             if (ep.isShiftKeyDown())
                 mov *= -1;
             tc.moveSrc(mov, dir);
-            ((BlockEntityBase) te).syncAllData(true);
+            te.syncAllData(true);
             return InteractionResult.SUCCESS;
         }
 
-        ((BlockEntityBase) te).syncAllData(true);
+        if (te instanceof BlockEntityEngine tile) {
+//       todo     if (is != null && is.getItem() == ItemRegistry.FUEL.getItemInstance())
+//                return InteractionResult.FAIL;
+/*            if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.TURBINE)) {
+                if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
+                    ((TileEntityJetEngine)tile).repairJet();
+                    if (!ep.isCreative())
+                        --is.stackSize;
+                    return InteractionResult.SUCCESS;
+                }
+            }
+            if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.COMPRESSOR)) {
+                if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
+                    ((TileEntityJetEngine)tile).repairJetPartial();
+                    if (!ep.isCreative())
+                        is.setCount(is.getCount() - 1);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+            if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.BEDROCK_ALLOY_SHAFT)) {
+                if (tile.getEngineType() == EngineType.HYDRO && !((TileEntityHydroEngine)tile).isBedrock()) {
+                    ((TileEntityHydroEngine)tile).makeBedrock();
+                    if (!ep.isCreative())
+                        is.setCount(is.getCount() - 1);
+                    return InteractionResult.SUCCESS;
+                }
+            }*/
+            if (is != null && is.getCount() == 1) {
+                if (is.getItem() == Items.BUCKET) {
+                    if (tile.getEngineType().isEthanolFueled()) {
+                        if (tile.getFuelLevel() >= 1000) {
+                            ep.setItemSlot(EquipmentSlot.MAINHAND, RotaryItems.ETHANOLBUCKET.get().getDefaultInstance());
+                            tile.subtractFuel(1000);
+                        } else {
+                            if (ConfigRegistry.CLEARCHAT.getState())
+                                ReikaChatHelper.clearChat();
+                            ReikaChatHelper.write("Engine does not have enough fuel to extract!");
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
+                    if (tile.getEngineType().isJetFueled()) {
+                        if (tile.getFuelLevel() >= 1000) {
+                            ep.setItemSlot(EquipmentSlot.MAINHAND, RotaryItems.JET_FUEL_BUCKET.get().getDefaultInstance());
+                            tile.subtractFuel(1000);
+                        } else {
+                            if (ConfigRegistry.CLEARCHAT.getState())
+                                ReikaChatHelper.clearChat();
+                            ReikaChatHelper.write("Engine does not have enough fuel to extract!");
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
+                    if (tile.getEngineType().requiresLubricant()) {
+                        if (tile.getLube() >= 1000) {
+                            ep.setItemSlot(EquipmentSlot.MAINHAND, RotaryItems.LUBE_BUCKET.get().getDefaultInstance());
+                            tile.removeLubricant(1000);
+                        } else {
+                            if (ConfigRegistry.CLEARCHAT.getState())
+                                ReikaChatHelper.clearChat();
+                            ReikaChatHelper.write("Engine does not have enough fuel to extract!");
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+                if (tile.getEngineType().isJetFueled()) {
+                    if (ReikaItemHelper.matchStacks(is, RotaryItems.JET_FUEL_BUCKET)) {
+                        if (tile.getFuelLevel() <= tile.FUELCAP - 1000) {
+                            if (!ep.isCreative())
+                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                            tile.addFuel(1000);
+                        } else {
+                            if (ConfigRegistry.CLEARCHAT.getState())
+                                ReikaChatHelper.clearChat();
+                            ReikaChatHelper.write("Engine is too full to add fuel!");
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+                if (tile.getEngineType().isEthanolFueled()) {
+                    if (ReikaItemHelper.matchStacks(is, RotaryItems.ETHANOLBUCKET)) {
+                        if (tile.getFuelLevel() <= tile.FUELCAP - 1000) {
+                            if (!ep.isCreative())
+                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                            tile.addFuel(1000);
+                        } else {
+                            if (ConfigRegistry.CLEARCHAT.getState())
+                                ReikaChatHelper.clearChat();
+                            ReikaChatHelper.write("Engine is too full to add fuel!");
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+                if (tile.getEngineType().requiresLubricant()) {
+                    if (ReikaItemHelper.matchStacks(is, RotaryItems.LUBE_BUCKET)) {
+                        if (tile.getLube() <= tile.LUBECAP - 1000) {
+                            if (!ep.isCreative())
+                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                            tile.addLubricant(1000);
+                        } else {
+                            if (ConfigRegistry.CLEARCHAT.getState())
+                                ReikaChatHelper.clearChat();
+                            ReikaChatHelper.write("Engine is too full to add lubricant!");
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+                if (tile.getEngineType().needsWater()) {
+                    if (is != null && is.getItem() == Items.WATER_BUCKET) {
+                        if (tile.getWater() <= tile.CAPACITY - 1000) {
+                            if (!ep.isCreative())
+                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                            tile.addWater(1000);
+                        } else {
+                            if (ConfigRegistry.CLEARCHAT.getState())
+                                ReikaChatHelper.clearChat();
+                            ReikaChatHelper.write("Engine is too full to add water!");
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
+                }
+            }
+        }
+        if (te != null && RotaryAux.hasGui(level, pos, ep) && te.isPlayerAccessible(ep)) {
+            if (!level.isClientSide()) {
+                NetworkHooks.openScreen((ServerPlayer) ep, te, pos);
+            }
+            ep.swing(InteractionHand.MAIN_HAND, true);
+            /*if (te instanceof BlockEntityReservoir reservoir && !level.isClientSide()) {
+                NetworkHooks.openScreen((ServerPlayer) player, reservoir, entity.getBlockPos());
+                return InteractionResult.SUCCESS;
+            }*/
+            return InteractionResult.SUCCESS;
+        }
+        te.syncAllData(true);
 
         return InteractionResult.FAIL;
     }
 
+    @Override
+    public void appendHoverText(ItemStack is, @Nullable BlockGetter p_49817_, List<Component> li, TooltipFlag p_49819_) {
+        super.appendHoverText(is, p_49817_, li, p_49819_);
+        MachineRegistry m = MachineRegistry.getMachineMapping(Block.byItem(is.getItem()));
+        RotaryCraft.LOGGER.info(m);
+//        ItemMachineRenderer ir = ClientProxy.machineItems;
+//        BlockEntity te = ir.getRenderingInstance(m, 0);
+//        if (m.isIncomplete()) {
+//            li.add("This machine is in development. Use at your own risk.");
+//        }
+//        if (m.hasNBTVariants() && is.stackTagCompound != null) {
+//            li.addAll(((NBTMachine)te).getDisplayTags(is.stackTagCompound));
+//        }
+        /*if (m == MachineRegistry.FUELENGINE) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                int t = TileEntityFuelEngine.GEN_TORQUE;
+                int o = TileEntityFuelEngine.GEN_OMEGA;
+                li.add(String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(t * o), ReikaEngLibrary.getSIPrefix(t * o)));
+                li.add(String.format("Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(t), ReikaEngLibrary.getSIPrefix(t)));
+                li.add(String.format("Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(o), ReikaEngLibrary.getSIPrefix(o)));
+            } else {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Hold ");
+                sb.append(EnumChatFormatting.GREEN.toString());
+                sb.append("Shift");
+                sb.append(EnumChatFormatting.GRAY.toString());
+                sb.append(" for power data");
+                li.add(sb.toString());
+            }
+        }*/
+        if (m.isPowerReceiver()) {
+            PowerReceivers p = m.getPowerReceiverEntry();
+            long pow = p.getMinPowerForDisplay();
+            int trq = p.getMinTorqueForDisplay();
+            int spd = p.getMinSpeedForDisplay();
+            boolean minp = !p.hasNoDirectMinPower();
+            boolean mint = !p.hasNoDirectMinTorque();
+            boolean mins = !p.hasNoDirectMinSpeed();
+            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_LSHIFT)) {
+                if (minp)
+                    li.add(Component.literal(String.format("Minimum Power: %.3f %sW", ReikaMathLibrary.getThousandBase(pow), ReikaEngLibrary.getSIPrefix(pow))));
+                if (mint)
+                    li.add(Component.literal(String.format("Minimum Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(trq), ReikaEngLibrary.getSIPrefix(trq))));
+                if (mins)
+                    li.add(Component.literal(String.format("Minimum Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(spd), ReikaEngLibrary.getSIPrefix(spd))));
+            } else {
+                if (minp || mint || mins) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Hold ");
+                    sb.append(ChatFormatting.GREEN);
+                    sb.append("Shift");
+                    sb.append(ChatFormatting.GRAY);
+                    sb.append(" for power data");
+                    li.add(Component.literal(sb.toString()));
+                }
+            }
+        }
+    }
 }

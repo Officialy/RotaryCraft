@@ -26,7 +26,6 @@ import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
 import reika.dragonapi.libraries.ReikaNBTHelper;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.auxiliary.interfaces.*;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
@@ -263,7 +262,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                         //int toadd = pc.getFluidRemoval().getTransferred(this.getLiquidLevel());
                         if (toadd > 0) {
                             FluidStack fs = new FluidStack(f, toadd);
-                            int added = pc.fill(dir.getOpposite(), fs, IFluidHandler.FluidAction.EXECUTE);
+                            int added = pc.fillPipe(dir.getOpposite(), fs, IFluidHandler.FluidAction.EXECUTE);
                             //ReikaJavaLibrary.pConsole(added, Dist.DEDICATED_SERVER);
                             if (added > 0) {
                                 //ReikaJavaLibrary.pConsole(toadd+":"+added+":"+this.getLiquidLevel(), Dist.DEDICATED_SERVER);
@@ -338,7 +337,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                     PipeConnector pc = (PipeConnector) te;
                     Flow flow = pc.getFlowForSide(dir.getOpposite());
                     if (flow.canOutput) {
-                        FluidStack fs = pc.drain(dir.getOpposite(), Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+                        FluidStack fs = pc.drainPipe(dir.getOpposite(), Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
                         if (fs != null) {
                             int level = this.getFluidLevel();
                             int todrain = this.getPipeIntake(fs.getAmount() - level);
@@ -346,7 +345,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                                 if (this.canIntakeFluid(fs.getFluid())) {
                                     this.addFluid(todrain);
                                     this.setFluid(fs.getFluid());
-                                    pc.drain(dir.getOpposite(), todrain, IFluidHandler.FluidAction.EXECUTE);
+                                    pc.drainPipe(dir.getOpposite(), todrain, IFluidHandler.FluidAction.EXECUTE);
                                     this.onIntake(te);
                                     //ReikaJavaLibrary.pConsole("Transferring "+todrain+", have "+this.getFluidLevel(), Dist.DEDICATED_SERVER);
                                 }

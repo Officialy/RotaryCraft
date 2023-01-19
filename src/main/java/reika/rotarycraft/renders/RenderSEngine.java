@@ -67,11 +67,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
 //        this.setupGL(stack, tile, par2, par4, par6);
         if (tile.isInWorld()) {
 
-            Level level = tile.getLevel();
-            boolean flag = level != null;
-            BlockState blockstate = flag ? tile.getBlockState() : RotaryBlocks.ENGINE.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
-
-            float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
+            float f = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
             if (tile.getEngineType().isJetFueled()) {
                 f += 90;
             }

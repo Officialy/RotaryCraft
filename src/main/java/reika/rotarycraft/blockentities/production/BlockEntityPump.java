@@ -268,7 +268,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     }
 
     @Override
-    public int fill(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;
     }
 
@@ -315,7 +315,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
 
 
     @Override
-    public FluidStack drain(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (from.getStepY() != 0)
             return null;
         return tank.drain(maxDrain, doDrain);

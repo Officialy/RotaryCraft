@@ -62,7 +62,7 @@ public abstract class BlockEntityFluidCannon extends BlockEntityAimedCannon impl
     public abstract boolean isValidFluid(Fluid f);
 
     @Override
-    public final int fill(Direction from, FluidStack resource, FluidAction doFill) {
+    public final int fillPipe(Direction from, FluidStack resource, FluidAction doFill) {
         if (!this.canFill(from, resource.getFluid()))
             return 0;
         return tank.fill(resource, doFill);

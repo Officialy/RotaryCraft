@@ -104,16 +104,6 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        return super.use(level, player, hand);
-    }
-
-    @Override
-    public void onUseTick(Level p_41428_, LivingEntity p_41429_, ItemStack p_41430_, int p_41431_) {
-        super.onUseTick(p_41428_, p_41429_, p_41430_, p_41431_);
-    }
-
-    @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         var level = context.getLevel();
         var pos = context.getClickedPos();
@@ -121,7 +111,6 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
         var te = level.getBlockEntity(pos);
         var s = context.getClickedFace(); //I'm assuming S was the direction of the face that was clicked
         int direction = 0;
-        RotaryCraft.LOGGER.info("Screwdriver used on " + pos + " on the" + s + " side");
         // if (ReikaPlayerAPI.isFakeOrNotInteractable(ep, new BlockPos(ep.position()), 8))
         //    return return InteractionResultHolder.fail(this.getDefaultInstance());;
 
@@ -140,7 +129,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
         }
         if (te instanceof Screwdriverable) {
             Screwdriverable sc = (Screwdriverable) te;
-            boolean flag = false;
+            boolean flag;
             if (ep.isShiftKeyDown())
                 flag = sc.onShiftRightClick(level, pos, s);
             else
@@ -149,19 +138,22 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                 return InteractionResult.SUCCESS;
         }
         MachineRegistry m = MachineRegistry.getMachine(level, pos);
-        RotaryCraft.LOGGER.info("The machine is: " + m);
         if (m != null) {
-            if (m == MachineRegistry.ENGINE) {
+            if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE ||
+                    m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE ||
+                    m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE) {
+
                 BlockEntityEngine clicked = (BlockEntityEngine) te;
-                int dmg = direction;
-                while (direction > 3)
+                int dir = direction;
+                while (direction > 3) {
                     direction -= 4;
-                if (direction == 3)
-//                    clicked.setBlockMetadata(dmg - 3);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(dmg - 3));
-                else
-//                    clicked.setBlockMetadata(dmg + 1);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(dmg + 1));
+                }
+
+                if (direction == 3) {
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[dir - 3]), 3);
+                } else {
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[dir + 1]), 3);
+                }
 
                 clicked.onRotate();
                 return InteractionResult.SUCCESS;
@@ -169,11 +161,9 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
             if (m == MachineRegistry.FLYWHEEL) {
                 BlockEntityFlywheel clicked = (BlockEntityFlywheel) te;
                 if (direction != 3 && direction != 7 && direction != 11 && direction != 15)
-//                    clicked.setBlockMetadata(direction + 1);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction + 1));
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
                 else
-//                    clicked.setBlockMetadata(direction - 3);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction - 3));
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 3]), 3);
 
                 context.getPlayer().swing(InteractionHand.MAIN_HAND);
                 return InteractionResult.SUCCESS;
@@ -195,19 +185,19 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                     clicked.increment();
                     ReikaChatHelper.writeString(String.format("ECU set to %.2f%s speed.", 100D * clicked.getSpeedMultiplier(), "%%"));
                 }
-            }
+            }*/
             if (m == MachineRegistry.ADVANCEDGEARS) {
                 BlockEntityAdvancedGear clicked = (BlockEntityAdvancedGear) te;
                 if (ep.isShiftKeyDown()) {
                     clicked.torquemode = !clicked.torquemode;
                 } else {
-                    if (damage != 3 && damage != 7 && damage != 11 && damage != 15)
-                        clicked.setBlockMetadata(damage + 1);
+                    if (direction != 3 && direction != 7 && direction != 11 && direction != 15)
+                        level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
                     else
-                        clicked.setBlockMetadata(damage - 3);
+                        level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 3]), 3);
                 }
                 return InteractionResult.SUCCESS;
-            }
+            }/*
             if (m == MachineRegistry.HYDRAULIC) {
                 BlockEntityHydraulicPump clicked = (BlockEntityHydraulicPump) te;
                 if (damage != 5 && damage != 11)
@@ -221,16 +211,13 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                 MaterialRegistry type = ts.getShaftType();
                 if (direction < 5)
 //                    ts.setBlockMetadata(direction + 1);
-                    ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction + 1));
+                    level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
                 if (direction == 5)
-//                    ts.setBlockMetadata(0);
-                    ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(0));
+                    level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[0]), 3);
                 if (direction > 5 && direction < 9)
-//                    ts.setBlockMetadata(direction + 1);
-                    ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction + 1));
+                    level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
                 if (direction == 9)
-//                    ts.setBlockMetadata(6);
-                    ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(6));
+                    level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[6]), 3);
 
                 BlockEntityShaft ts1 = (BlockEntityShaft) te;
                 ts1.setShaftType(type);
@@ -261,7 +248,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
             if (m == MachineRegistry.FLOODLIGHT) {
                 if (ep.isShiftKeyDown()) {
                     BlockEntityFloodlight clicked = (BlockEntityFloodlight) te;
-                    if (clicked != null && clicked.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot() >= 4) { //clicked.getBlockMetadata()
+                    if (clicked != null && clicked.getBlockState().getValue(BlockRotaryCraftMachine.FACING).ordinal() >= 4) { //clicked.getBlockMetadata()
                         clicked.beammode = !clicked.beammode;
                         clicked.lightsOut(level, ep.blockPosition());
                         return InteractionResult.SUCCESS;
@@ -347,13 +334,9 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                     BlockEntityGearbox clicked = (BlockEntityGearbox) level.getBlockEntity(pos);
                     RotaryCraft.LOGGER.info("gearbox direction: " + direction);
                     if (direction != 3 && direction != 7 && direction != 11 && direction != 15) {
-                        RotaryCraft.LOGGER.info("gearbox is turning 1");
-//                        clicked.setBlockMetadata(direction + 1);
-                        clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction + 1));
+                        level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
                     } else {
-                        RotaryCraft.LOGGER.info("gearbox is turning");
-//                        clicked.setBlockMetadata(direction - 3);
-                        clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction - 3));
+                        level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 3]), 3);
                     }
                     //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", level.getBlockMetadata(pos)));
                 }
@@ -362,25 +345,20 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
             if (m == MachineRegistry.SPLITTER && (!ep.isShiftKeyDown())) {
                 BlockEntitySplitter clicked = (BlockEntitySplitter) te;
                 if (direction < 7 || (direction < 15 && direction > 7))
-//                    clicked.setBlockMetadata(direction + 1);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction + 1));
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
                 if (direction == 7)
-//                    clicked.setBlockMetadata(0);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(0));
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[0]), 3);
                 if (direction == 15)
-//                    clicked.setBlockMetadata(8);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(8));
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[8]), 3);
 
                 return InteractionResult.SUCCESS;
             }
             if (m == MachineRegistry.SPLITTER && (ep.isShiftKeyDown())) {    // Toggle in/out
                 BlockEntitySplitter clicked = (BlockEntitySplitter) te;
                 if (direction < 8)
-//                    clicked.setBlockMetadata(direction + 8);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction + 8));
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 8]), 3);
                 else
-//                    clicked.setBlockMetadata(direction - 8);
-                    clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(direction - 8));
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 8]), 3);
                 return InteractionResult.SUCCESS;
             }
             int max = m.getNumberDirections() - 1;
@@ -388,9 +366,9 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
 
             if (t.getBlockState().getValue(BlockRotaryCraftMachine.FACING).ordinal() < max) {
                 var i = t.getBlockState().getValue(BlockRotaryCraftMachine.FACING).ordinal();
-                t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.fromYRot(i + 1));
+                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[i + 1]), 3);
             } else
-                t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.DOWN);
+                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.DOWN), 3);
             t.onRedirect();
             level.blockUpdated(pos, te.getBlockState().getBlock());
             ReikaWorldHelper.causeAdjacentUpdates(level, pos);

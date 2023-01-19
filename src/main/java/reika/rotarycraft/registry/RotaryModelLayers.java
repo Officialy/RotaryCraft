@@ -97,7 +97,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.DIAMOND_SHAFT.get(), RenderShaft::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.BEDROCK_SHAFT.get(), RenderShaft::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.MAGNETOSTATIC_ENGINE.get(), RenderMagnetic::new);
-        event.registerBlockEntityRenderer(RotaryBlockEntities.SOLAR_TOWER.get(), RenderSolar::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.SOLAR_TOWER.get(), RenderSolarTower::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.VACCUUM.get(), RenderVacuum::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COOLING_FIN.get(), RenderFin::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.HEAT_RAY.get(), RenderHRay::new);
@@ -146,7 +146,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(GEARBOX_8, Gearbox8Model::createLayer);
         event.registerLayerDefinition(GEARBOX_16, Gearbox16Model::createLayer);
         event.registerLayerDefinition(MAGNETIC, MagneticModel::createLayer);
-        event.registerLayerDefinition(SOLAR_TOWER, SolarModel::createLayer);
+        event.registerLayerDefinition(SOLAR_TOWER, SolarTowerModel::createLayer);
         event.registerLayerDefinition(BIGFURNACE, BigFurnaceModel::createLayer);
         event.registerLayerDefinition(GRINDER, GrinderModel::createLayer);
     }

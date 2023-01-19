@@ -15,6 +15,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 import reika.dragonapi.auxiliary.trackers.PlayerHandler;
+import reika.dragonapi.instantiable.Alert;
+import reika.dragonapi.interfaces.configuration.ConfigList;
 import reika.dragonapi.libraries.ReikaPlayerAPI;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
@@ -27,7 +29,7 @@ public class HandbookNotifications {
 
     public static final HandbookNotifications instance = new HandbookNotifications();
 
-//    private final HashMap<UUID, ArrayList<Alert>> data = new HashMap<>();
+    private final HashMap<UUID, ArrayList<Alert>> data = new HashMap<>();
 
     private final HashMap<UUID, Boolean> alert = new HashMap<>();
 
@@ -47,18 +49,18 @@ public class HandbookNotifications {
     }
 
 
-/*    public List<Alert> getNewAlerts() {
+    public List<Alert> getNewAlerts() {
         Player ep = Minecraft.getInstance().player;
         ArrayList<Alert> li = data.get(ep.getUUID());
         return li != null ? Collections.unmodifiableList(li) : new ArrayList<>();
     }
 
-    private void addAlert(Player ep, ForgeConfigSpec.ConfigValue<?> c, Level lvl, String msg) {
+    private void addAlert(Player ep, ConfigList c, Level lvl, String msg) {
         Alert a = new Alert(c.toString().toLowerCase(Locale.ENGLISH), c, lvl, msg);
         ArrayList<Alert> li = data.computeIfAbsent(ep.getUUID(), k -> new ArrayList<>());
         if (!li.contains(a))
             li.add(a);
-    }*/
+    }
 
     public static class HandbookConfigVerifier implements PlayerHandler.PlayerTracker {
 

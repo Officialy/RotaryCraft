@@ -54,7 +54,7 @@ public class PacketHandlerCore implements PacketHandler {
 
     public void handleData(PacketObj packet, Level world, Player ep) {
         DataInputStream inputStream = packet.getDataIn();
-        int control = Integer.MIN_VALUE;
+        int control;
         int len;
         int[] data = new int[0];
         long longdata = 0;
@@ -65,8 +65,8 @@ public class PacketHandlerCore implements PacketHandler {
         double dx = 0;
         double dy = 0;
         double dz = 0;
-        boolean readinglong = false;
-        CompoundTag NBT = null;
+        boolean readinglong;
+        CompoundTag NBT;
         String stringdata = null;
         UUID id = null;
         //System.out.print(packet.length);
