@@ -364,11 +364,11 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
             int max = m.getNumberDirections() - 1;
             RotaryCraftBlockEntity t = (RotaryCraftBlockEntity) te;
 
-            if (t.getBlockState().getValue(BlockRotaryCraftMachine.FACING).ordinal() < max) {
+            if (direction < max) {
                 var i = t.getBlockState().getValue(BlockRotaryCraftMachine.FACING).ordinal();
                 level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[i + 1]), 3);
             } else
-                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.DOWN), 3);
+                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[0]), 3);
             t.onRedirect();
             level.blockUpdated(pos, te.getBlockState().getBlock());
             ReikaWorldHelper.causeAdjacentUpdates(level, pos);
