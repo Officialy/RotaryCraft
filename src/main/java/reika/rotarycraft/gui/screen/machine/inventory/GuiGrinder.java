@@ -34,7 +34,6 @@ public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrind
     @Override
     protected void renderBg(PoseStack poseStack, float par1, int mouseX, int mouseY) {
         super.renderBg(poseStack, par1, mouseX, mouseY);
-
         int scaledWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
         int scaleHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
         int j = (scaledWidth - imageWidth) / 2;
@@ -51,7 +50,7 @@ public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrind
 
 
         //foreground
-        font.draw(poseStack,"Lubricant", 5, 11, 4210752);
+        font.draw(poseStack,"Lubricant", j + 5, k + 11, 4210752);
 
         if (api.isMouseInBox(j + 23, j + 32, k + 20, k + 76, mouseX, mouseY)) {
             api.drawTooltipAt(poseStack, font, String.format("%d/%d", grin.getFluidLevel(), BlockEntityGrinder.MAXLUBE), mouseX, mouseY);

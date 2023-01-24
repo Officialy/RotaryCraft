@@ -110,13 +110,13 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
         var ep = context.getPlayer();
         var te = level.getBlockEntity(pos);
         var s = context.getClickedFace(); //I'm assuming S was the direction of the face that was clicked
-        int direction = 0;
+        var direction = Direction.NORTH;
         // if (ReikaPlayerAPI.isFakeOrNotInteractable(ep, new BlockPos(ep.position()), 8))
         //    return return InteractionResultHolder.fail(this.getDefaultInstance());;
 
         if (te instanceof RotaryCraftBlockEntity) {
             RotaryCraftBlockEntity t = (RotaryCraftBlockEntity) te;
-            direction = t.getBlockState().getValue(BlockRotaryCraftMachine.FACING).ordinal();
+            direction = t.getBlockState().getValue(BlockRotaryCraftMachine.FACING);
         }
         if (te instanceof BlockEntityIOMachine) {
             ((BlockEntityIOMachine) te).iotick = 512;
@@ -144,26 +144,15 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                     m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE) {
 
                 BlockEntityEngine clicked = (BlockEntityEngine) te;
-                int dir = direction;
-                while (direction > 3) {
-                    direction -= 4;
-                }
+                level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise()), 3);
 
-                if (direction == 3) {
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[dir - 3]), 3);
-                } else {
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[dir + 1]), 3);
-                }
 
                 clicked.onRotate();
                 return InteractionResult.SUCCESS;
             }
             if (m == MachineRegistry.FLYWHEEL) {
                 BlockEntityFlywheel clicked = (BlockEntityFlywheel) te;
-                if (direction != 3 && direction != 7 && direction != 11 && direction != 15)
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
-                else
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 3]), 3);
+                level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise()), 3);
 
                 context.getPlayer().swing(InteractionHand.MAIN_HAND);
                 return InteractionResult.SUCCESS;
@@ -191,10 +180,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                 if (ep.isShiftKeyDown()) {
                     clicked.torquemode = !clicked.torquemode;
                 } else {
-                    if (direction != 3 && direction != 7 && direction != 11 && direction != 15)
-                        level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
-                    else
-                        level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 3]), 3);
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise()), 3);
                 }
                 return InteractionResult.SUCCESS;
             }/*
@@ -209,16 +195,14 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
             if (m == MachineRegistry.SHAFT) {
                 BlockEntityShaft ts = (BlockEntityShaft) te;
                 MaterialRegistry type = ts.getShaftType();
-                if (direction < 5)
-//                    ts.setBlockMetadata(direction + 1);
-                    level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
-                if (direction == 5)
-                    level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[0]), 3);
-                if (direction > 5 && direction < 9)
-                    level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
-                if (direction == 9)
-                    level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[6]), 3);
-
+                level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, switch (direction){
+                    case WEST -> Direction.EAST;
+                    case EAST -> Direction.SOUTH;
+                    case SOUTH -> Direction.NORTH;
+                    case NORTH -> Direction.UP;
+                    case UP -> Direction.DOWN;
+                    case DOWN -> Direction.WEST;
+                }), 3);
                 BlockEntityShaft ts1 = (BlockEntityShaft) te;
                 ts1.setShaftType(type);
                 return InteractionResult.SUCCESS;
@@ -333,16 +317,12 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                 } else {
                     BlockEntityGearbox clicked = (BlockEntityGearbox) level.getBlockEntity(pos);
                     RotaryCraft.LOGGER.info("gearbox direction: " + direction);
-                    if (direction != 3 && direction != 7 && direction != 11 && direction != 15) {
-                        level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
-                    } else {
-                        level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 3]), 3);
-                    }
+                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise()), 3);
                     //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", level.getBlockMetadata(pos)));
                 }
                 return InteractionResult.SUCCESS;
             }
-            if (m == MachineRegistry.SPLITTER && (!ep.isShiftKeyDown())) {
+         /*  todo if (m == MachineRegistry.SPLITTER && (!ep.isShiftKeyDown())) {
                 BlockEntitySplitter clicked = (BlockEntitySplitter) te;
                 if (direction < 7 || (direction < 15 && direction > 7))
                     level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
@@ -360,15 +340,17 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                 else
                     level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 8]), 3);
                 return InteractionResult.SUCCESS;
-            }
-            int max = m.getNumberDirections() - 1;
+            }*/
+            int max = m.getNumberDirections();
             RotaryCraftBlockEntity t = (RotaryCraftBlockEntity) te;
+            if (max == 2){
+                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getOpposite()), 3);
+            } else if (max == 4) {
+                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise()), 3);
+            }else if (max == 6){
+                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise(Direction.Axis.Z)), 3);
+            }
 
-            if (direction < max) {
-                var i = t.getBlockState().getValue(BlockRotaryCraftMachine.FACING).ordinal();
-                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[i + 1]), 3);
-            } else
-                level.setBlock(pos, t.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[0]), 3);
             t.onRedirect();
             level.blockUpdated(pos, te.getBlockState().getBlock());
             ReikaWorldHelper.causeAdjacentUpdates(level, pos);

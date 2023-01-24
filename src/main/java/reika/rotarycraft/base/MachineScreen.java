@@ -139,13 +139,12 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
     protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pX, int pY) {
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, new ResourceLocation(RotaryCraft.MODID, "textures/screen/" + getGuiTexture() + ".png"));
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, new ResourceLocation(RotaryCraft.MODID, "textures/screen/" + getGuiTexture() + ".png"));
         ScreenUtils.drawTexturedModalRect(pPoseStack, j, k, 0, 0, imageWidth, imageHeight, 0);
         if (tile instanceof BlockEntityPowerReceiver)
             this.drawPowerTab(pPoseStack, j, k);

@@ -35,7 +35,7 @@ public class ContainerGrinder extends IOMachineContainer<BlockEntityGrinder> {
         lastGrinderCookTime = 0;
         grinder = te;
         te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
-            RotaryCraft.LOGGER.info("Adding slots");
+//            RotaryCraft.LOGGER.info("Adding slots");
             this.addSlot(new SlotItemHandler(itemHandler, 0, 76, 35) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {

@@ -14,6 +14,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
+import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
+import reika.rotarycraft.registry.MachineRegistry;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -33,15 +35,9 @@ public class Tests {
         @Override
         public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
             if (!player.isShiftKeyDown() && player.level.isClientSide()) {
-//                IORenderer.renderIn(new PoseStack(), player.getOnPos(), 255);
-                RotaryCraft.LOGGER.info(ForgeRegistries.BLOCKS.tags()
-                        .getTag(Tags.Blocks.FENCE_GATES_WOODEN)
-                        .stream()
-                        .map(ItemStack::new)
-                        .toList());
             return InteractionResultHolder.success(this.getDefaultInstance());
             } else if (player.isShiftKeyDown()) {
-                RotaryCraft.LOGGER.info(RecipesGrinder.grinderRecipes);
+                RotaryCraft.LOGGER.info(RecipesGrinder.grinderRecipes.getAllGrindables());
                 return InteractionResultHolder.success(this.getDefaultInstance());
             }
 

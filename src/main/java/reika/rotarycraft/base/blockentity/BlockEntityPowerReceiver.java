@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.DragonAPI;
+import reika.dragonapi.exception.WTFException;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
 import reika.rotarycraft.RotaryCraft;
@@ -170,6 +171,10 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             return;
         this.clear();
         boolean isCentered = worldPosition.getX() == pos.getX() && worldPosition.getY() == pos.getY() && worldPosition.getZ() == pos.getZ();
+        if (read == null){
+            //RotaryCraft.LOGGER.error("BlockEntity "+pos+" has no read direction!" + " The block at this position will not function."); //todo comment out on release? or make it debug only?
+            return;
+        }
         int dx = pos.getX() + read.getStepX();
         int dy = pos.getY() + read.getStepY();
         int dz = pos.getZ() + read.getStepZ();

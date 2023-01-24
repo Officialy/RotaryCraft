@@ -202,8 +202,6 @@ public enum PowerReceivers {
                 }
             }
             throw new RegistrationException(RotaryCraft.getInstance(), "This should not happen! Machine " + name + " is a Power Receiver yet has no Power enum! Machine enum: " + em);
-            //RotaryCraft.LOGGER.error("This should not happen! Machine "+name+" is a Power Receiver yet has no Power enum! Machine enum: "+em);
-            //return null;
         } else
             return null;
     }

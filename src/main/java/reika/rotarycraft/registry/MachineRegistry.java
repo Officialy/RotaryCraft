@@ -18,7 +18,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.ModList;
 import reika.dragonapi.exception.RegistrationException;
@@ -60,13 +59,13 @@ import java.util.Locale;
 public enum MachineRegistry implements TileEnum {
 
     //        BEDROCKBREAKER("machine.bedrock", BlockRotaryCraftMachine.class, BlockEntityBedrockBreaker.class),
-    WIND_ENGINE("machine.wind_engine", RotaryBlocks.WIND_ENGINE.get(), BlockEntityWindEngine.class),
-    STEAM_ENGINE("machine.steam_engine", RotaryBlocks.STEAM_ENGINE.get(), BlockEntitySteamEngine.class),
-    PERFORMANCE_ENGINE("machine.performance_engine", RotaryBlocks.PERFORMANCE_ENGINE.get(), BlockEntityPerformanceEngine.class),
-    MICRO_TURBINE("machine.micro_turbine", RotaryBlocks.MICRO_TURBINE.get(), BlockEntityMicroturbine.class),
-    GAS_ENGINE("machine.gas_engine", RotaryBlocks.GAS_ENGINE.get(), BlockEntityGasEngine.class),
-    DC_ENGINE("machine.dc_engine", RotaryBlocks.DC_ENGINE.get(), BlockEntityDCEngine.class),
-    AC_ENGINE("machine.ac_engine", RotaryBlocks.AC_ENGINE.get(), BlockEntityACEngine.class),
+    WIND_ENGINE("machine.wind_engine", RotaryBlocks.WIND_ENGINE.get(), BlockEntityWindEngine.class, EngineType.WIND),
+    STEAM_ENGINE("machine.steam_engine", RotaryBlocks.STEAM_ENGINE.get(), BlockEntitySteamEngine.class, EngineType.STEAM),
+    PERFORMANCE_ENGINE("machine.performance_engine", RotaryBlocks.PERFORMANCE_ENGINE.get(), BlockEntityPerformanceEngine.class, EngineType.SPORT),
+    MICRO_TURBINE("machine.micro_turbine", RotaryBlocks.MICRO_TURBINE.get(), BlockEntityMicroturbine.class, EngineType.MICRO),
+    GAS_ENGINE("machine.gas_engine", RotaryBlocks.GAS_ENGINE.get(), BlockEntityGasEngine.class, EngineType.GAS),
+    DC_ENGINE("machine.dc_engine", RotaryBlocks.DC_ENGINE.get(), BlockEntityDCEngine.class, EngineType.DC),
+    AC_ENGINE("machine.ac_engine", RotaryBlocks.AC_ENGINE.get(), BlockEntityACEngine.class, EngineType.AC),
 
     FLYWHEEL("machine.flywheel", RotaryBlocks.HSLA_FLYWHEEL.get(), BlockEntityFlywheel.class),
     SHAFT("machine.shaft", RotaryBlocks.HSLA_SHAFT.get(), BlockEntityShaft.class),
@@ -207,11 +206,13 @@ public enum MachineRegistry implements TileEnum {
     //    FLAMETURRET("machine.flameturret", BlockRotaryCraftMachine.class, BlockEntityFlameTurret.class, "RenderFlameTurret"),
 //    BUNDLEDBUS("machine.bundledbus", BlockRotaryCraftMachine.class, BlockEntityBundledBus.class, ModList.APPENG, ModList.PROJRED),
     DISTRIBCLUTCH("machine.distribclutch", RotaryBlocks.DISTRIBUTION_CLUTCH.get(), BlockEntityDistributionClutch.class);
+
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
     private final String name;
     private final Block block;
-    private final Class<? extends BlockEntity> te;
+    private final Class<? extends RotaryCraftBlockEntity> te;
+    private EngineType engineType;
     private ModDependency requirement;
     private PowerTypes powertype;
     private PowerReceivers receiver;
@@ -226,15 +227,20 @@ public enum MachineRegistry implements TileEnum {
     MachineRegistry(String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, ModList... a) {
         this(n, b, tile);
         requirement = a.length > 0 ? new ModDependency(a) : null;
-
         receiver = PowerReceivers.initialize(this);
     }
 
     MachineRegistry(String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, PowerTypes p) {
         this(n, b, tile);
         powertype = p;
-
         receiver = PowerReceivers.initialize(this);
+    }
+
+    MachineRegistry(String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, EngineType type) {
+        name = n;
+        block = b;
+        te = tile;
+        engineType = type;
     }
 
 /*  todo  public String getRenderPackage() {
@@ -340,6 +346,12 @@ public enum MachineRegistry implements TileEnum {
         return receiver;
     }
 
+    public EngineType getEngineType() {
+        if (this.isEngine())
+            return engineType;
+        return EngineType.DC; //return DC in worst case to prevent crashes
+    }
+
     public String getDefaultName() {
         return this.getName();
     }
@@ -411,8 +423,8 @@ public enum MachineRegistry implements TileEnum {
         }
 //        if (this == CCTV)
 //            return 0.5F - 0.5F * (float) Math.sin(Math.toRadians(((BlockEntityCCTV) tile).theta));
-//        if (this == GRINDER)
-//            return 0.8125F;
+        if (this == GRINDER)
+            return 0.8125F;
         if (this == HEATRAY)
             return 0.6875F;
 //        if (this == LIGHTBRIDGE)
@@ -512,7 +524,7 @@ public enum MachineRegistry implements TileEnum {
         return this == PIPE || this == BEDPIPE;
     }
 
-    public Class<? extends BlockEntity> getTEClass() {
+    public Class<? extends RotaryCraftBlockEntity> getTEClass() {
         return te;
     }
 
@@ -536,7 +548,7 @@ public enum MachineRegistry implements TileEnum {
     }
 
     public boolean isPowerReceiver() {
-        return BlockEntityPowerReceiver.class.isAssignableFrom(te.getClass());
+        return BlockEntityPowerReceiver.class.isAssignableFrom(te);
     }
 
     public boolean dealsContactDamage() {
@@ -637,6 +649,10 @@ public enum MachineRegistry implements TileEnum {
                     AC_ENGINE -> true;
             default -> false;
         };
+    }
+
+    public boolean isEngine() {
+        return BlockEntityEngine.class.isAssignableFrom(te);
     }
 
     public boolean isBroken(RotaryCraftBlockEntity tile) {

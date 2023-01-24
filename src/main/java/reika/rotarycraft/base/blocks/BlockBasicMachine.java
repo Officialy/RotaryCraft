@@ -61,10 +61,7 @@ import reika.dragonapi.modinteract.ReikaXPFluidHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.ItemStacks;
 import reika.rotarycraft.auxiliary.RotaryAux;
-import reika.rotarycraft.auxiliary.interfaces.CachedConnection;
-import reika.rotarycraft.auxiliary.interfaces.EnchantableMachine;
-import reika.rotarycraft.auxiliary.interfaces.PressureTE;
-import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
+import reika.rotarycraft.auxiliary.interfaces.*;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
@@ -808,7 +805,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
     public void appendHoverText(ItemStack is, @Nullable BlockGetter p_49817_, List<Component> li, TooltipFlag p_49819_) {
         super.appendHoverText(is, p_49817_, li, p_49819_);
         MachineRegistry m = MachineRegistry.getMachineMapping(Block.byItem(is.getItem()));
-        RotaryCraft.LOGGER.info(m);
+//        RotaryCraft.LOGGER.info(m);
 //        ItemMachineRenderer ir = ClientProxy.machineItems;
 //        BlockEntity te = ir.getRenderingInstance(m, 0);
 //        if (m.isIncomplete()) {
@@ -860,6 +857,42 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     li.add(Component.literal(sb.toString()));
                 }
             }
+        }
+
+        if (m.isEngine()){
+            EngineType type = m.getEngineType();
+            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_LSHIFT)) {
+                double power = type.getPower();
+                double speed = type.getSpeed();
+                double torque = type.getTorque();
+                li.add(Component.literal(String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power))));
+                li.add(Component.literal(String.format("Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(torque), ReikaEngLibrary.getSIPrefix(torque))));
+                li.add(Component.literal(String.format("Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(speed), ReikaEngLibrary.getSIPrefix(speed))));
+            }
+            else {
+                StringBuilder sb = new StringBuilder();
+                sb.append("Hold ");
+                sb.append(ChatFormatting.GREEN);
+                sb.append("Shift");
+                sb.append(ChatFormatting.GRAY);
+                sb.append(" for power data");
+                li.add(Component.literal(sb.toString()));
+            }
+            if (is.hasTag()) {
+                int dmg = is.getTag().getInt("damage");
+                li.add(Component.literal(String.format("Damage: %.1f%s", dmg*12.5F, "%")));
+            }
+            if (is.hasTag()) {
+                if (is.getTag().getBoolean("bed")) {
+                    li.add(Component.literal("Bedrock Upgrade"));
+                }
+            }
+           /* todo BlockEntityEngine te = (BlockEntityEngine)MachineRegistry.AC_ENGINE.createTEInstanceForRender(i);
+            if (te instanceof NBTMachine && is.hasTag()) {
+                for (String s : ((NBTMachine)te).getDisplayTags(is.getTag())) {
+                    li.add(Component.literal(s));
+                }
+            }*/
         }
     }
 }
