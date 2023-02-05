@@ -110,8 +110,6 @@ public class RotaryBlocks {
 
     public static final RegistryObject<Block> COOLING_FIN = register("cooling_fin", () -> new BlockCoolingFin(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> MUSIC_BOX = register("music_box", () -> new BlockMusicBox(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-
-    public static final RegistryObject<Block> ADVANCED_GEAR = register("advanced_gear", () -> new BlockAdvGear(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> HEAT_RAY = register("heat_ray", () -> new BlockHeatRay(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> OBSIDIAN_MAKER = register("obsidian_maker", () -> new BlockObsidianMaker(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> PLAYER_DETECTOR = register("player_detector", () -> new BlockPlayerDetector(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
@@ -144,10 +142,10 @@ public class RotaryBlocks {
 
 //    public static final RegistryObject<Block> PULSE_JET_FURNACE = register("pulse_jet_furnace", () -> new BlockPulseJetFurnace(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
 
-    public static final RegistryObject<Block> COIL = register("coil", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5))); //todo blocks for these 4
-    public static final RegistryObject<Block> CVT = register("cvt", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-    public static final RegistryObject<Block> WORMGEAR = register("wormgear", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-    public static final RegistryObject<Block> HIGHGEAR = register("highgear", () -> new BlockFrictionHeater(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> COIL = register("coil", () -> new BlockCoil(BlockBehaviour.Properties.of(Material.METAL).strength(5))); //todo blocks for these 4
+    public static final RegistryObject<Block> CVT = register("cvt", () -> new BlockCVT(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> WORMGEAR = register("wormgear", () -> new BlockWormGear(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> HIGHGEAR = register("highgear", () -> new BlockHighGear(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> GRINDER = register("grinder", () -> new BlockGrinder(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
 
 
@@ -159,16 +157,6 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> SEPARATION = register("separation", () -> new BlockSeperation(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SUCTION = register("suction", () -> new BlockSuction(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> BEDROCK_PIPE = register("bedrock_pipe", () -> new BlockBedrockPipe(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-
-
-
-
-
-
-
-
-
-
 
     private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of(Material.STONE).strength(2.0F, 3.0F).sound(SoundType.METAL);
 

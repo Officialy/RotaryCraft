@@ -175,7 +175,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                     ReikaChatHelper.writeString(String.format("ECU set to %.2f%s speed.", 100D * clicked.getSpeedMultiplier(), "%%"));
                 }
             }*/
-            if (m == MachineRegistry.ADVANCEDGEARS) {
+            if (m == MachineRegistry.HIGHGEAR || m == MachineRegistry.WORMGEAR || m == MachineRegistry.CVT || m == MachineRegistry.COIL) {
                 BlockEntityAdvancedGear clicked = (BlockEntityAdvancedGear) te;
                 if (ep.isShiftKeyDown()) {
                     clicked.torquemode = !clicked.torquemode;

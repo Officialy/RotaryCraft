@@ -115,7 +115,11 @@ public enum MachineRegistry implements TileEnum {
     SMOKEDETECTOR("machine.smokedetector", RotaryBlocks.SMOKE_DETECTOR.get(), BlockEntitySmokeDetector.class),
     //    MOBRADAR("machine.mobradar", BlockRotaryCraftMachine.class, BlockEntityMobRadar.class, "RenderMobRadar"),
     WINDER("machine.winder", RotaryBlocks.WINDER.get(), BlockEntityWinder.class),
-    ADVANCEDGEARS("machine.advgear", RotaryBlocks.ADVANCED_GEAR.get(), BlockEntityAdvancedGear.class),
+    WORMGEAR("machine.advgear", RotaryBlocks.WORMGEAR.get(), BlockEntityAdvancedGear.class),
+    CVT("machine.advgear", RotaryBlocks.CVT.get(), BlockEntityAdvancedGear.class),
+    HIGHGEAR("machine.advgear", RotaryBlocks.HIGHGEAR.get(), BlockEntityAdvancedGear.class),
+    COIL("machine.advgear", RotaryBlocks.COIL.get(), BlockEntityAdvancedGear.class),
+
     TNTCANNON("machine.tntcannon", RotaryBlocks.TNT_CANNON.get(), BlockEntityTNTCannon.class),
     //    SONICWEAPON("machine.sonicweapon", BlockRotaryCraftMachine.class, BlockEntitySonicWeapon.class, "RenderSonic"),
 //    BLASTFURNACE("machine.blastfurnace", BlockRotaryCraftMachine.class, BlockEntityBlastFurnace.class),
@@ -566,7 +570,7 @@ public enum MachineRegistry implements TileEnum {
 
     public boolean is4Sided() {
         return switch (this) {
-            case DC_ENGINE, /*BORER, LIGHTBRIDGE,*/ FLYWHEEL, GEARBOX, SPLITTER, /*FERMENTER,*/ DYNAMOMETER, GRINDER, HEATRAY, /*COMPACTOR, WOODCUTTER,*/ WINDER, ADVANCEDGEARS, /*BLASTFURNACE, PROJECTOR, SCALECHEST, MAGNETIZER, SCREEN, FRICTION, DISPLAY,*/
+            case DC_ENGINE, /*BORER, LIGHTBRIDGE,*/ FLYWHEEL, GEARBOX, SPLITTER, /*FERMENTER,*/ DYNAMOMETER, GRINDER, HEATRAY, /*COMPACTOR, WOODCUTTER,*/ WINDER, WORMGEAR, HIGHGEAR, CVT, COIL, /*BLASTFURNACE, PROJECTOR, SCALECHEST, MAGNETIZER, SCREEN, FRICTION, DISPLAY,*/
                     MULTICLUTCH, /*ARROWGUN,*/ BEAMMIRROR, /*AIRGUN, SORTING, FILLINGSTATION, DISTILLER, CRYSTALLIZER, BUSCONTROLLER, REFRIGERATOR, DROPS,*/ SPILLWAY ->
                     true;
             default -> false;
@@ -619,23 +623,13 @@ public enum MachineRegistry implements TileEnum {
                     MICRO_TURBINE,
                     GAS_ENGINE,
                     DC_ENGINE,
-                    AC_ENGINE, GEARBOX, SHAFT, ADVANCEDGEARS, FLYWHEEL -> true;
+                    AC_ENGINE, GEARBOX, SHAFT, WORMGEAR, HIGHGEAR, CVT, COIL, FLYWHEEL -> true;
             default -> false;
         };
     }
 
     public boolean canBeFrictionHeated() {
         return FrictionHeatable.class.isAssignableFrom(te);
-    }
-
-    public int getNumberSubtypes() {
-        return switch (this) {
-            case GEARBOX -> GearboxTypes.typeList.length * 4;
-            case SHAFT -> MaterialRegistry.matList.length;
-            case ADVANCEDGEARS -> BlockEntityAdvancedGear.GearType.list.length;
-            case FLYWHEEL -> 4;
-            default -> 1;
-        };
     }
 
     public boolean canBeBroken() {
@@ -751,7 +745,7 @@ public enum MachineRegistry implements TileEnum {
 
     public boolean isAdvancedTransmission() {
         return switch (this) {
-            case ADVANCEDGEARS, GEARBOX, SPLITTER, DYNAMOMETER -> true;
+            case WORMGEAR, HIGHGEAR, CVT, COIL, GEARBOX, SPLITTER, DYNAMOMETER -> true;
             default -> false;
         };
     }
@@ -802,7 +796,7 @@ public enum MachineRegistry implements TileEnum {
     public boolean isSolidBottom() {
         return switch (this) {
 //            FRICTION, MAGNETIZER, CRYSTALLIZER, DISPLAY, SONICBORER, PROJECTOR, ELECTRICMOTOR, GENERATOR, AIRGUN,
-            case ADVANCEDGEARS, STEAMTURBINE, TNTCANNON, MAGNETIC, REFRIGERATOR, WINDER, COMPOSTER, SHAFT, CLUTCH, GEARBOX, FLYWHEEL, RESERVOIR, WIND_ENGINE, GRINDER,
+            case WORMGEAR, HIGHGEAR, CVT, COIL, STEAMTURBINE, TNTCANNON, MAGNETIC, REFRIGERATOR, WINDER, COMPOSTER, SHAFT, CLUTCH, GEARBOX, FLYWHEEL, RESERVOIR, WIND_ENGINE, GRINDER,
                     STEAM_ENGINE,
                     PERFORMANCE_ENGINE,
                     MICRO_TURBINE,

@@ -76,13 +76,18 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     private CVTController controller;
     private ItemStack[] belts = new ItemStack[31];
     private int targetTorque = 1;
-
+    private GearType gearType;
     private boolean enabled = true;
 
-    public BlockEntityAdvancedGear(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.ADVANCED_GEAR.get(), pos, state);
+    public BlockEntityAdvancedGear(GearType type, BlockPos pos, BlockState state) {
+        super(switch (type){
+            case WORM -> RotaryBlockEntities.WORMGEAR.get();
+            case HIGH -> RotaryBlockEntities.HIGHGEAR.get();
+            case COIL -> RotaryBlockEntities.COIL.get();
+            case CVT -> RotaryBlockEntities.CVT.get();
+        }, pos, state);
+        gearType = type;
     }
-
     public static long getMaxStorageCapacity(boolean bedrock) {
         return bedrock ? 240L * ReikaMathLibrary.longpow(10, 12) : 720 * ReikaMathLibrary.intpow2(10, 6);
     }
@@ -154,7 +159,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     }
 
     public GearType getGearType() {
-        return GearType.list[1];//todo [meta / 4];
+        return gearType;
     }
 
     public int getLubricant() {
@@ -862,7 +867,12 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
 
     @Override
     public MachineRegistry getMachine() {
-        return MachineRegistry.ADVANCEDGEARS;
+        return switch (gearType){
+            case WORM -> MachineRegistry.WORMGEAR;
+            case HIGH -> MachineRegistry.HIGHGEAR;
+            case COIL -> MachineRegistry.COIL;
+            case CVT -> MachineRegistry.CVT;
+        };
     }
 
     @Override

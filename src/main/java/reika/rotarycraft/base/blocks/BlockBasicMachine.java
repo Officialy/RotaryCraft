@@ -805,9 +805,13 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
     public void appendHoverText(ItemStack is, @Nullable BlockGetter p_49817_, List<Component> li, TooltipFlag p_49819_) {
         super.appendHoverText(is, p_49817_, li, p_49819_);
         MachineRegistry m = MachineRegistry.getMachineMapping(Block.byItem(is.getItem()));
+        if (m == null) {
+            return;
+        }
 //        RotaryCraft.LOGGER.info(m);
 //        ItemMachineRenderer ir = ClientProxy.machineItems;
 //        BlockEntity te = ir.getRenderingInstance(m, 0);
+
 //        if (m.isIncomplete()) {
 //            li.add("This machine is in development. Use at your own risk.");
 //        }

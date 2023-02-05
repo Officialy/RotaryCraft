@@ -100,10 +100,10 @@ public enum HandbookRegistry implements HandbookEntry {
     CLUTCH(MachineRegistry.CLUTCH),
     DYNA(MachineRegistry.DYNAMOMETER),
     FLYWHEEL(MachineRegistry.FLYWHEEL),
-    WORM(MachineRegistry.ADVANCEDGEARS, 0),
-    CVT(MachineRegistry.ADVANCEDGEARS, 1),
-    COIL(MachineRegistry.ADVANCEDGEARS, 2),
-    HIGEAR(MachineRegistry.ADVANCEDGEARS, 3),
+    WORM(MachineRegistry.WORMGEAR, 0),
+    CVT(MachineRegistry.CVT, 1),
+    COIL(MachineRegistry.COIL, 2),
+    HIGEAR(MachineRegistry.HIGHGEAR, 3),
     MULTI(MachineRegistry.MULTICLUTCH),
     //    BELT(MachineRegistry.BELT),
 //    BUSCONTROLLER(MachineRegistry.BUSCONTROLLER),
@@ -423,7 +423,7 @@ public enum HandbookRegistry implements HandbookEntry {
     public static int getScreen(MachineRegistry m, BlockEntity te) {
         if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE)
             return getEngineScreen(te);
-        if (m == MachineRegistry.ADVANCEDGEARS)
+        if (m == MachineRegistry.WORMGEAR || m == MachineRegistry.HIGHGEAR || m == MachineRegistry.CVT || m == MachineRegistry.COIL)
             return TRANSDESC.getBaseScreen() + 1;
         for (int i = ENGINEDESC.ordinal(); i < TOOLDESC.ordinal(); i++) {
             if (tabList[i].machine == m)
@@ -513,7 +513,7 @@ public enum HandbookRegistry implements HandbookEntry {
     public static int getPage(MachineRegistry m, BlockEntity te) {
         if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE)
             return getEnginePage(te);
-        if (m == MachineRegistry.ADVANCEDGEARS)
+        if (m == MachineRegistry.HIGHGEAR || m == MachineRegistry.WORMGEAR || m == MachineRegistry.CVT || m == MachineRegistry.COIL)
             return getAdvGearPage(te);
         for (HandbookRegistry handbookRegistry : tabList) {
             if (handbookRegistry.machine == m)

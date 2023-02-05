@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.auxiliary.interfaces.AlternatingRedstoneUser;
 import reika.rotarycraft.auxiliary.interfaces.RedstoneUpgradeable;
@@ -80,7 +81,6 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
         switch (tile.getEngineType()) {
             case DC -> {
                 VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid((DCModel.TEXTURE_LOCATION)));
-//                RotaryCraft.LOGGER.info(tile.getUpdateTag().getFloat("phi"));
                 dcModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
             }
             case WIND -> {
@@ -100,7 +100,8 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
             }
             case STEAM -> {
                 VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid((SteamModel.TEXTURE_LOCATION)));
-                steamModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+//                RotaryCraft.LOGGER.info(tile.getUpdateTag().getFloat("phi"));
+                steamModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
             }
             case GAS -> {
                 VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid((SteamModel.TEXTURE_LOCATION)));

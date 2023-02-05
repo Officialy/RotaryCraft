@@ -156,8 +156,17 @@ public class RotaryBlockEntities {
     public static final RegistryObject<BlockEntityType<BlockEntitySolarTower>> SOLAR_TOWER = BLOCK_ENTITIES.register("solar_tower", () ->
             BlockEntityType.Builder.of(BlockEntitySolarTower::new, RotaryBlocks.SOLAR_TOWER.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityAdvancedGear>> ADVANCED_GEAR = BLOCK_ENTITIES.register("advanced_gear", () ->
-            BlockEntityType.Builder.of(BlockEntityAdvancedGear::new, RotaryBlocks.ADVANCED_GEAR.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityAdvancedGear>> CVT = BLOCK_ENTITIES.register("cvt", () ->
+            BlockEntityType.Builder.of((pos, block) -> new BlockEntityAdvancedGear(BlockEntityAdvancedGear.GearType.CVT, pos, block), RotaryBlocks.CVT.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityAdvancedGear>> WORMGEAR = BLOCK_ENTITIES.register("wormgear", () ->
+            BlockEntityType.Builder.of((pos, block) -> new BlockEntityAdvancedGear(BlockEntityAdvancedGear.GearType.WORM, pos, block), RotaryBlocks.WORMGEAR.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityAdvancedGear>> COIL = BLOCK_ENTITIES.register("coil", () ->
+            BlockEntityType.Builder.of((pos, block) -> new BlockEntityAdvancedGear(BlockEntityAdvancedGear.GearType.COIL, pos, block), RotaryBlocks.COIL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityAdvancedGear>> HIGHGEAR = BLOCK_ENTITIES.register("highgear", () ->
+            BlockEntityType.Builder.of((pos, block) -> new BlockEntityAdvancedGear(BlockEntityAdvancedGear.GearType.HIGH, pos, block), RotaryBlocks.HIGHGEAR.get()).build(null));
     public static final RegistryObject<BlockEntityType<BlockEntityHeatRay>> HEAT_RAY = BLOCK_ENTITIES.register("heat_ray", () ->
             BlockEntityType.Builder.of(BlockEntityHeatRay::new, RotaryBlocks.HEAT_RAY.get()).build(null));
 
@@ -248,7 +257,7 @@ public class RotaryBlockEntities {
 //    public static final RegistryObject<BlockEntityType<BlockEntityFillingStation>> FILLING_STATION = BLOCK_ENTITIES.register("filling_station", () ->
 //            BlockEntityType.Builder.of(BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityGrinder>> GRINDER = BLOCK_ENTITIES.register("filling_station", () ->
+    public static final RegistryObject<BlockEntityType<BlockEntityGrinder>> GRINDER = BLOCK_ENTITIES.register("grinder", () ->
             BlockEntityType.Builder.of(BlockEntityGrinder::new, RotaryBlocks.GRINDER.get()).build(null));
 
 

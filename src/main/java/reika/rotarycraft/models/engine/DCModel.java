@@ -12,9 +12,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.joml.Vector3f;
 import reika.rotarycraft.base.RotaryModelBase;
-
 import java.util.ArrayList;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
@@ -34,11 +32,9 @@ public class DCModel extends RotaryModelBase {
     private final ModelPart shape6;
     private final ModelPart shape7;
     private final ModelPart shape8;
-    private final ModelPart root;
 
     public DCModel(ModelPart modelPart) {
         super(RenderType::entityCutout);
-        this.root = modelPart;
 
         this.shape1 = modelPart.getChild("shape1");
         this.shape12 = modelPart.getChild("shape12");

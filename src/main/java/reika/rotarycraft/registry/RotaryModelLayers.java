@@ -62,10 +62,10 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation MAGNETIC = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "magnetic"), "main");
     public static final ModelLayerLocation SOLAR_TOWER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "solar_tower"), "main");
     public static final ModelLayerLocation BIGFURNACE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "big_furnace"), "main");
-//    public static final ModelLayerLocation WORMMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "worm_model"), "main");
-//    public static final ModelLayerLocation CVTMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "cvt_model"), "main");
-//    public static final ModelLayerLocation COILMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "coil_model"), "main");
-//    public static final ModelLayerLocation HIGHGEARMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "high_gear_model"), "main");
+    public static final ModelLayerLocation WORMMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "worm_model"), "main");
+    public static final ModelLayerLocation CVTMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "cvt_model"), "main");
+    public static final ModelLayerLocation COILMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "coil_model"), "main");
+    public static final ModelLayerLocation HIGHGEARMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "high_gear_model"), "main");
     public static final ModelLayerLocation GRINDER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "grinder"), "main");
 
 
@@ -108,7 +108,10 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.GEARBOX.get(), RenderGearbox::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.BIG_FURNACE.get(), RenderBigFurnace::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.GRINDER.get(), RenderGrinder::new);
-
+        event.registerBlockEntityRenderer(RotaryBlockEntities.CVT.get(), RenderAdvGear::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.HIGHGEAR.get(), RenderAdvGear::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.COIL.get(), RenderAdvGear::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.WORMGEAR.get(), RenderAdvGear::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -149,5 +152,9 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(SOLAR_TOWER, SolarTowerModel::createLayer);
         event.registerLayerDefinition(BIGFURNACE, BigFurnaceModel::createLayer);
         event.registerLayerDefinition(GRINDER, GrinderModel::createLayer);
+        event.registerLayerDefinition(WORMMODEL, WormModel::createLayer);
+        event.registerLayerDefinition(CVTMODEL, CVTModel::createLayer);
+        event.registerLayerDefinition(COILMODEL, CoilModel::createLayer);
+        event.registerLayerDefinition(HIGHGEARMODEL, HighGearModel::createLayer);
     }
 }

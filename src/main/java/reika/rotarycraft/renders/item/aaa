@@ -1,0 +1,128 @@
+        Map map = EnchantmentHelper.getEnchantments(item);
+        boolean enchant = map != null && !map.isEmpty();
+        if (Renderid == -1) {
+            ReikaTextureHelper.bindTerrainTexture();
+            rb.renderBlockAsItem(Blocks.stone, 0, 1);
+            return;
+        }
+        else if (OldTextureLoader.instance.loadOldTextures()) {
+            MachineRegistry m = MachineRegistry.getMachineByPlacerItem(item);
+            if (m == null) {
+                ReikaTextureHelper.bindTerrainTexture();
+                rb.renderBlockAsItem(Blocks.brick_block, 0, 1F);
+                return;
+            }
+            ReikaTextureHelper.bindTerrainTexture();
+            rb.renderBlockAsItem(m.getBlock(), m.getBlockMetadata(), 1F);
+            return;
+        }
+        float a = 0; float b = 0;
+        if (RotaryBlocks.ENGINE.matchItem(item)) {
+            BlockEntity te = this.getRenderingInstance(MachineRegistry.ENGINE, item.getItemDamage());
+            BlockEntityEngine eng = (BlockEntityEngine)te;
+            if (type == type.ENTITY) {
+                a = -0.5F; b = -0.5F;
+                stack.glScalef(0.5F, 0.5F, 0.5F);
+            }
+            eng.setType(item);
+            BlockEntityRendererDispatcher.instance.renderBlockEntityAt(eng, a, 0.0D, b, 0);
+        }
+        else if (ItemRegistry.GEARBOX.matchItem(item)) {
+            BlockEntity te = this.getRenderingInstance(MachineRegistry.GEARBOX, item.getItemDamage());
+            BlockEntityGearbox gbx = (BlockEntityGearbox)te;
+            if (type == type.ENTITY) {
+                a = -0.5F; b = -0.5F;
+                stack.glScalef(0.5F, 0.5F, 0.5F);
+            }
+            gbx.setData(GearboxTypes.getMaterialFromGearboxItem(item), ReikaMathLibrary.intpow2(2, item.getItemDamage()+1));
+            int amt = item.stackTagCompound != null ? item.stackTagCompound.getInteger("lube") : 0;
+            gbx.setLubricant(amt);
+            if (item.stackTagCompound != null)
+                gbx.setDataFromItemStackTag(item.stackTagCompound);
+            BlockEntityRendererDispatcher.instance.renderBlockEntityAt(gbx, a, 0.0D, b, 0);
+        }
+        else if (ItemRegistry.ADVGEAR.matchItem(item)) {
+            BlockEntity te = this.getRenderingInstance(MachineRegistry.ADVANCEDGEARS, item.getItemDamage());
+            BlockEntityAdvancedGear adv = (BlockEntityAdvancedGear)te;
+            if (type == type.ENTITY) {
+                a = -0.5F; b = -0.5F;
+                stack.glScalef(0.5F, 0.5F, 0.5F);
+            }
+            if (item.stackTagCompound != null && item.stackTagCompound.getBoolean("bedrock"))
+                adv.setBedrock(true);
+            else
+                adv.setBedrock(false);
+            BlockEntityRendererDispatcher.instance.renderBlockEntityAt(adv, a, -0.1D, b, -1000F*(item.getItemDamage()+1));
+        }
+        else if (RotaryBlocks.FLYWHEEL.matchItem(item)) {
+            BlockEntity te = this.getRenderingInstance(MachineRegistry.FLYWHEEL, item.getItemDamage());
+            BlockEntityFlywheel fly = (BlockEntityFlywheel)te;
+            fly.setMaterialFromItem(item);
+            if (type == type.ENTITY) {
+                a = -0.5F; b = -0.5F;
+                stack.glScalef(0.5F, 0.5F, 0.5F);
+            }
+            BlockEntityRendererDispatcher.instance.renderBlockEntityAt(fly, a, 0.0D, b, 0);
+        }/*
+		else if (item.itemID == RotaryCraft.hydraulicitems.itemID) {
+			BlockEntity te = this.getRenderingInstance(MachineRegistry.HYDRAULIC);
+			BlockEntityHydraulicPump hyd = (BlockEntityHydraulicPump)te;
+			if (type == type.ENTITY) {
+				a = -0.5F; b = -0.5F;
+				stack.glScalef(0.5F, 0.5F, 0.5F);
+			}
+			BlockEntityRendererDispatcher.instance.renderBlockEntityAt(hyd, a, 0.0D, b, -1000F*(item.getItemDamage()+1));
+		}*/
+
+        else if (RotaryBlocks.MACHINE.matchItem(item)) {
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            if (type == type.ENTITY) {
+                a = -0.5F;
+                b = -0.5F;
+                stack.glScalef(0.5F, 0.5F, 0.5F);
+            }
+            if (item.getItemDamage() >= MachineRegistry.machineList.length)
+                throw new IllegalStateException("Invalid machine item for render!");
+            MachineRegistry machine = MachineRegistry.machineList.get(item.getItemDamage());
+            if (machine.isPipe()) {
+                if (type == type.EQUIPPED || type == type.EQUIPPED_FIRST_PERSON) {
+                    double d = 0.5;
+                    stack.glTranslated(d, d, d);
+                }
+                rb.renderBlockAsItem(RotaryBlocks.PIPING.getBlockInstance(), machine.getBlockMetadata(), 1);
+            }
+            else if (machine.hasModel()) {
+                BlockEntity te = this.getRenderingInstance(machine, 0);
+                if (machine.isEnchantable()) {
+                    EnchantableMachine em = (EnchantableMachine)te;
+                    em.getEnchantmentHandler().clear();
+                    em.getEnchantmentHandler().applyEnchants(item);
+                }
+                if (machine.hasNBTVariants()) {
+                    ((NBTMachine)te).setDataFromItemStackTag(item.stackTagCompound);
+                }
+                if (RenderItem.renderInFrame && type == type.ENTITY) {
+                    //stack.mulPose(Axis.YP.rotationDegrees(0, 0, 0, 0);
+                }
+                BlockEntityRendererDispatcher.instance.renderBlockEntityAt(te, a, -0.1D, b, 0.0F);
+            }
+            else {
+                ReikaTextureHelper.bindTerrainTexture();
+                if (type == type.EQUIPPED || type == type.EQUIPPED_FIRST_PERSON) {
+                    double d = 0.5;
+                    stack.glTranslated(d, d, d);
+                }
+                else if (RenderItem.renderInFrame && type == type.ENTITY) {
+                    stack.mulPose(Axis.YP.rotationDegrees(90, 0, 1, 0);
+                }
+                rb.renderBlockAsItem(MachineRegistry.machineList.get(item.getItemDamage()).getBlock(), MachineRegistry.machineList.get(item.getItemDamage()).getBlockMetadata(), 1);
+                if (enchant) {
+                    stack.mulPose(Axis.ZP.rotationDegrees(90));
+                    ReikaSpriteSheets.renderEffect(type, item);
+                    stack.mulPose(Axis.ZN.rotationDegrees(90));
+                }
+            }
+            stack.glDisable(stack.GL_BLEND);
+        }
+    }

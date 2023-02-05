@@ -12,6 +12,7 @@ package reika.rotarycraft.renders;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import org.joml.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -47,14 +48,12 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
 
     public void renderBlockEntityShaftAt(PoseStack stack, BlockEntityShaft tile, MultiBufferSource bufferSource, int pPackedLight) {
         stack.pushPose();
-
         if (tile.isInWorld()) {
             var failed = tile.failed();
 
             BlockState blockstate = tile.getLevel() != null ? tile.getBlockState() : RotaryBlocks.DYNAMOMETER.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
             stack.translate(0.5F, 1.5F, 0.5F);
             float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
-//            RotaryCraft.LOGGER.info("isUp: " + isUp);
             stack.mulPose(Axis.YP.rotationDegrees(-f + 90));
             stack.mulPose(Axis.ZP.rotationDegrees(180));
 
@@ -81,7 +80,7 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
             IORenderer.renderIO(stack, multiBufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
     }
 
-    public String getImageFileName(BlockEntity te) {
+    public static String getImageFileName(BlockEntity te) {
         BlockEntityShaft tile = (BlockEntityShaft) te;
         String tex = tile.getShaftType().getBaseShaftTexture();
         if (tile.isCross()) {

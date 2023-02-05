@@ -272,39 +272,39 @@ public abstract class IORenderer {
         builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         tesselator.end();
 
-
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         builder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
         builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         tesselator.end();
-
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         builder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
         builder.vertex(matrix, x + 1.0625f * expand, y + 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x + 1.0625f * expand, y + 0.0625f * expand, z + 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         tesselator.end();
-
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         builder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
         builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         tesselator.end();
-
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
         builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         tesselator.end();
-
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
         builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         tesselator.end();
-
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
         builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         tesselator.end();
-
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
         builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
         builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
