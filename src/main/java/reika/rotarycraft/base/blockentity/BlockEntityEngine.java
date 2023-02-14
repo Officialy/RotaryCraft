@@ -69,7 +69,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
      */
     public static final int FUELCAP = 240 * 1000;
     public static final int LUBECAP = 24 * 1000;
-    public static int temperature;
+    public int temperature;
     protected final ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
     protected final HybridTank water = new HybridTank("enginewater", CAPACITY);
     protected final HybridTank lubricant = new HybridTank("enginelube", LUBECAP);

@@ -29,8 +29,10 @@ public abstract class RotaryModelBase extends Model implements TileModel {
         this.renderAll(stack, tex, packedLightIn, te, conditions, phi, 0);
     }
 
+
+    // Not always used, but if it is, it's used to render the model in the inventory it gives 0 for phi and theta. The TE IS NULL WHEN USING THIS METHOD, MAKE SURE THE TE IS NOT NEEDED
     @Override
     public void renderToBuffer(PoseStack p_103111_, VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
-
+        this.renderAll(p_103111_, p_103112_, p_103113_, null, null, 0, 0);
     }
 }

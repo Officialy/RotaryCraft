@@ -60,7 +60,7 @@ public class SteamContainer extends IOMachineContainer<BlockEntitySteamEngine> {
     @Override
     public void setData(int pId, int pData) {
         switch (pId) {
-            case 1 -> BlockEntityEngine.temperature = pData;
+            case 1 -> steam.temperature = pData;
         }
     }
 

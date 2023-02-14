@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Vector3f;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.RotaryModelBase;
 
 import java.util.ArrayList;
@@ -146,10 +147,15 @@ public class ShaftModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        boolean fail = (Boolean) conditions.get(0);
-        this.renderMount(stack, tex, packedLightIn);
-        if (!fail)
+        if (conditions != null && conditions.size() > 0) {
+            boolean fail = (Boolean) conditions.get(0);
+            this.renderMount(stack, tex, packedLightIn);
+            if (!fail)
+                this.renderShaft(stack, tex, packedLightIn, phi);
+        } else { // This is for the item renderer
+            this.renderMount(stack, tex, packedLightIn);
             this.renderShaft(stack, tex, packedLightIn, phi);
+        }
     }
 
     public void renderShaft(PoseStack stack, VertexConsumer tex, int packedLightIn, float phi) {

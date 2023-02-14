@@ -17,16 +17,16 @@
 //import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 //import reika.rotarycraft.auxiliary.IORenderer;
 //import reika.rotarycraft.base.RotaryTERenderer;
-//import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 //import reika.rotarycraft.blockentities.transmission.BlockEntityFlywheel;
-//import reika.rotarycraft.model.animated.ModelFlywheel;
+//import reika.rotarycraft.model.animated.FlywheelModel;
+//import reika.rotarycraft.models.animated.FlywheelModel;
 //import reika.rotarycraft.registry.Flywheels;
 //
 //import java.util.Locale;
 //
 //public class RenderFlywheel extends RotaryTERenderer<BlockEntityFlywheel> {
 //
-//    private ModelFlywheel FlywheelModel = new ModelFlywheel();
+//    private FlywheelModel flywheelModel;
 //
 //    public RenderFlywheel(BlockEntityRendererProvider.Context pContext) {
 //
@@ -41,10 +41,11 @@
 //        return "Transmission/Flywheel/";
 //    }
 //
-//    public void renderBlockEntityFlywheelAt(PoseStack stack, BlockEntityFlywheel tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityFlywheelAt(PoseStack stack, BlockEntityFlywheel tile, MultiBufferSource bufferSource, int light) {
 //
-//        ModelFlywheel var14;
-//        var14 = FlywheelModel;
+//        FlywheelModel var14;
+//        var14 = flywheelModel;
+//
 //        this.bindTextureByName(this.getTextureFolder() + this.getFlywheelTextureName(tile.getTypeOrdinal()));
 //
 //        this.setupGL(stack, tile, par2, par4, par6);
@@ -91,9 +92,4 @@
 //            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
 //    }
 //
-//    @Override
-//    public String getImageFileName(RenderFetcher te) {
-//        BlockEntityFlywheel tile = (BlockEntityFlywheel) te;
-//        return this.getFlywheelTextureName(tile.getTypeOrdinal());
-//    }
 //}

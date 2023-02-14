@@ -17,7 +17,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class AerosolizerModel extends Model {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/");
+    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/aerotex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;
@@ -136,7 +136,6 @@ public class AerosolizerModel extends Model {
 
     @Override
     public void renderToBuffer(PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-
         root.render(stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 }

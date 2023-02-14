@@ -31,23 +31,24 @@ public class ItemRangeFinder extends ItemChargedTool {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player ep, InteractionHand hand) {
-        if (this.getDefaultInstance().getOrCreateTag().getInt("charge") <= 0) {
-            this.noCharge();
-            return InteractionResultHolder.fail(this.getDefaultInstance());
-        }
-        this.warnCharge(this.getDefaultInstance());
+        if (hand.equals(InteractionHand.MAIN_HAND)) {
+            if (this.getDefaultInstance().getOrCreateTag().getInt("charge") <= 0) {
+                this.noCharge();
+                return InteractionResultHolder.fail(this.getDefaultInstance());
+            }
+            this.warnCharge(this.getDefaultInstance());
 
-        HitResult mov = ReikaPlayerAPI.getLookedAtBlock(ep, 512, true);
-        if (mov != null) {
-            double d = ReikaMathLibrary.py3d(mov.getLocation().x() - ep.getY(), mov.getLocation().y() - ep.getY(), mov.getLocation().z() - ep.getZ());
-            Block b = level.getBlockState(new BlockPos(mov.getLocation().x(), mov.getLocation().y(), mov.getLocation().z())).getBlock();
-            String s = Item.BY_BLOCK.get(b).getName(new ItemStack(b, 1)).toString();
-            if (s == null || s.isEmpty())
-                s = "[No Name]";
-            ReikaChatHelper.write(String.format("Block '%s' is %.3fm away.", s, d));
-            this.getDefaultInstance().setDamageValue(this.getDefaultInstance().getDamageValue() - 1);
+            HitResult mov = ReikaPlayerAPI.getLookedAtBlock(ep, 512, true);
+            if (mov != null) {
+                double d = ReikaMathLibrary.py3d(mov.getLocation().x() - ep.getY(), mov.getLocation().y() - ep.getY(), mov.getLocation().z() - ep.getZ());
+                Block b = level.getBlockState(new BlockPos(mov.getLocation().x(), mov.getLocation().y(), mov.getLocation().z())).getBlock();
+                String s = Item.BY_BLOCK.get(b).getName(new ItemStack(b, 1)).toString();
+                if (s == null || s.isEmpty())
+                    s = "[No Name]";
+                ReikaChatHelper.write(String.format("Block '%s' is %.3fm away.", s, d));
+                this.getDefaultInstance().setDamageValue(this.getDefaultInstance().getDamageValue() - 1);
+            }
         }
-
         return InteractionResultHolder.pass(this.getDefaultInstance());
 
     }

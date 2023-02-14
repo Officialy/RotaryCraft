@@ -176,7 +176,7 @@ public class BlockEngine extends Block {
     public void onPlace(BlockState state, Level world, BlockPos pos, BlockState pOldState, boolean pIsMoving) {
         BlockEntityEngine te = (BlockEntityEngine) world.getBlockEntity(pos);
         if (te != null) {
-            BlockEntityEngine.temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
+            te.temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
         }
     }
 

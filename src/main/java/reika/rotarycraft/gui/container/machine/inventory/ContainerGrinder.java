@@ -13,7 +13,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
@@ -35,7 +37,6 @@ public class ContainerGrinder extends IOMachineContainer<BlockEntityGrinder> {
         lastGrinderCookTime = 0;
         grinder = te;
         te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
-//            RotaryCraft.LOGGER.info("Adding slots");
             this.addSlot(new SlotItemHandler(itemHandler, 0, 76, 35) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {

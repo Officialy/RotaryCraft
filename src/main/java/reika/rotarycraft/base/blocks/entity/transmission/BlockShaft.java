@@ -6,10 +6,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 import org.jetbrains.annotations.Nullable;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 import reika.rotarycraft.registry.MaterialRegistry;
+
+import java.util.function.Consumer;
 
 public class BlockShaft extends BlockBasicMachine {
 
@@ -34,4 +37,5 @@ public class BlockShaft extends BlockBasicMachine {
             ((BlockEntityShaft) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
 }

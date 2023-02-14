@@ -64,7 +64,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantments.MOB_LOOTING).addFilter(Enchantments.KNOCKBACK).addFilter(Enchantments.FLAMING_ARROWS /*flaming arrows or flame aspect?!*/).addFilter(Enchantments.BLOCK_FORTUNE);
-    private final HybridTank tank = new HybridTank("grinder", MAXLUBE){
+    private final HybridTank tank = new HybridTank("grinder", MAXLUBE) {
         @Override
         protected void onContentsChanged() {
             setChanged();
@@ -342,8 +342,9 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     public boolean isItemValidForSlot(int slot, ItemStack is) {
         if (slot == 1)
             return false;
-        if (slot == 2)
+        if (slot == 2) {
             return is.getItem() == Items.BUCKET;
+        }
         return is.getItem() == RotaryItems.CANOLA_SEEDS.get() || RecipesGrinder.grinderRecipes.isGrindable(is);
     }
 

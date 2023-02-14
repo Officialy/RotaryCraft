@@ -33,7 +33,7 @@ public class ItemTileSelector extends ItemRotaryTool {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (!super.use(level, player, hand).getResult().consumesAction()) //todo fix this its broke, "consumes action"??
+        if (!super.use(level, player, hand).getResult().consumesAction() && hand.equals(InteractionHand.MAIN_HAND)) //todo fix this its broke, "consumes action"??
             return InteractionResultHolder.fail(this.asItem().getDefaultInstance());
         BlockEntity te = level.getBlockEntity(player.blockPosition()); //todo might be broken, needs to be what the player is hovering over
         if (te instanceof SelectableTiles && !player.isShiftKeyDown()) {

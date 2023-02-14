@@ -1,5 +1,6 @@
 package reika.rotarycraft;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -13,6 +14,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 import reika.rotarycraft.registry.MachineRegistry;
@@ -34,10 +36,10 @@ public class Tests {
 
         @Override
         public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-            if (!player.isShiftKeyDown() && player.level.isClientSide()) {
-            return InteractionResultHolder.success(this.getDefaultInstance());
+            if (!player.isShiftKeyDown() && player.level.isClientSide() && hand.equals(InteractionHand.MAIN_HAND)) {
+                return InteractionResultHolder.success(this.getDefaultInstance());
             } else if (player.isShiftKeyDown()) {
-                RotaryCraft.LOGGER.info(RecipesGrinder.grinderRecipes.getAllGrindables());
+
                 return InteractionResultHolder.success(this.getDefaultInstance());
             }
 

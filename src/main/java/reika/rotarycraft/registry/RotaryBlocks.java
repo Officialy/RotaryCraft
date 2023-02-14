@@ -1,5 +1,6 @@
 package reika.rotarycraft.registry;
 
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -9,6 +10,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -18,7 +20,9 @@ import reika.rotarycraft.base.blocks.entity.*;
 import reika.rotarycraft.base.blocks.entity.engine.*;
 import reika.rotarycraft.base.blocks.entity.pipe.*;
 import reika.rotarycraft.base.blocks.entity.transmission.*;
+import reika.rotarycraft.renders.item.ShaftItemRenderer;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class RotaryBlocks {
@@ -52,14 +56,74 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> BEDROCK_GEARBOX_4x = register("bedrock_gearbox_4x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> BEDROCK_GEARBOX_8x = register("bedrock_gearbox_8x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> BEDROCK_GEARBOX_16x = register("bedrock_gearbox_16x", () -> new BlockGearbox(GearboxTypes.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
-//    public static final RegistryObject<Block> FILLING_STATION = register("filling_station", () -> new BlockFillingStation(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
-    public static final RegistryObject<Block> WOOD_SHAFT = register("wood_shaft", () -> new BlockShaft(MaterialRegistry.WOOD, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
-    public static final RegistryObject<Block> STONE_SHAFT = register("stone_shaft", () -> new BlockShaft(MaterialRegistry.STONE, BlockBehaviour.Properties.of(Material.WOOD).strength(20)));
-    public static final RegistryObject<Block> HSLA_SHAFT = register("hsla_shaft", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
+    //    public static final RegistryObject<Block> FILLING_STATION = register("filling_station", () -> new BlockFillingStation(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
+    public static final RegistryObject<Block> WOOD_SHAFT = register("wood_shaft", () -> new BlockShaft(MaterialRegistry.WOOD, BlockBehaviour.Properties.of(Material.WOOD).strength(20)), block -> new BlockItem(block, new Item.Properties()) {
+        @Override
+        public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+            consumer.accept(new IClientItemExtensions() {
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return new ShaftItemRenderer(null, null);
+                }
+            });
+        }
+    });
+    public static final RegistryObject<Block> STONE_SHAFT = register("stone_shaft", () -> new BlockShaft(MaterialRegistry.STONE, BlockBehaviour.Properties.of(Material.WOOD).strength(20)), block -> new BlockItem(block, new Item.Properties()) {
+        @Override
+        public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+            consumer.accept(new IClientItemExtensions() {
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return new ShaftItemRenderer(null, null);
+                }
+            });
+        }
+    });
+    public static final RegistryObject<Block> HSLA_SHAFT = register("hsla_shaft", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(20)), block -> new BlockItem(block, new Item.Properties()) {
+        @Override
+        public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+            consumer.accept(new IClientItemExtensions() {
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return new ShaftItemRenderer(null, null);
+                }
+            });
+        }
+    });
     public static final RegistryObject<Block> HSLA_STEEL_BLOCK = register("hsla_steel_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
-    public static final RegistryObject<Block> TUNGSTEN_SHAFT = register("tungsten_shaft", () -> new BlockShaft(MaterialRegistry.TUNGSTEN, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
-    public static final RegistryObject<Block> DIAMOND_SHAFT = register("diamond_shaft", () -> new BlockShaft(MaterialRegistry.DIAMOND, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
-    public static final RegistryObject<Block> BEDROCK_SHAFT = register("bedrock_shaft", () -> new BlockShaft(MaterialRegistry.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)));
+    public static final RegistryObject<Block> TUNGSTEN_SHAFT = register("tungsten_shaft", () -> new BlockShaft(MaterialRegistry.TUNGSTEN, BlockBehaviour.Properties.of(Material.METAL).strength(20)), block -> new BlockItem(block, new Item.Properties()) {
+        @Override
+        public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+            consumer.accept(new IClientItemExtensions() {
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return new ShaftItemRenderer(null, null);
+                }
+            });
+        }
+    });
+    public static final RegistryObject<Block> DIAMOND_SHAFT = register("diamond_shaft", () -> new BlockShaft(MaterialRegistry.DIAMOND, BlockBehaviour.Properties.of(Material.METAL).strength(20)), block -> new BlockItem(block, new Item.Properties()) {
+        @Override
+        public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+            consumer.accept(new IClientItemExtensions() {
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return new ShaftItemRenderer(null, null);
+                }
+            });
+        }
+    });
+    public static final RegistryObject<Block> BEDROCK_SHAFT = register("bedrock_shaft", () -> new BlockShaft(MaterialRegistry.BEDROCK, BlockBehaviour.Properties.of(Material.METAL).strength(20)), block -> new BlockItem(block, new Item.Properties()) {
+        @Override
+        public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+            consumer.accept(new IClientItemExtensions() {
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return new ShaftItemRenderer(null, null);
+                }
+            });
+        }
+    });
 
     public static final RegistryObject<Block> TRANS = register("trans", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
     public static final RegistryObject<Block> SOLAR_TOWER = register("solar_tower", () -> new BlockSolarTower(BlockBehaviour.Properties.of(Material.METAL).strength(20)));
@@ -79,8 +143,28 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> SHIELD = register("shield", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> BEDROCK = register("bedrock", () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(-1)));
     public static final RegistryObject<Block> COKE = register("coke_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-    public static final RegistryObject<Block> SHAFT_CROSS = register("cross", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(5)));
-    public static final RegistryObject<Block> SHAFT_MERGE = register("merge", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> SHAFT_CROSS = register("cross", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(5)), block -> new BlockItem(block, new Item.Properties()) {
+        @Override
+        public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+            consumer.accept(new IClientItemExtensions() {
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return new ShaftItemRenderer(null, null);
+                }
+            });
+        }
+    });
+    public static final RegistryObject<Block> SHAFT_MERGE = register("merge", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of(Material.METAL).strength(5)), block -> new BlockItem(block, new Item.Properties()) {
+        @Override
+        public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+            consumer.accept(new IClientItemExtensions() {
+                @Override
+                public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                    return new ShaftItemRenderer(null, null);
+                }
+            });
+        }
+    });
     public static final RegistryObject<Block> SPLITTER = register("splitter", () -> new BlockSplitter(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SMOKE_DETECTOR = register("smoke_detector", () -> new BlockSmokeDetector(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> DISTRIBUTION_CLUTCH = register("distribution_clutch", () -> new BlockDistributionClutch(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
@@ -158,7 +242,7 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> SUCTION = register("suction", () -> new BlockSuction(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> BEDROCK_PIPE = register("bedrock_pipe", () -> new BlockBedrockPipe(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
 
-    private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of(Material.STONE).strength(2.0F, 3.0F).sound(SoundType.METAL);
+    private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
 
     static {
 //        for (RoCWoodTypes type : RoCWoodTypes.VALUES) {
@@ -170,10 +254,10 @@ public class RotaryBlocks {
     }
 
     private static <BLOCK extends Block> RegistryObject<BLOCK> register(final String name, final Supplier<BLOCK> blockFactory) {
-        return registerBlock(name, blockFactory, block -> new BlockItem(block, new Item.Properties()));
+        return register(name, blockFactory, block -> new BlockItem(block, new Item.Properties()));
     }
 
-    private static <BLOCK extends Block> RegistryObject<BLOCK> registerBlock(final String name, final Supplier<BLOCK> blockFactory, final IBlockItemFactory<BLOCK> itemFactory) {
+    private static <BLOCK extends Block> RegistryObject<BLOCK> register(final String name, final Supplier<BLOCK> blockFactory, final IBlockItemFactory<BLOCK> itemFactory) {
         final RegistryObject<BLOCK> block = BLOCKS.register(name, blockFactory);
         ITEMS.register(name, () -> itemFactory.create(block.get()));
 
