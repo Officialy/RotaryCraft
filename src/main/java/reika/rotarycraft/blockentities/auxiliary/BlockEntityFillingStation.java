@@ -158,13 +158,13 @@
 //    }
 //
 //    private boolean hasFillable() {
-//        return inv[0] != null && inv[0].getItem() instanceof Fillable;
+//        return !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getItem() instanceof Fillable;
 //    }
 //
 //    private boolean canFill() {
 //        if (tank.isEmpty())
 //            return false;
-//        ItemStack is = inv[0];
+//        ItemStack is = itemHandler.getStackInSlot(0);
 //        if (is == null)
 //            return false;
 //        Fillable i = (Fillable) is.getItem();
@@ -259,12 +259,12 @@
 //    }
 //
 //    public ItemStack getItemForRender() {
-//        return inv[0] != null ? inv[0].copy() : null;
+//        return !itemHandler.getStackInSlot(0).isEmpty() ? itemHandler.getStackInSlot(0).copy() : null;
 //    }
 //
 //    @Override
 //    public boolean areConditionsMet() {
-//        return !tank.isEmpty() && inv[0] != null && inv[0].getItem() instanceof Fillable;
+//        return !tank.isEmpty() && !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getItem() instanceof Fillable;
 //    }
 //
 //    @Override

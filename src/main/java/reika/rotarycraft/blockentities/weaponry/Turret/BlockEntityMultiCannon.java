@@ -238,13 +238,13 @@
 //        for (int i = CLIP_SLOT - 1; i > LOAD_SLOT; i--) {
 //            if (inv[i - 1] != null) {
 //                boolean flag = false;
-//                if (inv[i] == null) {
-//                    inv[i] = inv[i - 1];
+//                if (itemHandler.getStackInSlot(i) == null) {
+//                    itemHandler.getStackInSlot(i) = inv[i - 1];
 //                    inv[i - 1] = null;
 //                    flag = true;
-//                } else if (inv[i].getCount() < 64) {
-//                    int amt = Math.min(64 - inv[i].getCount(), inv[i - 1].getCount());
-//                    inv[i].getCount() += amt;
+//                } else if (itemHandler.getStackInSlot(i).getCount() < 64) {
+//                    int amt = Math.min(64 - itemHandler.getStackInSlot(i).getCount(), inv[i - 1].getCount());
+//                    itemHandler.getStackInSlot(i).getCount() += amt;
 //                    ReikaInventoryHelper.decrStack(i - 1, this, amt);
 //                    flag = true;
 //                }

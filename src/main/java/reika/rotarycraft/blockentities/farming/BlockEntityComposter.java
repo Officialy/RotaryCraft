@@ -30,6 +30,7 @@ import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.InventoriedRCBlockEntity;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.COMPOSTER.get();
     }
 
     @Override
@@ -90,10 +91,10 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
         int time = 1 + (temperature - 40) / 4;
         timer.update(time);
         if (timer.checkCap()) {
-            ReikaInventoryHelper.decrStack(0, inv);
-            ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(RotaryItems.COMPOST.get().getDefaultInstance(), value), inv, 2);
+            ReikaInventoryHelper.decrStack(0, itemHandler);
+            ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(RotaryItems.COMPOST.get().getDefaultInstance(), value), itemHandler, 2);
             if (DragonAPI.rand.nextInt(75 - temperature) == 0)
-                ReikaInventoryHelper.decrStack(1, inv);
+                ReikaInventoryHelper.decrStack(1, itemHandler);
             composterCookTime = 0;
         }
         composterCookTime = timer.getTick();
@@ -107,18 +108,18 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
     private int getCompostValue() {
         if (temperature < MINTEMP || temperature > KILLTEMP)
             return 0;
-        if (inv[0] == null || inv[1] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty() || !itemHandler.getStackInSlot(1).isEmpty())
             return 0;
-        if (inv[1].getItem() != RotaryItems.YEAST.get())
+        if (itemHandler.getStackInSlot(1).getItem() != RotaryItems.YEAST.get())
             return 0;
-        CompostMatter c = CompostMatter.getMatterType(inv[0]);
+        CompostMatter c = CompostMatter.getMatterType(itemHandler.getStackInSlot(0));
         if (c == null)
             return 0;
-        if (inv[2] == null)
+        if (itemHandler.getStackInSlot(2).isEmpty())
             return c.value;
-        if (!ReikaItemHelper.matchStacks(inv[2], RotaryItems.COMPOST))
+        if (!ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(2), RotaryItems.COMPOST))
             return 0;
-        return inv[2].getCount() + c.value <= inv[2].getMaxStackSize() ? c.value : 0;
+        return itemHandler.getStackInSlot(2).getCount() + c.value <= itemHandler.getStackInSlot(2).getMaxStackSize() ? c.value : 0;
     }
 
     //    @Override
@@ -257,70 +258,8 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
     }
 
     @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
-    public int getSlots() {
-        return 3;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
-        return 0;
-    }
-
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public boolean hasAnInventory() {
-        return false;
+        return true;
     }
 
     @Override

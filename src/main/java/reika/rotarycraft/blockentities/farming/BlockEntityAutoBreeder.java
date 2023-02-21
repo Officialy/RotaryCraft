@@ -95,8 +95,8 @@
 //
 //    @Override
 //    public boolean isIdle() {
-//        for (int i = 0; i < inv.length; i++) {
-//            ItemStack in = inv[i];
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            ItemStack in = itemHandler.getStackInSlot(i);
 //            if (in != null) {
 //                if (feedItems.containsValue(new KeyedItemStack(in).setSimpleHash(true))) {
 //                    return false;

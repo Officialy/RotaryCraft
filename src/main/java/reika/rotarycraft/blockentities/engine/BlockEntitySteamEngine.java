@@ -214,16 +214,6 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     }
 
     @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
     public boolean hasAnInventory() {
         return false;
     }

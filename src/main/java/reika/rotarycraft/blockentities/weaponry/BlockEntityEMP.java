@@ -358,8 +358,8 @@
 //		if (te instanceof Container) {
 //			Container ii = (Container)te;
 //			inv = new ItemStack[ii.getContainerSize()];
-//			for (int i = 0; i < inv.length; i++) {
-//				inv[i] = ii.getStackInSlot(i);
+//			for (int i = 0; i < itemHandler.getSlots(); i++) {
+//				itemHandler.getStackInSlot(i) = ii.getStackInSlot(i);
 //			}
 //		}
 //		else {
@@ -368,9 +368,9 @@
 //		level.setBlock(pos, RotaryBlocks.DEADMACHINE.getBlock());
 //		BlockEntityDeadMachine dead = (BlockEntityDeadMachine)level.getBlockEntity(pos);
 //		dead.setBlock(b, id, meta);
-//		dead.setInvSize(inv.length);
-//		for (int i = 0; i < inv.length; i++) {
-//			dead.setInventorySlotContents(i, inv[i]);
+//		dead.setInvSize(itemHandler.getSlots());
+//		for (int i = 0; i < itemHandler.getSlots(); i++) {
+//			dead.setInventorySlotContents(i, itemHandler.getStackInSlot(i));
 //		}*/
 //    }
 //

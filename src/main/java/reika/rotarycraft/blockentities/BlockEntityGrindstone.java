@@ -59,7 +59,7 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
             return;
         }
 
-        if (inv[0] != null) {
+        if (!itemHandler.getStackInSlot(0).isEmpty()) {
             soundtick++;
             if (soundtick > 49) {
                 SoundRegistry.FRICTION.playSoundAtBlock(world, pos, RotaryAux.isMuffled(this) ? 0.1F : 0.5F, 1);
@@ -91,8 +91,8 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     }
 
     private void createUsesTag() {
-        if (!inv[0].getOrCreateTag().contains(NBT_TAG))
-            inv[0].getOrCreateTag().putInt(NBT_TAG, inv[0].getMaxDamage() * 2);
+        if (!itemHandler.getStackInSlot(0).getOrCreateTag().contains(NBT_TAG))
+            itemHandler.getStackInSlot(0).getOrCreateTag().putInt(NBT_TAG, itemHandler.getStackInSlot(0).getMaxDamage() * 2);
     }
 
     public void getIOSides(Level world, BlockPos pos, int metadata) {
@@ -109,12 +109,12 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     }
 
     private void repair() {
-        int dmg = inv[0].getDamageValue();
+        int dmg = itemHandler.getStackInSlot(0).getDamageValue();
         int newdmg = dmg - 1;
-        inv[0].setDamageValue(newdmg);
-        int repair = inv[0].getTag().getInt(NBT_TAG);
-        inv[0].getTag().putInt(NBT_TAG, repair - 1);
-        //ReikaJavaLibrary.pConsole(inv[0].getTag());
+        itemHandler.getStackInSlot(0).setDamageValue(newdmg);
+        int repair = itemHandler.getStackInSlot(0).getTag().getInt(NBT_TAG);
+        itemHandler.getStackInSlot(0).getTag().putInt(NBT_TAG, repair - 1);
+        //ReikaJavaLibrary.pConsole(itemHandler.getStackInSlot(0).getTag());
     }
 
     public int getMinimumDamageForItem(ItemStack is) {
@@ -122,11 +122,11 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     }
 
     public boolean hasValidItem() {
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return false;
-        if (!this.isItemValidForSlot(0, inv[0]))
+        if (!this.isItemValidForSlot(0, itemHandler.getStackInSlot(0)))
             return false;
-        return inv[0].getDamageValue() > this.getMinimumDamageForItem(inv[0]);
+        return itemHandler.getStackInSlot(0).getDamageValue() > this.getMinimumDamageForItem(itemHandler.getStackInSlot(0));
     }
 
     //    @Override
@@ -206,7 +206,7 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
 
     @Override
     public String getOperationalStatus() {
-        return inv[0] == null ? "No Tool" : this.areConditionsMet() ? "Operational" : "Invalid Item";
+        return itemHandler.getStackInSlot(0).isEmpty() ? "No Tool" : this.areConditionsMet() ? "Operational" : "Invalid Item";
     }
 
     @Override
@@ -217,33 +217,6 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     @Override
     public int getNumberConsecutiveOperations() {
         return DurationRegistry.GRINDSTONE.getNumberOperations(omega);
-    }
-
-    @Override
-    public int getSlots() {
-        return 1;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
-        return 64;
-    }
-
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return false;
     }
 
 
@@ -262,33 +235,4 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
         return 1;
     }
 
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
 }

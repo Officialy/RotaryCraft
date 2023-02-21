@@ -210,19 +210,19 @@
 //        int size = is.getCount();
 //        int firstempty = -1;
 //
-//        for (int k = 0; k < inv.length; k++) { //Find first empty slot
+//        for (int k = 0; k < itemHandler.getSlots(); k++) { //Find first empty slot
 //            if (inv[k] == null) {
 //                firstempty = k;
-//                k = inv.length;
+//                k = itemHandler.getSlots();
 //            }
 //        }
-//        for (int j = 0; j < inv.length; j++) {
+//        for (int j = 0; j < itemHandler.getSlots(); j++) {
 //            if (inv[j] != null) {
 //                if (ReikaItemHelper.areStacksCombinable(is, inv[j], Integer.MAX_VALUE)) {
 //                    if (ItemStack.isSameItemSameTags(is, inv[j])) {
 //                        if (inv[j].getCount() + size <= this.getInventoryStackLimit()) {
 //                            target = j;
-//                            j = inv.length;
+//                            j = itemHandler.getSlots();
 //                        } else {
 //                            int diff = is.getMaxStackSize() - inv[j].getCount();
 //                            inv[j].getCount() += diff;

@@ -60,7 +60,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
     public static final int OUTPUT_LOWER = 13;
     private final StepTimer tempTimer = new StepTimer(20);
     public int smeltTime = 0;
-    public boolean[] lockedSlots = new boolean[inv.length];
+    public boolean[] lockedSlots = new boolean[itemHandler.getSlots()];
     public boolean leaveLastItem;
     private int temperature;
     private float xp;
@@ -82,7 +82,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
 
         if (c != null && leaveLastItem) {
             for (int i = 1; i <= 9; i++) {
-                if (inv[i] != null && inv[i].getCount() == 1)
+                if (itemHandler.getStackInSlot(i).isEmpty() && itemHandler.getStackInSlot(i).getCount() == 1)
                     return null;
             }
         }
@@ -111,7 +111,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
 
         if (leaveLastItem) {
             for (int i = 1; i <= 9; i++) {
-                if (rec.usesSlot(i - 1) && inv[i] != null && inv[i].getCount() == 1)
+                if (rec.usesSlot(i - 1) && itemHandler.getStackInSlot(i).isEmpty() && itemHandler.getStackInSlot(i).getCount() == 1)
                     return null;
             }
         }
@@ -190,7 +190,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         }
 
         for (int i = 1; i < 10; i++) {
-            if (inv[i] != null)
+            if (itemHandler.getStackInSlot(i).isEmpty())
                 ReikaInventoryHelper.decrStack(i, inv);
         }
     }
@@ -248,7 +248,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         }
 
         for (int i = 1; i < 10; i++) {
-            if (inv[i] != null)
+            if (itemHandler.getStackInSlot(i).isEmpty())
                 ReikaInventoryHelper.decrStack(i, inv);
         }
         RotaryAdvancements a = this.getAchievement(rec);
@@ -264,8 +264,8 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
     private int getProducedFor(RecipesBlastFurnace.BlastRecipe rec) {
         int num = 0;
         for (int i = 1; i < 10; i++) {
-            if (inv[i] != null) {
-                if (rec.isValidMainItem(inv[i]))
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
+                if (rec.isValidMainItem(itemHandler.getStackInSlot(i)))
                     num++;
             }
         }
@@ -414,7 +414,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         temperature = NBT.getInt("temp");
         xp = NBT.getFloat("exp");
 
-        lockedSlots = ReikaArrayHelper.booleanFromBitflags(NBT.getInt("locks"), inv.length);
+        lockedSlots = ReikaArrayHelper.booleanFromBitflags(NBT.getInt("locks"), itemHandler.getSlots());
         leaveLastItem = NBT.getBoolean("last");
     }
 

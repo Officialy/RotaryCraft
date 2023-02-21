@@ -91,14 +91,14 @@
 //
 //    private void rebuildBlacklist() {
 //        blacklist.clear();
-//        for (int i = 2; i < inv.length; i++) {
-//            if (inv[i] != null)
-//                blacklist.add(new KeyedItemStack(inv[i]).setSimpleHash(true).setIgnoreNBT(false).setSized(false));
+//        for (int i = 2; i < itemHandler.getSlots(); i++) {
+//            if (itemHandler.getStackInSlot(i).isEmpty())
+//                blacklist.add(new KeyedItemStack(itemHandler.getStackInSlot(i)).setSimpleHash(true).setIgnoreNBT(false).setSized(false));
 //        }
 //    }
 //
 //    public void reloadData() {
-//        this.setData(inv[0] != null ? new MatchData(inv[0]).loadFrom(data) : null);
+//        this.setData(!itemHandler.getStackInSlot(0).isEmpty() ? new MatchData(itemHandler.getStackInSlot(0)).loadFrom(data) : null);
 //    }
 //
 //    @Override
@@ -128,19 +128,19 @@
 //                ((BasicAEInterface) aeGridBlock).setPowerCost(power >= MINPOWER ? 2 : 1);
 //            }
 //
-//            if (!world.isClientSide && network != null && data != null && inv[1] == null && !MEStacks.isEmpty()) {
+//            if (!world.isClientSide && network != null && data != null && itemHandler.getStackInSlot(1) == null && !MEStacks.isEmpty()) {
 //                int idx = DragonAPI.rand.nextInt(MEStacks.size());
 //                ItemStack is = MEStacks.get(idx);
 //                is = ReikaItemHelper.getSizedItemStack(is, is.getMaxStackSize());
 //                int ret = (int) network.removeItem(is, false, true);
 //                if (ret > 0) {
-//                    inv[1] = ReikaItemHelper.getSizedItemStack(is, ret);
+//                    itemHandler.getStackInSlot(1) = ReikaItemHelper.getSizedItemStack(is, ret);
 //                    MEStacks.remove(idx);
 //                }
 //            }
 //        }
 //
-//        if (data == null && inv[0] != null) {
+//        if (data == null && !itemHandler.getStackInSlot(0).isEmpty()) {
 //            this.onInventoryChanged(0);
 //        }
 //    }

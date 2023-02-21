@@ -34,13 +34,13 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
             return Integer.MAX_VALUE;
         //if (DragonAPI.DEBUGTEST)
         //    return Integer.MAX_VALUE;
-        ItemStack is = inv[this.getCoilSlot()];
+        ItemStack is = itemHandler.getStackInSlot(this.getCoilSlot());
         int base = this.getBaseDischargeTime();
         return base * ((TensionStorage) is.getItem()).getStiffness(is);
     }
 
     public int getExpectedCoilLife() {
-        return this.getUnwindTime() * inv[this.getCoilSlot()].getDamageValue();
+        return this.getUnwindTime() * itemHandler.getStackInSlot(this.getCoilSlot()).getTag().getInt("energy");
     }
 
 
@@ -58,7 +58,7 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
     }
 
     protected final ItemStack getDecrementedCharged() {
-        ItemStack in = inv[this.getCoilSlot()];
+        ItemStack in = itemHandler.getStackInSlot(this.getCoilSlot());
         if (isCreative)
             return in;
         return new ItemStack(in.getItem(), in.getCount(), getUpdateTag()); //todo check if this tag is fucked
@@ -69,7 +69,7 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
             return true;
         if (DragonAPI.debugtest)
             return true;
-        ItemStack is = inv[this.getCoilSlot()];
+        ItemStack is = itemHandler.getStackInSlot(this.getCoilSlot());
         if (is == null)
             return false;
         Item i = is.getItem();

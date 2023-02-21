@@ -157,41 +157,6 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
     }
 
     @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
     public Block getBlockEntityBlockID() {
         return RotaryBlocks.WIND_ENGINE.get();
     }

@@ -11,6 +11,8 @@ package reika.rotarycraft.blockentities.weaponry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
@@ -86,7 +88,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
         this.getSummativeSidedPower();
 
         if (DragonAPI.debugtest)
-            ReikaInventoryHelper.addToIInv(Blocks.TNT, this);
+            ReikaInventoryHelper.addToIInv(Blocks.TNT, itemHandler);
 
         if (power < MINPOWER)
             return;
@@ -171,8 +173,8 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
     }
 
     protected int canFire() {
-        for (int i = 0; i < inv.length; i++) {
-            ItemStack is = inv[i];
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            ItemStack is = itemHandler.getStackInSlot(i);
             if (is != null) {
                 if (ReikaItemHelper.matchStackWithBlock(is, Blocks.TNT.defaultBlockState()))
                     return i;
@@ -185,9 +187,9 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
 
     @Override
     protected boolean fire(Level world, BlockPos pos, int slot) {
-        ItemStack in = inv[slot];
-        ReikaInventoryHelper.decrStack(slot, inv);
-// todo       world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, "dragonapi.rand.explode", 0.7F + 0.3F * DragonAPI.rand.nextFloat() * 12, 0.1F * DragonAPI.rand.nextFloat());
+        ItemStack in = itemHandler.getStackInSlot(slot);
+        ReikaInventoryHelper.decrStack(slot, itemHandler);
+        world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.7F + 0.3F * DragonAPI.rand.nextFloat() * 12, 0.1F * DragonAPI.rand.nextFloat(), false);
 //        world.addParticle("hugeexplosion", pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1.0D, 0.0D, 0.0D);
         double dx = pos.getX() + 0.5;
         double dy = pos.getY() + 1.5 - 0.0625;
@@ -271,41 +273,6 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
     @Override
     public int getContainerSize() {
         return 9;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
     }
 
 }

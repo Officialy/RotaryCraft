@@ -128,15 +128,15 @@
 //    private void throughPut() {
 //        for (int i = 1; i < 4; i++) {
 //            if (inv[i + 3] != null) {
-//                if (inv[i] == null) {
-//                    inv[i] = inv[i + 3];
+//                if (itemHandler.getStackInSlot(i) == null) {
+//                    itemHandler.getStackInSlot(i) = inv[i + 3];
 //                    inv[i + 3] = null;
-//                } else if (inv[i].getCount() < inv[i].getMaxStackSize()) {
-//                    if (ReikaItemHelper.matchStacks(inv[i], inv[i + 3])) {
-//                        int amt = Math.min(inv[i + 3].getCount(), inv[i].getMaxStackSize() - inv[i].getCount());
+//                } else if (itemHandler.getStackInSlot(i).getCount() < itemHandler.getStackInSlot(i).getMaxStackSize()) {
+//                    if (ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(i), inv[i + 3])) {
+//                        int amt = Math.min(inv[i + 3].getCount(), itemHandler.getStackInSlot(i).getMaxStackSize() - itemHandler.getStackInSlot(i).getCount());
 //                        amt = Math.min(amt, this.getNumberConsecutiveOperations(i));
 //                        if (amt > 0) {
-//                            inv[i].getCount() += amt;
+//                            itemHandler.getStackInSlot(i).getCount() += amt;
 //                            ReikaInventoryHelper.decrStack(i + 3, inv, amt);
 //                        }
 //                    }
@@ -257,14 +257,14 @@
 //        if ((i == 1 || i == 2) && tank.isEmpty())
 //            return false;
 //
-//        if (inv[i] == null)
+//        if (itemHandler.getStackInSlot(i) == null)
 //            return false;
 //        if (inv[i + 4] != null && inv[i + 4].getCount() + 1 >= inv[i + 4].getMaxStackSize())
 //            return false;
 //        if (inv[8] != null) {
 //            if (inv[8].getCount() + 1 > inv[8].getMaxStackSize())
 //                return false;
-//            if (inv[3] != null) {
+//            if (!itemHandler.getStackInSlot(3).isPresent()) {
 //                ExtractorBonus bonus = ExtractorBonus.getBonusForIngredient(inv[3]);
 //                if (bonus != null) {
 //                    ItemStack out = bonus.getBonusItem();
@@ -273,11 +273,11 @@
 //                }
 //            }
 //        }
-//        OreType ore = this.getOreType(inv[i]);
+//        OreType ore = this.getOreType(itemHandler.getStackInSlot(i));
 //        if (ore == null)
 //            return false;
 //
-//        ItemStack itemstack = RecipesExtractor.getRecipes().getExtractionResult(inv[i]);
+//        ItemStack itemstack = RecipesExtractor.getRecipes().getExtractionResult(itemHandler.getStackInSlot(i));
 //        if (itemstack == null) {
 //            return false;
 //        }
@@ -291,12 +291,12 @@
 //    }
 //
 //    private void processItem(int i) {
-//        ItemStack itemstack = RecipesExtractor.getRecipes().getExtractionResult(inv[i]);
+//        ItemStack itemstack = RecipesExtractor.getRecipes().getExtractionResult(itemHandler.getStackInSlot(i));
 //        //ReikaJavaLibrary.pConsole("sSmelt :"+(inv[i+4] == null)+"   - "+ReikaItemHelper.matchStacks(inv[i+4], itemstack));
-//        //ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(inv[i].getItem()) : this.getVanillaOreByItem(inv[i]);
-//        OreType ore = this.getOreType(inv[i]);
+//        //ReikaOreHelper ore = i == 0 ? ReikaOreHelper.getFromVanillaOre(itemHandler.getStackInSlot(i).getItem()) : this.getVanillaOreByItem(itemHandler.getStackInSlot(i));
+//        OreType ore = this.getOreType(itemHandler.getStackInSlot(i));
 //        //ReikaJavaLibrary.pConsole(ore, Dist.DEDICATED_SERVER);
-//        int num = this.getSmeltNumber(i, ore, inv[i]);
+//        int num = this.getSmeltNumber(i, ore, itemHandler.getStackInSlot(i));
 //        if (inv[i + 4] == null) {
 //            inv[i + 4] = itemstack.copy();
 //            inv[i + 4].getCount() *= num;
@@ -307,18 +307,18 @@
 //            drillTime--;
 //        }
 //        if (i == 3) {
-//            this.bonusItems(inv[i]);
+//            this.bonusItems(itemHandler.getStackInSlot(i));
 //            RotaryAdvancements.EXTRACTOR.triggerAchievement(this.getPlacer());
 //            if (ore.getRarity() == OreRarity.RARE)
 //                RotaryAdvancements.RAREEXTRACT.triggerAchievement(this.getPlacer());
 //        }
 //
-//        inv[i].getCount()--;
+//        itemHandler.getStackInSlot(i).getCount()--;
 //        if (i == 1 || i == 2)
 //            tank.removeLiquid(125);
 //
-//        if (inv[i].getCount() <= 0)
-//            inv[i] = null;
+//        if (itemHandler.getStackInSlot(i).getCount() <= 0)
+//            itemHandler.getStackInSlot(i) = null;
 //
 //    }
 //
@@ -362,38 +362,38 @@
 //    }
 //
 //    private boolean processModOre(int i) {
-//        if (this.isValidModOre(inv[i])) {
-//            ModOreList m = ModOreList.getEntryFromDamage(inv[i].getItemDamage()/4);
-//            if (ModOreList.isModOre(inv[i]) && i == 0) {
-//                m = ModOreList.getModOreFromOre(inv[0]);
+//        if (this.isValidModOre(itemHandler.getStackInSlot(i))) {
+//            ModOreList m = ModOreList.getEntryFromDamage(itemHandler.getStackInSlot(i).getItemDamage()/4);
+//            if (ModOreList.isModOre(itemHandler.getStackInSlot(i)) && i == 0) {
+//                m = ModOreList.getModOreFromOre(itemHandler.getStackInSlot(0));
 //                ItemStack is = ExtractorModOres.getDustProduct(m);
-//                if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, inv[0]), is.getItemDamage(), inv, i+4)) {
+//                if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, itemHandler.getStackInSlot(0)), is.getItemDamage(), inv, i+4)) {
 //                    ReikaInventoryHelper.decrStack(i, inv);
 //                }
 //                return true;
 //            }
-//            else if (ExtractorModOres.isModOreIngredient(inv[i])) {
-//                if (ExtractorModOres.isDust(m, inv[i].getItemDamage()) && i == 1) {
+//            else if (ExtractorModOres.isModOreIngredient(itemHandler.getStackInSlot(i))) {
+//                if (ExtractorModOres.isDust(m, itemHandler.getStackInSlot(i).getItemDamage()) && i == 1) {
 //                    ItemStack is = ExtractorModOres.getSlurryProduct(m);
-//                    if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, inv[i]), is.getItemDamage(), inv, i+4)) {
+//                    if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, itemHandler.getStackInSlot(i)), is.getItemDamage(), inv, i+4)) {
 //                        ReikaInventoryHelper.decrStack(i, inv);
 //                        tank.removeLiquid(1000/8);
 //                    }
 //                    return true;
 //                }
-//                if (ExtractorModOres.isSlurry(m, inv[i].getItemDamage()) && i == 2) {
+//                if (ExtractorModOres.isSlurry(m, itemHandler.getStackInSlot(i).getItemDamage()) && i == 2) {
 //                    ItemStack is = ExtractorModOres.getSolutionProduct(m);
-//                    if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, inv[i]), is.getItemDamage(), inv, i+4)) {
+//                    if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, itemHandler.getStackInSlot(i)), is.getItemDamage(), inv, i+4)) {
 //                        ReikaInventoryHelper.decrStack(i, inv);
 //                        tank.removeLiquid(1000/8);
 //                    }
 //                    return true;
 //                }
-//                if (ExtractorModOres.isSolution(m, inv[i].getItemDamage()) && i == 3) {
+//                if (ExtractorModOres.isSolution(m, itemHandler.getStackInSlot(i).getItemDamage()) && i == 3) {
 //                    ItemStack is = ExtractorModOres.getFlakeProduct(m);
-//                    if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, inv[i]), is.getItemDamage(), inv, i+4)) {
+//                    if (ReikaInventoryHelper.addOrSetStack(is.getItem(), this.getSmeltNumber(i, m, itemHandler.getStackInSlot(i)), is.getItemDamage(), inv, i+4)) {
 //                        ReikaInventoryHelper.decrStack(i, inv);
-//                        this.bonusItems(inv[i]);
+//                        this.bonusItems(itemHandler.getStackInSlot(i));
 //                        RotaryAchievements.EXTRACTOR.triggerAchievement(this.getPlacer());
 //                        if (m.getRarity() == OreRarity.RARE)
 //                            RotaryAchievements.RAREEXTRACT.triggerAchievement(this.getPlacer());

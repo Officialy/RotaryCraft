@@ -61,30 +61,30 @@
 //        if (tickcount < this.getOperationTime())
 //            return;
 //        tickcount = 0;
-//        if (inv[0] != null) {
-//            MagnetizerRecipe r = RecipesMagnetizer.getRecipes().getRecipe(inv[0]);
+//        if (!itemHandler.getStackInSlot(0).isEmpty()) {
+//            MagnetizerRecipe r = RecipesMagnetizer.getRecipes().getRecipe(itemHandler.getStackInSlot(0));
 //            if (r != null && this.canRunRecipe(r))
 //                this.magnetize(r);
 //        }
 //    }
 //
 //    private boolean hasRecipe() {
-//        return inv[0] != null && RecipesMagnetizer.getRecipes().getRecipe(inv[0]) != null;
+//        return !itemHandler.getStackInSlot(0).isEmpty() && RecipesMagnetizer.getRecipes().getRecipe(itemHandler.getStackInSlot(0)) != null;
 //    }
 //
 //    private boolean canRunRecipe(MagnetizerRecipe r) {
 //        int ms = r.minSpeed;
 //        if (hasLodestoneUpgrade())
 //            ms /= 2;
-//        return omega >= ms && (r.allowStacking || inv[0].getCount() == 1);
+//        return omega >= ms && (r.allowStacking || itemHandler.getStackInSlot(0).getCount() == 1);
 //    }
 //
 //    private void magnetize(MagnetizerRecipe r) {
 //        if (DragonAPI.rand.nextInt(r.timeFactor) > 0)
 //            return;
-//        ItemStack is = inv[0];
+//        ItemStack is = itemHandler.getStackInSlot(0);
 //        if (r.action != null) {
-//            r.action.step(hasLodestoneUpgrade() ? omega * 2 : omega, inv[0]);
+//            r.action.step(hasLodestoneUpgrade() ? omega * 2 : omega, itemHandler.getStackInSlot(0));
 //        } else {
 //            if (is.getTag() == null) {
 //                is.put(new CompoundTag());
@@ -112,7 +112,7 @@
 //    @Override
 //    public boolean isItemValidForSlot(int slot, ItemStack is) {
 //        MagnetizerRecipe rec = RecipesMagnetizer.getRecipes().getRecipe(is);
-//        return rec != null && ((inv[0] == null && is.getCount() == 1) || rec.allowStacking);
+//        return rec != null && ((itemHandler.getStackInSlot(0).isEmpty() && is.getCount() == 1) || rec.allowStacking);
 //    }
 //
 //    //    @Override
@@ -140,7 +140,7 @@
 //
 //    @Override
 //    public int getCoreMagnetization() {
-//        return inv[0] != null && inv[0].getTag() != null ? inv[0].getTag().getInt("magnet") : 0;
+//        return !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getTag() != null ? itemHandler.getStackInSlot(0).getTag().getInt("magnet") : 0;
 //    }
 //
 //    @Override
@@ -217,7 +217,7 @@
 //    }
 //
 //    public boolean hasCore() {
-//        return ReikaItemHelper.matchStacks(inv[0], RotaryItems.HSLA_SHAFT_CORE) || ReikaItemHelper.matchStacks(inv[0], RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE);
+//        return ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(0), RotaryItems.HSLA_SHAFT_CORE) || ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(0), RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE);
 //    }
 //
 //    @Override

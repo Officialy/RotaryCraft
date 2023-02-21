@@ -203,8 +203,8 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
                 }
             }
 
-            stack.mulPose(Axis.YP.rotationDegrees(var11));
-            stack.mulPose(Axis.XP.rotationDegrees(var12));
+            stack.mulPose(Axis.XP.rotationDegrees(var11));
+            stack.mulPose(Axis.YP.rotationDegrees(var12));
             stack.mulPose(Axis.ZP.rotationDegrees(var13));
         } else {
             stack.mulPose(new Quaternionf(Axis.YP.rotationDegrees(90F)));

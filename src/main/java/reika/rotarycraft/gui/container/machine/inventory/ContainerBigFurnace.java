@@ -12,6 +12,8 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.SlotItemHandler;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
@@ -32,17 +34,19 @@ public class ContainerBigFurnace extends IOMachineContainer<BlockEntityLavaSmelt
 
         int dx = 18;
         int dy = 21;
-        for (int i = 0; i < te.getNumberInputSlots(); i++) {
-            int row = i % 9;
-            int col = i / 9;
-            Slot slot = new Slot(te, i, 8 + row * dx, 18 + col * dy);
-            this.addSlot(slot);
-        }
+        te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
+            for (int i = 0; i < te.getNumberInputSlots(); i++) {
+                int row = i % 9;
+                int col = i / 9;
+                Slot slot = new SlotItemHandler(itemHandler, i, 8 + row * dx, 18 + col * dy);
+                this.addSlot(slot);
+            }
+        });
 
         for (int i = 0; i < te.getNumberInputSlots(); i++) {
             int row = i % 9;
             int col = i / 9;
-            Slot slot = new Slot(player,i + te.getNumberInputSlots(), 8 + row * dx, 72 + col * dy);
+            Slot slot = new Slot(player, i + te.getNumberInputSlots(), 8 + row * dx, 72 + col * dy);
             this.addSlot(slot);
         }
 

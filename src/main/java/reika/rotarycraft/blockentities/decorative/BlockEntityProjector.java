@@ -64,43 +64,43 @@
 //    }
 //
 //    private void getChannelFromActiveSlide() {
-//        if (inv[0] == null) {
+//        if (itemHandler.getStackInSlot(0).isEmpty()) {
 //            emptySlide = true;
 //            channel = 0;
 //            return;
 //        }
-//        if (inv[0].getItem() == Items.ender_eye) {
+//        if (itemHandler.getStackInSlot(0).getItem() == Items.ender_eye) {
 //            emptySlide = false;
 //            channel = -1;
 //        }
-//        if (inv[0].getItem() == Items.clock) {
+//        if (itemHandler.getStackInSlot(0).getItem() == Items.clock) {
 //            emptySlide = false;
 //            channel = -3;
 //        }
-//        if (inv[0].getItem() != RotaryItems.SLIDE.get()) {
+//        if (itemHandler.getStackInSlot(0).getItem() != RotaryItems.SLIDE.get()) {
 //            emptySlide = true;
 //            return;
 //        }
 //        emptySlide = false;
-//        if (inv[0].getItemDamage() == 24) {
+//        if (itemHandler.getStackInSlot(0).getItemDamage() == 24) {
 //            channel = -2;
 //        } else
-//            channel = inv[0].getItemDamage();
+//            channel = itemHandler.getStackInSlot(0).getItemDamage();
 //    }
 //
 //    public String getCustomImagePath() {
-//        if (inv[0] == null || inv[0].getTag() == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty() || itemHandler.getStackInSlot(0).getTag() == null)
 //            return "";
-//        CompoundTag nbt = inv[0].getTag();
+//        CompoundTag nbt = itemHandler.getStackInSlot(0).getTag();
 //        return nbt.getString("file");
 //    }
 //
 //    public void cycleInv() {
-//        ItemStack active = inv[0];
-//        for (int i = 0; i < inv.length - 1; i++) {
-//            inv[i] = inv[i + 1];
+//        ItemStack active = itemHandler.getStackInSlot(0);
+//        for (int i = 0; i < itemHandler.getSlots() - 1; i++) {
+//            itemHandler.getStackInSlot(i) = inv[i + 1];
 //        }
-//        inv[inv.length - 1] = active;
+//        inv[itemHandler.getSlots() - 1] = active;
 //        SoundRegistry.PROJECTOR.playSoundAtBlock(level, xCoord, yCoord, zCoord, 1, 1);
 //    }
 //

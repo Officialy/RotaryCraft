@@ -13,7 +13,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,13 +25,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
+import reika.rotarycraft.gui.container.machine.inventory.PerformanceContainer;
 import reika.rotarycraft.registry.*;
 
 public class BlockEntityPerformanceEngine extends BlockEntityEngine {
@@ -42,10 +56,12 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
         super(RotaryBlockEntities.PERFORMANCE_ENGINE.get(), pos, state, false, false, true, true);
         type = EngineType.SPORT;
     }
+
     @Override
     public MachineRegistry getMachine() {
         return MachineRegistry.PERFORMANCE_ENGINE;
     }
+
     @Override
     public int getMaxTemperature() {
         return 240;
@@ -61,16 +77,16 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
 
     @Override
     protected void internalizeFuel() {
-        if (inv[0] != null && fuel.getFluidLevel() + FluidType.BUCKET_VOLUME < FUELCAP) {
-            if (inv[0].getItem() == RotaryItems.ETHANOL.get()) {
-                ReikaInventoryHelper.decrStack(0, inv);
+        if (itemHandler.getStackInSlot(0) != ItemStack.EMPTY && fuel.getFluidLevel() + FluidType.BUCKET_VOLUME < FUELCAP) {
+            if (itemHandler.getStackInSlot(0).getItem() == RotaryItems.ETHANOL.get()) {
+                ReikaInventoryHelper.decrStack(0, itemHandler);
                 fuel.addLiquid(1000, RotaryFluids.ETHANOL.get());
             }
         }
-        if (inv[1] != null && additives < FUELCAP / FluidType.BUCKET_VOLUME) { //additives
-            Item id = inv[1].getItem();
+        if (itemHandler.getStackInSlot(1) != null && additives < FUELCAP / FluidType.BUCKET_VOLUME) { //additives
+            Item id = itemHandler.getStackInSlot(1).getItem();
             if (id == Items.BLAZE_POWDER || id == Items.REDSTONE || id == Items.GUNPOWDER) {
-                ReikaInventoryHelper.decrStack(1, inv);
+                ReikaInventoryHelper.decrStack(1, itemHandler);
                 if (id == Items.REDSTONE)
                     additives += 1;
                 if (id == Items.GUNPOWDER)
@@ -227,41 +243,6 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
     }
 
     @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
     public boolean hasAnInventory() {
         return true;
     }
@@ -279,5 +260,15 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.literal("Performance Engine");
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+        return new PerformanceContainer(p_39954_, p_39955_, this);
     }
 }

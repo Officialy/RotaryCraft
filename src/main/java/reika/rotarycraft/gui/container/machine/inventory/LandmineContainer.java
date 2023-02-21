@@ -30,7 +30,6 @@ public class LandmineContainer extends CoreContainer<BlockEntityLandmine> {
     public LandmineContainer(int id, Inventory inv, BlockEntityLandmine te) {
         super(RotaryMenus.LANDMINE.get(), id, inv, te, null);
         this.landmine = te;
-        Container ii = te;
 
         this.addSlot(new Slot(epInv, 0, 80, 34));
 

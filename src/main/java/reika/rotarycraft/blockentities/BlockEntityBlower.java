@@ -20,9 +20,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.data.immutable.WorldLocation;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -437,24 +439,23 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
         }
 
         public int insertItem(BlockEntity te, ItemStack is, int amt) {
-            switch (this) {
-                case CHEST:
-                    Container ii = (Container) te;
-                    int items = 0;
-                    boolean flag = true;
-                    is = ReikaItemHelper.getSizedItemStack(is, 1);
-                    while (flag && amt > 0) {
-                        //ReikaJavaLibrary.pConsole("Attempting to add "+is+" to "+target);
-                        if (this.addToIInv(is, ii)) {
-                            amt--;
-                            items++;
-                            //ReikaJavaLibrary.pConsole("Success");
-                        } else {
-                            flag = false;
-                            //ReikaJavaLibrary.pConsole("Failure");
-                        }
+            if (this == InventoryType.CHEST) {
+                ChestBlockEntity ii = (ChestBlockEntity) te;
+                int items = 0;
+                boolean flag = true;
+                is = ReikaItemHelper.getSizedItemStack(is, 1);
+                while (flag && amt > 0) {
+                    //ReikaJavaLibrary.pConsole("Attempting to add "+is+" to "+target);
+                    if (this.addToIInv(is, ii)) {
+                        amt--;
+                        items++;
+                        //ReikaJavaLibrary.pConsole("Success");
+                    } else {
+                        flag = false;
+                        //ReikaJavaLibrary.pConsole("Failure");
                     }
-                    return items;
+                }
+                return items;
 //                case DSU:
 //                    IDeepStorageUnit dsu = (IDeepStorageUnit) te;
 //                    int has = dsu.getStoredItemType().getCount();

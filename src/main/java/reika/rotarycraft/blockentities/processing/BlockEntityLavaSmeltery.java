@@ -99,23 +99,23 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
     private void smelt() {
         int n = this.getNumberInputSlots();
         for (int i = 0; i < n; i++) {
-            ItemStack is = inv[i];
+            ItemStack is = itemHandler.getStackInSlot(i);
             if (is != null) {
                 ItemStack to = new ItemStack(Items.STONE);// = FurnaceRecipes.smelting().getSmeltingResult(is);
                 if (to != null) {
                     boolean add = false;
-                    if (inv[i + n] == null) {
-                        inv[i + n] = to.copy();
+                    if (itemHandler.getStackInSlot(i + n).isEmpty()) {
+                        itemHandler.setStackInSlot(i + n, to.copy());
                         add = true;
                     } else {
-                        if (ReikaItemHelper.areStacksCombinable(to, inv[i + n], this.getInventoryStackLimit())) {
+                        if (ReikaItemHelper.areStacksCombinable(to, itemHandler.getStackInSlot(i + n), this.getInventoryStackLimit())) {
                             add = true;
-                            int count = inv[i + n].getCount();
-                            inv[i + n].setCount(count + to.getCount());
+                            int count = itemHandler.getStackInSlot(i + n).getCount();
+                            itemHandler.getStackInSlot(i + n).setCount(count + to.getCount());
                         }
                     }
                     if (add)
-                        ReikaInventoryHelper.decrStack(i, inv);
+                        ReikaInventoryHelper.decrStack(i, itemHandler);
                 }
             }
         }
@@ -128,7 +128,7 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
             return false;
         int n = this.getNumberInputSlots();
         for (int i = 0; i < n; i++) {
-            ItemStack is = inv[i];
+            ItemStack is = itemHandler.getStackInSlot(i);
             if (is != null) {
                 ItemStack to = new ItemStack(Items.STONE);//FurnaceRecipes.smelting().getSmeltingResult(is);
                 if (to != null) {
@@ -345,36 +345,6 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
     @Override
     public int getContainerSize() {
         return WIDTH * HEIGHT * 2;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
     }
 
     @Override

@@ -111,9 +111,9 @@
 //            return false;
 //        if (temperature > this.getFreezingPoint())
 //            return false;
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return true;
-//        return ReikaItemHelper.areStacksCombinable(toMake, inv[0], this.getInventoryStackLimit());
+//        return ReikaItemHelper.areStacksCombinable(toMake, itemHandler.getStackInSlot(0), this.getInventoryStackLimit());
 //    }
 //
 //    public int getFreezingPoint() {
@@ -200,7 +200,7 @@
 //            Tamb -= 30;
 //
 //        ItemStack cryo = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ModList.THERMALFOUNDATION.getModid(), "dustCryotheum")).getDefaultInstance();//GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modid, "dustCryotheum", 1);
-//        if (ReikaItemHelper.matchStacks(RotaryItems.DRY_ICE.get().getDefaultInstance(), inv[1]) || (cryo != null && ReikaItemHelper.matchStacks(cryo, inv[1]))) {
+//        if (ReikaItemHelper.matchStacks(RotaryItems.DRY_ICE.get().getDefaultInstance(), itemHandler.getStackInSlot(1)) || (cryo != null && ReikaItemHelper.matchStacks(cryo, itemHandler.getStackInSlot(1)))) {
 //            Tamb -= 40;
 //            if (temperature > Tamb + 4 || DragonAPI.rand.nextInt(20) == 0)
 //                ReikaInventoryHelper.decrStack(1, inv);

@@ -161,7 +161,7 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
     }
 
     public BlockKey getNextBlockToAdd() {
-        ItemStack is = ReikaInventoryHelper.getNextBlockInInventory(inv, true);
+        ItemStack is = ReikaInventoryHelper.getNextBlockInInventory(itemHandler, true);
         if (is == null)
             return null;
         return ReikaItemHelper.getWorldBlockFromItem(is);
@@ -221,7 +221,7 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
 
     @Override
     public boolean areConditionsMet() {
-        return !ReikaInventoryHelper.isEmpty(inv);
+        return !ReikaInventoryHelper.isEmpty(itemHandler);
     }
 
     @Override
@@ -238,41 +238,6 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
     @Override
     public int getContainerSize() {
         return 9;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
     }
 
     @Override

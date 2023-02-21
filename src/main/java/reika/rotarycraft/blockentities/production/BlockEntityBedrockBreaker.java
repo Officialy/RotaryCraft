@@ -132,11 +132,11 @@
 //    }
 //
 //    private boolean hasInventorySpace() {
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return true;
-//        if (!ReikaItemHelper.matchStacks(inv[0], RotaryItems.bedrockdust))
+//        if (!ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(0), RotaryItems.bedrockdust))
 //            return false;
-//        return inv[0].getCount() + DifficultyEffects.BEDROCKDUST.getInt() <= inv[0].getMaxStackSize();
+//        return itemHandler.getStackInSlot(0).getCount() + DifficultyEffects.BEDROCKDUST.getInt() <= itemHandler.getStackInSlot(0).getMaxStackSize();
 //    }
 //
 //    public void readPower(boolean doublesided) {
@@ -294,9 +294,9 @@
 //    }
 //
 //    public void dropInventory() {
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return;
-//        ItemEntity itementity = new ItemEntity(level, dropx, dropy, dropz, inv[0]);
+//        ItemEntity itementity = new ItemEntity(level, dropx, dropy, dropz, itemHandler.getStackInSlot(0));
 //        itementity.delayBeforeCanPickup = 0;
 //        itementity.motionX = -0.025 + 0.05 * DragonAPI.rand.nextFloat();    // 0-0.5 m/s
 //        itementity.motionZ = -0.025 + 0.05 * DragonAPI.rand.nextFloat();
@@ -306,7 +306,7 @@
 //        if (!level.isClientSide)
 //            level.addFreshEntity(itementity);
 //        level.playLocalSound(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "DragonAPI.rand.pop", 0.2F, ((DragonAPI.rand.nextFloat() - DragonAPI.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-//        inv[0] = null;
+//        itemHandler.getStackInSlot(0) = null;
 //    }
 //
 //    private ItemStack getDrops(Level world, BlockPos pos) {
@@ -320,11 +320,11 @@
 //    }
 //
 //    public int getContents() {
-//        return inv[0] != null && ReikaItemHelper.matchStacks(inv[0], RotaryItems.bedrockdust) ? inv[0].getCount() : 0;
+//        return !itemHandler.getStackInSlot(0).isEmpty() && ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(0), RotaryItems.bedrockdust) ? itemHandler.getStackInSlot(0).getCount() : 0;
 //    }
 //
 //    private void setContents(int num) {
-//        inv[0] = ReikaItemHelper.getSizedItemStack(RotaryItems.bedrockdust, num);
+//        itemHandler.getStackInSlot(0) = ReikaItemHelper.getSizedItemStack(RotaryItems.bedrockdust, num);
 //    }
 //
 //    @Override
@@ -364,11 +364,11 @@
 //    }
 //
 //    public boolean isInventoryFull() {
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return false;
-//        if (!ReikaItemHelper.matchStacks(RotaryItems.bedrockdust, inv[0]))
+//        if (!ReikaItemHelper.matchStacks(RotaryItems.bedrockdust, itemHandler.getStackInSlot(0)))
 //            return true;
-//        return inv[0].getCount() >= inv[0].getMaxStackSize();
+//        return itemHandler.getStackInSlot(0).getCount() >= itemHandler.getStackInSlot(0).getMaxStackSize();
 //    }
 //
 //    @Override

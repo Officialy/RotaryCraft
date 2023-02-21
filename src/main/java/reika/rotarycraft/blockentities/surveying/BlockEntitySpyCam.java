@@ -73,7 +73,7 @@
 //        if (!DragonAPI.debugtest) {
 //            if (tickcount2 > this.getUnwindTime()) {
 //                ItemStack is = this.getDecrementedCharged();
-//                inv[0] = is;
+//                itemHandler.getStackInSlot(0) = is;
 //                tickcount2 = 0;
 //            }
 //        }

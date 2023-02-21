@@ -69,17 +69,17 @@
 //            return false;
 //        if (torque < MINTORQUE)
 //            return false;
-//        if (inv[0] == null || inv[1] == null || inv[2] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty() || itemHandler.getStackInSlot(1) == null || inv[2] == null)
 //            return false;
 //
 //        Map<DyeColor, Item> map = new HashMap<>();
 //
-//        return inv[0].getItem() == map.values() && inv[1].getItem() == map.values() && inv[2].getItem() == map.values(); //todo check if this dye checker works
+//        return itemHandler.getStackInSlot(0).getItem() == map.values() && itemHandler.getStackInSlot(1).getItem() == map.values() && inv[2].getItem() == map.values(); //todo check if this dye checker works
 //    }
 //
 //    private int[] getCameraFromColors(Level world) {
 //        int[] pos = {worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()};
-//        int[] colors = {2, 2, 2};//todo {inv[0].getItemDamage(), inv[1].getItemDamage(), inv[2].getItemDamage()};
+//        int[] colors = {2, 2, 2};//todo {itemHandler.getStackInSlot(0).getItemDamage(), itemHandler.getStackInSlot(1).getItemDamage(), inv[2].getItemDamage()};
 //        if (!cameras.containsKey(colors))
 //            if (!this.searchForMatchingCamera(world, colors))
 //                return pos;

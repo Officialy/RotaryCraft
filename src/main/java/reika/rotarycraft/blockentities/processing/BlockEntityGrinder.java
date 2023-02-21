@@ -28,6 +28,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.instantiable.data.collections.OneWayCollections.OneWaySet;
@@ -53,14 +54,14 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
 
     public static final int MAXLUBE = 4000;
     private static final int MIN_LUBE_PRODUCTION = DifficultyEffects.CANOLA.getAverageAmount();
-    private static final ItemHashMap<Float> grindableSeeds = new ItemHashMap();
-    private static final OneWaySet<KeyedItemStack> lockedSeeds = new OneWaySet();
+    private static final ItemHashMap<Float> grindableSeeds = new ItemHashMap<>();
+    private static final OneWaySet<KeyedItemStack> lockedSeeds = new OneWaySet<>();
 
     static {
 //        addGrindableSeed(RotaryItems.CANOLA.get(), 1F);
         grindableSeeds.put(RotaryItems.CANOLA_SEEDS.get(), 1F);
         lockedSeeds.add(new KeyedItemStack(RotaryItems.CANOLA_SEEDS.get()).lock());
-        //addGrindableSeed(RotaryItems.CANOLA.getStackOfMetadata(2), 0.65F);
+//        addGrindableSeed(RotaryItems.CANOLA.getStackOfMetadata(2), 0.65F);
     }
 
     private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantments.MOB_LOOTING).addFilter(Enchantments.KNOCKBACK).addFilter(Enchantments.FLAMING_ARROWS /*flaming arrows or flame aspect?!*/).addFilter(Enchantments.BLOCK_FORTUNE);
@@ -134,10 +135,10 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
         if (pos.getY() == 0)
             return false;
         switch (side) {
-            case EAST -> read = Direction.EAST;
-            case WEST -> read = Direction.WEST;
-            case SOUTH -> read = Direction.SOUTH;
-            case NORTH -> read = Direction.NORTH;
+            case EAST -> read = Direction.WEST;
+            case WEST -> read = Direction.EAST;
+            case SOUTH -> read = Direction.NORTH;
+            case NORTH -> read = Direction.SOUTH;
         }
         //ReikaWorldHelper.legacySetBlockWithNotify(world, readx, ready+3, readz, 4);
         return true;
@@ -154,36 +155,6 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
 
     public int getContainerSize() {
         return 3;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int p_18941_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int p_18942_, int p_18943_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int p_18951_) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int p_18944_, ItemStack p_18945_) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player p_18946_) {
-        return false;
     }
 
     @Override
@@ -215,7 +186,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.GRINDER.get();
     }
 
     @Override
@@ -237,9 +208,9 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
 
         if (flag1)
             this.setChanged();
-        if (inv[2] != null && tank.getFluidLevel() >= 1000 && !world.isClientSide) {
-            if (inv[2].getItem() == Items.BUCKET && inv[2].getCount() == 1) {
-                inv[2] = RotaryItems.LUBE_BUCKET.get().getDefaultInstance();
+        if (!itemHandler.getStackInSlot(2).isEmpty() && tank.getFluidLevel() >= 1000 && !world.isClientSide) {
+            if (itemHandler.getStackInSlot(2).getItem() == Items.BUCKET && itemHandler.getStackInSlot(2).getCount() == 1) {
+                itemHandler.setStackInSlot(2, RotaryItems.LUBE_BUCKET.get().getDefaultInstance());
                 tank.removeLiquid(1000);
             }
         }
@@ -261,31 +232,31 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     private boolean canGrind() {
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return false;
 
         boolean flag = false;
-        if (isGrindableSeed(inv[0])) {
+        if (isGrindableSeed(itemHandler.getStackInSlot(0))) {
             flag = true;
             if (tank.getRemainingSpace() < MIN_LUBE_PRODUCTION) {
                 return false;
             }
         }
 
-        ItemStack out = RecipesGrinder.grinderRecipes.getGrindingResult(inv[0]);
+        ItemStack out = RecipesGrinder.grinderRecipes.getGrindingResult(itemHandler.getStackInSlot(0));
 
-        if (flag && out == null)
+        if (flag && out.isEmpty())
             return true;
-        if (out == null)
+        if (out.isEmpty())
             return false;
 
-        if (inv[1] == null)
+        if (itemHandler.getStackInSlot(1).isEmpty())
             return true;
 
-        if (!inv[1].equals(out))
+        if (!itemHandler.getStackInSlot(1).equals(out))
             return false;
 
-        return inv[1].getCount() + out.getCount() <= Math.min(this.getInventoryStackLimit(), out.getMaxStackSize());
+        return itemHandler.getStackInSlot(1).getCount() + out.getCount() <= Math.min(this.getInventoryStackLimit(), out.getMaxStackSize());
     }
 
     public int getLubricantScaled(int par1) {
@@ -293,25 +264,25 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     private void grind() {
-        ItemStack is = inv[0];
+        ItemStack is = itemHandler.getStackInSlot(0);
 
-        if (is != null && isGrindableSeed(is)) {
+        if (!is.isEmpty() && isGrindableSeed(is)) {
             float num = grindableSeeds.get(is);
             tank.addLiquid((int) (DifficultyEffects.CANOLA.getInt() * this.getFortuneLubricantFactor() * num), RotaryFluids.LUBRICANT.get());
         }
 
         ItemStack out = RecipesGrinder.grinderRecipes.getGrindingResult(is);
-        if (out != null) {
-            if (inv[1] == null)
-                inv[1] = out.copy();
-            else if (inv[1].getItem() == out.getItem())
-                inv[1].setCount(out.getCount());
+        if (!out.isEmpty()) {
+            if (itemHandler.getStackInSlot(1).isEmpty())
+                itemHandler.setStackInSlot(1, out.copy());
+            else if (itemHandler.getStackInSlot(1).getItem() == out.getItem())
+                itemHandler.getStackInSlot(1).setCount(out.getCount());
         }
 
         is.setCount(is.getCount() - 1);
 
         if (is.getCount() <= 0)
-            inv[0] = null;
+            itemHandler.setStackInSlot(0, ItemStack.EMPTY);
     }
 
     private float getFortuneLubricantFactor() {
@@ -439,11 +410,6 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     @Override
     public MachineEnchantmentHandler getEnchantmentHandler() {
         return enchantments;
-    }
-
-    @Override
-    public void clearContent() {
-
     }
 
     @Override

@@ -189,14 +189,14 @@
 //                    if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
 //                        BlockKey plant = this.getPlantedSapling();
 //                        if (plant != null) {
-//                            if (inv[0] != null && !enchantments.hasEnchantment(Enchantment.infinity))
+//                            if (!itemHandler.getStackInSlot(0).isEmpty() && !enchantments.hasEnchantment(Enchantment.infinity))
 //                                ReikaInventoryHelper.decrStack(0, inv);
 //                            plant.place(world, c.xCoord, c.yCoord, c.zCoord);
 //                        }
 //                    } else if (tree.getTreeType() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.AIR)) {
 //                        BlockKey plant = this.getPlantedSapling();
 //                        if (plant != null) {
-//                            if (inv[0] != null && !enchantments.hasEnchantment(Enchantment.infinity))
+//                            if (!itemHandler.getStackInSlot(0).isEmpty() && !enchantments.hasEnchantment(Enchantment.infinity))
 //                                ReikaInventoryHelper.decrStack(0, inv);
 //                            world.setBlock(c.xCoord, c.yCoord - 1, c.zCoord, Blocks.DIRT);
 //                            plant.place(world, c.xCoord, c.yCoord, c.zCoord);
@@ -220,14 +220,14 @@
 //                        if (ReikaPlantHelper.SAPLING.canPlantAt(world, c.xCoord, c.yCoord, c.zCoord)) {
 //                            BlockKey plant = this.getPlantedSapling();
 //                            if (plant != null) {
-//                                if (inv[0] != null && !enchantments.hasEnchantment(Enchantment.infinity))
+//                                if (!itemHandler.getStackInSlot(0).isEmpty() && !enchantments.hasEnchantment(Enchantment.infinity))
 //                                    ReikaInventoryHelper.decrStack(0, inv);
 //                                plant.place(world, c.xCoord, c.yCoord, c.zCoord);
 //                            }
 //                        } else if (tree.getTreeType() == ModWoodList.TIMEWOOD && (idbelow == root || idbelow == Blocks.AIR)) {
 //                            BlockKey plant = this.getPlantedSapling();
 //                            if (plant != null) {
-//                                if (inv[0] != null && !enchantments.hasEnchantment(Enchantment.infinity))
+//                                if (!itemHandler.getStackInSlot(0).isEmpty() && !enchantments.hasEnchantment(Enchantment.infinity))
 //                                    ReikaInventoryHelper.decrStack(0, inv);
 //                                world.setBlock(c.xCoord, c.yCoord - 1, c.zCoord, Blocks.DIRT);
 //                                plant.place(world, c.xCoord, c.yCoord, c.zCoord);
@@ -303,7 +303,7 @@
 //        } else if (tree.getTreeType() != null) {
 //            sapling = tree.getSapling();
 //        }
-//        if (!ReikaItemHelper.matchStacks(inv[0], sapling)) {
+//        if (!ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(0), sapling)) {
 //            this.dumpInventory();
 //        }
 //    }
@@ -327,7 +327,7 @@
 //
 //        for (ItemStack todrop : drops) {
 //            if (ReikaItemHelper.matchStacks(todrop, sapling)) {
-//                if (inv[0] != null && inv[0].getCount() >= inv[0].getMaxStackSize()) {
+//                if (!itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getCount() >= itemHandler.getStackInSlot(0).getMaxStackSize()) {
 //                    this.chestCheck(todrop);
 //                    if (todrop.getCount() > 0)
 //                        ReikaItemHelper.dropItem(world, dropx, yCoord - 0.25, dropz, todrop);
@@ -369,10 +369,10 @@
 //    }
 //
 //    private void dumpInventory() {
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return;
-//        ItemStack is = inv[0].copy();
-//        inv[0] = null;
+//        ItemStack is = itemHandler.getStackInSlot(0).copy();
+//        itemHandler.getStackInSlot(0) = null;
 //        this.chestCheck(is);
 //    }
 //
@@ -393,9 +393,9 @@
 //        if (enchantments.hasEnchantment(Enchantment.infinity))
 //            return true;
 //        if (treeCopy.isDyeTree()) {
-//            return inv[0] != null && inv[0].getCount() > 0 && ReikaItemHelper.matchStackWithBlock(inv[0], ChromatiAPI.trees.getDyeSapling()) && inv[0].getItemDamage() == treeCopy.getDyeTreeMeta();
+//            return !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getCount() > 0 && ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(0), ChromatiAPI.trees.getDyeSapling()) && itemHandler.getStackInSlot(0).getItemDamage() == treeCopy.getDyeTreeMeta();
 //        } else if (treeCopy.getTreeType() != null) {
-//            return inv[0] != null && inv[0].getCount() > 0 && ReikaItemHelper.matchStacks(inv[0], treeCopy.getSapling());
+//            return !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getCount() > 0 && ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(0), treeCopy.getSapling());
 //        } else
 //            return false;
 //    }

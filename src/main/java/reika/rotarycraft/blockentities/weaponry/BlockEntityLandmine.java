@@ -103,10 +103,10 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     public void detonate(Level world, BlockPos pos) {
         if (chain)
             this.chainedExplosion(world, pos);
-        if (inv[1] != null && inv[2] != null && inv[3] != null && inv[4] != null) {
+        if (itemHandler.getStackInSlot(1) != null && !itemHandler.getStackInSlot(2).isEmpty() && !itemHandler.getStackInSlot(3).isEmpty() && !itemHandler.getStackInSlot(4).isEmpty()) {
             boolean flag = true;
             for (int i = 1; i <= 4; i++) {
-                if (!!ReikaItemHelper.matchStackWithBlock(inv[i], Blocks.TNT.defaultBlockState()))
+                if (!!ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(i), Blocks.TNT.defaultBlockState()))
                     flag = false;
             }
             if (flag)
@@ -166,14 +166,14 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
 
     private void getExplosionModifiers() {
         for (int i = 5; i <= 8; i++) {
-            if (inv[i] != null) {
-                if (inv[i].getItem() == Items.BLAZE_POWDER)
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
+                if (itemHandler.getStackInSlot(i).getItem() == Items.BLAZE_POWDER)
                     flaming = true;
-                if (inv[i].getItem() == Items.SPIDER_EYE)
+                if (itemHandler.getStackInSlot(i).getItem() == Items.SPIDER_EYE)
                     poison = true;
-                if (ReikaItemHelper.matchStackWithBlock(inv[i], Blocks.TNT.defaultBlockState()))
+                if (ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(i), Blocks.TNT.defaultBlockState()))
                     chain = true;
-                if (ReikaItemHelper.matchStackWithBlock(inv[i], Blocks.GLASS.defaultBlockState()))
+                if (ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(i), Blocks.GLASS.defaultBlockState()))
                     shrapnel = true;
             }
         }
@@ -182,21 +182,21 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     private float getExplosionPower() {
         int num = 0;
         for (int i = 1; i <= 4; i++)
-            if (inv[i] != null) {
-                if (inv[i].getItem() == Items.GUNPOWDER)
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
+                if (itemHandler.getStackInSlot(i).getItem() == Items.GUNPOWDER)
                     num++;
             }
         return 2F * num; //Each item is 1/2 block TNT (so capped at 2x)
     }
 
     private int getAge() {
-        return 65536 - inv[0].getDamageValue();
+        return 65536 - itemHandler.getStackInSlot(0).getDamageValue();
     }
 
     @Override
     public void openInventory() {
         super.openInventory();
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return;
         if (DragonAPI.rand.nextInt(65536 - this.getAge()) / 2 == 0)
             this.detonate(level, worldPosition);
@@ -258,7 +258,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
         tickcount++;
         if (tickcount > this.getUnwindTime()) {
             ItemStack is = this.getDecrementedCharged();
-            inv[0] = is;
+            itemHandler.setStackInSlot(0, is);
             tickcount = 0;
         }
 
@@ -299,68 +299,6 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     @Override
     public int getContainerSize() {
         return 9;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
-    public int getSlots() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
-        return 0;
-    }
-
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return false;
     }
 
     @Override

@@ -63,8 +63,8 @@
 //        }
 //
 //
-//        for (int i = 0; i < inv.length; i++) {
-//            ItemStack is = inv[i];
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            ItemStack is = itemHandler.getStackInSlot(i);
 //            if (is != null) {
 //                FluidStack fs = RecipesLavaMaker.getRecipes().getMelting(is);
 //                long melt_energy = RecipesLavaMaker.getRecipes().getMeltingEnergy(is);
@@ -82,8 +82,8 @@
 //    }
 //
 //    private int getMeltingTemperature() {
-//        for (int i = 0; i < inv.length; i++) {
-//            ItemStack is = inv[i];
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            ItemStack is = itemHandler.getStackInSlot(i);
 //            if (is != null) {
 //                int temp = RecipesLavaMaker.getRecipes().getMeltTemperature(is);
 //                if (temp > Integer.MIN_VALUE) {
@@ -153,8 +153,8 @@
 //    }
 //
 //    private boolean canMake() {
-//        for (int i = 0; i < inv.length; i++) {
-//            ItemStack is = inv[i];
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            ItemStack is = itemHandler.getStackInSlot(i);
 //            if (is != null) {
 //                FluidStack fs = RecipesLavaMaker.getRecipes().getMelting(is);
 //                if (fs != null)

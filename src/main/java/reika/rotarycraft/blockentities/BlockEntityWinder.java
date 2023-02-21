@@ -41,15 +41,15 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
     }
 
     public final int getUnwindTorque() {
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return 0;
-        return 8 * ((TensionStorage) inv[0].getItem()).getPowerScale(inv[0]);
+        return 8 * ((TensionStorage) itemHandler.getStackInSlot(0).getItem()).getPowerScale(itemHandler.getStackInSlot(0));
     }
 
     public final int getUnwindSpeed() {
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return 0;
-        return 1024 * ((TensionStorage) inv[0].getItem()).getPowerScale(inv[0]);
+        return 1024 * ((TensionStorage) itemHandler.getStackInSlot(0).getItem()).getPowerScale(itemHandler.getStackInSlot(0));
     }
 
     //    @Override
@@ -72,14 +72,14 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
             read = null;
         }
         tickcount++;
-        if (inv[0] == null) {
+        if (itemHandler.getStackInSlot(0).isEmpty()) {
             if (!winding) {
                 torque = 0;
                 omega = 0;
             }
             return;
         }
-        if (!(inv[0].getItem() instanceof TensionStorage)) {
+        if (!(itemHandler.getStackInSlot(0).getItem() instanceof TensionStorage)) {
             if (!winding) {
                 torque = 0;
                 omega = 0;
@@ -90,16 +90,16 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
             if (tickcount < this.getOperationTime())
                 return;
             tickcount = 0;
-            if (inv[0].getTag().getInt("energy") >= this.getMaxWind())
+            if (itemHandler.getStackInSlot(0).getTag().getInt("energy") >= this.getMaxWind())
                 return;
-            inv[0].getTag().putInt("energy", inv[0].getTag().getInt("energy") - 1); // = new ItemStack(inv[0].getItem(), 1, inv[0].getTag().getInt("energy") + 1); todo testme
+            itemHandler.getStackInSlot(0).getTag().putInt("energy", itemHandler.getStackInSlot(0).getTag().getInt("energy") - 1); // = new ItemStack(itemHandler.getStackInSlot(0).getItem(), 1, itemHandler.getStackInSlot(0).getTag().getInt("energy") + 1); todo testme
             if (!world.isClientSide && this.breakCoil()) {
-                inv[0] = null;
+                itemHandler.setStackInSlot(0, ItemStack.EMPTY);
 //                world.playLocalSound(pos, "DragonAPI.rand.break", 1F, 1F);
                 world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 1F, 1F, true);
             }
         } else {
-            if (inv[0].getTag().getInt("energy") <= 0) {
+            if (itemHandler.getStackInSlot(0).getTag().getInt("energy") <= 0) {
                 omega = 0;
                 torque = 0;
                 power = 0;
@@ -111,19 +111,19 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
             if (tickcount < this.getUnwindTime())
                 return;
             tickcount = 0;
-            inv[0].getTag().putInt("energy", inv[0].getTag().getInt("energy") - 1); //todo testme
+            itemHandler.getStackInSlot(0).getTag().putInt("energy", itemHandler.getStackInSlot(0).getTag().getInt("energy") - 1); //todo testme
         }
 
     }
 
     protected final int getUnwindTime() {
-        ItemStack is = inv[0];
+        ItemStack is = itemHandler.getStackInSlot(0);
         int base = 20;
         return base * ((TensionStorage) is.getItem()).getStiffness(is);
     }
 
     private boolean breakCoil() {
-        ItemStack is = inv[0];
+        ItemStack is = itemHandler.getStackInSlot(0);
         if (is == null)
             return false;
         if (!(is.getItem() instanceof TensionStorage))
@@ -131,27 +131,27 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
         TensionStorage ts = (TensionStorage) is.getItem();
         if (!ts.isBreakable(is))
             return false;
-        int dmg = inv[0].getTag().getInt("energy");
+        int dmg = itemHandler.getStackInSlot(0).getTag().getInt("energy");
         double diff = dmg / 65536D * DifficultyEffects.BREAKCOIL.getDouble();
         boolean rand = ReikaRandomHelper.doWithChance(diff);
         return rand;
     }
 
     public int getOperationTime() {
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return 1;
-        int base = (int) ReikaMathLibrary.logbase(inv[0].getTag().getInt("energy"), 2);
+        int base = (int) ReikaMathLibrary.logbase(itemHandler.getStackInSlot(0).getTag().getInt("energy"), 2);
         double factor = 1D / (int) (ReikaMathLibrary.logbase(omega + 1, 2));
         return (int) (base * factor);
     }
 
     public int getMaxWind() {
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return 0;
-        if (!(inv[0].getItem() instanceof TensionStorage))
+        if (!(itemHandler.getStackInSlot(0).getItem() instanceof TensionStorage))
             return 0;
-        Item id = inv[0].getItem();
-        int max = torque / ((TensionStorage) inv[0].getItem()).getStiffness(inv[0]);
+        Item id = itemHandler.getStackInSlot(0).getItem();
+        int max = torque / ((TensionStorage) itemHandler.getStackInSlot(0).getItem()).getStiffness(itemHandler.getStackInSlot(0));
 //        if (max > RotaryItems.HSLA_STEEL_SPRING.getNumberMetadatas()) //technical limit
 //            return RotaryItems.HSLA_STEEL_SPRING.getNumberMetadatas();todo technical limit
         return max;
@@ -211,11 +211,11 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
 
     @Override
     public int getRedstoneOverride() {
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return 15;
-        if (inv[0].getItem() != RotaryItems.HSLA_STEEL_SPRING.get())
+        if (itemHandler.getStackInSlot(0).getItem() != RotaryItems.HSLA_STEEL_SPRING.get())
             return 15;
-        if (inv[0].getDamageValue() >= torque && winding)
+        if (itemHandler.getStackInSlot(0).getDamageValue() >= torque && winding)
             return 15;
         return 0;
     }
@@ -231,7 +231,7 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
 
     @Override
     public boolean areConditionsMet() {
-        return inv[0] != null && inv[0].getItem() instanceof TensionStorage;
+        return !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getItem() instanceof TensionStorage;
     }
 
     @Override
@@ -239,40 +239,6 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
         return this.areConditionsMet() ? "Operational" : "No Coil";
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
 
     @Override
     public boolean hasAnInventory() {

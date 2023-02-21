@@ -49,8 +49,8 @@
 //    }
 //
 //    private void checkAmmo() {
-//        for (int i = 0; i < inv.length; i++) {
-//            RailGunAmmoType rg = getAmmo(inv[i]);
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            RailGunAmmoType rg = getAmmo(itemHandler.getStackInSlot(i));
 //            if (rg != null) {
 //                if (torque >= rg.getRequiredTorque()) {
 //                    if (ammoType == null || rg.compareTo(ammoType) > 0)

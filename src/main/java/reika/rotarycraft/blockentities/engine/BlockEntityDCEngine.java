@@ -135,41 +135,6 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
     }
 
     @Override
-    public void clearContent() {
-
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int p_18941_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int p_18942_, int p_18943_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int p_18951_) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int p_18944_, ItemStack p_18945_) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player p_18946_) {
-        return false;
-    }
-
-    @Override
     public boolean hasAnInventory() {
         return false;
     }

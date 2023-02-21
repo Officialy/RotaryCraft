@@ -66,7 +66,7 @@
 //        tickcount2++;
 //        if (tickcount2 > this.getUnwindTime()) {
 //            ItemStack is = this.getDecrementedCharged();
-//            inv[0] = is;
+//            itemHandler.getStackInSlot(0) = is;
 //            tickcount2 = 0;
 //        }
 //
@@ -92,7 +92,7 @@
 //            ;//return;
 //        if (!cameraIsMoved)
 //            return;
-//        if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && inv[0] != null && inv[0].getItem() == RotaryItems.SPRING.get() && inv[0].getItemDamage() > 0)
+//        if (!Keyboard.isKeyDown(Keyboard.KEY_BACKSLASH) && !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getItem() == RotaryItems.SPRING.get() && itemHandler.getStackInSlot(0).getItemDamage() > 0)
 //            return;
 //        tickcount = 0;
 //        this.movePlayerBack(e);

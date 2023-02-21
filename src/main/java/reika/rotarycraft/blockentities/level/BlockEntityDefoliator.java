@@ -97,8 +97,8 @@
 //    }
 //
 //    private void consumePotions() {
-//        if (inv[0] != null && tank.canTakeIn(1000)) {
-//            if (this.isItemValidForSlot(0, inv[0])) {
+//        if (!itemHandler.getStackInSlot(0).isEmpty() && tank.canTakeIn(1000)) {
+//            if (this.isItemValidForSlot(0, itemHandler.getStackInSlot(0))) {
 //                tank.addLiquid(1000, Fluids.getFluid("poison"));
 //                ReikaInventoryHelper.decrStack(0, inv);
 //                ReikaInventoryHelper.addOrSetStack(Items.GLASS_BOTTLE, 1, inv, 1);

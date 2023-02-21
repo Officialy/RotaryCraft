@@ -136,8 +136,8 @@
 //        if (sawdust >= 0)
 //            return sawdust;
 //        ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
-//        for (int i = 0; i < inv.length; i++) {
-//            ItemStack is = inv[i];
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            ItemStack is = itemHandler.getStackInSlot(i);
 //            if (is != null) {
 //                if (ReikaItemHelper.collectionContainsItemStack(li, is))
 //                    return i;

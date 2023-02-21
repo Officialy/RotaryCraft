@@ -20,26 +20,50 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 
 public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut implements Container {
 
-    protected ItemStack[] inv = new ItemStack[this.getContainerSize()];
+    protected ItemStackHandler itemHandler = new ItemStackHandler(getContainerSize()) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public InventoriedPowerLiquidInOut(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    public final ItemStack getStackInSlot(int par1) {
-        return inv[par1];
+    @Override
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (capability == ForgeCapabilities.ITEM_HANDLER)
+            return lazyItemHandler.cast();
+        return super.getCapability(capability, facing);
     }
 
-    public final void setInventorySlotContents(int par1, ItemStack is) {
-        inv[par1] = is;
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyItemHandler.invalidate();
+    }
+    public final ItemStack getStackInSlot(int slot) {
+        return itemHandler.getStackInSlot(slot);
     }
 
+    public final void setInventorySlotContents(int slot, ItemStack is) {
+        itemHandler.setStackInSlot(slot, is);
+    }
     public void openInventory() {
     }
 
@@ -53,7 +77,7 @@ public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut imp
     public abstract boolean isItemValidForSlot(int slot, ItemStack is);
 
     public final ItemStack decrStackSize(int par1, int par2) {
-        return ReikaInventoryHelper.decrStackSize(this, par1, par2);
+        return ReikaInventoryHelper.decrStackSize(itemHandler, par1, par2);
     }
 
 //    public final ItemStack getStackInSlotOnClosing(int par1) {
@@ -85,11 +109,11 @@ public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut imp
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
         ListTag nbttaglist = new ListTag();
-        for (int i = 0; i < inv.length; i++) {
-            if (inv[i] != null) {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
                 CompoundTag compoundTag = new CompoundTag();
                 compoundTag.putByte("Slot", (byte) i);
-                inv[i].save(compoundTag);
+                itemHandler.getStackInSlot(i).save(compoundTag);
                 nbttaglist.add(compoundTag);
             }
         }
@@ -100,14 +124,18 @@ public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut imp
     @Override
     public void load(CompoundTag NBT) {
         ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
-        inv = new ItemStack[this.getContainerSize()];
-
+        itemHandler = new ItemStackHandler(getContainerSize()) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
+        };
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag tag = nbttaglist.getCompound(i);
             byte byte0 = tag.getByte("Slot");
 
-            if (byte0 >= 0 && byte0 < inv.length) {
-                inv[byte0] = ItemStack.of(tag);
+            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
+                itemHandler.setStackInSlot(byte0, ItemStack.of(tag));
             }
         }
     }

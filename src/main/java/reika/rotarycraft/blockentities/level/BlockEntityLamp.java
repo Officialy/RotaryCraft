@@ -135,7 +135,7 @@
 //        tickcount++;
 //        if (tickcount > this.getUnwindTime()) {
 //            ItemStack is = this.getDecrementedCharged();
-//            inv[0] = is;
+//            itemHandler.getStackInSlot(0) = is;
 //            tickcount = 0;
 //        }
 //        canlight = true;

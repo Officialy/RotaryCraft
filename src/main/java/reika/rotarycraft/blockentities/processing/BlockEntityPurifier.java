@@ -85,7 +85,7 @@
 //        tickcount = 0;
 //        int count = 0;
 //        for (int i = 1; i < 6; i++) {
-//            if (this.isModSteel(inv[i])) {
+//            if (this.isModSteel(itemHandler.getStackInSlot(i))) {
 //                ReikaInventoryHelper.decrStack(i, inv);
 //                count++;
 //            }
@@ -106,16 +106,16 @@
 //    private boolean canSmelt() {
 //        if (temperature < SMELTTEMP)
 //            return false;
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return false;
-//        if (inv[0].getItem() != Items.GUNPOWDER)
+//        if (itemHandler.getStackInSlot(0).getItem() != Items.GUNPOWDER)
 //            return false;
 //        if (inv[7] == null)
 //            return false;
 //        if (!ReikaItemHelper.matchStackWithBlock(inv[7], Blocks.SAND.defaultBlockState()))
 //            return false;
 //        for (int i = 1; i < 6; i++) {
-//            if (this.isModSteel(inv[i]))
+//            if (this.isModSteel(itemHandler.getStackInSlot(i)))
 //                return true;
 //        }
 //        return false;
@@ -223,13 +223,13 @@
 //
 //    @Override
 //    public int getRedstoneOverride() {
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return 15;
-//        if (inv[0].getItem() != Items.GUNPOWDER)
+//        if (itemHandler.getStackInSlot(0).getItem() != Items.GUNPOWDER)
 //            return 0;
 //        boolean hasModSteel = false;
 //        for (int i = 1; i < 6; i++) {
-//            if (this.isModSteel(inv[i]))
+//            if (this.isModSteel(itemHandler.getStackInSlot(i)))
 //                hasModSteel = true;
 //        }
 //        if (!hasModSteel)

@@ -12,19 +12,42 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.registry.MachineRegistry;
 
-public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProducer implements Container {
+public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProducer {
 
-    protected ItemStack[] inv = new ItemStack[this.getContainerSize()];
-
+    protected ItemStackHandler itemHandler = new ItemStackHandler(getContainerSize()){
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
     public InventoriedPowerLiquidProducer(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
+    @Override
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (capability == ForgeCapabilities.ITEM_HANDLER)
+            return lazyItemHandler.cast();
+        return super.getCapability(capability, facing);
+    }
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyItemHandler.invalidate();
+    }
     @Override
     public MachineRegistry getMachine() {
         return null;
@@ -46,11 +69,11 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
     }
 
     public final ItemStack getStackInSlot(int par1) {
-        return inv[par1];
+        return itemHandler.getStackInSlot(par1);
     }
 
     public final void setInventorySlotContents(int par1, ItemStack is) {
-        inv[par1] = is;
+        itemHandler.setStackInSlot(par1, is);
     }
 
     public void openInventory() {
@@ -66,7 +89,7 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
     public abstract boolean isItemValidForSlot(int slot, ItemStack is);
 
     public final ItemStack decrStackSize(int par1, int par2) {
-        return ReikaInventoryHelper.decrStackSize(this, par1, par2);
+        return ReikaInventoryHelper.decrStackSize(itemHandler, par1, par2);
     }
 
     public final ItemStack getStackInSlotOnClosing(int par1) {
@@ -96,11 +119,11 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
 
         ListTag nbttaglist = new ListTag();
 
-        for (int i = 0; i < inv.length; i++) {
-            if (inv[i] != null) {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
                 CompoundTag CompoundTag = new CompoundTag();
                 CompoundTag.putByte("Slot", (byte) i);
-                inv[i].save(CompoundTag);
+                itemHandler.getStackInSlot(i).save(CompoundTag);
                 nbttaglist.add(CompoundTag);
             }
         }
@@ -113,10 +136,10 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
         super.serializeNBT();
         CompoundTag nbt = new CompoundTag();
         ListTag nbttaglist = new ListTag();
-        for (int i = 0; i < inv.length; i++) {
-            if (inv[i] != null) {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
                 nbt.putByte("Slot", (byte) i);
-                inv[i].save(nbt);
+                itemHandler.getStackInSlot(i).save(nbt);
                 nbttaglist.add(nbt);
             }
         }
@@ -129,63 +152,25 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
         super.load(nbt);
 
         ListTag nbttaglist = nbt.getList("Items", Tag.TAG_COMPOUND);
-        inv = new ItemStack[this.getContainerSize()];
+        itemHandler = new ItemStackHandler(getContainerSize()){
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
+        };
 
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag CompoundTag = nbttaglist.getCompound(i);
             byte byte0 = CompoundTag.getByte("Slot");
 
-            if (byte0 >= 0 && byte0 < inv.length) {
-                inv[byte0] = ItemStack.of(CompoundTag);
+            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
+                itemHandler.setStackInSlot(byte0, ItemStack.of(CompoundTag));
             }
         }
     }
 
 
-    @Override
-    public int getContainerSize() {
-        return 0;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int p_18941_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int p_18942_, int p_18943_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int p_18951_) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int p_18944_, ItemStack p_18945_) {
-
-    }
-
-    @Override
-    public int getMaxStackSize() {
-        return 64;
-    }
-
-    @Override
-    public boolean stillValid(Player p_18946_) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
+    public abstract int getContainerSize();
 
     @Override
     public int getTanks() {

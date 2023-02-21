@@ -51,7 +51,7 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
 
     @Override
     protected boolean getRequirements(Level world, BlockPos pos) {
-        ItemStack is = inv[0];
+        ItemStack is = itemHandler.getStackInSlot(0);
         if (is == null)
             return false;
         if (!ReikaItemHelper.matchStacks(is, RotaryItems.HSLA_SHAFT_CORE) && !ReikaItemHelper.matchStacks(is, RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE))
@@ -118,7 +118,7 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
 
     @Override
     public int getCoreMagnetization() {
-        return inv[0] != null && inv[0].getTag() != null ? inv[0].getTag().getInt("magnet") : 0;
+        return itemHandler.getStackInSlot(0) != ItemStack.EMPTY && itemHandler.getStackInSlot(0).getTag() != null ? itemHandler.getStackInSlot(0).getTag().getInt("magnet") : 0;
     }
 
     @Override
@@ -188,41 +188,6 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     @Override
     public int getAmbientTemperature() {
         return 0;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
     }
 
     @Override

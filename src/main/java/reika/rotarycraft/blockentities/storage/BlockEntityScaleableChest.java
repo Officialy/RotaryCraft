@@ -78,8 +78,8 @@
 //            size = 9;
 //        else
 //            size = 9 + (int) (power - MINPOWER) / FALLOFF;
-//        if (size >= inv.length)
-//            size = inv.length;
+//        if (size >= itemHandler.getSlots())
+//            size = itemHandler.getSlots();
 //        return size;
 //    }
 //
@@ -291,13 +291,13 @@
 //
 //        ListTag nbttaglist = new ListTag();
 //
-//        for (int i = 0; i < inv.length; i++) {
-//            if (inv[i] != null) {
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            if (itemHandler.getStackInSlot(i).isEmpty()) {
 //                CompoundTag CompoundTag = new CompoundTag();
 //                CompoundTag.putShort("Slot", (short) i);
-//                inv[i].saveAdditional(CompoundTag);
+//                itemHandler.getStackInSlot(i).saveAdditional(CompoundTag);
 //                nbttaglist.add(CompoundTag);
-//                //ReikaJavaLibrary.pConsole(i+":"+inv[i]);
+//                //ReikaJavaLibrary.pConsole(i+":"+itemHandler.getStackInSlot(i));
 //            }
 //        }
 //
@@ -313,7 +313,7 @@
 //                CompoundTag CompoundTag = nbttaglist.getCompound(i);
 //                short byte0 = CompoundTag.getShort("Slot");
 //
-//                if (byte0 >= 0 && byte0 < inv.length) {
+//                if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
 //                    inv[byte0] = ItemStack.of(CompoundTag);
 //                } else {
 //                    RotaryCraft.LOGGER.error(this + " tried to load an inventory slot " + byte0 + " from NBT!");

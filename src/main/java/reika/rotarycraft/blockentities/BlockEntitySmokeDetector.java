@@ -38,6 +38,8 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
 
     public BlockEntitySmokeDetector(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.SMOKE_DETECTOR.get(), pos, state);
+
+        ///todo make the item handler only accept RotaryItems.HSLA_STEEL_SPRING.get().getDefaultInstance();
     }
 
     public boolean isAlarming() {
@@ -53,25 +55,25 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     public void updateEntity(Level world, BlockPos pos) {
         tickcount++;
         unwindtick++;
-        //this.getPower4Sided(0, 1, 0);
-        //if (this.power < MINPOWER)
-        //	return;
+//        this.getPower4Sided(0, 1, 0);
+//        if (this.power < MINPOWER)
+//        	return;
         if (!this.checkValidCoil())
             return;
         if (unwindtick >= this.getUnwindTime()) {
-            inv[0] = this.getDecrementedCharged();
+            itemHandler.setStackInSlot(0, this.getDecrementedCharged());
             unwindtick = 0;
         }
         //ReikaChatHelper.write(ReikaWorldHelper.findNearBlock(world, pos, 8, Blocks.FIRE.blockID));
         if (ReikaWorldHelper.findNearBlock(world, pos, 8, Blocks.FIRE)) {
             if (!isAlarm) {
                 isAlarm = true;
-                //ReikaWorldHelper.causeAdjacentUpdates(world, pos);
+                ReikaWorldHelper.causeAdjacentUpdates(world, pos);
             }
         } else {
             if (isAlarm) {
                 isAlarm = false;
-                //ReikaWorldHelper.causeAdjacentUpdates(world, pos);
+                ReikaWorldHelper.causeAdjacentUpdates(world, pos);
             }
         }
         isLowBatt = this.lowBattery();
@@ -120,7 +122,7 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
         //overpower  = (int)(this.power/MINPOWER);
         if (!this.checkValidCoil())
             return 0;
-        int dmg = inv[0].getTag().getInt("power");
+        int dmg = itemHandler.getStackInSlot(0).getTag().getInt("power");
         overpower = (int) ReikaMathLibrary.logbase(dmg * dmg, 2);
         return Math.min(overpower, 8);
     }
@@ -128,7 +130,7 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     public boolean lowBattery() {
         if (!this.checkValidCoil())
             return false;
-        return inv[0].getTag().getInt("power") <= 8;
+        return itemHandler.getStackInSlot(0).getTag().getInt("power") <= 8;
     }
 
     @Override
@@ -152,33 +154,6 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     }
 
     @Override
-    public int getSlots() {
-        return 1;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
-        return 1;
-    }
-
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return stack == RotaryItems.HSLA_STEEL_SPRING.get().getDefaultInstance();
-    }
-
-    @Override
     public boolean hasAnInventory() {
         return true;
     }
@@ -191,41 +166,6 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     @Override
     public int getContainerSize() {
         return 1;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
     }
 
 }

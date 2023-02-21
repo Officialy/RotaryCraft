@@ -92,8 +92,8 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
     }
 
 //    private void emptyBuckets() {
-//        for (int i = 0; i < inv.length; i++) {
-//            ItemStack slot = inv[i];
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            ItemStack slot = itemHandler.getStackInSlot(i);
 //            if (slot != null) {
 //                FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(slot);
 //                if (fluid != null) {
@@ -114,8 +114,8 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
 //    }
 //
 //    private void fillBuckets() {
-//        for (int i = 0; i < inv.length; i++) {
-//            ItemStack slot = inv[i];
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            ItemStack slot = itemHandler.getStackInSlot(i);
 //            if (slot != null && FluidContainerRegistry.isEmptyContainer(slot)) {
 //                ItemStack is = FluidContainerRegistry.fillFluidContainer(tank.getFluid(), slot);
 //                if (is != null) {
@@ -224,7 +224,7 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
 
     @Override
     public boolean areConditionsMet() {
-        return !ReikaInventoryHelper.isEmpty(inv);
+        return !ReikaInventoryHelper.isEmpty(itemHandler);
     }
 
     @Override
@@ -247,38 +247,4 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
         return 18;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
 }

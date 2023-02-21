@@ -62,9 +62,9 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
 
     @Override
     protected void internalizeFuel() {
-        if (inv[0] != null && fuel.getFluidLevel() + FluidType.BUCKET_VOLUME <= FUELCAP) {
-            if (inv[0].getItem() == RotaryItems.ETHANOL.get()) {
-                ReikaInventoryHelper.decrStack(0, inv);
+        if (!itemHandler.getStackInSlot(0).isEmpty() && fuel.getFluidLevel() + FluidType.BUCKET_VOLUME <= FUELCAP) {
+            if (itemHandler.getStackInSlot(0).getItem() == RotaryItems.ETHANOL.get()) {
+                ReikaInventoryHelper.decrStack(0, itemHandler);
                 fuel.addLiquid(1000, RotaryFluids.ETHANOL.get());
             }
         }
@@ -95,41 +95,6 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
 
     @Override
     protected void affectSurroundings(Level world, BlockPos pos) {
-
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
 
     }
 

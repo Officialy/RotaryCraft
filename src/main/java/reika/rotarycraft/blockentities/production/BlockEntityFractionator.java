@@ -185,7 +185,7 @@
 //            float consume = ingredients.size() * DifficultyEffects.CONSUMEFRAC.getChance();
 //            WeightedRandom<Integer> wr = new WeightedRandom();
 //            for (int i = 0; i < ingredients.size(); i++) {
-//                ItemStack is = inv[i];
+//                ItemStack is = itemHandler.getStackInSlot(i);
 //                KeyedItemStack ks = key(is);
 //                float wt = ingredients.get(ks);
 //                wr.addEntry(i, wt);
@@ -222,11 +222,11 @@
 //    private boolean hasAllIngredients() {
 //        HashSet<KeyedItemStack> check = new HashSet(ingredients.keySet());
 //        for (int i = 0; i < ingredients.size(); i++) {
-//            if (inv[i] == null)
+//            if (itemHandler.getStackInSlot(i) == null)
 //                return false;
 //            //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", ingredients[i.getItem, ingredients[i].getItemDamage()));
 //            //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", i)+String.valueOf(this.haveIngredient(ingredients[i.getItem, ingredients[i].getItemDamage())));
-//            KeyedItemStack ks = key(inv[i]);
+//            KeyedItemStack ks = key(itemHandler.getStackInSlot(i));
 //            if (!check.contains(ks))
 //                return false;
 //            check.remove(ks);

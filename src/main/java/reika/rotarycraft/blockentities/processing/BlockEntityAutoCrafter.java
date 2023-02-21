@@ -247,7 +247,7 @@
 //        if (network != null) {
 //            network.clearCallbacks();
 //            for (int i = 0; i < SIZE; i++) {
-//                ItemStack pattern = inv[i];
+//                ItemStack pattern = itemHandler.getStackInSlot(i);
 //                if (this.isItemValidForSlot(i, pattern)) {
 //                    ItemStack[] in = this.getIngredients(pattern);
 //                    if (in != null) {
@@ -313,7 +313,7 @@
 //    }
 //
 //    private boolean attemptSlotCrafting(int i, int n, int d) {
-//        ItemStack is = inv[i];
+//        ItemStack is = itemHandler.getStackInSlot(i);
 //        if (is == null)
 //            return false;
 //        ItemStack[] items = this.getIngredients(is);

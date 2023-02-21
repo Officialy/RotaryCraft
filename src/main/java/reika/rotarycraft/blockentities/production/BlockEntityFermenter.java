@@ -66,17 +66,17 @@
 //    // Return the itemstack product from the input items.
 //    private ItemStack getRecipe() {
 //        for (int i = 0; i < 2; i++)
-//            if (inv[i] == null)
+//            if (itemHandler.getStackInSlot(i) == null)
 //                return null;
-//        if (inv[0].getItem() == Items.SUGAR) {
+//        if (itemHandler.getStackInSlot(0).getItem() == Items.SUGAR) {
 //            if (this.hasWater())
-//                if (ReikaItemHelper.matchStackWithBlock(inv[1], Blocks.DIRT))
+//                if (ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(1), Blocks.DIRT))
 //                    return !RotaryConfig.COMMON.enableFermenterYeast() ? null : new ItemStack(RotaryItems.YEAST.get(), 1, 0);
 //        }
-//        if (inv[0].getItem() == RotaryItems.YEAST.get()) {
-//            if (MulchMaterials.instance.isMulchable(inv[1]))
+//        if (itemHandler.getStackInSlot(0).getItem() == RotaryItems.YEAST.get()) {
+//            if (MulchMaterials.instance.isMulchable(itemHandler.getStackInSlot(1)))
 //                if (this.hasWater())
-//                    return ReikaItemHelper.getSizedItemStack(RotaryItems.SLUDGE, MulchMaterials.instance.getPlantValue(inv[1]));
+//                    return ReikaItemHelper.getSizedItemStack(RotaryItems.SLUDGE, MulchMaterials.instance.getPlantValue(itemHandler.getStackInSlot(1)));
 //        }
 //        return null;
 //    }
@@ -154,14 +154,14 @@
 //        if (product.getItem() != RotaryItems.YEAST.get() && !ReikaItemHelper.matchStacks(product, RotaryItems.sludge))
 //            return;
 //
-//        if (inv[2] != null) {
+//        if (!itemHandler.getStackInSlot(2).isPresent()) {
 //            if (product.getItem() != inv[2].getItem()) {
 //                fermenterCookTime = 0;
 //                return;
 //            }
 //        }
 //        idle = false;
-//        if (inv[2] != null) {
+//        if (!itemHandler.getStackInSlot(2).isPresent()) {
 //            if (inv[2].getCount() + product.getCount() > inv[2].getMaxStackSize()) {
 //                fermenterCookTime = 0;
 //                return;
@@ -181,7 +181,7 @@
 //        }
 //        if (product.getItem() != RotaryItems.YEAST.get() && !ReikaItemHelper.matchStacks(product, RotaryItems.SLUDGE))
 //            return false;
-//        if (inv[2] != null) {
+//        if (!itemHandler.getStackInSlot(2).isPresent()) {
 //            if (product.getItem() != inv[2].getItem()) {
 //                return false;
 //            }

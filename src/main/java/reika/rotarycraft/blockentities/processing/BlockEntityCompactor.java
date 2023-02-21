@@ -61,19 +61,19 @@
 //        boolean ingred = false;
 //        boolean invalid = false;
 //        for (int i = 0; i < 4; i++) {
-//            if (inv[i] == null)
+//            if (itemHandler.getStackInSlot(i) == null)
 //                invalid = true;
 //        }
 //        if (!invalid) {
-//            Item id = inv[0].getItem();
-//            int dmg = inv[0].getItemDamage();
+//            Item id = itemHandler.getStackInSlot(0).getItem();
+//            int dmg = itemHandler.getStackInSlot(0).getItemDamage();
 //            for (int i = 1; i < 4; i++) {
-//                if (inv[i].getItem() != id || inv[i].getItemDamage() != dmg)
+//                if (itemHandler.getStackInSlot(i).getItem() != id || itemHandler.getStackInSlot(i).getItemDamage() != dmg)
 //                    invalid = true;
 //            }
 //        }
 //        if (!invalid) {
-//            if (RecipesCompactor.getRecipes().isCompactable(inv[0]))
+//            if (RecipesCompactor.getRecipes().isCompactable(itemHandler.getStackInSlot(0)))
 //                ingred = true;
 //        }
 //        boolean full = true;
@@ -159,8 +159,8 @@
 //    }
 //
 //    public int compressTime() {
-//        ItemStack is1 = inv[0];
-//        ItemStack is2 = inv[1];
+//        ItemStack is1 = itemHandler.getStackInSlot(0);
+//        ItemStack is2 = itemHandler.getStackInSlot(1);
 //        ItemStack is3 = inv[2];
 //        ItemStack is4 = inv[3];
 //
@@ -267,17 +267,17 @@
 //    }
 //
 //    public int getStage() {
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return 1;
-//        if (!RecipesCompactor.getRecipes().isCompactable(inv[0]))
+//        if (!RecipesCompactor.getRecipes().isCompactable(itemHandler.getStackInSlot(0)))
 //            return 1;
-//        if (inv[0].getItem() == Items.coal)
+//        if (itemHandler.getStackInSlot(0).getItem() == Items.coal)
 //            return 1;
-//        if (ReikaItemHelper.matchStacks(RotaryItems.anthracite, inv[0]))
+//        if (ReikaItemHelper.matchStacks(RotaryItems.anthracite, itemHandler.getStackInSlot(0)))
 //            return 2;
-//        if (ReikaItemHelper.matchStacks(RotaryItems.prismane, inv[0]))
+//        if (ReikaItemHelper.matchStacks(RotaryItems.prismane, itemHandler.getStackInSlot(0)))
 //            return 3;
-//        if (ReikaItemHelper.matchStacks(RotaryItems.lonsda, inv[0]))
+//        if (ReikaItemHelper.matchStacks(RotaryItems.lonsda, itemHandler.getStackInSlot(0)))
 //            return 4;
 //        return 1;
 //    }
@@ -334,29 +334,29 @@
 //            return false;
 //
 //        for (int i = 0; i < 4; i++)
-//            if (inv[i] == null)
+//            if (itemHandler.getStackInSlot(i) == null)
 //                return false;
 //
-//        if (inv[0].getItem() != inv[1].getItem())
+//        if (itemHandler.getStackInSlot(0).getItem() != itemHandler.getStackInSlot(1).getItem())
 //            return false;
-//        if (inv[0].getItem() != inv[2].getItem())
+//        if (itemHandler.getStackInSlot(0).getItem() != inv[2].getItem())
 //            return false;
-//        if (inv[0].getItem() != inv[3].getItem())
+//        if (itemHandler.getStackInSlot(0).getItem() != inv[3].getItem())
 //            return false;
-//        if (inv[0].getItemDamage() != inv[1].getItemDamage())
+//        if (itemHandler.getStackInSlot(0).getItemDamage() != itemHandler.getStackInSlot(1).getItemDamage())
 //            return false;
-//        if (inv[0].getItemDamage() != inv[2].getItemDamage())
+//        if (itemHandler.getStackInSlot(0).getItemDamage() != inv[2].getItemDamage())
 //            return false;
-//        if (inv[0].getItemDamage() != inv[3].getItemDamage())
-//            return false;
-//
-//        if (pressure < RecipesCompactor.getRecipes().getReqPressure(inv[0]) || temperature < RecipesCompactor.getRecipes().getReqTemperature(inv[0]))
+//        if (itemHandler.getStackInSlot(0).getItemDamage() != inv[3].getItemDamage())
 //            return false;
 //
-//        ItemStack itemstack = RecipesCompactor.getRecipes().getCompactingResult(inv[0]);
+//        if (pressure < RecipesCompactor.getRecipes().getReqPressure(itemHandler.getStackInSlot(0)) || temperature < RecipesCompactor.getRecipes().getReqTemperature(itemHandler.getStackInSlot(0)))
+//            return false;
+//
+//        ItemStack itemstack = RecipesCompactor.getRecipes().getCompactingResult(itemHandler.getStackInSlot(0));
 //        if (itemstack == null)
 //            return false;
-//        if (inv[4] != null) {
+//        if (!itemHandler.getStackInSlot(4).isPresent()) {
 //            if (!inv[4].isItemEqual(itemstack))
 //                return false;
 //            if (inv[4].getCount() >= itemstack.getMaxStackSize())
@@ -373,20 +373,20 @@
 //    public void smeltItem() {
 //        if (!this.canSmelt())
 //            return;
-//        ItemStack itemstack = RecipesCompactor.getRecipes().getCompactingResult(inv[0]);
+//        ItemStack itemstack = RecipesCompactor.getRecipes().getCompactingResult(itemHandler.getStackInSlot(0));
 //        if (inv[4] == null)
 //            inv[4] = itemstack.copy();
 //        else if (inv[4].getItem() == itemstack.getItem())
 //            inv[4].getCount() += itemstack.getCount();
 //
 //        for (int i = 0; i < 4; i++) {
-//            //if (inv[i].getItem().func_46056_k())
-//            //    inv[i] = new ItemStack(inv[i].getItem().setFull3D());
+//            //if (itemHandler.getStackInSlot(i).getItem().func_46056_k())
+//            //    itemHandler.getStackInSlot(i) = new ItemStack(itemHandler.getStackInSlot(i).getItem().setFull3D());
 //            // else
-//            inv[i].getCount()--;
+//            itemHandler.getStackInSlot(i).getCount()--;
 //
-//            if (inv[i].getCount() <= 0)
-//                inv[i] = null;
+//            if (itemHandler.getStackInSlot(i).getCount() <= 0)
+//                itemHandler.getStackInSlot(i) = null;
 //        }
 //    }
 //
@@ -491,11 +491,11 @@
 //
 //    @Override
 //    public String getOperationalStatus() {
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return "Missing Items";
-//        if (temperature < RecipesCompactor.getRecipes().getReqTemperature(inv[0]))
+//        if (temperature < RecipesCompactor.getRecipes().getReqTemperature(itemHandler.getStackInSlot(0)))
 //            return "Insufficient Temperature";
-//        if (pressure < RecipesCompactor.getRecipes().getReqPressure(inv[0]))
+//        if (pressure < RecipesCompactor.getRecipes().getReqPressure(itemHandler.getStackInSlot(0)))
 //            return "Insufficient Pressure";
 //        return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
 //    }

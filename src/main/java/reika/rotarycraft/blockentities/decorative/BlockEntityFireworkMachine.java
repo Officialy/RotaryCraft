@@ -76,9 +76,9 @@
 //					if (slot != -1)
 //						star = this.getStackInSlot(slot);
 //				}*/
-//                int slot = DragonAPI.rand.nextInt(inv.length);
+//                int slot = DragonAPI.rand.nextInt(itemHandler.getSlots());
 //                while (inv[slot] == null || inv[slot].getItem() != Items.FIREWORK_STAR) {
-//                    slot = DragonAPI.rand.nextInt(inv.length);
+//                    slot = DragonAPI.rand.nextInt(itemHandler.getSlots());
 //                }
 //                star = this.getStackInSlot(slot);
 //                if (this.consumeChance())
@@ -129,13 +129,13 @@
 //        haveDye = ReikaInventoryHelper.checkForItem(Items.DYE, inv);
 //        havePaper = ReikaInventoryHelper.checkForItem(Items.PAPER, inv);
 //        int numgunpowder = 0;
-//        for (int i = 0; i < inv.length; i++) {
-//            if (inv[i] != null) {
-//                if (inv[i].getItem() == Items.GUNPOWDER) {
-//                    numgunpowder += inv[i].getCount();
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            if (itemHandler.getStackInSlot(i).isEmpty()) {
+//                if (itemHandler.getStackInSlot(i).getItem() == Items.GUNPOWDER) {
+//                    numgunpowder += itemHandler.getStackInSlot(i).getCount();
 //                    if (numgunpowder >= 2) {
 //                        have2Gunpowder = true;
-//                        i = inv.length;
+//                        i = itemHandler.getSlots();
 //                    }
 //                }
 //            }
@@ -174,8 +174,8 @@
 //        int color = -1;
 //        boolean[] hasColors = new boolean[16]; // To save CPU time, see below
 //        boolean hasDye = false;
-//        for (int i = 0; i < inv.length; i++) {
-//            Collection<ReikaDyeHelper> dyes = ReikaDyeHelper.getColorsFromItem(inv[i]);
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            Collection<ReikaDyeHelper> dyes = ReikaDyeHelper.getColorsFromItem(itemHandler.getStackInSlot(i));
 //            if (dyes != null) {
 //                hasDye = true;
 //                for (ReikaDyeHelper dye : dyes)
@@ -188,7 +188,7 @@
 //            ReikaDyeHelper randcolor = ReikaDyeHelper.getRandomColor();
 //            while (!hasColors[randcolor.ordinal()])
 //                randcolor = ReikaDyeHelper.getRandomColor();
-//            for (int j = 0; j < inv.length; j++) {
+//            for (int j = 0; j < itemHandler.getSlots(); j++) {
 //                if (inv[j] != null) {
 //                    ReikaDyeHelper dye2 = ReikaDyeHelper.getColorFromItem(inv[j]);
 //                    if (dye2 == randcolor) {
@@ -204,9 +204,9 @@
 //    }
 //
 //    private boolean getIngredient(Item id, boolean decr) {
-//        for (int i = 0; i < inv.length; i++) {
-//            if (inv[i] != null) {
-//                if (inv[i].getItem() == id) {
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            if (itemHandler.getStackInSlot(i).isEmpty()) {
+//                if (itemHandler.getStackInSlot(i).getItem() == id) {
 //                    if (decr) {
 //                        ReikaInventoryHelper.decrStack(i, inv);
 //                    }

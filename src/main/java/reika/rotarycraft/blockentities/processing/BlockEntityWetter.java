@@ -40,7 +40,7 @@
 //        boolean ticked = false;
 //
 //        if (power >= MINPOWER && omega >= MINSPEED) {
-//            ItemStack is = inv[0];
+//            ItemStack is = itemHandler.getStackInSlot(0);
 //            if (is != null) {
 //                FluidStack fs = tank.getFluid();
 //                if (fs != null) {
@@ -49,9 +49,9 @@
 //                        ticked = true;
 //                        if (tick >= this.getDuration(wr)) {
 //                            tank.removeLiquid(wr.getFluid().amount);
-//                            inv[0] = wr.getOutput();
+//                            itemHandler.getStackInSlot(0) = wr.getOutput();
 //                            tick = 0;
-//                            this.onItemSet(0, inv[0]);
+//                            this.onItemSet(0, itemHandler.getStackInSlot(0));
 //                        } else {
 //                            tick += 1 + 4 * ReikaMathLibrary.logbase2(omega / MINSPEED);
 //                            extractionCooldown = 10;
@@ -80,10 +80,10 @@
 //    }
 //
 //    private void updateItem() {
-//        if (item == null && inv[0] == null)
+//        if (item == null && itemHandler.getStackInSlot(0).isEmpty())
 //            return;
-//        if ((item == null && inv[0] != null) || (item != null && inv[0] == null) || !ReikaItemHelper.matchStacks(item.getEntityItem(), inv[0])) {
-//            item = inv[0] != null ? new InertItem(level, inv[0]) : null;
+//        if ((item == null && !itemHandler.getStackInSlot(0).isEmpty()) || (item != null && itemHandler.getStackInSlot(0).isEmpty()) || !ReikaItemHelper.matchStacks(item.getEntityItem(), itemHandler.getStackInSlot(0))) {
+//            item = !itemHandler.getStackInSlot(0).isEmpty() ? new InertItem(level, itemHandler.getStackInSlot(0)) : null;
 //        }
 //        this.syncAllData(true);
 //    }
@@ -129,8 +129,8 @@
 //    public boolean isValidFluid(Fluid f) {
 //        if (tick > 0)
 //            return false;
-//        if (inv[0] != null) {
-//            return RecipesWetter.getRecipes().isWettableWith(inv[0], f);
+//        if (!itemHandler.getStackInSlot(0).isEmpty()) {
+//            return RecipesWetter.getRecipes().isWettableWith(itemHandler.getStackInSlot(0), f);
 //        }
 //        return RecipesWetter.getRecipes().isValidFluid(f);
 //    }

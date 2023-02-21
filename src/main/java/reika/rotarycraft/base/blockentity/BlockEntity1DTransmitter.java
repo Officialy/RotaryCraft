@@ -39,10 +39,10 @@ public abstract class BlockEntity1DTransmitter extends BlockEntityTransmissionMa
     public void getIOSides(Level world, BlockPos pos, boolean hasVertical) {
         if (world.getBlockState(pos).getBlock() instanceof BlockRotaryCraftMachine) {
             switch (world.getBlockState(pos).getValue(BlockRotaryCraftMachine.FACING)) {
-                case EAST -> read = Direction.EAST;
-                case WEST -> read = Direction.WEST;
-                case SOUTH -> read = Direction.SOUTH;
-                case NORTH -> read = Direction.NORTH;
+                case EAST -> read = Direction.WEST;
+                case WEST -> read = Direction.EAST;
+                case SOUTH -> read = Direction.NORTH;
+                case NORTH -> read = Direction.SOUTH;
                 case DOWN -> {
                     if (hasVertical) {
                         read = Direction.DOWN;

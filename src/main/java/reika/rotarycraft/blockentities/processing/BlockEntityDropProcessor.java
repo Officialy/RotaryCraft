@@ -140,10 +140,10 @@
 //    }
 //
 //    private boolean doOperation(Level world, BlockPos pos, boolean multiple) {
-//        if (inv[0] != null) {
-//            if (inv[1] == null || this.canContinueProcessingWithOutput()) {
+//        if (!itemHandler.getStackInSlot(0).isEmpty()) {
+//            if (itemHandler.getStackInSlot(1) == null || this.canContinueProcessingWithOutput()) {
 //                if (overflow.isEmpty()) {
-//                    if (isProcessable(inv[0])) {
+//                    if (isProcessable(itemHandler.getStackInSlot(0))) {
 //                        dropProcessTime++;
 //                        if (multiple || dropProcessTime >= this.getOperationTime()) {
 //                            dropProcessTime = 0;
@@ -155,8 +155,8 @@
 //                        return false;
 //                    }
 //                } else {
-//                    if (inv[1] == null) {
-//                        inv[1] = overflow.remove(0);
+//                    if (itemHandler.getStackInSlot(1) == null) {
+//                        itemHandler.getStackInSlot(1) = overflow.remove(0);
 //                    } else {
 //
 //                    }
@@ -174,14 +174,14 @@
 //    }
 //
 //    private boolean canContinueProcessingWithOutput() {
-//        DropProcessing h = getHandler(inv[0]);
+//        DropProcessing h = getHandler(itemHandler.getStackInSlot(0));
 //        if (h.allowsStacking()) {
-//            Collection<ItemStack> c = this.runHandler(h, inv[0]);
+//            Collection<ItemStack> c = this.runHandler(h, itemHandler.getStackInSlot(0));
 //            if (c.size() != 1) {
 //                return false;
 //            }
 //            ItemStack is = c.iterator().next();
-//            return ReikaItemHelper.matchStacks(is, inv[1]) && is.getCount() + inv[1].getCount() <= Math.min(this.getInventoryStackLimit(), is.getMaxStackSize());
+//            return ReikaItemHelper.matchStacks(is, itemHandler.getStackInSlot(1)) && is.getCount() + itemHandler.getStackInSlot(1).getCount() <= Math.min(this.getInventoryStackLimit(), is.getMaxStackSize());
 //        }
 //        return false;
 //    }
@@ -199,8 +199,8 @@
 //    }
 //
 //    private void processItem(Level world, BlockPos pos) {
-//        DropProcessing dp = getHandler(inv[0]);
-//        Collection<ItemStack> c = this.runHandler(dp, inv[0]);
+//        DropProcessing dp = getHandler(itemHandler.getStackInSlot(0));
+//        Collection<ItemStack> c = this.runHandler(dp, itemHandler.getStackInSlot(0));
 //        ArrayList<ItemStack> li = ReikaItemHelper.collateItemList(c);
 //        if (!li.isEmpty()) {
 //            ReikaInventoryHelper.addOrSetStack(li.remove(0), inv, 1);
@@ -278,7 +278,7 @@
 //
 //    @Override
 //    public boolean areConditionsMet() {
-//        return inv[0] != null && ReikaItemHelper.isBlock(inv[0]) && inv[1] == null && overflow.isEmpty();
+//        return !itemHandler.getStackInSlot(0).isEmpty() && ReikaItemHelper.isBlock(itemHandler.getStackInSlot(0)) && itemHandler.getStackInSlot(1) == null && overflow.isEmpty();
 //    }
 //
 //    @Override

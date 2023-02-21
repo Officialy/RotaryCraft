@@ -93,7 +93,7 @@
 //
 //        if (DragonAPI.debugtest) {
 //            tank.addLiquid(100, Fluids.WATER);
-//            inv[0] = new ItemStack(Items.dye, 64, 15);
+//            itemHandler.getStackInSlot(0) = new ItemStack(Items.dye, 64, 15);
 //        }
 //
 //        if (!world.isClientSide) {
@@ -223,9 +223,9 @@
 //        firstValidSlot = -1;
 //        if (tank.isEmpty())
 //            return;
-//        for (int i = 0; i < inv.length; i++) {
-//            if (inv[i] != null) {
-//                if (this.isValidFertilizer(inv[i])) {
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            if (itemHandler.getStackInSlot(i).isEmpty()) {
+//                if (this.isValidFertilizer(itemHandler.getStackInSlot(i))) {
 //                    firstValidSlot = i;
 //                    return;
 //                }

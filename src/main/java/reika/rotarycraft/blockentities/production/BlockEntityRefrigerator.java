@@ -98,15 +98,15 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
     private boolean canProgress() {
         if (power < MINPOWER || torque < MINTORQUE)
             return false;
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return false;
         if (!tank.canTakeIn(this.getProducedLN2()))
             return false;
-        return ReikaItemHelper.matchStackWithBlock(inv[0], Blocks.ICE.defaultBlockState()) && (inv[1] == null || inv[1].getCount() < inv[1].getMaxStackSize());
+        return ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(0), Blocks.ICE.defaultBlockState()) && (itemHandler.getStackInSlot(1) == null || itemHandler.getStackInSlot(1).getCount() < itemHandler.getStackInSlot(1).getMaxStackSize());
     }
 
     private void cycle() {
-        ReikaInventoryHelper.decrStack(0, inv);
+        ReikaInventoryHelper.decrStack(0, itemHandler);
         int amt = this.getProducedLN2();
         tank.addLiquid(amt, RotaryFluids.LIQUID_NITROGEN.get());
         if (amt > 0) {
@@ -117,9 +117,9 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
             }
             if (DragonAPI.rand.nextInt(4) == 0) {
                 int n = DragonAPI.rand.nextInt(20) == 0 ? 4 : (DragonAPI.rand.nextInt(4) == 0 ? 2 : 1);
-                if (inv[1] != null)
-                    n = Math.min(n, RotaryItems.DRY_ICE.get().getMaxStackSize() - inv[1].getCount());
-                ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(RotaryItems.DRY_ICE.get().getDefaultInstance(), n), inv, 1);
+                if (itemHandler.getStackInSlot(1) != null)
+                    n = Math.min(n, RotaryItems.DRY_ICE.get().getMaxStackSize() - itemHandler.getStackInSlot(1).getCount());
+                ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(RotaryItems.DRY_ICE.get().getDefaultInstance(), n), itemHandler, 1);
             }
         }
     }

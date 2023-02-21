@@ -30,6 +30,7 @@ public interface RotaryMenus {
     Supplier<MenuType<LandmineContainer>> LANDMINE = register("landmine", LandmineContainer::new);
 
     Supplier<MenuType<BlowerContainer>> BLOWER = register("blower", BlowerContainer::new);
+    Supplier<MenuType<ContainerJet>> JET = register("jet", ContainerJet::new);
 
 //    Supplier<MenuType<ContainerEthanol>> GAS_ENGINE = register("gas_engine",      () -> IForgeMenuType.create(new ContainerEthanol.Factory()));
 

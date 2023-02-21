@@ -1,6 +1,7 @@
 package reika.rotarycraft.blockentities.level;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -13,8 +14,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.ModList;
 import reika.dragonapi.base.OneSlotMachine;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
@@ -26,38 +32,59 @@ import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 
-public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements IItemHandler, OneSlotMachine {
+public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements OneSlotMachine {
 
-    private ItemStack[] inv = new ItemStack[1];
+
+    protected ItemStackHandler itemHandler = new ItemStackHandler(1) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public BlockEntityBlockFiller(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.FILLER.get(), pos, state);
     }
 
     @Override
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (capability == ForgeCapabilities.ITEM_HANDLER)
+            return lazyItemHandler.cast();
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyItemHandler.invalidate();
+    }
+
+    @Override
     protected void onBlockPlaced() {
-        /*todo if (ModList.BOTANIA.isLoaded() && inv[0].getItem() instanceof IBlockProvider) {
-            BlockKey bk = this.getBlockFromBotania((IBlockProvider) inv[0].getItem(), inv[0]);
-            ((IBlockProvider) inv[0].getItem()).provideBlock(this.getPlacer(), null, inv[0], bk.blockID, bk.metadata, true);
+        /*todo if (ModList.BOTANIA.isLoaded() && itemHandler.getStackInSlot(0).getItem() instanceof IBlockProvider) {
+            BlockKey bk = this.getBlockFromBotania((IBlockProvider) itemHandler.getStackInSlot(0).getItem(), itemHandler.getStackInSlot(0));
+            ((IBlockProvider) itemHandler.getStackInSlot(0).getItem()).provideBlock(this.getPlacer(), null, itemHandler.getStackInSlot(0), bk.blockID, bk.metadata, true);
         } else {*/
-            ReikaInventoryHelper.decrStack(0, inv);
+        ReikaInventoryHelper.decrStack(0, itemHandler);
         //}
     }
 
     @Override
     protected boolean hasRemainingBlocks() {
-        if (inv[0] == null)
+        if (itemHandler.getStackInSlot(0).isEmpty())
             return false;
-        /*todo if (ModList.BOTANIA.isLoaded() && inv[0].getItem() instanceof IBlockProvider) {
-            BlockKey bk = this.getBlockFromBotania((IBlockProvider) inv[0].getItem(), inv[0]);
-            return bk != null && ((IBlockProvider) inv[0].getItem()).provideBlock(this.getPlacer(), null, inv[0], bk.blockID, bk.metadata, false);
+        /*todo if (ModList.BOTANIA.isLoaded() && itemHandler.getStackInSlot(0).getItem() instanceof IBlockProvider) {
+            BlockKey bk = this.getBlockFromBotania((IBlockProvider) itemHandler.getStackInSlot(0).getItem(), itemHandler.getStackInSlot(0));
+            return bk != null && ((IBlockProvider) itemHandler.getStackInSlot(0).getItem()).provideBlock(this.getPlacer(), null, itemHandler.getStackInSlot(0), bk.blockID, bk.metadata, false);
         }*/
-        return inv[0].getCount() > 0;
+        return itemHandler.getStackInSlot(0).getCount() > 0;
     }
 
     @Override
     protected BlockKey getNextPlacedBlock() {
-        return this.getBlock(inv[0]);
+        return this.getBlock(itemHandler.getStackInSlot(0));
     }
 
     private BlockKey getBlock(ItemStack is) {
@@ -99,39 +126,12 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements IIt
 
     }
 
-    @Override
-    public int getSlots() {
-        return 1;
-    }
-
     public final ItemStack getStackInSlot(int par1) {
-        return inv[par1];
-    }
-
-    @NotNull
-    @Override
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
-        return 0;
-    }
-
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return false;
+        return itemHandler.getStackInSlot(par1);
     }
 
     public final void setInventorySlotContents(int par1, ItemStack is) {
-        inv[par1] = is;
+        itemHandler.setStackInSlot(par1, is);
         this.onInventoryChanged();
     }
 
@@ -157,7 +157,7 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements IIt
     }
 
     public final ItemStack decrStackSize(int par1, int par2) {
-        ItemStack ret = ReikaInventoryHelper.decrStackSize((Container) this, par1, par2);
+        ItemStack ret = ReikaInventoryHelper.decrStackSize(itemHandler, par1, par2);
         this.onInventoryChanged();
         return ret;
     }
@@ -190,13 +190,13 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements IIt
 
         ListTag nbttaglist = new ListTag();
 
-        for (int i = 0; i < inv.length; i++) {
-            if (inv[i] != null) {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
                 CompoundTag CompoundTag = new CompoundTag();
                 CompoundTag.putShort("Slot", (short) i);
-                inv[i].save(CompoundTag);
+                itemHandler.getStackInSlot(i).save(CompoundTag);
                 nbttaglist.add(CompoundTag);
-                //ReikaJavaLibrary.pConsole(i+":"+inv[i]);
+                //ReikaJavaLibrary.pConsole(i+":"+itemHandler.getStackInSlot(i));
             }
         }
 
@@ -223,14 +223,18 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements IIt
         super.load(NBT);
 
         ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
-        inv = new ItemStack[this.getSlots()];
-
+        itemHandler = new ItemStackHandler(1) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
+        };
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag CompoundTag = nbttaglist.getCompound(i);
             short byte0 = CompoundTag.getShort("Slot");
 
-            if (byte0 >= 0 && byte0 < inv.length) {
-                inv[byte0] = ItemStack.of(CompoundTag);
+            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
+                itemHandler.setStackInSlot(byte0, ItemStack.of(CompoundTag));
                 //ReikaJavaLibrary.pConsole(byte0+":"+inv[byte0]);
             } else {
                 RotaryCraft.LOGGER.error(this + " tried to load an inventory slot " + byte0 + " from NBT!");

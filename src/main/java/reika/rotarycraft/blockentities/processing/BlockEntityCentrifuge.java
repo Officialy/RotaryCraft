@@ -77,14 +77,14 @@
 //    }
 //
 //    private void doOperation(boolean multiple) {
-//        ItemStack in = inv[0];
+//        ItemStack in = itemHandler.getStackInSlot(0);
 //        if (in != null && RecipesCentrifuge.getRecipes().isCentrifugable(in)) {
 //            progressTime++;
 //
 //            if (multiple || progressTime >= this.getOperationTime()) {
 //                CentrifugeRecipe out = RecipesCentrifuge.getRecipes().getRecipeResult(in);
 //                Collection<ItemWithChance> items = out.getItems();
-//                for (int i = 0; i < out.maxStack && inv[0] != null; i++) {
+//                for (int i = 0; i < out.maxStack && !itemHandler.getStackInSlot(0).isEmpty(); i++) {
 //                    if (this.canMakeAllOf(items)) {
 //                        FluidStack fs = out.getFluid();
 //                        if (fs == null || tank.canTakeIn(fs)) {
@@ -155,7 +155,7 @@
 //
 //    @Override
 //    public boolean areConditionsMet() {
-//        return inv[0] != null && RecipesCentrifuge.getRecipes().isCentrifugable(inv[0]);
+//        return !itemHandler.getStackInSlot(0).isEmpty() && RecipesCentrifuge.getRecipes().isCentrifugable(itemHandler.getStackInSlot(0));
 //    }
 //
 //    @Override

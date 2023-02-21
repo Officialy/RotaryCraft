@@ -59,9 +59,9 @@
 //    }
 //
 //    private boolean canMakeMore(ItemStack is) {
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return true;
-//        return ReikaItemHelper.matchStacks(is, inv[0]) && inv[0].getCount() + is.getCount() <= inv[0].getMaxStackSize();
+//        return ReikaItemHelper.matchStacks(is, itemHandler.getStackInSlot(0)) && itemHandler.getStackInSlot(0).getCount() + is.getCount() <= itemHandler.getStackInSlot(0).getMaxStackSize();
 //    }
 //
 //    @Override

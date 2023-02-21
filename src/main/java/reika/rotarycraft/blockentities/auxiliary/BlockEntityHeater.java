@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -24,12 +25,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.ForgeHooks;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.ThermalMachine;
+import reika.rotarycraft.auxiliary.ItemStacks;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
@@ -128,25 +131,25 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
     }
 
     private int findHottestUsefulItemTemp(int maxT, boolean consume) {
-        ItemStack item = null;
+        ItemStack item = ItemStack.EMPTY;
         int itemheat = -1;
         int slot = -1;
-        for (int i = 0; i < inv.length; i++) {
-            if (inv[i] != null) {
-                //ReikaChatHelper.writeInt(BlockEntityFurnace.getItemBurnTime(inv[i]));
-                int heat = 200;//(FurnaceBlockEntity.getItemBurnTime(inv[i]) / 25);
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
+                //ReikaChatHelper.writeInt(BlockEntityFurnace.getItemBurnTime(itemHandler.getStackInSlot(i)));
+                int heat = ForgeHooks.getBurnTime(itemHandler.getStackInSlot(i), RecipeType.SMELTING) / 25;
                 if (heat <= maxT && heat > itemheat) {
                     itemheat = heat;
-                    item = inv[i];
+                    item = itemHandler.getStackInSlot(i);
                     slot = i;
                 }
             }
         }
         if (slot != -1 && consume) {
-            Item id = inv[slot].getItem();
-            ReikaInventoryHelper.decrStack(slot, inv);
+            Item id = itemHandler.getStackInSlot(slot).getItem();
+            ReikaInventoryHelper.decrStack(slot, itemHandler);
             if (id == Items.LAVA_BUCKET) {
-                int leftover = 1; // ReikaInventoryHelper.addToInventoryWithLeftover(Items.BUCKET, 1, inv);
+                int leftover = ReikaInventoryHelper.addToInventoryWithLeftover(Items.BUCKET, 1, itemHandler);
                 if (leftover > 0) {
                     ItemEntity ei = new ItemEntity(level, worldPosition.getX() + DragonAPI.rand.nextFloat(), worldPosition.getY() + DragonAPI.rand.nextFloat(), worldPosition.getZ() + DragonAPI.rand.nextFloat(), new ItemStack(Items.LAVA_BUCKET, leftover));
                     ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
@@ -309,38 +312,4 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
         return 18;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
 }

@@ -291,16 +291,16 @@
 //        //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", power));
 //        if (power <= 0 || omega < MINSPEED)
 //            return null;
-//        if (inv[0] == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty())
 //            return null;
 //        if (fuel.isEmpty())
 //            return null;
 //
-//        RecipesPulseFurnace.PulseJetRecipe rec = RecipesPulseFurnace.getRecipes().getSmeltingResult(inv[0]);
+//        RecipesPulseFurnace.PulseJetRecipe rec = RecipesPulseFurnace.getRecipes().getSmeltingResult(itemHandler.getStackInSlot(0));
 //        if (rec == null || rec.requiredTemperature > temperature)
 //            return null;
 //
-//        if (inv[2] != null && !ReikaItemHelper.areStacksCombinable(inv[2], rec.getOutput(), this.getInventoryStackLimit()))
+//        if (!itemHandler.getStackInSlot(2).isPresent() && !ReikaItemHelper.areStacksCombinable(inv[2], rec.getOutput(), this.getInventoryStackLimit()))
 //            return null;
 //
 //        return rec;
@@ -317,20 +317,20 @@
 //
 //	private void smeltScrap() {
 //		int size = 1;
-//		if (inv[0].getItem == RotaryItems.HSLA_STEEL_SCRAP.itemID && inv[0].getItemDamage() == RotaryItems.HSLA_STEEL_SCRAP.getItemDamage())
+//		if (itemHandler.getStackInSlot(0).getItem == RotaryItems.HSLA_STEEL_SCRAP.itemID && itemHandler.getStackInSlot(0).getItemDamage() == RotaryItems.HSLA_STEEL_SCRAP.getItemDamage())
 //			size = 9;
-//		inv[0].getCount() -= size;
+//		itemHandler.getStackInSlot(0).getCount() -= size;
 //		ItemStack i = this.getCraftedScrapIngot();
 //		ReikaInventoryHelper.addOrSetStack(i.itemID, 1, i.getItemDamage(), inv, 2);
-//		if (inv[0].getCount() <= 0)
-//			inv[0] = null;
+//		if (itemHandler.getStackInSlot(0).getCount() <= 0)
+//			itemHandler.getStackInSlot(0) = null;
 //		RotaryAchievements.RECYCLE.triggerAchievement(this.getPlacer());
 //	}*/
 //
 //    private ItemStack getCraftedScrapIngot() {
-//        if (ReikaItemHelper.matchStacks(inv[0], RotaryItems.HSLA_STEEL_SCRAP))
+//        if (ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(0), RotaryItems.HSLA_STEEL_SCRAP))
 //            return RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance();
-//        if (ReikaItemHelper.matchStacks(inv[0], RotaryItems.IRON_SCRAP))
+//        if (ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(0), RotaryItems.IRON_SCRAP))
 //            return new ItemStack(Items.IRON_INGOT);
 //        return null;
 //    }

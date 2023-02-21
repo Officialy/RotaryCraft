@@ -403,11 +403,11 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     }
 
     protected final void getIOSides(Level world, BlockPos pos, Direction dir) {
-        switch (dir.get2DDataValue()) {
-            case 0 -> facingDir = Direction.NORTH;
-            case 1 -> facingDir = Direction.WEST;
-            case 2 -> facingDir = Direction.SOUTH;
-            case 3 -> facingDir = Direction.EAST;
+        switch (dir) {
+            case SOUTH -> facingDir = Direction.NORTH;
+            case EAST -> facingDir = Direction.WEST;
+            case NORTH -> facingDir = Direction.SOUTH;
+            case WEST -> facingDir = Direction.EAST;
         }
         read = facingDir;
         write = read.getOpposite();

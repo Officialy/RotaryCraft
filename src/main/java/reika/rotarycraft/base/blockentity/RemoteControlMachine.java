@@ -33,14 +33,14 @@ public abstract class RemoteControlMachine extends BlockEntitySpringPowered {
 
     public abstract void activate(Level world, Player ep, BlockPos pos);
 
-    protected void setColors() {
+    protected void setColors() { //todo colour damage values - old metadata code
         for (int i = 0; i < 3; i++) {
-            if (inv[i + 1] == null)
+            if (itemHandler.getStackInSlot(i + 1).isEmpty())
                 colors[i] = -1;
-            else if (inv[i + 1].getItem() != Items.BLACK_DYE)
+            else if (itemHandler.getStackInSlot(i + 1).getItem() != Items.BLACK_DYE)
                 colors[i] = -1;
             else
-                colors[i] = inv[i + 1].getDamageValue();
+                colors[i] = itemHandler.getStackInSlot(i + 1).getDamageValue();
             if (colors[i] == -1)
                 on = false;
         }

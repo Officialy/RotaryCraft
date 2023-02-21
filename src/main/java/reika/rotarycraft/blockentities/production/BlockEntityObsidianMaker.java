@@ -197,7 +197,7 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
         int lavaamt = obsid ? 1000 : 50;
         if (lava.getFluidLevel() < lavaamt || water.getFluidLevel() < 1000)
             return;
-        ReikaInventoryHelper.addOrSetStack(is, inv, slot);
+        ReikaInventoryHelper.addOrSetStack(is, itemHandler, slot);
         if (!ReikaItemHelper.matchStackWithBlock(is, Blocks.COBBLESTONE.defaultBlockState()))
             lava.removeLiquid(lavaamt);
         water.removeLiquid(obsid ? 2500 : 1000);
@@ -210,10 +210,10 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
     }
 
     public int getNonFullStack(ItemStack is) {
-        for (int k = 0; k < inv.length; k++) {
-            if (inv[k] == null)
+        for (int k = 0; k < itemHandler.getSlots(); k++) {
+            if (itemHandler.getStackInSlot(k).isEmpty())
                 return k;
-            else if (ReikaItemHelper.matchStacks(inv[k], is) && inv[k].getCount() < this.getInventoryStackLimit())
+            else if (ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(k), is) && itemHandler.getStackInSlot(k).getCount() < this.getInventoryStackLimit())
                 return k;
         }
         return -1;
@@ -408,41 +408,6 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
     @Override
     public int getMaxTemperature() {
         return MAXTEMP;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
     }
 
     @Override

@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import reika.rotarycraft.models.SolarTowerModel;
+import reika.rotarycraft.models.animated.GrinderModel;
 import reika.rotarycraft.models.animated.shaftonly.CrossModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftModel;
 import reika.rotarycraft.models.engine.*;
@@ -41,6 +42,8 @@ public class MachineItemRenderer extends BlockEntityWithoutLevelRenderer {
     private SolarTowerModel solarModel;
     private SteamTurbineModel steamTurbineModel;
     private MagneticModel magneticModel;
+    private GrinderModel grinderModel;
+
     public MachineItemRenderer(BlockEntityRenderDispatcher p_172550_, EntityModelSet p_172551_) {
         super(p_172550_, p_172551_);
         EntityModelSet nonNullEntitySet = Minecraft.getInstance().getEntityModels();
@@ -58,6 +61,7 @@ public class MachineItemRenderer extends BlockEntityWithoutLevelRenderer {
         solarModel = new SolarTowerModel(nonNullEntitySet.bakeLayer(RotaryModelLayers.SOLAR_TOWER));
 //        steamTurbineModel = new SteamTurbineModel(nonNullEntitySet.bakeLayer(RotaryModelLayers.STEAM_TURBINE));
         magneticModel = new MagneticModel(nonNullEntitySet.bakeLayer(RotaryModelLayers.MAGNETIC));
+        grinderModel = new GrinderModel(nonNullEntitySet.bakeLayer(RotaryModelLayers.GRINDER));
     }
 
     @Override
@@ -191,7 +195,9 @@ public class MachineItemRenderer extends BlockEntityWithoutLevelRenderer {
 //        if (item.getItem() == RotaryBlocks.HYDRO_ENGINE.get().asItem()) {
 //            hydroModel.renderToBuffer(stack, bufferSource.getBuffer(RenderType.entitySolid((HydroModel.TEXTURE_LOCATION))), combinedLight, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1.0F);
 //        }
-
+        if (item.getItem() == RotaryBlocks.GRINDER.get().asItem()) {
+            grinderModel.renderToBuffer(stack, bufferSource.getBuffer(RenderType.entitySolid((GrinderModel.TEXTURE_LOCATION))), combinedLight, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1.0F);
+        }
         stack.popPose();
         RenderSystem.disableBlend();
     }

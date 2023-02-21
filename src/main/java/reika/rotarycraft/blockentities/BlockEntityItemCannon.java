@@ -108,11 +108,11 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
             world.addFreshEntity(ei);
         //world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, "DragonAPI.rand.explode", 1, 1);
         int num = power >= STACKPOWER ? is.getCount() : 1;
-        int slot = ReikaInventoryHelper.locateInInventory(is, inv, false);
+        int slot = ReikaInventoryHelper.locateInInventory(is, itemHandler, false);
         if (slot == -1)
             return;
-        int left = ReikaInventoryHelper.addToInventoryWithLeftover(ReikaItemHelper.getSizedItemStack(is, num), te.inv);
-        // ReikaInventoryHelper.decrStack(slot, this, num - left);
+        int left = ReikaInventoryHelper.addToInventoryWithLeftover(ReikaItemHelper.getSizedItemStack(is, num), te.itemHandler);
+//         ReikaInventoryHelper.decrStack(slot, this, num - left);
     }
 
     private BlockEntityItemCannon getTargetTE() {
@@ -121,9 +121,9 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
     }
 
     private ItemStack getFirstStack() {
-        for (int i = 0; i < inv.length; i++) {
-            if (inv[i] != null) {
-                return inv[i].copy();
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
+                return itemHandler.getStackInSlot(i).copy();
             }
         }
         return null;
@@ -153,9 +153,9 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
             target.saveAdditional("target", tag);
     }
 
-    //@Override
+    @Override
     public int getRedstoneOverride() {
-        if (ReikaInventoryHelper.isEmpty(inv))
+        if (ReikaInventoryHelper.isEmpty(itemHandler))
             return 15;
         return 0;
     }
@@ -167,7 +167,7 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
 
     @Override
     public boolean areConditionsMet() {
-        return !ReikaInventoryHelper.isEmpty(inv);
+        return !ReikaInventoryHelper.isEmpty(itemHandler);
     }
 
     @Override
@@ -203,40 +203,5 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
     @Override
     public int getContainerSize() {
         return 9;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
     }
 }

@@ -71,16 +71,6 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
     }
 
     @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
     public Block getBlockEntityBlockID() {
         return RotaryBlocks.MICRO_TURBINE.get();
     }

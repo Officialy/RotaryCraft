@@ -200,7 +200,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
                 if (!PackUpgrades.WING.existsOn(is)) {
                     ItemStack ingot = pack.getDefaultInstance();
                     for (int i = 0; i < 3; i++) {
-                        if (!ReikaItemHelper.matchStacks(inv[i], ingot))
+                        if (!ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(i), ingot))
                             return;
                     }
                     for (int i = 0; i < 3; i++) {
@@ -233,7 +233,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
 
     public boolean isReadyToCraft() {
         for (int i = 9; i < 18; i++) {
-            if (inv[i] != null)
+            if (itemHandler.getStackInSlot(i).isEmpty())
                 return false;
         }
         return true;
@@ -306,7 +306,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     public boolean canUncraft() {
         boolean can = false;
         for (int i = 0; i < 9; i++) {
-            ItemStack is = inv[i];
+            ItemStack is = itemHandler.getStackInSlot(i);
             if (i == 4) {
                 if (is == null || this.isNotUncraftable(is))
                     return false;
@@ -442,10 +442,10 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
 
     private Item getTool() {
         for (int i = 0; i < 9; i++) {
-            ItemStack is = inv[i];
+            ItemStack is = itemHandler.getStackInSlot(i);
             if (is != null) {
                 if (is.getItem() instanceof ItemChargedTool || is.getItem() instanceof ItemChargedArmor || is.getItem() instanceof ChargeableTool)
-                    return inv[i].getItem();
+                    return itemHandler.getStackInSlot(i).getItem();
             }
         }
         return null;
@@ -598,7 +598,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
 
         hasProgram = false;
         for (int i = 18; i < 27; i++) {
-            if (inv[i] != null) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
                 hasProgram = true;
             }
         }

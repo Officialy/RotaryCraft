@@ -242,7 +242,7 @@
 //    }
 //
 //    public int getLeftoverSlots() {
-//        int slots = inv.length;
+//        int slots = itemHandler.getSlots();
 //        while (slots >= 9)
 //            slots -= 9;
 //        return slots;
@@ -268,8 +268,8 @@
 //    public int getRedstoneOverride() {
 //        if (ReikaInventoryHelper.isEmpty(inv))
 //            return 15;
-//        for (int i = 0; i < inv.length; i++) {
-//            if (MobBait.isValidItem(inv[i]))
+//        for (int i = 0; i < itemHandler.getSlots(); i++) {
+//            if (MobBait.isValidItem(itemHandler.getStackInSlot(i)))
 //                return 0;
 //        }
 //        return 15;

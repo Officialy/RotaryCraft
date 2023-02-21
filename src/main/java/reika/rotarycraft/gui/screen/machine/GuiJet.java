@@ -9,22 +9,28 @@
 // ******************************************************************************/
 //package reika.rotarycraft.gui.screen.machine;
 //
+//import com.mojang.blaze3d.vertex.PoseStack;
+//import net.minecraft.client.gui.components.Button;
+//import net.minecraft.client.gui.components.ImageButton;
+//import net.minecraft.world.entity.player.Player;
+//import net.minecraftforge.client.gui.ScreenUtils;
+//import reika.dragonapi.libraries.io.ReikaPacketHelper;
 //import reika.rotarycraft.RotaryCraft;
-//import reika.rotarycraft.base.GuiEngine;
 //
-//import reika.rotarycraft.gui.container.Machine.ContainerJet;
+//import reika.rotarycraft.base.EngineScreen;
+//import reika.rotarycraft.base.blockentity.BlockEntityEngine;
+//import reika.rotarycraft.gui.container.machine.ContainerJet;
 //import reika.rotarycraft.registry.PacketRegistry;
 //
 //
-//public class GuiJet extends GuiEngine {
+//public class GuiJet extends EngineScreen<BlockEntityEngine, ContainerJet> {
 //    private final BlockEntityJetEngine jet;
 //    private boolean burn;
 //
 //    public GuiJet(Player p5ep, BlockEntityEngine te) {
-//        super(new ContainerJet(p5ep, te), te, p5ep);
+//        super();
 //        imageWidth = 176;
 //        imageHeight = 166;
-//        ep = p5ep;
 //        jet = eng instanceof BlockEntityJetEngine ? (BlockEntityJetEngine) eng : null;
 //        burn = jet != null && jet.canAfterBurn() && jet.burnerActive();
 //    }
@@ -92,13 +98,13 @@
 //
 //    @Override
 //    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(PoseStack poseStack, par1, par2, par3);
+//        super.renderBg(poseStack, par1, par2, par3);
 //
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;
 //
-//        int i2 = eng.getFuelScaled(54);
-//        ScreenUtils.drawTexturedModalRect(j + 85, k + 71 - i2, 207, 55 - i2, 5, i2);
+//        int i2 = engine.getFuelScaled(54);
+//        ScreenUtils.drawTexturedModalRect(poseStack, + 85, k + 71 - i2, 207, 55 - i2, 5, i2, 0);
 //    }
 //
 //    @Override

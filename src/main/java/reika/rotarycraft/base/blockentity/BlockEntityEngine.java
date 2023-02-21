@@ -31,6 +31,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -589,7 +591,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             torque = type.getTorque();
     }
 
-    @Override
     public boolean canPlaceItem(int i, ItemStack is) {
         if (!type.isValidFuel(is))
             return false;
@@ -929,29 +930,4 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         return integratedGear;
     }
 
-    //These are all the methods that are required to be implemented by Container, default values here to clean up other classes that dont require these
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
 }

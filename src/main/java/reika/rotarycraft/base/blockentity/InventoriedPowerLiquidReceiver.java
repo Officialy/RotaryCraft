@@ -19,55 +19,53 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.registry.MachineRegistry;
 
-public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiver implements IItemHandler, Container {
+public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiver {
 
-    protected ItemStack[] inv = new ItemStack[this.getContainerSize()];
+    protected ItemStackHandler itemHandler = new ItemStackHandler(getContainerSize()) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public InventoriedPowerLiquidReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
     @Override
-    public int getSlots() {
-        return 0;
-    }
-
-    public final ItemStack getStackInSlot(int par1) {
-        return inv[par1];
-    }
-
     @NotNull
-    @Override
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        if (capability == ForgeCapabilities.ITEM_HANDLER)
+            return lazyItemHandler.cast();
+        return super.getCapability(capability, facing);
     }
 
     @Override
-    public int getSlotLimit(int slot) {
-        return 0;
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyItemHandler.invalidate();
     }
 
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return false;
+    public final ItemStack getStackInSlot(int slot) {
+        return itemHandler.getStackInSlot(slot);
     }
 
-    public final void setInventorySlotContents(int par1, ItemStack is) {
-        inv[par1] = is;
+    public final void setInventorySlotContents(int slot, ItemStack is) {
+        itemHandler.setStackInSlot(slot, is);
 
-        this.onItemSet(par1, is);
+        this.onItemSet(slot, is);
     }
 
     protected void onItemSet(int slot, ItemStack is) {
@@ -100,7 +98,7 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
     public abstract boolean isItemValidForSlot(int slot, ItemStack is);
 
     public final ItemStack decrStackSize(int par1, int par2) {
-        return ReikaInventoryHelper.decrStackSize(this, par1, par2);
+        return ReikaInventoryHelper.decrStackSize(itemHandler, par1, par2);
     }
 
 //    public final ItemStack getStackInSlotOnClosing(int par1) {
@@ -131,11 +129,11 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
 
         ListTag nbttaglist = new ListTag();
 
-        for (int i = 0; i < inv.length; i++) {
-            if (inv[i] != null) {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i).isEmpty()) {
                 CompoundTag tag = new CompoundTag();
                 tag.putByte("Slot", (byte) i);
-                inv[i].save(tag);
+                itemHandler.getStackInSlot(i).save(tag);
                 nbttaglist.add(tag);
             }
         }
@@ -148,14 +146,18 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
 //        super.load(NBT);
 
         ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
-        inv = new ItemStack[this.getContainerSize()];
-
+        itemHandler = new ItemStackHandler(getContainerSize()) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
+        };
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag tag = nbttaglist.getCompound(i);
             byte byte0 = tag.getByte("Slot");
 
-            if (byte0 >= 0 && byte0 < inv.length) {
-                inv[byte0] = ItemStack.of(tag);
+            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
+                itemHandler.setStackInSlot(byte0, ItemStack.of(tag));
             }
         }
     }
@@ -199,4 +201,6 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
     public boolean hasModelTransparency() {
         return false;
     }
+
+    public abstract int getContainerSize();
 }

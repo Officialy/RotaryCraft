@@ -32,14 +32,20 @@ import reika.rotarycraft.RotaryCraft;
 
 import javax.annotation.Nonnull;
 
-public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver implements Container {
+public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver {
 
-    protected ItemStack[] inv = new ItemStack[this.getContainerSize()];
-    private ItemStackHandler itemHandler = createHandler();
+    protected ItemStackHandler itemHandler = new ItemStackHandler(getContainerSize()) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+
     public InventoriedPowerReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
+
     @Override
     @NotNull
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
@@ -60,19 +66,6 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
         lazyItemHandler.invalidate();
     }
 
-    protected void onInventoryChanged(int slot) {
-
-    }
-
-    public final ItemStack getStackInSlot(int par1) {
-        return inv[par1];
-    }
-
-    public final void setInventorySlotContents(int par1, ItemStack is) {
-        inv[par1] = is;
-        this.onInventoryChanged(par1);
-    }
-
     public void openInventory() {
     }
 
@@ -83,12 +76,19 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
         return 64;
     }
 
-    public final ItemStack decrStackSize(int par1, int par2) {
-        ItemStack ret = ReikaInventoryHelper.decrStackSize(this, par1, par2);
-        this.onInventoryChanged(par1);
-        return ret;
+
+    public final ItemStack getStackInSlot(int slot) {
+        return itemHandler.getStackInSlot(slot);
     }
 
+    public final void setInventorySlotContents(int slot, ItemStack is) {
+        itemHandler.setStackInSlot(slot, is);
+        this.onInventoryChanged(slot);
+    }
+
+    protected void onInventoryChanged(int slot) {
+        setChanged();
+    }
 //    public final ItemStack getStackInSlotOnClosing(int par1) {
 //        ItemStack ret = ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
 //        this.onInventoryChanged(par1);
@@ -101,34 +101,28 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
 //        return ReikaInventoryHelper.getWholeInventoryForISided(this);
 //    }
 
-    public final boolean canInsertItem(int i, ItemStack is, int side) {
-//        if (this instanceof InertIInv)
-//            return false;
-        return this.canPlaceItem(i, is);
-    }
-
     public boolean isUseableByPlayer(Player var1) {
-//        return this.isPlayerAccessible(var1);
-        return true;
+        return this.isPlayerAccessible(var1);
     }
 
-    //    @Override
+    @Override
     public void saveAdditional(CompoundTag NBT) {
 
         ListTag nbttaglist = new ListTag();
 
-        for (int i = 0; i < inv.length; i++) {
-            if (inv[i] != null) {
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (!itemHandler.getStackInSlot(i).isEmpty()) {
                 CompoundTag CompoundTag = new CompoundTag();
                 CompoundTag.putShort("Slot", (short) i);
-                inv[i].save(CompoundTag);
+                itemHandler.getStackInSlot(i).save(CompoundTag);
                 nbttaglist.add(CompoundTag);
-                //ReikaJavaLibrary.pConsole(i+":"+inv[i]);
+                //ReikaJavaLibrary.pConsole(i+":"+itemHandler.getStackInSlot(i));
             }
         }
 
         NBT.put("Items", nbttaglist);
     }
+
     @Override
     public void deserializeNBT(CompoundTag nbt) {
         super.deserializeNBT(nbt);
@@ -138,18 +132,24 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
     public CompoundTag serializeNBT() {
         return super.serializeNBT();
     }
-    //    @Override
+
+    @Override
     public void load(CompoundTag NBT) {
 
         ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
-        inv = new ItemStack[this.getContainerSize()];
+        itemHandler = new ItemStackHandler(getContainerSize()) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
+        };
 
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag CompoundTag = nbttaglist.getCompound(i);
             short byte0 = CompoundTag.getShort("Slot");
 
-            if (byte0 >= 0 && byte0 < inv.length) {
-                inv[byte0] = ItemStack.of(CompoundTag);
+            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
+                itemHandler.setStackInSlot(byte0, ItemStack.of(CompoundTag));
                 //ReikaJavaLibrary.pConsole(byte0+":"+inv[byte0]);
             } else {
                 RotaryCraft.LOGGER.error(this + " tried to load an inventory slot " + byte0 + " from NBT!");
@@ -158,30 +158,5 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
         }
     }
 
-
-    private ItemStackHandler createHandler() {
-        return new ItemStackHandler(getContainerSize()) {
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                // To make sure the BE persists when the chunk is saved later we need to
-                // mark it changed every time the item handler changes
-                setChanged();
-            }
-
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == Items.DIAMOND;
-            }
-
-            @Nonnull
-            @Override
-            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                if (stack.getItem() != Items.DIAMOND) {
-                    return stack;
-                }
-                return super.insertItem(slot, stack, simulate);
-            }
-        };
-    }
+    public abstract int getContainerSize();
 }

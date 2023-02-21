@@ -77,7 +77,7 @@ public class BlockEntityParticleEmitter extends BlockEntitySpringPowered {// tod
         tickcount++;
         if (tickcount > this.getUnwindTime()) {
             ItemStack is = this.getDecrementedCharged();
-            inv[0] = is;
+            itemHandler.setStackInSlot(0, is);
             tickcount = 0;
         }
     }
@@ -129,68 +129,6 @@ public class BlockEntityParticleEmitter extends BlockEntitySpringPowered {// tod
     @Override
     public int getContainerSize() {
         return 0;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
-    public int getSlots() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
-        return 0;
-    }
-
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return false;
     }
 
     @Override
