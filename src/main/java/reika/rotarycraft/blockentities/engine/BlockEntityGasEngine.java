@@ -30,7 +30,7 @@ import reika.rotarycraft.registry.*;
 public class BlockEntityGasEngine extends BlockEntityEngine implements UpgradeableMachine {
 
     public BlockEntityGasEngine(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.GAS_ENGINE.get(), pos, state);
+        super(RotaryBlockEntities.GAS_ENGINE.get(), pos, state, false, false, false, true);
         type = EngineType.GAS;
     }
     @Override

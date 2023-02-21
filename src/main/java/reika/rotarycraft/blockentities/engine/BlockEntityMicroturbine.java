@@ -25,7 +25,7 @@ import reika.rotarycraft.registry.*;
 public class BlockEntityMicroturbine extends BlockEntityEngine {
 
     public BlockEntityMicroturbine(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.MICROTURBINE.get(), pos, state);
+        super(RotaryBlockEntities.MICROTURBINE.get(), pos, state, false, false, false, true);
         type = EngineType.MICRO;
     }
 
@@ -76,31 +76,6 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
     }
 
     @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
     public void clearContent() {
 
     }
@@ -115,10 +90,6 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
         return "Microturbine";
     }
 
-
-
-
-
     @Override
     public boolean hasAnInventory() {
         return false;
@@ -126,7 +97,7 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
 
     @Override
     public boolean hasATank() {
-        return false;
+        return true;
     }
 
     @Override

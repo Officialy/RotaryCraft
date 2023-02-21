@@ -33,7 +33,7 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     private final RedstoneCycleTracker redstone = new RedstoneCycleTracker(3);
 
     public BlockEntityACEngine(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.AC_ENGINE.get(), pos, state);
+        super(RotaryBlockEntities.AC_ENGINE.get(), pos, state, false, false, false, false);
     }
     @Override
     public MachineRegistry getMachine() {

@@ -183,7 +183,12 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
         MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
         BlockEntity te = isCentered ? getAdjacentBlockEntity(read) : world.getBlockEntity(new BlockPos(dx, dy, dz));
         if (this.isProvider(te)) {
-            if (m == MachineRegistry.SHAFT) {
+            if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                 BlockEntityShaft devicein = (BlockEntityShaft) te;
                 if (devicein.isCross()) {
                     omegain = this.readFromCross(devicein, false);

@@ -32,10 +32,10 @@ public class RotaryBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RotaryCraft.MODID);
 
     public static final RegistryObject<BlockEntityType<BlockEntityShaft>> WOOD_SHAFT = BLOCK_ENTITIES.register("wood_shaft", () ->
-            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STEEL, pPos, pState), RotaryBlocks.WOOD_SHAFT.get()).build(null));
-    public static final RegistryObject<BlockEntityType<BlockEntityShaft>> STONE_SHAFT = BLOCK_ENTITIES.register("stone_shaft", () ->
-            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STONE, pPos, pState), RotaryBlocks.WOOD_SHAFT.get()).build(null));
+            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.WOOD, pPos, pState), RotaryBlocks.WOOD_SHAFT.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<BlockEntityShaft>> STONE_SHAFT = BLOCK_ENTITIES.register("stone_shaft", () ->
+            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STONE, pPos, pState), RotaryBlocks.STONE_SHAFT.get()).build(null));
     public static final RegistryObject<BlockEntityType<BlockEntityShaft>> HSLA_STEEL_SHAFT = BLOCK_ENTITIES.register("hsla_shaft", () ->
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STEEL, pPos, pState), RotaryBlocks.HSLA_SHAFT.get()).build(null));
 
@@ -49,7 +49,7 @@ public class RotaryBlockEntities {
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.BEDROCK, pPos, pState), RotaryBlocks.BEDROCK_SHAFT.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityGearbox>> GEARBOX = BLOCK_ENTITIES.register("gearbox", () ->
-            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityGearbox(GearboxTypes.STEEL, pPos, pState), RotaryBlocks.HSLA_GEARBOX_2x.get()).build(null));
+            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityGearbox(GearboxTypes.STEEL, pPos, pState), RotaryBlocks.HSLA_GEARBOX_2x.get()).build(null)); //todo all gearboxes
 
     public static final RegistryObject<BlockEntityType<BlockEntityMicroturbine>> MICROTURBINE = BLOCK_ENTITIES.register("microturbine", () ->
             BlockEntityType.Builder.of(BlockEntityMicroturbine::new, RotaryBlocks.MICRO_TURBINE.get()).build(null));

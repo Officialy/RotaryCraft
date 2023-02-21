@@ -183,7 +183,12 @@ public class ItemDebug extends ItemRotaryTool {
                     tile.omega = tile.getEngineType().getSpeed();
                 }
             }
-            if (m == MachineRegistry.SHAFT) {
+            if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                 BlockEntityShaft tile = (BlockEntityShaft) te;
                 if (tile != null) {
                     ReikaChatHelper.write(String.format("%d %d %d %d", tile.readomega[0], tile.readomega[1], tile.readtorque[0], tile.readtorque[1]));

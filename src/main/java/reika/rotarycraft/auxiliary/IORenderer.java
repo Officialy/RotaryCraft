@@ -9,18 +9,31 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BeaconRenderer;
+import net.minecraft.client.renderer.chunk.RenderChunkRegion;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
+import reika.dragonapi.libraries.rendering.ReikaColorAPI;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
 import reika.rotarycraft.api.power.ShaftPowerReceiver;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
@@ -31,8 +44,10 @@ import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.RotaryItems;
 
+import java.awt.*;
+
 public abstract class IORenderer {
-    private static final float expand = 0;
+    private static final float expand = 1;
     private static final Direction[] dirs = Direction.values();
 
     public static void renderOut(PoseStack matrixStack, float x, float y, float z, int a) {
@@ -50,6 +65,7 @@ public abstract class IORenderer {
         }
         renderBox(matrixStack, x, y, z, color);
     }
+
     public static void renderIO(PoseStack matrixStack, MultiBufferSource bufferSource, BlockEntity teb, BlockPos pos) {
         renderIO(matrixStack, bufferSource, teb, pos.getX(), pos.getY(), pos.getZ());
     }
@@ -103,7 +119,6 @@ public abstract class IORenderer {
             }
             if (teb instanceof BlockEntityShaft && ((BlockEntityShaft) teb).isCross()) { //cross
                 BlockEntityShaft ts = (BlockEntityShaft) teb;
-
                 if (ts.getWriteDirection() != null) {
                     float xdiff = ts.getWriteDirection().getStepX();
                     float zdiff = ts.getWriteDirection().getStepZ();
@@ -248,107 +263,65 @@ public abstract class IORenderer {
     }
 
     private static void renderBox(PoseStack stack, float x, float y, float z, int[] color) {
-        stack.pushPose();
-        Matrix4f matrix = stack.last().pose();
-//        RotaryCraft.LOGGER.info("Rendering box at " + pos);
+//        RotaryCraft.LOGGER.info("Rendering box at " + x + ", " + y + ", " + z);
         if (color[3] > 255)
             color[3] = 255;
 
         ReikaRenderHelper.prepareGeoDraw(true);
-        RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+        RenderSystem.enableDepthTest();
         RenderSystem.disableCull();
-
-        RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
-        RenderSystem.lineWidth(10);
 
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder builder = tesselator.getBuilder();
 
-        builder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        tesselator.end();
+        RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
+        Block.box(0, 0, 0, 16, 16, 16).forAllEdges((p_234280_, p_234281_, p_234282_, p_234283_, p_234284_, p_234285_) -> {
+            RenderSystem.lineWidth(10);
+            ReikaRenderHelper.renderLine(stack, x + p_234280_, y + p_234281_, z + p_234282_, x + p_234283_, y + p_234284_, z + p_234285_, color);
+        });
+
+        stack.pushPose();
+        stack.translate(0.001, 0.001, 0.001);
+        Matrix4f matrix = stack.last().pose();
 
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        builder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        tesselator.end();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        builder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-        builder.vertex(matrix, x + 1.0625f * expand, y + 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 0.0625f * expand, z + 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        tesselator.end();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        builder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        tesselator.end();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        tesselator.end();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        tesselator.end();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        tesselator.end();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], color[3]).endVertex();
+        builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_NORMAL);
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+
+        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+
+        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+
+        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+
+        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
         tesselator.end();
 
-
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-
-        builder.vertex(matrix, x - 0.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y - 0.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z - 0.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x - 0.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        builder.vertex(matrix, x + 1.0625f * expand, y + 1.0625f * expand, z + 1.0625f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).endVertex();
-        tesselator.end();
-
-        RenderSystem.lineWidth(1.0F);
-        RenderSystem.disableBlend();
-        RenderSystem.enableCull();
+        RenderSystem.lineWidth(1.0f);
         ReikaRenderHelper.exitGeoDraw();
+        RenderSystem.disableDepthTest();
+        RenderSystem.enableCull();
         stack.popPose();
     }
 }

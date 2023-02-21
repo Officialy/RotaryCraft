@@ -87,9 +87,17 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     protected long lastpower = 0;
     private boolean isOn;
     private int integratedGear = 0;
+    private boolean requiresAir = false;
+    private boolean requiresLubricant = false;
+    private boolean requiresWater = false;
+    private boolean requiresFuel = false;
 
-    public BlockEntityEngine(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public BlockEntityEngine(BlockEntityType<?> type, BlockPos pos, BlockState state, boolean air, boolean lube, boolean water, boolean fuel) {
         super(type, pos, state);
+        requiresAir = air;
+        requiresLubricant = lube;
+        requiresWater = water;
+        requiresFuel = fuel;
     }
 
     @Override
@@ -104,7 +112,18 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public void onLoad() {
         super.onLoad();
         for (HybridTank tank : tanks) {
-            lazyFluidHandler = LazyOptional.of(() -> tank);
+            if (tank == water && !requiresWater) {
+                lazyFluidHandler = LazyOptional.of(() -> tank);
+            }
+            if (tank == lubricant && !requiresLubricant) {
+                lazyFluidHandler = LazyOptional.of(() -> tank);
+            }
+            if (tank == fuel && !requiresFuel) {
+                lazyFluidHandler = LazyOptional.of(() -> tank);
+            }
+            if (tank == air && !requiresAir) {
+                lazyFluidHandler = LazyOptional.of(() -> tank);
+            }
         }
     }
 
@@ -910,4 +929,29 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         return integratedGear;
     }
 
+    //These are all the methods that are required to be implemented by Container, default values here to clean up other classes that dont require these
+    @Override
+    public ItemStack getItem(int pIndex) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeItem(int pIndex, int pCount) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int pIndex) {
+        return null;
+    }
+
+    @Override
+    public void setItem(int pIndex, ItemStack pStack) {
+
+    }
+
+    @Override
+    public boolean stillValid(Player pPlayer) {
+        return false;
+    }
 }

@@ -14,6 +14,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -39,9 +42,10 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     private int dryTicks = 0;
 
     public BlockEntitySteamEngine(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.STEAM_ENGINE.get(), pos, state);
+        super(RotaryBlockEntities.STEAM_ENGINE.get(), pos, state, false, false, true, false);
         type = EngineType.STEAM;
     }
+
     @Override
     public MachineRegistry getMachine() {
         return MachineRegistry.STEAM_ENGINE;
@@ -90,7 +94,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
         } else {
             if (dryTicks > 900 && !water.isEmpty()) {
                 level.setBlock(worldPosition, Blocks.AIR.defaultBlockState(), 1);
-                level.explode(null, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, 6, Level.ExplosionInteraction.NONE); //todo explosion interaction
+                level.explode(null, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, 6, Level.ExplosionInteraction.BLOCK);
             }
             dryTicks = 0;
         }
@@ -98,11 +102,11 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
 
     @Override
     protected boolean getRequirements(Level world, BlockPos pos) {
-        if (temperature < 100) //water boiling point
+        if (temperature < 100) //water boiling point is 100C
             return false;
+        RotaryAdvancements.STEAMENGINE.triggerAchievement(this.getPlacer());
         return !water.isEmpty();
 
-//        RotaryAdvancements.STEAMENGINE.triggerAchievement(this.getPlacer());
     }
 
     @Override
@@ -111,7 +115,6 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
         if (this.isMuffled(world, pos)) {
             volume *= 0.3125F;
         }
-
         if (soundtick < this.getSoundLength(1F / pitchMultiplier) && soundtick < 2000)
             return;
         soundtick = 0;
@@ -154,12 +157,12 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     public void overheat(Level world, BlockPos pos) {
         if (water.isEmpty()) {
             world.setBlock(pos, Fluids.FLOWING_LAVA.defaultFluidState().createLegacyBlock(), 1);
-//            world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, "DragonAPI.rand.fizz", 2, 1, true);
+            world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS,2, 1, true);
             return;
         }
         temperature = this.getMaxTemperature();
         ReikaWorldHelper.overheat(world, pos.getX(), pos.getY(), pos.getZ(), RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance(), 0, 17, false, 1F, false, true, 2F);
-//        RotaryAdvancements.OVERPRESSURE.triggerAchievement(this.getPlacer());
+        RotaryAdvancements.OVERPRESSURE.triggerAchievement(this.getPlacer());
         world.setBlock(pos, Blocks.AIR.defaultBlockState(), 1);
     }
 
@@ -216,31 +219,6 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     }
 
     @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
     public void clearContent() {
 
     }
@@ -254,8 +232,6 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     public boolean hasATank() {
         return true;
     }
-
-
 
     @Override
     public Component getDisplayName() {

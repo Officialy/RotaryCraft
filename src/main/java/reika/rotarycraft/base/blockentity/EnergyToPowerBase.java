@@ -36,6 +36,7 @@ import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.power.PowerGenerator;
 import reika.rotarycraft.api.power.ShaftMerger;
 import reika.rotarycraft.auxiliary.PowerSourceList;
@@ -402,11 +403,11 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     }
 
     protected final void getIOSides(Level world, BlockPos pos, Direction dir) {
-        switch (dir) {
-            case NORTH -> facingDir = Direction.NORTH;
-            case WEST -> facingDir = Direction.WEST;
-            case SOUTH -> facingDir = Direction.SOUTH;
-            case EAST -> facingDir = Direction.EAST;
+        switch (dir.get2DDataValue()) {
+            case 0 -> facingDir = Direction.NORTH;
+            case 1 -> facingDir = Direction.WEST;
+            case 2 -> facingDir = Direction.SOUTH;
+            case 3 -> facingDir = Direction.EAST;
         }
         read = facingDir;
         write = read.getOpposite();

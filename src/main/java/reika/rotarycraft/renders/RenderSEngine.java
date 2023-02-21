@@ -104,7 +104,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
                 steamModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
             }
             case GAS -> {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid((SteamModel.TEXTURE_LOCATION)));
+                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid((CombustionModel.TEXTURE_LOCATION)));
                 combModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
             }
             case AC -> {

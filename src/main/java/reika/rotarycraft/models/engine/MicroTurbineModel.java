@@ -17,7 +17,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class MicroTurbineModel extends Model {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/engine/");
+    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/engine/microtex.png");
 
     private final ModelPart shape2;
     private final ModelPart shape1;
@@ -613,7 +613,6 @@ public class MicroTurbineModel extends Model {
 
     @Override
     public void renderToBuffer(PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-
         root.render(stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 }

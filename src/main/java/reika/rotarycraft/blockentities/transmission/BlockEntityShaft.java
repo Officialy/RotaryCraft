@@ -55,7 +55,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
     private boolean isCrossForRender;
 
     public BlockEntityShaft(MaterialRegistry materialType, BlockPos pos, BlockState state) {
-        super(switch (materialType){
+        super(switch (materialType) {
             case WOOD -> RotaryBlockEntities.WOOD_SHAFT.get();
             case STONE -> RotaryBlockEntities.STONE_SHAFT.get();
             case STEEL -> RotaryBlockEntities.HSLA_STEEL_SHAFT.get();
@@ -364,7 +364,12 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
         if (check1) {
             if (this.isProvider(te1)) {
-                if (m == MachineRegistry.SHAFT) {
+                if (m == MachineRegistry.WOOD_SHAFT || m ==
+                        MachineRegistry.STONE_SHAFT || m ==
+                        MachineRegistry.HSLA_SHAFT || m ==
+                        MachineRegistry.TUNGSTEN_SHAFT || m ==
+                        MachineRegistry.DIAMOND_SHAFT || m ==
+                        MachineRegistry.BEDROCK_SHAFT) {
                     BlockEntityShaft devicein = (BlockEntityShaft) te1;
                     if (devicein.isCross()) {
                         this.crossReadFromCross(devicein, 0);
@@ -410,7 +415,12 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
         if (check2) {
             if (this.isProvider(te2)) {
-                if (m2 == MachineRegistry.SHAFT) {
+                if (m2 == MachineRegistry.WOOD_SHAFT || m2 ==
+                        MachineRegistry.STONE_SHAFT || m2 ==
+                        MachineRegistry.HSLA_SHAFT || m2 ==
+                        MachineRegistry.TUNGSTEN_SHAFT || m2 ==
+                        MachineRegistry.DIAMOND_SHAFT || m2 ==
+                        MachineRegistry.BEDROCK_SHAFT) {
                     BlockEntityShaft devicein2 = (BlockEntityShaft) te2;
                     if (devicein2.isCross()) {
                         this.crossReadFromCross(devicein2, 1);
@@ -487,7 +497,12 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 //        }
 
         if (this.isProvider(te)) {
-            if (m == MachineRegistry.SHAFT) {
+            if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                 BlockEntityShaft devicein = (BlockEntityShaft) te;
                 if (devicein.isCross()) {
                     this.readFromCross(devicein);
@@ -644,7 +659,14 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
     @Override
     public MachineRegistry getMachine() {
-        return MachineRegistry.SHAFT;
+        return switch (materialType){
+            case WOOD -> MachineRegistry.WOOD_SHAFT;
+            case STONE -> MachineRegistry.STONE_SHAFT;
+            case STEEL -> MachineRegistry.HSLA_SHAFT;
+            case TUNGSTEN -> MachineRegistry.TUNGSTEN_SHAFT;
+            case DIAMOND -> MachineRegistry.DIAMOND_SHAFT;
+            case BEDROCK -> MachineRegistry.BEDROCK_SHAFT;
+        };
     }
 
     @Override

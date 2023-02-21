@@ -1,0 +1,6 @@
+{
+  "parent": "rotarycraft:block/blank",
+  "textures": {
+    "layer0": "rotarycraft:item/highgear"
+  }
+}

@@ -39,7 +39,7 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
     private boolean starvedengine;
 
     public BlockEntityPerformanceEngine(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.PERFORMANCE_ENGINE.get(), pos, state);
+        super(RotaryBlockEntities.PERFORMANCE_ENGINE.get(), pos, state, false, false, true, true);
         type = EngineType.SPORT;
     }
     @Override

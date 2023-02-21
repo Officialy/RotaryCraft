@@ -64,7 +64,12 @@ public class BlockEntityMonitor extends BlockEntity1DTransmitter {
         BlockEntity te = isCentered ? getAdjacentBlockEntity(read) : world.getBlockEntity(new BlockPos(dx, dy, dz));
 //        RotaryCraft.LOGGER.info(te);
         if (this.isProvider(te)) {
-            if (m == MachineRegistry.SHAFT) {
+            if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                 BlockEntityShaft devicein = (BlockEntityShaft) te;
                 if (devicein.isCross()) {
                     this.readFromCross(devicein);

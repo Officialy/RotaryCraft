@@ -93,7 +93,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
     //---------------------TRANSMISSION--------------------//
     TRANSDESC("Power Transfer", "Transmission"),
-    SHAFT(MachineRegistry.SHAFT),
+    SHAFT(MachineRegistry.HSLA_SHAFT),
     GEARBOX(MachineRegistry.GEARBOX),
     BEVEL(MachineRegistry.BEVELGEARS),
     SPLITTER(MachineRegistry.SPLITTER),

@@ -1,8 +1,6 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "particle": "rotarycraft:blocks/steel"
+    "particle": "rotarycraft:block/steel"
   }
 }
-
-

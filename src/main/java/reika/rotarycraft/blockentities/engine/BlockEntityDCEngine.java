@@ -33,7 +33,7 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
     private boolean hasUpgrade;
 
     public BlockEntityDCEngine(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.DC_ENGINE.get(), pos, state);
+        super(RotaryBlockEntities.DC_ENGINE.get(), pos, state, false, false, false, false);
         type = EngineType.DC;
     }
     @Override

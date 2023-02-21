@@ -262,7 +262,12 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
             BlockEntity te2 = isCentered ? getAdjacentBlockEntity(read2) : world.getBlockEntity(new BlockPos(dx2, dy2, dz2));
             if (check1) {
                 if (this.isProvider(te)) {
-                    if (m == MachineRegistry.SHAFT) {
+                    if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                         BlockEntityShaft devicein = (BlockEntityShaft) te;
                         if (devicein.isCross()) {
                             this.mergeReadFromCross(devicein, 0);
@@ -319,7 +324,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
             }
             if (check2) {
                 if (this.isProvider(te2)) {
-                    if (m2 == MachineRegistry.SHAFT) {
+                    if (m2 == MachineRegistry.WOOD_SHAFT || m2 == MachineRegistry.STONE_SHAFT || m2 == MachineRegistry.HSLA_SHAFT || m2 == MachineRegistry.TUNGSTEN_SHAFT || m2 == MachineRegistry.DIAMOND_SHAFT || m2 == MachineRegistry.BEDROCK_SHAFT) {
                         BlockEntityShaft devicein2 = (BlockEntityShaft) te2;
                         if (devicein2.isCross()) {
                             this.mergeReadFromCross(devicein2, 1);
@@ -433,7 +438,12 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
             MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, new BlockPos(dx, dy, dz));
             BlockEntity te = isCentered ? getAdjacentBlockEntity(read) : world.getBlockEntity(new BlockPos(dx, dy, dz));
             if (this.isProvider(te)) {
-                if (m == MachineRegistry.SHAFT) {
+                if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                     BlockEntityShaft devicein = (BlockEntityShaft) te;
                     if (devicein.isCross()) {
                         this.readFromCross(devicein);

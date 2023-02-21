@@ -192,7 +192,12 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                     clicked.setBlockMetadata(damage - 5);
                 return InteractionResult.SUCCESS;
             }*/
-            if (m == MachineRegistry.SHAFT) {
+            if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                 BlockEntityShaft ts = (BlockEntityShaft) te;
                 MaterialRegistry type = ts.getShaftType();
                 level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, switch (direction){

@@ -36,7 +36,7 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
     private WindClearanceCheck clearance;
 
     public BlockEntityWindEngine(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.WIND_ENGINE.get(), pos, state);
+        super(RotaryBlockEntities.WIND_ENGINE.get(), pos, state, false, false, false, false);
         type = EngineType.WIND;
     }
     @Override

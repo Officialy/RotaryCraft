@@ -19,7 +19,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -29,7 +28,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -39,12 +37,10 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import reika.dragonapi.ModList;
 import reika.dragonapi.base.BlockEntityBase;
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
 import reika.dragonapi.interfaces.blockentity.PlaceNotification;
@@ -55,11 +51,9 @@ import reika.dragonapi.libraries.io.ReikaSoundHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-import reika.dragonapi.libraries.registry.ReikaDyeHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.dragonapi.modinteract.ReikaXPFluidHelper;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.auxiliary.ItemStacks;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.*;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -76,7 +70,6 @@ import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.registry.*;
 
 import java.util.List;
-import java.util.Random;
 
 public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
@@ -113,6 +106,9 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         }
         if (te instanceof PlaceNotification)
             ((PlaceNotification) te).onPlaced();
+        if (te instanceof BlockEntityEngine engine) {
+            engine.temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
+        }
     }
 
     @Override
@@ -665,27 +661,27 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         }
 
         if (te instanceof BlockEntityEngine tile) {
-//       todo     if (is != null && is.getItem() == ItemRegistry.FUEL.getItemInstance())
-//                return InteractionResult.FAIL;
-/*            if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.TURBINE)) {
-                if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
-                    ((TileEntityJetEngine)tile).repairJet();
+            if (is != null && is.getItem() == RotaryItems.JET_FUEL_BUCKET.get())
+                return InteractionResult.FAIL;
+            /*if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.TURBINE)) {
+                if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine) tile).FOD > 0) {
+                    ((TileEntityJetEngine) tile).repairJet();
                     if (!ep.isCreative())
                         --is.stackSize;
                     return InteractionResult.SUCCESS;
                 }
             }
             if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.COMPRESSOR)) {
-                if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine)tile).FOD > 0) {
-                    ((TileEntityJetEngine)tile).repairJetPartial();
+                if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine) tile).FOD > 0) {
+                    ((TileEntityJetEngine) tile).repairJetPartial();
                     if (!ep.isCreative())
                         is.setCount(is.getCount() - 1);
                     return InteractionResult.SUCCESS;
                 }
             }
             if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.BEDROCK_ALLOY_SHAFT)) {
-                if (tile.getEngineType() == EngineType.HYDRO && !((TileEntityHydroEngine)tile).isBedrock()) {
-                    ((TileEntityHydroEngine)tile).makeBedrock();
+                if (tile.getEngineType() == EngineType.HYDRO && !((TileEntityHydroEngine) tile).isBedrock()) {
+                    ((TileEntityHydroEngine) tile).makeBedrock();
                     if (!ep.isCreative())
                         is.setCount(is.getCount() - 1);
                     return InteractionResult.SUCCESS;
@@ -695,7 +691,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 if (is.getItem() == Items.BUCKET) {
                     if (tile.getEngineType().isEthanolFueled()) {
                         if (tile.getFuelLevel() >= 1000) {
-                            ep.setItemSlot(EquipmentSlot.MAINHAND, RotaryItems.ETHANOLBUCKET.get().getDefaultInstance());
+                            ep.setItemSlot(EquipmentSlot.MAINHAND, RotaryItems.ETHANOL_BUCKET.get().getDefaultInstance());
                             tile.subtractFuel(1000);
                         } else {
                             if (ConfigRegistry.CLEARCHAT.getState())
@@ -742,7 +738,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     }
                 }
                 if (tile.getEngineType().isEthanolFueled()) {
-                    if (ReikaItemHelper.matchStacks(is, RotaryItems.ETHANOLBUCKET)) {
+                    if (ReikaItemHelper.matchStacks(is, RotaryItems.ETHANOL_BUCKET)) {
                         if (tile.getFuelLevel() <= tile.FUELCAP - 1000) {
                             if (!ep.isCreative())
                                 ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
@@ -863,7 +859,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             }
         }
 
-        if (m.isEngine()){
+        if (m.isEngine()) {
             EngineType type = m.getEngineType();
             if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_LSHIFT)) {
                 double power = type.getPower();
@@ -872,8 +868,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 li.add(Component.literal(String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power))));
                 li.add(Component.literal(String.format("Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(torque), ReikaEngLibrary.getSIPrefix(torque))));
                 li.add(Component.literal(String.format("Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(speed), ReikaEngLibrary.getSIPrefix(speed))));
-            }
-            else {
+            } else {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Hold ");
                 sb.append(ChatFormatting.GREEN);
@@ -884,7 +879,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             }
             if (is.hasTag()) {
                 int dmg = is.getTag().getInt("damage");
-                li.add(Component.literal(String.format("Damage: %.1f%s", dmg*12.5F, "%")));
+                li.add(Component.literal(String.format("Damage: %.1f%s", dmg * 12.5F, "%")));
             }
             if (is.hasTag()) {
                 if (is.getTag().getBoolean("bed")) {

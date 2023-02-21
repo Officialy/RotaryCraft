@@ -194,7 +194,46 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return switch (type) {
+            case WOOD -> switch (ratio) {
+                case 4 -> RotaryBlocks.WOOD_GEARBOX_4x.get();
+                case 8 -> RotaryBlocks.WOOD_GEARBOX_8x.get();
+                case 16 -> RotaryBlocks.WOOD_GEARBOX_16x.get();
+                default -> RotaryBlocks.WOOD_GEARBOX_2x.get();
+            };
+            case STONE -> switch (ratio) {
+                case 4 -> RotaryBlocks.STONE_GEARBOX_4x.get();
+                case 8 -> RotaryBlocks.STONE_GEARBOX_8x.get();
+                case 16 -> RotaryBlocks.STONE_GEARBOX_16x.get();
+                default -> RotaryBlocks.STONE_GEARBOX_2x.get();
+            };
+            case STEEL -> switch (ratio) {
+                case 4 -> RotaryBlocks.HSLA_GEARBOX_4x.get();
+                case 8 -> RotaryBlocks.HSLA_GEARBOX_8x.get();
+                case 16 -> RotaryBlocks.HSLA_GEARBOX_16x.get();
+                default -> RotaryBlocks.HSLA_GEARBOX_2x.get();
+            };
+            case TUNGSTEN -> switch (ratio) {
+                case 4 -> RotaryBlocks.TUNGSTEN_GEARBOX_4x.get();
+                case 8 -> RotaryBlocks.TUNGSTEN_GEARBOX_8x.get();
+                case 16 -> RotaryBlocks.TUNGSTEN_GEARBOX_16x.get();
+                default -> RotaryBlocks.TUNGSTEN_GEARBOX_2x.get();
+            };
+            case DIAMOND -> switch (ratio) {
+                case 4 -> RotaryBlocks.DIAMOND_GEARBOX_4x.get();
+                case 8 -> RotaryBlocks.DIAMOND_GEARBOX_8x.get();
+                case 16 -> RotaryBlocks.DIAMOND_GEARBOX_16x.get();
+                default -> RotaryBlocks.DIAMOND_GEARBOX_2x.get();
+            };
+            case BEDROCK -> switch (ratio) {
+                case 4 -> RotaryBlocks.BEDROCK_GEARBOX_4x.get();
+                case 8 -> RotaryBlocks.BEDROCK_GEARBOX_8x.get();
+                case 16 -> RotaryBlocks.BEDROCK_GEARBOX_16x.get();
+                default -> RotaryBlocks.BEDROCK_GEARBOX_2x.get();
+            };
+            case LIVINGWOOD -> null; //todo botania compat
+            case LIVINGROCK -> null;
+        };
     }
 
     @Override
@@ -311,7 +350,12 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
         BlockEntity te = isCentered ? getAdjacentBlockEntity(read) : world.getBlockEntity(new BlockPos(dx, dy, dz));
         if (this.isProvider(te)) {
-            if (m == MachineRegistry.SHAFT) {
+            if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                 BlockEntityShaft devicein = (BlockEntityShaft) te;
                 if (devicein.isCross()) {
                     this.readFromCross(devicein);

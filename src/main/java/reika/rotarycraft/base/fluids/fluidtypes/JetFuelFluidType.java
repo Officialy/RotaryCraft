@@ -1,10 +1,7 @@
-package reika.rotarycraft.base.fluids;
+package reika.rotarycraft.base.fluids.fluidtypes;
 
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.common.SoundActions;
-import org.joml.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -16,27 +13,29 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidType;
+import org.joml.Vector3f;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.registry.RotaryFluids;
 
 import java.util.function.Consumer;
 
-public class HslaFluidType extends FluidType {
+public class JetFuelFluidType extends FluidType {
 
-    public static final ResourceLocation HSLA_FLUID_STILL_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/hsla_still");
-    public static final ResourceLocation HSLA_FLUID_FLOWING_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/hsla_flow");
-    public static final ResourceLocation HSLA_FLUID_OVERLAY_TEXTURE = HSLA_FLUID_STILL_TEXTURE;
+    public static final ResourceLocation JETFUEL_FLUID_STILL_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/jetfuel");
+    public static final ResourceLocation JETFUEL_FLUID_FLOWING_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/jetfuel_anim");
+    public static final ResourceLocation JETFUEL_FLUID_OVERLAY_TEXTURE = JETFUEL_FLUID_STILL_TEXTURE;
 
-    public HslaFluidType() {
-        super(FluidType.Properties.create()
+    public JetFuelFluidType() {
+        super(Properties.create()
                 .canHydrate(false)
                 .canDrown(false)
-                .canExtinguish(true)
+                .canExtinguish(false)
                 .canPushEntity(true)
                 .canSwim(true)
                 .pathType(BlockPathTypes.LAVA)
-                .adjacentPathType(BlockPathTypes.DAMAGE_FIRE)
+                .adjacentPathType(BlockPathTypes.LAVA)
                 .fallDistanceModifier(0.15f)
                 .motionScale(0.0115)
                 .rarity(Rarity.UNCOMMON)
@@ -44,8 +43,7 @@ public class HslaFluidType extends FluidType {
                 .density(7000)
                 .temperature(1873)
                 .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
-                .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH));
+                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY));
     }
 
     @Override
@@ -54,22 +52,22 @@ public class HslaFluidType extends FluidType {
 
             @Override
             public ResourceLocation getStillTexture() {
-                return HSLA_FLUID_STILL_TEXTURE;
+                return JETFUEL_FLUID_STILL_TEXTURE;
             }
 
             @Override
             public ResourceLocation getFlowingTexture() {
-                return HSLA_FLUID_FLOWING_TEXTURE;
+                return JETFUEL_FLUID_FLOWING_TEXTURE;
             }
 
             @Override
             public ResourceLocation getOverlayTexture() {
-                return HSLA_FLUID_OVERLAY_TEXTURE;
+                return JETFUEL_FLUID_OVERLAY_TEXTURE;
             }
 
             @Override
             public ResourceLocation getRenderOverlayTexture(Minecraft mc) {
-                return null;
+                return JETFUEL_FLUID_STILL_TEXTURE;
             }
 
             @Override

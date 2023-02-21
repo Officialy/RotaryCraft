@@ -223,8 +223,8 @@ public class RotaryItems {
     //Fluid Buckets
     public static final RegistryObject<Item> LUBE_BUCKET = ITEMS.register("lubricant_bucket", () -> new BucketItem(RotaryFluids.LUBRICANT, new Item.Properties()));
     public static final RegistryObject<Item> JET_FUEL_BUCKET = ITEMS.register("jet_fuel_bucket", () -> new BucketItem(RotaryFluids.JET_FUEL, new Item.Properties()));
-    public static final RegistryObject<Item> ETHANOLBUCKET = ITEMS.register("liquid_ethanol_bucket", () -> new BucketItem(RotaryFluids.ETHANOL, new Item.Properties()));
-    public static final RegistryObject<Item> NITROGENBUCKET = ITEMS.register("liquid_nitrogen_bucket", () -> new BucketItem(RotaryFluids.LIQUID_NITROGEN, new Item.Properties()));
+    public static final RegistryObject<Item> ETHANOL_BUCKET = ITEMS.register("liquid_ethanol_bucket", () -> new BucketItem(RotaryFluids.ETHANOL, new Item.Properties()));
+    public static final RegistryObject<Item> NITROGEN_BUCKET = ITEMS.register("liquid_nitrogen_bucket", () -> new BucketItem(RotaryFluids.LIQUID_NITROGEN, new Item.Properties()));
 
     //Other Items
     public static final RegistryObject<Item> YEAST = ITEMS.register("yeast", () -> new ItemBasic(new Item.Properties(), 64));

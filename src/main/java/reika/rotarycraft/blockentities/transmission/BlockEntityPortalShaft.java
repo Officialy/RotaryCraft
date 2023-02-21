@@ -158,7 +158,12 @@
 //        //ReikaJavaLibrary.pConsole(x+", "+y+", "+z+":"+dx+", "+dy+", "+dz+" >> "+m, Dist.DEDICATED_SERVER);
 //        //ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, Dist.DEDICATED_SERVER);
 //        //ReikaJavaLibrary.pConsole(dx+", "+dy+", "+dz+" >> "+m, dim == 7);
-//        if (m == MachineRegistry.SHAFT) {
+//        if (m == MachineRegistry.WOOD_SHAFT || m ==
+//                    MachineRegistry.STONE_SHAFT || m ==
+//                    MachineRegistry.HSLA_SHAFT || m ==
+//                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+//                    MachineRegistry.DIAMOND_SHAFT || m ==
+//                    MachineRegistry.BEDROCK_SHAFT) {
 //            BlockEntityShaft te = (BlockEntityShaft) age.getBlockEntity(dx, dy, dz);
 //            int terx = te.xCoord + te.getReadDirection().getStepX();
 //            int tery = te.yCoord + te.getReadDirection().getStepY();
@@ -277,7 +282,12 @@
 //        MachineRegistry m = this.getMachine(read);
 //        BlockEntity te = this.getAdjacentBlockEntity(read);
 //        if (this.isProvider(te)) {
-//            if (m == MachineRegistry.SHAFT) {
+//            if (m == MachineRegistry.WOOD_SHAFT || m ==
+//                    MachineRegistry.STONE_SHAFT || m ==
+//                    MachineRegistry.HSLA_SHAFT || m ==
+//                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+//                    MachineRegistry.DIAMOND_SHAFT || m ==
+//                    MachineRegistry.BEDROCK_SHAFT) {
 //                BlockEntityShaft devicein = (BlockEntityShaft) te;
 //                if (devicein.isCross()) {
 //                    this.readFromCross(devicein);

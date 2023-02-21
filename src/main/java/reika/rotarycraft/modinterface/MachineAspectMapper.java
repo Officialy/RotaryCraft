@@ -460,7 +460,12 @@
 //					al.merge((Aspect)SFAPI.genericLookups.getAspect(), amt);
 //			}
 //		}
-//		if (m == MachineRegistry.SHAFT) {
+//		if (m == MachineRegistry.WOOD_SHAFT || m ==
+//                    MachineRegistry.STONE_SHAFT || m ==
+//                    MachineRegistry.HSLA_SHAFT || m ==
+//                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+//                    MachineRegistry.DIAMOND_SHAFT || m ==
+//                    MachineRegistry.BEDROCK_SHAFT) {
 //			int ratio = ReikaMathLibrary.intpow2(2, is.getItemDamage()+1);
 //			al.merge(Aspect.MOTION, 12);
 //			if (ModList.SATISFORESTRY.isLoaded()) {

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.renders.dmi;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -35,7 +36,8 @@ public class RenderGrinder extends RotaryTERenderer<BlockEntityGrinder> {
      * Renders the BlockEntity for the position.
      */
     public void renderBlockEntityGrinderAt(BlockEntityGrinder tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
-
+        RenderSystem.disableCull();
+        stack.pushPose();
         float f = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.mulPose(Axis.YP.rotationDegrees(-f));
@@ -43,6 +45,8 @@ public class RenderGrinder extends RotaryTERenderer<BlockEntityGrinder> {
 
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid(GrinderModel.TEXTURE_LOCATION));
         modelGrinder.renderAll(stack, vertexconsumer, light, tile, null, -tile.phi); //-tile.getUpdateTag().getFloat("phi")
+        stack.popPose();
+        RenderSystem.enableCull();
     }
 
     @Override

@@ -152,7 +152,6 @@ public class RotaryCraftTabs {
                 output.accept(RotaryBlocks.ANTHRA.get().asItem().getDefaultInstance());
                 output.accept(RotaryBlocks.LONS.get().asItem().getDefaultInstance());
                 output.accept(RotaryBlocks.SHIELD.get().asItem().getDefaultInstance());
-                output.accept(RotaryBlocks.BEDROCK.get().asItem().getDefaultInstance());
                 output.accept(RotaryBlocks.COKE.get().asItem().getDefaultInstance());
                 output.accept(RotaryBlocks.SMOKE_DETECTOR.get().asItem().getDefaultInstance());
                 output.accept(RotaryBlocks.WIND_ENGINE.get().asItem().getDefaultInstance());
@@ -302,8 +301,8 @@ public class RotaryCraftTabs {
                 output.accept(RotaryItems.BEDROCK_DRILL.get().getDefaultInstance());
                 output.accept(RotaryItems.LUBE_BUCKET.get().getDefaultInstance());
                 output.accept(RotaryItems.JET_FUEL_BUCKET.get().getDefaultInstance());
-                output.accept(RotaryItems.ETHANOLBUCKET.get().getDefaultInstance());
-                output.accept(RotaryItems.NITROGENBUCKET.get().getDefaultInstance());
+                output.accept(RotaryItems.ETHANOL_BUCKET.get().getDefaultInstance());
+                output.accept(RotaryItems.NITROGEN_BUCKET.get().getDefaultInstance());
             }).title(Component.translatable("tab.rotarycraft.tools"));
         }));
 

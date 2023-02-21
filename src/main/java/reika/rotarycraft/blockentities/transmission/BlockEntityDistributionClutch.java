@@ -19,8 +19,10 @@ import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
 import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 import reika.rotarycraft.base.blockentity.BlockEntityTransmissionMachine;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 
 import java.util.Collection;
 
@@ -91,12 +93,12 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.DISTRIBUTION_CLUTCH.get();
     }
 
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
-        this.getIOSides(world, pos);
+        this.getIOSides(world, pos, getBlockState().getValue(BlockRotaryCraftMachine.FACING));
         if (!RotaryAux.getPowerOnClient && world.isClientSide)
             return;
         this.updateControl(world, pos);
@@ -105,8 +107,8 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
         this.distributePower(world, pos);
     }
 
-    private void getIOSides(Level world, BlockPos pos) {
-        switch (Direction.values().length) {
+    private void getIOSides(Level world, BlockPos pos, Direction direction) {
+        switch (direction.ordinal()) {
             case 0 -> read = Direction.EAST;
             case 1 -> read = Direction.WEST;
             case 2 -> read = Direction.SOUTH;
@@ -170,7 +172,12 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
         BlockEntity te = isCentered ? getAdjacentBlockEntity(read) : world.getBlockEntity(new BlockPos(dx, dy, dz));
         //ReikaJavaLibrary.pConsole(System.nanoTime(), Dist.DEDICATED_SERVER, x == 514);
         if (this.isProvider(te)) {
-            if (m == MachineRegistry.SHAFT) {
+            if (m == MachineRegistry.WOOD_SHAFT || m ==
+                    MachineRegistry.STONE_SHAFT || m ==
+                    MachineRegistry.HSLA_SHAFT || m ==
+                    MachineRegistry.TUNGSTEN_SHAFT || m ==
+                    MachineRegistry.DIAMOND_SHAFT || m ==
+                    MachineRegistry.BEDROCK_SHAFT) {
                 BlockEntityShaft devicein = (BlockEntityShaft) te;
                 if (devicein.isCross()) {
                     this.readFromCross(devicein);
@@ -362,14 +369,11 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
         }
 
         public boolean isValid() {
-            switch (this) {
-                case BUNDLEDREDSTONE:
-                    return ModList.PROJRED.isLoaded();
-                case COMPUTER:
-                    return ModList.COMPUTERCRAFT.isLoaded() || ModList.OPENCOMPUTERS.isLoaded();
-                default:
-                    return true;
-            }
+            return switch (this) {
+                case BUNDLEDREDSTONE -> ModList.PROJRED.isLoaded();
+                case COMPUTER -> ModList.COMPUTERCRAFT.isLoaded() || ModList.OPENCOMPUTERS.isLoaded();
+                default -> true;
+            };
         }
     }
 

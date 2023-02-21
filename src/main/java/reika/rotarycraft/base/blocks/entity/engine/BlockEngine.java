@@ -168,19 +168,6 @@ public class BlockEngine extends Block {
     }
 
 //    @Override
-//    public BlockEntity createBlockEntity(Level world) {
-//        return EngineType.engineList.newBlockEntity();
-//    }
-
-    @Override
-    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState pOldState, boolean pIsMoving) {
-        BlockEntityEngine te = (BlockEntityEngine) world.getBlockEntity(pos);
-        if (te != null) {
-            te.temperature = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
-        }
-    }
-
-//    @Override
 //    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
 //        ArrayList<ItemStack> ret = new ArrayList<>();
 //        BlockEntityEngine tile = (BlockEntityEngine) builder.getLevel().getBlockEntity(worldposition);

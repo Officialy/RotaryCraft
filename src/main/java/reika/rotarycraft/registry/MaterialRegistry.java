@@ -72,9 +72,19 @@ public enum MaterialRegistry {
     }
 
     public static MaterialRegistry getMaterialFromShaftItem(ItemStack is) {
-        if (is.getTag() != null && is.getTag().contains("material"))
-            return MaterialRegistry.valueOf(is.getTag().getString("material"));
-        return MaterialRegistry.matList[is.getDamageValue()];
+        if (is.getItem() == RotaryBlocks.WOOD_SHAFT.get().asItem())
+            return WOOD;
+        if (is.getItem() == RotaryBlocks.STONE_SHAFT.get().asItem())
+            return STONE;
+        if (is.getItem() == RotaryBlocks.HSLA_SHAFT.get().asItem())
+            return STEEL;
+        if (is.getItem() == RotaryBlocks.TUNGSTEN_SHAFT.get().asItem())
+            return TUNGSTEN;
+        if (is.getItem() == RotaryBlocks.DIAMOND_SHAFT.get().asItem())
+            return DIAMOND;
+        if (is.getItem() == RotaryBlocks.BEDROCK_SHAFT.get().asItem())
+            return BEDROCK;
+        return MaterialRegistry.WOOD;
     }
 
     public double getElasticModulus() {
@@ -134,8 +144,8 @@ public enum MaterialRegistry {
         if (tool == null)
             return false;
         Item item = tool.getItem();
-        //if (item == RotaryItems.BEDPICK.get())
-        //    return true;
+        if (item == RotaryItems.BEDROCK_ALLOY_PICK.get())
+            return true;
         if (item == RotaryItems.HSLA_STEEL_PICKAXE.get())
             return this != BEDROCK;
         /*if (item instanceof PickaxeItem) {

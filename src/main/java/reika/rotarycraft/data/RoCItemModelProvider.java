@@ -13,6 +13,7 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.models.AerosolizerModel;
 import reika.rotarycraft.models.FinModel;
 import reika.rotarycraft.models.engine.DCModel;
+import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 
@@ -30,28 +31,8 @@ public class RoCItemModelProvider extends ItemModelProvider {
                 this.basicItem(e.get())
         );
 
-        basicItem(RotaryBlocks.WOOD_SHAFT.get().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
-        basicItem(RotaryBlocks.STONE_SHAFT.get().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
-        basicItem(RotaryBlocks.HSLA_SHAFT.get().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
-        basicItem(RotaryBlocks.TUNGSTEN_SHAFT.get().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
-        basicItem(RotaryBlocks.DIAMOND_SHAFT.get().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
-        basicItem(RotaryBlocks.BEDROCK_SHAFT.get().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
-
-
-        var modelparts = DCModel.createLayer().bakeRoot().children.entrySet();
-        for (var part : modelparts) {
-            part.getValue().cubes.forEach(cube -> {
-                var texture = DCModel.TEXTURE_LOCATION.toString().replaceAll("textures/", "").replaceAll(".png", "");
-
-                getBuilder(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(RotaryBlocks.DC_ENGINE.get().asItem())).toString())
-                        .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                        .element().textureAll(texture)
-                        .from(cube.minX, cube.minY, cube.minZ)
-                        .to(cube.maxX, cube.maxY, cube.maxZ).end();
-                        /*.rotation()
-                            .origin(part.x, part.y, part.z).end();
-                 */
-            });
+        for (var machine : MachineRegistry.values()) {
+            basicItem(machine.getBlockState().getBlock().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
         }
     }
 
