@@ -306,6 +306,18 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     @Override
+    public void saveAdditional(CompoundTag NBT) {
+        super.saveAdditional(NBT);
+        NBT.putFloat("phi", phi);
+    }
+
+    @Override
+    public void load(CompoundTag NBT) {
+        super.load(NBT);
+        phi = NBT.getFloat("phi");
+    }
+
+    @Override
     public MachineRegistry getMachine() {
         return MachineRegistry.GRINDER;
     }

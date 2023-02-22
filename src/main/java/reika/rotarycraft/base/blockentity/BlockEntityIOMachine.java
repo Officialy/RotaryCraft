@@ -57,6 +57,7 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
     }
 
     public void updateBlockEntity() {
+        updateEntity();
         if (iotick > 0) {
             iotick -= 8;
         }

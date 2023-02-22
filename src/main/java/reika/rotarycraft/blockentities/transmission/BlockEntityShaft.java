@@ -648,8 +648,6 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
         crossphi1 += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(readomega[0] + 1, 2), 1.25);
         crossphi2 += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(readomega[1] + 1, 2), 1.25);
-        setChanged();
-//        RotaryCraft.LOGGER.info(phi);
     }
 
     @Override

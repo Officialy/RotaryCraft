@@ -50,7 +50,6 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase implements 
      */
     private boolean disabled;
 
-
     public RotaryCraftBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }

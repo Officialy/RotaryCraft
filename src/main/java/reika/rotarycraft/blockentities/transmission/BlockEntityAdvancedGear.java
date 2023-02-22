@@ -780,7 +780,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                 nbttaglist.add(CompoundTag);
             }
         }
-
+        NBT.putFloat("phi", phi);
         NBT.put("Items", nbttaglist);
     }
 
@@ -803,6 +803,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                 belts[byte0] = ItemStack.of(CompoundTag);
             }
         }
+        phi = NBT.getFloat("phi");
     }
 
     @Override

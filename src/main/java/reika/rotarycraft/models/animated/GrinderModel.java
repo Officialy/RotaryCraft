@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.RotaryModelBase;
 
 import java.util.ArrayList;

@@ -16,6 +16,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
@@ -40,11 +41,11 @@ public class RenderGrinder extends RotaryTERenderer<BlockEntityGrinder> {
         stack.pushPose();
         float f = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.YP.rotationDegrees(-f));
+        stack.mulPose(Axis.YP.rotationDegrees(f));
         stack.mulPose(Axis.ZP.rotationDegrees(180));
 
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid(GrinderModel.TEXTURE_LOCATION));
-        modelGrinder.renderAll(stack, vertexconsumer, light, tile, null, -tile.phi); //-tile.getUpdateTag().getFloat("phi")
+        modelGrinder.renderAll(stack, vertexconsumer, light, tile, null, -tile.phi, 0); //
         stack.popPose();
         RenderSystem.enableCull();
     }

@@ -54,11 +54,11 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
         switch (tile.getGearType()) {
             case WORM -> {
                 VertexConsumer wormTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/shafttex.png"))));
-                wormModel.renderAll(stack, wormTex, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
+                wormModel.renderAll(stack, wormTex, pPackedLight, tile, null, -tile.phi);
             }
             case CVT -> {
                 VertexConsumer cvtTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/cvttex.png"))));
-                cvtModel.renderAll(stack, cvtTex, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
+                cvtModel.renderAll(stack, cvtTex, pPackedLight, tile, null, -tile.phi);
                 if (tile.isInWorld()) {
 //                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 //                    GL11.glDisable(GL11.GL_LIGHTING);
@@ -100,22 +100,21 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                         }
                         fr.draw(stack, var15b, -10, 39, 0xffffff);
                     }
-
                     //GL11.glPopAttrib();
                 }
             }
             case COIL -> {
                 if (tile.isBedrockCoil()) {
                     VertexConsumer bedCoilTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/coiltex_bed.png"))));
-                    coilModel.renderAll(stack, bedCoilTex, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
+                    coilModel.renderAll(stack, bedCoilTex, pPackedLight, tile, null, -tile.phi);
                 } else {
                     VertexConsumer coilTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/coiltex.png"))));
-                    coilModel.renderAll(stack, coilTex, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
+                    coilModel.renderAll(stack, coilTex, pPackedLight, tile, null, -tile.phi);
                 }
             }
             case HIGH -> {
                 VertexConsumer highTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/highgeartex.png"))));
-                highGearModel.renderAll(stack, highTex, pPackedLight, tile, null, -tile.getUpdateTag().getFloat("phi"));
+                highGearModel.renderAll(stack, highTex, pPackedLight, tile, null, -tile.phi);
             }
         }
         stack.popPose();
