@@ -85,7 +85,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
 
     @Override
     public boolean canProvidePower() {
-        //return this.isMultiBlock(level, xCoord, yCoord, zCoord) && this.getMultiBlockPosition(level, xCoord, yCoord, zCoord)[1] == 0;
+//        return this.isMultiBlock(level, xCoord, yCoord, zCoord) && this.getMultiBlockPosition(level, xCoord, yCoord, zCoord)[1] == 0;
         return true;
     }
 

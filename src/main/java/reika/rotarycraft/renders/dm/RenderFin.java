@@ -11,6 +11,7 @@ package reika.rotarycraft.renders.dm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -37,6 +38,8 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
      */
     public void renderBlockEntityCoolingFinAt(PoseStack stack, BlockEntityCoolingFin tile, MultiBufferSource bufferSource, int pPackedLight) {
         stack.pushPose();
+        stack.translate(0.5, 1.5, 0.5);
+        stack.mulPose(Axis.ZP.rotationDegrees(180));
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(FinModel.TEXTURE_LOCATION));
         finModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         stack.popPose();
@@ -45,17 +48,17 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
     @Override
     public void render(BlockEntityCoolingFin tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
         if (this.doRenderModel(stack, tile))
-            this.renderBlockEntityCoolingFinAt(stack, tile, multiBufferSource, i1);
+            this.renderBlockEntityCoolingFinAt(stack, tile, multiBufferSource, i);
         if ((tile).isInWorld()) {// && MinecraftForgeClient.getRenderPass() == 1) {
-            this.renderTarget(stack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+            this.renderTarget(stack, tile);
         }
 
     }
 
-    private void renderTarget(PoseStack stack, BlockEntityCoolingFin tile, double par2, double par4, double par6) {
+    private void renderTarget(PoseStack stack, BlockEntityCoolingFin tile) {
         int[] xyz = tile.getTarget();
         AABB box = AABB.of(new BoundingBox(xyz[0], xyz[1], xyz[2], xyz[0] + 1, xyz[1] + 1, xyz[2] + 1)).expandTowards(0.03125, 0.03125, 0.03125);
-        ReikaAABBHelper.renderAABB(stack, box, par2, par4, par6, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), tile.ticks, 0, 127, 255, true);
+        ReikaAABBHelper.renderAABB(stack, box, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), tile.ticks, 0, 127, 255, true);
     }
 
 }

@@ -29,7 +29,9 @@ import reika.dragonapi.auxiliary.trackers.DonatorController;
 import reika.dragonapi.auxiliary.trackers.PlayerFirstTimeTracker;
 import reika.dragonapi.auxiliary.trackers.PlayerHandler;
 import reika.dragonapi.base.DragonAPIMod;
+import reika.dragonapi.instantiable.io.SoundLoader;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
+import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.rotarycraft.auxiliary.*;
 import reika.rotarycraft.gui.screen.GuiHandCraft;
 import reika.rotarycraft.gui.screen.machine.*;
@@ -48,6 +50,7 @@ public class RotaryCraft extends DragonAPIMod {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
+    protected static final SoundLoader sounds = new SoundLoader(SoundRegistry.class);
     public static final MachineDamage jetingest = new MachineDamage("was sucked into a jet engine").setArmorBlocking(1F, 90, 1, 2, 3, 4);
     public static final MachineDamage hydrokinetic = new MachineDamage("was paddled to death").setArmorBlocking(0.5F, 2, 4);
     public static final MachineDamage shock = (MachineDamage) new MachineDamage("was electrified").bypassArmor();
@@ -112,6 +115,8 @@ public class RotaryCraft extends DragonAPIMod {
         DonatorController.instance.registerMod(this, DonatorController.reikaURL);
         ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new PacketHandlerCore());
 
+//   todo     ReikaJavaLibrary.initClass(HandbookRegistry.class);
+        ReikaJavaLibrary.initClass(SoundRegistry.class);
 //        PackModificationTracker.instance.addMod(this, config);
         this.finishTiming();
     }
@@ -164,6 +169,9 @@ public class RotaryCraft extends DragonAPIMod {
     }
 
     public void clientSetup(final FMLClientSetupEvent event) {
+        sounds.register();
+
+
         MenuScreens.register(RotaryMenus.STEAM_ENGINE.get(), SteamScreen::new);
         MenuScreens.register(RotaryMenus.GEARBOX.get(), GearboxScreen::new);
         MenuScreens.register(RotaryMenus.RESERVOIR.get(), ReservoirScreen::new);

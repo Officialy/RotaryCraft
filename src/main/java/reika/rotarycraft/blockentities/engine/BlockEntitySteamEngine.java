@@ -14,13 +14,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -111,13 +109,13 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
 
     @Override
     protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundtick++;
+        soundTick++;
         if (this.isMuffled(world, pos)) {
             volume *= 0.3125F;
         }
-        if (soundtick < this.getSoundLength(1F / pitchMultiplier) && soundtick < 2000)
+        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
             return;
-        soundtick = 0;
+        soundTick = 0;
 
         SoundRegistry.STEAM.playSoundAtBlock(world, pos, 0.7F * volume, 1F * pitchMultiplier);
     }

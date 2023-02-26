@@ -12,17 +12,13 @@ package reika.rotarycraft.blockentities.engine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
-import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.interfaces.RedstoneUpgradeable;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.items.tools.ItemEngineUpgrade;
@@ -36,10 +32,12 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
         super(RotaryBlockEntities.DC_ENGINE.get(), pos, state, false, false, false, false);
         type = EngineType.DC;
     }
+
     @Override
     public MachineRegistry getMachine() {
         return MachineRegistry.DC_ENGINE;
     }
+
     @Override
     protected void consumeFuel() {
 
@@ -58,13 +56,15 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
 
     @Override
     protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundtick++;
+        soundTick++;
         if (this.isMuffled(world, pos)) {
             volume *= 0.3125F;
         }
-        if (soundtick < this.getSoundLength(1F / pitchMultiplier) && soundtick < 2000)
+        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000) {
             return;
-        soundtick = 0;
+        }
+        soundTick = 0;
+
         SoundRegistry.ELECTRIC.playSoundAtBlock(world, pos, 0.125F * volume, 1F * pitchMultiplier);
     }
 

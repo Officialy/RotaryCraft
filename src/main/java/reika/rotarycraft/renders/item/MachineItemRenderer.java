@@ -168,7 +168,7 @@ public class MachineItemRenderer extends BlockEntityWithoutLevelRenderer {
         if (item.getItem() == RotaryBlocks.MICRO_TURBINE.get().asItem()) {
             microModel.renderToBuffer(stack, bufferSource.getBuffer(RenderType.entitySolid((MicroTurbineModel.TEXTURE_LOCATION))), combinedLight, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1.0F);
         }
-        if (item.getItem() == RotaryBlocks.STEAM_TURBINE.get().asItem()) {
+        if (item.getItem() == RotaryBlocks.STEAM_ENGINE.get().asItem()) {
             steamModel.renderToBuffer(stack, bufferSource.getBuffer(RenderType.entitySolid((SteamModel.TEXTURE_LOCATION))), combinedLight, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1.0F);
         }
         if (item.getItem() == RotaryBlocks.GAS_ENGINE.get().asItem()) {
@@ -198,6 +198,7 @@ public class MachineItemRenderer extends BlockEntityWithoutLevelRenderer {
         if (item.getItem() == RotaryBlocks.GRINDER.get().asItem()) {
             grinderModel.renderToBuffer(stack, bufferSource.getBuffer(RenderType.entitySolid((GrinderModel.TEXTURE_LOCATION))), combinedLight, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1.0F);
         }
+
         stack.popPose();
         RenderSystem.disableBlend();
     }

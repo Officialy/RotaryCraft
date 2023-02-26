@@ -64,7 +64,7 @@ public enum SoundRegistry implements SoundEnum {
     FAN("#fan"),
     SPARK("spark"),
     DYNAMO("#dynamo"),
-    //JETDAMAGE("jetdamage"),
+//    JETDAMAGE("jetdamage"),
     INGESTION("ingest_short"),
     FRIDGE("#fridge"),
     JETSTART("#jetstart"),
@@ -115,9 +115,9 @@ public enum SoundRegistry implements SoundEnum {
     }
 
     public float getSoundVolume() {
-        double vol = ConfigRegistry.MACHINEVOLUME.getValue();
+        double vol = ConfigRegistry.MACHINEVOLUME.getFloat();
         if (this.isEngineSound()) {
-            vol *= ConfigRegistry.ENGINEVOLUME.getValue();
+            vol *= ConfigRegistry.ENGINEVOLUME.getFloat();
         }
         if (vol < 0)
             vol = 0;
@@ -143,7 +143,7 @@ public enum SoundRegistry implements SoundEnum {
     }
 
     public void playSound(Level world, BlockPos pos, float vol, float pitch) {
-        if (FMLLoader.getDist().isClient())
+        if (world.isClientSide())
             return;
 //        Packet250CustomPayload p = new Packet62LevelSound(s.getPlayableReference(), pos, vol, pitch);
 //        PacketDispatcher.sendPacketToAllInDimension(p, world.provider.dimensionId);

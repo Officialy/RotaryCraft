@@ -13,7 +13,6 @@ package reika.rotarycraft.blockentities.engine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -77,13 +76,13 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
 
     @Override
     protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundtick++;
+        soundTick++;
         if (this.isMuffled(world, pos)) {
             volume *= 0.3125F;
         }
-        if (soundtick < this.getSoundLength(1F / pitchMultiplier) && soundtick < 2000)
+        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
             return;
-        soundtick = 0;
+        soundTick = 0;
 
         SoundRegistry.CAR.playSoundAtBlock(world, pos, 0.33F * volume, 0.9F * pitchMultiplier);
     }

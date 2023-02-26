@@ -31,8 +31,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,7 +80,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     /**
      * For timing control
      */
-    public int soundtick = 2000;
+    public int soundTick = 2000;
     protected EngineType type = EngineType.DC;
     protected int backx;
     protected int backz;
@@ -343,8 +341,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             this.updateSpeed(0, false);
             if (omega == 0)
                 torque = 0;
-            if (soundtick == 0 && omega == 0)
-                soundtick = 2000;
+            if (soundTick == 0 && omega == 0)
+                soundTick = 2000;
         }
     }
 
@@ -426,7 +424,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             if (power > 0)
                 this.affectSurroundings(world, pos);
         }
-
         float pitch = 1F;
         float soundfactor = 1F;
         if (type.isECUControllable() && this.hasECU()) {
@@ -463,9 +460,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 //            }
         }
 
-        this.resetPower(); //temp once above is fixed
-        soundtick = 0; //temp once above is fixed
-
         this.basicPowerReceiver();
 
         this.internalizeFuel();
@@ -477,8 +471,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 
         if (power > 0) {
             this.playSounds(world, pos, pitch, 1);
-        } else if (soundtick < this.getSoundLength(soundfactor))
-            soundtick = 2000;
+        } else if (soundTick < this.getSoundLength(soundfactor))
+            soundTick = 2000;
 
         lastpower = power;
     }
@@ -487,7 +481,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         if (omega == 0)
             torque = 0;
         power = (long) omega * (long) torque;
-        soundtick = 2000;
+        soundTick = 2000;
         lastpower = power;
     }
 

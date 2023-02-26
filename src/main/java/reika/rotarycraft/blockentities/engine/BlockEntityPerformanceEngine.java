@@ -14,7 +14,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -25,17 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -107,14 +98,14 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
 
     @Override
     protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundtick++;
+        soundTick++;
         if (this.isMuffled(world, pos)) {
             volume *= 0.3125F;
         }
 
-        if (soundtick < this.getSoundLength(1F / pitchMultiplier) && soundtick < 2000)
+        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
             return;
-        soundtick = 0;
+        soundTick = 0;
 
         SoundRegistry.CAR.playSoundAtBlock(world, pos, 0.33F * volume, 0.9F * pitchMultiplier);
     }
