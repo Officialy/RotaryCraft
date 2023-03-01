@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import org.joml.Vector3f;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.auxiliary.RotaryAux;
@@ -35,7 +34,7 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
     private MonitorModel monitorModel;
 
     public RenderMonitor(BlockEntityRendererProvider.Context context) {
-        monitorModel = new MonitorModel(context.bakeLayer(RotaryModelLayers.MONITOR));
+        monitorModel = new MonitorModel(context.bakeLayer(RotaryModelLayers.DYNOMONITOR));
     }
 
     public void renderBlockEntityMonitorAt(PoseStack stack, BlockEntityMonitor tile, MultiBufferSource bufferSource, int pPackedLight) {

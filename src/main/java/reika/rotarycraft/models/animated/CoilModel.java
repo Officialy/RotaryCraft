@@ -1,4 +1,8 @@
 package reika.rotarycraft.models.animated;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -588,5 +592,10 @@ public class CoilModel extends RotaryModelBase {
         stack.translate(0, 1, 0);
         stack.mulPose(Axis.XN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
+    }
+
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

@@ -185,6 +185,7 @@ public class RotaryCraft extends DragonAPIMod {
         MenuScreens.register(RotaryMenus.HAND_CRAFT.get(), GuiHandCraft::new);
         MenuScreens.register(RotaryMenus.MUSIC.get(), GuiMusic::new);
         MenuScreens.register(RotaryMenus.GRINDER.get(), GuiGrinder::new);
+        MenuScreens.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
 
         RotaryRenders.registerBlockColors();
         event.enqueueWork(RotaryRenders::registerRenderLayers);

@@ -1,4 +1,8 @@
 package reika.rotarycraft.models.animated;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -254,5 +258,9 @@ public class WinderModel extends RotaryModelBase {
         Shape6k.render(te, f5);
         GL11.glScaled(-1, 1, 1);
         GL11.glFrontFace(GL11.GL_CCW);*/
+    }
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

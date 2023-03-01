@@ -13,6 +13,10 @@ package reika.rotarycraft.blockentities.engine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -21,9 +25,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.auxiliary.interfaces.UpgradeableMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerEthanol;
 import reika.rotarycraft.registry.*;
 
 public class BlockEntityGasEngine extends BlockEntityEngine implements UpgradeableMachine {
@@ -131,5 +137,11 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         return null;
+    }
+
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+        return new ContainerEthanol(p_39954_, p_39955_, this);
     }
 }

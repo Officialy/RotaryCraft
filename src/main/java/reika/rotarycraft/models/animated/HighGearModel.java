@@ -1,4 +1,8 @@
 package reika.rotarycraft.models.animated;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -351,5 +355,9 @@ public class HighGearModel extends RotaryModelBase {
 
             stack.translate(-f, 0, 0);
         }
+    }
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

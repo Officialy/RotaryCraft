@@ -1,4 +1,8 @@
 package reika.rotarycraft.models.animated;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,8 +18,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import java.util.ArrayList;
 
-public class AggregatorModel extends Model {
+public class AggregatorModel extends RotaryModelBase {
 
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/animated");
 
@@ -296,9 +304,13 @@ public class AggregatorModel extends Model {
         return LayerDefinition.create(definition, 128, 128);
     }
 
-    @Override
-    public void renderToBuffer(PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        @Override
+    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
+        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+    }
 
-        root.render(stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

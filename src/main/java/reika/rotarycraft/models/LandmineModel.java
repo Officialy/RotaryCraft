@@ -1,4 +1,8 @@
 package reika.rotarycraft.models;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
-public class LandmineModel extends Model {
+public class LandmineModel extends RotaryModelBase {
 
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/landminetex.png");
 
@@ -141,9 +145,13 @@ public class LandmineModel extends Model {
         return LayerDefinition.create(definition, 64, 64);
     }
 
-    @Override
-    public void renderToBuffer(PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        @Override
+    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
+        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+    }
 
-        root.render(stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

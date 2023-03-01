@@ -28,7 +28,7 @@ public class ReservoirContainer extends CoreContainer<BlockEntityReservoir> {
     }
 
     public ReservoirContainer(int id, Inventory inv, BlockEntityReservoir te) {
-        super(RotaryMenus.RESERVOIR.get(), id, inv, te, inv);
+        super(RotaryMenus.RESERVOIR.get(), id, inv, te);
         this.reservoir = te;
     }
 
@@ -38,7 +38,7 @@ public class ReservoirContainer extends CoreContainer<BlockEntityReservoir> {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (!FMLLoader.getDist().isClient()) {
+        if (FMLLoader.getDist().isDedicatedServer()) {
             ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, reservoir, "tank");
         }
 

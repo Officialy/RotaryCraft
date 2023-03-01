@@ -32,7 +32,7 @@ public interface RotaryMenus {
     Supplier<MenuType<BlowerContainer>> BLOWER = register("blower", BlowerContainer::new);
     Supplier<MenuType<ContainerJet>> JET = register("jet", ContainerJet::new);
 
-//    Supplier<MenuType<ContainerEthanol>> GAS_ENGINE = register("gas_engine",      () -> IForgeMenuType.create(new ContainerEthanol.Factory()));
+    Supplier<MenuType<ContainerEthanol>> GAS_ENGINE = register("gas_engine", ContainerEthanol::new);
 
 //    Supplier<MenuType<ContainerHeater>> HEATER = register("heater",     () -> IForgeMenuType.create(new ContainerHeater.Factory()));
 

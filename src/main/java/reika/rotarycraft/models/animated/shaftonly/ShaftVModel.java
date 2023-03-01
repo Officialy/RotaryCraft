@@ -175,4 +175,8 @@ public class ShaftVModel extends RotaryModelBase {
         stack.mulPose(Axis.YN.rotationDegrees(phi));
     }
 
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
+    }
 }

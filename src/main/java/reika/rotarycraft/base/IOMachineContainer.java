@@ -24,13 +24,13 @@ public abstract class IOMachineContainer<T extends BlockEntityIOMachine> extends
     }
 
     public IOMachineContainer(MenuType<?> type, final int id, Inventory inv, T tile) {
-        super(type, id, inv, tile, inv);
+        super(type, id, inv, tile);
         ioTile = tile;
     }
 
     @Override
     public void broadcastChanges() {
-//        super.broadcastChanges();
+        super.broadcastChanges();
 
         /*todo for (Object ic : this.containerListeners) {
             if (ic instanceof ServerPlayer)

@@ -157,4 +157,8 @@ public class DCModel extends RotaryModelBase {
         shape14.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
 
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
+    }
 }

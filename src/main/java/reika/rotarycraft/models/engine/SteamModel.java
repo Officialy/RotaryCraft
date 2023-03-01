@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Vector3f;
 import reika.rotarycraft.base.RotaryModelBase;
-
 import java.util.ArrayList;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
@@ -305,5 +304,10 @@ public class SteamModel extends RotaryModelBase {
         shape21.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape22.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape23.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+    }
+
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

@@ -1,4 +1,8 @@
 package reika.rotarycraft.models;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -150,9 +154,8 @@ public class CVTModel extends RotaryModelBase {
     }
 
     @Override
-    public void renderToBuffer(PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-
-        root.render(stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 
     @Override

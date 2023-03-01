@@ -39,10 +39,10 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
     private HighGearModel highGearModel;
 
     public RenderAdvGear(BlockEntityRendererProvider.Context context) {
-        wormModel = new WormModel(context.bakeLayer(RotaryModelLayers.WORMMODEL));
-        cvtModel = new CVTModel(context.bakeLayer(RotaryModelLayers.CVTMODEL));
-        coilModel = new CoilModel(context.bakeLayer(RotaryModelLayers.COILMODEL));
-        highGearModel = new HighGearModel(context.bakeLayer(RotaryModelLayers.HIGHGEARMODEL));
+        wormModel = new WormModel(context.bakeLayer(RotaryModelLayers.WORM));
+        cvtModel = new CVTModel(context.bakeLayer(RotaryModelLayers.CVT));
+        coilModel = new CoilModel(context.bakeLayer(RotaryModelLayers.COIL));
+        highGearModel = new HighGearModel(context.bakeLayer(RotaryModelLayers.HIGHGEAR));
     }
 
     public void renderBlockEntityAdvancedGearAt(BlockEntityAdvancedGear tile, PoseStack stack, MultiBufferSource bufferSource, int pPackedLight) {

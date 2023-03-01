@@ -12,8 +12,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import java.util.ArrayList;
 
-public class ClutchModel extends Model {
+public class ClutchModel extends RotaryModelBase {
 
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/");
 
@@ -156,9 +160,13 @@ public class ClutchModel extends Model {
         return LayerDefinition.create(definition, 128, 32);
     }
 
-    @Override
-    public void renderToBuffer(PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        @Override
+    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
+        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+    }
 
-        root.render(stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

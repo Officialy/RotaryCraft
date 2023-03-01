@@ -1,5 +1,5 @@
 package reika.rotarycraft.modinterface.model;
-    
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
@@ -15,11 +15,16 @@ import net.minecraft.client.renderer.RenderType;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
-public class BoilerModel extends Model
-{
-    
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+
+import java.util.ArrayList;
+
+public class BoilerModel extends RotaryModelBase {
+
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/modinterface/");
-    
+
     private final ModelPart shape1b;
     private final ModelPart shape1c;
     private final ModelPart shape1d;
@@ -38,11 +43,11 @@ public class BoilerModel extends Model
     private final ModelPart p6;
     private final ModelPart shape1;
     private final ModelPart root;
-    
+
     public BoilerModel(ModelPart modelPart) {
         super(RenderType::entityCutout);
         this.root = modelPart;
-        
+
         this.shape1b = modelPart.getChild("shape1b");
         this.shape1c = modelPart.getChild("shape1c");
         this.shape1d = modelPart.getChild("shape1d");
@@ -63,136 +68,140 @@ public class BoilerModel extends Model
     }
 
     // Grab the parts in the constructor if you need them
-    
+
     public static LayerDefinition createLayer() {
         MeshDefinition definition = new MeshDefinition();
         PartDefinition root = definition.getRoot();
-        
+
         root.addOrReplaceChild("shape1b",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 0)
-                .addBox(0, 0, 0, 16, 1, 16),
-            PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 0)
+                        .addBox(0, 0, 0, 16, 1, 16),
+                PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
+
         root.addOrReplaceChild("shape1c",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 54)
-                .addBox(0, 0, 0, 16, 1, 16),
-            PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 54)
+                        .addBox(0, 0, 0, 16, 1, 16),
+                PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
+
         root.addOrReplaceChild("shape1d",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(65, 0)
-                .addBox(-0.5F, 0, -6, 1, 1, 12),
-            PartPose.offsetAndRotation(0, 21, 0, 0, 1.047198F, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(65, 0)
+                        .addBox(-0.5F, 0, -6, 1, 1, 12),
+                PartPose.offsetAndRotation(0, 21, 0, 0, 1.047198F, 0));
+
         root.addOrReplaceChild("shape1e",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(65, 0)
-                .addBox(-0.5F, 0, -6, 1, 1, 12),
-            PartPose.offsetAndRotation(0, 21, 0, 0, 0.5235988F, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(65, 0)
+                        .addBox(-0.5F, 0, -6, 1, 1, 12),
+                PartPose.offsetAndRotation(0, 21, 0, 0, 0.5235988F, 0));
+
         root.addOrReplaceChild("shape1f",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(65, 0)
-                .addBox(-0.5F, 0, -6, 1, 1, 12),
-            PartPose.offsetAndRotation(0, 21, 0, 0, -0.5235988F, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(65, 0)
+                        .addBox(-0.5F, 0, -6, 1, 1, 12),
+                PartPose.offsetAndRotation(0, 21, 0, 0, -0.5235988F, 0));
+
         root.addOrReplaceChild("shape1g",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(65, 0)
-                .addBox(-0.5F, 0, -6, 1, 1, 12),
-            PartPose.offsetAndRotation(0, 21, 0, 0, 1.570796F, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(65, 0)
+                        .addBox(-0.5F, 0, -6, 1, 1, 12),
+                PartPose.offsetAndRotation(0, 21, 0, 0, 1.570796F, 0));
+
         root.addOrReplaceChild("shape1h",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(65, 0)
-                .addBox(-0.5F, 0, -6, 1, 1, 12),
-            PartPose.offsetAndRotation(0, 21, 0, 0, -1.047198F, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(65, 0)
+                        .addBox(-0.5F, 0, -6, 1, 1, 12),
+                PartPose.offsetAndRotation(0, 21, 0, 0, -1.047198F, 0));
+
         root.addOrReplaceChild("shape1i",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(65, 0)
-                .addBox(-0.5F, 0, -6, 1, 1, 12),
-            PartPose.offsetAndRotation(0, 21, 0, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(65, 0)
+                        .addBox(-0.5F, 0, -6, 1, 1, 12),
+                PartPose.offsetAndRotation(0, 21, 0, 0, 0, 0));
+
         root.addOrReplaceChild("shape3",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 75)
-                .addBox(0, 0, 0, 1, 14, 1),
-            PartPose.offsetAndRotation(7, 9, 7, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 75)
+                        .addBox(0, 0, 0, 1, 14, 1),
+                PartPose.offsetAndRotation(7, 9, 7, 0, 0, 0));
+
         root.addOrReplaceChild("shape3a",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 75)
-                .addBox(0, 0, 0, 1, 14, 1),
-            PartPose.offsetAndRotation(-8, 9, 7, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 75)
+                        .addBox(0, 0, 0, 1, 14, 1),
+                PartPose.offsetAndRotation(-8, 9, 7, 0, 0, 0));
+
         root.addOrReplaceChild("shape3b",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 75)
-                .addBox(0, 0, 0, 1, 14, 1),
-            PartPose.offsetAndRotation(7, 9, -8, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 75)
+                        .addBox(0, 0, 0, 1, 14, 1),
+                PartPose.offsetAndRotation(7, 9, -8, 0, 0, 0));
+
         root.addOrReplaceChild("shape3c",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 75)
-                .addBox(0, 0, 0, 1, 14, 1),
-            PartPose.offsetAndRotation(-8, 9, -8, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 75)
+                        .addBox(0, 0, 0, 1, 14, 1),
+                PartPose.offsetAndRotation(-8, 9, -8, 0, 0, 0));
+
         root.addOrReplaceChild("p",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 96)
-                .addBox(0, 0, 0, 14, 14, 1),
-            PartPose.offsetAndRotation(-7, 9, 7, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 96)
+                        .addBox(0, 0, 0, 14, 14, 1),
+                PartPose.offsetAndRotation(-7, 9, 7, 0, 0, 0));
+
         root.addOrReplaceChild("p5",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(33, 75)
-                .addBox(0, 0, 0, 1, 14, 14),
-            PartPose.offsetAndRotation(7, 9, -7, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(33, 75)
+                        .addBox(0, 0, 0, 1, 14, 14),
+                PartPose.offsetAndRotation(7, 9, -7, 0, 0, 0));
+
         root.addOrReplaceChild("p3",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 96)
-                .addBox(0, 0, 0, 14, 14, 1),
-            PartPose.offsetAndRotation(-7, 9, -8, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 96)
+                        .addBox(0, 0, 0, 14, 14, 1),
+                PartPose.offsetAndRotation(-7, 9, -8, 0, 0, 0));
+
         root.addOrReplaceChild("p6",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(33, 75)
-                .addBox(0, 0, 0, 1, 14, 14),
-            PartPose.offsetAndRotation(-8, 9, -7, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(33, 75)
+                        .addBox(0, 0, 0, 1, 14, 14),
+                PartPose.offsetAndRotation(-8, 9, -7, 0, 0, 0));
+
         root.addOrReplaceChild("shape1",
-            CubeListBuilder.create()
-                .mirror(true)
-                .texOffs(0, 20)
-                .addBox(0, 0, 0, 12, 1, 12),
-            PartPose.offsetAndRotation(-6, 22, -6, 0, 0, 0));
-        
+                CubeListBuilder.create()
+                        .mirror(true)
+                        .texOffs(0, 20)
+                        .addBox(0, 0, 0, 12, 1, 12),
+                PartPose.offsetAndRotation(-6, 22, -6, 0, 0, 0));
+
         return LayerDefinition.create(definition, 128, 128);
     }
 
     @Override
-    public void renderToBuffer(PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-    
-        root.render(stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
+        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+    }
+
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

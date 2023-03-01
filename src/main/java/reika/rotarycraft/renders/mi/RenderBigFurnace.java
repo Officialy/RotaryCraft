@@ -33,7 +33,7 @@ public class RenderBigFurnace extends RotaryTERenderer<BlockEntityLavaSmeltery> 
     private BigFurnaceModel modelBigFurnace;
 
     public RenderBigFurnace(BlockEntityRendererProvider.Context ctx) {
-        modelBigFurnace = new BigFurnaceModel(ctx.bakeLayer(RotaryModelLayers.BIGFURNACE));
+        modelBigFurnace = new BigFurnaceModel(ctx.bakeLayer(RotaryModelLayers.BIG_FURNACE));
     }
 
     /**

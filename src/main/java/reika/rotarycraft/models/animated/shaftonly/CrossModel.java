@@ -19,6 +19,12 @@ import java.util.ArrayList;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+
+import java.util.ArrayList;
+
 public class CrossModel extends RotaryModelBase {
 
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/");
@@ -303,5 +309,10 @@ public class CrossModel extends RotaryModelBase {
         stack.translate(0, 1, 0);
         stack.mulPose(Axis.XN.rotationDegrees(phi2));
         stack.translate(0, -1, 0);
+    }
+
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
 }

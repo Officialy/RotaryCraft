@@ -75,7 +75,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;//RotaryBlocks.BOILER.get();
+        return RotaryBlocks.FRICTION_BOILER.get();
     }
 
     @Override
@@ -201,7 +201,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
 
     @Override
     protected String getTEName() {
-        return null;
+        return "friction_boiler";
     }
 
     @Override

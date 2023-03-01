@@ -134,6 +134,7 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Beve
         this.init();
         bevel.direction = posn;
         ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.ordinal(), bevel, posn);
+        bevel.setChanged();
     }
 
     @Override
@@ -145,7 +146,6 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Beve
 
         font.draw(poseStack, "Input Side", j + 24, k + 32, 4210752);
         font.draw(poseStack, "Output Side", j + 99, k + 32, 4210752);
-
 
         if (ConfigRegistry.COLORBLIND.getState()) {
             for (int i = 0; i < 6; i++) {

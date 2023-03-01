@@ -16,7 +16,7 @@ public class OneSlotContainer<T extends BlockEntityBase> extends CoreContainer<T
     }
 
     public OneSlotContainer(MenuType<?> type, int id, Inventory inventory, T te, int offsetY) {
-        super(type, id, inventory, te, (Container) te);
+        super(type, id, inventory, te);
         epInv = inventory;
         inv = (Container)te;
         this.addSlot(new Slot(inv, 0, 80, 35));

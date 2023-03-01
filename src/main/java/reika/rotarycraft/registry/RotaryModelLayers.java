@@ -8,15 +8,19 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.model.GearboxBaseModel;
 import reika.rotarycraft.models.*;
 import reika.rotarycraft.models.animated.*;
+import reika.rotarycraft.models.animated.shaftonly.ClutchModel;
 import reika.rotarycraft.models.animated.shaftonly.CrossModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftVModel;
 import reika.rotarycraft.models.engine.*;
 import reika.rotarycraft.modinterface.conversion.RenderMagnetic;
+import reika.rotarycraft.modinterface.model.BoilerModel;
 import reika.rotarycraft.modinterface.model.MagneticModel;
+import reika.rotarycraft.modinterface.model.SteamTurbineModel;
 import reika.rotarycraft.renders.*;
 import reika.rotarycraft.renders.dm.RenderFin;
 import reika.rotarycraft.renders.dmi.RenderGrinder;
+import reika.rotarycraft.renders.dmi.RenderWinder;
 import reika.rotarycraft.renders.m.RenderReservoir;
 import reika.rotarycraft.renders.m.RenderVanDeGraff;
 import reika.rotarycraft.renders.mi.RenderBigFurnace;
@@ -37,7 +41,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation VAN_DE_GRAFF = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "van_de_graff"), "main");
     public static final ModelLayerLocation HEAT_RAY = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "heat_ray"), "main");
     public static final ModelLayerLocation COOLING_FIN = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "cooling_fin"), "main");
-    public static final ModelLayerLocation MONITOR = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "monitor"), "main");
+    public static final ModelLayerLocation DYNOMONITOR = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "dynomonitor"), "main");
     public static final ModelLayerLocation LANDMINE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "landmine"), "main");
     public static final ModelLayerLocation DC_ENGINE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "dc_engine"), "main");
     public static final ModelLayerLocation VACCUUM = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "vacuum"), "main");
@@ -61,12 +65,26 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation GEARBOX_BASE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "gearbox_base"), "main");
     public static final ModelLayerLocation MAGNETIC = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "magnetic"), "main");
     public static final ModelLayerLocation SOLAR_TOWER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "solar_tower"), "main");
-    public static final ModelLayerLocation BIGFURNACE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "big_furnace"), "main");
-    public static final ModelLayerLocation WORMMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "worm_model"), "main");
-    public static final ModelLayerLocation CVTMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "cvt_model"), "main");
-    public static final ModelLayerLocation COILMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "coil_model"), "main");
-    public static final ModelLayerLocation HIGHGEARMODEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "high_gear_model"), "main");
+    public static final ModelLayerLocation BIG_FURNACE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "big_furnace"), "main");
+    public static final ModelLayerLocation WORM = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "worm_model"), "main");
+    public static final ModelLayerLocation CVT = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "cvt_model"), "main");
+    public static final ModelLayerLocation COIL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "coil_model"), "main");
+    public static final ModelLayerLocation HIGHGEAR = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "high_gear_model"), "main");
     public static final ModelLayerLocation GRINDER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "grinder"), "main");
+    public static final ModelLayerLocation FLYWHEEL = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "flywheel"), "main");
+    public static final ModelLayerLocation STEAM_TURBINE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "steam_turbine"), "main");
+    public static final ModelLayerLocation SPILLWAY = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "spillway"), "main");
+    public static final ModelLayerLocation DISTRIB_CLUTCH = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "distrib_clutch"), "main");
+    public static final ModelLayerLocation BOILER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "boiler"), "main");
+    public static final ModelLayerLocation BEAM_MIRROR = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "beam_mirror"), "main");
+    public static final ModelLayerLocation MULTI_CLUTCH = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "multi_clutch"), "main");
+    public static final ModelLayerLocation WINDER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "winder"), "main");
+    public static final ModelLayerLocation HEATER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "heater"), "main");
+    public static final ModelLayerLocation PUMP = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "pump"), "main");
+    public static final ModelLayerLocation AEROSOLIZER = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "aerosolizer"), "main");
+    public static final ModelLayerLocation CLUTCH = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "clutch"), "main");
+    public static final ModelLayerLocation ITEM_CANNON = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "item_cannon"), "main");
+    public static final ModelLayerLocation GRINDSTONE = new ModelLayerLocation(new ResourceLocation(RotaryCraft.MODID, "grindstone"), "main");
 
 
     public static void init(IEventBus bus) {
@@ -112,6 +130,10 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.HIGHGEAR.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COIL.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WORMGEAR.get(), RenderAdvGear::new);
+//        event.registerBlockEntityRenderer(RotaryBlockEntities.FLYWHEEL.get(), RenderFlywheel::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.WINDER.get(), RenderWinder::new);
+//        event.registerBlockEntityRenderer(RotaryBlockEntities.AEROSOLIZER.get(), AerosolizerRenderer::new);
+//        event.registerBlockEntityRenderer(RotaryBlockEntities.CLUTCH.get(), RenderClutch::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -121,12 +143,11 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(VACCUUM, VacuumModel::createLayer);
         event.registerLayerDefinition(RESERVOIR, ReservoirModel::createLayer);
         event.registerLayerDefinition(DC_ENGINE, DCModel::createLayer);
-        event.registerLayerDefinition(MONITOR, MonitorModel::createLayer);
+        event.registerLayerDefinition(DYNOMONITOR, MonitorModel::createLayer);
         event.registerLayerDefinition(PLAYER_DETECTOR, DetectorModel::createLayer);
         event.registerLayerDefinition(VAN_DE_GRAFF, VanDeGraffModel::createLayer);
         event.registerLayerDefinition(HEAT_RAY, HRayModel::createLayer);
         event.registerLayerDefinition(COOLING_FIN, FinModel::createLayer);
-        event.registerLayerDefinition(MONITOR, MonitorModel::createLayer);
         event.registerLayerDefinition(LANDMINE, LandmineModel::createLayer);
         event.registerLayerDefinition(SPLITTER, SplitterModel::createLayer);
         event.registerLayerDefinition(SPLITTER_2, SplitterModel2::createLayer);
@@ -150,11 +171,25 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(GEARBOX_16, Gearbox16Model::createLayer);
         event.registerLayerDefinition(MAGNETIC, MagneticModel::createLayer);
         event.registerLayerDefinition(SOLAR_TOWER, SolarTowerModel::createLayer);
-        event.registerLayerDefinition(BIGFURNACE, BigFurnaceModel::createLayer);
+        event.registerLayerDefinition(BIG_FURNACE, BigFurnaceModel::createLayer);
         event.registerLayerDefinition(GRINDER, GrinderModel::createLayer);
-        event.registerLayerDefinition(WORMMODEL, WormModel::createLayer);
-        event.registerLayerDefinition(CVTMODEL, CVTModel::createLayer);
-        event.registerLayerDefinition(COILMODEL, CoilModel::createLayer);
-        event.registerLayerDefinition(HIGHGEARMODEL, HighGearModel::createLayer);
+        event.registerLayerDefinition(WORM, WormModel::createLayer);
+        event.registerLayerDefinition(CVT, CVTModel::createLayer);
+        event.registerLayerDefinition(COIL, CoilModel::createLayer);
+        event.registerLayerDefinition(HIGHGEAR, HighGearModel::createLayer);
+        event.registerLayerDefinition(FLYWHEEL, FlywheelModel::createLayer);
+        event.registerLayerDefinition(STEAM_TURBINE, SteamTurbineModel::createLayer);
+        event.registerLayerDefinition(DISTRIB_CLUTCH, DistribClutchModel::createLayer);
+        event.registerLayerDefinition(BOILER, BoilerModel::createLayer);
+        event.registerLayerDefinition(BEAM_MIRROR, BeamMirrorModel::createLayer);
+        event.registerLayerDefinition(MULTI_CLUTCH, MultiClutchModel::createLayer);
+        event.registerLayerDefinition(WINDER, WinderModel::createLayer);
+        event.registerLayerDefinition(HEATER, HeaterModel::createLayer);
+        event.registerLayerDefinition(PUMP, PumpModel::createLayer);
+        event.registerLayerDefinition(AEROSOLIZER, AerosolizerModel::createLayer);
+        event.registerLayerDefinition(CLUTCH, ClutchModel::createLayer);
+        event.registerLayerDefinition(ITEM_CANNON, ItemCannonModel::createLayer);
+        event.registerLayerDefinition(GRINDSTONE, GrindstoneModel::createLayer);
+        event.registerLayerDefinition(SPILLWAY, SpillwayModel::createLayer);
     }
 }

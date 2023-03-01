@@ -14,6 +14,10 @@
 // - ZeuX
 
 package reika.rotarycraft.models;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -25,9 +29,15 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+
+import java.util.ArrayList;
 
 
-public class VLampModel extends Model {
+public class VLampModel extends RotaryModelBase {
     //fields
     public final ModelPart shape1;
     public final ModelPart shape2;
@@ -192,31 +202,34 @@ public class VLampModel extends Model {
     }
 
     @Override
-    public void renderToBuffer(PoseStack stack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
-        boolean beam = true; //todo (Boolean) li.get(0);
-        shape1.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape2.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape3.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape4.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape5.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape6.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape7.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape8.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape9.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape10.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape11.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape12.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape13.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape14.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape15.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-        shape16.render(stack, pBuffer, pPackedLight, pPackedOverlay);
+    public void renderAll(PoseStack stack, VertexConsumer pBuffer, int pPackedLight, BlockEntity te, ArrayList<?> li, float phi, float theta) {
+        boolean beam = (Boolean) li.get(0);
+        shape1.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape2.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape3.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape4.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape5.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape6.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape7.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape8.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape9.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape10.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape11.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape12.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape13.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape14.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape15.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        shape16.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
         if (beam) {
-            shape17.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-            shape17b.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-            shape18.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-            shape18b.render(stack, pBuffer, pPackedLight, pPackedOverlay);
-            shape19.render(stack, pBuffer, pPackedLight, pPackedOverlay);
+            shape17.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+            shape17b.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+            shape18.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+            shape18b.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
+            shape19.render(stack, pBuffer, pPackedLight, OverlayTexture.NO_OVERLAY);
         }
     }
-
+    @Override
+    public ResourceLocation getTexture() {
+        return LampModel.TEXTURE_LOCATION;
+    }
 }

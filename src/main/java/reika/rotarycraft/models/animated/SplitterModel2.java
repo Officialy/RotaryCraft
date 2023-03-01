@@ -1,5 +1,11 @@
 package reika.rotarycraft.models.animated;
 
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryModelBase;
+
+import java.util.ArrayList;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
@@ -14,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
-public class SplitterModel2 extends Model {
+public class SplitterModel2 extends RotaryModelBase {
 
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/bedsplittertex.png");
 
@@ -222,10 +228,14 @@ public class SplitterModel2 extends Model {
         return LayerDefinition.create(definition, 128, 32);
     }
 
-    // May need to implement the rendering parts depending on what you are doing
+    @Override
+    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
+        main.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+    }
 
     @Override
-    public void renderToBuffer(PoseStack stack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
-        main.render(stack, pBuffer, pPackedLight, pPackedOverlay);
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
     }
+
 }

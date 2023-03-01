@@ -1,61 +1,57 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.gui.container.machine.inventory;
-//
-//import net.minecraft.core.BlockPos;
-//import net.minecraft.network.FriendlyByteBuf;
-//import net.minecraft.world.entity.player.Inventory;
-//import net.minecraft.world.inventory.Slot;
-//import net.minecraft.world.level.Level;
-//import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraftforge.network.IContainerFactory;
-//import reika.rotarycraft.base.IOMachineMenu;
-//import reika.rotarycraft.blockentities.engine.BlockEntityGasEngine;
-//import reika.rotarycraft.registry.RotaryMenuTypes;
-//
-//public class ContainerEthanol extends IOMachineMenu {
-//    private final BlockEntityGasEngine engine;
-//
-//    public ContainerEthanol(final int id, Inventory player, BlockEntityGasEngine te) {
-//        super(RotaryMenuTypes.GAS_ENGINE.get(), id, player, te);
-//        engine = te;
-//        int getX = engine.getBlockPos().getX();
-//        int posY = engine.getBlockPos().getY();
-//        int posZ = engine.getBlockPos().getZ();
-//        this.addSlot(new Slot(te, 0, 61, 36));
-//
-//        this.addPlayerInventory(player);
-//    }
-//
-//    /**
-//     * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
-//     */
-////    @Override
-////    public void broadcastChanges() {
-////        super.broadcastChanges();
-////
-////        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, Engine, "fuel");
-////    }
-//
-//    public static class Factory implements IContainerFactory<ContainerEthanol> {
-//        @Override
-//        public ContainerEthanol create(final int id, final Inventory inv, final FriendlyByteBuf data) {
-//            final BlockPos pos = data.readBlockPos();
-//            final Level world = inv.player.getCommandSenderWorld();
-//            final BlockEntity blockEntity = world.getBlockEntity(pos);
-//
-//            if (!(blockEntity instanceof BlockEntityGasEngine)) {
-//                throw new IllegalStateException("Invalid block at:" + pos);
-//            }
-//
-//            return new ContainerEthanol(id, inv, (BlockEntityGasEngine) blockEntity);
-//        }
-//    }
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.container.machine.inventory;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.SlotItemHandler;
+import reika.dragonapi.libraries.io.ReikaPacketHelper;
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.base.IOMachineContainer;
+import reika.rotarycraft.blockentities.engine.BlockEntityGasEngine;
+import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
+import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.registry.RotaryMenus;
+
+public class ContainerEthanol extends IOMachineContainer<BlockEntityGasEngine> {
+    private final BlockEntityGasEngine engine;
+
+    //Client
+    public ContainerEthanol(int id, Inventory inv, FriendlyByteBuf data) {
+        this(id, inv, (BlockEntityGasEngine) inv.player.level.getBlockEntity(data.readBlockPos()));
+    }
+
+    public ContainerEthanol(final int id, Inventory player, BlockEntityGasEngine engine) {
+        super(RotaryMenus.GAS_ENGINE.get(), id, player, engine);
+        this.engine = engine;
+        this.engine.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
+            this.addSlot(new SlotItemHandler(itemHandler, 0, 61, 36) {
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    return stack.getItem() == RotaryItems.ETHANOL.get();
+                }
+            });
+        });
+        this.addPlayerInventory(player);
+    }
+
+    /**
+     * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
+     */
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+
+        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, engine, "fuel");
+    }
+
+}

@@ -145,7 +145,7 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase implements 
 
     @Override
     public Component getDisplayName() {
-        return Component.literal(getName());
+        return Component.literal(getTEName());
     }
 
     @Nullable

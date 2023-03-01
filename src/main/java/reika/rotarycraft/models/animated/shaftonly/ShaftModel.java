@@ -182,4 +182,9 @@ public class ShaftModel extends RotaryModelBase {
         shape10.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape11.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
+
+    @Override
+    public ResourceLocation getTexture() {
+        return TEXTURE_LOCATION;
+    }
 }
