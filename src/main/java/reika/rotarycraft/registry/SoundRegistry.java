@@ -175,7 +175,6 @@ public enum SoundRegistry implements SoundEnum {
     public void playSoundNoAttenuation(Level world, BlockPos pos, float vol, float pitch, int broadcast) {
         if (world.isClientSide())
             return;
-//        ReikaSoundHelper.playSound(this, RotaryCraft.packetChannel, world, pos, vol/* *this.getModulatedVolume()*/, pitch, false);
         ReikaPacketHelper.sendSoundPacket(this, world, pos.getX(), pos.getY(), pos.getZ(), vol, pitch, false, broadcast);
     }
 

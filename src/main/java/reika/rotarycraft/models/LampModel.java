@@ -22,7 +22,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import reika.rotarycraft.RotaryCraft;
 
-@OnlyIn(Dist.CLIENT)
+
 public class LampModel extends RotaryModelBase {
     public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/lamptex.png");
     private final ModelPart shape1;

@@ -71,8 +71,8 @@ public class PacketHandlerCore implements PacketHandler {
         UUID id = null;
         //System.out.print(packet.length);
         try {
-            ReikaJavaLibrary.pConsole(inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt()+":"+inputStream.readInt());
             PacketTypes packetType = packet.getType();
+            ReikaJavaLibrary.pConsole("Recieved packet type: " + packetType + "\n" + "Containing data: " + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt());
             switch (packetType) {
                 case FULLSOUND:
                     break;
