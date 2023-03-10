@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class ClutchModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/");
+    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/shafttex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;

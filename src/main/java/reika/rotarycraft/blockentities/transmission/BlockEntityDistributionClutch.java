@@ -67,7 +67,7 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
         return true;
     }
 
-    //    @Override
+        @Override
     protected void animateWithTick(Level world, BlockPos pos) {
 //        if (!this.isisInWorld()) {
 //            phi = 0;

@@ -170,6 +170,7 @@ public class RotaryCraft extends DragonAPIMod {
 
     public void clientSetup(final FMLClientSetupEvent event) {
         sounds.register();
+        LOGGER.info(SoundRegistry.PULSEJET.getPath());
         MenuScreens.register(RotaryMenus.STEAM_ENGINE.get(), SteamScreen::new);
         MenuScreens.register(RotaryMenus.GEARBOX.get(), GearboxScreen::new);
         MenuScreens.register(RotaryMenus.RESERVOIR.get(), ReservoirScreen::new);

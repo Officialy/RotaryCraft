@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.interfaces.blockentity.GuiController;
+import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.ComplexIO;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
@@ -104,13 +105,14 @@ public class BlockEntityMultiClutch extends BlockEntity1DTransmitter implements 
         }
     }
 
-//    protected void animateWithTick(Level world, BlockPos pos) {
-//        if (!this.isInWorld()) {
-//            phi = 0;
-//            return;
-//        }
-//        phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
-//    }
+    @Override
+    protected void animateWithTick(Level world, BlockPos pos) {
+        if (!this.isInWorld()) {
+            phi = 0;
+            return;
+        }
+        phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
+    }
 
     @Override
     public MachineRegistry getMachine() {
@@ -136,11 +138,6 @@ public class BlockEntityMultiClutch extends BlockEntity1DTransmitter implements 
         this.transferPower(world, pos);
 
         this.basicPowerReceiver();
-    }
-
-    @Override
-    protected void animateWithTick(Level level, BlockPos blockPos) {
-
     }
 
     @Override

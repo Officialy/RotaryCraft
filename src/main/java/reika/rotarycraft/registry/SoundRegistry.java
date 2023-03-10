@@ -10,12 +10,14 @@
 package reika.rotarycraft.registry;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
+import reika.dragonapi.interfaces.registry.CustomDistanceSound;
 import reika.dragonapi.interfaces.registry.SoundEnum;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.io.ReikaSoundHelper;
@@ -27,7 +29,7 @@ import java.util.HashMap;
 
 import static net.minecraft.sounds.SoundSource.MASTER;
 
-public enum SoundRegistry implements SoundEnum {
+public enum SoundRegistry implements CustomDistanceSound {
 
     ELECTRIC("#elecengine"),
     WIND("#windengine"),
@@ -77,7 +79,6 @@ public enum SoundRegistry implements SoundEnum {
     GATLING("gatling"),
     FLAMETURRET("flameturret");
 
-    public static final String PREFIX = "reika/rotarycraft/";
     public static final String SOUND_FOLDER = "sounds/";
     private static final String SOUND_DIR = "sounds/";
     private static final String SOUND_EXT = ".ogg";
@@ -90,7 +91,7 @@ public enum SoundRegistry implements SoundEnum {
         }
     }
 
-    private final String path;
+    private final ResourceLocation path;
     private final String name;
     private boolean isVolumed = false;
 
@@ -101,9 +102,9 @@ public enum SoundRegistry implements SoundEnum {
         }
         name = n;
         if (this.isNote())
-            path = PREFIX + SOUND_FOLDER + MUSIC_FOLDER + name + SOUND_EXT;
+            path = new ResourceLocation(RotaryCraft.MODID,SOUND_FOLDER + MUSIC_FOLDER + name + SOUND_EXT);
         else
-            path = PREFIX + SOUND_FOLDER + name + SOUND_EXT;
+            path = new ResourceLocation(RotaryCraft.MODID, SOUND_FOLDER + name + SOUND_EXT);
     }
 
     public static SoundRegistry getNoteFromVoiceAndPitch(SoundRegistry voice, String pitch) {
@@ -182,7 +183,7 @@ public enum SoundRegistry implements SoundEnum {
         return this.name();
     }
 
-    public String getPath() {
+    public ResourceLocation getPath() {
         return path;
     }
 
@@ -220,5 +221,13 @@ public enum SoundRegistry implements SoundEnum {
     @Override
     public boolean preload() {
         return this == JETSTART;
+    }
+
+    @Override
+    public float getAudibleDistance() {
+        return switch (this) {
+            case JET, JETSTART -> 40;
+            default -> -1;
+        };
     }
 }
