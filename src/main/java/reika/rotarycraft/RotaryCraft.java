@@ -29,10 +29,14 @@ import reika.dragonapi.auxiliary.trackers.DonatorController;
 import reika.dragonapi.auxiliary.trackers.PlayerFirstTimeTracker;
 import reika.dragonapi.auxiliary.trackers.PlayerHandler;
 import reika.dragonapi.base.DragonAPIMod;
+import reika.dragonapi.instantiable.data.collections.OneWayCollections;
+import reika.dragonapi.instantiable.io.CustomRecipeList;
 import reika.dragonapi.instantiable.io.SoundLoader;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.rotarycraft.auxiliary.*;
+import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler;
+import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
 import reika.rotarycraft.gui.screen.GuiHandCraft;
 import reika.rotarycraft.gui.screen.machine.*;
 import reika.rotarycraft.gui.screen.machine.inventory.*;
@@ -41,6 +45,7 @@ import reika.rotarycraft.registry.RotaryItems;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 
 @Mod(RotaryCraft.MODID)
 public class RotaryCraft extends DragonAPIMod {
@@ -84,6 +89,10 @@ public class RotaryCraft extends DragonAPIMod {
         instance = this;
 
         this.basicSetup();
+        config = new RotaryConfig(instance, ConfigRegistry.optionList, null);
+        config.loadSubfolderedConfigFile();
+        config.initProps();
+
         modEventBus.addListener(this::commonSetup);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             // Client setup
@@ -137,10 +146,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 
     public void commonSetup(final FMLCommonSetupEvent evt) {
-
-        config = new RotaryConfig(instance, ConfigRegistry.optionList, null);
-        config.loadSubfolderedConfigFile();
-        config.initProps();
         if (ConfigRegistry.HANDBOOK.getState())
             PlayerFirstTimeTracker.addTracker(new HandbookTracker());
         PlayerHandler.instance.registerTracker(HandbookNotifications.HandbookConfigVerifier.instance);
@@ -161,6 +166,8 @@ public class RotaryCraft extends DragonAPIMod {
             }
 //            TimeTorchHelper.blacklistBlockEntity(type.engineClass);
         }
+        loadMachineRecipeHandlers();
+        addPostLoadRecipes();
 
       /*todo  if (RotaryConfig.Common.ACHIEVEMENTS.get()) {
             achievements = new Advancement[RotaryAdvancements.list.length];
@@ -199,4 +206,33 @@ public class RotaryCraft extends DragonAPIMod {
     public String getModAuthorName() {
         return "Reika";
     }
+
+    private static final Collection<RecipeHandler> recipeHandlers = new OneWayCollections.OneWayList<>();
+    public static void addPostLoadRecipes() {
+        for (RecipeHandler h : recipeHandlers) {
+            h.addPostLoadRecipes();
+            h.loadCustomRecipeFiles();
+        }
+    }
+
+
+    public static void loadMachineRecipeHandlers() {
+//        loadRecipeHandler(WorktableRecipes.getInstance());
+//        loadRecipeHandler(RecipesBlastFurnace.getRecipes());
+//        loadRecipeHandler(RecipesCentrifuge.getRecipes());
+//        loadRecipeHandler(RecipesCompactor.getRecipes());
+//        loadRecipeHandler(RecipesCrystallizer.getRecipes());
+//        loadRecipeHandler(RecipesDryingBed.getRecipes());
+//        loadRecipeHandler(RecipesFrictionHeater.getRecipes());
+        loadRecipeHandler(RecipesGrinder.getRecipes());
+//        loadRecipeHandler(RecipesLavaMaker.getRecipes());
+//        loadRecipeHandler(RecipesPulseFurnace.getRecipes());
+//        loadRecipeHandler(RecipesWetter.getRecipes());
+//        loadRecipeHandler(RecipesMagnetizer.getRecipes());
+    }
+
+    private static void loadRecipeHandler(RecipeHandler handler) {
+        recipeHandlers.add(handler);
+    }
+
 }

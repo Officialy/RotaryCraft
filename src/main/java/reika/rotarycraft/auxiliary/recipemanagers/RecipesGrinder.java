@@ -10,6 +10,7 @@
 package reika.rotarycraft.auxiliary.recipemanagers;
 
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ForgeItemTagsProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 import reika.dragonapi.ModList;
 import reika.dragonapi.exception.MisuseException;
@@ -46,7 +48,11 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
     public static final int ore_rate = 3;
 
-    private final ItemHashMap<GrinderRecipe> recipes = new ItemHashMap();
+    private final ItemHashMap<GrinderRecipe> recipes = new ItemHashMap<>();
+
+    public static final RecipesGrinder getRecipes() {
+        return grinderRecipes;
+    }
 
     private RecipesGrinder() {
         super(MachineRegistry.GRINDER);
@@ -84,7 +90,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
         for (int i = 0; i < ReikaTreeHelper.treeList.length; i++) {
             ReikaTreeHelper tree = ReikaTreeHelper.treeList[i];
             this.addRecipe(tree.getLog().asItemStack(), this.getSizedSawdust(16), RecipeLevel.PERIPHERAL);
-//            todo this.addRecipe(new ItemStack(Blocks.PLANKS, 1, tree.ordinal()), this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
+            this.addRecipe(tree.getPlank().asItemStack(), this.getSizedSawdust(4), RecipeLevel.PERIPHERAL);
         }
         this.addRecipe(Blocks.NOTE_BLOCK, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
         this.addRecipe(Blocks.JUKEBOX, this.getSizedSawdust(32), RecipeLevel.PERIPHERAL);
@@ -181,30 +187,6 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
     }
 
-	/*
-	private static class GrinderRecipe {
-
-		private final ItemStack input;
-		private final ItemStack output1;
-		private final ItemStack output2;
-
-		private GrinderRecipe(ItemStack in, ItemStack out1, ItemStack out2) {
-			input = in;
-			output1 = out1;
-			output2 = out2;
-		}
-
-		public ItemStack[] getOutputs() {
-			return output2 != null ? new ItemStack[]{output1.copy(), output2.copy()} : new ItemStack[]{output1.copy()};
-		}
-
-		public boolean makesItem(ItemStack is) {
-			return ReikaItemHelper.matchStacks(is, output1) || (output2 != null && ReikaItemHelper.matchStacks(is, output2));
-		}
-
-	}
-	 */
-
     private ItemStack getSizedSawdust(int size) {
         return ReikaItemHelper.getSizedItemStack(RotaryItems.SAWDUST.get().getDefaultInstance(), size);
     }
@@ -291,7 +273,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 /*		if (ModList.APPENG.isLoaded()) {
 			ItemStack cry = AppEngHandler.getInstance().getCertusQuartz();
 			ItemStack dust = AppEngHandler.getInstance().getCertusQuartzDust();
-			if (cry != null && dust != null) {
+			if (!cry.isEmpty() && !dust.isEmpty()) {
 				this.addRecipe(cry, dust, RecipeLevel.MODINTERACT);
 			}
 			else {
@@ -300,7 +282,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 			ItemStack fluix = AppEngHandler.getInstance().getFluixCrystal();
 			ItemStack fluixdust = AppEngHandler.getInstance().getFluixDust();
-			if (fluix != null && fluixdust != null) {
+			if (!fluix.isEmpty() && !fluixdust.isEmpty()) {
 				this.addRecipe(fluix, fluixdust, RecipeLevel.MODINTERACT);
 			}
 			else {
@@ -336,12 +318,12 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 		}*/
 
         ItemStack dust = ReikaItemHelper.lookupItem("exnihilo:dust");
-        if (dust != null) {
+        if (!dust.isEmpty()) {
             this.addRecipe(Blocks.SAND, dust, RecipeLevel.MODINTERACT);
         }
 
         ItemStack endDust = ReikaItemHelper.lookupItem("exnihilo:exnihilo.gravel_ender");
-        if (endDust != null) {
+        if (!endDust.isEmpty()) {
             this.addRecipe(Blocks.END_STONE, endDust, RecipeLevel.MODINTERACT);
         }
 
@@ -351,7 +333,7 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
         if (ModList.HARVESTCRAFT.isLoaded()) {
             ItemStack corn = ReikaItemHelper.lookupItem("harvestcraft:cornItem");
             ItemStack fla = ReikaItemHelper.lookupItem("harvestcraft:cornflakesItem");
-            if (corn != null && fla != null)
+            if (!corn.isEmpty() && !fla.isEmpty())
                 this.addRecipe(corn, ReikaItemHelper.getSizedItemStack(fla, 3), RecipeLevel.MODINTERACT);
         }
 
@@ -383,15 +365,15 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
 
 
     private void addOreRecipes() {
-/*        enum Ores {
-            COAL("Coal", Blocks.COAL_ORE, Items.COAL.getDefaultInstance(), 1, "oreCoal", "itemCoal", OreType.OreRarity.COMMON),
-            IRON("Iron", Blocks.IRON_ORE, Items.IRON_INGOT.getDefaultInstance(), 1, "ingotIron", OreType.OreRarity.AVERAGE),
-            GOLD("Gold", Blocks.GOLD_ORE, Items.GOLD_INGOT.getDefaultInstance(), 1, "ingotGold", OreType.OreRarity.SCATTERED),
-            REDSTONE("Redstone", Blocks.REDSTONE_ORE, Items.REDSTONE.getDefaultInstance(), 1, "oreRedstone", "dustRedstone", OreType.OreRarity.COMMON),
-            LAPIS("Lapis Lazuli", Blocks.LAPIS_ORE, Items.LAPIS_LAZULI.getDefaultInstance(), 1, "oreLapis", "gemLapis", OreType.OreRarity.SCARCE),
-            DIAMOND("Diamond", Blocks.DIAMOND_ORE, Items.DIAMOND.getDefaultInstance(), 1, "oreDiamond", "gemDiamond", OreType.OreRarity.SCARCE),
-            EMERALD("Emerald", Blocks.EMERALD_ORE, Items.EMERALD.getDefaultInstance(), 1, BlockTags.EMERALD_ORES, "gemEmerald", OreType.OreRarity.RARE),
-            QUARTZ("Nether Quartz", Blocks.NETHER_QUARTZ_ORE, Items.QUARTZ.getDefaultInstance(), 1, "oreQuartz", "itemQuartz", OreType.OreRarity.EVERYWHERE);
+        enum Ores {
+            COAL("Coal", Blocks.COAL_ORE, Items.COAL.getDefaultInstance(), 1, BlockTags.COAL_ORES, Tags.Items.ORES_COAL, OreType.OreRarity.COMMON), //todo item tag for coal? missing idfk
+            IRON("Iron", Blocks.IRON_ORE, Items.IRON_INGOT.getDefaultInstance(), 1, BlockTags.IRON_ORES, Tags.Items.INGOTS_IRON, OreType.OreRarity.AVERAGE),
+            GOLD("Gold", Blocks.GOLD_ORE, Items.GOLD_INGOT.getDefaultInstance(), 1, BlockTags.GOLD_ORES, Tags.Items.INGOTS_GOLD, OreType.OreRarity.SCATTERED),
+            REDSTONE("Redstone", Blocks.REDSTONE_ORE, Items.REDSTONE.getDefaultInstance(), 1, BlockTags.REDSTONE_ORES, Tags.Items.DUSTS_REDSTONE, OreType.OreRarity.COMMON),
+            LAPIS("Lapis Lazuli", Blocks.LAPIS_ORE, Items.LAPIS_LAZULI.getDefaultInstance(), 1, BlockTags.LAPIS_ORES, Tags.Items.GEMS_LAPIS, OreType.OreRarity.SCARCE),
+            DIAMOND("Diamond", Blocks.DIAMOND_ORE, Items.DIAMOND.getDefaultInstance(), 1, BlockTags.DIAMOND_ORES, Tags.Items.GEMS_DIAMOND, OreType.OreRarity.SCARCE),
+            EMERALD("Emerald", Blocks.EMERALD_ORE, Items.EMERALD.getDefaultInstance(), 1, BlockTags.EMERALD_ORES, Tags.Items.GEMS_EMERALD, OreType.OreRarity.RARE),
+            QUARTZ("Nether Quartz", Blocks.NETHER_QUARTZ_ORE, Items.QUARTZ.getDefaultInstance(), 1, Tags.Blocks.ORES_QUARTZ, Tags.Items.GEMS_QUARTZ, OreType.OreRarity.EVERYWHERE);
 
             private String name;
             private ItemStack drop;
@@ -413,11 +395,12 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
             }
         }
 
-        for (int i = 0; i < 9; i++) {
+      /* todo ore flakes
+           for (int i = 0; i < 9; i++) {
             Ores ore = Ores.oreList[i];
             ItemStack is = ore.drop;
             if (recipes.containsKey(is)) {
-                Ores mod = Ores.oreList[recipes.get(is).output.getItemDamage()];
+                Ores mod = Ores.oreList[recipes.get(is).output.getItem().getItemDamage()];
                 RotaryCraft.LOGGER.info("Ore " + is.getDisplayName() + " is being skipped for grinder registration as " + ore + " as it is already registered to " + mod);
             } else {
                 ItemStack flake = RotaryItems.EXTRACTS.getCraftedMetadataProduct(ore_rate, 24 + ore.ordinal());
@@ -427,28 +410,28 @@ public class RecipesGrinder extends RecipeHandler implements GrinderManager {
                     n *= 3;
                 RotaryCraft.LOGGER.info("Adding " + n + "x grinder recipe for " + ore + " ore " + is);
             }
-        }*/
+    }*/
 
-/*		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			ModOreList ore = ModOreList.oreList[i];
-			Collection<ItemStack> li = ore.getAllOreBlocks();
-			int n = ore_rate;
-			if (ore.isNetherOres())
-				n *= 2;
-			else if (ore.getRarity() == OreType.OreRarity.RARE)
-				n *= 3;
-			for (ItemStack is : li) {
-				if (recipes.containsKey(is)) {
-					OreType mod = ExtractorModOres.getOreFromExtract(recipes.get(is).output);
-					RotaryCraft.LOGGER.info("Ore "+is.getDisplayName()+" is being skipped for grinder registration as "+ore+" as it is already registered to "+mod);
-				}
-				else {
-					ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
-					this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, n), RecipeLevel.CORE);
-					RotaryCraft.LOGGER.info("Adding "+(n)+"x grinder recipe for "+ore+" ore "+is);
-				}
-			}
-		}*/
+        for (int i = 0; i < ModOreList.oreList.length; i++) {
+            ModOreList ore = ModOreList.oreList[i];
+            Collection<ItemStack> li = ore.getAllOreBlocks();
+            int n = ore_rate;
+            if (ore.isNetherOres())
+                n *= 2;
+            else if (ore.getRarity() == OreType.OreRarity.RARE)
+                n *= 3;
+            for (ItemStack is : li) {
+             /*  todo modded ore extracts
+                   if (recipes.containsKey(is)) {
+                    OreType mod = ExtractorModOres.getOreFromExtract(recipes.get(is).output);
+                    RotaryCraft.LOGGER.info("Ore " + is.getDisplayName() + " is being skipped for grinder registration as " + ore + " as it is already registered to " + mod);
+                } else {
+                    ItemStack flake = ExtractorModOres.getFlakeProduct(ore);
+                    this.addRecipe(is, ReikaItemHelper.getSizedItemStack(flake, n), RecipeLevel.CORE);
+                    RotaryCraft.LOGGER.info("Adding " + (n) + "x grinder recipe for " + ore + " ore " + is);
+                }*/
+            }
+        }
 
 		/*if (ModList.GREGTECH.isLoaded()) {
 			this.loadGTOres();

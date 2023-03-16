@@ -240,7 +240,7 @@ public abstract class RecipeHandler implements FlexibleIngredient.IngredientIDHa
                 }
             }
         }
-        else {/*
+        else {/* reika commented out
 			crl.createFolders();
 			for (Collection c : this.getRecipes(RecipeLevel.CORE))
 				crl.addToExample(createLuaBlock(c));
