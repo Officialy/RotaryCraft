@@ -52,7 +52,7 @@
 //            li.add(Component.literal("No Crafting Pattern."));
 //        }
 //        else {
-//            ItemStack item = this.getRecipeOutput(is);
+//            ItemStack item = this.getResult(is);
 //            if (item != null) {
 //                li.add(Component.literal("Crafts "+item.getCount()+" "+item.getDisplayName()));//+" with:");
 //            }
@@ -63,7 +63,7 @@
 //        li.add(Component.literal("Recipe Mode: "+this.getMode(is).displayName));
 //    }
 //
-//    public static ItemStack getRecipeOutput(ItemStack is) {
+//    public static ItemStack getResult(ItemStack is) {
 //        ItemStack item = is.getTag() != null ? ItemStack.of(is.getTag().getCompound("output")) : null;
 //        return item != null ? item.copy() : null;
 //    }
@@ -135,7 +135,7 @@
 ///*    @Override
 //    public boolean onRender(RenderItem ri, ItemStack is, ItemRenderType type) {
 //        if (type == ItemRenderType.INVENTORY && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-//            ItemStack out = this.getRecipeOutput(is);
+//            ItemStack out = this.getResult(is);
 //            if (out != null) {
 //                double s = 0.0625;
 //                GL11.glScaled(s, -s, s);

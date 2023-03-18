@@ -81,7 +81,7 @@
 //	}
 //
 //	@Override
-//	public Object getRecipeOutput(ItemStack input) {
+//	public Object getResult(ItemStack input) {
 //		ItemStack is = RotaryItems.BEDREVEAL.getEnchantedStack();
 //		ReikaNBTHelper.combineNBT(is.stackTagCompound, cachedCentralInput.stackTagCompound);
 //		return is;

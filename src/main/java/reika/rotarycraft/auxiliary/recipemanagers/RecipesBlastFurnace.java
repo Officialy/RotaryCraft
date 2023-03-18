@@ -130,17 +130,17 @@
 //		return BlastFurnaceBase;
 //	}
 //
-//	public void addRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
+//	public void addRecipe(ItemStack out, int temperature, IReikaRecipe in, int speed, float xp) {
 //		BlastCrafting c = new BlastCrafting(out, temperature, speed, in, xp);
 //		this.addCrafting(c, RecipeLevel.CORE);
 //	}
 //
-//	public void addAlloyingRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
+//	public void addAlloyingRecipe(ItemStack out, int temperature, IReikaRecipe in, int speed, float xp) {
 //		BlastCrafting c = new BlastCrafting(out, temperature, speed, in, xp).setAlloying();
 //		this.addCrafting(c, RecipeLevel.CORE);
 //	}
 //
-//	public void add3x3AlloyingRecipe(ItemStack out, int temperature, IRecipe in, int speed, float xp) {
+//	public void add3x3AlloyingRecipe(ItemStack out, int temperature, IReikaRecipe in, int speed, float xp) {
 //		//ShapedRecipes r = ReikaRecipeHelper.getShapedRecipeFor(out, in);
 //		ShapedOreRecipe r = new ShapedOreRecipe(out, in);
 //		BlastCrafting c = new BlastCrafting(out, temperature, speed, r, xp).setAlloying();

@@ -25,11 +25,14 @@ import reika.dragonapi.ModList;
 import reika.dragonapi.exception.RegistrationException;
 import reika.dragonapi.instantiable.data.immutable.ImmutableArray;
 import reika.dragonapi.instantiable.data.maps.BlockMap;
+import reika.dragonapi.interfaces.IReikaRecipe;
 import reika.dragonapi.interfaces.registry.TileEnum;
 import reika.dragonapi.modregistry.PowerTypes;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.ModDependency;
 import reika.rotarycraft.auxiliary.interfaces.*;
+import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler;
+import reika.rotarycraft.auxiliary.recipemanagers.WorktableRecipes;
 import reika.rotarycraft.base.RotaryModelBase;
 import reika.rotarycraft.base.blockentity.*;
 import reika.rotarycraft.blockentities.*;
@@ -952,9 +955,66 @@ public enum MachineRegistry implements TileEnum {
         return this.isSolidBottom();
     }
 
-/*    public boolean isCreativeTabValid(CreativeModeTab tab) {
-//      todo  if (this == BELT || this == CHAIN || this == POWERBUS || this == BUSCONTROLLER || BlockEntityTransmissionMachine.class.isAssignableFrom(te))
-//            return tab == RotaryCraft.ROTARY_POWER;
-        return tab == RotaryCraft.ROTARY;
-    }*/
+    /*    public boolean isCreativeTabValid(CreativeModeTab tab) {
+    //      todo  if (this == BELT || this == CHAIN || this == POWERBUS || this == BUSCONTROLLER || BlockEntityTransmissionMachine.class.isAssignableFrom(te))
+    //            return tab == RotaryCraft.ROTARY_POWER;
+            return tab == RotaryCraft.ROTARY;
+        }*/
+    /** Is the machine crucial to the mod (i.e. the techtree, realism, usability, or balance is damaged by its removal) */
+    public boolean isCrucial() {
+        if (this.isPipe())
+            return true;
+        if (this.isCritical())
+            return true;
+        return switch (this) {
+            case /*BEDROCKBREAKER,*/ STEAM_ENGINE,
+                    PERFORMANCE_ENGINE,
+                    MICRO_TURBINE,
+                    GAS_ENGINE,
+                    DC_ENGINE,
+                    AC_ENGINE, WOOD_SHAFT,
+                    STONE_SHAFT,
+                    HSLA_SHAFT,
+                    TUNGSTEN_SHAFT,
+                    DIAMOND_SHAFT,
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, /*COMPACTOR, BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER,*/ HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER/*, PIPEPUMP, CENTRIFUGE, DRYING, WETTER*/ ->
+                    true;
+            default -> false;
+        };
+    }
+
+    public boolean isCritical() {
+        if (this.isPipe())
+            return true;
+        return switch (this) {
+            case /*BEDROCKBREAKER, ENGINE, SHAFT, */
+                    BEVELGEARS, SPLITTER, GEARBOX,
+                    /*FERMENTER,*/ GRINDER,/* COMPACTOR,*/ PUMP,
+                    /*EXTRACTOR, FAN, FRACTIONATOR,*/ HEATER,
+                    HEATRAY, WINDER, /*ADVANCEDGEARS, BLASTFURNACE,
+                    MAGNETIZER, FRICTION,*/ COOLINGFIN, /*WORKTABLE, */
+                    MULTICLUTCH, SORTING, /*FERTILIZER, AGGREGATOR,
+                    FILLINGSTATION, BELT,*/ VANDEGRAFF,/* BUSCONTROLLER,
+                    POWERBUS,*/ BLOWER, REFRIGERATOR/*, CRAFTER,
+                    PIPEPUMP, CENTRIFUGE, DRYING, WETTER */->
+                    true;
+            default -> false;
+        };
+    }
+    public boolean isCraftable() {
+        if (requirement != null && !requirement.isLoaded())
+            return false;
+        if (powertype != null && !powertype.isLoaded())
+            return false;
+        return !this.isDummiedOut() && !this.isTechnical() && !this.isConfigDisabled();
+    }
+
+    public void addRecipe(IReikaRecipe ir) {
+        if (this.isCraftable()) {
+            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeHandler.RecipeLevel.CORE : RecipeHandler.RecipeLevel.PROTECTED);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(ir);
+            }
+        }
+    }
 }

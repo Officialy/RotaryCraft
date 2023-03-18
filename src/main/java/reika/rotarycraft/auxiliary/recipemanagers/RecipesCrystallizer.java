@@ -169,7 +169,7 @@
 //				for (Object o : li) {
 //					ItemStack cast = SmelteryRecipeHandler.getRecipeCast(o);
 //					if (ReikaItemHelper.matchStacks(cast, TinkerToolHandler.getInstance().getIngotCast())) {
-//						ItemStack out = SmelteryRecipeHandler.getRecipeOutput(o);
+//						ItemStack out = SmelteryRecipeHandler.getResult(o);
 //						FluidStack fs = SmelteryRecipeHandler.getRecipeFluid(o);
 //
 //						if (ModList.IC2.isLoaded() && fs.getFluid().getName().toLowerCase(Locale.ENGLISH).equals("steel.molten")) { //prevent steel -> refined iron

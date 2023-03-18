@@ -65,16 +65,16 @@ public class ContainerHandCraft extends AbstractContainerMenu {
         slotChangedCraftingGrid(this, level, player, this.craftMatrix, this.craftResult);
     }
 
-    protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_) {
-        if (!p_150548_.isClientSide) {
+    protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level level, Player p_150549_, CraftingContainer container, ResultContainer p_150551_) {
+        if (!level.isClientSide) {
             ServerPlayer serverplayer = (ServerPlayer) p_150549_;
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = p_150548_.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, p_150550_, p_150548_);
+            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container, level);
             if (optional.isPresent()) {
                 CraftingRecipe craftingrecipe = optional.get();
-                if (p_150551_.setRecipeUsed(p_150548_, serverplayer, craftingrecipe)) {
-                    ItemStack itemstack1 = craftingrecipe.assemble(p_150550_);
-                    if (itemstack1.isItemEnabled(p_150548_.enabledFeatures())) {
+                if (p_150551_.setRecipeUsed(level, serverplayer, craftingrecipe)) {
+                    ItemStack itemstack1 = craftingrecipe.assemble(container);
+                    if (itemstack1.isItemEnabled(level.enabledFeatures())) {
                         itemstack = itemstack1;
                     }
                 }

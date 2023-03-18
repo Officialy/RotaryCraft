@@ -343,7 +343,7 @@
 //
 //    private ItemStack getOutput(ItemStack is) {
 //        if (is.getItem() == RotaryItems.CRAFTPATTERN.get() && is.getTag() != null && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING) {
-//            return ItemCraftPattern.getRecipeOutput(is);
+//            return ItemCraftPattern.getResult(is);
 //        } else if (ModList.APPENG.isLoaded() && InterfaceCache.AEPATTERN.instanceOf(is.getItem())) {
 //            if (!AEPatternHandling.isCraftingRecipe(is, level))
 //                return null;
@@ -560,7 +560,7 @@
 //
 //    @Override
 //    public boolean isItemValidForSlot(int i, ItemStack is) {
-//        return i < SIZE && RotaryItems.CRAFTPATTERN.matchItem(is) && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING && ItemCraftPattern.getRecipeOutput(is) != null;
+//        return i < SIZE && RotaryItems.CRAFTPATTERN.matchItem(is) && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING && ItemCraftPattern.getResult(is) != null;
 //    }
 //
 //

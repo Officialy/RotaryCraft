@@ -192,7 +192,7 @@
 //			in = in.copy();
 ////			in.setItemDamage(OreDictionary.WILDCARD_VALUE);
 //		}
-//	/* todo	List<IRecipe> li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), in);
+//	/* todo	List<IReikaRecipe> li = ReikaRecipeHelper.getAllRecipesByOutput(CraftingManager.getInstance().getRecipeList(), in);
 //		if (li != null && li.size() > 1) {
 //			RotaryCraft.LOGGER.info("Skipping recycling of "+this.fullID(in)+" to "+this.fullID(out)+" due to multiple production recipes");
 //			return;

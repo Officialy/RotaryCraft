@@ -132,7 +132,7 @@
 //		List<Recipe> li = WorktableRecipes.getInstance().getRecipeListCopy();
 //		List<ItemStack> items = new ArrayList<>();
 //		for (int i = 0; i < li.size(); i++) {
-//			items.add(li.get(i).getRecipeOutput());
+//			items.add(li.get(i).getResult());
 //		}
 //		RecipeTransferRect rect = new RecipeTransferRect(new Rectangle(75, 24, 18, 18), "item", (Object[])new ItemStack[]{RotaryItems.salt, RotaryItems.aluminumingot});
 //		transferRects.add(rect);*/

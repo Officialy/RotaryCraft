@@ -1,44 +1,44 @@
 package reika.rotarycraft.auxiliary;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.Level;
 import reika.dragonapi.interfaces.CustomToStringRecipe;
+import reika.dragonapi.interfaces.IReikaRecipe;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.auxiliary.recipemanagers.RotaryRecipeTypes;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.ArrayList;
 
-public class RecyclingRecipe implements Recipe, CustomToStringRecipe {
+public class RecyclingRecipe implements IReikaRecipe, CustomToStringRecipe {
 
-    private final Recipe input;
+    private final IReikaRecipe input;
     public final int scrapValue;
 
-//    todo public RecyclingRecipe(int value, ItemStack... recipe) {
-//        this(ReikaRecipeHelper.getShapelessRecipeFor(ReikaItemHelper.getSizedItemStack(RotaryItems.IRON_SCRAP.get().getDefaultInstance(), value), recipe), value);
-//    }
+    public RecyclingRecipe(int value, ItemStack... recipe) {
+        this(ReikaRecipeHelper.getShapelessRecipeFor(ReikaItemHelper.getSizedItemStack(RotaryItems.IRON_SCRAP.get().getDefaultInstance(), value), recipe), value);
+    }
 
-   /*todo public RecyclingRecipe(ItemStack in, int value) {
+    public RecyclingRecipe(ItemStack in, int value) {
         this(value, in);
     }
 
     public RecyclingRecipe(int value, ItemStack in, int amt) {
         this(value, ReikaArrayHelper.getArrayOf(in, amt));
-    }*/
+    }
 
-    public RecyclingRecipe(Recipe is, int value) {
+    public RecyclingRecipe(IReikaRecipe is, int value) {
         input = is;
         scrapValue = value;
     }
 
-    public ItemStack getCraftingResult(CraftingContainer ics) {
+    @Override
+    public ItemStack getCraftingResult(Container ics) {
         return ReikaItemHelper.getSizedItemStack(RotaryItems.IRON_SCRAP.get().getDefaultInstance(), scrapValue);//RotaryItems.getScrap(scrapValue);
     }
 
@@ -48,33 +48,13 @@ public class RecyclingRecipe implements Recipe, CustomToStringRecipe {
     }
 
     @Override
-    public ItemStack assemble(Container p_44001_) {
-        return null;
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int p_43999_, int p_44000_) {
-        return false;
-    }
-
-    @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResult() {
         return ReikaItemHelper.getSizedItemStack(RotaryItems.IRON_SCRAP.get().getDefaultInstance(), scrapValue);//RotaryItems.scrap;
     }
 
     @Override
-    public ResourceLocation getId() {
-        return null;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return null;
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return RotaryRecipeTypes.RECYCLING;
+    public int getRecipeGridSize() {
+        return 1;
     }
 
     public ArrayList<ItemStack> getSplitOutput() {
@@ -90,12 +70,12 @@ public class RecyclingRecipe implements Recipe, CustomToStringRecipe {
 
     @Override
     public String toDisplayString() {
-        return scrapValue+" X scrap = ";// todo + ReikaRecipeHelper.toString(input);
+        return scrapValue + " X scrap = ";// todo + ReikaRecipeHelper.toString(input);
     }
 
     @Override
     public String toDeterministicString() {
-        return scrapValue+" X scrap = ";//todo +ReikaRecipeHelper.toDeterministicString(input);
+        return scrapValue + " X scrap = ";//todo +ReikaRecipeHelper.toDeterministicString(input);
     }
 
 }
