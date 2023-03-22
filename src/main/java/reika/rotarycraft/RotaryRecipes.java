@@ -1,16 +1,13 @@
 package reika.rotarycraft;
 
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.registries.ForgeRegistries;
 import reika.dragonapi.ModList;
 import reika.dragonapi.auxiliary.trackers.ItemMaterialController;
 import reika.dragonapi.instantiable.ItemMaterial;
@@ -21,6 +18,7 @@ import reika.rotarycraft.auxiliary.RecyclingRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler;
 import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
 import reika.rotarycraft.registry.*;
+import reika.rotarycraft.registry.GearboxTypes.GearPart;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,11 +47,11 @@ public class RotaryRecipes {
 
 
         Object[] bin = getBlastFurnaceIngredients();
-        addOreRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), bin);
+//        addOreRecipeToBoth(MachineRegistry.BLASTFURNACE.getCraftedProduct(), bin);
         RotaryCraft.LOGGER.info("Blast Furnace materials set to " + Arrays.toString(bin));
 
         bin = getWorktableIngredients();
-        addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), bin);
+//        addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), bin);
         RotaryCraft.LOGGER.info("Worktable materials set to " + Arrays.toString(bin));
 
         addProps();
@@ -66,16 +64,16 @@ public class RotaryRecipes {
 
         //RecipesExtractor.recipes().addModRecipes();
 
-        MachineRegistry.COMPRESSOR.addCrafting("SsS", " G ", "CPC", 's', getConverterGatingItem(), 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS, 'P', Blocks.PISTON, 'C', RotaryItems.COMPRESSOR);
+//        MachineRegistry.COMPRESSOR.addCrafting("SsS", " G ", "CPC", 's', getConverterGatingItem(), 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS, 'P', Blocks.PISTON, 'C', RotaryItems.COMPRESSOR);
 
-        MachineRegistry.PNEUENGINE.addCrafting("ppS", "sT ", "PPP", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 's', RotaryItems.HSLA_SHAFT, 'p', RotaryItems.PIPE, 'P', RotaryItems.BASE_PANEL, 'T', RotaryItems.IMPELLER);
+//        MachineRegistry.PNEUENGINE.addCrafting("ppS", "sT ", "PPP", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 's', RotaryItems.HSLA_SHAFT, 'p', RotaryItems.PIPE, 'P', RotaryItems.BASE_PANEL, 'T', RotaryItems.IMPELLER);
 
-        ItemStack plate = ModList.RAILCRAFT.isLoaded() ? new ItemStack(GameRegistry.findItem(ModList.RAILCRAFT.modid, "part.plate"), 1, 1) : null;
-        MachineRegistry.STEAMTURBINE.addCrafting("sPs", "GTG", "ScS", 's', ConfigRegistry.HARDCONVERTERS.getState() && plate != null ? plate : RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.DIAMONDSHAFTCORE, 'G', Blocks.GLASS, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'T', RotaryItems.TURBINE, 'P', RotaryItems.BASEPANEL);
+        ItemStack plate = ModList.RAILCRAFT.isLoaded() ? new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(ModList.RAILCRAFT.modid, "part.plate")), 1) : null; //todo modern railcraft?
+        MachineRegistry.STEAMTURBINE.addCrafting("sPs", "GTG", "ScS", 's', ConfigRegistry.HARDCONVERTERS.getState() && plate != null ? plate : RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.DIAMOND_SHAFT_CORE, 'G', Blocks.GLASS, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'T', RotaryItems.TURBINE, 'P', RotaryItems.BASEPANEL);
 
-        MachineRegistry.BOILER.addCrafting("SPS", "G G", "sIs", 's', getConverterGatingItem(), 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.PIPE, 'G', Blocks.GLASS);
+//        MachineRegistry.BOILER.addCrafting("SPS", "G G", "sIs", 's', getConverterGatingItem(), 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.PIPE, 'G', Blocks.GLASS);
 
-        MachineRegistry.GENERATOR.addCrafting("gpS", "iGs", "psp", 'S', getConverterGatingItem(), 'p', RotaryItems.BASE_PANEL, 'g', Items.GOLD_INGOT, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', RotaryItems.GENERATOR, 'i', RotaryItems.IMPELLER, 's', RotaryItems.SHAFTCORE);
+//        MachineRegistry.GENERATOR.addCrafting("gpS", "iGs", "psp", 'S', getConverterGatingItem(), 'p', RotaryItems.BASE_PANEL, 'g', Items.GOLD_INGOT, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', RotaryItems.GENERATOR, 'i', RotaryItems.IMPELLER, 's', RotaryItems.HSLA_SHAFT_CORE);
 
         ItemStack cool = null;
       /*  if (ModList.IC2.isLoaded()) {
@@ -84,24 +82,24 @@ public class RotaryRecipes {
             }
             cool = IC2Stacks.COOLANT6.getItem();
         }*/
-        MachineRegistry.ELECTRICMOTOR.addCrafting("cGS", "BCB", "SGS", 'c', ConfigRegistry.HARDCONVERTERS.getState() && cool != null ? cool : RotaryItems.HSLA_STEEL_INGOT.get(), 'G', RotaryItems.GOLDCOIL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', RotaryItems.BASEPANEL, 'C', RotaryItems.DIAMONDSHAFTCORE);
+//        MachineRegistry.ELECTRICMOTOR.addCrafting("cGS", "BCB", "SGS", 'c', ConfigRegistry.HARDCONVERTERS.getState() && cool != null ? cool : RotaryItems.HSLA_STEEL_INGOT.get(), 'G', RotaryItems.GOLDCOIL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', RotaryItems.BASEPANEL, 'C', RotaryItems.DIAMONDSHAFTCORE);
 
         ItemStack coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modid, "powerCoilSilver", 1) : RotaryItems.POWER;
-        MachineRegistry.DYNAMO.addOreRecipe(" C ", "GiG", "IRI", 'C', coil, 'i', getConverterGatingItem(), 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', RotaryItems.STEELGEAR, 'R', Items.REDSTONE);
+//        MachineRegistry.DYNAMO.addOreRecipe(" C ", "GiG", "IRI", 'C', coil, 'i', getConverterGatingItem(), 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', RotaryItems.STEELGEAR, 'R', Items.REDSTONE);
         coil = ModList.THERMALEXPANSION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALEXPANSION.modid, "powerCoilGold", 1) : RotaryItems.GOLDCOIL;
         Object ps = new PreferentialItemStack(Items.IRON_INGOT, "ingotLead").blockItem(RotaryItems.MODINGOTS.getItemInstance()).getItem();
         Item crys = ModList.BUILDCRAFT.isLoaded() ? GameRegistry.findItem(ModList.BCSILICON.modid, "redstoneCrystal") : null;
-        MachineRegistry.MAGNETIC.addOreRecipe("LCl", "scs", "PSP", 'L', ConfigRegistry.HARDCONVERTERS.getState() && crys != null ? crys : ps, 'c', RotaryItems.CONDUCTIVE.getItem(), 'C', coil, 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.DIAMONDSHAFTCORE, 'l', ps, 's', "ingotSilver");
+        MachineRegistry.MAGNETIC.addTagRecipe("LCl", "scs", "PSP", 'L', ConfigRegistry.HARDCONVERTERS.getState() && crys != null ? crys : ps, 'c', RotaryItems.CONDUCTIVE.getItem(), 'C', coil, 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.DIAMONDSHAFTCORE, 'l', ps, 's', "ingotSilver");
 
         ItemStack enderium = ModList.THERMALFOUNDATION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modid, "ingotEnderium", 1) : RotaryItems.BEDROCK_ALLOY_INGOT.get();
         ItemStack electrum = ModList.THERMALFOUNDATION.isLoaded() ? GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modid, "ingotElectrum", 1) : RotaryItems.REDGOLDINGOT;
-        RotaryItems.UPGRADE.addMetaRecipe(Upgrades.FLUX.ordinal(), "BeB", "tEt", "BeB", 'e', electrum, 'B', RotaryItems.BASEPANEL, 'E', enderium, 't', RotaryItems.TUNGSTENINGOT);
+//        RotaryItems.UPGRADE.addMetaRecipe(Upgrades.FLUX.ordinal(), "BeB", "tEt", "BeB", 'e', electrum, 'B', RotaryItems.BASEPANEL, 'E', enderium, 't', RotaryItems.TUNGSTENINGOT);
 
-        ItemStack ender = ModList.BCSILICON.isLoaded() ? ItemRedstoneChipset.Chipset.PULSATING.getStack() : new ItemStack(Items.ENDER_PEARL);
-        ItemStack latch = ReikaItemHelper.lookupItem("ProjRed|Integration:projectred.integration.gate:17");
-        if (latch == null)
-            latch = new ItemStack(Items.CLOCK);
-        RotaryItems.UPGRADE.addMetaRecipe(9, "rQr", "qsq", "rEr", 'r', Items.REDSTONE, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'q', Items.QUARTZ, 'E', ender, 'Q', latch);
+//        ItemStack ender = ModList.BCSILICON.isLoaded() ? ItemRedstoneChipset.Chipset.PULSATING.getStack() : new ItemStack(Items.ENDER_PEARL);
+//        ItemStack latch = ReikaItemHelper.lookupItem("ProjRed|Integration:projectred.integration.gate:17");
+//        if (latch == null)
+//            latch = new ItemStack(Items.CLOCK);
+//        RotaryItems.UPGRADE.addMetaRecipe(9, "rQr", "qsq", "rEr", 'r', Items.REDSTONE, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'q', Items.QUARTZ, 'E', ender, 'Q', latch);
 
         /*if (ModList.TINKERER.isLoaded()) {
             GameRegistry.addRecipe(BlockRegistry.DECOTANK.getCraftedMetadataProduct(4, 1), "SGS", "GGG", "SGS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', new ItemStack(TinkerBlockHandler.getInstance().clearPaneID, 1, 0));
@@ -276,13 +274,13 @@ public class RotaryRecipes {
         ItemStack ctr = RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance();
         switch (ConfigRegistry.LATEDYNAMO.getValue()) {
             case 1:
-                ctr = RotaryItems.REDGOLDINGOT;
+                ctr = RotaryItems.INDUCTIVE_INGOT.get().getDefaultInstance();
                 break;
             case 2:
-                ctr = RotaryItems.TUNGSTENINGOT;
+                ctr = RotaryItems.TUNGSTEN_ALLOY_INGOT.get().getDefaultInstance();
                 break;
             case 3:
-                ctr = RotaryItems.BEDROCK_ALLOY_INGOT.get();
+                ctr = RotaryItems.BEDROCK_ALLOY_INGOT.get().getDefaultInstance();
                 break;
           /*todo
                case 4:
@@ -301,9 +299,9 @@ public class RotaryRecipes {
 
 
     private static void addMachines() {
-        MachineRegistry.COMPACTOR.addCrafting("SPS", "PGP", "#P#", '#', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'P', RotaryItems.PRESSHEAD, 'G', GearboxTypes.TUNGSTEN.getPart(GearPart.UNIT16));
+//        MachineRegistry.COMPACTOR.addCrafting("SPS", "PGP", "#P#", '#', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'P', RotaryItems.PRESSHEAD, 'G', GearboxTypes.TUNGSTEN.getPart(GearPart.UNIT16));
 
-        MachineRegistry.FAN.addOreRecipe("WWW", "WIW", "#s#", '#', RotaryItems.BASEPANEL, 'W', "plankWood", 'I', RotaryItems.IMPELLER, 's', RotaryItems.SHAFTITEM);
+//        MachineRegistry.FAN.addOreRecipe("WWW", "WIW", "#s#", '#', RotaryItems.BASEPANEL, 'W', "plankWood", 'I', RotaryItems.IMPELLER, 's', RotaryItems.SHAFTITEM);
 
         MachineRegistry.AEROSOLIZER.addCrafting("BRB", "RIR", "BRB", 'B', RotaryItems.BASEPANEL, 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 'I', RotaryItems.IMPELLER);
 
@@ -312,18 +310,18 @@ public class RotaryRecipes {
         MachineRegistry.FLOODLIGHT.addCrafting("ISO", "Ggd", "I#O", '#', RotaryItems.BASEPANEL, 'I', Items.IRON_INGOT, 'd', Items.GOLD_INGOT, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS, 'g', Blocks.GLOWSTONE, 'O', Blocks.OBSIDIAN);
 
         if (ReikaItemHelper.oreItemsExist("ingotCopper", "ingotSilver"))
-            MachineRegistry.FLOODLIGHT.addOreRecipe("ISO", "Ggd", "I#O", '#', RotaryItems.BASEPANEL, 'I', "ingotSilver", 'd', "ingotCopper", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS, 'g', Blocks.GLOWSTONE, 'O', Blocks.OBSIDIAN);
+            MachineRegistry.FLOODLIGHT.addTagRecipe("ISO", "Ggd", "I#O", '#', RotaryItems.BASEPANEL, 'I', "ingotSilver", 'd', "ingotCopper", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS, 'g', Blocks.GLOWSTONE, 'O', Blocks.OBSIDIAN);
 
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setBoolean("cross", true);
-        MachineRegistry.SHAFT.addNBTCrafting(nbt, " S ", "SSS", " M ", 'M', RotaryItems.MOUNT, 'S', RotaryItems.SHAFTITEM); //Shaft cross
+        CompoundTag nbt = new CompoundTag();
+        nbt.putBoolean("cross", true);
+//        MachineRegistry.CROSS_SHAFT.addNBTCrafting(nbt, " S ", "SSS", " M ", 'M', RotaryItems.MOUNT, 'S', RotaryItems.SHAFTITEM); //Shaft cross
 
         //addRecipeToBoth(MachineRegistry.WORKTABLE.getCraftedProduct(), " C ", "SBS", "srs", 'r', Items.REDSTONE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', Blocks.BRICK_BLOCK, 'C', Blocks.CRAFTING_TABLE, 's', ReikaItemHelper.stoneSlab);
 
         MachineRegistry.BEVELGEARS.addSizedCrafting(4, "ISB", "SGB", "BBB", 'B', RotaryItems.BASEPANEL, 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SHAFTITEM, 'G', RotaryItems.STEELGEAR);
 
-        nbt = new NBTTagCompound();
-        nbt.setBoolean("bedrock", false);
+        nbt = new CompoundTag();
+        nbt.putBoolean("bedrock", false);
         MachineRegistry.SPLITTER.addSizedNBTCrafting(nbt, 2, "ISP", "SGP", "ISP", 'P', RotaryItems.BASEPANEL, 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SHAFTITEM, 'G', RotaryItems.STEELGEAR);
 
         MachineRegistry.CLUTCH.addCrafting("S", "M", "R", 'M', RotaryItems.MOUNT, 'S', RotaryItems.SHAFTITEM, 'R', Items.REDSTONE);
@@ -332,88 +330,88 @@ public class RotaryRecipes {
         MachineRegistry.DYNAMOMETER.addSizedCrafting(2, " S ", " E ", " Ms", 's', RotaryItems.SCREEN, 'M', RotaryItems.MOUNT, 'S', RotaryItems.SHAFTITEM, 'E', Items.ENDER_PEARL);
         MachineRegistry.DYNAMOMETER.addSizedCrafting(4, " S ", " E ", " Ms", 's', RotaryItems.SCREEN, 'M', RotaryItems.MOUNT, 'S', RotaryItems.SHAFTITEM, 'E', RotaryItems.SILICON);
 
-        MachineRegistry.BEDROCKBREAKER.addCrafting("BDt", "BSO", "BDt", 't', RotaryItems.TUNGSTENINGOT, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', Items.DIAMOND, 'O', Blocks.OBSIDIAN, 'B', RotaryItems.BASEPANEL);
+//        MachineRegistry.BEDROCKBREAKER.addCrafting("BDt", "BSO", "BDt", 't', RotaryItems.TUNGSTENINGOT, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', Items.DIAMOND, 'O', Blocks.OBSIDIAN, 'B', RotaryItems.BASEPANEL);
 
-        MachineRegistry.FERMENTER.addCrafting("BPB", "PIP", "BPB", 'B', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL);
-        MachineRegistry.FERMENTER.addOreRecipe("BPB", "PIP", "BPB", 'B', "ingotTin", 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL);
+//        MachineRegistry.FERMENTER.addCrafting("BPB", "PIP", "BPB", 'B', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL);
+//        MachineRegistry.FERMENTER.addOreRecipe("BPB", "PIP", "BPB", 'B', "ingotTin", 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL);
 
         MachineRegistry.GRINDER.addCrafting("B B", "SGS", "PPP", 'B', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', RotaryItems.STEELGEAR, 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.SAW);
 
         MachineRegistry.RESERVOIR.addCrafting("B B", "B B", "BBB", 'B', RotaryItems.BASEPANEL);
-        nbt = new NBTTagCompound();
-        nbt.setBoolean("cover", true);
+        nbt = new CompoundTag();
+        nbt.putBoolean("cover", true);
         MachineRegistry.RESERVOIR.addNBTCrafting(nbt, "BPB", "B B", "BBB", 'B', RotaryItems.BASEPANEL, 'P', Blocks.GLASS_PANE);
 
-        MachineRegistry.FIREWORK.addCrafting("BEB", "BDB", "BRB", 'B', RotaryItems.BASEPANEL, 'R', Items.REDSTONE, 'E', Items.ENDER_EYE, 'D', Blocks.DISPENSER);
+//        MachineRegistry.FIREWORK.addCrafting("BEB", "BDB", "BRB", 'B', RotaryItems.BASEPANEL, 'R', Items.REDSTONE, 'E', Items.ENDER_EYE, 'D', Blocks.DISPENSER);
 
-        MachineRegistry.AUTOBREEDER.addCrafting("B B", "BBB", 'B', RotaryItems.BASEPANEL);
+//        MachineRegistry.AUTOBREEDER.addCrafting("B B", "BBB", 'B', RotaryItems.BASEPANEL);
 
-        MachineRegistry.FRACTIONATOR.addCrafting("GFG", "GIG", "GPG", 'P', RotaryItems.BASEPANEL, 'I', RotaryItems.MIXER, 'G', Items.GOLD_INGOT, 'F', RotaryItems.FUELLINE);
+//        MachineRegistry.FRACTIONATOR.addCrafting("GFG", "GIG", "GPG", 'P', RotaryItems.BASEPANEL, 'I', RotaryItems.MIXER, 'G', Items.GOLD_INGOT, 'F', RotaryItems.FUELLINE);
 
-        MachineRegistry.BAITBOX.addCrafting("BBB", "BAB", "BBB", 'B', Blocks.IRON_BARS, 'A', MachineRegistry.AUTOBREEDER.getCraftedProduct());
+//        MachineRegistry.BAITBOX.addCrafting("BBB", "BAB", "BBB", 'B', Blocks.IRON_BARS, 'A', MachineRegistry.AUTOBREEDER.getCraftedProduct());
 
         MachineRegistry.WINDER.addCrafting(" ss", " hg", "ppp", 'h', RotaryItems.SHAFTITEM, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'g', RotaryItems.GEARUNIT, 'p', RotaryItems.BASEPANEL);
 
-        MachineRegistry.ECU.addCrafting("IPI", "IGI", "IRI", 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Items.GOLD_INGOT, 'P', RotaryItems.PCB, 'R', Items.REDSTONE);
+//        MachineRegistry.ECU.addCrafting("IPI", "IGI", "IRI", 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Items.GOLD_INGOT, 'P', RotaryItems.PCB, 'R', Items.REDSTONE);
 
-        if (ReikaItemHelper.oreItemExists("ingotElectrum"))
-            MachineRegistry.ECU.addOreRecipe("IPI", "IGI", "IRI", 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', "ingotElectrum", 'P', RotaryItems.PCB, 'R', Items.REDSTONE);
-        else if (ReikaItemHelper.oreItemExists("ingotCopper"))
-            MachineRegistry.ECU.addOreRecipe("IPI", "IGI", "IRI", 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', "ingotCopper", 'P', RotaryItems.PCB, 'R', Items.REDSTONE);
+//        if (ReikaItemHelper.oreItemExists("ingotElectrum"))
+//            MachineRegistry.ECU.addOreRecipe("IPI", "IGI", "IRI", 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', "ingotElectrum", 'P', RotaryItems.PCB, 'R', Items.REDSTONE);
+//        else if (ReikaItemHelper.oreItemExists("ingotCopper"))
+//            MachineRegistry.ECU.addOreRecipe("IPI", "IGI", "IRI", 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', "ingotCopper", 'P', RotaryItems.PCB, 'R', Items.REDSTONE);
 
-        MachineRegistry.WOODCUTTER.addCrafting("IS ", "PGS", "PPI", 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SAW, 'P', RotaryItems.BASEPANEL, 'G', RotaryItems.GEARUNIT);
+//        MachineRegistry.WOODCUTTER.addCrafting("IS ", "PGS", "PPI", 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SAW, 'P', RotaryItems.BASEPANEL, 'G', RotaryItems.GEARUNIT);
 
-        MachineRegistry.VACUUM.addCrafting("SwS", "wIw", "SCS", 'C', Blocks.CHEST, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'w', ReikaItemHelper.blackWool);
+//        MachineRegistry.VACUUM.addCrafting("SwS", "wIw", "SCS", 'C', Blocks.CHEST, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'w', ReikaItemHelper.blackWool);
 
-        MachineRegistry.BORER.addCrafting("SSS", "DGC", "BBB", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', RotaryItems.DRILL, 'G', RotaryItems.GEARUNIT, 'C', RotaryItems.PCB);
+//        MachineRegistry.BORER.addCrafting("SSS", "DGC", "BBB", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', RotaryItems.DRILL, 'G', RotaryItems.GEARUNIT, 'C', RotaryItems.PCB);
 
-        MachineRegistry.SPRINKLER.addSizedCrafting(4, " s ", " p ", " i ", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'p', RotaryItems.PIPE, 'i', RotaryItems.IMPELLER);
-        MachineRegistry.SPRINKLER.addSizedOreRecipe(4, " s ", " p ", " i ", 's', "ingotTin", 'p', RotaryItems.PIPE, 'i', RotaryItems.IMPELLER);
+//        MachineRegistry.SPRINKLER.addSizedCrafting(4, " s ", " p ", " i ", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'p', RotaryItems.PIPE, 'i', RotaryItems.IMPELLER);
+//        MachineRegistry.SPRINKLER.addSizedOreRecipe(4, " s ", " p ", " i ", 's', "ingotTin", 'p', RotaryItems.PIPE, 'i', RotaryItems.IMPELLER);
 
-        MachineRegistry.SPAWNERCONTROLLER.addCrafting("PCP", "OGO", "g g", 'O', Blocks.OBSIDIAN, 'P', RotaryItems.BASEPANEL, 'G', Items.GOLD_INGOT, 'g', Blocks.GLOWSTONE, 'C', RotaryItems.PCB);
+//        MachineRegistry.SPAWNERCONTROLLER.addCrafting("PCP", "OGO", "g g", 'O', Blocks.OBSIDIAN, 'P', RotaryItems.BASEPANEL, 'G', Items.GOLD_INGOT, 'g', Blocks.GLOWSTONE, 'C', RotaryItems.PCB);
 
         MachineRegistry.PLAYERDETECTOR.addCrafting("LRL", "OGO", "OPO", 'L', ReikaItemHelper.lapisDye, 'R', RotaryItems.RADAR, 'O', Blocks.OBSIDIAN, 'P', RotaryItems.BASEPANEL, 'G', Items.GOLD_INGOT);
 
         MachineRegistry.OBSIDIAN.addCrafting("SpS", "PMP", "BBB", 'M', RotaryItems.MIXER, 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'p', Blocks.GLASS_PANE, 'P', RotaryItems.PIPE);
         if (ReikaItemHelper.oreItemExists("ingotInvar"))
-            MachineRegistry.OBSIDIAN.addOreRecipe("SpS", "PMP", "BBB", 'M', RotaryItems.MIXER, 'B', RotaryItems.BASEPANEL, 'S', "ingotInvar", 'p', Blocks.GLASS_PANE, 'P', RotaryItems.PIPE);
+            MachineRegistry.OBSIDIAN.addTagRecipe("SpS", "PMP", "BBB", 'M', RotaryItems.MIXER, 'B', RotaryItems.BASEPANEL, 'S', "ingotInvar", 'p', Blocks.GLASS_PANE, 'P', RotaryItems.PIPE);
 
         MachineRegistry.HEATER.addCrafting("sBs", "prp", "scs", 'r', RotaryItems.TUNGSTENINGOT, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', Blocks.IRON_BARS, 'p', RotaryItems.BASEPANEL, 'c', RotaryItems.COMBUSTOR);
 
-        MachineRegistry.GPR.addCrafting("SsS", "PCP", "SRS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 's', RotaryItems.SCREEN, 'P', RotaryItems.BASEPANEL, 'R', RotaryItems.RADAR, 'C', RotaryItems.PCB);
-
-        MachineRegistry.PULSEJET.addCrafting("OCD", "PcO", "BBB", 'B', RotaryItems.BASEPANEL, 'O', Blocks.OBSIDIAN, 'C', RotaryItems.COMPRESSOR, 'D', RotaryItems.DIFFUSER, 'c', RotaryItems.COMBUSTOR, 'P', RotaryItems.PIPE);
-
-        MachineRegistry.EXTRACTOR.addOreRecipe("SWS", "siD", "PIN", 'D', RotaryItems.DRILL, 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.SHAFTITEM, 's', Blocks.STONE, 'i', RotaryItems.IMPELLER, 'N', Blocks.NETHERRACK, 'W', "plankWood");
-
-        MachineRegistry.LIGHTBRIDGE.addCrafting("GgG", "BgS", "BBD", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', Items.DIAMOND, 'G', Items.GOLD_INGOT, 'g', Blocks.GLASS);
-
-        MachineRegistry.PILEDRIVER.addCrafting("PGP", "gFg", "PDP", 'P', RotaryItems.BASEPANEL, 'G', RotaryItems.GEARUNIT8, 'g', RotaryItems.SHAFTITEM, 'F', Flywheels.TUNGSTEN.getCore(), 'D', RotaryItems.DRILL);
+//        MachineRegistry.GPR.addCrafting("SsS", "PCP", "SRS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 's', RotaryItems.SCREEN, 'P', RotaryItems.BASEPANEL, 'R', RotaryItems.RADAR, 'C', RotaryItems.PCB);
+//
+//        MachineRegistry.PULSEJET.addCrafting("OCD", "PcO", "BBB", 'B', RotaryItems.BASEPANEL, 'O', Blocks.OBSIDIAN, 'C', RotaryItems.COMPRESSOR, 'D', RotaryItems.DIFFUSER, 'c', RotaryItems.COMBUSTOR, 'P', RotaryItems.PIPE);
+//
+//        MachineRegistry.EXTRACTOR.addOreRecipe("SWS", "siD", "PIN", 'D', RotaryItems.DRILL, 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.SHAFTITEM, 's', Blocks.STONE, 'i', RotaryItems.IMPELLER, 'N', Blocks.NETHERRACK, 'W', "plankWood");
+//
+//        MachineRegistry.LIGHTBRIDGE.addCrafting("GgG", "BgS", "BBD", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', Items.DIAMOND, 'G', Items.GOLD_INGOT, 'g', Blocks.GLASS);
+//
+//        MachineRegistry.PILEDRIVER.addCrafting("PGP", "gFg", "PDP", 'P', RotaryItems.BASEPANEL, 'G', RotaryItems.GEARUNIT8, 'g', RotaryItems.SHAFTITEM, 'F', Flywheels.TUNGSTEN.getCore(), 'D', RotaryItems.DRILL);
 
         MachineRegistry.PUMP.addCrafting("SGS", "pIp", "PpP", 'P', RotaryItems.BASEPANEL, 'p', RotaryItems.PIPE, 'I', RotaryItems.IMPELLER, 'G', Blocks.GLASS_PANE, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
 
-        MachineRegistry.MOBRADAR.addCrafting(" rs", " g ", "pcp", 'r', RotaryItems.RADAR, 's', RotaryItems.SCREEN, 'c', RotaryItems.PCB, 'g', RotaryItems.GEARUNIT, 'p', RotaryItems.BASEPANEL);
+//        MachineRegistry.MOBRADAR.addCrafting(" rs", " g ", "pcp", 'r', RotaryItems.RADAR, 's', RotaryItems.SCREEN, 'c', RotaryItems.PCB, 'g', RotaryItems.GEARUNIT, 'p', RotaryItems.BASEPANEL);
 
         MachineRegistry.TNTCANNON.addCrafting("sgc", "pcp", "pCr", 'g', Blocks.REDSTONE_BLOCK, 'C', RotaryItems.COMPRESSOR, 'c', RotaryItems.SCREEN, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.PCB, 'r', Blocks.CHEST, 'p', RotaryItems.BASEPANEL);
 
-        MachineRegistry.SONICWEAPON.addCrafting("psp", "sts", "psp", 't', RotaryItems.TURBINE, 's', RotaryItems.SONAR, 'p', RotaryItems.BASEPANEL);
-
-        MachineRegistry.FORCEFIELD.addCrafting("lnl", "ddd", "sgs", 'd', Items.DIAMOND, 's', RotaryItems.BASEPANEL, 'n', Items.NETHER_STAR, 'g', Items.GOLD_INGOT, 'l', ReikaItemHelper.lapisDye);
+//        MachineRegistry.SONICWEAPON.addCrafting("psp", "sts", "psp", 't', RotaryItems.TURBINE, 's', RotaryItems.SONAR, 'p', RotaryItems.BASEPANEL);
+//
+//        MachineRegistry.FORCEFIELD.addCrafting("lnl", "ddd", "sgs", 'd', Items.DIAMOND, 's', RotaryItems.BASEPANEL, 'n', Items.NETHER_STAR, 'g', Items.GOLD_INGOT, 'l', ReikaItemHelper.lapisDye);
 
         MachineRegistry.MUSICBOX.addSizedCrafting(4, "sns", "ncn", "sns", 'n', Blocks.NOTEBLOCK, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.PCB);
         MachineRegistry.MUSICBOX.addSizedOreRecipe(4, "sns", "ncn", "sns", 'n', Blocks.NOTEBLOCK, 's', "ingotSilver", 'c', RotaryItems.PCB);
 
-        MachineRegistry.WEATHERCONTROLLER.addCrafting("s s", "sls", "pcp", 'l', Blocks.DAYLIGHT_DETECTOR, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.PCB, 'p', RotaryItems.BASEPANEL);
+//        MachineRegistry.WEATHERCONTROLLER.addCrafting("s s", "sls", "pcp", 'l', Blocks.DAYLIGHT_DETECTOR, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.PCB, 'p', RotaryItems.BASEPANEL);
 
         MachineRegistry.MOBHARVESTER.addCrafting("shs", "sps", 'h', RotaryItems.IGNITER, 'p', Items.ENDER_PEARL, 's', RotaryItems.BASEPANEL);
 
-        MachineRegistry.PROJECTOR.addCrafting("sss", "gcl", "ppp", 'c', RotaryItems.PCB, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'g', Blocks.GLASS, 'l', Blocks.GLOWSTONE, 'p', RotaryItems.BASEPANEL);
+//        MachineRegistry.PROJECTOR.addCrafting("sss", "gcl", "ppp", 'c', RotaryItems.PCB, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'g', Blocks.GLASS, 'l', Blocks.GLOWSTONE, 'p', RotaryItems.BASEPANEL);
 
         MachineRegistry.REFRESHER.addCrafting("ses", "epe", "ses", 'p', Items.ENDER_PEARL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'e', ReikaItemHelper.lapisDye);
 
         MachineRegistry.CAVESCANNER.addCrafting("sps", "pcp", "sns", 'n', RotaryItems.SONAR, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.PCB, 'p', RotaryItems.BASEPANEL);
 
-        MachineRegistry.SCALECHEST.addCrafting("sss", "scs", "sss", 'c', Blocks.CHEST, 's', RotaryItems.HSLA_STEEL_INGOT.get());
+//        MachineRegistry.SCALECHEST.addCrafting("sss", "scs", "sss", 'c', Blocks.CHEST, 's', RotaryItems.HSLA_STEEL_INGOT.get());
 
         MachineRegistry.SPILLER.addCrafting("sps", "s s", 'p', RotaryItems.PIPE, 's', RotaryItems.HSLA_STEEL_INGOT.get());
 
@@ -421,66 +419,65 @@ public class RotaryRecipes {
 
         MachineRegistry.SMOKEDETECTOR.addCrafting(" S ", "RRR", " N ", 'S', ReikaItemHelper.stoneSlab, 'R', Items.REDSTONE, 'N', Blocks.NOTEBLOCK);
 
-        MachineRegistry.IGNITER.addCrafting("OGO", "GCG", "OGO", 'O', Blocks.OBSIDIAN, 'G', Items.GOLD_INGOT, 'C', RotaryItems.COMBUSTOR);
+//        MachineRegistry.IGNITER.addCrafting("OGO", "GCG", "OGO", 'O', Blocks.OBSIDIAN, 'G', Items.GOLD_INGOT, 'C', RotaryItems.COMBUSTOR);
 
         MachineRegistry.CONTAINMENT.addCrafting("lnl", "ddd", "sgs", 'd', Items.DIAMOND, 's', RotaryItems.BASEPANEL, 'n', Items.NETHER_STAR, 'g', Items.GOLD_INGOT, 'l', ReikaItemHelper.purpleDye);
 
-        MachineRegistry.MAGNETIZER.addCrafting("p p", "gmg", "prp", 'r', Items.REDSTONE, 'p', RotaryItems.BASEPANEL, 'm', RotaryItems.MOUNT, 'g', RotaryItems.GOLDCOIL);
-
-        MachineRegistry.FREEZEGUN.addCrafting(" ss", "iig", "sb ", 'b', RotaryItems.RAILBASE, 'i', Blocks.ICE, 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'g', RotaryItems.GEARUNIT);
-
-        MachineRegistry.SCREEN.addCrafting("sss", "mcs", "ppp", 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'm', RotaryItems.SCREEN, 'c', RotaryItems.PCB);
-
-        MachineRegistry.CCTV.addCrafting(" g ", "brs", " p ", 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'b', Blocks.GLASS_PANE, 'r', Items.REDSTONE, 'g', Items.GOLD_INGOT);
-
-        MachineRegistry.PURIFIER.addCrafting("sbs", "prp", "sps", 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'r', Items.REDSTONE, 'b', Blocks.IRON_BARS);
+//        MachineRegistry.MAGNETIZER.addCrafting("p p", "gmg", "prp", 'r', Items.REDSTONE, 'p', RotaryItems.BASEPANEL, 'm', RotaryItems.MOUNT, 'g', RotaryItems.GOLDCOIL);
+//
+//        MachineRegistry.FREEZEGUN.addCrafting(" ss", "iig", "sb ", 'b', RotaryItems.RAILBASE, 'i', Blocks.ICE, 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'g', RotaryItems.GEARUNIT);
+//
+//        MachineRegistry.SCREEN.addCrafting("sss", "mcs", "ppp", 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'm', RotaryItems.SCREEN, 'c', RotaryItems.PCB);
+//
+//        MachineRegistry.CCTV.addCrafting(" g ", "brs", " p ", 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'b', Blocks.GLASS_PANE, 'r', Items.REDSTONE, 'g', Items.GOLD_INGOT);
+//
+//        MachineRegistry.PURIFIER.addCrafting("sbs", "prp", "sps", 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'r', Items.REDSTONE, 'b', Blocks.IRON_BARS);
 
         MachineRegistry.MIRROR.addCrafting("bmb", " g ", "pcp", 'b', BlockRegistry.BLASTGLASS.get(), 'p', RotaryItems.BASEPANEL, 'c', RotaryItems.PCB, 'm', RotaryItems.MIRROR, 'g', RotaryItems.STEELGEAR);
 
-        MachineRegistry.SOLARTOWER.addOreRecipe("pPp", "iPi", "pPp", 'p', RotaryItems.BASEPANEL, 'P', RotaryItems.PIPE, 'i', "dyeBlack");
+        MachineRegistry.SOLARTOWER.addTagRecipe("pPp", "iPi", "pPp", 'p', RotaryItems.BASEPANEL, 'P', RotaryItems.PIPE, 'i', "dyeBlack");
 
-        MachineRegistry.RAILGUN.addCrafting(" H ", " A ", " B ", 'B', RotaryItems.RAILBASE, 'A', RotaryItems.RAILAIM, 'H', RotaryItems.RAILHEAD);
-
+//        MachineRegistry.RAILGUN.addCrafting(" H ", " A ", " B ", 'B', RotaryItems.RAILBASE, 'A', RotaryItems.RAILAIM, 'H', RotaryItems.RAILHEAD);
+//
         MachineRegistry.LASERGUN.addCrafting("CLB", "APG", " b ", 'b', RotaryItems.RAILBASE, 'C', RotaryItems.BULB, 'L', RotaryItems.LENS, 'P', RotaryItems.POWER, 'B', RotaryItems.BARREL, 'A', RotaryItems.RAILAIM, 'G', RotaryItems.GEARUNIT);
 
         MachineRegistry.ITEMCANNON.addCrafting("s c", "pcp", "pCr", 'C', RotaryItems.COMPRESSOR, 'c', RotaryItems.SCREEN, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.GEARUNIT, 'r', Blocks.CHEST, 'p', RotaryItems.BASEPANEL);
 
         MachineRegistry.BLOCKCANNON.addCrafting("s c", "pcp", "pCr", 'C', RotaryItems.COMPRESSOR, 'c', RotaryItems.SCREEN, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.PCB, 'r', Blocks.CHEST, 'p', RotaryItems.BASEPANEL);
 
-        MachineRegistry.FRICTION.addCrafting("S  ", "Sss", "SPP", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 's', RotaryItems.SHAFTITEM);
+//        MachineRegistry.FRICTION.addCrafting("S  ", "Sss", "SPP", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 's', RotaryItems.SHAFTITEM);
 
         MachineRegistry.LANDMINE.addCrafting(" P ", "RGR", "SIS", 'P', Blocks.STONE_PRESSURE_PLATE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IGNITER, 'R', Items.REDSTONE, 'G', Items.GOLD_INGOT);
 
-        MachineRegistry.BUCKETFILLER.addCrafting("SPS", "PCP", "SPS", 'P', RotaryItems.PIPE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', Blocks.CHEST);
+//        MachineRegistry.BUCKETFILLER.addCrafting("SPS", "PCP", "SPS", 'P', RotaryItems.PIPE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', Blocks.CHEST);
 
-        MachineRegistry.SPYCAM.addCrafting("SCS", "PRP", "SGS", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', RotaryItems.PCB, 'G', Blocks.GLASS_PANE, 'R', Items.REDSTONE);
+//        MachineRegistry.SPYCAM.addCrafting("SCS", "PRP", "SGS", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', RotaryItems.PCB, 'G', Blocks.GLASS_PANE, 'R', Items.REDSTONE);
 
         MachineRegistry.COOLINGFIN.addSizedCrafting(3, "SSS", "SSS", "PPP", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.SHAFTITEM);
         MachineRegistry.COOLINGFIN.addSizedOreRecipe(2, "SSS", "SSS", "PPP", 'P', "ingotTin", 'S', "ingotCopper");
 
         MachineRegistry.SELFDESTRUCT.addCrafting("STS", "TCs", "STS", 'T', Blocks.TNT, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 's', RotaryItems.SHAFTITEM, 'C', RotaryItems.PCB);
 
-        //MachineRegistry.DISPLAY.addCrafting("SES", "SCS", " P ", 'P', RotaryItems.BASEPANEL, 'E', Items.ENDER_PEARL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', RotaryItems.PCB);
-        MachineRegistry.DISPLAY.addCrafting("SES", "SCS", " P ", 'P', RotaryItems.BASEPANEL, 'E', RotaryItems.SILICON, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', RotaryItems.PCB);
-
-        MachineRegistry.LAMP.addCrafting("SGS", "GgG", "SGS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS, 'g', Blocks.GLOWSTONE);
+//        MachineRegistry.DISPLAY.addCrafting("SES", "SCS", " P ", 'P', RotaryItems.BASEPANEL, 'E', RotaryItems.SILICON, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', RotaryItems.PCB);
+//
+//        MachineRegistry.LAMP.addCrafting("SGS", "GgG", "SGS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS, 'g', Blocks.GLOWSTONE);
 
         MachineRegistry.MULTICLUTCH.addCrafting("PSP", "SGS", "RSR", 'R', Items.REDSTONE, 'I', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SHAFTITEM, 'G', RotaryItems.GEARUNIT, 'P', RotaryItems.BASEPANEL);
 
-        MachineRegistry.FUELENHANCER.addCrafting("PGP", "gMg", "PGP", 'G', Blocks.GLASS_PANE, 'M', RotaryItems.MIXER, 'P', RotaryItems.BASEPANEL, 'g', Items.GOLD_INGOT);
+//        MachineRegistry.FUELENHANCER.addCrafting("PGP", "gMg", "PGP", 'G', Blocks.GLASS_PANE, 'M', RotaryItems.MIXER, 'P', RotaryItems.BASEPANEL, 'g', Items.GOLD_INGOT);
 
         MachineRegistry.LINEBUILDER.addCrafting("sbs", "sps", "PgP", 'g', RotaryItems.GEARUNIT, 'p', Blocks.PISTON, 'P', RotaryItems.BASEPANEL, 'b', RotaryItems.BEDROCK_ALLOY_INGOT.get(), 's', RotaryItems.HSLA_STEEL_INGOT.get());
 
-        MachineRegistry.TERRAFORMER.addCrafting("SsS", "ici", "PiP", 'i', RotaryItems.IMPELLER, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.PCB, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SCREEN);
-
-        MachineRegistry.EMP.addCrafting("GDG", "GsG", "PnP", 'P', RotaryItems.BASEPANEL, 'n', Items.NETHER_STAR, 'G', RotaryItems.GOLDCOIL, 'D', Blocks.DIAMOND_BLOCK, 's', GearboxTypes.BEDROCK.getPart(GearPart.SHAFTCORE));
-
-        MachineRegistry.ARROWGUN.addCrafting("SSS", "BDB", "SBS", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', Blocks.DISPENSER);
-
-        MachineRegistry.FERTILIZER.addCrafting("PIP", " S ", "BCB", 'P', RotaryItems.PIPE, 'S', RotaryItems.SHAFTITEM, 'I', RotaryItems.IMPELLER, 'C', Blocks.CHEST, 'B', RotaryItems.BASEPANEL);
-
-        MachineRegistry.LAVAMAKER.addCrafting("SRS", "PGP", "SsS", 's', RotaryItems.SHAFTITEM, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 'P', RotaryItems.BASEPANEL, 'G', RotaryItems.STEELGEAR);
-
+//        MachineRegistry.TERRAFORMER.addCrafting("SsS", "ici", "PiP", 'i', RotaryItems.IMPELLER, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.PCB, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SCREEN);
+//
+//        MachineRegistry.EMP.addCrafting("GDG", "GsG", "PnP", 'P', RotaryItems.BASEPANEL, 'n', Items.NETHER_STAR, 'G', RotaryItems.GOLDCOIL, 'D', Blocks.DIAMOND_BLOCK, 's', GearboxTypes.BEDROCK.getPart(GearPart.SHAFTCORE));
+//
+//        MachineRegistry.ARROWGUN.addCrafting("SSS", "BDB", "SBS", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', Blocks.DISPENSER);
+//
+//        MachineRegistry.FERTILIZER.addCrafting("PIP", " S ", "BCB", 'P', RotaryItems.PIPE, 'S', RotaryItems.SHAFTITEM, 'I', RotaryItems.IMPELLER, 'C', Blocks.CHEST, 'B', RotaryItems.BASEPANEL);
+//
+//        MachineRegistry.LAVAMAKER.addCrafting("SRS", "PGP", "SsS", 's', RotaryItems.SHAFTITEM, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'R', MachineRegistry.RESERVOIR.getCraftedProduct(), 'P', RotaryItems.BASEPANEL, 'G', RotaryItems.STEELGEAR);
+//
         MachineRegistry.BEAMMIRROR.addCrafting(" m ", " s ", " p ", 'p', RotaryItems.BASEPANEL, 'm', RotaryItems.MIRROR, 's', RotaryItems.HSLA_STEEL_INGOT.get());
 
         MachineRegistry.VALVE.addSizedCrafting(4, "sGs", "OGO", "sGs", 'O', Blocks.REDSTONE_BLOCK, 'G', Blocks.GLASS, 's', RotaryItems.HSLA_STEEL_INGOT.get());
@@ -489,21 +486,21 @@ public class RotaryRecipes {
 
         MachineRegistry.SEPARATION.addSizedCrafting(4, "sGs", "OGO", "sGs", 'O', Blocks.LAPIS_BLOCK, 'G', Blocks.GLASS, 's', RotaryItems.HSLA_STEEL_INGOT.get());
 
-        MachineRegistry.SONICBORER.addCrafting("ss ", "Icp", "bbb", 'p', RotaryItems.PIPE, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.COMPRESSOR, 'b', RotaryItems.BASEPANEL, 'I', Blocks.IRON_BARS);
-
-        MachineRegistry.AIRGUN.addCrafting("sps", "I S", "sps", 'I', RotaryItems.IMPELLER, 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SONAR);
-
-        MachineRegistry.FUELENGINE.addCrafting("CGC", "fgs", "bIb", 'g', GearboxTypes.TUNGSTEN.getPart(GearboxTypes.GearPart.UNIT8), 'C', RotaryItems.ALUMINUMCYLINDER, 'G', RotaryItems.TUNGSTENINGOT, 'f', RotaryItems.GEARUNIT, 'b', RotaryItems.BASEPANEL, 'I', RotaryItems.IMPELLER, 's', RotaryItems.SHAFTCORE);
-
-        MachineRegistry.AGGREGATOR.addCrafting("SPS", "GCG", "SsS", 's', RotaryItems.HSLA_SHAFT, 'G', Blocks.GLASS_PANE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'P', RotaryItems.BASEPANEL, 'C', RotaryItems.COMPRESSOR);
-
-        MachineRegistry.FILLINGSTATION.addCrafting("ppS", " iR", "ppB", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'i', RotaryItems.IMPELLER, 'p', RotaryItems.PIPE, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
-
-        MachineRegistry.BELT.addSizedCrafting(2, "sBs", " G ", "sBs", 'B', RotaryItems.BASEPANEL, 'G', RotaryItems.HUB, 's', RotaryItems.HSLA_STEEL_INGOT.get());
+//        MachineRegistry.SONICBORER.addCrafting("ss ", "Icp", "bbb", 'p', RotaryItems.PIPE, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.COMPRESSOR, 'b', RotaryItems.BASEPANEL, 'I', Blocks.IRON_BARS);
+//
+//        MachineRegistry.AIRGUN.addCrafting("sps", "I S", "sps", 'I', RotaryItems.IMPELLER, 'p', RotaryItems.BASEPANEL, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SONAR);
+//
+//        MachineRegistry.FUELENGINE.addCrafting("CGC", "fgs", "bIb", 'g', GearboxTypes.TUNGSTEN.getPart(GearPart.UNIT8), 'C', RotaryItems.ALUMINUMCYLINDER, 'G', RotaryItems.TUNGSTENINGOT, 'f', RotaryItems.GEARUNIT, 'b', RotaryItems.BASEPANEL, 'I', RotaryItems.IMPELLER, 's', RotaryItems.SHAFTCORE);
+//
+//        MachineRegistry.AGGREGATOR.addCrafting("SPS", "GCG", "SsS", 's', RotaryItems.HSLA_SHAFT, 'G', Blocks.GLASS_PANE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'P', RotaryItems.BASEPANEL, 'C', RotaryItems.COMPRESSOR);
+//
+//        MachineRegistry.FILLINGSTATION.addCrafting("ppS", " iR", "ppB", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'i', RotaryItems.IMPELLER, 'p', RotaryItems.PIPE, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
+//
+//        MachineRegistry.BELT.addSizedCrafting(2, "sBs", " G ", "sBs", 'B', RotaryItems.BASEPANEL, 'G', RotaryItems.HUB, 's', RotaryItems.HSLA_STEEL_INGOT.get());
 
         MachineRegistry.VANDEGRAFF.addCrafting("shs", "gbg", "php", 'h', RotaryItems.HUB, 'p', RotaryItems.BASEPANEL, 'b', RotaryItems.BELT, 'g', Blocks.GLASS_PANE, 's', RotaryItems.HSLA_STEEL_INGOT.get());
 
-        MachineRegistry.DISTILLER.addCrafting("PGP", "gMg", "PGP", 'G', Blocks.GLASS_PANE, 'M', RotaryItems.MIXER, 'P', RotaryItems.BASEPANEL, 'g', Items.IRON_INGOT);
+//        MachineRegistry.DISTILLER.addCrafting("PGP", "gMg", "PGP", 'G', Blocks.GLASS_PANE, 'M', RotaryItems.MIXER, 'P', RotaryItems.BASEPANEL, 'g', Items.IRON_INGOT);
 
         MachineRegistry.BIGFURNACE.addCrafting("SFS", "FRF", "SRS", 'S', RotaryItems.BASEPANEL, 'F', Blocks.FURNACE, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
 
@@ -511,56 +508,56 @@ public class RotaryRecipes {
 
         MachineRegistry.SORTING.addCrafting("SHS", " C ", "P P", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'H', Blocks.HOPPER, 'C', RotaryItems.PCB);
 
-        MachineRegistry.CRYSTALLIZER.addCrafting("SFS", "FIF", "BBB", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', RotaryItems.BASEPANEL, 'F', MachineRegistry.COOLINGFIN.getBlockState().getBlock().asItem(), 'I', RotaryItems.IMPELLER);
-
-        MachineRegistry.POWERBUS.addSizedCrafting(4, "SMS", "MCM", "SMS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'M', RotaryItems.BEARING, 'C', RotaryItems.BELT);
-
-        MachineRegistry.BUSCONTROLLER.addCrafting("SMS", "MCM", "SMS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'M', RotaryItems.BEARING, 'C', RotaryItems.PCB);
+//        MachineRegistry.CRYSTALLIZER.addCrafting("SFS", "FIF", "BBB", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', RotaryItems.BASEPANEL, 'F', MachineRegistry.COOLINGFIN.getBlockState().getBlock().asItem(), 'I', RotaryItems.IMPELLER);
+//
+//        MachineRegistry.POWERBUS.addSizedCrafting(4, "SMS", "MCM", "SMS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'M', RotaryItems.BEARING, 'C', RotaryItems.BELT);
+//
+//        MachineRegistry.BUSCONTROLLER.addCrafting("SMS", "MCM", "SMS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'M', RotaryItems.BEARING, 'C', RotaryItems.PCB);
 
         MachineRegistry.PARTICLE.addSizedCrafting(4, "SDS", "PCP", "SIS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'P', RotaryItems.BASEPANEL, 'C', RotaryItems.PCB, 'D', Blocks.DISPENSER, 'I', RotaryItems.IMPELLER);
         MachineRegistry.PARTICLE.addSizedOreRecipe(4, "SDS", "PCP", "SIS", 'S', "ingotTin", 'P', RotaryItems.BASEPANEL, 'C', RotaryItems.PCB, 'D', Blocks.DISPENSER, 'I', RotaryItems.IMPELLER);
 
-        MachineRegistry.LAWNSPRINKLER.addCrafting("PPP", " P ", "BIB", 'I', RotaryItems.IMPELLER, 'P', RotaryItems.PIPE, 'B', RotaryItems.BASEPANEL);
+//        MachineRegistry.LAWNSPRINKLER.addCrafting("PPP", " P ", "BIB", 'I', RotaryItems.IMPELLER, 'P', RotaryItems.PIPE, 'B', RotaryItems.BASEPANEL);
 
         MachineRegistry.GRINDSTONE.addCrafting("S S", "sBs", "ppp", 'p', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', Blocks.STONE);
 
         MachineRegistry.BLOWER.addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), "BBB", "PIP", "BBB", 'B', RotaryItems.BASEPANEL, 'I', RotaryItems.IMPELLER, 'P', RotaryItems.PIPE);
 
-        MachineRegistry.DEFOLIATOR.addCrafting("P P", "SPS", "BIB", 'B', RotaryItems.BASEPANEL, 'P', RotaryItems.PIPE, 'I', RotaryItems.IMPELLER, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
+//        MachineRegistry.DEFOLIATOR.addCrafting("P P", "SPS", "BIB", 'B', RotaryItems.BASEPANEL, 'P', RotaryItems.PIPE, 'I', RotaryItems.IMPELLER, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
 
         MachineRegistry.REFRIGERATOR.addCrafting("SPS", "CcD", "pPp", 'p', RotaryItems.BASEPANEL, 'P', RotaryItems.PIPE, 'D', RotaryItems.DIFFUSER, 'C', RotaryItems.COMPRESSOR, 'c', RotaryItems.CONDENSER, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
 
         MachineRegistry.COMPOSTER.addCrafting(" S ", "S S", "BBB", 'B', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
-        MachineRegistry.COMPOSTER.addOreRecipe(" S ", "S S", "BBB", 'B', RotaryItems.BASEPANEL, 'S', "ingotTin");
+        MachineRegistry.COMPOSTER.addTagRecipe(" S ", "S S", "BBB", 'B', RotaryItems.BASEPANEL, 'S', "ingotTin");
 
-        MachineRegistry.GASTANK.addCrafting("SIS", "PRP", "PPP", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
-
-        MachineRegistry.CRAFTER.addCrafting("SCS", "PcP", "SPS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', Blocks.CRAFTING_TABLE, 'P', RotaryItems.BASEPANEL, 'c', RotaryItems.PCB);
-
-        MachineRegistry.ANTIAIR.addCrafting("sss", "ppc", " Ba", 'p', RotaryItems.PIPE, 'c', RotaryItems.COMPRESSOR, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'a', RotaryItems.RAILAIM, 'B', RotaryItems.RAILBASE);
-
-        MachineRegistry.PIPEPUMP.addCrafting("BBB", "PIP", "BBB", 'B', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.PIPE);
-
-        MachineRegistry.CHAIN.addSizedCrafting(2, "sBs", " G ", "sBs", 'B', RotaryItems.BASEPANEL, 'G', RotaryItems.STEELGEAR, 's', RotaryItems.HSLA_STEEL_INGOT.get());
-
-        MachineRegistry.CENTRIFUGE.addCrafting("SGS", "S S", "PgP", 'P', RotaryItems.BASEPANEL, 'g', RotaryItems.GEARUNIT4, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS_PANE);
-
-        MachineRegistry.DRYING.addCrafting("S S", "SPS", "S S", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
-
-        MachineRegistry.WETTER.addCrafting("S S", "gmg", "SPS", 'g', Blocks.GLASS_PANE, 'm', RotaryItems.MIXER, 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
-
-        MachineRegistry.CHUNKLOADER.addCrafting("sSs", "BSB", "PGP", 'B', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.BEDROCKSHAFT, 's', Items.NETHER_STAR, 'P', RotaryItems.BASEPANEL, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
-
-        MachineRegistry.DROPS.addCrafting("PSP", "PDP", "PSP", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', RotaryItems.DRILL, 'P', RotaryItems.BASEPANEL);
-
-        MachineRegistry.ITEMFILTER.addCrafting("sSs", "CCC", "PRP", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SCREEN, 'C', RotaryItems.PCB, 'R', Items.REDSTONE, 'P', RotaryItems.BASEPANEL);
-
-        MachineRegistry.HYDRATOR.addOreRecipe("sls", "p p", "PpP", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'p', "plankWood", 'l', Blocks.LADDER, 'P', RotaryItems.BASEPANEL);
-
-        MachineRegistry.GATLING.addCrafting("PPG", " GA", "  B", 'B', RotaryItems.RAILBASE, 'A', RotaryItems.RAILAIM, 'G', RotaryItems.STEELGEAR, 'P', RotaryItems.CYLINDER);
-
-        MachineRegistry.FLAMETURRET.addCrafting("FIP", "GFS", " FB", 'B', RotaryItems.RAILBASE, 'F', RotaryItems.FUELLINE, 'I', RotaryItems.IGNITER, 'P', RotaryItems.PIPE, 'g', RotaryItems.IMPELLER, 'S', RotaryItems.SHAFTITEM);
-
+//        MachineRegistry.GASTANK.addCrafting("SIS", "PRP", "PPP", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'R', MachineRegistry.RESERVOIR.getCraftedProduct());
+//
+//        MachineRegistry.CRAFTER.addCrafting("SCS", "PcP", "SPS", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'C', Blocks.CRAFTING_TABLE, 'P', RotaryItems.BASEPANEL, 'c', RotaryItems.PCB);
+//
+//        MachineRegistry.ANTIAIR.addCrafting("sss", "ppc", " Ba", 'p', RotaryItems.PIPE, 'c', RotaryItems.COMPRESSOR, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'a', RotaryItems.RAILAIM, 'B', RotaryItems.RAILBASE);
+//
+//        MachineRegistry.PIPEPUMP.addCrafting("BBB", "PIP", "BBB", 'B', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.PIPE);
+//
+//        MachineRegistry.CHAIN.addSizedCrafting(2, "sBs", " G ", "sBs", 'B', RotaryItems.BASEPANEL, 'G', RotaryItems.STEELGEAR, 's', RotaryItems.HSLA_STEEL_INGOT.get());
+//
+//        MachineRegistry.CENTRIFUGE.addCrafting("SGS", "S S", "PgP", 'P', RotaryItems.BASEPANEL, 'g', RotaryItems.GEARUNIT4, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS_PANE);
+//
+//        MachineRegistry.DRYING.addCrafting("S S", "SPS", "S S", 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
+//
+//        MachineRegistry.WETTER.addCrafting("S S", "gmg", "SPS", 'g', Blocks.GLASS_PANE, 'm', RotaryItems.MIXER, 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.HSLA_STEEL_INGOT.get());
+//
+//        MachineRegistry.CHUNKLOADER.addCrafting("sSs", "BSB", "PGP", 'B', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.BEDROCKSHAFT, 's', Items.NETHER_STAR, 'P', RotaryItems.BASEPANEL, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16));
+//
+//        MachineRegistry.DROPS.addCrafting("PSP", "PDP", "PSP", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'D', RotaryItems.DRILL, 'P', RotaryItems.BASEPANEL);
+//
+//        MachineRegistry.ITEMFILTER.addCrafting("sSs", "CCC", "PRP", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'S', RotaryItems.SCREEN, 'C', RotaryItems.PCB, 'R', Items.REDSTONE, 'P', RotaryItems.BASEPANEL);
+//
+//        MachineRegistry.HYDRATOR.addOreRecipe("sls", "p p", "PpP", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'p', "plankWood", 'l', Blocks.LADDER, 'P', RotaryItems.BASEPANEL);
+//
+//        MachineRegistry.GATLING.addCrafting("PPG", " GA", "  B", 'B', RotaryItems.RAILBASE, 'A', RotaryItems.RAILAIM, 'G', RotaryItems.STEELGEAR, 'P', RotaryItems.CYLINDER);
+//
+//        MachineRegistry.FLAMETURRET.addCrafting("FIP", "GFS", " FB", 'B', RotaryItems.RAILBASE, 'F', RotaryItems.FUELLINE, 'I', RotaryItems.IGNITER, 'P', RotaryItems.PIPE, 'g', RotaryItems.IMPELLER, 'S', RotaryItems.SHAFTITEM);
+//
         MachineRegistry.SPILLWAY.addCrafting("S  ", "PSP", "PpP", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'P', RotaryItems.BASEPANEL, 'p', RotaryItems.PIPE);
 
         MachineRegistry.DISTRIBCLUTCH.addCrafting("sgs", "SGS", "PrP", 'r', RotaryItems.PCB, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'P', RotaryItems.BASEPANEL, 'S', RotaryItems.SHAFTITEM, 'g', RotaryItems.STEELGEAR, 'G', RotaryItems.GEARUNIT);
@@ -625,7 +622,7 @@ public class RotaryRecipes {
         RotaryItems.GRAVELGUN.addRecipe(" d ", "gcg", "sas", 'a', RotaryCraft.config.getGravelGunGatingMaterial(true, RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance()), 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', Blocks.CHEST, 'd', Blocks.DISPENSER, 'g', RotaryItems.STEELGEAR);
         RotaryItems.RANGEFINDER.addRecipe(" e ", "rGr", "sss", 'G', Blocks.GLOWSTONE, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'r', Items.REDSTONE, 'e', Items.ENDER_PEARL);
         RotaryItems.FIREBALL.addRecipe("b b", "scs", "srs", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.COMBUSTOR, 'r', Items.REDSTONE, 'b', Items.BLAZE_ROD);
-        RotaryItems.HANDCRAFT.addRecipe(" g ", "scs", " g ", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'g', Items.GOLD_INGOT, 'c', Blocks.CRAFTING_TABLE);
+        RotaryItems.HANDHELD_CRAFTING_TABLE.addRecipe(" g ", "scs", " g ", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'g', Items.GOLD_INGOT, 'c', Blocks.CRAFTING_TABLE);
         RotaryItems.NVG.addRecipe("scs", "ese", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.SCREEN, 'e', Items.ENDER_EYE);
 
         RotaryItems.IOGOGGLES.addRecipe("scs", "ese", 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'c', Items.ENDER_PEARL, 'e', Items.REDSTONE);
@@ -664,7 +661,7 @@ public class RotaryRecipes {
         RotaryItems.GEARUPGRADE.addMetaBlastRecipe(1200, 2, 0, "sSS", "SsS", "SSG", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'G', Blocks.GLASS_PANE, 's', RotaryItems.BEDROCKSHAFT);
 
         for (int i = 1; i <= 4; i++) {
-            ItemStack gear = GearboxTypes.BEDROCK.getPart(GearboxTypes.GearPart.list[GearboxTypes.GearPart.UNIT2.ordinal() + i - 1]);
+            ItemStack gear = GearboxTypes.BEDROCK.getPart(GearPart.list[GearPart.UNIT2.ordinal() + i - 1]);
             RotaryItems.GEARUPGRADE.addRecipe(ReikaRecipeHelper.getShapelessRecipeFor(RotaryItems.GEARUPGRADE.getMetadata(i), RotaryItems.GEARUPGRADE.getMetadata(0), gear));
         }
     }
@@ -686,8 +683,6 @@ public class RotaryRecipes {
         WorktableRecipes.getInstance().addRecyclingRecipe(new RecyclingRecipe(RotaryItems.WATERPLATE, 81));
 
         WorktableRecipes.getInstance().addRecipe(RotaryItems.STEELBLOCK, RecipeHandler.RecipeLevel.PROTECTED, "BBB", "BBB", "BBB", 'B', RotaryItems.HSLA_STEEL_INGOT.get());
-
-
     }
 
 
@@ -697,7 +692,7 @@ public class RotaryRecipes {
         MachineRegistry.ADVANCEDGEARS.addMetaCrafting(1, "BSB", "BSB", "sMc", 'c', RotaryItems.SCREEN, 's', RotaryItems.PCB, 'M', RotaryItems.MOUNT, 'S', RotaryItems.BEDROCKSHAFT, 'B', GearboxTypes.DIAMOND.getPart(GearPart.BEARING)); //CVT
         MachineRegistry.ADVANCEDGEARS.addMetaCrafting(2, "BCS", " M ", 'M', RotaryItems.MOUNT, 'S', RotaryItems.SHAFTCORE, 'B', RotaryItems.BRAKE, 'C', RotaryItems.TENSCOIL); //Coil
         NBTTagCompound NBT = new NBTTagCompound();
-        NBT.setBoolean("bedrock", true);
+        NBT.putBoolean("bedrock", true);
         MachineRegistry.ADVANCEDGEARS.addNBTMetaCrafting(NBT, 2, "BCS", " M ", 'M', RotaryItems.MOUNT, 'S', GearboxTypes.BEDROCK.getPart(GearPart.SHAFTCORE), 'B', RotaryItems.BRAKE, 'C', RotaryItems.BEDROCKCOIL); //Coil
         MachineRegistry.ADVANCEDGEARS.addMetaCrafting(3, "SGS", "SGS", "BMB", 'S', RotaryItems.BEDROCKSHAFT, 'B', GearboxTypes.TUNGSTEN.getPart(GearPart.BEARING), 'M', RotaryItems.MOUNT, 'G', GearboxTypes.BEDROCK.getPart(GearPart.UNIT16)); //256x
 
@@ -714,21 +709,21 @@ public class RotaryRecipes {
             }
         }
 
-        MachineRegistry.ENGINE.addMetaCrafting(EngineType.DC.ordinal(), "SSS", "SRs", "PRP", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'R', Items.REDSTONE, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM);
-        MachineRegistry.ENGINE.addSizedMetaCrafting(2, EngineType.WIND.ordinal(), "SSS", "SHS", "SSS", 'S', RotaryItems.PROP, 'H', RotaryItems.HUB);
-        MachineRegistry.ENGINE.addMetaCrafting(EngineType.STEAM.ordinal(), "ccc", "CIs", "PGP", 'c', Blocks.COBBLESTONE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', Items.GOLD_INGOT, 'C', RotaryItems.CONDENSER);
+        MachineRegistry.DC_ENGINE.addMetaCrafting(EngineType.DC.ordinal(), "SSS", "SRs", "PRP", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'R', Items.REDSTONE, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM);
+        MachineRegistry.WIND_ENGINE.addSizedMetaCrafting(2, EngineType.WIND.ordinal(), "SSS", "SHS", "SSS", 'S', RotaryItems.PROP, 'H', RotaryItems.HUB);
+        MachineRegistry.STEAM_ENGINE.addMetaCrafting(EngineType.STEAM.ordinal(), "ccc", "CIs", "PGP", 'c', Blocks.COBBLESTONE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', Items.GOLD_INGOT, 'C', RotaryItems.CONDENSER);
 
         if (ReikaItemHelper.oreItemExists("ingotCopper"))
-            MachineRegistry.ENGINE.addMetaOreRecipe(EngineType.STEAM.ordinal(), "ccc", "CIs", "PGP", 'c', Blocks.COBBLESTONE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', "ingotCopper", 'C', RotaryItems.CONDENSER);
-        MachineRegistry.ENGINE.addMetaCrafting(EngineType.GAS.ordinal(), "CgC", "SGs", "PIP", 'g', Items.GOLD_INGOT, 'S', RotaryItems.IGNITER, 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', RotaryItems.GEARUNIT, 'C', RotaryItems.CYLINDER);
-        MachineRegistry.ENGINE.addMetaCrafting(EngineType.AC.ordinal(), "SSS", "SGs", "PRP", 'S', Items.GOLD_INGOT, 'R', Items.REDSTONE, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', RotaryItems.GOLDCOIL);
+            MachineRegistry.STEAM_ENGINE.addMetaOreRecipe(EngineType.STEAM.ordinal(), "ccc", "CIs", "PGP", 'c', Blocks.COBBLESTONE, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', "ingotCopper", 'C', RotaryItems.CONDENSER);
+        MachineRegistry.GAS_ENGINE.addMetaCrafting(EngineType.GAS.ordinal(), "CgC", "SGs", "PIP", 'g', Items.GOLD_INGOT, 'S', RotaryItems.IGNITER, 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', RotaryItems.GEARUNIT, 'C', RotaryItems.CYLINDER);
+        MachineRegistry.AC_ENGINE.addMetaCrafting(EngineType.AC.ordinal(), "SSS", "SGs", "PRP", 'S', Items.GOLD_INGOT, 'R', Items.REDSTONE, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', RotaryItems.GOLDCOIL);
 
         if (ReikaItemHelper.oreItemExists("ingotElectrum"))
-            MachineRegistry.ENGINE.addMetaOreRecipe(EngineType.AC.ordinal(), "SSS", "SGs", "PRP", 'S', "ingotElectrum", 'R', Items.REDSTONE, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', RotaryItems.GOLDCOIL);
-        MachineRegistry.ENGINE.addMetaCrafting(EngineType.SPORT.ordinal(), "CrC", "SGs", "PIP", 'C', RotaryItems.ALUMINUMCYLINDER, 'S', RotaryItems.IGNITER, 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'r', RotaryItems.RADIATOR, 'G', RotaryItems.GEARUNIT);
-        MachineRegistry.ENGINE.addMetaCrafting(EngineType.HYDRO.ordinal(), "PPP", "PGP", "PPP", 'P', RotaryItems.WATERPLATE, 'G', RotaryItems.DIAMONDSHAFTCORE);
-        MachineRegistry.ENGINE.addMetaCrafting(EngineType.MICRO.ordinal(), "CSS", "cTs", "PPP", 'S', RotaryItems.SILUMIN, 'C', RotaryItems.COMPRESSOR, 'c', RotaryItems.HIGHCOMBUSTOR, 'T', RotaryItems.TURBINE, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM);
-        MachineRegistry.ENGINE.addMetaCrafting(EngineType.JET.ordinal(), "DCS", "ScS", "PTs", 'S', RotaryItems.SILUMIN, 'D', RotaryItems.DIFFUSER, 'C', RotaryItems.COMPOUNDCOMPRESS, 'c', RotaryItems.HIGHCOMBUSTOR, 'T', RotaryItems.COMPOUNDTURB, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM);
+            MachineRegistry.AC_ENGINE.addMetaOreRecipe(EngineType.AC.ordinal(), "SSS", "SGs", "PRP", 'S', "ingotElectrum", 'R', Items.REDSTONE, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'G', RotaryItems.GOLDCOIL);
+        MachineRegistry.PERFORMANCE_ENGINE.addMetaCrafting(EngineType.SPORT.ordinal(), "CrC", "SGs", "PIP", 'C', RotaryItems.ALUMINUMCYLINDER, 'S', RotaryItems.IGNITER, 'I', RotaryItems.IMPELLER, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM, 'r', RotaryItems.RADIATOR, 'G', RotaryItems.GEARUNIT);
+//        MachineRegistry.HYDRO.addMetaCrafting(EngineType.HYDRO.ordinal(), "PPP", "PGP", "PPP", 'P', RotaryItems.WATERPLATE, 'G', RotaryItems.DIAMONDSHAFTCORE);
+        MachineRegistry.MICRO_TURBINE.addMetaCrafting(EngineType.MICRO.ordinal(), "CSS", "cTs", "PPP", 'S', RotaryItems.SILUMIN, 'C', RotaryItems.COMPRESSOR, 'c', RotaryItems.HIGHCOMBUSTOR, 'T', RotaryItems.TURBINE, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM);
+//        MachineRegistry.JET.addMetaCrafting(EngineType.JET.ordinal(), "DCS", "ScS", "PTs", 'S', RotaryItems.SILUMIN, 'D', RotaryItems.DIFFUSER, 'C', RotaryItems.COMPOUNDCOMPRESS, 'c', RotaryItems.HIGHCOMBUSTOR, 'T', RotaryItems.COMPOUNDTURB, 'P', RotaryItems.BASEPANEL, 's', RotaryItems.SHAFTITEM);
 
         if (ConfigRegistry.ROTATEHOSE.getState()) {
             MachineRegistry.HOSE.addSizedOreRecipe(DifficultyEffects.PIPECRAFT.getInt(), "WWW", "GGG", "WWW", 'G', Blocks.GLASS, 'W', "plankWood");
@@ -752,7 +747,7 @@ public class RotaryRecipes {
             Object m = gear.getMountItem();
             for (int r = 2; r <= 16; r *= 2) {
                 ItemStack item = addDamageNBT(gear.getGearboxItem(r));
-                ItemStack unit = gear.getPart(GearboxTypes.GearPart.getGearUnitPartItemFromRatio(r));
+                ItemStack unit = gear.getPart(GearPart.getGearUnitPartItemFromRatio(r));
                 if (m == RotaryItems.MOUNT) {
                     MachineRegistry.GEARBOX.addRecipe(item, new Object[]{"G", "M", 'M', RotaryItems.MOUNT, 'G', unit});
                 } else {
@@ -772,7 +767,7 @@ public class RotaryRecipes {
     private static ItemStack addDiamondTypeTag(ItemStack is, String tag, boolean value) {
         if (is.stackTagCompound == null)
             is.setTagCompound(new NBTTagCompound());
-        is.stackTagCompound.setBoolean(tag, value);
+        is.stackTagCompound.putBoolean(tag, value);
         return is;
     }
 

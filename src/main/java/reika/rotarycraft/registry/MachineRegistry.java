@@ -12,10 +12,12 @@ package reika.rotarycraft.registry;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,11 +29,12 @@ import reika.dragonapi.instantiable.data.immutable.ImmutableArray;
 import reika.dragonapi.instantiable.data.maps.BlockMap;
 import reika.dragonapi.interfaces.IReikaRecipe;
 import reika.dragonapi.interfaces.registry.TileEnum;
+import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.dragonapi.modregistry.PowerTypes;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.ModDependency;
 import reika.rotarycraft.auxiliary.interfaces.*;
-import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler;
+import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler.RecipeLevel;
 import reika.rotarycraft.auxiliary.recipemanagers.WorktableRecipes;
 import reika.rotarycraft.base.RotaryModelBase;
 import reika.rotarycraft.base.blockentity.*;
@@ -62,7 +65,6 @@ import reika.rotarycraft.modinterface.conversion.BlockEntityBoiler;
 import reika.rotarycraft.modinterface.conversion.BlockEntityMagnetEngine;
 import reika.rotarycraft.modinterface.conversion.BlockEntitySteam;
 import reika.rotarycraft.modinterface.model.BoilerModel;
-import reika.rotarycraft.modinterface.model.DynamoModel;
 import reika.rotarycraft.modinterface.model.MagneticModel;
 import reika.rotarycraft.modinterface.model.SteamTurbineModel;
 
@@ -1009,9 +1011,117 @@ public enum MachineRegistry implements TileEnum {
         return !this.isDummiedOut() && !this.isTechnical() && !this.isConfigDisabled();
     }
 
+
+    public void addSizedOreRecipe(int size, Object... obj) {
+        if (this.isCraftable()) {
+            ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), size), obj);
+            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(ir);
+            }
+        }
+    }
+
+
+    public void addMetaOreRecipe(int meta, Object... obj) {
+        if (this.isCraftable()) {
+            ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedMetadataProduct(meta), obj);
+            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(ir);
+            }
+        }
+    }
+
+    public void addSizedMetaOreRecipe(int size, int meta, Object... obj) {
+        if (this.isCraftable()) {
+            ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(meta), size), obj);
+            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(ir);
+            }
+        }
+    }
+
+    public void addMetaCrafting(int metadata, Object... obj) {
+        if (this.isCraftable()) {
+            WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(this.getCraftedMetadataProduct(metadata), obj);
+            }
+        }
+        //this.addMetaOreRecipe(metadata, obj);
+    }
+
+    public void addSizedCrafting(int num, Object... obj) {
+        if (this.isCraftable()) {
+            WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
+            }
+        }
+        //this.addSizedOreRecipe(num, obj);
+    }
+
     public void addRecipe(IReikaRecipe ir) {
         if (this.isCraftable()) {
-            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeHandler.RecipeLevel.CORE : RecipeHandler.RecipeLevel.PROTECTED);
+            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+//              GameRegistry.addRecipe(ir);
+                recipe.put(, ir.getResult());
+            }
+        }
+    }
+
+    public void addRecipe(ItemStack is, Object... obj) {
+        if (this.isCraftable()) {
+            WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(is, obj);
+            }
+        }
+    }
+
+    public void addCrafting(Object... obj) {
+        if (this.isCraftable()) {
+            WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(this.getCraftedProduct(), obj);
+            }
+        }
+        //this.addOreRecipe(obj);
+    }
+
+    public void addNBTCrafting(CompoundTag NBT, Object... obj) {
+        if (this.isCraftable()) {
+            ItemStack is = this.getCraftedProduct();
+            is.setTag(NBT.copy());
+            WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(is, obj);
+            }
+        }
+        //this.addSizedOreRecipe(num, obj);
+    }
+
+
+    public void addSizedNBTCrafting(CompoundTag NBT, int num, Object... obj) {
+        if (this.isCraftable()) {
+            ItemStack is = ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num);
+            is.setTag(NBT.copy());
+            WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
+            if (ConfigRegistry.TABLEMACHINES.getState()) {
+                GameRegistry.addRecipe(is, obj);
+            }
+        }
+        //this.addSizedOreRecipe(num, obj);
+    }
+
+
+    public void addTagRecipe(Object... obj) {
+        if (this.isCraftable()) {
+            ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedProduct(), obj);
+            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
             if (ConfigRegistry.TABLEMACHINES.getState()) {
                 GameRegistry.addRecipe(ir);
             }

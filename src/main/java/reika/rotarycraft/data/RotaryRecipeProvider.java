@@ -6,8 +6,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import reika.dragonapi.interfaces.IReikaRecipe;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler;
+import reika.rotarycraft.auxiliary.recipemanagers.WorktableRecipes;
 import reika.rotarycraft.registry.*;
 import reika.rotarycraft.registry.GearboxTypes.GearPart;
 
@@ -17,6 +20,8 @@ import java.util.function.Consumer;
 
 public class RotaryRecipeProvider extends RecipeProvider {
 
+    //list of items for recipe, 9 items and one output
+    private static final HashMap<ItemStack[], ItemStack> recipe = new HashMap<>();
 
     public RotaryRecipeProvider(PackOutput p_248933_) {
         super(p_248933_);
@@ -31,7 +36,8 @@ public class RotaryRecipeProvider extends RecipeProvider {
                 .pattern("S")
                 .define('S', smooth)
                 .unlockedBy("has_stone", has(smooth))
-                .save(consumer, new ResourceLocation(RotaryCraft.MODID, GeoDataProviders.name(pillar)));
+                .save(consumer, new ResourceLocation(RotaryCraft.MODID, RoCDataProviders.name()));
+
 
     }
 
@@ -410,4 +416,5 @@ public class RotaryRecipeProvider extends RecipeProvider {
             }
         }
     }*/
+
 }
