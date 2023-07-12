@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import reika.dragonapi.instantiable.data.maps.MultiMap;
 import reika.dragonapi.instantiable.data.maps.NestedMap;
@@ -57,31 +58,31 @@ public class MachineItemRenderer extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack item, ItemTransforms.TransformType type, PoseStack stack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlayIn) {
+    public void renderByItem(ItemStack item, ItemDisplayContext type, PoseStack stack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlayIn) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         stack.pushPose();
-        if (type == ItemTransforms.TransformType.GROUND) {
+        if (type == ItemDisplayContext.GROUND) {
             stack.translate(0.5D, 1.1D, 0.5D);
             stack.scale(-0.5f, -0.5f, 0.5f);
             stack.mulPose(Axis.YN.rotationDegrees(90f));
         }
-        if (type == ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND || type == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND) {
+        if (type == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || type == ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
             stack.translate(0.4D, 1.2D, 0.75D);
             stack.scale(-0.5f, -0.5f, 0.5f);
             stack.mulPose(Axis.YN.rotationDegrees(140f));
         }
-        if (type == ItemTransforms.TransformType.GUI) {
+        if (type == ItemDisplayContext.GUI) {
             stack.translate(0.5D, 1.1D, 0.5D);
             stack.scale(-0.6f, -0.6f, 0.6f);
             stack.mulPose(Axis.YP.rotationDegrees(135f));
         }
-        if (type == ItemTransforms.TransformType.FIXED) {
+        if (type == ItemDisplayContext.FIXED) {
             stack.translate(0.5D, 1.1D, 0.5D);
             stack.scale(-0.5f, -0.5f, 0.5f);
             stack.mulPose(Axis.YN.rotationDegrees(90f));
         }
-        if (type == ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND || type == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND) {
+        if (type == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || type == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
             stack.translate(0.5D, 1.1D, 0.5D);
             stack.scale(-0.5f, -0.5f, 0.5f);
             stack.mulPose(Axis.YN.rotationDegrees(90f));

@@ -31,7 +31,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
 
-    private MonitorModel monitorModel;
+    private final MonitorModel monitorModel;
 
     public RenderMonitor(BlockEntityRendererProvider.Context context) {
         monitorModel = new MonitorModel(context.bakeLayer(RotaryModelLayers.DYNOMONITOR));

@@ -76,7 +76,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     private CVTController controller;
     private ItemStack[] belts = new ItemStack[31];
     private int targetTorque = 1;
-    private GearType gearType;
+    private final GearType gearType;
     private boolean enabled = true;
 
     public BlockEntityAdvancedGear(GearType type, BlockPos pos, BlockState state) {
@@ -89,7 +89,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
         gearType = type;
     }
     public static long getMaxStorageCapacity(boolean bedrock) {
-        return bedrock ? 240L * ReikaMathLibrary.longpow(10, 12) : 720 * ReikaMathLibrary.intpow2(10, 6);
+        return bedrock ? 240L * ReikaMathLibrary.longpow(10, 12) : 720L * ReikaMathLibrary.intpow2(10, 6);
     }
 
     public static String getMaxStorageCapacityFormatted(boolean bedrock) {
@@ -216,7 +216,6 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                 torque = 0;
                 omega = 0;
                 power = 0;
-                return;
             }
         } else if (this.getGearType() == GearType.HIGH) {
             if (this.hasLubricant()) {
@@ -544,7 +543,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                 torque = torque * WORMRATIO;
         } else {
             omega = torque = 0;
-            return; //not its output
+            //not its output
         }
     }
 
@@ -580,16 +579,14 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
             }
-            if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();
                 }
             }
 
-            if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            if (te instanceof ComplexIO pwr) {
                 Direction dir = this.getInputDirection().getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
@@ -919,7 +916,7 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
     public long getMaxPower() {
         if (this.getGearType() != GearType.COIL)
             return 0;
-        return power > 0 ? releaseOmega * releaseTorque : 0;
+        return power > 0 ? (long) releaseOmega * releaseTorque : 0;
     }
 
     @Override

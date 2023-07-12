@@ -1,10 +1,7 @@
 package reika.rotarycraft.registry;
 
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -157,10 +154,10 @@ public class RotaryItems {
 
     public static final RegistryObject<Item> HSLA_STEEL_INGOT = ITEMS.register("hsla_steel_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> HSLA_STEEL_NUGGET = ITEMS.register("hsla_steel_nugget", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> HSLA_HELMET = ITEMS.register("hsla_steel_helmet", () -> new ItemSteelArmor(EquipmentSlot.HEAD, new Item.Properties()));
-    public static final RegistryObject<Item> HSLA_CHESTPLATE = ITEMS.register("hsla_steel_chestplate", () -> new ItemSteelArmor(EquipmentSlot.CHEST, new Item.Properties()));
-    public static final RegistryObject<Item> HSLA_LEGGINGS = ITEMS.register("hsla_steel_leggings", () -> new ItemSteelArmor(EquipmentSlot.LEGS, new Item.Properties()));
-    public static final RegistryObject<Item> HSLA_BOOTS = ITEMS.register("hsla_steel_boots", () -> new ItemSteelArmor(EquipmentSlot.FEET, new Item.Properties()));
+    public static final RegistryObject<Item> HSLA_HELMET = ITEMS.register("hsla_steel_helmet", () -> new ItemSteelArmor(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> HSLA_CHESTPLATE = ITEMS.register("hsla_steel_chestplate", () -> new ItemSteelArmor(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> HSLA_LEGGINGS = ITEMS.register("hsla_steel_leggings", () -> new ItemSteelArmor(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> HSLA_BOOTS = ITEMS.register("hsla_steel_boots", () -> new ItemSteelArmor(ArmorItem.Type.BOOTS, new Item.Properties()));
     public static final RegistryObject<Item> HSLA_STEEL_SCRAP = ITEMS.register("hsla_steel_scrap", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> HSLA_PLATE = ITEMS.register("hsla_steel_plate", () -> new Item(new Item.Properties())); //this is the "base plate"
     public static final RegistryObject<Item> HSLA_DRILL = ITEMS.register("hsla_steel_drill", () -> new Item(new Item.Properties()));
@@ -208,10 +205,10 @@ public class RotaryItems {
 //    public static final RegistryObject<Item> BEDROCK_ALLOY_SHIELD = ITEMS.register("bedrock_alloy_shield", () -> new ShieldItem(new Item.Properties()));
 
     public static final RegistryObject<Item> BEDROCK_ALLOY_INGOT = ITEMS.register("bedrock_alloy_ingot", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> BEDROCK_ALLOY_HELMET = ITEMS.register("bedrock_alloy_helmet", () -> new ItemBedrockArmor(EquipmentSlot.HEAD, new Item.Properties()));
-    public static final RegistryObject<Item> BEDROCK_ALLOY_CHESTPLATE = ITEMS.register("bedrock_alloy_chestplate", () -> new ItemBedrockArmor(EquipmentSlot.CHEST, new Item.Properties()));
-    public static final RegistryObject<Item> BEDROCK_ALLOY_LEGGINGS = ITEMS.register("bedrock_alloy_leggings", () -> new ItemBedrockArmor(EquipmentSlot.LEGS, new Item.Properties()));
-    public static final RegistryObject<Item> BEDROCK_ALLOY_BOOTS = ITEMS.register("bedrock_alloy_boots", () -> new ItemBedrockArmor(EquipmentSlot.FEET, new Item.Properties()));
+    public static final RegistryObject<Item> BEDROCK_ALLOY_HELMET = ITEMS.register("bedrock_alloy_helmet", () -> new ItemBedrockArmor(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> BEDROCK_ALLOY_CHESTPLATE = ITEMS.register("bedrock_alloy_chestplate", () -> new ItemBedrockArmor(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> BEDROCK_ALLOY_LEGGINGS = ITEMS.register("bedrock_alloy_leggings", () -> new ItemBedrockArmor(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> BEDROCK_ALLOY_BOOTS = ITEMS.register("bedrock_alloy_boots", () -> new ItemBedrockArmor(ArmorItem.Type.BOOTS, new Item.Properties()));
     public static final RegistryObject<Item> BEDROCK_DRILL = ITEMS.register("bedrock_alloy_drill", () -> new Item(new Item.Properties()));
 
     //Flakes
@@ -300,9 +297,7 @@ public class RotaryItems {
         if (is == SCREWDRIVER.get().getDefaultInstance()){
             return true;
         }
-        if (is == UPGRADE.get().getDefaultInstance()){
-            return true;
-        }
+        return is == UPGRADE.get().getDefaultInstance();
         /*if (is == DEBUG.get().getDefaultInstance()){
             return true;
         }
@@ -321,6 +316,5 @@ public class RotaryItems {
         if (is == PUMP.get().getDefaultInstance()){
                 return is.getTag() != null;
         }*/
-        return false;
     }
 }

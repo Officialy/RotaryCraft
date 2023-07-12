@@ -93,10 +93,9 @@ public class ItemBedrockSword extends SwordItem {
     private void forceEnchants(ItemStack is, Level Level, Entity entity, int slot) {
         if (!ReikaEnchantmentHelper.hasEnchantment(Enchantments.MOB_LOOTING, is) || !ReikaEnchantmentHelper.hasEnchantment(Enchantments.SHARPNESS, is)) {
             entity.playSound(SoundEvents.ITEM_BREAK, 1, 1);
-            if (entity instanceof Player) {
-                Player ep = (Player) entity;
+            if (entity instanceof Player ep) {
                 ep.getInventory().setItem(slot, ItemStack.EMPTY);
-                ep.hurt(DamageSource.GENERIC, 10);
+                ep.hurt(ep.damageSources().generic(), 10);
                 ReikaChatHelper.sendChatToPlayer(ep, "The dulled tool has broken.");
                 is = null;
             }

@@ -28,7 +28,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderSolarTower extends RotaryTERenderer<BlockEntitySolarTower> {
 
-    private SolarTowerModel modelSolar;
+    private final SolarTowerModel modelSolar;
 
     public RenderSolarTower(BlockEntityRendererProvider.Context context) {
         modelSolar = new SolarTowerModel(context.bakeLayer(RotaryModelLayers.SOLAR_TOWER));

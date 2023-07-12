@@ -12,9 +12,8 @@ public class EntityCustomTNT extends PrimedTnt implements IEntityAdditionalSpawn
 
     private int extraTime;
 
-    public EntityCustomTNT(Level world, BlockPos pos, LivingEntity e, int fuse)
-    {
-        super(world, pos.getX(), pos.getY(), pos.getZ(), e);
+    public EntityCustomTNT(Level world, double x, double y, double z, LivingEntity e, int fuse) {
+        super(world, x, y, z, e);
         setFuse(fuse);
     }
 
@@ -25,6 +24,6 @@ public class EntityCustomTNT extends PrimedTnt implements IEntityAdditionalSpawn
 
     @Override
     public void readSpawnData(FriendlyByteBuf data) {
-         setFuse(data.readInt());
+        setFuse(data.readInt());
     }
 }

@@ -31,7 +31,7 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
             setChanged();
         }
     };
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    private final LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
     public InventoriedPowerLiquidProducer(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }

@@ -187,8 +187,7 @@ public class BlockEntityFloodlight extends BlockEntityBeamMachine implements Ran
             int dz = worldPosition.getZ() + i * facing.getStepZ();
             Block b = level.getBlockState(new BlockPos(dx, dy, dz)).getBlock();
             if (b != Blocks.AIR) {
-                if (b instanceof SemiTransparent) {
-                    SemiTransparent sm = (SemiTransparent) b;
+                if (b instanceof SemiTransparent sm) {
                     if (sm.isOpaque())
                         return i;
                 } //else if (b.isOpaqueCube())
@@ -212,7 +211,7 @@ public class BlockEntityFloodlight extends BlockEntityBeamMachine implements Ran
     public void breakBlock() {
         this.lightsOut(level, worldPosition);
         if (fresnel) {
-            ReikaItemHelper.dropItem(level, new BlockPos(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5), RotaryItems.LENS.get().getDefaultInstance());
+            ReikaItemHelper.dropItem(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, RotaryItems.LENS.get().getDefaultInstance());
         }
     }
 

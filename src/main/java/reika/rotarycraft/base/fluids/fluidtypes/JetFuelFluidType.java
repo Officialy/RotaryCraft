@@ -78,7 +78,7 @@ public class JetFuelFluidType extends FluidType {
             @Override
             public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
                 // Scale the brightness of fog but make sure it is never darker than the dimension's min brightness.
-                BlockPos blockpos = new BlockPos(camera.getEntity().getX(), camera.getEntity().getEyeY(), camera.getEntity().getZ());
+                BlockPos blockpos = new BlockPos((int) camera.getEntity().getX(), (int) camera.getEntity().getY(), (int) camera.getEntity().getZ());
                 float brightnessAtEyes = LightTexture.getBrightness(camera.getEntity().level.dimensionType(), camera.getEntity().level.getMaxLocalRawBrightness(blockpos));
                 float brightness = (float) Math.max(Math.pow(getDimensionBrightnessAtEyes(camera.getEntity()), 2D), brightnessAtEyes);
                 float fogRed = 0.6F * brightness;
@@ -96,7 +96,7 @@ public class JetFuelFluidType extends FluidType {
     }
 
     public static float getDimensionBrightnessAtEyes(Entity entity) {
-        float lightLevelAtEyes = entity.level.getRawBrightness(new BlockPos(entity.getEyePosition(1)), 0);
+        float lightLevelAtEyes = entity.level.getRawBrightness(new BlockPos((int) entity.getEyePosition().x, (int) entity.getEyePosition().y, (int) entity.getEyePosition().z), 0);
         return lightLevelAtEyes / 15f;
     }
 }

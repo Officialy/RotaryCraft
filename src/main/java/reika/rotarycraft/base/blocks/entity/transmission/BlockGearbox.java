@@ -191,7 +191,7 @@ public class BlockGearbox extends BlockBasicMachine {
                     GearboxTypes material = GearboxTypes.getMaterialFromCraftingItem(held);
                     if (tile.getGearboxType().acceptsBearingUpgrade(material) && tile.getBearingTier() != material) {
                         if (tile.getBearingTier() != tile.getGearboxType())
-                            ReikaItemHelper.dropItem(level, pos.offset(0.5, 0.5, 0.5), tile.getBearingTier().getPart(GearboxTypes.GearPart.BEARING));
+                            ReikaItemHelper.dropItem(level, 0.5, 0.5, 0.5, tile.getBearingTier().getPart(GearboxTypes.GearPart.BEARING));
                         tile.setBearingTier(material);
                         if (!player.isCreative()) {
                             int num = held.getCount();

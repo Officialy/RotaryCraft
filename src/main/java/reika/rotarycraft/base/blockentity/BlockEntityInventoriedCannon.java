@@ -35,7 +35,7 @@ public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCanno
             setChanged();
         }
     };
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    private final LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public BlockEntityInventoriedCannon(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

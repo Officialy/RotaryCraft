@@ -34,9 +34,9 @@ public class EntityDischarge extends Entity implements IEntityAdditionalSpawnDat
         charge = 0;
     }
 
-    public EntityDischarge(Level world, BlockPos pos, int charge, double tx, double ty, double tz) {
+    public EntityDischarge(Level world, double x, double y, double z, int charge, double tx, double ty, double tz) {
         super(EntityType.AREA_EFFECT_CLOUD, world);
-        this.setPos(pos.getX(), pos.getY(), pos.getZ());
+        this.setPos(x, y, z);
         this.charge = charge;
         targetX = tx;
         targetY = ty;

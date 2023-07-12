@@ -73,7 +73,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
             if (optional.isPresent()) {
                 CraftingRecipe craftingrecipe = optional.get();
                 if (p_150551_.setRecipeUsed(level, serverplayer, craftingrecipe)) {
-                    ItemStack itemstack1 = craftingrecipe.assemble(container);
+                    ItemStack itemstack1 = craftingrecipe.assemble(container, level.registryAccess());
                     if (itemstack1.isItemEnabled(level.enabledFeatures())) {
                         itemstack = itemstack1;
                     }

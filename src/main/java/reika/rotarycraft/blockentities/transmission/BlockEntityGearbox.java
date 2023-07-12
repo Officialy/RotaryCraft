@@ -332,7 +332,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
             }
         } else {
             omegain = torquein = 0;
-            return; //not its output
+            //not its output
         }
     }
 
@@ -366,13 +366,11 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
                 }
             } else if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
-            } else if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            } else if (te instanceof ComplexIO pwr) {
                 Direction dir = this.getInputDirection().getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
-            } else if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            } else if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();
@@ -443,7 +441,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
             case BEDROCK -> new ItemStack(RotaryItems.BEDROCK_DUST.get());
         };
         for (int i = 0; i < this.getRatio(); i++) {
-            ReikaItemHelper.dropItem(world, new BlockPos(worldPosition.getX() + 0.5, worldPosition.getY() + 1.25, worldPosition.getZ() + 0.5), item);
+            ReikaItemHelper.dropItem(world, worldPosition.getX() + 0.5, worldPosition.getY() + 1.25, worldPosition.getZ() + 0.5, item);
         }
         world.setBlock(pos, Blocks.AIR.defaultBlockState(), 1);
     }

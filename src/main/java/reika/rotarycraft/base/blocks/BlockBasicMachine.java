@@ -388,7 +388,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                         tr.isCovered = true;
                         if (!ep.isCreative())
                             ep.setItemSlot(EquipmentSlot.MAINHAND, ReikaItemHelper.getSizedItemStack(is, is.getCount() - 1));
-                        ((BlockEntityBase) te).syncAllData(true);
+                        te.syncAllData(true);
                         return InteractionResult.SUCCESS;
                     }
                 } else if (is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
@@ -398,14 +398,14 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                         if (f != null) {
                             Fluid fluid = f.getFluid();
                             int size = is.getCount();
-                            if (tr.getFluidLevel() + (size - 1) * f.getAmount() <= tr.CAPACITY) {
+                            if (tr.getFluidLevel() + (size - 1) * f.getAmount() <= BlockEntityReservoir.CAPACITY) {
                                 if (tr.isEmpty()) {
                                     tr.addLiquid(size * f.getAmount(), fluid);
                                     if (!ep.isCreative()) {
                                         @NotNull FluidStack ret = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().drain(f, IFluidHandler.FluidAction.EXECUTE);
                                         ep.setItemSlot(EquipmentSlot.MAINHAND, ret.isEmpty() ? ReikaItemHelper.getSizedItemStack(is, size) : ItemStack.EMPTY);
                                     }
-                                    ((BlockEntityBase) te).syncAllData(true);
+                                    te.syncAllData(true);
                                     if (!level.isClientSide)
                                         ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
                                     return InteractionResult.SUCCESS;
@@ -415,7 +415,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                         @NotNull FluidStack ret = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().drain(f, IFluidHandler.FluidAction.EXECUTE);
                                         ep.setItemSlot(EquipmentSlot.MAINHAND, ret.isEmpty() ? ReikaItemHelper.getSizedItemStack(is, size) : ItemStack.EMPTY);
                                     }
-                                    ((BlockEntityBase) te).syncAllData(true);
+                                    te.syncAllData(true);
                                     if (!level.isClientSide)
                                         ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
                                     return InteractionResult.SUCCESS;
@@ -435,7 +435,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                 tr.removeLiquid(amt);
                                 if (!ep.isCreative())
                                     ep.setItemSlot(EquipmentSlot.MAINHAND, ReikaItemHelper.getSizedItemStack(is, size)); //todo check if this breaks lol
-                                ((BlockEntityBase) te).syncAllData(true);
+                                te.syncAllData(true);
                                 if (!level.isClientSide)
                                     ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
                                 return true;
@@ -449,7 +449,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     int size = is.getCount();
                     if (tr.getFluidLevel() > 0 && tr.getFluid().getFluid().equals(Fluids.WATER)) {
                         ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.POTION, size));
-                        ((BlockEntityBase) te).syncAllData(true);
+                        te.syncAllData(true);
                         return InteractionResult.SUCCESS;
                     }
                 } else if (is.getItem() == RotaryItems.JET_FUEL_BUCKET.get()) { //todo make sure this is meant to be jet fuel
@@ -521,19 +521,19 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         }*/
         if (m == MachineRegistry.OBSIDIAN) {
             BlockEntityObsidianMaker fm = (BlockEntityObsidianMaker) te;
-            if (fm.getWater() + 1000 <= fm.CAPACITY && is != null && is.getItem() == Items.WATER_BUCKET) {
+            if (fm.getWater() + 1000 <= BlockEntityObsidianMaker.CAPACITY && is != null && is.getItem() == Items.WATER_BUCKET) {
                 fm.addWater(1000);
                 if (!ep.isCreative()) {
                     ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                 }
-                ((BlockEntityBase) te).syncAllData(true);
+                te.syncAllData(true);
                 return InteractionResult.SUCCESS;
-            } else if (fm.getLava() + 1000 <= fm.CAPACITY && is != null && is.getItem() == Items.LAVA_BUCKET) {
+            } else if (fm.getLava() + 1000 <= BlockEntityObsidianMaker.CAPACITY && is != null && is.getItem() == Items.LAVA_BUCKET) {
                 fm.addLava(1000);
                 if (!ep.isCreative()) {
                     ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                 }
-                ((BlockEntityBase) te).syncAllData(true);
+                te.syncAllData(true);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -555,7 +555,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 if (!ep.isCreative()) {
                     ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                 }
-                ((BlockEntityBase) te).syncAllData(true);
+                te.syncAllData(true);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -725,7 +725,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 }
                 if (tile.getEngineType().isJetFueled()) {
                     if (ReikaItemHelper.matchStacks(is, RotaryItems.JET_FUEL_BUCKET)) {
-                        if (tile.getFuelLevel() <= tile.FUELCAP - 1000) {
+                        if (tile.getFuelLevel() <= BlockEntityEngine.FUELCAP - 1000) {
                             if (!ep.isCreative())
                                 ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                             tile.addFuel(1000);
@@ -739,7 +739,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 }
                 if (tile.getEngineType().isEthanolFueled()) {
                     if (ReikaItemHelper.matchStacks(is, RotaryItems.ETHANOL_BUCKET)) {
-                        if (tile.getFuelLevel() <= tile.FUELCAP - 1000) {
+                        if (tile.getFuelLevel() <= BlockEntityEngine.FUELCAP - 1000) {
                             if (!ep.isCreative())
                                 ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                             tile.addFuel(1000);
@@ -753,7 +753,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 }
                 if (tile.getEngineType().requiresLubricant()) {
                     if (ReikaItemHelper.matchStacks(is, RotaryItems.LUBE_BUCKET)) {
-                        if (tile.getLube() <= tile.LUBECAP - 1000) {
+                        if (tile.getLube() <= BlockEntityEngine.LUBECAP - 1000) {
                             if (!ep.isCreative())
                                 ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                             tile.addLubricant(1000);
@@ -767,7 +767,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 }
                 if (tile.getEngineType().needsWater()) {
                     if (is != null && is.getItem() == Items.WATER_BUCKET) {
-                        if (tile.getWater() <= tile.CAPACITY - 1000) {
+                        if (tile.getWater() <= BlockEntityEngine.CAPACITY - 1000) {
                             if (!ep.isCreative())
                                 ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                             tile.addWater(1000);
@@ -786,10 +786,6 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 NetworkHooks.openScreen((ServerPlayer) ep, te, pos);
             }
             ep.swing(InteractionHand.MAIN_HAND, true);
-            /*if (te instanceof BlockEntityReservoir reservoir && !level.isClientSide()) {
-                NetworkHooks.openScreen((ServerPlayer) player, reservoir, entity.getBlockPos());
-                return InteractionResult.SUCCESS;
-            }*/
             return InteractionResult.SUCCESS;
         }
         te.syncAllData(true);
@@ -848,13 +844,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     li.add(Component.literal(String.format("Minimum Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(spd), ReikaEngLibrary.getSIPrefix(spd))));
             } else {
                 if (minp || mint || mins) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("Hold ");
-                    sb.append(ChatFormatting.GREEN);
-                    sb.append("Shift");
-                    sb.append(ChatFormatting.GRAY);
-                    sb.append(" for power data");
-                    li.add(Component.literal(sb.toString()));
+                    String sb = "Hold " +
+                            ChatFormatting.GREEN +
+                            "Shift" +
+                            ChatFormatting.GRAY +
+                            " for power data";
+                    li.add(Component.literal(sb));
                 }
             }
         }
@@ -869,13 +864,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 li.add(Component.literal(String.format("Torque: %.3f %sNm", ReikaMathLibrary.getThousandBase(torque), ReikaEngLibrary.getSIPrefix(torque))));
                 li.add(Component.literal(String.format("Speed: %.3f %srad/s", ReikaMathLibrary.getThousandBase(speed), ReikaEngLibrary.getSIPrefix(speed))));
             } else {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Hold ");
-                sb.append(ChatFormatting.GREEN);
-                sb.append("Shift");
-                sb.append(ChatFormatting.GRAY);
-                sb.append(" for power data");
-                li.add(Component.literal(sb.toString()));
+                String sb = "Hold " +
+                        ChatFormatting.GREEN +
+                        "Shift" +
+                        ChatFormatting.GRAY +
+                        " for power data";
+                li.add(Component.literal(sb));
             }
             if (is.hasTag()) {
                 int dmg = is.getTag().getInt("damage");

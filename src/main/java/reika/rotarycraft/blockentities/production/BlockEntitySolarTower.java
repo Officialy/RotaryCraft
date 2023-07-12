@@ -140,8 +140,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         }
 
         BlockEntity top = level.getBlockEntity(new BlockPos(worldPosition.getX(), topLocation + 1, worldPosition.getZ()));
-        if (top instanceof SodiumSolarReceiver) {
-            SodiumSolarReceiver ss = (SodiumSolarReceiver) top;
+        if (top instanceof SodiumSolarReceiver ss) {
             if (ss.isActive()) {
                 ss.tick(size, overallBrightness);
                 temperature = ss.getTemperature();
@@ -189,8 +188,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         if (power > 0 && tank.getFluidLevel() > 0 && amt > 0) {
             if (!water) {
                 BlockEntity te = getAdjacentBlockEntity(Direction.DOWN);
-                if (te instanceof SodiumSolarOutput) {
-                    SodiumSolarOutput ss = (SodiumSolarOutput) te;
+                if (te instanceof SodiumSolarOutput ss) {
                     if (ss.isActive()) {
                         amt = ss.receiveSodium(amt);
                     }
@@ -216,7 +214,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         boolean sodium = tank.getActualFluid().getFluid() == RotaryFluids.SODIUM.get();
         int p = ReikaMathLibrary.logbase2(power);
         if (sodium)
-            p = Math.max(1, p - 2 * 0);
+            p = Math.max(1, p);
         int base = 10 + (sodium ? 64 : 16) * p;
         int rnd = 10;
         if (base >= 1000)
@@ -296,7 +294,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
             Fluid f2 = tile.tank.getActualFluid().getFluid();
             if (f == null && f2 != null)
                 f = f2;
-            if (f2 != null && f.equals(f2)) {
+            if (f.equals(f2)) {
                 lvl += tile.tank.getFluidLevel();
                 tile.tank.empty();
             }
@@ -379,7 +377,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
     }
 
     public long getMaxPower() {
-        return torque * omega;
+        return (long) torque * omega;
     }
 
     public long getCurrentPower() {
@@ -390,8 +388,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
     private boolean canUseSodium() {
         int y = this.getTopOfTower() + 1;
         BlockEntity te = level.getBlockEntity(new BlockPos(worldPosition.getX(), y, worldPosition.getZ()));
-        if (te instanceof SodiumSolarReceiver) {
-            SodiumSolarReceiver ss = (SodiumSolarReceiver) te;
+        if (te instanceof SodiumSolarReceiver ss) {
             return ss.isActive();
         }
         return false;

@@ -70,8 +70,7 @@ public class ItemMeter extends ItemRotaryTool {
 
         if (tile instanceof BlockEntityIOMachine) {
             ((BlockEntityIOMachine) tile).iotick = 512;
-        } else if (tile instanceof ShaftMachine) {
-            ShaftMachine sm = (ShaftMachine) tile;
+        } else if (tile instanceof ShaftMachine sm) {
             sm.setIORenderAlpha(512);
             return InteractionResult.SUCCESS;
         }
@@ -170,8 +169,7 @@ public class ItemMeter extends ItemRotaryTool {
 //                    this.sendMessage(ep, sg);
 //                }
 //            }
-        } else if (tile instanceof ShaftPowerEmitter) {
-            ShaftPowerEmitter sp = (ShaftPowerEmitter) tile;
+        } else if (tile instanceof ShaftPowerEmitter sp) {
             this.sendMessage(ep, String.format("%s producing %s", name, RotaryAux.formatPowerIO(sp)));
             return InteractionResult.SUCCESS;
         }
@@ -186,8 +184,7 @@ public class ItemMeter extends ItemRotaryTool {
                 this.sendLocalizedMessage(ep, "mintorque");
             if (power < te.MINTORQUE)
                 this.sendLocalizedMessage(ep, "minspeed");
-        } else if (tile instanceof ShaftPowerReceiver) {
-            ShaftPowerReceiver sp = (ShaftPowerReceiver) tile;
+        } else if (tile instanceof ShaftPowerReceiver sp) {
             this.sendMessage(ep, String.format("%s receiving %s", name, RotaryAux.formatPowerIO(sp)));
             return InteractionResult.SUCCESS;
         }
@@ -197,7 +194,7 @@ public class ItemMeter extends ItemRotaryTool {
             Direction read = te.getInputDirection();
             if (read != null) {
                 String sname = ReikaStringParser.capFirstChar(read.name());
-                long pwr = te.getInputTorque() * te.omega;
+                long pwr = (long) te.getInputTorque() * te.omega;
                 this.sendMessage(ep, String.format("Input side %s receiving %s", sname, RotaryAux.formatPowerIO(te.omega, pwr)));
                 return InteractionResult.SUCCESS;
             }
@@ -205,7 +202,7 @@ public class ItemMeter extends ItemRotaryTool {
                 Direction dir = Direction.values()[i + 2];
                 if (te.isOutputtingToSide(dir)) {
                     String sname = ReikaStringParser.capFirstChar(dir.name());
-                    long out = te.getTorqueToSide(dir) * te.omega;
+                    long out = (long) te.getTorqueToSide(dir) * te.omega;
 
                     if (dir == read.getOpposite()) {
                         this.sendMessage(ep, String.format("Output to side %s: %s (leftover)", sname, RotaryAux.formatPowerIO(te.omega, out)));
@@ -223,28 +220,28 @@ public class ItemMeter extends ItemRotaryTool {
             BlockEntitySplitter te = (BlockEntitySplitter) tile;
             if (te.isSplitting()) {
                 String sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
-                long pwr = te.torque * te.omega;
+                long pwr = (long) te.torque * te.omega;
                 this.sendMessage(ep, String.format("Input side %s receiving %s", sname, RotaryAux.formatPowerIO(te.omega, pwr)));
 
                 sname = ReikaStringParser.capFirstChar(te.getWriteDirection().name());
-                long out = te.torqueOut1 * te.omega;
+                long out = (long) te.torqueOut1 * te.omega;
                 this.sendMessage(ep, String.format("Output to side %s: %s", sname, RotaryAux.formatPowerIO(te.omega, out)));
 
                 sname = ReikaStringParser.capFirstChar(te.getWriteDirection2().name());
-                out = te.torqueOut2 * te.omega;
+                out = (long) te.torqueOut2 * te.omega;
                 this.sendMessage(ep, String.format("Output to side %s: %s", sname, RotaryAux.formatPowerIO(te.omega, out)));
                 return InteractionResult.SUCCESS;
             } else {
                 String sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
-                long pwr = te.getInputTorque1() * te.getInputSpeed1();
+                long pwr = (long) te.getInputTorque1() * te.getInputSpeed1();
                 this.sendMessage(ep, String.format("Input side %s receiving %s", sname, RotaryAux.formatPowerIO(te.omega, pwr)));
 
-                pwr = te.getInputTorque2() * te.getInputSpeed2();
+                pwr = (long) te.getInputTorque2() * te.getInputSpeed2();
                 sname = ReikaStringParser.capFirstChar(te.getReadDirection().name());
                 this.sendMessage(ep, String.format("Input side %s receiving %s", sname, RotaryAux.formatPowerIO(te.omega, pwr)));
 
                 sname = ReikaStringParser.capFirstChar(te.getWriteDirection().name());
-                long out = te.torque * te.omega;
+                long out = (long) te.torque * te.omega;
                 this.sendMessage(ep, String.format("Output to side %s: %s", sname, RotaryAux.formatPowerIO(te.omega, out)));
             }
 

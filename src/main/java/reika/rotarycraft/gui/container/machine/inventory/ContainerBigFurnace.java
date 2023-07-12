@@ -70,11 +70,9 @@ public class ContainerBigFurnace extends IOMachineContainer<BlockEntityLavaSmelt
 
     @Override
     public void setData(int par1, int par2) {
-        switch (par1) {
-            //case 1: te.setLevel(par2); break;
-            case 0:
-                te.smeltTick = par2;
-                break;
+        //case 1: te.setLevel(par2); break;
+        if (par1 == 0) {
+            te.smeltTick = par2;
         }
     }
 }

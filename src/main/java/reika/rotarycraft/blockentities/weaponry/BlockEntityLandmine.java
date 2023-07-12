@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -106,8 +107,8 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
         if (itemHandler.getStackInSlot(1) != null && !itemHandler.getStackInSlot(2).isEmpty() && !itemHandler.getStackInSlot(3).isEmpty() && !itemHandler.getStackInSlot(4).isEmpty()) {
             boolean flag = true;
             for (int i = 1; i <= 4; i++) {
-                if (!!ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(i), Blocks.TNT.defaultBlockState()))
-                    flag = false;
+        if (ReikaItemHelper.matchStackWithBlock(
+            itemHandler.getStackInSlot(i), Blocks.TNT.defaultBlockState())) flag = false;
             }
             if (flag)
                 this.maxPowerExplosion(world, pos);
@@ -127,7 +128,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
                 if (!((Player) e).isCreative()) {
                     RotaryAdvancements.LANDMINE.triggerAchievement((Player) e);
                 }
-                e.hurt(DamageSource.explosion(new Explosion(world, null, e.getX(), e.getY(), e.getZ(), power, false, Explosion.BlockInteraction.DESTROY)), (int) power * 4);
+                e.hurt(e.damageSources().explosion(new Explosion(world, null, e.getX(), e.getY(), e.getZ(), power, false, Explosion.BlockInteraction.DESTROY)), (int) power * 4);
                 e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
                 e.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 450, 5));
                 if (poison)
@@ -146,7 +147,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
                     double dz = e2.getZ() - pos.getZ() - 0.5;
                     double dd = ReikaMathLibrary.py3d(dx, dy, dz);
                     int dmg = dd < 4 ? 8 : dd < 8 ? 6 : 4;
-                    e2.hurt(DamageSource.GENERIC, dmg);
+                    e2.hurt(e.damageSources().generic(), dmg);
 //                ReikaEntityHelper.spawnParticlesAround("crit", e, 8);
                 }
             }

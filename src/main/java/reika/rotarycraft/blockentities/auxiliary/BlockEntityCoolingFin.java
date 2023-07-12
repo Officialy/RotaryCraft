@@ -103,8 +103,7 @@ public class BlockEntityCoolingFin extends RotaryCraftBlockEntity implements Tem
             return;
         tickcount = 0;
         this.updateTemperature(world, pos);
-        if (te instanceof TemperatureTE) {
-            TemperatureTE tr = (TemperatureTE) te;
+        if (te instanceof TemperatureTE tr) {
             if (tr.canBeCooledWithFins()) {
                 int temp = tr.getTemperature();
                 if (temp > temperature) {

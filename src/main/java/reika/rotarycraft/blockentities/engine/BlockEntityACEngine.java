@@ -95,7 +95,7 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
             return;
         soundTick = 0;
 
-        SoundRegistry.ELECTRIC.playSoundAtBlock(world, pos, 0.125F * volume, 1F * pitchMultiplier);
+        SoundRegistry.ELECTRIC.playSoundAtBlock(world, pos, 0.125F * volume, pitchMultiplier);
     }
 
     public void magneticInterference(int mag, double dd) {
@@ -169,7 +169,7 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     public void breakBlock() {
         super.breakBlock();
         if (this.hasRedstoneUpgrade()) {
-            ReikaItemHelper.dropItem(level, new BlockPos(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5), RotaryItems.UPGRADE.get().getDefaultInstance());//.getUpgradeType(Upgrades.REDSTONE.ordinal()));
+            ReikaItemHelper.dropItem(level,worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, RotaryItems.UPGRADE.get().getDefaultInstance());//.getUpgradeType(Upgrades.REDSTONE.ordinal()));
         }
     }
 

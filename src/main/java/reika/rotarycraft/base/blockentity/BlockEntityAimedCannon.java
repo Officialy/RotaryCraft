@@ -120,7 +120,6 @@ public abstract class BlockEntityAimedCannon extends BlockEntityPowerReceiver im
 				}
 			}
 			 */
-            return;
         } else {
             target = this.getTarget(level, worldPosition);
             this.adjustAim(level, worldPosition, target);

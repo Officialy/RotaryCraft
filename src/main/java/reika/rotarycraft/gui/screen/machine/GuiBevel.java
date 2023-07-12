@@ -57,7 +57,7 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Beve
         int px = 176;
         for (int i = 0; i < 6; i++) {
             String s = Direction.values()[i].name().substring(0, 1);
-            if (true || BlockEntityBevelGear.isValid(Direction.values()[i], out)) {
+            if (true) {
                 if (in.ordinal() == i)
                 //id is i
                 //pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffTex, pResourceLocation, pTextureWidth, pTextureHeight, pOnPress, pMessage

@@ -23,7 +23,7 @@ public class ItemSpringBoots extends ItemChargedArmor //implements IArmorApiaris
     public final int SPEED_LEVEL = 2;
 
     public ItemSpringBoots(ArmorMaterial mat, Item.Properties properties) {
-        super(mat, EquipmentSlot.FEET, properties);
+        super(mat, Type.BOOTS, properties);
     }
 
 //    public static boolean isSpringBoots(ItemStack is) {

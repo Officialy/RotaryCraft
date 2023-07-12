@@ -9,13 +9,15 @@
  ******************************************************************************/
 package reika.rotarycraft.base;
 
+import net.minecraft.world.item.ArmorItem;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
+import reika.rotarycraft.RotaryConfig;
 
 public abstract class ItemChargedArmor extends ItemRotaryArmor {
 
-    public ItemChargedArmor(ArmorMaterial par2, EquipmentSlot slot, Properties properties) {
+    public ItemChargedArmor(ArmorMaterial par2, ArmorItem.Type slot, Properties properties) {
         super(par2, slot, properties);
         //this.setNoRepair();
     }
@@ -38,8 +40,8 @@ public abstract class ItemChargedArmor extends ItemRotaryArmor {
 	}*/
 
     protected final void noCharge() {
-        //if (RotaryConfig.COMMON.CLEARCHAT.getState())
-        //	ReikaChatHelper.clearChat();
+//        if (RotaryConfig.COMMON.CLEARCHAT.getState())
+//        	ReikaChatHelper.clearChat();
         ReikaChatHelper.write("Armor charge is depleted!");
     }
 

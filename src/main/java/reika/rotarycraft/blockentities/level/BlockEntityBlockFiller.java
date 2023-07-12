@@ -41,7 +41,7 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
             setChanged();
         }
     };
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    private final LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public BlockEntityBlockFiller(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.FILLER.get(), pos, state);

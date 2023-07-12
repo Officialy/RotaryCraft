@@ -119,11 +119,10 @@ public class BlockEntityParticleEmitter extends BlockEntitySpringPowered {// tod
     public boolean isParticleValid(ReikaParticleHelper p) {
         if (p == ReikaParticleHelper.DRIPLAVA)
             return false;
-        if (p == ReikaParticleHelper.DRIPWATER)
-            return false;
+        return p != ReikaParticleHelper.DRIPWATER;
 //    todo    if (p == ReikaParticleHelper.SUSPEND)
 //            return false;
-        return true;// todo p != ReikaParticleHelper.SNOWSHOVEL;
+// todo p != ReikaParticleHelper.SNOWSHOVEL;
     }
 
     @Override

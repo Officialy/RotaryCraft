@@ -129,7 +129,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         AABB box = new AABB(pos.getX(), pos.getY() - 1, pos.getZ(), pos.getX() + 1, pos.getY(), pos.getZ() + 1);
         List<LivingEntity> inbox = world.getEntitiesOfClass(LivingEntity.class, box);
         for (LivingEntity e : inbox) {
-            e.hurt(DamageSource.GENERIC, 5);
+            e.hurt(e.damageSources().generic(), 5);
         }
         if (inbox.size() > 0 && !ReikaEntityHelper.allAreDead(inbox, false))
             damage++;
@@ -144,7 +144,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     private void breakPump(Level world, BlockPos pos) {
 //        world.playLocalSound(pos, "DragonAPI.rand.break", 1F, 1F);
 //        for (int i = 0; i < 8; i++)
-        ReikaItemHelper.dropItem(world, new BlockPos(pos.getX() + DragonAPI.rand.nextDouble(), pos.getY() + DragonAPI.rand.nextDouble(), pos.getZ() + DragonAPI.rand.nextDouble()), RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance());
+        ReikaItemHelper.dropItem(world, pos.getX() + DragonAPI.rand.nextDouble(), pos.getY() + DragonAPI.rand.nextDouble(), pos.getZ() + DragonAPI.rand.nextDouble(), RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance());
     }
 
     public void harvest(Level world, BlockPos pos, BlockPos loc) {
@@ -174,7 +174,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         }
         if (f.equals(Fluids.WATER))
 //            RotaryAdvancements.PUMP.triggerAchievement(this.getPlacer());
-            duplicationAmount = (int) (mult * ConfigRegistry.FREEWATER.getValue());
+            duplicationAmount = mult * ConfigRegistry.FREEWATER.getValue();
         tank.addLiquid(fs.getAmount() * mult, f);
         world.blockUpdated(loc, world.getBlockState(pos).getBlock());
     }

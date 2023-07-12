@@ -31,8 +31,8 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
 
-    private SplitterModel splitterModel;
-    private SplitterModel2 splitterModel2;
+    private final SplitterModel splitterModel;
+    private final SplitterModel2 splitterModel2;
 
     public RenderSplitter(BlockEntityRendererProvider.Context context) {
         splitterModel = new SplitterModel(context.bakeLayer(RotaryModelLayers.SPLITTER));

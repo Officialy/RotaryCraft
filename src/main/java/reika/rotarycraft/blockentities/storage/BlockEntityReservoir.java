@@ -597,11 +597,11 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
                 eff.applyEffect(e);
             }
             if (f.equals(Fluids.LAVA) || f.getFluid().getFluidType().getTemperature() > 500) {
-                e.hurt(DamageSource.LAVA, 4);
+                e.hurt(e.damageSources().lava(), 4);
                 e.setSecondsOnFire(12);
             }
             if (f.getFluid().getFluidType().getTemperature() < 250)
-                e.hurt(DamageSource.WITHER, 1);
+                e.hurt(e.damageSources().wither(), 1);
             if (e.isOnFire() && ReikaFluidHelper.isFlammable(f.getFluid().defaultFluidState())) {
                 this.delete();
                 level.explode(e, e.getY(), e.getY(), e.getZ(), 4F, true, Level.ExplosionInteraction.BLOCK);

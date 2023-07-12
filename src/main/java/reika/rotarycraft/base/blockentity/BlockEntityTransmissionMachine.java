@@ -69,7 +69,6 @@ public abstract class BlockEntityTransmissionMachine extends BlockEntityIOMachin
             torque = 0;
             omega = 0;
             power = 0;
-            return;
         }
     }
 

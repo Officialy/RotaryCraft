@@ -12,7 +12,6 @@ package reika.rotarycraft;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -29,23 +28,20 @@ import reika.dragonapi.auxiliary.trackers.DonatorController;
 import reika.dragonapi.auxiliary.trackers.PlayerFirstTimeTracker;
 import reika.dragonapi.auxiliary.trackers.PlayerHandler;
 import reika.dragonapi.base.DragonAPIMod;
-import reika.dragonapi.instantiable.data.collections.OneWayCollections;
-import reika.dragonapi.instantiable.io.CustomRecipeList;
 import reika.dragonapi.instantiable.io.SoundLoader;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
-import reika.rotarycraft.auxiliary.*;
-import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler;
-import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
+import reika.rotarycraft.auxiliary.FreezePotion;
+import reika.rotarycraft.auxiliary.HandbookNotifications;
+import reika.rotarycraft.auxiliary.HandbookTracker;
+import reika.rotarycraft.auxiliary.MachineDamage;
 import reika.rotarycraft.gui.screen.GuiHandCraft;
 import reika.rotarycraft.gui.screen.machine.*;
 import reika.rotarycraft.gui.screen.machine.inventory.*;
 import reika.rotarycraft.registry.*;
-import reika.rotarycraft.registry.RotaryItems;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Collection;
 
 @Mod(RotaryCraft.MODID)
 public class RotaryCraft extends DragonAPIMod {
@@ -58,10 +54,10 @@ public class RotaryCraft extends DragonAPIMod {
     protected static final SoundLoader sounds = new SoundLoader(SoundRegistry.class);
     public static final MachineDamage jetingest = new MachineDamage("was sucked into a jet engine").setArmorBlocking(1F, 90, 1, 2, 3, 4);
     public static final MachineDamage hydrokinetic = new MachineDamage("was paddled to death").setArmorBlocking(0.5F, 2, 4);
-    public static final MachineDamage shock = (MachineDamage) new MachineDamage("was electrified").bypassArmor();
+    public static final MachineDamage shock = new MachineDamage("was electrified");//todo .bypassArmor();
     public static final MachineDamage grind = new MachineDamage("was ground to a pulp").setArmorBlocking(0.5F, 6, 1);
     public static final MachineDamage freezeDamage = new MachineDamage("froze");
-    public static final MachineDamage heatDamage = (MachineDamage) new MachineDamage("burned up").setIsFire();
+    public static final MachineDamage heatDamage = new MachineDamage("burned up");//todo .setIsFire();
 
     public static FreezePotion freeze = new FreezePotion(MobEffectCategory.HARMFUL, 0x289EFF);
     private static RotaryCraft instance;
@@ -126,7 +122,6 @@ public class RotaryCraft extends DragonAPIMod {
 
 //   todo     ReikaJavaLibrary.initClass(HandbookRegistry.class);
         ReikaJavaLibrary.initClass(SoundRegistry.class);
-//        PackModificationTracker.instance.addMod(this, config);
         this.finishTiming();
     }
 
@@ -166,8 +161,8 @@ public class RotaryCraft extends DragonAPIMod {
             }
 //            TimeTorchHelper.blacklistBlockEntity(type.engineClass);
         }
-        loadMachineRecipeHandlers();
-        addPostLoadRecipes();
+//        RotaryRecipes.loadMachineRecipeHandlers();
+//        RotaryRecipes.addPostLoadRecipes();
 
       /*todo  if (RotaryConfig.Common.ACHIEVEMENTS.get()) {
             achievements = new Advancement[RotaryAdvancements.list.length];
@@ -206,7 +201,6 @@ public class RotaryCraft extends DragonAPIMod {
     public String getModAuthorName() {
         return "Reika";
     }
-
 
 
 }

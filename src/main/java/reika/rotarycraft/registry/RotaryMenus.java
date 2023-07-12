@@ -1,5 +1,8 @@
 package reika.rotarycraft.registry;
 
+import net.minecraft.world.flag.FeatureFlag;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.network.IContainerFactory;
@@ -17,7 +20,7 @@ public interface RotaryMenus {
     DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.MENU_TYPES, RotaryCraft.MODID);
 
     static <T extends AbstractContainerMenu> Supplier<MenuType<T>> register(String id, IContainerFactory<T> factory) {
-        return REGISTRY.register(id, () -> new MenuType<>(factory));
+        return REGISTRY.register(id, () -> new MenuType<>(factory, FeatureFlags.DEFAULT_FLAGS));
     }
 
     Supplier<MenuType<WinderContainer>> WINDER = register("winder", WinderContainer::new);
@@ -38,12 +41,12 @@ public interface RotaryMenus {
 
     Supplier<MenuType<ContainerHandCraft>> HAND_CRAFT = register("hand_craft", ContainerHandCraft::new);
 
-
     Supplier<MenuType<SteamContainer>> STEAM_ENGINE = register("steam_engine", SteamContainer::new);
     Supplier<MenuType<BevelContainer>> BEVEL = register("bevel", BevelContainer::new);
     Supplier<MenuType<MusicContainer>> MUSIC = register("music", MusicContainer::new);
 
     Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", ContainerGrinder::new);
+    Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);
 
 //    Supplier<MenuType<BlastFurnaceMenu>> BLAST_FURNACE = register("blast_furnace",   () -> IForgeMenuType.create(new BlastFurnaceMenu.Factory()));
 //

@@ -27,7 +27,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
 
-    private FinModel finModel;
+    private final FinModel finModel;
 
     public RenderFin(BlockEntityRendererProvider.Context context) {
         finModel = new FinModel(context.bakeLayer(RotaryModelLayers.COOLING_FIN));

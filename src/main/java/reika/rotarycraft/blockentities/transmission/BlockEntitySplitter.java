@@ -216,8 +216,8 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
         } else if (cross.isWritingTo2(this)) {
             omega = cross.readomega[1];
             torque = cross.readtorque[1];
-        } else
-            return; //not its output
+        } else {
+        } //not its output
     }
 
     private void mergeReadFromCross(BlockEntityShaft cross, int side) {
@@ -239,8 +239,8 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
                 omegain2 = cross.readomega[1];
                 torquein2 = cross.readtorque[1];
             }
-        } else
-            return; //not its output
+        } else {
+        } //not its output
     }
 
     protected void transferPower(Level world, BlockPos pos, boolean check1, boolean check2) {
@@ -288,14 +288,12 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
                         } else
                             torquein = omegain = 0;
                     }
-                    if (te instanceof ComplexIO) {
-                        ComplexIO pwr = (ComplexIO) te;
+                    if (te instanceof ComplexIO pwr) {
                         Direction dir = this.getInputDirection().getOpposite();
                         omegain = pwr.getSpeedToSide(dir);
                         torquein = pwr.getTorqueToSide(dir);
                     }
-                    if (te instanceof ShaftPowerEmitter) {
-                        ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+                    if (te instanceof ShaftPowerEmitter sp) {
                         if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                             torquein = sp.getTorque();
                             omegain = sp.getOmega();
@@ -343,14 +341,12 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
                         } else
                             torquein2 = omegain2 = 0;
                     }
-                    if (te2 instanceof ComplexIO) {
-                        ComplexIO pwr = (ComplexIO) te2;
+                    if (te2 instanceof ComplexIO pwr) {
                         Direction dir = this.getInputDirection().getOpposite();
                         omegain2 = pwr.getSpeedToSide(dir);
                         torquein2 = pwr.getTorqueToSide(dir);
                     }
-                    if (te2 instanceof ShaftPowerEmitter) {
-                        ShaftPowerEmitter sp = (ShaftPowerEmitter) te2;
+                    if (te2 instanceof ShaftPowerEmitter sp) {
                         if (sp.isEmitting() && sp.canWriteTo(read2.getOpposite())) {
                             torquein2 = sp.getTorque();
                             omegain2 = sp.getOmega();
@@ -405,7 +401,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
                     overloadTick = 0;
                 } else {
                     world.addParticle(ParticleTypes.CRIT, pos.getX() + DragonAPI.rand.nextFloat(), pos.getY() + DragonAPI.rand.nextFloat(), pos.getZ() + DragonAPI.rand.nextFloat(), -0.5 + DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat(), -0.5 + DragonAPI.rand.nextFloat());
-                    world.playSound(null /*todo null player bad*/, new BlockPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), SoundEvents.BLAZE_HURT, SoundSource.MASTER, 0.1F, 1F);
+                    world.playSound(null /*todo null player bad*/, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLAZE_HURT, SoundSource.MASTER, 0.1F, 1F);
                 }
             } else if (omegain == omegain2) {
                 omega = omegain;
@@ -422,7 +418,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
                 }
                 if (omegain != 0 && omegain2 != 0) {
                     world.addParticle(ParticleTypes.CRIT, pos.getX() + DragonAPI.rand.nextFloat(), pos.getY() + DragonAPI.rand.nextFloat(), pos.getZ() + DragonAPI.rand.nextFloat(), -0.5 + DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat(), -0.5 + DragonAPI.rand.nextFloat());
-                    world.playSound(null /*todo null player bad*/, new BlockPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), SoundEvents.BLAZE_HURT, SoundSource.MASTER, 0.1F, 1F);
+                    world.playSound(null /*todo null player bad?*/,pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLAZE_HURT, SoundSource.MASTER, 0.1F, 1F);
                 }
             }
             if (!overload)
@@ -464,8 +460,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
                     } else
                         torque = omega = 0;
                 }
-                if (te instanceof ShaftPowerEmitter) {
-                    ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+                if (te instanceof ShaftPowerEmitter sp) {
                     if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                         torque = sp.getTorque();
                         omega = sp.getOmega();
@@ -473,8 +468,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
                         torque = omega = 0;
                 }
 
-                if (te instanceof ComplexIO) {
-                    ComplexIO pwr = (ComplexIO) te;
+                if (te instanceof ComplexIO pwr) {
                     Direction dir = this.getInputDirection().getOpposite();
                     omega = pwr.getSpeedToSide(dir);
                     torque = pwr.getTorqueToSide(dir);
@@ -618,7 +612,6 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
         } else { //We are not one of its write-to blocks
             this.assignTorque(0);
             this.assignOmega(0);
-            return;
         }
     }
 

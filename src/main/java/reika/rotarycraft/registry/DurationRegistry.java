@@ -111,8 +111,7 @@ public enum DurationRegistry {
 
     public int getNumberOperations(int omega, int stage) {
         MathExpression exp = exps[stage];
-        if (exp instanceof OverrunExpression) {
-            OverrunExpression o = (OverrunExpression) exp;
+        if (exp instanceof OverrunExpression o) {
             return 1 + o.getOverrun(omega);
         } else {
             return 1;

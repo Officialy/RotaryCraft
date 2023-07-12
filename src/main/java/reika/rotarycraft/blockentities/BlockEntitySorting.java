@@ -41,6 +41,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BlockEntitySorting extends BlockEntityPowerReceiver {
@@ -93,8 +94,7 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
     private List<ItemCallback> getItems(Level world, BlockPos pos) {
         BlockEntity te = getAdjacentBlockEntity(Direction.UP);
         List<ItemCallback> li = new ArrayList<>();
-        if (te instanceof Container) {
-            Container ii = (Container) te;
+        if (te instanceof Container ii) {
             for (int i = 0; i < ii.getContainerSize(); i++) {
                 ItemStack in = ii.getItem(i);
                 if (in != null) {
@@ -193,8 +193,7 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
     private Direction getDirection(int index) {
         index /= LENGTH;
         List<Direction> li = new ArrayList<>();
-        for (int i = 2; i < 6; i++)
-            li.add(dirs[i]);
+        li.addAll(Arrays.asList(dirs).subList(2, 6));
         li.remove(facingDir);
         return li.get(index);
     }

@@ -150,9 +150,9 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.0, pos.getY() + 1.0625, pos.getZ() + 0.5, 0, 0, 0);
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.0625, pos.getZ() + 0.5, 0, 0, 0);
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + 1, pos.getY() + 1.0625, pos.getZ() + 0.5, 0, 0, 0);
-                world.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.0, pos.getY() + 1.0625, pos.getZ() + 0, 0, 0, 0);
+                world.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.0, pos.getY() + 1.0625, pos.getZ(), 0, 0, 0);
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.0, pos.getY() + 1.0625, pos.getZ() + 1, 0, 0, 0);
-                world.addParticle(ParticleTypes.SMOKE, pos.getX() + 1, pos.getY() + 1.0625, pos.getZ() + 0, 0, 0, 0);
+                world.addParticle(ParticleTypes.SMOKE, pos.getX() + 1, pos.getY() + 1.0625, pos.getZ(), 0, 0, 0);
                 world.addParticle(ParticleTypes.SMOKE, pos.getX() + 1, pos.getY() + 1.0625, pos.getZ() + 1, 0, 0, 0);
             }
         }

@@ -104,7 +104,6 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
             return false;
         RotaryAdvancements.STEAMENGINE.triggerAchievement(this.getPlacer());
         return !water.isEmpty();
-
     }
 
     @Override
@@ -117,7 +116,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
             return;
         soundTick = 0;
 
-        SoundRegistry.STEAM.playSoundAtBlock(world, pos, 0.7F * volume, 1F * pitchMultiplier);
+        SoundRegistry.STEAM.playSoundAtBlock(world, pos, 0.7F * volume, pitchMultiplier);
     }
 
     @Override

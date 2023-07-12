@@ -23,18 +23,8 @@ public class GravelGunDamage extends CustomStringDamageSource {
     }
 
     @Override
-    public boolean isProjectile() {
-        return true;
-    }
-
-    @Override
     public Entity getEntity() {
         return player;
     }
-
-    //@Override
-    //public boolean isUnblockable() {
-    //    return true;
-    //}
 
 }

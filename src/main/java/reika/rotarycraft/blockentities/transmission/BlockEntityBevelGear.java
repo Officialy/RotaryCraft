@@ -201,8 +201,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
         Direction read = null;
         for (int i = 0; i < 6; i++) {
             BlockEntity te = getAdjacentBlockEntity(Direction.values()[i]);
-            if (te instanceof BlockEntityIOMachine) {
-                BlockEntityIOMachine io = (BlockEntityIOMachine) te;
+            if (te instanceof BlockEntityIOMachine io) {
                 if (read == null) {
                     if (io.isWritingToCoordinate(pos) || io.isWritingToCoordinate2(pos)) {
                         read = Direction.values()[i];
@@ -262,14 +261,12 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
             }
-            if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            if (te instanceof ComplexIO pwr) {
                 Direction dir = this.getInputDirection().getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
             }
-            if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();

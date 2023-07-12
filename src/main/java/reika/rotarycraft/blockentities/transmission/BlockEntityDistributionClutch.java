@@ -187,8 +187,7 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
                     omegain = devicein.omega;
                 }
             }
-            if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            if (te instanceof ComplexIO pwr) {
                 Direction dir = this.getInputDirection().getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
@@ -198,8 +197,7 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
             }
-            if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();
@@ -211,7 +209,6 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
                     this.readFromSplitter(world, pos, devicein);
                     torquein = torque;
                     omegain = omega;
-                    return;
                 } else if (devicein.isWritingToCoordinate(pos)) {
                     torquein = devicein.torque;
                     omegain = devicein.omega;
@@ -305,9 +302,7 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
     }
 
     public void setTorqueRequests(int[] vals) {
-        for (int i = 0; i < 4; i++) {
-            requestedTorques[i] = vals[i];
-        }
+        System.arraycopy(vals, 0, requestedTorques, 0, 4);
 //        this.syncAllData(false);
     }
 

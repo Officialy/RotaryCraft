@@ -27,7 +27,7 @@ public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrind
 
     public GuiGrinder(ContainerGrinder container, Inventory inv, Component title) {
         super(container, inv, title);
-        grin = (BlockEntityGrinder) inv.player.level.getBlockEntity(container.tile.getBlockPos());;
+        grin = (BlockEntityGrinder) inv.player.level.getBlockEntity(container.tile.getBlockPos());
         inventory = inv;
     }
 
@@ -40,7 +40,7 @@ public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrind
         int k = (scaleHeight - imageHeight) / 2;
 
         int i1 = Math.min(48, grin.getCookProgressScaled(48));
-        ScreenUtils.drawTexturedModalRect(poseStack, j + 99, k + 34, 176, 14, 1 * (i1) + 1, 16, 0);
+        ScreenUtils.drawTexturedModalRect(poseStack, j + 99, k + 34, 176, 14, (i1) + 1, 16, 0);
 
         int i2 = grin.getLubricantScaled(55);
         int i3 = 0;

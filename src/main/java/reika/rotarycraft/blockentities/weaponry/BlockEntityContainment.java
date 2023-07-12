@@ -137,7 +137,7 @@ public class BlockEntityContainment extends BlockEntityProtectionDome {
         boolean pot = !e.getActiveEffects().contains(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3600)); //todo check if this works
         if (pot)
             e.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3600));
-        e.hurt(DamageSource.ON_FIRE, 0);
+        e.hurt(e.damageSources().onFire(), 0);
         if (pot)
             e.removeEffect(MobEffects.FIRE_RESISTANCE);
     }

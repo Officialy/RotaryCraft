@@ -17,7 +17,7 @@ import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemSteelArmor extends ItemRotaryArmor {
 
-    public ItemSteelArmor(EquipmentSlot slot, Properties properties) {
+    public ItemSteelArmor(Type slot, Properties properties) {
         super(Materials.HSLA_STEEL, slot, properties);
     }
 

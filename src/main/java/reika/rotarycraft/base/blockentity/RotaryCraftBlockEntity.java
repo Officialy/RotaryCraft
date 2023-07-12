@@ -35,122 +35,114 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.BasicMachine;
 import reika.rotarycraft.registry.MachineRegistry;
 
-public abstract class RotaryCraftBlockEntity extends BlockEntityBase implements BasicMachine, MenuProvider {
+public abstract class RotaryCraftBlockEntity extends BlockEntityBase
+    implements BasicMachine, MenuProvider {
 
-    /**
-     * Rotational position.
-     */
-    public float phi = 0;
+  /** Rotational position. */
+  public float phi = 0;
 
-    public boolean isFlipped = false;
-    protected int tickcount = 0;
-    protected StepTimer second = new StepTimer(20);
-    /**
-     * For emp
-     */
-    private boolean disabled;
+  public boolean isFlipped = false;
+  protected int tickcount = 0;
+  protected StepTimer second = new StepTimer(20);
+  /** For emp */
+  private boolean disabled;
 
-    public RotaryCraftBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+  public RotaryCraftBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    super(type, pos, state);
+  }
+
+  public int getTick() {
+    return tickcount;
+  }
+
+  @Override
+  protected abstract void animateWithTick(Level world, BlockPos pos);
+
+  public final int getMachineIndex() {
+    return this.getMachine().ordinal();
+  }
+
+  public abstract MachineRegistry getMachine();
+
+  public final MachineRegistry getMachine(Direction dir) {
+    BlockEntity te = getAdjacentBlockEntity(dir);
+    return te instanceof RotaryCraftBlockEntity ? ((RotaryCraftBlockEntity) te).getMachine() : null;
+  }
+
+  public final void giveNoSuperWarning() {
+    RotaryCraft.LOGGER.error("BlockEntity " + this.getName() + " does not call super()!");
+    ReikaChatHelper.write("BlockEntity " + this.getName() + " does not call super()!");
+  }
+
+  public abstract boolean hasModelTransparency();
+
+  @Override
+  protected void writeSyncTag(CompoundTag NBT) {
+    super.writeSyncTag(NBT);
+
+    if (isFlipped) NBT.putBoolean("flip", isFlipped);
+  }
+
+  @Override
+  protected void readSyncTag(CompoundTag NBT) {
+    super.readSyncTag(NBT);
+
+    isFlipped = NBT.getBoolean("flip");
+  }
+
+  @Override
+  public void saveAdditional(CompoundTag tag) {
+    super.saveAdditional(tag);
+    tag.putInt("tick", tickcount);
+    tag.putBoolean("emp", disabled);
+  }
+
+  @Override
+  public void load(CompoundTag nbt) {
+    super.load(nbt);
+    tickcount = nbt.getInt("tick");
+    disabled = nbt.getBoolean("emp");
+  }
+
+  public boolean isShutdown() {
+    return disabled;
+  }
+
+  public void onEMP() {
+    disabled = true;
+    if (this instanceof BlockEntityIOMachine io) {
+      io.power = 0;
+      io.torque = 0;
+      io.omega = 0;
     }
+  }
 
-    public int getTick() {
-        return tickcount;
-    }
+  public void onRedirect() {}
 
+  public double heatEnergyPerDegree() {
+    return ReikaThermoHelper.STEEL_HEAT
+        * ReikaBlockHelper.getBlockVolume(level, getBlockPos())
+        * ReikaEngLibrary.rhoiron;
+  }
 
-    @Override
-    protected abstract void animateWithTick(Level world, BlockPos pos);
+  public boolean matchMachine(BlockGetter world, BlockPos pos) {
+    Block id = world.getBlockState(pos).getBlock();
+    Block id2 = this.getBlockEntityBlockID();
+    return id2 == id;
+  }
 
-    public final int getMachineIndex() {
-        return this.getMachine().ordinal();
-    }
+  public final TileEnum getMachine(Level world, BlockPos pos) {
+    return MachineRegistry.getMachine(world, pos);
+  }
 
-    public abstract MachineRegistry getMachine();
+  @Override
+  public Component getDisplayName() {
+    return Component.literal(getTEName());
+  }
 
-    public final MachineRegistry getMachine(Direction dir) {
-        BlockEntity te = getAdjacentBlockEntity(dir);
-        return te instanceof RotaryCraftBlockEntity ? ((RotaryCraftBlockEntity) te).getMachine() : null;
-    }
-
-    public final void giveNoSuperWarning() {
-        RotaryCraft.LOGGER.error("BlockEntity " + this.getName() + " does not call super()!");
-        ReikaChatHelper.write("BlockEntity " + this.getName() + " does not call super()!");
-    }
-
-    public abstract boolean hasModelTransparency();
-
-    @Override
-    protected void writeSyncTag(CompoundTag NBT) {
-        super.writeSyncTag(NBT);
-
-        if (isFlipped)
-            NBT.putBoolean("flip", isFlipped);
-    }
-
-    @Override
-    protected void readSyncTag(CompoundTag NBT) {
-        super.readSyncTag(NBT);
-
-        isFlipped = NBT.getBoolean("flip");
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.putInt("tick", tickcount);
-        tag.putBoolean("emp", disabled);
-    }
-
-    @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        tickcount = nbt.getInt("tick");
-        disabled = nbt.getBoolean("emp");
-    }
-
-
-    public boolean isShutdown() {
-        return disabled;
-    }
-
-
-    public void onEMP() {
-        disabled = true;
-        if (this instanceof BlockEntityIOMachine) {
-            BlockEntityIOMachine io = (BlockEntityIOMachine) this;
-            io.power = 0;
-            io.torque = 0;
-            io.omega = 0;
-        }
-    }
-
-    public void onRedirect() {
-
-    }
-
-    public double heatEnergyPerDegree() {
-        return ReikaThermoHelper.STEEL_HEAT * ReikaBlockHelper.getBlockVolume(level, getBlockPos()) * ReikaEngLibrary.rhoiron;
-    }
-
-    public boolean matchMachine(BlockGetter world, BlockPos pos) {
-        Block id = world.getBlockState(pos).getBlock();
-        Block id2 = this.getBlockEntityBlockID();
-        return id2 == id;
-    }
-
-    public final TileEnum getMachine(Level world, BlockPos pos) {
-        return MachineRegistry.getMachine(world, pos);
-    }
-
-    @Override
-    public Component getDisplayName() {
-        return Component.literal(getTEName());
-    }
-
-    @Nullable
-    @Override
-    public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return null;
-    }
+  @Nullable
+  @Override
+  public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    return null;
+  }
 }

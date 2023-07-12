@@ -56,8 +56,7 @@ public class ItemDebug extends ItemRotaryTool {
                 ReikaChatHelper.write("Additional Data (Meaning differs per machine):");
             }
             BlockEntity te = world.getBlockEntity(ep.blockPosition());
-            if (ep.isCrouching() && te instanceof BlockEntitySpringPowered) {
-                BlockEntitySpringPowered sp = (BlockEntitySpringPowered) te;
+            if (ep.isCrouching() && te instanceof BlockEntitySpringPowered sp) {
                 sp.isCreative = !sp.isCreative;
                 return InteractionResultHolder.pass(this.getDefaultInstance()); //todo check if this works
             }

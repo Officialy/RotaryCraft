@@ -21,7 +21,7 @@ public class RotaryCraftTabs {
     @SubscribeEvent
     public static void creativeTabRegistry(CreativeModeTabEvent.Register event) {
         ROTARYCRAFT = event.registerCreativeModeTab(new ResourceLocation(RotaryCraft.MODID, "rotarycraft"), (builder -> {
-            builder.icon(() -> RotaryItems.HSLA_STEEL_GEAR.get().getDefaultInstance()).displayItems((features, output, hasPermission) -> {
+            builder.icon(() -> RotaryItems.HSLA_STEEL_GEAR.get().getDefaultInstance()).displayItems((itemDisplayParameters, output) -> {
                 output.accept(RotaryItems.IRON_SCRAP.get().getDefaultInstance());
                 output.accept(RotaryItems.CUSTOMEXTRACT.get().getDefaultInstance());
                 output.accept(RotaryItems.ALUMINUM_ALLOY_INGOT.get().getDefaultInstance());
@@ -213,7 +213,7 @@ public class RotaryCraftTabs {
         }));
 
         ROTARYCRAFT_TRANSMISSION = event.registerCreativeModeTab(new ResourceLocation(RotaryCraft.MODID, "transmission"), (builder -> {
-            builder.icon(() -> RotaryItems.DIAMOND_SHAFT.get().getDefaultInstance()).displayItems((features, output, hasPermission) -> {
+            builder.icon(() -> RotaryItems.DIAMOND_SHAFT.get().getDefaultInstance()).displayItems((itemDisplayParameters, output) -> {
                 output.accept(RotaryBlocks.WOOD_FLYWHEEL.get().asItem().getDefaultInstance());
                 output.accept(RotaryBlocks.HSLA_FLYWHEEL.get().asItem().getDefaultInstance());
                 output.accept(RotaryBlocks.TUNGSTEN_FLYWHEEL.get().asItem().getDefaultInstance());
@@ -256,7 +256,7 @@ public class RotaryCraftTabs {
         }));
 
         ROTARYCRAFT_TOOLS = event.registerCreativeModeTab(new ResourceLocation(RotaryCraft.MODID, "tools"), (builder -> {
-            builder.icon(() -> RotaryItems.BEDROCK_ALLOY_PICK.get().getDefaultInstance()).displayItems((features, output, hasPermission) -> {
+            builder.icon(() -> RotaryItems.BEDROCK_ALLOY_PICK.get().getDefaultInstance()).displayItems((itemDisplayParameters, output) -> {
                 output.accept(RotaryItems.BEDROCK_ALLOY_PICK.get().getDefaultInstance());
                 output.accept(RotaryItems.BEDROCK_ALLOY_AXE.get().getDefaultInstance());
                 output.accept(RotaryItems.BEDROCK_ALLOY_SWORD.get().getDefaultInstance());
@@ -307,7 +307,7 @@ public class RotaryCraftTabs {
         }));
 
         ROTARY_ORES = event.registerCreativeModeTab(new ResourceLocation(RotaryCraft.MODID, "ores"), (builder -> {
-            builder.icon(() -> RotaryItems.TUNGSTEN_FLAKES.get().getDefaultInstance()).displayItems((features, output, hasPermission) -> {
+            builder.icon(() -> RotaryItems.TUNGSTEN_FLAKES.get().getDefaultInstance()).displayItems((itemDisplayParameters, output) -> {
                 output.accept(RotaryItems.DIAMOND_FLAKES.get().getDefaultInstance());
                 output.accept(RotaryItems.TUNGSTEN_FLAKES.get().getDefaultInstance());
             }).title(Component.translatable("tab.rotarycraft.ores"));

@@ -60,13 +60,13 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
             stack.mulPose(Axis.ZP.rotationDegrees(180));
 
             if (tile.isCross()) {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(SplitterModel.TEXTURE_LOCATION + this.getImageFileName(tile))));
+                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(SplitterModel.TEXTURE_LOCATION + getImageFileName(tile))));
                 crossModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.phi, 0);
             } else if (tile.isVertical()) {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(ShaftVModel.TEXTURE_LOCATION + this.getImageFileName(tile))));
+                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(ShaftVModel.TEXTURE_LOCATION + getImageFileName(tile))));
                 VShaftModelt.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.phi, 0);
             } else {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(ShaftModel.TEXTURE_LOCATION + this.getImageFileName(tile))));
+                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(ShaftModel.TEXTURE_LOCATION + getImageFileName(tile))));
                 shaftModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.phi, 0);
 //                RotaryCraft.LOGGER.info("phi" + tile.phi);
             }

@@ -10,24 +10,17 @@
 package reika.rotarycraft.blockentities.weaponry;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.items.CapabilityItemHandler;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -141,7 +134,7 @@ public class BlockEntityBlockCannon extends BlockEntityLaunchCannon {
     }*/
 
     private void fireBlock(BlockToFire b, Level world, BlockPos pos) {
-        FallingBlockEntity e = FallingBlockEntity.fall(world, new BlockPos(pos.getX() + 0.5, pos.getY() + 1 + 0.5, pos.getZ() + 0.5), b.toFire.blockID);
+        FallingBlockEntity e = FallingBlockEntity.fall(world, new BlockPos(pos.getX(), pos.getY() + 1 , pos.getZ()), b.toFire.blockID);
         if (b.toFire.blockID == Blocks.SPAWNER.defaultBlockState()) {
             SpawnerBlockEntity spw = new SpawnerBlockEntity(pos, b.toFire.blockID); //todo check if this works
             //ReikaSpawnerHelper.setSpawnerFromItemNBT(b.referenceItem, spw, true);

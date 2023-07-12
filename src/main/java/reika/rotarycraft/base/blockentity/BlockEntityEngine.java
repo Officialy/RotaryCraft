@@ -261,7 +261,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
                 if (ReikaWorldHelper.softBlocks(world, new BlockPos(dx, dy, dz)))
                     return false;
         }
-        return flag && true;
+        return flag;
     }
 
     public void updateTemperature(Level world, BlockPos pos) {
@@ -764,8 +764,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 
     @Override
     public final void onEMP() {
-        if (type.isEMPImmune())
-            return;
+        if (type.isEMPImmune()) {
+        }
         else
             super.onEMP();
     }
@@ -904,7 +904,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public void breakBlock() {
         if (integratedGear != 0) {
             ItemStack is = ItemIntegratedGearbox.getIntegratedGearItem(integratedGear, null);
-            ReikaItemHelper.dropItem(level, new BlockPos(worldPosition.getX() + DragonAPI.rand.nextDouble(), worldPosition.getY() + DragonAPI.rand.nextDouble(), worldPosition.getZ() + DragonAPI.rand.nextDouble()), is);
+            ReikaItemHelper.dropItem(level, worldPosition.getX() + DragonAPI.rand.nextDouble(), worldPosition.getY() + DragonAPI.rand.nextDouble(), worldPosition.getZ() + DragonAPI.rand.nextDouble(), is);
         }
     }
 

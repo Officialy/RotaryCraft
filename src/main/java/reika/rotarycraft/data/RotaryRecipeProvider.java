@@ -2,20 +2,8 @@ package reika.rotarycraft.data;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
-import reika.dragonapi.interfaces.IReikaRecipe;
-import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler;
-import reika.rotarycraft.auxiliary.recipemanagers.WorktableRecipes;
-import reika.rotarycraft.registry.*;
-import reika.rotarycraft.registry.GearboxTypes.GearPart;
-
 import java.util.HashMap;
-import java.util.Random;
 import java.util.function.Consumer;
 
 public class RotaryRecipeProvider extends RecipeProvider {
@@ -30,6 +18,7 @@ public class RotaryRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
 
+/*
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, pillar, 3)
                 .pattern("S")
                 .pattern("S")
@@ -37,9 +26,13 @@ public class RotaryRecipeProvider extends RecipeProvider {
                 .define('S', smooth)
                 .unlockedBy("has_stone", has(smooth))
                 .save(consumer, new ResourceLocation(RotaryCraft.MODID, RoCDataProviders.name()));
+*/
 
 
     }
+
+}
+/*
 
     private static void addCraftItems() {
         if (ConfigRegistry.CRAFTABLEBEDROCK.getState())
@@ -219,9 +212,11 @@ public class RotaryRecipeProvider extends RecipeProvider {
                 " S ", "PGP", 'P', RotaryItems.basepanel, 'G', RotaryItems.gearunit, 'S', RotaryItems.steelgear});
         GameRegistry.addRecipe(RotaryItems.railaim, new Object[]{
                 "sds", "CRC", "sgs", 'R', RotaryItems.radar, 'C', RotaryItems.pcb, 's', RotaryItems.HSLA_STEEL_INGOT.get(), 'd', Items.diamond, 'g', RotaryItems.generator});
-		/*
+		*/
+/*
 		GameRegistry.addRecipe(RotaryItems.bedingot, new Object[]{
-				" B ", "BSB", " B ", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', RotaryItems.bedrockdust});*/
+				" B ", "BSB", " B ", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'B', RotaryItems.bedrockdust});*//*
+
 
         GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(RotaryItems.basepanel, DifficultyEffects.PARTCRAFT.getInt()), new Object[]{
                 "SSS", 'S', RotaryItems.HSLA_STEEL_INGOT.get()});
@@ -382,7 +377,8 @@ public class RotaryRecipeProvider extends RecipeProvider {
         ExtractorModOres.addSmelting();
         ReikaRecipeHelper.addSmelting(RotaryItems.IRON_SCRAP, new ItemStack(Items.IRON_INGOT), 0.4F);
     }
-  /*  private static void addSlideRecipes() {
+  */
+/*  private static void addSlideRecipes() {
         GameRegistry.addRecipe(RotaryItems.SLIDE.getCraftedProduct(4), new Object[]{
                 "PPP", "PGP", "PPP", 'G', Blocks.glass_pane, 'P', Items.paper});
 
@@ -415,6 +411,7 @@ public class RotaryRecipeProvider extends RecipeProvider {
                 //ReikaJavaLibrary.pConsole("Registering recipe with slide "+j+" and color "+i+" to result slide "+(color+j));
             }
         }
-    }*/
+    }*//*
 
-}
+
+}*/

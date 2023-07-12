@@ -41,7 +41,7 @@ public class ItemRangeFinder extends ItemChargedTool {
             HitResult mov = ReikaPlayerAPI.getLookedAtBlock(ep, 512, true);
             if (mov != null) {
                 double d = ReikaMathLibrary.py3d(mov.getLocation().x() - ep.getY(), mov.getLocation().y() - ep.getY(), mov.getLocation().z() - ep.getZ());
-                Block b = level.getBlockState(new BlockPos(mov.getLocation().x(), mov.getLocation().y(), mov.getLocation().z())).getBlock();
+                Block b = level.getBlockState(new BlockPos((int) mov.getLocation().x(), (int) mov.getLocation().y(), (int) mov.getLocation().z())).getBlock();
                 String s = Item.BY_BLOCK.get(b).getName(new ItemStack(b, 1)).toString();
                 if (s == null || s.isEmpty())
                     s = "[No Name]";

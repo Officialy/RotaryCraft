@@ -33,10 +33,10 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
 
-    private WormModel wormModel;
-    private CVTModel cvtModel;
-    private CoilModel coilModel;
-    private HighGearModel highGearModel;
+    private final WormModel wormModel;
+    private final CVTModel cvtModel;
+    private final CoilModel coilModel;
+    private final HighGearModel highGearModel;
 
     public RenderAdvGear(BlockEntityRendererProvider.Context context) {
         wormModel = new WormModel(context.bakeLayer(RotaryModelLayers.WORM));

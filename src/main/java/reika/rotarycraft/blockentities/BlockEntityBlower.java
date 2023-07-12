@@ -120,8 +120,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
                 WorldLocation tg = new WorldLocation(target);
 
                 ArrayList<BlockEntity> li = new ArrayList<>();
-                while (target instanceof BlockEntityBlower) {
-                    BlockEntityBlower te = (BlockEntityBlower) target;
+                while (target instanceof BlockEntityBlower te) {
                     dir = te.getFacingDir();
                     target = getAdjacentBlockEntity(dir);
                     tg = tg.move(dir, 1);

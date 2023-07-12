@@ -123,7 +123,7 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
         if (!this.checkValidCoil())
             return 0;
         int dmg = itemHandler.getStackInSlot(0).getTag().getInt("power");
-        overpower = (int) ReikaMathLibrary.logbase(dmg * dmg, 2);
+        overpower = (int) ReikaMathLibrary.logbase((long) dmg * dmg, 2);
         return Math.min(overpower, 8);
     }
 

@@ -116,8 +116,8 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             powerin[slot][2] = cross.readomega[1];
             powerin[slot][1] = cross.readtorque[1];
             powerin[slot][0] = powerin[slot][1] * powerin[slot][2];
-        } else
-            return; //not its output
+        } else {
+        } //not its output
     }
 
     protected void readFromSplitter(Level world, BlockPos pos, BlockEntitySplitter spl, int slot) { //Complex enough to deserve its own function
@@ -133,7 +133,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             powerin[slot][2] = spl.omega; //omega always constant
             if (ratio == 1) { //Even split, favorbent irrelevant
                 powerin[slot][1] = spl.torque / 2;
-                powerin[slot][0] = spl.omega * spl.torque / 2;
+                powerin[slot][0] = (long) spl.omega * spl.torque / 2;
                 return;
             }
             if (favorbent) {
@@ -146,7 +146,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             powerin[slot][2] = spl.omega; //omega always constant
             if (ratio == 1) { //Even split, favorbent irrelevant
                 powerin[slot][1] = spl.torque / 2;
-                powerin[slot][0] = spl.omega * spl.torque / 2;
+                powerin[slot][0] = (long) spl.omega * spl.torque / 2;
                 return;
             }
             if (favorbent) {
@@ -197,8 +197,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
                     omegain = devicein.omega;
                 }
             }
-            if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            if (te instanceof ComplexIO pwr) {
                 Direction dir = read.getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
@@ -206,8 +205,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
             }
-            if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();
@@ -269,8 +267,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
                     omegain = devicein.omega;
                 }
             }
-            if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            if (te instanceof ComplexIO pwr) {
                 Direction dir = read2.getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
@@ -279,8 +276,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
             }
-            if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read2.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();
@@ -359,8 +355,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
                         omegain = devicein.omega;
                     }
                 }
-                if (te1 instanceof ComplexIO) {
-                    ComplexIO pwr = (ComplexIO) te1;
+                if (te1 instanceof ComplexIO pwr) {
                     Direction dir = in.getOpposite();
                     omegain = pwr.getSpeedToSide(dir);
                     torquein = pwr.getTorqueToSide(dir);
@@ -368,8 +363,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
                 if (te1 instanceof SimpleProvider) {
                     this.copyStandardPower(te1);
                 }
-                if (te1 instanceof ShaftPowerEmitter) {
-                    ShaftPowerEmitter sp = (ShaftPowerEmitter) te1;
+                if (te1 instanceof ShaftPowerEmitter sp) {
                     if (sp.isEmitting() && sp.canWriteTo(in.getOpposite())) {
                         torquein = sp.getTorque();
                         omegain = sp.getOmega();
@@ -389,7 +383,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
                     }
                 }
             }
-            powerin[i][0] = torquein * omegain;
+            powerin[i][0] = (long) torquein * omegain;
             powerin[i][1] = torquein;
             powerin[i][2] = omegain;
             torquein = 0;

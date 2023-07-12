@@ -32,9 +32,9 @@ import reika.rotarycraft.registry.RotaryBlocks;
 
 public class BlockEntityPipe extends BlockEntityPiping implements TemperatureTE, PumpablePipe {
 
-    public static final int HORIZLOSS = 1 * 0;    // all are 1(friction)+g (10m) * delta h (0 or 1m)
-    public static final int UPLOSS = 1 * 0;
-    public static final int DOWNLOSS = -1 * 0;
+    public static final int HORIZLOSS = 0;    // all are 1(friction)+g (10m) * delta h (0 or 1m)
+    public static final int UPLOSS = 0;
+    public static final int DOWNLOSS = 0;
     private Fluid liquid;
     private int liquidLevel = 0;
     private int temperature;

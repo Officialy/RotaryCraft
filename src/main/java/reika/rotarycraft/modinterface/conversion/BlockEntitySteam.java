@@ -99,8 +99,7 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 		int drain = 25;
 		if (storedEnergy <= this.getMaxStorage()-drain) {
 			BlockEntity te = world.getBlockEntity(pos);
-			if (te instanceof IFluidHandler) {
-				IFluidHandler ic = (IFluidHandler)te;
+			if (te instanceof IFluidHandler ic) {
 				FluidStack liq = ic.drain(drain, FluidAction.EXECUTE);
 				if (liq != null && liq.getAmount() > 0 && liq.getFluid().equals(Fluids.WATER))
 					//steam.addLiquid(liq.amount, FluidRegistry.getFluid("steam"));

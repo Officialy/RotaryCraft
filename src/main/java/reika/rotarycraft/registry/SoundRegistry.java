@@ -66,7 +66,7 @@ public enum SoundRegistry implements CustomDistanceSound {
     FAN("#fan"),
     SPARK("spark"),
     DYNAMO("#dynamo"),
-//    JETDAMAGE("jetdamage"),
+    //    JETDAMAGE("jetdamage"),
     INGESTION("ingest_short"),
     FRIDGE("#fridge"),
     JETSTART("#jetstart"),
@@ -102,7 +102,7 @@ public enum SoundRegistry implements CustomDistanceSound {
         }
         name = n;
         if (this.isNote())
-            path = new ResourceLocation(RotaryCraft.MODID,SOUND_FOLDER + MUSIC_FOLDER + name + SOUND_EXT);
+            path = new ResourceLocation(RotaryCraft.MODID, SOUND_FOLDER + MUSIC_FOLDER + name + SOUND_EXT);
         else
             path = new ResourceLocation(RotaryCraft.MODID, SOUND_FOLDER + name + SOUND_EXT);
     }
@@ -151,6 +151,12 @@ public enum SoundRegistry implements CustomDistanceSound {
         ReikaSoundHelper.playSound(this, world, pos.getX(), pos.getY(), pos.getZ(), vol * this.getModulatedVolume(), pitch);
     }
 
+    public void playSound(Level world, double x, double y, double z, float vol, float pitch) {
+        if (world.isClientSide())
+            return;
+        ReikaSoundHelper.playSound(this, world, x, y, z, vol * this.getModulatedVolume(), pitch);
+    }
+
     public void playSound(Level world, BlockPos pos, float vol, float pitch, boolean attenuate) {
         if (world.isClientSide())
             return;
@@ -158,9 +164,11 @@ public enum SoundRegistry implements CustomDistanceSound {
     }
 
     public void playSoundAtBlock(Level world, BlockPos pos, float vol, float pitch) {
-        this.playSound(world, new BlockPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), vol, pitch);
+        this.playSound(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, vol, pitch);
     }
-
+    public void playSoundAtBlock(Level world, double x, double y, double z, float vol, float pitch) {
+        this.playSound(world, x + 0.5, y + 0.5, x + 0.5, vol, pitch);
+    }
     public void playSoundAtBlock(Level world, BlockPos pos) {
         this.playSound(world, pos, 1, 1);
     }

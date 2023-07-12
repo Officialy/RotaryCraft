@@ -196,8 +196,7 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
             id = level.getBlockState(new BlockPos(rx, ry, rz)).getBlock();
             if (id == Blocks.BEDROCK)
                 return Integer.MIN_VALUE;
-            if (id instanceof ImmovableBlock) {
-                ImmovableBlock im = (ImmovableBlock) id;
+            if (id instanceof ImmovableBlock im) {
                 if (!im.canBePushed(level, new BlockPos(rx, ry, rz), i, torque, power))
                     return Integer.MIN_VALUE;
             }

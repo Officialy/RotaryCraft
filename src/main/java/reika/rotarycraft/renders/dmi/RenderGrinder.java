@@ -26,7 +26,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderGrinder extends RotaryTERenderer<BlockEntityGrinder> {
 
-    private GrinderModel modelGrinder;
+    private final GrinderModel modelGrinder;
 
     //private ModelGrinderV GrinderModelV = new ModelGrinderV();
     public RenderGrinder(BlockEntityRendererProvider.Context context) {

@@ -97,7 +97,7 @@ public class BlockEntityMirror extends RotaryCraftBlockEntity implements SolarPl
                     //ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
                     if (e.yo < -0.1 && m - e.yo * 20 > 80) { //todo check motion, was motionY
                         //ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.ordinal(), this, new PacketTarget.RadiusTarget(this, 32));
-                        e.hurt(DamageSource.CACTUS, 1);
+                        e.hurt(e.damageSources().cactus(), 1);
                         this.breakMirror(world, pos);
                         break;
                     }

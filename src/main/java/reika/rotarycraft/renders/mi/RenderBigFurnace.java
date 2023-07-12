@@ -30,7 +30,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderBigFurnace extends RotaryTERenderer<BlockEntityLavaSmeltery> {
 
-    private BigFurnaceModel modelBigFurnace;
+    private final BigFurnaceModel modelBigFurnace;
 
     public RenderBigFurnace(BlockEntityRendererProvider.Context ctx) {
         modelBigFurnace = new BigFurnaceModel(ctx.bakeLayer(RotaryModelLayers.BIG_FURNACE));

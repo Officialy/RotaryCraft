@@ -66,10 +66,17 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
             return 101300;
         //p = rho*R*T approximation
         long ret;
-        if (f.getFluidType().isLighterThanAir())
-            ret = 101300 + (128 * (int) (amt / 1000D * f.getFluidType().getTemperature() * Math.abs(f.getFluidType().getDensity()) / 1000D));
-        else
-            ret = 101300 + amt * 24;
+    if (f.getFluidType().isLighterThanAir())
+      ret =
+          101300
+              + (128
+                  * (int)
+                      (amt
+                          / 1000D
+                          * f.getFluidType().getTemperature()
+                          * Math.abs(f.getFluidType().getDensity())
+                          / 1000D));
+    else ret = 101300 + amt * 24L;
         return (int) Math.min(Integer.MAX_VALUE, ret);
     }
 
@@ -240,8 +247,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                 int dz = pos.getZ() + dir.getStepZ();
                 BlockEntity te = world.getBlockEntity(new BlockPos(dx, dy, dz));
 
-                if (te instanceof BlockEntityPiping) {
-                    BlockEntityPiping tp = (BlockEntityPiping) te;
+                if (te instanceof BlockEntityPiping tp) {
                     if (this.hasReciprocalConnectivity(tp, dir) && this.canEmitToPipeOn(dir) && tp.canReceiveFromPipeOn(dir.getOpposite())) {
                         //ReikaJavaLibrary.pConsole(dir, this.getSide() == Dist.DEDICATED_SERVER && this instanceof BlockEntitySeparatorPipe);
                         if (tp.canIntakeFluid(f)) {
@@ -254,8 +260,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                             }
                         }
                     }
-                } else if (te instanceof PipeConnector) {
-                    PipeConnector pc = (PipeConnector) te;
+                } else if (te instanceof PipeConnector pc) {
                     Flow flow = pc.getFlowForSide(dir.getOpposite());
                     if (flow.canIntake) {
                         int toadd = this.getPipeOutput(this.getFluidLevel());
@@ -270,9 +275,8 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                             }
                         }
                     }
-                } else if (te instanceof IFluidHandler && this.canOutputToIFluidHandler(dir)) {
-                    IFluidHandler fl = (IFluidHandler) te;
-//                    if (fl.isFluidValid(dir.getOpposite(), f)) {
+                } else if (te instanceof IFluidHandler fl && this.canOutputToIFluidHandler(dir)) {
+                    //                    if (fl.isFluidValid(dir.getOpposite(), f)) {
 //                        int toadd = this.getPipeOutput(this.getFluidLevel());
 //                        if (toadd > 0) {
 //                            int added = fl.fill(new FluidStack(f, toadd), IFluidHandler.FluidAction.EXECUTE);
@@ -318,8 +322,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
 //                    }
 //                }
 
-                if (te instanceof BlockEntityPiping) {
-                    BlockEntityPiping tp = (BlockEntityPiping) te;
+                if (te instanceof BlockEntityPiping tp) {
                     if (this.hasReciprocalConnectivity(tp, dir) && this.canReceiveFromPipeOn(dir) && tp.canEmitToPipeOn(dir.getOpposite())) {
                         Fluid f = tp.getAttributes();
                         int amt = tp.getFluidLevel();
@@ -333,8 +336,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                             this.onIntake(te);
                         }
                     }
-                } else if (te instanceof PipeConnector) {
-                    PipeConnector pc = (PipeConnector) te;
+                } else if (te instanceof PipeConnector pc) {
                     Flow flow = pc.getFlowForSide(dir.getOpposite());
                     if (flow.canOutput) {
                         FluidStack fs = pc.drainPipe(dir.getOpposite(), Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
@@ -352,8 +354,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                             }
                         }
                     }
-                } else if (te instanceof IFluidHandler && this.canIntakeFromIFluidHandler(dir)) {
-                    IFluidHandler fl = (IFluidHandler) te;
+                } else if (te instanceof IFluidHandler fl && this.canIntakeFromIFluidHandler(dir)) {
                     FluidStack fs = fl.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
                     //ReikaJavaLibrary.pConsole(fs);
                     if (fs != null) {
@@ -459,8 +460,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         }*/
         if (tile instanceof BlockEntityPiping)
             return this.hasReciprocalConnectivity((BlockEntityPiping) tile, dir);
-        else if (tile instanceof PipeConnector) {
-            PipeConnector pc = (PipeConnector) tile;
+        else if (tile instanceof PipeConnector pc) {
             return pc.canConnectToPipe(this.getMachine()) && pc.canConnectToPipeOnSide(this.getMachine(), dir.getOpposite());
         } else return this.interactsWithMachines() && this.isInteractableTile(tile, dir);
     }

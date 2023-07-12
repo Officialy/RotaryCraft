@@ -129,7 +129,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
         AABB box = new AABB(pos).expandTowards(r, r, r);
         LivingEntity e = ReikaWorldHelper.getClosestLivingEntityNoPlayers(world, worldPosition, box, true);
         if (e != null) {
-            EntityDischarge d = new EntityDischarge(world, pos.offset(0.5, 0.75, 0.5), charge, e.getY(), e.getY() + e.getEyeHeight() * 0.8, e.getZ());
+            EntityDischarge d = new EntityDischarge(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, charge, e.getY(), e.getY() + e.getEyeHeight() * 0.8, e.getZ());
             if (!world.isClientSide) {
                 this.shock(e);
                 world.addFreshEntity(d);
@@ -199,7 +199,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
             dz = s.getAimPos().getZ();
         }
         SoundRegistry.SPARK.playSoundAtBlock(level, worldPosition, 0.25F, 1F);
-        EntityDischarge d = new EntityDischarge(level, worldPosition, charge, worldPosition.getX() + dx, worldPosition.getY() + dy, worldPosition.getZ() + dz);
+        EntityDischarge d = new EntityDischarge(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), charge, worldPosition.getX() + dx, worldPosition.getY() + dy, worldPosition.getZ() + dz);
         if (!level.isClientSide)
             level.addFreshEntity(d);
         charge = 0;
@@ -218,7 +218,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
             e.hurt(RotaryCraft.shock, dmg);
             if (e instanceof Creeper) {
                 level.explode(e, e.blockPosition().getX(), e.blockPosition().getY(), e.blockPosition().getZ(), 3F, Level.ExplosionInteraction.BLOCK);
-                e.hurt(DamageSource.MAGIC, Integer.MAX_VALUE);
+                e.hurt(e.damageSources().magic(), Integer.MAX_VALUE);
             }
         }
         MinecraftForge.EVENT_BUS.post(new VDGAttackEvent(this, charge, dmg));

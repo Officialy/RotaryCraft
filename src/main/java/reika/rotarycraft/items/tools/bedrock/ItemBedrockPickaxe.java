@@ -74,11 +74,10 @@ public final class ItemBedrockPickaxe extends PickaxeItem {
 
     private void forceSilkTouch(ItemStack is, Level Level, Entity entity, int slot) {
         if (!ReikaEnchantmentHelper.hasEnchantment(Enchantments.SILK_TOUCH, is) || ReikaEnchantmentHelper.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE, is) < 5) {
-            if (entity instanceof Player) {
+            if (entity instanceof Player ep) {
                 entity.playSound(SoundEvents.STONE_BREAK, 1, 1);
-                Player ep = (Player) entity;
                 ep.getInventory().setItem(slot, ItemStack.EMPTY);
-                ep.hurt(DamageSource.GENERIC, 10);
+                ep.hurt(ep.damageSources().generic(), 10);
                 ReikaChatHelper.sendChatToPlayer(ep, "The dulled tool has broken.");
                 is = null;
             }
@@ -142,7 +141,7 @@ public final class ItemBedrockPickaxe extends PickaxeItem {
                 item.save(spw.getUpdateTag()); // todo check if this works
 //                if (ReikaSpawnerHelper.hasCustomLogic(spw) && this.shouldKeepSpawnerLogic(is))
 //                    ReikaSpawnerHelper.setSpawnerItemNBT(item, spw.func_145881_a(), true, true);
-                ReikaItemHelper.dropItem(level, new BlockPos(pos.getX() + level.getRandom().nextDouble(), pos.getY() + level.getRandom().nextDouble(), pos.getZ() + level.getRandom().nextDouble()), item);
+                ReikaItemHelper.dropItem(level, pos.getX() + level.getRandom().nextDouble(), pos.getY() + level.getRandom().nextDouble(), pos.getZ() + level.getRandom().nextDouble(), item);
                 //Level.setBlockToAir(x, y, z);
                 //Level.playLocalSound(x+0.5, y+0.5, z+0.5, "dig.stone", 1F, 1.25F);
                 if (FMLLoader.getDist() == Dist.CLIENT) {
@@ -202,7 +201,7 @@ public final class ItemBedrockPickaxe extends PickaxeItem {
         if (FMLLoader.getDist() == Dist.CLIENT) {
             //ReikaRenderHelper.spawnDropParticles(level, pos, Block.byItem(block.getItem()));
         }
-        ReikaItemHelper.dropItem(level, new BlockPos(pos.getX() + level.getRandom().nextDouble(), pos.getY() + level.getRandom().nextDouble(), pos.getZ() + level.getRandom().nextDouble()), block);
+        ReikaItemHelper.dropItem(level, pos.getX() + level.getRandom().nextDouble(), pos.getY() + level.getRandom().nextDouble(), pos.getZ() + level.getRandom().nextDouble(), block);
     }
 
     @Override

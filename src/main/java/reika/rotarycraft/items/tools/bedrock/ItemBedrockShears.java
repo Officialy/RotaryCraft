@@ -139,7 +139,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
             }
             if (drop) {
                 ItemStack block = new ItemStack(b, 1);
-                ReikaItemHelper.dropItem(player.level, new BlockPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), block);
+                ReikaItemHelper.dropItem(player.level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, block);
                 player.level.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
             }
             return flag;
@@ -158,8 +158,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
         if (entity.level.isClientSide())
             return InteractionResult.FAIL;
-        if (entity instanceof IForgeShearable) {
-            IForgeShearable target = (IForgeShearable) entity;
+        if (entity instanceof IForgeShearable target) {
             int x = Mth.floor(entity.getX());
             int y = Mth.floor(entity.getY());
             int z = Mth.floor(entity.getZ());
@@ -173,7 +172,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
                         is.setCount(amount * 2);
                     }
                 }
-                ReikaItemHelper.dropItems(entity.level, new BlockPos(x + 0.5, y + 0.8, z + 0.5), drops);
+                ReikaItemHelper.dropItems(entity.level, x + 0.5, y + 0.8, z + 0.5, drops);
             }
             return InteractionResult.SUCCESS;
         }

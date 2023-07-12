@@ -79,8 +79,7 @@ public class BlockEntityMonitor extends BlockEntity1DTransmitter {
                     omegain = devicein.omega;
                 }
             }
-            if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            if (te instanceof ComplexIO pwr) {
                 Direction dir = this.getInputDirection().getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
@@ -88,8 +87,7 @@ public class BlockEntityMonitor extends BlockEntity1DTransmitter {
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
             }
-            if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();

@@ -74,8 +74,7 @@ public abstract class IORenderer {
         ItemStack is = Minecraft.getInstance().player.getItemBySlot(EquipmentSlot.HEAD);
         boolean flag = is.is(RotaryItems.IO_GOGGLES.get());
         int par4 = 0;
-        if (teb instanceof BlockEntityIOMachine) {
-            BlockEntityIOMachine te = (BlockEntityIOMachine) teb;
+        if (teb instanceof BlockEntityIOMachine te) {
             if (flag)
                 te.iotick = 512;
             if (te.iotick <= 0)
@@ -141,8 +140,7 @@ public abstract class IORenderer {
                 }
                 return;
             }
-            if (teb instanceof BlockEntityDistributionClutch) {
-                BlockEntityDistributionClutch td = (BlockEntityDistributionClutch) teb;
+            if (teb instanceof BlockEntityDistributionClutch td) {
                 Direction read = td.getInputDirection();
                 if (read != null) {
                     renderIn(matrixStack, read.getStepX(), read.getStepY(), read.getStepZ(), te.iotick);
@@ -225,8 +223,7 @@ public abstract class IORenderer {
                 renderIn(matrixStack, xdiff, ydiff, zdiff, te.iotick);
             }
         } else {
-            if (teb instanceof ShaftPowerReceiver) {
-                ShaftPowerReceiver sr = (ShaftPowerReceiver) teb;
+            if (teb instanceof ShaftPowerReceiver sr) {
                 int io = sr.getIORenderAlpha();
                 if (flag)
                     io = 255;
@@ -242,8 +239,7 @@ public abstract class IORenderer {
                     }
                 }
             }
-            if (teb instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter se = (ShaftPowerEmitter) teb;
+            if (teb instanceof ShaftPowerEmitter se) {
                 int io = se.getIORenderAlpha();
                 if (flag)
                     io = 255;
@@ -288,34 +284,34 @@ public abstract class IORenderer {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_NORMAL);
         builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y - 0f * expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
 
-        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y + expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y + expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y - 0f * expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
 
-        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
         builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
 
-        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y - 0f * expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y + expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
 
         builder.vertex(matrix, x - 0f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y + expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y - 0f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
 
-        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x - 0f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
-        builder.vertex(matrix, x + 1f * expand, y + 1f * expand, z + 1f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y + expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + expand, z - 0f * expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x - 0f * expand, y + expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
+        builder.vertex(matrix, x + expand, y + expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
         tesselator.end();
 
         RenderSystem.lineWidth(1.0f);

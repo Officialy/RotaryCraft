@@ -50,8 +50,7 @@ public class BlockEntityBypass extends BlockEntityPiping {
             Direction dir = dirs[i];
             if (tryForcedConnection[i]) {
                 BlockEntity te = getAdjacentBlockEntity(dir);
-                if (te instanceof BlockEntityBypass) {
-                    BlockEntityBypass tb = (BlockEntityBypass) te;
+                if (te instanceof BlockEntityBypass tb) {
                     tb.tryForcedConnection[dir.getOpposite().ordinal()] = true;
                     this.forceConnect(dir);
                     tb.forceConnect(dir.getOpposite());

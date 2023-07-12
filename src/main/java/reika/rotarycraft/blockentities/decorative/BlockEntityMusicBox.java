@@ -702,8 +702,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
 
         @Override
         public boolean equals(Object o) {
-            if (o instanceof Note) {
-                Note n = (Note) o;
+            if (o instanceof Note n) {
                 return n.length == length && n.pitch == pitch && n.voice == voice;
             }
             return false;
@@ -714,23 +713,21 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
             if (this.isRest()) {
                 return ReikaStringParser.capFirstChar(length.name()) + " Rest";
             }
-            StringBuilder sb = new StringBuilder();
-            sb.append(voice);
-            sb.append(" plays ");
-            sb.append(pitch);
-            sb.append(" for ");
-            sb.append(length);
-            return sb.toString();
+            String sb = voice +
+                    " plays " +
+                    pitch +
+                    " for " +
+                    length;
+            return sb;
         }
 
         public String toSerialString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append(length.ordinal());
-            sb.append(":");
-            sb.append(pitch);
-            sb.append(":");
-            sb.append(voice.ordinal());
-            return sb.toString();
+            String sb = length.ordinal() +
+                    ":" +
+                    pitch +
+                    ":" +
+                    voice.ordinal();
+            return sb;
         }
 
         public CompoundTag saveAdditional() {

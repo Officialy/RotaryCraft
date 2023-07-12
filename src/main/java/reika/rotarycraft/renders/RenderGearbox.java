@@ -37,10 +37,10 @@ import java.util.ArrayList;
 
 public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
 
-    private GearboxModel gearboxModel;
-    private Gearbox4Model gearboxModel4;
-    private Gearbox8Model gearboxModel8;
-    private Gearbox16Model gearboxModel16;
+    private final GearboxModel gearboxModel;
+    private final Gearbox4Model gearboxModel4;
+    private final Gearbox8Model gearboxModel8;
+    private final Gearbox16Model gearboxModel16;
 
     private static Field manaIcon;
 

@@ -44,8 +44,7 @@ public class TorqueUsage {
 
         if (tile instanceof BlockEntityTransmissionMachine) { //true if the considered tile is a Transmission tile and is getting power from an already examined block
             BlockEntityIOMachine io = (BlockEntityIOMachine) tile;
-            if (tile instanceof BlockEntitySplitter) { //check if splitter
-                BlockEntitySplitter spl = (BlockEntitySplitter) tile;
+            if (tile instanceof BlockEntitySplitter spl) { //check if splitter
                 if (!spl.isSplitting()) { //check if merge mode or split mode (true if in merge mode)
                     BlockEntity write = spl.getWriteBlockEntity();
                     if (isPoweredFrom(write, spl)) {
@@ -63,15 +62,13 @@ public class TorqueUsage {
                 }
             } else if (tile instanceof BlockEntityFlywheel) {
                 requiredTorque += activeRatio * ((BlockEntityFlywheel) tile).getOppTorque(reader);
-            } else if (tile instanceof BlockEntityClutch) {
-                BlockEntityClutch clu = (BlockEntityClutch) tile;
+            } else if (tile instanceof BlockEntityClutch clu) {
                 if (clu.isOutputEnabled()) {
                     if (isPoweredFrom(clu.getWriteBlockEntity(), clu)) {
                         recursiveFind(clu.getWriteBlockEntity(), reader, activeRatio);
                     }
                 }
-            } else if (tile instanceof BlockEntityGearbox) {
-                BlockEntityGearbox gbx = (BlockEntityGearbox) tile;
+            } else if (tile instanceof BlockEntityGearbox gbx) {
                 if (isPoweredFrom(gbx.getWriteBlockEntity(), gbx)) {
                     if (gbx.reduction) {
                         recursiveFind(gbx.getWriteBlockEntity(), reader, activeRatio / gbx.getRatio());
@@ -109,8 +106,7 @@ public class TorqueUsage {
                         }
                         break;
                 }
-            }*/ else if (tile instanceof BlockEntityShaft) {
-                BlockEntityShaft sha = (BlockEntityShaft) tile;
+            }*/ else if (tile instanceof BlockEntityShaft sha) {
                 if (sha.isCross()) {
                     BlockEntity write = sha.getWriteBlockEntity();
                     BlockEntity write2 = sha.getWriteBlockEntity2();
@@ -130,8 +126,7 @@ public class TorqueUsage {
                     recursiveFind(io.getWriteBlockEntity(), reader, activeRatio);
                 }
             }
-        } else if (tile instanceof BlockEntityPowerReceiver) { //if the tile is a power Receiver, it stores its minimum torque requirement
-            BlockEntityPowerReceiver pwr = (BlockEntityPowerReceiver) tile;
+        } else if (tile instanceof BlockEntityPowerReceiver pwr) { //if the tile is a power Receiver, it stores its minimum torque requirement
             /*if (tile instanceof BlockEntityBeltHub) {
                 BlockEntityBeltHub hub = (BlockEntityBeltHub) tile;
                 if (!hub.isEmitting) {
@@ -208,15 +203,13 @@ public class TorqueUsage {
 
     private static boolean isPoweredFrom(BlockEntity tile, BlockEntityIOMachine caller) {
         WorldLocation loc = new WorldLocation(caller);
-        if (tile instanceof BlockEntityIOMachine) {
-            BlockEntityIOMachine io = (BlockEntityIOMachine) tile;
+        if (tile instanceof BlockEntityIOMachine io) {
             WorldLocation read = io.getReadLocation();
             WorldLocation read2 = io.getReadLocation2();
             WorldLocation read3 = io.getReadLocation3();
             WorldLocation read4 = io.getReadLocation4();
             return loc.equals(read) || loc.equals(read2) || loc.equals(read3) || loc.equals(read4);
-        } else if (tile instanceof PowerAcceptor) {
-            PowerAcceptor acc = (PowerAcceptor) tile;
+        } else if (tile instanceof PowerAcceptor acc) {
             if (acc.isReceiving()) {
                 for (int i = 0; i < 6; i++) {
                     Direction dir = Direction.values()[i];

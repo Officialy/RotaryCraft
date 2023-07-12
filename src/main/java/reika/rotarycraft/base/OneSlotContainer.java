@@ -9,7 +9,7 @@ import reika.dragonapi.base.CoreContainer;
 
 public class OneSlotContainer<T extends BlockEntityBase> extends CoreContainer<T> {
 
-    private Container inv;
+    private final Container inv;
 
     public OneSlotContainer(MenuType<?> type, int id, Inventory player, T te) {
         this(type, id, player, te, 0);

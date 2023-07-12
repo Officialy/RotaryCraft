@@ -25,7 +25,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
 
-    private MirrorModel mirrorModel;
+    private final MirrorModel mirrorModel;
 
     public RenderMirror(BlockEntityRendererProvider.Context pContext) {
         mirrorModel = new MirrorModel(pContext.bakeLayer(RotaryModelLayers.MIRROR));

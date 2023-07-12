@@ -6,458 +6,191 @@
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
- ******************************************************************************//*
+ ******************************************************************************/
 
 package reika.rotarycraft.blockentities.production;
 
+import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.BlastFurnaceMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
-import org.jetbrains.annotations.NotNull;
-import reika.dragonapi.DragonAPI;
-import reika.dragonapi.instantiable.StepTimer;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.interfaces.blockentity.XPProducer;
-import reika.dragonapi.libraries.ReikaInventoryHelper;
-import reika.dragonapi.libraries.java.ReikaArrayHelper;
-import reika.dragonapi.libraries.java.ReikaRandomHelper;
-import reika.dragonapi.libraries.level.ReikaWorldHelper;
-import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.auxiliary.RotaryAux;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.FrictionHeatable;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
-import reika.rotarycraft.auxiliary.recipemanagers.RecipesBlastFurnace;
+import reika.rotarycraft.auxiliary.recipemanagers.BlastFurnaceRecipe;
 import reika.rotarycraft.base.blockentity.InventoriedRCBlockEntity;
 import reika.rotarycraft.registry.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Optional;
 
-public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements TemperatureTE, XPProducer, FrictionHeatable, DiscreteFunction, ConditionalOperation {
+public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements TemperatureTE, XPProducer, FrictionHeatable, DiscreteFunction, ConditionalOperation, Tickable {
 
-    public static final int SMELTTEMP = 600;
-    public static final int BEDROCKTEMP = 1450;//1400;//1000;//1150;
-    public static final int MAXTEMP = 2000;
-    public static final float SMELT_XP = 0.6F;
-    public static final int CENTER_ADDITIVE = 0;
-    public static final int LOWER_ADDITIVE = 11;
-    public static final int UPPER_ADDITIVE = 14;
-    public static final int PATTERN_SLOT = 15;
-    public static final int OUTPUT_CENTER = 10;
-    public static final int OUTPUT_UPPER = 12;
-    public static final int OUTPUT_LOWER = 13;
-    private final StepTimer tempTimer = new StepTimer(20);
-    public int smeltTime = 0;
-    public boolean[] lockedSlots = new boolean[itemHandler.getSlots()];
-    public boolean leaveLastItem;
+    // The Inventory, last 3 for additives the first 9 for crafting
+    private final ItemStackHandler itemHandler = new ItemStackHandler(12) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    //The output inventory, 3 for output
+    private final ItemStackHandler outputInv = new ItemStackHandler(3) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    private final LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    private final LazyOptional<IItemHandler> lazyOutputInv = LazyOptional.of(() -> outputInv);
+    protected final ContainerData data;
+    public int progress = 0;
+    private int maxProgress = 120; // Default is 6 seconds, multiplied by tier
     private int temperature;
-    private float xp;
-    private RecipesBlastFurnace.BlastFurnacePattern pattern;
+    private static float minimumOperatingTemperature = 0f;
+    private final float maximumTemperature = 2100.0f;
+    public boolean leaveLastItem = false;
 
-    public BlockEntityBlastFurnace(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntityBlastFurnace(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.BLAST_FURNACE.get(), pos, state);
+        this.data = new ContainerData() {
+            @Override
+            public int get(int index) {
+                return switch (index) {
+                    case 0 -> progress;
+                    case 1 -> maxProgress;
+                    default -> 0;
+                };
+            }
+
+            @Override
+            public void set(int index, int value) {
+                switch (index) {
+                    case 0 -> progress = value;
+                    case 1 -> maxProgress = value;
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        };
     }
 
     @Override
-    protected int getActiveTexture() {
-        return this.getRecipe() != null || this.getCrafting() != null ? 1 : 0;
-    }
-
-    private RecipesBlastFurnace.BlastCrafting getCrafting() {
-        ItemStack[] center = new ItemStack[9];
-        System.arraycopy(inv, 1, center, 0, 9);
-        RecipesBlastFurnace.BlastCrafting c = RecipesBlastFurnace.getRecipes().getCrafting(center, temperature);
-
-        if (c != null && leaveLastItem) {
-            for (int i = 1; i <= 9; i++) {
-                if (itemHandler.getStackInSlot(i).isEmpty() && itemHandler.getStackInSlot(i).getCount() == 1)
-                    return null;
+    public void tick() {
+        if (hasRecipe(this) && temperature >= minimumOperatingTemperature) {
+            progress++;
+            RotaryCraft.LOGGER.info("Progress: " + progress);
+            Level level = getLevel();
+            SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                inventory.setItem(i, itemHandler.getStackInSlot(i));
             }
-        }
 
-        return c;
-    }
+            Optional<BlastFurnaceRecipe> match = level.getRecipeManager().getRecipeFor(BlastFurnaceRecipe.Type.INSTANCE, inventory, level);
 
-    private RecipesBlastFurnace.BlastRecipe getRecipe() {
-        ItemStack[] center = new ItemStack[9];
-        System.arraycopy(inv, 1, center, 0, 9);
-        RecipesBlastFurnace.BlastRecipe rec = RecipesBlastFurnace.getRecipes().getRecipe(inv[CENTER_ADDITIVE], inv[LOWER_ADDITIVE], inv[UPPER_ADDITIVE], center, temperature);
-
-        if (rec == null)
-            return null;
-
-        if (rec.requiresEmptyOutput()) {
-            if (inv[10] != null || inv[13] != null || inv[12] != null)
-                return null;
-        }
-
-        ItemStack out = rec.outputItem();
-        int num = this.getProducedFor(rec);
-        out = ReikaItemHelper.getSizedItemStack(out, num);
-        if (!this.checkCanMakeItem(out))
-            return null;
-
-        if (leaveLastItem) {
-            for (int i = 1; i <= 9; i++) {
-                if (rec.usesSlot(i - 1) && itemHandler.getStackInSlot(i).isEmpty() && itemHandler.getStackInSlot(i).getCount() == 1)
-                    return null;
-            }
-        }
-
-        return rec;
-    }
-
-    private boolean checkCanMakeItem(ItemStack out) {
-        return this.canAdd(out, 10) || this.canAdd(out, 13) || this.canAdd(out, 12);
-    }
-
-    private boolean canAdd(ItemStack is, int slot) {
-        if (inv[slot] == null)
-            return true;
-        else {
-            ItemStack in = inv[slot];
-            return ReikaItemHelper.areStacksCombinable(is, in, this.getInventoryStackLimit());
-        }
-    }
-
-    @Override
-    public Block getBlockEntityBlockID() {
-        return null;
-    }
-
-    @Override
-    public void updateEntity(Level world, BlockPos pos) {
-        tempTimer.update();
-        if (tempTimer.checkCap()) {
-            this.updateTemperature(world, pos);
-        }
-
-        RecipesBlastFurnace.BlastRecipe rec = this.getRecipe();
-        RecipesBlastFurnace.BlastCrafting bc = this.getCrafting();
-        if (bc != null) {
-            pattern = bc;
-            if (bc.speed <= 1 || level.getDayTime() % bc.speed == 0)
-                smeltTime++;
-            if (smeltTime >= this.getOperationTime()) {
-                this.craft(bc);
-            }
-        } else if (rec != null) {
-            pattern = rec;
-            smeltTime++;
-            if (smeltTime >= this.getOperationTime()) {
-                this.make(rec);
+            if (match.isPresent()) {
+                ItemStack output = match.get().getResultItem(RegistryAccess.EMPTY).copy();
+                if (progress >= maxProgress) {
+                    if (leaveLastItem) {
+                        boolean canCraft = true; // set to false if any slot has less than 2 items
+                        for (int i = 0; i < 10; i++) { // check first 10 slots
+                            if (itemHandler.getStackInSlot(i).getCount() < 2) {
+                                canCraft = false;
+                                break; // no need to check other slots if one slot has less than 2 items
+                            }
+                        }
+                        if (canCraft) {
+                            // Craft the recipe and output the result
+                            itemHandler.extractItem(0, match.get().getIngredients().size(), false);
+                            for (int i = 1; i < 10; i++) {
+                                itemHandler.extractItem(i, 1, false);
+                            }
+                            outputInv.insertItem(1, output, false);
+                        }
+                    } else {
+                        // Craft the recipe and output the result
+                        itemHandler.extractItem(0, match.get().getIngredients().size(), false);
+                        for (int i = 1; i < 10; i++) {
+                            itemHandler.extractItem(i, 1, false);
+                        }
+                        outputInv.insertItem(1, output, false);
+                    }
+                }
             }
         } else {
-            pattern = null;
-            smeltTime = 0;
-            return;
+            progress = 0;
+            setChanged();
         }
     }
 
-    @Override
-    protected void animateWithTick(Level level, BlockPos blockPos) {
-
-    }
-
-    private void craft(RecipesBlastFurnace.BlastCrafting bc) {
-        smeltTime = 0;
-        if (level.isClientSide)
-            return;
-
-        ItemStack out = bc.outputItem();
-
-        if (!ReikaInventoryHelper.addOrSetStack(out, inv, 10))
-            if (!ReikaInventoryHelper.addOrSetStack(out, inv, 12))
-                if (!ReikaInventoryHelper.addOrSetStack(out, inv, 13))
-                    if (!this.checkSpreadFit(out, out.getCount()))
-                        return;
-
-        xp += out.getCount() * bc.xp;
-        if (this.getPlacer() != null) {
-            out.onCraftedBy(level, this.getPlacer(), out.getCount());
-        }
-
-        for (int i = 1; i < 10; i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty())
-                ReikaInventoryHelper.decrStack(i, inv);
-        }
-    }
-
-    private void make(RecipesBlastFurnace.BlastRecipe rec) {
-        smeltTime = 0;
-        if (level.isClientSide)
-            return;
-
-        int num = this.getProducedFor(rec);
-        int made = num;
-        ItemStack out = rec.outputItem();
-
-        if (rec.bonusYield > 0) {
-            double chance = DifficultyEffects.BONUSSTEEL.getDouble() * (ReikaMathLibrary.intpow(1.005, num * num) - 1);
-            if (ReikaRandomHelper.doWithChance(chance)) {
-                num *= 1 + DragonAPI.rand.nextFloat() * rec.bonusYield;
-            }
-        }
-
-        if (ReikaItemHelper.matchStacks(out, RotaryBlocks.HSLA_STEEL_BLOCK)) {
-            if (!ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), 2 * num), inv, 10))
-                if (!ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), 2 * num), inv, 12))
-                    if (!ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), 2 * num), inv, 13))
-                        return;
-            if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.COAL, 3 * num, 1), inv, 10))
-                if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.COAL, 3 * num, 1), inv, 12))
-                    if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.COAL, 3 * num, 1), inv, 13))
-                        return;
-            if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.IRON_INGOT, 5 * num, 0), inv, 10))
-                if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.IRON_INGOT, 5 * num, 0), inv, 12))
-                    if (!ReikaInventoryHelper.addOrSetStack(new ItemStack(Items.IRON_INGOT, 5 * num, 0), inv, 13))
-                        return;
-        } else {
-            if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 10))
-                if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 12))
-                    if (!ReikaInventoryHelper.addOrSetStack(out.getItem(), num, out.getItemDamage(), inv, 13))
-                        if (!this.checkSpreadFit(out, num))
-                            return;
-        }
-
-        xp += rec.xp * num;
-
-        for (int i = 0; i < rec.primary.numberToUse; i++) {
-            if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.primary.chanceToUse, made)))
-                ReikaInventoryHelper.decrStack(0, inv);
-        }
-        for (int i = 0; i < rec.secondary.numberToUse; i++) {
-            if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.secondary.chanceToUse, made)))
-                ReikaInventoryHelper.decrStack(11, inv);
-        }
-        for (int i = 0; i < rec.tertiary.numberToUse; i++) {
-            if (ReikaRandomHelper.doWithChance(this.getConsumptionFactor(rec.tertiary.chanceToUse, made)))
-                ReikaInventoryHelper.decrStack(14, inv);
-        }
-
-        for (int i = 1; i < 10; i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty())
-                ReikaInventoryHelper.decrStack(i, inv);
-        }
-        RotaryAdvancements a = this.getAchievement(rec);
-        if (a != null)
-            a.triggerAchievement(this.getPlacer());
-
-    }
-
-    private float getConsumptionFactor(float base, int made) {
-        return Mth.clamp(base * made * DifficultyEffects.BLASTCONSUME.getChance(), base, 1);
-    }
-
-    private int getProducedFor(RecipesBlastFurnace.BlastRecipe rec) {
-        int num = 0;
-        for (int i = 1; i < 10; i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
-                if (rec.isValidMainItem(itemHandler.getStackInSlot(i)))
-                    num++;
-            }
-        }
-        return rec.getNumberProduced(num);
-    }
-
-    private RotaryAdvancements getAchievement(RecipesBlastFurnace.BlastRecipe rec) {
-        if (rec.isValidMainItem(RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance()))
-            return RotaryAdvancements.RECYCLE;
-        if (ReikaItemHelper.matchStacks(rec.outputItem(), RotaryItems.HSLA_STEEL_INGOT))
-            return RotaryAdvancements.MAKESTEEL;
-        if (ReikaItemHelper.matchStacks(rec.outputItem(), RotaryBlocks.HSLA_STEEL_BLOCK))
-            return RotaryAdvancements.FAILSTEEL;
-        return null;
-    }
-
-    public int getTemperatureScaled(int p1) {
-        return ((p1 * temperature) / MAXTEMP);
-    }
-
-    public void dropXP() {
-        ReikaWorldHelper.splitAndSpawnXP(level, worldPosition.getX() + DragonAPI.rand.nextFloat(), worldPosition.getY() + 1.25F, worldPosition.getZ() + DragonAPI.rand.nextFloat(), (int) xp);
-        xp = 0;
-    }
-
-    public float getXP() {
-        return xp;
-    }
-
-    public void clearXP() {
-        xp = 0;
-    }
-
-    private boolean checkSpreadFit(ItemStack is, int num) {
-        int maxfit = 0;
-        int f1 = is.getMaxStackSize() - inv[10].getCount();
-        int f2 = is.getMaxStackSize() - inv[12].getCount();
-        int f3 = is.getMaxStackSize() - inv[13].getCount();
-        maxfit = f1 + f2 + f3;
-        if (num > maxfit)
+    private static boolean hasRecipe(BlockEntityBlastFurnace blockEntity) {
+        Level level = blockEntity.getLevel();
+        if (level == null) {
             return false;
-        if (f1 > num) {
-            inv[10].setCount(+num);
-            return true;
-        } else {
-            inv[10].setCount(inv[10].getMaxStackSize());
-            num -= f1;
         }
-        if (f2 > num) {
-            inv[12].setCount(+num);
-            return true;
-        } else {
-            inv[12].setCount(inv[12].getMaxStackSize());
-            num -= f2;
+        SimpleContainer inventory = new SimpleContainer(blockEntity.itemHandler.getSlots());
+        SimpleContainer outputInventory = new SimpleContainer(blockEntity.outputInv.getSlots());
+        for (int i = 0; i < blockEntity.itemHandler.getSlots(); i++) {
+            inventory.setItem(i, blockEntity.itemHandler.getStackInSlot(i));
         }
-        if (f3 > num) {
-            inv[12].setCount(+num);
-            return true;
-        } else {
-            inv[13].setCount(inv[13].getMaxStackSize());
-            num -= f3;
-        }
-        return true;
+
+        Optional<BlastFurnaceRecipe> recipe = level.getRecipeManager().getRecipeFor(BlastFurnaceRecipe.Type.INSTANCE, inventory, level);
+        recipe.ifPresent(blastFurnaceRecipe -> minimumOperatingTemperature = blastFurnaceRecipe.getOperatingTemperature());
+        return recipe.isPresent() && canInsertAmountIntoOutputSlot(outputInventory) && canInsertItemIntoOutputSlot(outputInventory, recipe.get().getResultItem(RegistryAccess.EMPTY));
     }
 
-    public int getOperationTime() {
-        int time = 2 * ((1500 - (temperature - SMELTTEMP)) / 12); //1500 was MAXTEMP
-        if (time < 1)
-            return 1;
-        return time;
+    private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack output) {
+        return inventory.getItem(3).getItem() == output.getItem() || inventory.getItem(3).isEmpty();
     }
 
-    public int getCookScaled(int p1) {
-        return ((p1 * smeltTime) / this.getOperationTime());
+    private static boolean canInsertAmountIntoOutputSlot(SimpleContainer inventory) {
+        return inventory.getItem(3).getMaxStackSize() > inventory.getItem(3).getCount();
     }
 
-    public void updateTemperature(Level world, BlockPos pos) {
-        int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
-
-        if (RotaryAux.isNextToWater(world, pos)) {
-            Tamb /= 2;
-        }
-        Direction iceside = ReikaWorldHelper.checkForAdjBlock(world, pos, Blocks.ICE);
-        if (iceside == null)
-            iceside = ReikaWorldHelper.checkForAdjBlock(world, pos, Blocks.PACKED_ICE);
-        if (iceside != null) {
-            if (Tamb > 0)
-                Tamb /= 4;
-            ReikaWorldHelper.changeAdjBlock(world, pos, iceside, Fluids.FLOWING_WATER.getFlowing().defaultFluidState().createLegacyBlock(), 0);
-        }
-        int Tadd = 0;
-        if (RotaryAux.isNextToFire(world, pos)) {
-            Tadd += Tamb >= 100 ? 100 : 200;
-        }
-        if (RotaryAux.isNextToLava(world, pos)) {
-            Tadd += Tamb >= 100 ? 400 : 600;
-        }
-        Tamb += Tadd;
-
-        if (temperature > Tamb)
-            temperature--;
-        if (temperature > Tamb * 2)
-            temperature--;
-        if (temperature < Tamb)
-            temperature++;
-        if (temperature * 2 < Tamb)
-            temperature++;
-        if (temperature > MAXTEMP)
-            temperature = MAXTEMP;
-        if (temperature > 100) {
-            Direction side = ReikaWorldHelper.checkForAdjBlock(world, pos, Blocks.SNOW);
-            if (side == null)
-                side = ReikaWorldHelper.checkForAdjBlock(world, pos, Blocks.SNOW);
-            if (side != null)
-                ReikaWorldHelper.changeAdjBlock(world, pos, side, Blocks.AIR, 0);
-            side = ReikaWorldHelper.checkForAdjBlock(world, pos, Blocks.ICE);
-            if (side != null)
-                ReikaWorldHelper.changeAdjBlock(world, pos, side, Fluids.FLOWING_WATER.getFlowing().defaultFluidState().createLegacyBlock(), 0);
-        }
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        itemHandler.deserializeNBT(tag.getCompound("itemInventory"));
+        outputInv.deserializeNBT(tag.getCompound("outputInventory"));
+        temperature = tag.getInt("temperature");
+        progress = tag.getInt("progress");
+        leaveLastItem = tag.getBoolean("leaveLastItem");
     }
 
+    @Override
     public int getContainerSize() {
-        return 16;
+        return 0;
     }
 
     @Override
-    public int getInventoryStackLimit() {
-        return 64;
+    protected void animateWithTick(Level world, BlockPos pos) {
+
     }
-
-    @Override
-    protected void writeSyncTag(CompoundTag NBT) {
-        super.writeSyncTag(NBT);
-        NBT.putInt("melt", smeltTime);
-        NBT.putInt("temp", temperature);
-        NBT.putFloat("exp", xp);
-
-        NBT.putInt("locks", ReikaArrayHelper.booleanToBitflags(lockedSlots));
-        NBT.putBoolean("last", leaveLastItem);
-    }
-
-    @Override
-    protected void readSyncTag(CompoundTag NBT) {
-        super.readSyncTag(NBT);
-        smeltTime = NBT.getInt("melt");
-        temperature = NBT.getInt("temp");
-        xp = NBT.getFloat("exp");
-
-        lockedSlots = ReikaArrayHelper.booleanFromBitflags(NBT.getInt("locks"), itemHandler.getSlots());
-        leaveLastItem = NBT.getBoolean("last");
-    }
-
-    @Override
-    protected String getTEName() {
-        return null;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack is) {
-        return is != null && this.getSlotForItem(i, is);
-    }
-
-    private boolean getSlotForItem(int slot, ItemStack is) {
-        ItemStack patt = inv[PATTERN_SLOT];
-//        todo if (RotaryItems.CRAFTPATTERN.matchItem(patt) && slot >= 1 && slot <= 9) {
-//            return ItemCraftPattern.checkPatternForMatch(this, RecipeMode.BLASTFURN, slot, slot - 1, is, patt);
-//        }
-        //ReikaJavaLibrary.pConsole(slot+": "+lockedSlots[slot]);
-        if (lockedSlots[slot])
-            return false;
-        HashSet<Integer> slots = ReikaInventoryHelper.getSlotsBetweenWithItemStack(is, this, 1, 9, false);
-        if (!slots.isEmpty()) {
-            return slots.contains(slot);
-        }
-
-        Set<Integer> types = RecipesBlastFurnace.getRecipes().getInputTypesForItem(is);
-        if (slot == CENTER_ADDITIVE)
-            return types.contains(1);
-        if (slot == LOWER_ADDITIVE)
-            return types.contains(2);
-        if (slot == UPPER_ADDITIVE)
-            return types.contains(3);
-        if (slot >= 1 && slot <= 9)
-            return types.contains(0); //check this last, since there are fewer variants that go in additives
-        return false;
-    }
-
-    @Override
-    public boolean hasModelTransparency() {
-        return false;
-    }
-
 
     @Override
     public MachineRegistry getMachine() {
@@ -465,81 +198,71 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
     }
 
     @Override
-    public int getThermalDamage() {
-        return 0;
+    public boolean hasModelTransparency() {
+        return false;
     }
 
     @Override
-    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-        return i == 10 || i == 12 || i == 13;
+    public void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.put("inventory", itemHandler.serializeNBT());
+        tag.put("outputInventory", outputInv.serializeNBT());
+        tag.putInt("temperature", temperature);
+        tag.putInt("progress", progress);
+        tag.putBoolean("leaveLastItem", leaveLastItem);
+    }
+
+    @Override
+    protected String getTEName() {
+        return "blast_furnace";
+    }
+
+    @Override
+    public Block getBlockEntityBlockID() {
+        return RotaryBlocks.BLAST_FURNACE.get();
+    }
+
+    @Override
+    public void updateEntity(Level world, BlockPos pos) {
+
     }
 
     @Override
     public int getRedstoneOverride() {
-        return this.getRecipe() == null ? 15 : 0;
+        return 0;
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this, blockEntity -> this.getUpdateTag());
     }
 
     @Override
-    public void addTemperature(int temp) {
-        temperature += temp;
+    public CompoundTag getUpdateTag() {
+        var tag = new CompoundTag();
+        saveAdditional(tag);
+        return tag;
     }
+
+//    @Override
+//    public void setTemperature(float temperature) {
+//        this.temperature = temperature;
+//    }
 
     @Override
     public int getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temp) {
-        temperature = temp;
-    }
-
-    @Override
-    public void overheat(Level world, BlockPos pos) {
-
-    }
-
-    @Override
-    public void onEMP() {
-    }
-
     @Override
     public int getMaxTemperature() {
-        return MAXTEMP;
-    }
-
-    @Override
-    public boolean areConditionsMet() {
-        return this.getRecipe() != null;
-    }
-
-    @Override
-    public String getOperationalStatus() {
-        return this.areConditionsMet() ? "Operational" : "Insufficient Temperature or Invalid or Missing Items";
-    }
-
-    @Override
-    public boolean canBeCooledWithFins() {
-        return false;
-    }
-
-    @Override
-    public boolean allowHeatExtraction() {
-        return true;
-    }
-
-    @Override
-    public int getAmbientTemperature() {
         return 0;
     }
 
     @Override
-    public void resetAmbientTemperatureTimer() {
-        tempTimer.reset();
-    }
+    public void setTemperature(int temp) {
 
-    @Override
-    public float getMultiplier() {
-        return 1;
     }
 
     @Override
@@ -549,74 +272,42 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
 
     @Override
     public boolean canBeFrictionHeated() {
-        return true;
-    }
-
-    @Override
-    public boolean allowExternalHeating() {
-        return true;
-    }
-
-    @Override
-    public boolean isEmpty() {
         return false;
     }
 
     @Override
-    public ItemStack getItem(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int pIndex, int pCount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int pIndex) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int pIndex, ItemStack pStack) {
-
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
-    public int getSlots() {
-        return 0;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
+    public float getMultiplier() {
         return 0;
     }
 
     @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return false;
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
+
+            return side == Direction.DOWN ? this.lazyOutputInv.cast() : this.lazyItemHandler.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new BlastFurnaceMenu(id, inv, this, this.data);
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.literal("Blast Furnace");
+    }
+
+    @Override
+    public void clearXP() {
+
+    }
+
+    @Override
+    public float getXP() {
+        return 0;
     }
 
     @Override
@@ -628,5 +319,64 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
     public boolean hasATank() {
         return false;
     }
+
+    @Override
+    public void resetAmbientTemperatureTimer() {
+
+    }
+
+    @Override
+    public boolean areConditionsMet() {
+        return false;
+    }
+
+    @Override
+    public String getOperationalStatus() {
+        return null;
+    }
+
+    @Override
+    public int getOperationTime() {
+        return 0;
+    }
+
+    @Override
+    public boolean canBeCooledWithFins() {
+        return false;
+    }
+
+    @Override
+    public boolean allowExternalHeating() {
+        return false;
+    }
+
+    @Override
+    public boolean allowHeatExtraction() {
+        return false;
+    }
+
+    @Override
+    public int getAmbientTemperature() {
+        return 0;
+    }
+
+    @Override
+    public void updateTemperature(Level world, BlockPos pos) {
+
+    }
+
+    @Override
+    public void addTemperature(int temp) {
+
+    }
+
+    @Override
+    public int getThermalDamage() {
+        return 0;
+    }
+
+    @Override
+    public void overheat(Level world, BlockPos pos) {
+
+    }
 }
-*/

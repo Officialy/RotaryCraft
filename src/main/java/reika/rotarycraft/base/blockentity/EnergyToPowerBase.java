@@ -351,13 +351,12 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
             li.add(String.format("Max Speed: %d rad/s", speed));
             li.add(String.format("Max Power: %.3f%sW", val, exp));
         } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Hold ");
-            sb.append(ChatFormatting.GREEN);
-            sb.append("Shift");
-            sb.append(ChatFormatting.GRAY);
-            sb.append(" for power data");
-            li.add(sb.toString());
+            String sb = "Hold " +
+                    ChatFormatting.GREEN +
+                    "Shift" +
+                    ChatFormatting.GRAY +
+                    " for power data";
+            li.add(sb);
         }
         return li;
     }
@@ -648,8 +647,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     public final void breakBlock() {
         if (integratedGear != 0) {
             ItemStack is = ItemIntegratedGearbox.getIntegratedGearItem(integratedGear, null);
-            ReikaItemHelper.dropItem(level, new BlockPos(
-                    worldPosition.getX() + DragonAPI.rand.nextDouble(), worldPosition.getY() + DragonAPI.rand.nextDouble(), worldPosition.getZ() + DragonAPI.rand.nextDouble()), is);
+            ReikaItemHelper.dropItem(level, worldPosition.getX() + DragonAPI.rand.nextDouble(), worldPosition.getY() + DragonAPI.rand.nextDouble(), worldPosition.getZ() + DragonAPI.rand.nextDouble(), is);
         }
     }
 

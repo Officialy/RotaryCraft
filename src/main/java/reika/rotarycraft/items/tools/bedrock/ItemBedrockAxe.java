@@ -240,7 +240,7 @@ public class ItemBedrockAxe extends AxeItem {
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity player) {
         if (target.getClass().getSimpleName().equals("EntityEnt")) {
-            DamageSource src = player instanceof Player ? DamageSource.playerAttack((Player) player) : DamageSource.GENERIC;
+            DamageSource src = player instanceof Player ? player.damageSources().playerAttack((Player) player) : player.damageSources().generic();
             target.setHealth(1);
             target.hurt(src, Integer.MAX_VALUE);
             return true;

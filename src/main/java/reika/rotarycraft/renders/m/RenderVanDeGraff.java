@@ -23,7 +23,7 @@ import reika.rotarycraft.models.VanDeGraffModel;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderVanDeGraff extends RotaryTERenderer<BlockEntityVanDeGraff> {
-    private VanDeGraffModel vanDeGraffModel;
+    private final VanDeGraffModel vanDeGraffModel;
 
     public RenderVanDeGraff(BlockEntityRendererProvider.Context context) {
         vanDeGraffModel = new VanDeGraffModel(context.bakeLayer(RotaryModelLayers.VAN_DE_GRAFF));

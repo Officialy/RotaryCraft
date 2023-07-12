@@ -3,6 +3,7 @@ package reika.rotarycraft.registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import reika.rotarycraft.RotaryCraft;
@@ -10,13 +11,14 @@ import reika.rotarycraft.RotaryCraft;
 public class Materials {
 
     public static ArmorMaterial HSLA_STEEL = new ArmorMaterial() {
+
         @Override
-        public int getDurabilityForSlot(EquipmentSlot p_40410_) {
+        public int getDurabilityForType(ArmorItem.Type p_266807_) {
             return 37;
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot p_40411_) {
+        public int getDefenseForType(ArmorItem.Type p_267168_) {
             return 3;
         }
 
@@ -53,12 +55,12 @@ public class Materials {
 
     public static ArmorMaterial BEDROCK_ALLOY = new ArmorMaterial() {
         @Override
-        public int getDurabilityForSlot(EquipmentSlot p_40410_) {
+        public int getDurabilityForType(ArmorItem.Type p_40410_) {
             return 37;
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot p_40411_) {
+        public int getDefenseForType(ArmorItem.Type p_40411_) {
             return 15;
         }
 

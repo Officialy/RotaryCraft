@@ -9,7 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
-import com.mojang.bridge.game.Language;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -82,22 +81,20 @@ public final class RotaryDescriptions {
     }
 
     private static String getParent(boolean locale) {
-        return locale && FMLLoader.getDist() == Dist.CLIENT ? getLocalizedParent() : "Resources/";
+        return locale && FMLLoader.getDist() == Dist.CLIENT ? getLocalizedParent() : "resources/";
     }
-
 
     private static String getLocalizedParent() {
-        Language language = Minecraft.getInstance().getLanguageManager().getSelected();
-        String lang = language.getCode();
-        if (hasLocalizedFor(language) && !"en_US".equals(lang))
-            return "Resources/" + lang + "/";
-        return "Resources/";
+        String language = Minecraft.getInstance().getLanguageManager().getSelected();
+//        String lang = language.getCode();
+        if (hasLocalizedFor(language) && !"en_us".equals(language))
+            return "resources/" + language + "/";
+        return "resources/";
     }
 
-
-    private static boolean hasLocalizedFor(Language language) {
-        String lang = language.getCode();
-        try (InputStream o = RotaryCraft.class.getResourceAsStream("Resources/" + lang + "/categories.xml")) {
+    private static boolean hasLocalizedFor(String language) {
+//        String lang = language.getCode();
+        try (InputStream o = RotaryCraft.class.getResourceAsStream("resources/" + language + "/categories.xml")) {
             return o != null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -431,13 +428,12 @@ public final class RotaryDescriptions {
 
 //
 //        ArrayList<MachineRegistry> li = MachineRegistry.getEnchantableMachineList();
-        StringBuilder sb = new StringBuilder();
-//        for (int i = 0; i < li.size(); i++) {
+        //        for (int i = 0; i < li.size(); i++) {
 //            sb.append(li.get(i).getName());
 //            if (i < li.size() - 1)
 //                sb.append(", ");
 //        }
-        addData(HandbookRegistry.ENCHANTING, sb.toString());
+        addData(HandbookRegistry.ENCHANTING, "");
 //
         addData(HandbookRegistry.BEARINGS, (int) (BlockEntityGearbox.BEARINGREDUCTION * 100) + "%", (int) (BlockEntityGearbox.BEARINGINCREASE * 100) + "%");
 //

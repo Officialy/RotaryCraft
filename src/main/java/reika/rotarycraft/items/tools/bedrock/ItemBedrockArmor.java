@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -44,7 +45,7 @@ import java.util.Locale;
 //@Strippable(value = {"forestry.api.apiculture.IArmorApiarist"})
 public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiarist {
 
-    public ItemBedrockArmor(EquipmentSlot slot, Properties properties) {
+    public ItemBedrockArmor(Type slot, Properties properties) {
         super(Materials.BEDROCK_ALLOY, slot, properties);
     }
 
@@ -156,12 +157,11 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
         for (Enchantment e : map.keySet()) {
             if (!ReikaEnchantmentHelper.hasEnchantment(e, is)) {
                 entity.playSound(SoundEvents.ITEM_BREAK, 1, 1);
-                if (entity instanceof Player) {
-                    Player ep = (Player) entity;
+                if (entity instanceof Player ep) {
                     ep.getInventory().setItem(slot, ItemStack.EMPTY);
-                    ep.hurt(DamageSource.GENERIC, 10);
+                    ep.hurt(ep.damageSources().generic(), 10);
                     ReikaChatHelper.sendChatToPlayer(ep, "The damaged tool has broken.");
-                    is = null;
+                    is = ItemStack.EMPTY;
                     break;
                 }
             }

@@ -166,6 +166,10 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> SEPARATION = registerMachineBlock("separation", () -> new BlockSeperation(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> SUCTION = registerMachineBlock("suction", () -> new BlockSuction(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
     public static final RegistryObject<Block> BEDROCK_PIPE = registerMachineBlock("bedrock_pipe", () -> new BlockBedrockPipe(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> WORKTABLE = registerMachineBlock("worktable", () -> new BlockWorktable(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> VACUUM = registerMachineBlock("vacuum", () -> new BlockVacuum(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+    public static final RegistryObject<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(BlockBehaviour.Properties.of(Material.METAL).strength(5)));
+
 
     private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
 

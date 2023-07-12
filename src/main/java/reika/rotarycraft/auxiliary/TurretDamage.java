@@ -10,13 +10,15 @@
 package reika.rotarycraft.auxiliary;
 
 
+import net.minecraft.world.damagesource.DamageType;
+import reika.dragonapi.instantiable.CustomStringDamageSource;
 import reika.rotarycraft.base.blockentity.BlockEntityAimedCannon;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class TurretDamage extends DamageSource {
+public class TurretDamage extends CustomStringDamageSource {
 
     private final Player player;
     private final BlockEntity tile;
@@ -32,17 +34,17 @@ public class TurretDamage extends DamageSource {
         tile = te;
     }
 
-    @Override
+  /*  @Override
     public boolean isProjectile() {
         return true;
-    }
+    }*/
 
     @Override
     public Entity getEntity() {
         return player;
     }
 
-    //@Override
+//    @Override
     public boolean isUnblockable() {
         return true;
     }

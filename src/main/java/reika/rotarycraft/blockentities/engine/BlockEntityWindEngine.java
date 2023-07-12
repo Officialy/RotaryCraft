@@ -58,7 +58,7 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
         AABB box = new AABB(pos.getX() + c, pos.getY(), pos.getZ() + d, pos.getX() + 1 + c, pos.getY() + 1, pos.getZ() + 1 + d).expandTowards(a, 1, b);
         List<LivingEntity> in = world.getEntitiesOfClass(LivingEntity.class, box);
         for (LivingEntity ent : in) {
-            ent.hurt(DamageSource.GENERIC, 1);
+            ent.hurt(ent.damageSources().generic(), 1);
         }
     }
 
@@ -124,7 +124,7 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
             return;
         soundTick = 0;
 
-        SoundRegistry.WIND.playSoundAtBlock(world, pos, 1.1F * volume, 1F * pitchMultiplier);
+        SoundRegistry.WIND.playSoundAtBlock(world, pos, 1.1F * volume, pitchMultiplier);
     }
 
     @Override

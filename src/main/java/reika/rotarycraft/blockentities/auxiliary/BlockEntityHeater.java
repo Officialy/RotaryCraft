@@ -164,8 +164,7 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
             ReikaWorldHelper.temperatureEnvironment(world, worldPosition.below(), temperature);
         MachineRegistry id = MachineRegistry.getMachine(world, pos);
         BlockEntity te = world.getBlockEntity(pos);
-        if (te instanceof ThermalMachine) {
-            ThermalMachine th = (ThermalMachine) te;
+        if (te instanceof ThermalMachine th) {
             int tempdiff = temperature - th.getTemperature();
             if (tempdiff <= 0)
                 return;

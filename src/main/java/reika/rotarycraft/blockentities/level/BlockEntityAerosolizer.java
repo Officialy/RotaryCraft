@@ -65,8 +65,10 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
     public void testIdle() {
         boolean empty = true;
         for (int i = 0; i < 9; i++) {
-            if (potions[i] != null)
+            if (potions[i] != null) {
                 empty = false;
+                break;
+            }
         }
         idle = empty;
     }
@@ -165,8 +167,7 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
                     return new PotionApplication(ReikaJavaLibrary.makeListFrom(new MobEffectInstance(p.getEffect(), 0)), extended ? 3 : 1, level2 ? 1 : 0);
                 }
             }
-        } else if (i instanceof CustomPotion) {
-            CustomPotion cp = (CustomPotion) i;
+        } else if (i instanceof CustomPotion cp) {
             Potion p = cp.getPotion(is);
             if (p != null && !p.hasInstantEffects()) {
                 boolean extended = cp.isExtended(is);
@@ -521,8 +522,7 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
 
         @Override
         public boolean equals(Object o) {
-            if (o instanceof PotionApplication) {
-                PotionApplication p = (PotionApplication) o;
+            if (o instanceof PotionApplication p) {
                 return p.potionLevel == potionLevel && this.matchEffects(p);
             }
             return false;

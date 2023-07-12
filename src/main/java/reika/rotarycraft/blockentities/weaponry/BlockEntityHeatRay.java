@@ -219,8 +219,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
                 if (this.affectBlock(world, new BlockPos(dx, dy, dz), step, id.getBlock(), maxdist)) {
                     blocked = true;
                 }
-                if (id instanceof SemiTransparent) {
-                    SemiTransparent st = (SemiTransparent) id;
+                if (id instanceof SemiTransparent st) {
                     if (st.isOpaque())
                         blocked = true;
                 } //else if (todo id.isOpaqueCube())
@@ -403,7 +402,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
 
         @Override
         public int getDelayTick(Block b, long surplus, int dist) {
-            return (int) Math.min(Integer.MAX_VALUE, (4 * dist) / surplus);
+            return (int) Math.min(Integer.MAX_VALUE, (4L * dist) / surplus);
         }
 
     }
@@ -454,7 +453,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
             int d = 2;
             if (fluid == Fluids.WATER)
                 d = 8;
-            return (int) Math.min(Integer.MAX_VALUE, (4 * dist / (d * surplus)));
+            return (int) Math.min(Integer.MAX_VALUE, (4L * dist / (d * surplus)));
         }
 
     }
@@ -470,7 +469,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
 
         @Override
         public int getDelayTick(Block b, long surplus, int dist) {
-            return (int) Math.min(Integer.MAX_VALUE, (4 * dist / (8 * surplus)));
+            return (int) Math.min(Integer.MAX_VALUE, (4L * dist / (8 * surplus)));
         }
 
     }

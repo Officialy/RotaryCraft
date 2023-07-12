@@ -16,7 +16,7 @@ import reika.dragonapi.interfaces.item.UnbreakableArmor;
 
 public abstract class ItemRotaryArmor extends ArmorItem implements UnbreakableArmor {
 
-    public ItemRotaryArmor(ArmorMaterial material, EquipmentSlot slot, Properties properties) {
+    public ItemRotaryArmor(ArmorMaterial material, ArmorItem.Type slot, Properties properties) {
         super(material, slot, properties);
     }
 

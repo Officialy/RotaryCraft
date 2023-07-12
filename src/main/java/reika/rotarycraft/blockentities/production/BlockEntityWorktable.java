@@ -6,73 +6,56 @@
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
- ******************************************************************************//*
+ ******************************************************************************/
 
 package reika.rotarycraft.blockentities.production;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import org.jetbrains.annotations.NotNull;
-import reika.dragonapi.instantiable.recipe.CraftingInputMatrix;
-import reika.dragonapi.interfaces.blockentity.CraftingTile;
 import reika.dragonapi.interfaces.blockentity.TriggerableAction;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.ReikaNBTHelper;
-import reika.dragonapi.libraries.ReikaRecipeHelper;
-import reika.dragonapi.libraries.io.ReikaSoundHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.api.event.WorktableCraftEvent;
 import reika.rotarycraft.api.interfaces.ChargeableTool;
 import reika.rotarycraft.auxiliary.interfaces.AlternatingRedstoneUser;
-import reika.rotarycraft.auxiliary.recipemanagers.WorktableRecipes;
 import reika.rotarycraft.base.ItemChargedArmor;
 import reika.rotarycraft.base.ItemChargedTool;
 import reika.rotarycraft.base.blockentity.InventoriedRCBlockEntity;
-import reika.rotarycraft.gui.container.machine.inventory.ContainerWorktable;
 import reika.rotarycraft.items.tools.ItemJetPack;
 import reika.rotarycraft.items.tools.ItemJetPack.PackUpgrades;
 import reika.rotarycraft.items.tools.bedrock.ItemBedrockArmor.HelmetUpgrades;
 import reika.rotarycraft.registry.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class BlockEntityWorktable extends InventoriedRCBlockEntity implements CraftingTile<WorktableRecipes.WorktableRecipe>, TriggerableAction, AlternatingRedstoneUser {
-
-    private final CraftingInputMatrix matrix = new CraftingInputMatrix(this);
+public class BlockEntityWorktable extends InventoriedRCBlockEntity implements TriggerableAction, AlternatingRedstoneUser {
 
     private boolean hasUpgrade;
-    private WorktableRecipes.WorktableRecipe toCraft;
+//    private WorktableRecipes.WorktableRecipe toCraft;
 
-    public BlockEntityWorktable(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntityWorktable(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.WORKTABLE.get(), pos, state);
     }
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.WORKTABLE.get();
     }
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
         if (!world.isClientSide) {
-            matrix.update();
-            if (matrix.isEmpty())
-                return;
+//            matrix.update();
+//            if (matrix.isEmpty())
+//                return;
             if (hasUpgrade && this.tickcount % 6 == 0 && !this.hasRedstoneSignal()) {
                 this.onPositiveRedstoneEdge();
                 if (this.tickcount % 6 == 0) {
-//             todo       ReikaSoundHelper.playSoundAtBlock(world, pos, "DragonAPI.rand.click", 0.5F, 0.675F);
+//todo                    ReikaSoundHelper.playSoundAtBlock(world, pos, "DragonAPI.rand.click", 0.5F, 0.675F);
                 }
             }
             if (this.isReadyToCraft()) {
@@ -106,24 +89,24 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private void makeHelmetUpgrades() {
-        int armorslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_HELMET.get(), inv);
+        int armorslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_HELMET.get(), itemHandler);
 //  todo      if (armorslot == -1)
-//            armorslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_HELMET_REVEALING.get(), inv);
+//            armorslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_HELMET_REVEALING.get(), itemHandler);
         if (armorslot != -1) {
             for (int i = 0; i < HelmetUpgrades.list.length; i++) {
                 HelmetUpgrades g = HelmetUpgrades.list[i];
-                if (g.isAvailable && !g.existsOn(inv[armorslot])) {
+                if (g.isAvailable && !g.existsOn(itemHandler.getStackInSlot(armorslot))) {
                     ItemStack[] rec = g.getUpgradeItems();
                     boolean flag = false;
                     int itemslot = -1;
                     if (rec.length == 1) { //shapeless
-                        itemslot = ReikaInventoryHelper.locateInInventory(rec[0], inv, false);
+                        itemslot = ReikaInventoryHelper.locateInInventory(rec[0], itemHandler, false);
                         flag = itemslot != -1;
                     } else if (armorslot == 4) {
                         boolean flag2 = true;
                         for (int k = 0; k < rec.length; k++) {
                             ItemStack is = rec[k];
-                            ItemStack in = inv[k >= 4 ? k + 1 : k];
+                            ItemStack in = itemHandler.getStackInSlot(k >= 4 ? k + 1 : k);
                             if (!ReikaItemHelper.matchStacks(in, is)) {
                                 flag2 = false;
                                 break;
@@ -131,19 +114,19 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
                         }
                         flag = flag2;
                     }
-                    if (flag && ReikaInventoryHelper.isEmptyFrom(this, 9, 17)) {
-                        ItemStack is = inv[armorslot].copy();
+                    if (flag && ReikaInventoryHelper.isEmptyFrom(itemHandler, 9, 17)) {
+                        ItemStack is = itemHandler.getStackInSlot(armorslot).copy();
                         if (itemslot != -1) {
-                            inv[itemslot] = null;
-                            inv[armorslot] = null;
+                            itemHandler.setStackInSlot(itemslot, ItemStack.EMPTY);
+                            itemHandler.setStackInSlot(armorslot, ItemStack.EMPTY);
                         } else {
                             for (int k = 0; k < 9; k++) {
-                                ReikaInventoryHelper.decrStack(k, inv);
+                                ReikaInventoryHelper.decrStack(k, itemHandler);
                             }
-                            inv[armorslot] = null;
+                            itemHandler.setStackInSlot(armorslot, ItemStack.EMPTY);
                         }
                         g.enable(is, true);
-                        inv[9] = is;
+                        itemHandler.setStackInSlot(9, is);
                     }
                 }
             }
@@ -151,20 +134,19 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private void coolJetpacks() {
-        ItemStack is = inv[4];
+        ItemStack is = itemHandler.getStackInSlot(4);
         if (is != null) {
             Item item = is.getItem();
-            if (item instanceof ItemJetPack) {
-                ItemJetPack pack = (ItemJetPack) item;
+            if (item instanceof ItemJetPack pack) {
                 if (!PackUpgrades.COOLING.existsOn(is)) {
-                    boolean items = ReikaItemHelper.matchStacks(inv[3], MachineRegistry.COOLINGFIN.getBlockState());
-                    items &= ReikaItemHelper.matchStacks(inv[5], MachineRegistry.COOLINGFIN.getBlockState());
+                    boolean items = ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(3), MachineRegistry.COOLINGFIN.getBlockState());
+                    items &= ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(5), MachineRegistry.COOLINGFIN.getBlockState());
                     if (items) {
-                        ReikaInventoryHelper.decrStack(3, inv);
-                        ReikaInventoryHelper.decrStack(5, inv);
+                        ReikaInventoryHelper.decrStack(3, itemHandler);
+                        ReikaInventoryHelper.decrStack(5, itemHandler);
                         PackUpgrades.COOLING.enable(is, true);
-                        inv[13] = is.copy();
-                        inv[4] = null;
+                        itemHandler.setStackInSlot(13, is.copy());
+                        itemHandler.setStackInSlot(4, ItemStack.EMPTY);
                     }
                 }
             }
@@ -172,19 +154,18 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private void makeJetPropel() {
-        ItemStack is = inv[4];
+        ItemStack is = itemHandler.getStackInSlot(4);
         if (is != null) {
             Item item = is.getItem();
-            if (item instanceof ItemJetPack) {
-                ItemJetPack pack = (ItemJetPack) item;
+            if (item instanceof ItemJetPack pack) {
                 if (!PackUpgrades.JET.existsOn(is)) {
-                    */
-/*todo jet engine if (ReikaItemHelper.matchStacks(inv[7], EngineType.JET.getCraftedProduct())) {
-                        ReikaInventoryHelper.decrStack(7, inv);
+
+/*todo jet engine if (ReikaItemHelper.matchStacks(itemHandler[7], EngineType.JET.getCraftedProduct())) {
+                        ReikaInventoryHelper.decrStack(7, itemHandler);
                         PackUpgrades.JET.enable(is, true);
-                        inv[13] = is.copy();
-                        inv[4] = null;
-                    }*//*
+                        itemHandler[13] = is.copy();
+                        itemHandler[4] = null;
+                    }*/
 
                 }
             }
@@ -192,11 +173,10 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private void wingJetpacks() {
-        ItemStack is = inv[4];
+        ItemStack is = itemHandler.getStackInSlot(4);
         if (is != null) {
             Item item = is.getItem();
-            if (item instanceof ItemJetPack) {
-                ItemJetPack pack = (ItemJetPack) item;
+            if (item instanceof ItemJetPack pack) {
                 if (!PackUpgrades.WING.existsOn(is)) {
                     ItemStack ingot = pack.getDefaultInstance();
                     for (int i = 0; i < 3; i++) {
@@ -204,30 +184,21 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
                             return;
                     }
                     for (int i = 0; i < 3; i++) {
-                        ReikaInventoryHelper.decrStack(i, inv);
+                        ReikaInventoryHelper.decrStack(i, itemHandler);
                     }
                     PackUpgrades.WING.enable(is, true);
-                    inv[13] = is.copy();
-                    inv[4] = null;
+                    itemHandler.setStackInSlot(13, is.copy());
+                    itemHandler.setStackInSlot(4, ItemStack.EMPTY);
                 }
             }
         }
     }
 
-    public CraftingContainer constructContainer() {
-        return new ContainerWorktable(this.getPlacer(), this, level, false);
-    }
-
-    @Override
-    public int getOutputSlot() {
-        return 13;
-    }
-
     private boolean craft() {
-        WorktableRecipes.WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(matrix, level);
-        if (wr != null) {
-            return this.handleCrafting(wr, this.getPlacer(), false);
-        }
+//        WorktableRecipes.WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(matrix, level);
+//        if (wr != null) {
+//            return this.handleCrafting(wr, this.getPlacer(), false);
+//        }
         return false;
     }
 
@@ -239,6 +210,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         return true;
     }
 
+/*
     public boolean handleCrafting(WorktableRecipes.WorktableRecipe wr, Player ep, boolean craftAll) {
         int maxCrafts = craftAll ? this.getSmallestInputStack() : 1;
         int crafts = 0;
@@ -246,7 +218,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
             ArrayList<ItemStack> li = wr.getRecycling().getSplitOutput();
             int i = 9;
             for (ItemStack is : li) {
-                ReikaInventoryHelper.addOrSetStack(is, inv, i);
+                ReikaInventoryHelper.addOrSetStack(is, itemHandler, i);
                 i++;
             }
             RotaryAdvancements.RECYCLE.triggerAchievement(ep);
@@ -254,10 +226,10 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         } else {
             for (int i = 0; i < maxCrafts; i++) {
                 ItemStack is = wr.getOutput();
-                if (inv[13] != null && inv[13].getCount() + is.getCount() > Math.min(this.getMaxStackSize(), is.getMaxStackSize()))
+                if (itemHandler.getStackInSlot(13) != null && itemHandler.getStackInSlot(13).getCount() + is.getCount() > Math.min(this.getMaxStackSize(), is.getMaxStackSize()))
                     break;
                 is.onCraftedBy(level, ep, is.getCount());
-                ReikaInventoryHelper.addOrSetStack(is, inv, 13);
+                ReikaInventoryHelper.addOrSetStack(is, itemHandler, 13);
                 crafts++;
             }
             ItemStack out = wr.getOutput().copy();
@@ -269,7 +241,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
                 ItemStack item = this.getStackInSlot(i);
                 if (item != null) {
                     //noUpdate = true;
-                    ReikaInventoryHelper.decrStack(i, this, crafts);
+                    ReikaInventoryHelper.decrStack(i, itemHandler, crafts);
                 }
             }
             SoundRegistry.CRAFT.playSoundAtBlock(level, worldPosition, 0.3F, 1.5F);
@@ -278,6 +250,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
             return false;
         }
     }
+*/
 
     private int getSmallestInputStack() {
         int smallest = Integer.MAX_VALUE;
@@ -291,27 +264,27 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private void makeBedjump() {
-        int armorslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JUMP.get(), inv);
-        int jumpslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JUMP.get(), inv);
-        if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
-            CompoundTag tag = inv[armorslot].getTag().copy();
-            inv[jumpslot] = null;
-            inv[armorslot] = null;
+        int armorslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JUMP.get(), itemHandler);
+        int jumpslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JUMP.get(), itemHandler);
+        if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
+            CompoundTag tag = itemHandler.getStackInSlot(armorslot).getTag().copy();
+            itemHandler.setStackInSlot(jumpslot, ItemStack.EMPTY);
+            itemHandler.setStackInSlot(armorslot, ItemStack.EMPTY);
             ItemStack is = RotaryItems.BEDROCK_ALLOY_JUMP_BOOTS.get().getDefaultInstance();//todo .getEnchantedStack();
             ReikaNBTHelper.combineNBT(is.getTag(), tag);
-            inv[9] = is;
+            itemHandler.setStackInSlot(9, is);
         }
     }
 
     public boolean canUncraft() {
         boolean can = false;
-        for (int i = 0; i < 9; i++) {
+       /* for (int i = 0; i < 9; i++) {
             ItemStack is = itemHandler.getStackInSlot(i);
             if (i == 4) {
                 if (is == null || this.isNotUncraftable(is))
                     return false;
                 else {
-                    Recipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
+                    IReikaRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
                     if (ir == null)
                         return false;
                     else {
@@ -320,10 +293,10 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
                             boolean flag = true;
                             for (int k = 0; k < 9; k++) {
                                 if (in[k] != null && !in[k].isEmpty()) {
-                                    if (inv[k + 9] != null) {
-                                        if (!ReikaItemHelper.collectionContainsItemStack(in[k], inv[k + 9]))
+                                    if (itemHandler.getStackInSlot(k + 9) != null) {
+                                        if (!ReikaItemHelper.collectionContainsItemStack(in[k], itemHandler.getStackInSlot(k + 9)))
                                             flag = false;
-                                        if (inv[k + 9].getCount() >= Math.min(this.getMaxStackSize(), inv[k + 9].getMaxStackSize()))
+                                        if (itemHandler.getStackInSlot(k + 9).getCount() >= Math.min(this.getMaxStackSize(), itemHandler.getStackInSlot(k + 9).getMaxStackSize()))
                                             flag = false;
                                     }
                                 }
@@ -336,16 +309,16 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
                 if (is != null)
                     return false;
             }
-        }
+        }*/
         return can;
     }
 
     private boolean isNotUncraftable(ItemStack is) {
-*/
-/*     todo  RotaryItems ir = RotaryItems.getEntry(is);
-      if (ir != null && (ir.isTool() || ir.isArmor())) {
-            return is.getItemDamage() > 0;
-        }*//*
+
+//        RotaryItems ir = RotaryItems.getEntry(is);
+//        if (ir != null && (ir.isTool() || ir.isArmor())) {
+//            return is.getItemDamage() > 0;
+//        }
 
         if (is.getTag() == null)
             return false;
@@ -359,37 +332,36 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
             return true;
         if (is.getTag().contains("ench"))
             return true;
-      */
-/*todo   if (ir == RotaryItems.MACHINE) {
-            MachineRegistry r = MachineRegistry.machineList.get(is.getItemDamage());
-            return !r.isUncraftable();
-        }*//*
+//        if (ir == RotaryItems.MACHINE) {
+//            MachineRegistry r = MachineRegistry.machineList.get(is.getItemDamage());
+//            return !r.isUncraftable();
+//        }
 
         return false;
     }
 
     private void uncraft() {
-        ItemStack is = inv[4];
-        Recipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
-        List<ItemStack>[] in = ReikaRecipeHelper.getRecipeArray(ir);
-        if (in == null)
-            return;
-
-        for (int i = 0; i < ir.getResultItem().getCount(); i++)
-            ReikaInventoryHelper.decrStack(4, inv);
-
-     */
-/*todo   for (int i = 0; i < 9; i++) {
-            if (in[i] != null && !in[i].isEmpty()) {
-                if (inv[i + 9] == null) {
-                    inv[i + 9] = in[i].get(0).copy();
-                    if (inv[i + 9].getItemDamage() == OreDictionary.WILDCARD_VALUE)
-                        inv[i + 9].setItemDamage(0);
-                } else {
-                    ++inv[i + 9].getCount();
-                }
-            }
-        }*//*
+        ItemStack is = itemHandler.getStackInSlot(4);
+//        IReikaRecipe ir = WorktableRecipes.getInstance().getInputRecipe(is);
+//        List<ItemStack>[] in = ReikaRecipeHelper.getRecipeArray(ir);
+//        if (in == null)
+//            return;
+//
+//        for (int i = 0; i < ir.getResult().getCount(); i++)
+//            ReikaInventoryHelper.decrStack(4, itemHandler);
+//
+//
+//        for (int i = 0; i < 9; i++) {
+//            if (in[i] != null && !in[i].isEmpty()) {
+//                if (itemHandler.getStackInSlot(i + 9) == ItemStack.EMPTY) {
+//                    itemHandler.setStackInSlot(i + 9, in[i].get(0).copy());
+//                    if (itemHandler.getStackInSlot(i + 9).getItemDamage() == OreDictionary.WILDCARD_VALUE)
+//                        itemHandler.getStackInSlot(i + 9).setItemDamage(0);
+//                } else {
+//                 todo   ++itemHandler.getStackInSlot(i + 9).getCount();
+//                }
+//            }
+//        }
 
     }
 
@@ -410,32 +382,32 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private void chargeTools() {
-        int coilslot = ReikaInventoryHelper.locateInInventory(RotaryItems.HSLA_STEEL_SPRING.get(), inv);
+        int coilslot = ReikaInventoryHelper.locateInInventory(RotaryItems.HSLA_STEEL_SPRING.get(), itemHandler);
         if (coilslot == -1)
-            coilslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_SPRING.get(), inv);
+            coilslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_SPRING.get(), itemHandler);
         Item toolid = this.getTool();
-        int toolslot = ReikaInventoryHelper.locateInInventory(toolid, inv);
+        int toolslot = ReikaInventoryHelper.locateInInventory(toolid, itemHandler);
 
-        if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
-            Item coilid = inv[coilslot].getItem();
-            int coilmeta = 5;//todo coil current level inv[coilslot].getItemDamage();
-            ItemStack tool = inv[toolslot];
+        if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
+            Item coilid = itemHandler.getStackInSlot(coilslot).getItem();
+            int coilmeta = 5;//todo coil current level itemHandler[coilslot].getItemDamage();
+            ItemStack tool = itemHandler.getStackInSlot(toolslot);
             if (toolid instanceof ChargeableTool) {
                 int newcoilcharge = ((ChargeableTool) toolid).setCharged(tool, coilmeta, coilid == RotaryItems.BEDROCK_ALLOY_SPRING.get());
                 ItemStack newcoil = new ItemStack(coilid, 1); //todo add coil charge tag
-                inv[toolslot] = null;
-                inv[coilslot] = null;
-                inv[9] = tool.copy();
-                inv[10] = newcoil;
+                itemHandler.setStackInSlot(toolslot, ItemStack.EMPTY);
+                itemHandler.setStackInSlot(coilslot, ItemStack.EMPTY);
+                itemHandler.setStackInSlot(9, tool.copy());
+                itemHandler.setStackInSlot(10, newcoil);
             } else {
                 ItemStack newtool = new ItemStack(toolid, 1);
                 CompoundTag tag = tool.getTag() != null ? tool.getTag().copy() : null;
                 newtool.setTag(tag);
                 ItemStack newcoil = new ItemStack(coilid, 1); //todo add coil charge tag
-                inv[toolslot] = null;
-                inv[coilslot] = null;
-                inv[9] = newtool;
-                inv[10] = newcoil;
+                itemHandler.setStackInSlot(toolslot, ItemStack.EMPTY);
+                itemHandler.setStackInSlot(coilslot, ItemStack.EMPTY);
+                itemHandler.setStackInSlot(9, newtool);
+                itemHandler.setStackInSlot(10, newcoil);
             }
         }
     }
@@ -453,28 +425,28 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
 
     private void makeJetplate() {
         boolean bed = false;
-        int plateslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get(), inv);
+        int plateslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get(), itemHandler);
         if (plateslot == -1)
-            plateslot = ReikaInventoryHelper.locateInInventory(RotaryItems.HSLA_CHESTPLATE.get(), inv);
+            plateslot = ReikaInventoryHelper.locateInInventory(RotaryItems.HSLA_CHESTPLATE.get(), itemHandler);
         else
             bed = true;
         //ReikaJavaLibrary.pConsole(plateslot, Dist.DEDICATED_SERVER);
-        int jetslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JETPACK.get(), inv);
-        if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(inv, 17)) {
-            ItemStack jet = inv[jetslot];
-            ItemStack plate = inv[plateslot];
+        int jetslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JETPACK.get(), itemHandler);
+        if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
+            ItemStack jet = itemHandler.getStackInSlot(jetslot);
+            ItemStack plate = itemHandler.getStackInSlot(plateslot);
             CompoundTag tag1 = plate.getTag() != null ? (CompoundTag) plate.getTag().copy() : null;
             CompoundTag tag2 = jet.getTag() != null ? (CompoundTag) jet.getTag().copy() : null;
-            inv[jetslot] = null;
-            inv[plateslot] = null;
-            ItemStack is = (bed ? RotaryItems.BEDROCK_ALLOY_PACK.get().getDefaultInstance() */
-/*todo get the enchanted version max*//*
- : RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance());
+            itemHandler.setStackInSlot(jetslot, ItemStack.EMPTY);
+            itemHandler.setStackInSlot(plateslot, ItemStack.EMPTY);
+            ItemStack is = (bed ? RotaryItems.BEDROCK_ALLOY_PACK.get().getDefaultInstance() : RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance());
+            /*todo get the enchanted version max*/
+
             if (is.getTag() == null)
                 is.setTag(new CompoundTag());
             ReikaNBTHelper.combineNBT(is.getTag(), tag1);
             ReikaNBTHelper.combineNBT(is.getTag(), tag2);
-            inv[9] = is;
+            itemHandler.setStackInSlot(9, is);
             for (PackUpgrades u : PackUpgrades.values()) {
                 if (u.existsOn(jet)) {
                     u.enable(is, true);
@@ -484,22 +456,21 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private void uncraftJetplate() {
-        ItemStack combine = inv[4];
+        ItemStack combine = itemHandler.getStackInSlot(4);
         boolean bed = RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance() == combine;
         if (combine != null && (RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance() == combine || RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance() == combine)) {
             ItemJetPack pack = (ItemJetPack) combine.getItem();
             //ReikaJavaLibrary.pConsole(plateslot, Dist.DEDICATED_SERVER);
-            if (ReikaInventoryHelper.hasNEmptyStacks(inv, 18)) {
+            if (ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 18)) {
                 ItemStack jet = RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance();
                 ((ItemJetPack) jet.getItem()).addFluid(jet, pack.getCurrentFluid(combine).defaultFluidState(), pack.getFuel(combine));
                 for (PackUpgrades p : pack.getUpgrades(combine))
                     p.enable(jet, true);
-                inv[4] = null;
-                ItemStack plate = bed ? RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance() */
-/*todo get the enchanted version max*//*
- : RotaryItems.HSLA_CHESTPLATE.get().getDefaultInstance();
-                inv[9] = plate;
-                inv[10] = jet;
+                itemHandler.setStackInSlot(4, ItemStack.EMPTY);
+                ItemStack plate = bed ? RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance() : RotaryItems.HSLA_CHESTPLATE.get().getDefaultInstance();
+                /*todo get the enchanted version max*/
+                itemHandler.setStackInSlot(9, plate);
+                itemHandler.setStackInSlot(10, jet);
             }
         }
     }
@@ -509,50 +480,15 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         return 19;
     }
 
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public ItemStack getItem(int p_18941_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItem(int p_18942_, int p_18943_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int p_18951_) {
-        return null;
-    }
-
-    @Override
-    public void setItem(int p_18944_, ItemStack p_18945_) {
-
-    }
-
-    @Override
-    public int getMaxStackSize() {
-        return 64;
-    }
-
-    @Override
-    public boolean stillValid(Player p_18946_) {
-        return false;
-    }
-
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         if (i >= 9)
             return false;
-        //return hasProgram ? inv[i+18] != null && ReikaItemHelper.matchStacks(inv[i+18], itemstack) : true;
-//todo        return !RotaryItems.CRAFT_PATTERN.matchItem(inv[18]) || ItemCraftPattern.checkPatternForMatch(this, RecipeMode.WORKTABLE, i, i, itemstack, inv[18]);
+        //return hasProgram ? itemHandler[i+18] != null && ReikaItemHelper.matchStacks(itemHandler[i+18], itemstack) : true;
+//todo        return !RotaryItems.CRAFT_PATTERN.matchItem(itemHandler[18]) || ItemCraftPattern.checkPatternForMatch(this, RecipeMode.WORKTABLE, i, i, itemstack, itemHandler[18]);
         return false;
     }
 
-    //    @Override
+    //        @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         return i >= 9 && i != 18;
     }
@@ -581,15 +517,14 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
 
     }
 
-    */
 /*
     public ItemStack getProgrammedSlot(int i, int k) {
-        ItemStack is = inv[18+i*3+k];
+        ItemStack is = itemHandler[18+i*3+k];
         return is != null ? is.copy() : null;
     }
 
     public void setMapping(int slot, ItemStack is) {
-        inv[slot] = is != null ? is.copy() : null;
+        itemHandler[slot] = is != null ? is.copy() : null;
     }
 
     @Override
@@ -603,7 +538,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
             }
         }
     }
-     *//*
+     */
 
     @Override
     public boolean trigger() {
@@ -633,49 +568,9 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     @Override
     public void breakBlock() {
         if (this.hasRedstoneUpgrade()) {
-            ReikaItemHelper.dropItem(level, worldPosition.offset(0.5, 0.5, 0.5), RotaryItems.UPGRADE.get().getDefaultInstance());
+            ReikaItemHelper.dropItem(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, RotaryItems.UPGRADE.get().getDefaultInstance());
             ;//.getStackOfMetadata(Upgrades.REDSTONE.ordinal()));
         }
-    }
-
-    @Override
-    public WorktableRecipes.WorktableRecipe getToCraft() {
-        return toCraft;
-    }
-
-    @Override
-    public void setToCraft(WorktableRecipes.WorktableRecipe wr) {
-        toCraft = wr;
-    }
-
-    @Override
-    public void clearContent() {
-
-    }
-
-    @Override
-    public int getSlots() {
-        return 0;
-    }
-
-    @Override
-    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
-        return 0;
-    }
-
-    @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return false;
     }
 
     @Override
@@ -688,4 +583,4 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         return false;
     }
 }
-*/
+

@@ -108,7 +108,7 @@ public class ItemBedrockShovel extends ShovelItem {
                 double mult = Math.sqrt(1 + EnchantmentHelper.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE, ep)); //ep was is??
                 Collection<ItemStack> c = co.calculate(mult);
                 for (ItemStack drop : c) {
-                    ReikaItemHelper.dropItem(ep.level, new BlockPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), drop);
+                    ReikaItemHelper.dropItem(ep.level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
                 }
             }
         }

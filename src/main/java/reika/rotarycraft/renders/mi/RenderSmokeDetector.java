@@ -29,7 +29,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderSmokeDetector extends RotaryTERenderer<BlockEntitySmokeDetector> {
 
-    private SmokeDetectorModel smokeDetectorModel;
+    private final SmokeDetectorModel smokeDetectorModel;
     //private ModelSmokeDetectorV SmokeDetectorModelV = new ModelSmokeDetectorV();
 
     public RenderSmokeDetector(BlockEntityRendererProvider.Context context) {
@@ -60,7 +60,7 @@ public class RenderSmokeDetector extends RotaryTERenderer<BlockEntitySmokeDetect
             stack.mulPose(Axis.YP.rotationDegrees(-f));
         }
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(smokeDetectorModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(SmokeDetectorModel.TEXTURE_LOCATION));
         smokeDetectorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
 
 //     todo       if (tile.isInWorld())

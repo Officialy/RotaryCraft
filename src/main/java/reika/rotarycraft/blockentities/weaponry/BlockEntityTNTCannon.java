@@ -198,7 +198,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
 
         Entity tnt = null;
         if (ReikaItemHelper.matchStackWithBlock(in, Blocks.TNT.defaultBlockState())) {
-            tnt = new EntityCustomTNT(world, new BlockPos(dx, dy, dz), null, fuse);
+            tnt = new EntityCustomTNT(world, dx, dy, dz, null, fuse);
         } else if (in.getItem() instanceof CannonExplosive) {
             tnt = ((CannonExplosive) in.getItem()).getExplosiveEntity(in);
             tnt.setPos(dx, dy, dz);

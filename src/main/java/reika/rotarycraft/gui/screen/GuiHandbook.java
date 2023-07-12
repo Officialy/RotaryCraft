@@ -57,7 +57,7 @@ public class GuiHandbook extends Screen {
     protected final int xSize = 256;
     protected final int ySize = 220;
     public Level level;
-    private Player player;
+    private final Player player;
 
     /**
      * One second in nanoseconds.
@@ -78,7 +78,7 @@ public class GuiHandbook extends Screen {
     public static long time;
     private long buttontime;
     public static int i = 0;
-    private int buttoni = 0;
+    private final int buttoni = 0;
     protected int buttontimer = 0;
 
     private static int staticwidth;

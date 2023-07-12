@@ -58,7 +58,7 @@ import static reika.dragonapi.DragonAPI.rand;
 public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
     public ItemJetPack(ArmorMaterial mat) {
-        super(mat, EquipmentSlot.CHEST, new Properties());
+        super(mat, Type.CHESTPLATE, new Properties());
     }
 
     private static final boolean wingEnabled(ItemStack is) {

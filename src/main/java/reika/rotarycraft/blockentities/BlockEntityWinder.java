@@ -126,9 +126,8 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
         ItemStack is = itemHandler.getStackInSlot(0);
         if (is == null)
             return false;
-        if (!(is.getItem() instanceof TensionStorage))
+        if (!(is.getItem() instanceof TensionStorage ts))
             return false;
-        TensionStorage ts = (TensionStorage) is.getItem();
         if (!ts.isBreakable(is))
             return false;
         int dmg = itemHandler.getStackInSlot(0).getTag().getInt("energy");

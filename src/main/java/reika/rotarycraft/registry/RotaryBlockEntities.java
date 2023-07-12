@@ -50,9 +50,10 @@ public class RotaryBlockEntities {
 
     public static final RegistryObject<BlockEntityType<BlockEntityGearbox>> GEARBOX = BLOCK_ENTITIES.register("gearbox", () ->
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityGearbox(GearboxTypes.STEEL, pPos, pState), RotaryBlocks.HSLA_GEARBOX_2x.get()).build(null)); //todo all gearboxes
-
     public static final RegistryObject<BlockEntityType<BlockEntityMicroturbine>> MICROTURBINE = BLOCK_ENTITIES.register("microturbine", () ->
             BlockEntityType.Builder.of(BlockEntityMicroturbine::new, RotaryBlocks.MICRO_TURBINE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityWorktable>> WORKTABLE = BLOCK_ENTITIES.register("worktable", () ->
+            BlockEntityType.Builder.of(BlockEntityWorktable::new, RotaryBlocks.WORKTABLE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityPerformanceEngine>> PERFORMANCE_ENGINE = BLOCK_ENTITIES.register("performance_engine", () ->
             BlockEntityType.Builder.of(BlockEntityPerformanceEngine::new, RotaryBlocks.PERFORMANCE_ENGINE.get()).build(null));
@@ -83,6 +84,8 @@ public class RotaryBlockEntities {
     public static final RegistryObject<BlockEntityType<BlockEntityClutch>> CLUTCH = BLOCK_ENTITIES.register("clutch", () ->
             BlockEntityType.Builder.of(BlockEntityClutch::new, RotaryBlocks.CLUTCH.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<BlockEntityVacuum>> VACUUM = BLOCK_ENTITIES.register("vacuum", () ->
+            BlockEntityType.Builder.of(BlockEntityVacuum::new, RotaryBlocks.VACUUM.get()).build(null));
     public static final RegistryObject<BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->
             BlockEntityType.Builder.of(BlockEntityDistributionClutch::new, RotaryBlocks.DISTRIBUTION_CLUTCH.get()).build(null));
 
@@ -259,6 +262,9 @@ public class RotaryBlockEntities {
 
     public static final RegistryObject<BlockEntityType<BlockEntityGrinder>> GRINDER = BLOCK_ENTITIES.register("grinder", () ->
             BlockEntityType.Builder.of(BlockEntityGrinder::new, RotaryBlocks.GRINDER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityBlastFurnace>> BLAST_FURNACE = BLOCK_ENTITIES.register("blast_furnace", () ->
+            BlockEntityType.Builder.of(BlockEntityBlastFurnace::new, RotaryBlocks.BLAST_FURNACE.get()).build(null));
+
 
 
 }

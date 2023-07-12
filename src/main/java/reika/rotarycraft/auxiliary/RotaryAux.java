@@ -124,8 +124,7 @@ public class RotaryAux {
         if (ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.ICE) != null)
             return true;
         Block b = world.getBlockState(pos.below()).getBlock();
-        if (b instanceof EnvironmentalHeatSource) {
-            EnvironmentalHeatSource ehs = (EnvironmentalHeatSource) b;
+        if (b instanceof EnvironmentalHeatSource ehs) {
             return ehs.isActive(world, pos) && ehs.getSourceType(world, pos).isCold();
         }
         return false;
@@ -136,8 +135,7 @@ public class RotaryAux {
             return true;
         for (int i = 1; i <= 2; i++) {
             Block b = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).getBlock();
-            if (b instanceof EnvironmentalHeatSource) {
-                EnvironmentalHeatSource ehs = (EnvironmentalHeatSource) b;
+            if (b instanceof EnvironmentalHeatSource ehs) {
                 return ehs.isActive(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) && ehs.getSourceType(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) == EnvironmentalHeatSource.SourceType.WATER;
             }
         }
@@ -149,8 +147,7 @@ public class RotaryAux {
             return true;
         for (int i = 1; i <= 2; i++) {
             Block b = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).getBlock();
-            if (b instanceof EnvironmentalHeatSource) {
-                EnvironmentalHeatSource ehs = (EnvironmentalHeatSource) b;
+            if (b instanceof EnvironmentalHeatSource ehs) {
                 return ehs.isActive(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) && ehs.getSourceType(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) == EnvironmentalHeatSource.SourceType.FIRE;
             }
         }
@@ -162,8 +159,7 @@ public class RotaryAux {
             return true;
         for (int i = 1; i <= 2; i++) {
             Block b = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).getBlock();
-            if (b instanceof EnvironmentalHeatSource) {
-                EnvironmentalHeatSource ehs = (EnvironmentalHeatSource) b;
+            if (b instanceof EnvironmentalHeatSource ehs) {
                 return ehs.isActive(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) && ehs.getSourceType(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) == EnvironmentalHeatSource.SourceType.LAVA;
             }
         }
@@ -176,8 +172,7 @@ public class RotaryAux {
             return true;
         for (int i = 1; i <= 2; i++) {
             b = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).getBlock();
-            if (b instanceof EnvironmentalHeatSource) {
-                EnvironmentalHeatSource ehs = (EnvironmentalHeatSource) b;
+            if (b instanceof EnvironmentalHeatSource ehs) {
                 return ehs.isActive(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) && ehs.getSourceType(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) == EnvironmentalHeatSource.SourceType.FIRE;
             }
         }
@@ -190,8 +185,7 @@ public class RotaryAux {
             return true;
         for (int i = 1; i <= 2; i++) {
             b = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).getBlock();
-            if (b instanceof EnvironmentalHeatSource) {
-                EnvironmentalHeatSource ehs = (EnvironmentalHeatSource) b;
+            if (b instanceof EnvironmentalHeatSource ehs) {
                 return ehs.isActive(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) && ehs.getSourceType(world, new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())) == EnvironmentalHeatSource.SourceType.LAVA;
             }
         }

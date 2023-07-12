@@ -16,9 +16,9 @@ import java.util.ArrayList;
 public class RotaryConfig extends ControlledConfig {
 
     private static final ArrayList<String> entries = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(RotaryAdvancements.class);
-    private DataElement<String[]> blastGate;
-    private DataElement<String> bedrockGate;
-    private DataElement<String> gravelGate;
+    private final DataElement<String[]> blastGate;
+    private final DataElement<String> bedrockGate;
+    private final DataElement<String> gravelGate;
 
     /**
      * Non-config-file control data used by the machines

@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
 public class ItemIOGoggles extends ItemRotaryArmor {
 
     public ItemIOGoggles() {
-        super(ArmorMaterials.IRON, EquipmentSlot.HEAD, new Properties().stacksTo(1));
+        super(ArmorMaterials.IRON, Type.HELMET, new Properties().stacksTo(1));
     }
 
     @Override

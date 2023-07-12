@@ -122,13 +122,11 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
             ((BlockEntityIOMachine) te).iotick = 512;
             level.setBlockAndUpdate(pos, te.getBlockState());
         }
-        if (te instanceof ShaftMachine) {
-            ShaftMachine sm = (ShaftMachine) te;
+        if (te instanceof ShaftMachine sm) {
             sm.setIORenderAlpha(512);
             level.setBlockAndUpdate(pos, te.getBlockState());
         }
-        if (te instanceof Screwdriverable) {
-            Screwdriverable sc = (Screwdriverable) te;
+        if (te instanceof Screwdriverable sc) {
             boolean flag;
             if (ep.isShiftKeyDown())
                 flag = sc.onShiftRightClick(level, pos, s);

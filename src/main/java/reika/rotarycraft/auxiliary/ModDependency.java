@@ -12,6 +12,7 @@ package reika.rotarycraft.auxiliary;
 import reika.dragonapi.exception.MisuseException;
 import reika.dragonapi.interfaces.registry.ModEntry;
 
+import java.util.Collections;
 import java.util.HashSet;
 
 
@@ -22,9 +23,7 @@ public class ModDependency {
     public ModDependency(ModEntry... mods) {
         if (mods.length == 0)
             throw new MisuseException("You cannot have a mod dependency list with no mods!");
-        for (int i = 0; i < mods.length; i++) {
-            dependencies.add(mods[i]);
-        }
+        Collections.addAll(dependencies, mods);
     }
 
     public boolean isLoaded() {

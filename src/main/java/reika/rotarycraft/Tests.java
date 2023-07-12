@@ -10,17 +10,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import reika.dragonapi.libraries.level.ReikaWorldHelper;
-import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
-import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
-import reika.rotarycraft.registry.MachineRegistry;
-
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class Tests {
 

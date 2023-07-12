@@ -37,8 +37,7 @@ public class PowerTransferHelper {
 			}
 		}*/
         if (toCheck instanceof PowerGenerator || toCheck instanceof IOMachine) {
-            if (toCheck instanceof ComplexIO) {
-                ComplexIO cio = (ComplexIO) toCheck;
+            if (toCheck instanceof ComplexIO cio) {
                 int torque = cio.getTorqueToSide(dir.getOpposite());
                 int omega = cio.getSpeedToSide(dir.getOpposite());
                 return (torque * omega) != 0;

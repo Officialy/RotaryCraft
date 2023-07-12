@@ -41,7 +41,6 @@ import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.MachineEnchantmentHandler;
 import reika.rotarycraft.auxiliary.interfaces.*;
-import reika.rotarycraft.auxiliary.recipemanagers.RecipesGrinder;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
@@ -243,7 +242,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
             }
         }
 
-        ItemStack out = RecipesGrinder.grinderRecipes.getGrindingResult(itemHandler.getStackInSlot(0));
+        ItemStack out = ItemStack.EMPTY;//RecipesGrinder.grinderRecipes.getGrindingResult(itemHandler.getStackInSlot(0));
 
         if (flag && out.isEmpty())
             return true;
@@ -271,7 +270,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
             tank.addLiquid((int) (DifficultyEffects.CANOLA.getInt() * this.getFortuneLubricantFactor() * num), RotaryFluids.LUBRICANT.get());
         }
 
-        ItemStack out = RecipesGrinder.grinderRecipes.getGrindingResult(is);
+        ItemStack out = ItemStack.EMPTY;//todo RecipesGrinder.grinderRecipes.getGrindingResult(is);
         if (!out.isEmpty()) {
             if (itemHandler.getStackInSlot(1).isEmpty())
                 itemHandler.setStackInSlot(1, out.copy());
@@ -328,7 +327,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
         if (slot == 2) {
             return is.getItem() == Items.BUCKET;
         }
-        return is.getItem() == RotaryItems.CANOLA_SEEDS.get() || RecipesGrinder.grinderRecipes.isGrindable(is);
+        return is.getItem() == Items.BUCKET;//todo || RecipesGrinder.grinderRecipes.isGrindable(is);
     }
 
     @Override

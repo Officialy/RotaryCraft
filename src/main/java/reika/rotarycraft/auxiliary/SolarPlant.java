@@ -165,8 +165,7 @@ public class SolarPlant {
         float f = 0;
         for (BlockPos c : mirrors.keySet()) {
             BlockEntity te = world.getBlockEntity(c);
-            if (te instanceof BlockEntityMirror) {
-                BlockEntityMirror tm = (BlockEntityMirror) te;
+            if (te instanceof BlockEntityMirror tm) {
                 if (tm.isFunctional())
                     f++;
             }

@@ -10,7 +10,10 @@
 package reika.rotarycraft.base;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.Fireball;
@@ -18,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryManager;
 import reika.rotarycraft.auxiliary.TurretDamage;
 import reika.rotarycraft.base.blockentity.BlockEntityAimedCannon;
 
@@ -52,9 +57,10 @@ public abstract class EntityTurretShot extends Fireball implements IEntityAdditi
 
     protected abstract void applyAttackEffectsToEntity(Level world, Entity el);
 
+
     protected final DamageSource getDamageSource() {
         if (gun == null || !gun.hasLevel())
-            return DamageSource.GENERIC;
+            return damageSources().generic();
         return new TurretDamage(gun);
     }
 

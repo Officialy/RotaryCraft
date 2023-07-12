@@ -155,8 +155,8 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
         } else if (cross.isWritingTo2(this)) {
             readomega[dir] = cross.readomega[1];
             readtorque[dir] = cross.readtorque[1];
-        } else
-            return; //not its output
+        } else {
+        } //not its output
     }
 
     @Override
@@ -385,8 +385,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
                         readomega[0] = ((BlockEntityIOMachine) te1).omega;
                     }
                 }
-                if (te1 instanceof ShaftPowerEmitter) {
-                    ShaftPowerEmitter sp = (ShaftPowerEmitter) te1;
+                if (te1 instanceof ShaftPowerEmitter sp) {
                     if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                         readtorque[0] = sp.getTorque();
                         readomega[0] = sp.getOmega();
@@ -436,8 +435,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
                     readtorque[1] = ((BlockEntityIOMachine) te2).torque;
                     readomega[1] = ((BlockEntityIOMachine) te2).omega;
                 }
-                if (te2 instanceof ShaftPowerEmitter) {
-                    ShaftPowerEmitter sp = (ShaftPowerEmitter) te2;
+                if (te2 instanceof ShaftPowerEmitter sp) {
                     if (sp.isEmitting() && sp.canWriteTo(read2.getOpposite())) {
                         readtorque[1] = sp.getTorque();
                         readomega[1] = sp.getOmega();
@@ -515,14 +513,12 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
             }
-            if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            if (te instanceof ComplexIO pwr) {
                 Direction dir = this.getInputDirection().getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
             }
-            if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();
@@ -553,7 +549,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
         omega = omegain / ratio;
         torque = torquein * ratio;
-        power = omega * torque;
+        power = (long) omega * torque;
 
         this.basicPowerReceiver();
 

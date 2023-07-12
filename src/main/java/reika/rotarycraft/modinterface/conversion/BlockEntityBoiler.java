@@ -39,7 +39,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
     public static final int CAPACITY = 27000;
     public static final int MAXTEMP = 500;
 
-    private StepTimer timer = new StepTimer(20);
+    private final StepTimer timer = new StepTimer(20);
 
     public BlockEntityBoiler(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.FRICTION_BOILER.get(), pos, state);
@@ -101,8 +101,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
         }
 
         BlockEntity te = world.getBlockEntity(pos.above());
-        if (te instanceof IFluidHandler) {
-            IFluidHandler ic = (IFluidHandler) te;
+        if (te instanceof IFluidHandler ic) {
             if (output.getFluid() != null) {
                 int amt = ic.fill(output.getFluid(), IFluidHandler.FluidAction.EXECUTE); //direction = down
                 if (amt > 0)

@@ -24,7 +24,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderLandmine extends RotaryTERenderer<BlockEntityLandmine> {
 
-    private LandmineModel landmineModel;
+    private final LandmineModel landmineModel;
     //private LandmineModelV LandmineModelV = new LandmineModelV();
 
     public RenderLandmine(BlockEntityRendererProvider.Context context) {

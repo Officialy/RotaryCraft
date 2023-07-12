@@ -15,7 +15,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 public class ItemBedReveal extends ItemBedrockArmor {//implements IRevealer, IGoggles, IVisDiscountGear {
 
     public ItemBedReveal(Properties properties) {
-        super(EquipmentSlot.HEAD, properties);
+        super(Type.HELMET, properties);
     }
 
 //    @Override

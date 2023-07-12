@@ -65,7 +65,7 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
         }
         soundTick = 0;
 
-        SoundRegistry.ELECTRIC.playSoundAtBlock(world, pos, 0.125F * volume, 1F * pitchMultiplier);
+        SoundRegistry.ELECTRIC.playSoundAtBlock(world, pos, 0.125F * volume, pitchMultiplier);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
     public void breakBlock() {
         super.breakBlock();
         if (this.hasRedstoneUpgrade()) {
-            ReikaItemHelper.dropItem(level, worldPosition.offset(0.5, 0.5, 0.5), new ItemStack(RotaryItems.UPGRADE.get(), 1, new CompoundTag() {{
+            ReikaItemHelper.dropItem(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, new ItemStack(RotaryItems.UPGRADE.get(), 1, new CompoundTag() {{
                 putString("upgrade", ItemEngineUpgrade.UpgradeType.REDSTONE.name());
             }}));
         }

@@ -12,12 +12,10 @@ package reika.rotarycraft.registry;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,15 +25,11 @@ import reika.dragonapi.ModList;
 import reika.dragonapi.exception.RegistrationException;
 import reika.dragonapi.instantiable.data.immutable.ImmutableArray;
 import reika.dragonapi.instantiable.data.maps.BlockMap;
-import reika.dragonapi.interfaces.IReikaRecipe;
 import reika.dragonapi.interfaces.registry.TileEnum;
-import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.dragonapi.modregistry.PowerTypes;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.ModDependency;
 import reika.rotarycraft.auxiliary.interfaces.*;
-import reika.rotarycraft.auxiliary.recipemanagers.RecipeHandler.RecipeLevel;
-import reika.rotarycraft.auxiliary.recipemanagers.WorktableRecipes;
 import reika.rotarycraft.base.RotaryModelBase;
 import reika.rotarycraft.base.blockentity.*;
 import reika.rotarycraft.blockentities.*;
@@ -56,11 +50,11 @@ import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
 import reika.rotarycraft.blockentities.transmission.*;
 import reika.rotarycraft.blockentities.weaponry.*;
+import reika.rotarycraft.models.*;
 import reika.rotarycraft.models.animated.*;
 import reika.rotarycraft.models.animated.shaftonly.ClutchModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftModel;
 import reika.rotarycraft.models.engine.*;
-import reika.rotarycraft.models.*;
 import reika.rotarycraft.modinterface.conversion.BlockEntityBoiler;
 import reika.rotarycraft.modinterface.conversion.BlockEntityMagnetEngine;
 import reika.rotarycraft.modinterface.conversion.BlockEntitySteam;
@@ -126,7 +120,7 @@ public enum MachineRegistry implements TileEnum {
 //    GPR(true, "machine.gpr", BlockGPR.class, BlockEntityGPR.class),
     OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class/*, (modelSet) -> new ObsidianMakerModel(modelSet.bakeLayer(RotaryModelLayers.OBSIDIAN_MAKER))*/),
     //    PILEDRIVER("machine.piledriver", BlockRotaryCraftMachine.class, BlockEntityPileDriver.class, "RenderPileDriver"),
-//    VACUUM(true, "machine.vacuum", BlockRotaryCraftMachine.class, BlockEntityVacuum.class, "RenderVacuum"),
+    VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class/*, (modelSet) -> new VacuumModel(modelSet.bakeLayer(RotaryModelLayers.VACUUM))*/),
 //    FIREWORK(true, "machine.firework", BlockRotaryCraftMachine.class, BlockEntityFireworkMachine.class),
 //    SPRINKLER(true, "machine.sprinkler", BlockRotaryCraftMachine.class, BlockEntitySprinkler.class, "RenderSprinkler"),
 //    WOODCUTTER("machine.woodcutter", BlockRotaryCraftMachine.class, BlockEntityWoodcutter.class, "RenderWoodcutter"),
@@ -146,7 +140,7 @@ public enum MachineRegistry implements TileEnum {
 
     TNTCANNON(true, "machine.tntcannon", RotaryBlocks.TNT_CANNON.get(), BlockEntityTNTCannon.class/*, (modelSet) -> new TNTCannonModel(modelSet.bakeLayer(RotaryModelLayers.TNT_CANNON))*/),
     //    SONICWEAPON(true, "machine.sonicweapon", BlockRotaryCraftMachine.class, BlockEntitySonicWeapon.class, "RenderSonic"),
-//    BLASTFURNACE(true, "machine.blastfurnace", BlockRotaryCraftMachine.class, BlockEntityBlastFurnace.class),
+    BLASTFURNACE(true, "machine.blastfurnace", RotaryBlocks.BLAST_FURNACE.get(), BlockEntityBlastFurnace.class),
 //    FORCEFIELD(true, "machine.forcefield", BlockRotaryCraftMachine.class, BlockEntityForceField.class, "RenderForceField"),
     MUSICBOX(true, "machine.musicbox", RotaryBlocks.MUSIC_BOX.get(), BlockEntityMusicBox.class/*, (modelSet) -> new MusicBoxModel(modelSet.bakeLayer(RotaryModelLayers.MUSIC_BOX))*/),
     SPILLER(true, "machine.spiller", RotaryBlocks.SPILLER.get(), BlockEntitySpiller.class/*, (modelSet) -> new SpillerModel(modelSet.bakeLayer(RotaryModelLayers.SPILLER))*/),
@@ -176,8 +170,8 @@ public enum MachineRegistry implements TileEnum {
     //    SPYCAM("machine.spycam", BlockRotaryCraftMachine.class, BlockEntitySpyCam.class, "RenderSpyCam"),
     SELFDESTRUCT("machine.selfdestruct", RotaryBlocks.SELF_DESTRUCT.get(), BlockEntitySelfDestruct.class/*, (modelSet) -> new SelfDestructModel(modelSet.bakeLayer(RotaryModelLayers.SELF_DESTRUCT))*/),
     COOLINGFIN("machine.coolingfin", RotaryBlocks.COOLING_FIN.get(), BlockEntityCoolingFin.class, (modelSet) -> new FinModel(modelSet.bakeLayer(RotaryModelLayers.COOLING_FIN))),
-    //        WORKTABLE("machine.worktable", BlockRotaryCraftMachine.class, BlockEntityWorktable.class),
-//    COMPRESSOR("machine.compressor", BlockModEngine.class, BlockEntityAirCompressor.class, "RenderCompressor", PowerTypes.PNEUMATIC),
+    WORKTABLE("machine.worktable", RotaryBlocks.WORKTABLE.get(), BlockEntityWorktable.class),
+    //    COMPRESSOR("machine.compressor", BlockModEngine.class, BlockEntityAirCompressor.class, "RenderCompressor", PowerTypes.PNEUMATIC),
     //PNEUENGINE("machine.pneuengine", BlockModEngine.class, BlockEntityPneumaticEngine.class, "RenderPneumatic", PowerTypes.PNEUMATIC),
 //    DISPLAY("machine.display", BlockRotaryCraftMachine.class, BlockEntityDisplay.class, "RenderDisplay"),
 //    LAMP("machine.lamp", BlockRotaryCraftMachine.class, BlockEntityLamp.class),
@@ -809,11 +803,9 @@ public enum MachineRegistry implements TileEnum {
             return false;
 //    todo    if (this.isIncomplete() && !(DragonAPI.isReikasComputer() || DragonOptions.DEBUGMODE.getState()))
 //            return false;
-        if (this.isConfigDisabled())
-            return false;
+        return !this.isConfigDisabled();
 //        todo if (this == PORTALSHAFT)
 //            return false;
-        return true;
     }
 
     public boolean isDummiedOut() {
@@ -821,9 +813,7 @@ public enum MachineRegistry implements TileEnum {
 //            return true;
         if (requirement != null && !requirement.isLoaded())
             return true;
-        if (powertype != null && !powertype.isLoaded())
-            return true;
-        return false;
+        return powertype != null && !powertype.isLoaded();
     }
 
     public boolean hasPrerequisite() {
@@ -835,10 +825,8 @@ public enum MachineRegistry implements TileEnum {
             return true;
 //        if (this == DISPLAY)
 //            return true;
-        if (this == PUMP)
-            return true;
+        return this == PUMP;
 //        return this == EMP;
-        return false;
     }
 
     public boolean isSidePlaced() {
@@ -899,17 +887,12 @@ public enum MachineRegistry implements TileEnum {
     }
 
     public boolean canBeDisabledInOverworld() {
-        return switch (this) {
-//            case BORER, SONICBORER, EMP, RAILGUN, LASERGUN -> true;
-            default -> false;
-        };
+        //            case BORER, SONICBORER, EMP, RAILGUN, LASERGUN -> true;
+        return false;
     }
 
     public boolean isUncraftable() {
-        if (this == MachineRegistry.COOLINGFIN) {
-            return false;
-        }
-        return true;
+        return this != MachineRegistry.COOLINGFIN;
     }
 
     public boolean canDoMultiPerTick() {
@@ -962,7 +945,10 @@ public enum MachineRegistry implements TileEnum {
     //            return tab == RotaryCraft.ROTARY_POWER;
             return tab == RotaryCraft.ROTARY;
         }*/
-    /** Is the machine crucial to the mod (i.e. the techtree, realism, usability, or balance is damaged by its removal) */
+
+    /**
+     * Is the machine crucial to the mod (i.e. the techtree, realism, usability, or balance is damaged by its removal)
+     */
     public boolean isCrucial() {
         if (this.isPipe())
             return true;
@@ -991,140 +977,23 @@ public enum MachineRegistry implements TileEnum {
         return switch (this) {
             case /*BEDROCKBREAKER, ENGINE, SHAFT, */
                     BEVELGEARS, SPLITTER, GEARBOX,
-                    /*FERMENTER,*/ GRINDER,/* COMPACTOR,*/ PUMP,
-                    /*EXTRACTOR, FAN, FRACTIONATOR,*/ HEATER,
-                    HEATRAY, WINDER, /*ADVANCEDGEARS, BLASTFURNACE,
+                            /*FERMENTER,*/ GRINDER,/* COMPACTOR,*/ PUMP,
+                            /*EXTRACTOR, FAN, FRACTIONATOR,*/ HEATER,
+                            HEATRAY, WINDER, /*ADVANCEDGEARS, BLASTFURNACE,
                     MAGNETIZER, FRICTION,*/ COOLINGFIN, /*WORKTABLE, */
-                    MULTICLUTCH, SORTING, /*FERTILIZER, AGGREGATOR,
+                            MULTICLUTCH, SORTING, /*FERTILIZER, AGGREGATOR,
                     FILLINGSTATION, BELT,*/ VANDEGRAFF,/* BUSCONTROLLER,
                     POWERBUS,*/ BLOWER, REFRIGERATOR/*, CRAFTER,
-                    PIPEPUMP, CENTRIFUGE, DRYING, WETTER */->
-                    true;
+                    PIPEPUMP, CENTRIFUGE, DRYING, WETTER */ -> true;
             default -> false;
         };
     }
+
     public boolean isCraftable() {
         if (requirement != null && !requirement.isLoaded())
             return false;
         if (powertype != null && !powertype.isLoaded())
             return false;
         return !this.isDummiedOut() && !this.isTechnical() && !this.isConfigDisabled();
-    }
-
-
-    public void addSizedOreRecipe(int size, Object... obj) {
-        if (this.isCraftable()) {
-            ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), size), obj);
-            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(ir);
-            }
-        }
-    }
-
-
-    public void addMetaOreRecipe(int meta, Object... obj) {
-        if (this.isCraftable()) {
-            ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedMetadataProduct(meta), obj);
-            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(ir);
-            }
-        }
-    }
-
-    public void addSizedMetaOreRecipe(int size, int meta, Object... obj) {
-        if (this.isCraftable()) {
-            ShapedOreRecipe ir = new ShapedOreRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedMetadataProduct(meta), size), obj);
-            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(ir);
-            }
-        }
-    }
-
-    public void addMetaCrafting(int metadata, Object... obj) {
-        if (this.isCraftable()) {
-            WorktableRecipes.getInstance().addRecipe(this.getCraftedMetadataProduct(metadata), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(this.getCraftedMetadataProduct(metadata), obj);
-            }
-        }
-        //this.addMetaOreRecipe(metadata, obj);
-    }
-
-    public void addSizedCrafting(int num, Object... obj) {
-        if (this.isCraftable()) {
-            WorktableRecipes.getInstance().addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num), obj);
-            }
-        }
-        //this.addSizedOreRecipe(num, obj);
-    }
-
-    public void addRecipe(IReikaRecipe ir) {
-        if (this.isCraftable()) {
-            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-//              GameRegistry.addRecipe(ir);
-                recipe.put(, ir.getResult());
-            }
-        }
-    }
-
-    public void addRecipe(ItemStack is, Object... obj) {
-        if (this.isCraftable()) {
-            WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(is, obj);
-            }
-        }
-    }
-
-    public void addCrafting(Object... obj) {
-        if (this.isCraftable()) {
-            WorktableRecipes.getInstance().addRecipe(this.getCraftedProduct(), this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(this.getCraftedProduct(), obj);
-            }
-        }
-        //this.addOreRecipe(obj);
-    }
-
-    public void addNBTCrafting(CompoundTag NBT, Object... obj) {
-        if (this.isCraftable()) {
-            ItemStack is = this.getCraftedProduct();
-            is.setTag(NBT.copy());
-            WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(is, obj);
-            }
-        }
-        //this.addSizedOreRecipe(num, obj);
-    }
-
-
-    public void addSizedNBTCrafting(CompoundTag NBT, int num, Object... obj) {
-        if (this.isCraftable()) {
-            ItemStack is = ReikaItemHelper.getSizedItemStack(this.getCraftedProduct(), num);
-            is.setTag(NBT.copy());
-            WorktableRecipes.getInstance().addRecipe(is, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED, obj);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(is, obj);
-            }
-        }
-        //this.addSizedOreRecipe(num, obj);
-    }
-
-
-    public void addTagRecipe(Object... obj) {
-        if (this.isCraftable()) {
-            ShapedOreRecipe ir = new ShapedOreRecipe(this.getCraftedProduct(), obj);
-            WorktableRecipes.getInstance().addRecipe(ir, this.isCrucial() ? RecipeLevel.CORE : RecipeLevel.PROTECTED);
-            if (ConfigRegistry.TABLEMACHINES.getState()) {
-                GameRegistry.addRecipe(ir);
-            }
-        }
     }
 }

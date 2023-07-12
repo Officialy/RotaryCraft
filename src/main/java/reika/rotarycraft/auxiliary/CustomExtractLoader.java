@@ -93,7 +93,7 @@ public class CustomExtractLoader {
             writeCommentLine(p, "Ore rarity is the rarity of the ore blocks in the world, and affects the multiplication rates.");
             writeCommentLine(p, "Valid Rarity Values:");
             for (OreType.OreRarity o : OreType.OreRarity.values()) {
-                writeCommentLine(p, "\t" + o.name() + " - " + o.desc + ", like " + o.examples + "");
+                writeCommentLine(p, "\t" + o.name() + " - " + o.desc + ", like " + o.examples);
             }
             writeCommentLine(p, "");
             writeCommentLine(p, "Valid Product Types:");

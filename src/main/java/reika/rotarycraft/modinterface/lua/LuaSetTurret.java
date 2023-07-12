@@ -27,7 +27,7 @@ public class LuaSetTurret extends LuaMethod {
 		double tphi = ((Double)args[0]).doubleValue();
 		double ttheta = ((Double)args[1]).doubleValue();
 		if (!can.isValidTheta(ttheta))
-			throw new LuaMethodException("Invalid angle; out of gimbal limits ("+can.MAXLOWANGLE+" degrees below horizontal)");
+			throw new LuaMethodException("Invalid angle; out of gimbal limits ("+ BlockEntityAimedCannon.MAXLOWANGLE +" degrees below horizontal)");
 		boolean ret = can.adjustAim(tphi, ttheta);
 		return new Object[] {ret};
 	}

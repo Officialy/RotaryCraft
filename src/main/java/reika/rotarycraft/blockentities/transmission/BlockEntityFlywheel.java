@@ -123,7 +123,7 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
         }
         if (read != null && write != null)
             this.process(world, pos);
-        power = omega * torque;
+        power = (long) omega * torque;
         this.testFailure();
         this.playSounds();
 
@@ -201,14 +201,12 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
             }
-            if (te instanceof ComplexIO) {
-                ComplexIO pwr = (ComplexIO) te;
+            if (te instanceof ComplexIO pwr) {
                 Direction dir = this.getInputDirection().getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
             }
-            if (te instanceof ShaftPowerEmitter) {
-                ShaftPowerEmitter sp = (ShaftPowerEmitter) te;
+            if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();
@@ -403,7 +401,7 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
 
     @Override
     public long getMaxPower() {
-        return maxtorque * omega;
+        return (long) maxtorque * omega;
     }
 
     @Override

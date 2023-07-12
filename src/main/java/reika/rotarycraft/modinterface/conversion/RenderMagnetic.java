@@ -30,7 +30,7 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderMagnetic extends RotaryTERenderer<BlockEntityMagnetEngine> {
 
-    private MagneticModel dynamoModel;
+    private final MagneticModel dynamoModel;
 
     public RenderMagnetic(BlockEntityRendererProvider.Context context) {
         dynamoModel = new MagneticModel(context.bakeLayer(RotaryModelLayers.MAGNETIC));

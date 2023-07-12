@@ -9,16 +9,20 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
-import net.minecraft.world.damagesource.EntityDamageSource;
+import net.minecraft.core.Holder;
+import net.minecraft.world.damagesource.DamageEffects;
+import net.minecraft.world.damagesource.DamageScaling;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.enchantment.Enchantments;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 
-public class HarvesterDamage extends EntityDamageSource {
+public class HarvesterDamage extends /*Entity*/DamageSource {
 
     private final BlockEntityMobHarvester tile;
 
     public HarvesterDamage(BlockEntityMobHarvester te) {
-        super("player", te.getPlacer());
+        super(Holder.direct(new DamageType("player", DamageScaling.ALWAYS, 0.1F, DamageEffects.HURT)));//"player", te.getPlacer());
         tile = te;
     }
 

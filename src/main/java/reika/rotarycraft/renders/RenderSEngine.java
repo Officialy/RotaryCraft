@@ -35,15 +35,15 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 //@SideOnly(Dist.CLIENT)
 public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
 
-    private DCModel dcModel;
-    private SteamModel steamModel;
-    private CombustionModel combModel;
-    private ACModel acModel;
-    private PerformanceModel perfModel;
-    private MicroTurbineModel microModel;
-    private JetModel jetModel;
-    private HydroModel hydroModel;
-    private WindModel windModel;
+    private final DCModel dcModel;
+    private final SteamModel steamModel;
+    private final CombustionModel combModel;
+    private final ACModel acModel;
+    private final PerformanceModel perfModel;
+    private final MicroTurbineModel microModel;
+    private final JetModel jetModel;
+    private final HydroModel hydroModel;
+    private final WindModel windModel;
 
 //    private static final Glow jetGlow = new Glow(255, 150, 20, 192).setScale(0.4);
 
@@ -258,7 +258,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
 //      todo      GL11.glDisable(GL11.GL_LIGHTING);
 
 //        RenderSystem.enableBlend();
-        RenderSystem.enableTexture();
+//        RenderSystem.enableTexture();
 
         double o = 0.005;
         double t = 0.05;

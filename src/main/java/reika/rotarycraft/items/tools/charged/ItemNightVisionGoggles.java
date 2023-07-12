@@ -13,6 +13,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -22,7 +23,7 @@ import reika.rotarycraft.base.ItemChargedArmor;
 public class ItemNightVisionGoggles extends ItemChargedArmor {
 
     public ItemNightVisionGoggles() {
-        super(ArmorMaterials.IRON, EquipmentSlot.HEAD, new Properties());
+        super(ArmorMaterials.IRON, Type.HELMET, new Properties());
     }
 
     @Override

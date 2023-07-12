@@ -46,12 +46,12 @@ public class ItemTarget extends ItemRotaryTool {
             int x = (int) mov.getLocation().x();
             int y = (int) mov.getLocation().y();
             int z = (int) mov.getLocation().z();
-            ReikaChatHelper.writeBlockAtCoords(level, new BlockPos(player.position()));
+            ReikaChatHelper.writeBlockAtCoords(level, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z));
             int range = 16;
             for (int i = -range; i <= range; i++) {
                 for (int j = -range; j <= range; j++) {
                     for (int k = -range; k <= range; k++) {
-                        BlockEntity te = level.getBlockEntity(new BlockPos(player.getX() + i, player.getY() + j, player.getZ() + k));
+                        BlockEntity te = level.getBlockEntity(new BlockPos((int) player.getX() + i, (int) player.getY() + j, (int) player.getZ() + k));
 //                        if (te instanceof BlockEntityLaunchCannon) {
 //                            BlockEntityLaunchCannon tc = (BlockEntityLaunchCannon) te;
 //                            if (tc.targetMode) {
