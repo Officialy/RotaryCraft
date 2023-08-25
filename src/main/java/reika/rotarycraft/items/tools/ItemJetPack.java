@@ -13,21 +13,17 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.auxiliary.trackers.KeyWatcher;
@@ -38,13 +34,8 @@ import reika.dragonapi.libraries.java.ReikaRandomHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryConfig;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.Fillable;
 import reika.rotarycraft.base.ItemRotaryArmor;
-import reika.rotarycraft.items.tools.bedrock.ItemBedrockArmor;
-import reika.rotarycraft.items.tools.steel.ItemSteelArmor;
-
 import reika.rotarycraft.registry.*;
 
 import java.util.ArrayList;
@@ -148,10 +139,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
         if (ep.getVehicle() != null)
             thrust *= 1.25F;
 
-        boolean canFly = !hoverMode || (!ep.isOnGround() && ep.getDeltaMovement().y < 0);
+        boolean canFly = !hoverMode || (!ep.onGround() && ep.getDeltaMovement().y < 0);
         if (isFlying && canFly) {
-            if (!ep.level.isClientSide && !ep.isCreative() && !ep.isFallFlying()) {
-                if (ep.level.getGameTime() % 2 == 0)
+            if (!ep.level().isClientSide() && !ep.isCreative() && !ep.isFallFlying()) {
+                if (ep.level().getGameTime() % 2 == 0)
                     this.use(is, (hoverMode ? 2 : 1) * this.getFuelUsageMultiplier());
             }
 
@@ -173,26 +164,26 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
                 if (KeyWatcher.instance.isKeyDown(ep, KeyWatcher.Key.FORWARD)) {
                     ep.setDeltaMovement(0, thrust, thrust);
-                    if (ep.level.getGameTime() % 2 == 0 && !ep.isCreative())
+                    if (ep.level().getGameTime() % 2 == 0 && !ep.isCreative())
                         this.use(is, this.getFuelUsageMultiplier());
                 }
                 if (KeyWatcher.instance.isKeyDown(ep, KeyWatcher.Key.BACK)) {
                     ep.setDeltaMovement(0, -thrust, thrust);
-                    if (ep.level.getGameTime() % 2 == 0 && !ep.isCreative())
+                    if (ep.level().getGameTime() % 2 == 0 && !ep.isCreative())
                         this.use(is, this.getFuelUsageMultiplier());
                 }
                 if (KeyWatcher.instance.isKeyDown(ep, KeyWatcher.Key.LEFT)) {
                     ep.setDeltaMovement(thrust, 0, thrust);
-                    if (ep.level.getGameTime() % 2 == 0 && !ep.isCreative())
+                    if (ep.level().getGameTime() % 2 == 0 && !ep.isCreative())
                         this.use(is, this.getFuelUsageMultiplier());
                 }
                 if (KeyWatcher.instance.isKeyDown(ep, KeyWatcher.Key.RIGHT)) {
                     ep.setDeltaMovement(-thrust, 0, thrust);
-                    if (ep.level.getGameTime() % 2 == 0 && !ep.isCreative())
+                    if (ep.level().getGameTime() % 2 == 0 && !ep.isCreative())
                         this.use(is, this.getFuelUsageMultiplier());
                 }
 
-                if (!ep.level.isClientSide) {
+                if (!ep.level().isClientSide) {
                     ep.fallDistance = -2;
                     if (ConfigRegistry.KICKFLYING.getState()) {
                         /*if (ep instanceof Player) {
@@ -201,10 +192,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
                     }
                 }
 
-                float pitch = 1 + 0.5F * (float) Math.sin((ep.level.getDayTime() * 2) % 360);
-                SoundRegistry.JETPACK.playSound(ep.level, ep.getOnPos(), 0.75F, pitch);
+                float pitch = 1 + 0.5F * (float) Math.sin((ep.level().getDayTime() * 2) % 360);
+                SoundRegistry.JETPACK.playSound(ep.level(), ep.getOnPos(), 0.75F, pitch);
                 if (propel) {
-                    SoundRegistry.SHORTJET.playSound(ep.level, ep.getOnPos(), 0.15F, 1F);
+                    SoundRegistry.SHORTJET.playSound(ep.level(), ep.getOnPos(), 0.15F, 1F);
                 }
             }
         }

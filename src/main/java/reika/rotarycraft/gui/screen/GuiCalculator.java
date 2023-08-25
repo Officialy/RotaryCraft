@@ -11,6 +11,7 @@ package reika.rotarycraft.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -48,7 +49,7 @@ public class GuiCalculator extends Screen {
     }
 
     @Override
-    public void render(PoseStack stack, int p_98419_, int x, float z) {
+    public void render(GuiGraphics stack, int p_98419_, int x, float z) {
         super.render(stack, p_98419_, x, z);
         int posX = (width - imageWidth) / 2;
         int posY = (height - imageHeight) / 2 - 8;

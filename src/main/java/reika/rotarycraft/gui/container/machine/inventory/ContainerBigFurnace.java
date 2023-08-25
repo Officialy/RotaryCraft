@@ -25,7 +25,7 @@ public class ContainerBigFurnace extends IOMachineContainer<BlockEntityLavaSmelt
 
     //Client
     public ContainerBigFurnace(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityLavaSmeltery) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityLavaSmeltery) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public ContainerBigFurnace(int id, Inventory player, BlockEntityLavaSmeltery par2BlockEntityLavaSmeltery) {

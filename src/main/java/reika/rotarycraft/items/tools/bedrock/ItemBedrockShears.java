@@ -23,14 +23,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.eventbus.api.Event;
 import reika.dragonapi.base.BlockTieredResource;
 import reika.dragonapi.libraries.ReikaPlayerAPI;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryConfig;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.ItemRotaryShears;
 import reika.rotarycraft.registry.ConfigRegistry;
 
@@ -67,7 +65,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
         } else if (b instanceof IForgeShearable) {
             ((IForgeShearable) b).onSheared(player, player.getUseItem(), level, pos, 0);
             return Event.Result.ALLOW;
-        } else if (b.defaultBlockState().getMaterial() == Material.PLANT || b.defaultBlockState().getMaterial() == Material.LEAVES) {
+        } else if (b.defaultBlockState().getMapColor(level, pos) == MapColor.PLANT) {
             return Event.Result.ALLOW;
         } else {
             return Event.Result.DEFAULT;
@@ -125,13 +123,13 @@ public class ItemBedrockShears extends ItemRotaryShears {
      */
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
-        if (player.level.isClientSide())
+        if (player.level().isClientSide())
             return false;
         else {
-            Block b = player.level.getBlockState(pos).getBlock();
+            Block b = player.level().getBlockState(pos).getBlock();
             boolean drop = false;
             boolean flag = false;
-            Event.Result res = getHarvestResult(b, player, player.level, pos);
+            Event.Result res = getHarvestResult(b, player, player.level(), pos);
             switch (res) {
                 case ALLOW -> drop = flag = true;
                 case DEFAULT -> flag = super.onBlockStartBreak(itemstack, pos, player);
@@ -139,8 +137,8 @@ public class ItemBedrockShears extends ItemRotaryShears {
             }
             if (drop) {
                 ItemStack block = new ItemStack(b, 1);
-                ReikaItemHelper.dropItem(player.level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, block);
-                player.level.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
+                ReikaItemHelper.dropItem(player.level(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, block);
+                player.level().setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
             }
             return flag;
         }
@@ -156,15 +154,15 @@ public class ItemBedrockShears extends ItemRotaryShears {
      */
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
-        if (entity.level.isClientSide())
+        if (entity.level().isClientSide())
             return InteractionResult.FAIL;
         if (entity instanceof IForgeShearable target) {
             int x = Mth.floor(entity.getX());
             int y = Mth.floor(entity.getY());
             int z = Mth.floor(entity.getZ());
-            if (target.isShearable(stack, entity.level, new BlockPos(x, y, z))) {
+            if (target.isShearable(stack, entity.level(), new BlockPos(x, y, z))) {
                 int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE, player);
-                List<ItemStack> drops = target.onSheared(player, stack, entity.level, new BlockPos(x, y, z), fortune);
+                List<ItemStack> drops = target.onSheared(player, stack, entity.level(), new BlockPos(x, y, z), fortune);
 
                 if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(player)) {
                     for (ItemStack is : drops) {
@@ -172,7 +170,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
                         is.setCount(amount * 2);
                     }
                 }
-                ReikaItemHelper.dropItems(entity.level, x + 0.5, y + 0.8, z + 0.5, drops);
+                ReikaItemHelper.dropItems(entity.level(), x + 0.5, y + 0.8, z + 0.5, drops);
             }
             return InteractionResult.SUCCESS;
         }
@@ -185,11 +183,11 @@ public class ItemBedrockShears extends ItemRotaryShears {
         if (pState != null) {
             if (pState.getBlock() instanceof IForgeShearable) {
                 f = 8F;
-            } else if (pState.getMaterial() == Material.PLANT) {
+            } else if (pState.getBlock().defaultMapColor() == MapColor.PLANT) {
                 f = 8F;
-            } else if (pState.getMaterial() == Material.WEB || pState.getBlock() == Blocks.COBWEB) {
+            } else if (pState.getBlock() == Blocks.COBWEB) {
                 f = 40F;
-            } else if (pState.getMaterial() == Material.CLOTH_DECORATION || pState.getMaterial() == Material.WOOL) {
+            } else if (pState.getBlock().defaultMapColor() == MapColor.WOOL) {
                 f = 16;
             }
         }

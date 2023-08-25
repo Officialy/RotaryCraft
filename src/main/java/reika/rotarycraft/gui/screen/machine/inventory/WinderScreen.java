@@ -31,7 +31,7 @@ public class WinderScreen extends GuiOneSlotScreen<BlockEntityWinder, WinderCont
 
     public WinderScreen(WinderContainer container, Inventory inventory, Component title) {
         super(inventory, container, title);
-        winder = (BlockEntityWinder) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
+        winder = (BlockEntityWinder) inventory.player.level().getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 166;
         this.inventory = inventory;

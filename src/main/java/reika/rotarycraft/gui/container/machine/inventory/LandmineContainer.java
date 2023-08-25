@@ -25,7 +25,7 @@ public class LandmineContainer extends CoreContainer<BlockEntityLandmine> {
 
     //Client
     public LandmineContainer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityLandmine) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityLandmine) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public LandmineContainer(int id, Inventory inv, BlockEntityLandmine te) {

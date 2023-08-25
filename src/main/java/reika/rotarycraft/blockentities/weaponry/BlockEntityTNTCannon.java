@@ -106,7 +106,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
             AABB box = new AABB(pos, new BlockPos(pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).expandTowards(256, 256, 256);
             List<PrimedTnt> in = world.getEntitiesOfClass(PrimedTnt.class, box);
             for (PrimedTnt tnt : in) {
-                if (!tnt.isOnGround()) {
+                if (!tnt.onGround()) {
                     //todo if this actually does : Nullify air resistance
 //                    tnt.motionX /= 0.869800000190734863D;
 //                    tnt.motionZ /= 0.869800000190734863D;

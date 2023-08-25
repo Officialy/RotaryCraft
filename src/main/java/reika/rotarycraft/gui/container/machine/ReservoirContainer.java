@@ -24,7 +24,7 @@ public class ReservoirContainer extends CoreContainer<BlockEntityReservoir> {
 
     //Client
     public ReservoirContainer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityReservoir) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityReservoir) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public ReservoirContainer(int id, Inventory inv, BlockEntityReservoir te) {

@@ -25,7 +25,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
+
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
 import reika.dragonapi.DragonAPI;
@@ -66,7 +67,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
             if (b == Blocks.AIR || b == Blocks.BARRIER) {
                 sideMap.addEntry(dir, 0);
             } else {
-                Material mat = b.defaultBlockState().getMaterial();
+                MapColor mat = b.defaultBlockState().getMapColor(world, pos); //todo pos or dx,dy,dz?
                 MachineRegistry m = MachineRegistry.getMachine(world, new BlockPos(dx, dy, dz));
                 if (m == MachineRegistry.VANDEGRAFF) {
                     sideMap.addEntry(dir, 0);
@@ -74,9 +75,9 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
                     BlockEntity te = getAdjacentBlockEntity(dir);
                     if (te instanceof Shockable) {
                         sideMap.addEntry(dir, 1000);
-                    } else if (mat == Material.METAL || mat == Material.HEAVY_METAL) {// || InterfaceCache.BCPIPE.instanceOf(te)) {
+                    } else if (mat == MapColor.METAL) { // || mat == Material.HEAVY_METAL) {// || InterfaceCache.BCPIPE.instanceOf(te)) {
                         sideMap.addEntry(dir, 50);
-                    } else if (mat == Material.WATER) {
+                    } else if (mat == MapColor.WATER) {
                         sideMap.addEntry(dir, 20);
                     } else if (b == Blocks.TNT) {
                         sideMap.addEntry(dir, 100);

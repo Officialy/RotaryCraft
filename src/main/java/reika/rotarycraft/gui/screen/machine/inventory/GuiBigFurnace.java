@@ -10,6 +10,7 @@
 package reika.rotarycraft.gui.screen.machine.inventory;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.ScreenUtils;
@@ -23,7 +24,7 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, 
 
     public GuiBigFurnace(ContainerBigFurnace container, Inventory inv, Component title) {
         super(container, inv, title);
-        te = (BlockEntityLavaSmeltery) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
+        te = (BlockEntityLavaSmeltery) inventory.player.level().getBlockEntity(container.tile.getBlockPos());
         inventory = inv;
         imageWidth = 190;
         imageHeight = 207;
@@ -40,7 +41,7 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, 
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-    protected void renderBg(PoseStack poseStack, float pPartialTick, int pX, int pY) {
+    protected void renderBg(GuiGraphics poseStack, float pPartialTick, int pX, int pY) {
         super.renderBg(poseStack, pPartialTick, pX, pY);
 
         int j = (width - imageWidth) / 2;

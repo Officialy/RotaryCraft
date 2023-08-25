@@ -10,7 +10,7 @@ public class WinderContainer extends OneSlotContainer<BlockEntityWinder> {
 
     //Client
     public WinderContainer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityWinder) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityWinder) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public WinderContainer(int id, Inventory inv, BlockEntityWinder te) {

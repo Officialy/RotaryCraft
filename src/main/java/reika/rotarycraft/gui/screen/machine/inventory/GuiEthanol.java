@@ -10,6 +10,7 @@
 package reika.rotarycraft.gui.screen.machine.inventory;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.ScreenUtils;
@@ -22,13 +23,13 @@ public class GuiEthanol extends EngineScreen<BlockEntityGasEngine, ContainerEtha
 
     public GuiEthanol(ContainerEthanol container, Inventory inv, Component component) {
         super(container, inv, component);
-        engine = (BlockEntityGasEngine) inv.player.level.getBlockEntity(container.tile.getBlockPos());
+        engine = (BlockEntityGasEngine) inv.player.level().getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 166;
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
+    protected void renderBg(GuiGraphics poseStack, float par1, int par2, int par3) {
         super.renderBg(poseStack, par1, par2, par3);
 
         int j = (width - imageWidth) / 2;

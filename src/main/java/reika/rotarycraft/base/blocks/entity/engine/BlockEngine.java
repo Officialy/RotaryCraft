@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.auxiliary.RotaryAux;
@@ -168,7 +168,7 @@ public class BlockEngine extends Block {
     }
 
 //    @Override
-//    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+//    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
 //        ArrayList<ItemStack> ret = new ArrayList<>();
 //        BlockEntityEngine tile = (BlockEntityEngine) builder.getLevel().getBlockEntity(worldposition);
 //        if (tile == null)

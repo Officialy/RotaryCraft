@@ -77,8 +77,8 @@ public class JetpackFuelOverlay {
                         v5.vertex(12, height / 2 - 32 + f * 64, 0).uv(u + w, f * h).color(1.0f, 1.0f, 1.0f, 0.75f).endVertex();
                         v5.vertex(4, height / 2 - 32 + f * 64, 0).uv(u, f * h).color(1.0f, 1.0f, 1.0f, 0.75f).endVertex();
                         tess.end();
-                        Minecraft.getInstance().font.draw(event.getPoseStack(), String.format("%d%s", Math.round(frac * 100), "%"), 1, height / 2 - 40, 0xffffff);
-                        Minecraft.getInstance().font.draw(event.getPoseStack(), String.format("%dmB", fuel), 1, height / 2 + 33, 0xffffff);
+                        event.getGuiGraphics().drawString(Minecraft.getInstance().font, String.format("%d%s", Math.round(frac * 100), "%"), 1, height / 2 - 40, 0xffffff);
+                        event.getGuiGraphics().drawString(Minecraft.getInstance().font, String.format("%dmB", fuel), 1, height / 2 + 33, 0xffffff);
 //                        ReikaTextureHelper.bindHUDTexture();
                         //RenderSystem.disableBlend();
                     }

@@ -11,6 +11,7 @@ package reika.rotarycraft.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
@@ -33,20 +34,19 @@ public class GuiHandCraft extends AbstractContainerScreen<ContainerHandCraft> im
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
     @Override
-    public void render(PoseStack stack, int p_98419_, int p_98420_, float p_98421_) {
-        font.draw(stack, I18n.get("container.crafting"), 28, 6, 4210752);
-        font.draw(stack, I18n.get("container.inventory"), 8, imageHeight - 96 + 2, 4210752);
+    public void render(GuiGraphics stack, int p_98419_, int p_98420_, float p_98421_) {
+        stack.drawString(font, I18n.get("container.crafting"), 28, 6, 4210752);
+        stack.drawString(font, I18n.get("container.inventory"), 8, imageHeight - 96 + 2, 4210752);
     }
 
     /**
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-        RenderSystem.setShaderTexture(0, textures);
+    protected void renderBg(GuiGraphics poseStack, float par1, int par2, int par3) {
         int var5 = (width - imageWidth) / 2;
         int var6 = (height - imageHeight) / 2;
-        ScreenUtils.drawTexturedModalRect(poseStack, var5, var6, 1, 2, imageWidth, imageHeight, 0);
+        poseStack.blit(textures, var5, var6, 1, 2, imageWidth, imageHeight);
     }
 
     @Override

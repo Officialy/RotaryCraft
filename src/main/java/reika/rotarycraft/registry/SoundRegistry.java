@@ -140,7 +140,7 @@ public enum SoundRegistry implements CustomDistanceSound {
     }
 
     public void playSound(Entity e, float vol, float pitch) {
-        this.playSound(e.level, e.getOnPos(), vol, pitch);
+        this.playSound(e.level(), e.getOnPos(), vol, pitch);
     }
 
     public void playSound(Level world, BlockPos pos, float vol, float pitch) {

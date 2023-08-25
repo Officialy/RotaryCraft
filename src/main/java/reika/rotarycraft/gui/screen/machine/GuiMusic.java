@@ -11,6 +11,7 @@ package reika.rotarycraft.gui.screen.machine;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
@@ -45,7 +46,7 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
 
     public GuiMusic(MusicContainer container, Inventory inv, Component title) {
         super(container, inv, title);
-        music = (BlockEntityMusicBox) inv.player.level.getBlockEntity(container.tile.getBlockPos());
+        music = (BlockEntityMusicBox) inv.player.level().getBlockEntity(container.tile.getBlockPos());
         imageHeight = 217;
         imageWidth = 256;
     }
@@ -156,7 +157,7 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
     @Override
-    protected void renderBg(PoseStack stack, float par1, int par2, int par3) {
+    protected void renderBg(GuiGraphics stack, float par1, int par2, int par3) {
         super.renderBg(stack, par1, par2, par3);
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
@@ -173,10 +174,10 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
 
         int dx = (activeVoice.ordinal() - 1) * 16;
         int color = BlockEntityMusicBox.getColorForChannel(activeChannel);
-        ReikaGuiAPI.instance.drawLine(stack, 152 + dx, 53, 152 + dx, 69, 0xff000000);
-        ReikaGuiAPI.instance.drawLine(stack, 152 + dx, 53, 168 + dx, 53, 0xff000000);
-        ReikaGuiAPI.instance.drawLine(stack, 168 + dx, 53, 168 + dx, 69, 0xff000000);
-        ReikaGuiAPI.instance.drawLine(stack, 152 + dx, 69, 168 + dx, 69, 0xff000000);
+        ReikaGuiAPI.instance.drawLine(stack.pose(), 152 + dx, 53, 152 + dx, 69, 0xff000000);
+        ReikaGuiAPI.instance.drawLine(stack.pose(), 152 + dx, 53, 168 + dx, 53, 0xff000000);
+        ReikaGuiAPI.instance.drawLine(stack.pose(), 168 + dx, 53, 168 + dx, 69, 0xff000000);
+        ReikaGuiAPI.instance.drawLine(stack.pose(), 152 + dx, 69, 168 + dx, 69, 0xff000000);
     }
 
     @Override
@@ -200,8 +201,8 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
     }
 
     @Override
-    public void bindKeyboardTexture() {
-        RenderSystem.setShaderTexture(0, new ResourceLocation(RotaryCraft.MODID, "textures/screen/musicbuttons.png"));
+    public ResourceLocation bindKeyboardTexture() {
+        return new ResourceLocation(RotaryCraft.MODID, "textures/screen/musicbuttons.png");
     }
 
 }

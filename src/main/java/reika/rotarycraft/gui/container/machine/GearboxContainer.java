@@ -22,7 +22,7 @@ public class GearboxContainer extends IOMachineContainer<BlockEntityGearbox> {
 
     //Client
     public GearboxContainer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityGearbox) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityGearbox) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public GearboxContainer(int id, Inventory inv, BlockEntityGearbox te) {

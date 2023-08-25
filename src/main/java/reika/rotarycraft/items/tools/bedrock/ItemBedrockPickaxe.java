@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
 import reika.dragonapi.ModList;
@@ -98,7 +98,7 @@ public final class ItemBedrockPickaxe extends PickaxeItem {
     public boolean onBlockStartBreak(ItemStack is, BlockPos pos, Player ep) {
         if (ep.isCreative())
             return false;
-        Level level = ep.level;
+        Level level = ep.level();
         Block id = level.getBlockState(pos).getBlock();
         ItemStack block = new ItemStack(id, 1);
 
@@ -284,11 +284,11 @@ public final class ItemBedrockPickaxe extends PickaxeItem {
         if (((ItemBedrockShovel) RotaryItems.BEDROCK_ALLOY_SHOVEL.get()).isAcceleratedOn(b))
             return 6F;
 
-        if (b.getMaterial() == Material.STONE || b.getMaterial() == Material.METAL || b.getMaterial() == Material.AMETHYST)
+        if (b.getBlock().defaultMapColor() == MapColor.STONE || b.getBlock().defaultMapColor() == MapColor.METAL || b.getBlock().defaultMapColor() == MapColor.COLOR_PURPLE)
             return 12F;
-        if (b.getMaterial() == Material.GLASS)
+        if (b.getBlock().defaultMapColor() == MapColor.NONE) //might be glass map colour? or air, fuck this material removal bs for now
             return 12F;
-        if (b.getMaterial() == Material.ICE)
+        if (b.getBlock().defaultMapColor() == MapColor.ICE)
             return 12F;
         if (b.getBlock() instanceof BlockBasicMachine)
             return 12F;

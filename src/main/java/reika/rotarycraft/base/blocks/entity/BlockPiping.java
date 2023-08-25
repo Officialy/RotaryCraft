@@ -13,7 +13,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootParams;
 import org.jetbrains.annotations.Nullable;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.blockentities.piping.BlockEntityPipe;
@@ -38,7 +39,7 @@ public class BlockPiping extends Block implements EntityBlock {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
+    public List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
         return null;
     }
 

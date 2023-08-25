@@ -26,7 +26,7 @@ public class PerformanceContainer extends IOMachineContainer<BlockEntityPerforma
 
     //Client
     public PerformanceContainer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityPerformanceEngine) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityPerformanceEngine) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public PerformanceContainer(int id, Inventory inv, BlockEntityPerformanceEngine par2BlockEntityEngine) {

@@ -20,7 +20,7 @@ public abstract class IOMachineContainer<T extends BlockEntityIOMachine> extends
     private final T ioTile;
 
     public IOMachineContainer(MenuType<?> type, final int id, Inventory inv, FriendlyByteBuf buf) {
-        this(type, id, inv, (T) inv.player.level.getBlockEntity(buf.readBlockPos()));
+        this(type, id, inv, (T) inv.player.level().getBlockEntity(buf.readBlockPos()));
     }
 
     public IOMachineContainer(MenuType<?> type, final int id, Inventory inv, T tile) {

@@ -29,7 +29,7 @@ public class ContainerGrinder extends IOMachineContainer<BlockEntityGrinder> {
 
     //Client
     public ContainerGrinder(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityGrinder) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityGrinder) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public ContainerGrinder(int id, Inventory inv, BlockEntityGrinder te) {

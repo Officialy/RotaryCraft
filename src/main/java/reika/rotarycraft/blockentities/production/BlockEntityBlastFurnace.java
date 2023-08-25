@@ -292,7 +292,8 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
-        return new BlastFurnaceMenu(id, inv, this, this.data);
+        return null;
+//todo        return new BlastFurnaceMenu(id, inv, this, this.data);
     }
 
     @Override

@@ -10,6 +10,9 @@
 package reika.rotarycraft.gui.screen.machine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -23,14 +26,14 @@ public class GuiSorter extends GuiPowerOnlyMachine<BlockEntitySorting, Container
 
     public GuiSorter(ContainerSorter container, Inventory inv, Component title) {
         super(container, inv, title);
-        sorter = (BlockEntitySorting) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
+        sorter = (BlockEntitySorting) inventory.player.level().getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 180;
         inventory = inv;
     }
 
     @Override
-    public void renderBackground(PoseStack stack) {
+    public void renderBackground(GuiGraphics stack) {
         int dy = 22;
         int x = 8;
         int y = 18;
@@ -38,7 +41,7 @@ public class GuiSorter extends GuiPowerOnlyMachine<BlockEntitySorting, Container
         for (int k = 0; k < l * 3; k++) {
             ItemStack is = sorter.getMapping(k);
             if (is != null) {
-                api.drawItemStack(stack, this.itemRenderer, font, is, x + k % l * 18, y + k / l * dy);
+                api.drawItemStack(stack, Minecraft.getInstance().getItemRenderer(), font, is, x + k % l * 18, y + k / l * dy);
             }
         }
     }

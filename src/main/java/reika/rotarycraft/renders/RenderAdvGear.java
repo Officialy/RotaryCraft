@@ -79,13 +79,13 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
 
                     if (tile.getTicksExisted() / 80 % 2 == 0) {
                         var15b = RotaryAux.formatPower(tile.power);
-                        fr.draw(stack, var15b, -18, 70, 0xffffff);
+                        fr.drawInBatch(var15b, -18, 70, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
 
                         var15b = RotaryAux.formatTorque(tile.torque);
-                        fr.draw(stack, var15b, -18, 82, 0xffffff);
+                        fr.drawInBatch(var15b, -18, 82, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
 
                         var15b = RotaryAux.formatSpeed(tile.omega);
-                        fr.draw(stack, var15b, -18, 94, 0xffffff);
+                        fr.drawInBatch(var15b, -18, 94, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
                     } else {
                         stack.scale(2, 2, 2);
                         stack.translate(0.075F, 0.25F, 0.1F);
@@ -98,7 +98,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                         while (var15b.length() < 5) {
                             var15b = " " + var15b;
                         }
-                        fr.draw(stack, var15b, -10, 39, 0xffffff);
+                        fr.drawInBatch(var15b, -10, 39, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
                     }
                     //GL11.glPopAttrib();
                 }

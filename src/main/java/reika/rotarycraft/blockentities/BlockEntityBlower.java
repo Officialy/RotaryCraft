@@ -366,7 +366,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
     private boolean doStacksMatch(ItemStack is, ItemStack is1) {
 //        if (checkMeta && is.getItemDamage() != is1.getItemDamage())
 //            return false;
-        if (checkNBT && !ItemStack.tagMatches(is, is1))
+        if (checkNBT && !ItemStack.isSameItemSameTags(is, is1))
             return false;
         if (ReikaItemHelper.matchStacks(is, is1))
             return true;

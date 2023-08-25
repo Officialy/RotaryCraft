@@ -41,7 +41,7 @@ public class ItemFlamethrower extends ItemChargedTool {
     @Override
     public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
         Vec3 vec = pLivingEntity.getLookAngle();
-        pLivingEntity.level.addParticle(ParticleTypes.FLAME, pLivingEntity.blockPosition().getX(), pLivingEntity.blockPosition().getY(), pLivingEntity.blockPosition().getZ(), vec.x() / 4, vec.y() / 4, vec.z() / 4);
+        pLivingEntity.level().addParticle(ParticleTypes.FLAME, pLivingEntity.blockPosition().getX(), pLivingEntity.blockPosition().getY(), pLivingEntity.blockPosition().getZ(), vec.x() / 4, vec.y() / 4, vec.z() / 4);
     }
 
     /**

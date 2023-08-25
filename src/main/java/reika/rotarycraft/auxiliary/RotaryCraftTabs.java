@@ -3,7 +3,7 @@ package reika.rotarycraft.auxiliary;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import reika.rotarycraft.RotaryCraft;
@@ -19,8 +19,8 @@ public class RotaryCraftTabs {
 
 
     @SubscribeEvent
-    public static void creativeTabRegistry(CreativeModeTabEvent.Register event) {
-        ROTARYCRAFT = event.registerCreativeModeTab(new ResourceLocation(RotaryCraft.MODID, "rotarycraft"), (builder -> {
+    public static void creativeTabRegistry(BuildCreativeModeTabContentsEvent event) {
+       /* ROTARYCRAFT = event.registerCreativeModeTab(new ResourceLocation(RotaryCraft.MODID, "rotarycraft"), (builder -> {
             builder.icon(() -> RotaryItems.HSLA_STEEL_GEAR.get().getDefaultInstance()).displayItems((itemDisplayParameters, output) -> {
                 output.accept(RotaryItems.IRON_SCRAP.get().getDefaultInstance());
                 output.accept(RotaryItems.CUSTOMEXTRACT.get().getDefaultInstance());
@@ -311,6 +311,6 @@ public class RotaryCraftTabs {
                 output.accept(RotaryItems.DIAMOND_FLAKES.get().getDefaultInstance());
                 output.accept(RotaryItems.TUNGSTEN_FLAKES.get().getDefaultInstance());
             }).title(Component.translatable("tab.rotarycraft.ores"));
-        }));
+        }));*/
     }
 }

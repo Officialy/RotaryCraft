@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class BlockBlastGlass extends Block {
     private final ArrayList<Integer> allDirs = new ArrayList<>();
 
     public BlockBlastGlass() {
-        super(Properties.of(Material.GLASS).strength(10, 6000F).sound(SoundType.GLASS).noOcclusion());
+        super(Properties.copy(Blocks.GLASS).strength(10, 6000F));
         //this.setCreativeTab(RotaryCraft.ROTARY);
         //this.setHarvestLevel("pickaxe", 3);
         //this.blockIndexInTexture = 74;
@@ -87,7 +86,7 @@ public class BlockBlastGlass extends Block {
             return false;
         if (item.getItem() == Items.DIAMOND_PICKAXE || item.getItem() == RotaryItems.BEDROCK_ALLOY_PICK.get())
             return true;
-        return item.getItem().canAttackBlock(Blocks.OBSIDIAN.defaultBlockState(), player.level, pos, player);
+        return item.getItem().canAttackBlock(Blocks.OBSIDIAN.defaultBlockState(), player.level(), pos, player);
     }
 
     /**

@@ -23,7 +23,7 @@ public class ContainerJet extends IOMachineContainer<BlockEntityEngine> {
 
     public ContainerJet(int id, Inventory inv, FriendlyByteBuf buf) {
         super(RotaryMenus.JET.get(), id, inv, buf);
-        engine = (BlockEntityEngine) inv.player.level.getBlockEntity(buf.readBlockPos());
+        engine = (BlockEntityEngine) inv.player.level().getBlockEntity(buf.readBlockPos());
         this.addPlayerInventory(inv);
     }
 

@@ -11,6 +11,7 @@ package reika.rotarycraft.gui.container.machine.inventory;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.FurnaceResultSlot;
 import net.minecraft.world.inventory.Slot;
@@ -27,8 +28,8 @@ public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorkta
     private static BlockEntityWorktable table;
     //Client
     public ContainerWorktable(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityWorktable) inv.player.level.getBlockEntity(data.readBlockPos()), inv.player.level, true);
-        table = (BlockEntityWorktable) inv.player.level.getBlockEntity(data.readBlockPos());
+        this(id, inv, (BlockEntityWorktable) inv.player.level().getBlockEntity(data.readBlockPos()), inv.player.level(), true);
+        table = (BlockEntityWorktable) inv.player.level().getBlockEntity(data.readBlockPos());
     }
 
     public ContainerWorktable(int id, Inventory inv, BlockEntityWorktable te, Level world, boolean gui) {
@@ -117,7 +118,8 @@ public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorkta
 
     }
 
-    /**
-     * Callback for when the crafting matrix is changed.
-     */
+    @Override
+    public boolean stillValid(Player player) {
+        return !tile.isRemoved();
+    }
 }

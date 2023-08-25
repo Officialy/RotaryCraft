@@ -30,17 +30,13 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements Mac
     public boolean hasVerticalPlacement = false;
 
     /** This is the property that determines the possible directions the block is facing. This does contain UP and DOWN,
-    * however they are not enabled unless {@link hasVerticalPlacement} is set to true.
+    * however they are not enabled unless {@link #hasVerticalPlacement} is set to true.
+     * Setting a block that does not have vertical placement to face up or down will cause a crash. This may be fixed in the future.
     */
     public static DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BlockRotaryCraftMachine(BlockBehaviour.Properties properties) {
         super(properties.strength(4, 15));
-//		this.setHardness(4F);
-//		this.setResistance(15F);
-//		this.setLightLevel(0F);
-//		if (mat == Material.METAL)
-//			this.setStepSound(soundTypeMetal);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 

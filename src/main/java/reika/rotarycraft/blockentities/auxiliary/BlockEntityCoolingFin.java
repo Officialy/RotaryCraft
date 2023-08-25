@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import reika.dragonapi.instantiable.Interpolation;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
@@ -56,11 +56,11 @@ public class BlockEntityCoolingFin extends RotaryCraftBlockEntity implements Tem
     @Override
     public void updateTemperature(Level world, BlockPos pos) {
         int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
-        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.WATER) != null)
+        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, MapColor.WATER) != null)
             Tamb -= 5;
-        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.LAVA) != null)
+        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, MapColor.FIRE) != null)
             Tamb = 2600;
-        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.ICE) != null)
+        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, MapColor.ICE) != null)
             Tamb -= 15;
         if (Tamb > temperature) {
             temperature++;

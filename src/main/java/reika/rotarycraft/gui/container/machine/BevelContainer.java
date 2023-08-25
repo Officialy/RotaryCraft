@@ -12,7 +12,7 @@ public class BevelContainer extends IOMachineContainer<BlockEntityBevelGear> {
 
     //Client
     public BevelContainer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityBevelGear) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityBevelGear) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public BevelContainer(int id, Inventory inv, BlockEntityBevelGear te) {

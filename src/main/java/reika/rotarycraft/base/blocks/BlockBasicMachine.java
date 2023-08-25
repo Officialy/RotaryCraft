@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -73,13 +74,8 @@ import java.util.List;
 
 public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
-    public BlockBasicMachine(Properties properties) {
-        super(properties);
-//        this.setHardness(4F);
-//        this.setResistance(15F);
-//        this.setLightLevel(0F);
-//        if (par3Material == Material.METAL)
-//            this.setStepSound(soundTypeMetal);
+    public BlockBasicMachine(BlockBehaviour.Properties properties) {
+        super(properties.strength(4, 15));
     }
 
     @Override

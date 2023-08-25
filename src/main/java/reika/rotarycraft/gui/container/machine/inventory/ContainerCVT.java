@@ -24,7 +24,7 @@ public class ContainerCVT extends IOMachineContainer<BlockEntityAdvancedGear> {
 
     //Client
     public ContainerCVT(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityAdvancedGear) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityAdvancedGear) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public ContainerCVT(int id, Inventory playerInv, BlockEntityAdvancedGear par2BlockEntityAdvancedGear) {

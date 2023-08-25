@@ -52,10 +52,10 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         stack.popPose();
 
         if (tile.isInWorld())
-            this.renderText(tile, stack, blockstate);
+            this.renderText(tile, stack, bufferSource, blockstate);
     }
 
-    private void renderText(BlockEntityMonitor tile, PoseStack stack, BlockState blockstate) {
+    private void renderText(BlockEntityMonitor tile, PoseStack stack, MultiBufferSource bufferSource, BlockState blockstate) {
         Direction dir = blockstate.getValue(BlockRotaryCraftMachine.FACING);
         ReikaRenderHelper.disableEntityLighting();
         stack.pushPose();
@@ -82,17 +82,17 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
             stack.translate(-10 * i, 0, -37 * 2 * i - 9 * i);
             if (i == 1)
                 stack.scale(-1, 1, 1);
-            fontRenderer.draw(stack, "Power:", -37, 140, 0xffffff);
+            fontRenderer.drawInBatch("Power:", -37, 140, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
             displayText = RotaryAux.formatPower(tile.power);
-            fontRenderer.draw(stack, displayText, -28, 148, 0xffffff);
+            fontRenderer.drawInBatch(displayText, -28, 148, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
 
-            fontRenderer.draw(stack, "Torque:", -37, 164, 0xffffff);
+            fontRenderer.drawInBatch("Torque:", -37, 164, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
             displayText = RotaryAux.formatTorque(tile.torque);
-            fontRenderer.draw(stack, displayText, -28, 172, 0xffffff);
+            fontRenderer.drawInBatch(displayText, -28, 172, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
 
-            fontRenderer.draw(stack, "Speed:", -37, 188, 0xffffff);
+            fontRenderer.drawInBatch("Speed:", -37, 188, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
             displayText = RotaryAux.formatSpeed(tile.omega);
-            fontRenderer.draw(stack, displayText, -28, 196, 0xffffff);
+            fontRenderer.drawInBatch(displayText, -28, 196, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
         }
 //        RenderSystem.depthMask(true);
         stack.popPose();

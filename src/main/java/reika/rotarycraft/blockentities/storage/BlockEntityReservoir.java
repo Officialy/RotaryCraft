@@ -29,7 +29,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
+
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.capabilities.Capability;
@@ -325,8 +326,8 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
                 }
 
                 boolean hot = Tamb >= 300;
-                hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.FIRE) != null;
-                hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.LAVA) != null;
+                hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, pos, MapColor.FIRE) != null;
+//                hot = hot || ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.LAVA) != null;
                 if (hot) {
                     if (ReikaFluidHelper.isFlammable(f.getFluid().defaultFluidState())) {
                         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());

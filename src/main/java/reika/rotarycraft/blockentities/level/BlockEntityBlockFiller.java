@@ -5,15 +5,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -21,7 +19,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import reika.dragonapi.ModList;
 import reika.dragonapi.base.OneSlotMachine;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -255,12 +252,12 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
 
     @Override
     protected long getRequiredPower() {
-        Material mat = this.getNextPlacedBlock().blockID.getMaterial();
-        if (!mat.isSolid())
-            return 512;
-        if (mat == Material.METAL || mat == Material.HEAVY_METAL)
+        MapColor mat = this.getNextPlacedBlock().blockID.getMapColor(level, worldPosition);
+//todo        if (!mat.isSolid())
+//            return 512;
+        if (mat == MapColor.METAL)// || mat == MapColor.HEAVY_METAL)
             return 4096;
-        return mat == Material.STONE ? 2048 : 1024;
+        return mat == MapColor.STONE ? 2048 : 1024;
     }
 
     @Override

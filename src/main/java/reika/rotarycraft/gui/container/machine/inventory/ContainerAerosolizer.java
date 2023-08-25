@@ -23,8 +23,8 @@ public class ContainerAerosolizer extends IOMachineContainer<BlockEntityAerosoli
 
     //Client
     public ContainerAerosolizer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityAerosolizer) inv.player.level.getBlockEntity(data.readBlockPos()));
-        aerosolizer = (BlockEntityAerosolizer) inv.player.level.getBlockEntity(data.readBlockPos());
+        this(id, inv, (BlockEntityAerosolizer) inv.player.level().getBlockEntity(data.readBlockPos()));
+        aerosolizer = (BlockEntityAerosolizer) inv.player.level().getBlockEntity(data.readBlockPos());
     }
 
     public ContainerAerosolizer(int id, Inventory player, BlockEntityAerosolizer par2BlockEntityAerosolizer) {

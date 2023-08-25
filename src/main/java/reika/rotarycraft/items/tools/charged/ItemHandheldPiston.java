@@ -42,7 +42,7 @@ public class ItemHandheldPiston extends ItemChargedTool {
 //            return InteractionResultHolder.fail(this.getDefaultInstance());
 //    }
         if (!world.isClientSide) {
-            var pos = ReikaPlayerAPI.getLookedAtBlock(ep, ep.getReachDistance(), false).getBlockPos();
+            var pos = ReikaPlayerAPI.getLookedAtBlock(ep, ep.getEntityReach(), false).getBlockPos();
             ReikaChatHelper.write("moving block");
             ReikaChatHelper.writeBlockAtCoords(world, pos);
             BlockEntity te = world.getBlockEntity(ep.blockPosition());

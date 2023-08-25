@@ -226,7 +226,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         if (tile.isInWorld()) {// && MinecraftForgeClient.getRenderPass() == 1) {
 //            this.renderCompass(tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
             if (tile.iotick > 64 && ConfigRegistry.COLORBLIND.getState())
-                this.renderFaceNumbers(stack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+                this.renderFaceNumbers(stack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), bufferSource);
 //            else
 //                this.renderFaceColors(tile, par2, par4, par6);
             IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
@@ -234,7 +234,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
 
     }
 
-    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double par2, double par4, double par6) {
+    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double par2, double par4, double par6, MultiBufferSource bufferSource) {
         stack.translate(par2, par4, par6);
         ReikaRenderHelper.disableLighting();
         float s = 0.0625f;
@@ -287,7 +287,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
             stack.translate(d, 0.28, l);
             stack.scale(s, s, s);
             //Minecraft.getInstance().fontRenderer.draw("0", 0, 0, 0xffffff);
-            ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, this.getFontRenderer(), String.valueOf(i), 0, 0, 0xffffff);
+            ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, this.getFontRenderer(), String.valueOf(i), 0, 0, 0xffffff, bufferSource);
             stack.scale(1 / s, 1 / s, 1 / s);
             stack.translate(-d, -0.28, -l);
             GL11.glRotated(-rz, 0, 0, 1);

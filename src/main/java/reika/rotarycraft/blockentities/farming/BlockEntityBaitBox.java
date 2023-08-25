@@ -10,7 +10,7 @@
 //package reika.rotarycraft.blockentities.farming;
 //
 //import forestry.api.lepidopterology.IEntityButterfly;
-//import net.minecraft.world.level.material.Material;
+//
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.entity.LivingEntity;
 //import net.minecraft.entity.monster.EntityBlaze;

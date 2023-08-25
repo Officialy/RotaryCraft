@@ -12,7 +12,7 @@ public class MusicContainer extends IOMachineContainer<BlockEntityMusicBox> {
 
     //Client
     public MusicContainer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityMusicBox) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityMusicBox) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public MusicContainer(int id, Inventory inv, BlockEntityMusicBox te) {

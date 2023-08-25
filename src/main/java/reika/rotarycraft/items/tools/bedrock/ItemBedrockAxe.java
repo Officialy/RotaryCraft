@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import reika.dragonapi.auxiliary.ProgressiveRecursiveBreaker;
 import reika.dragonapi.instantiable.data.blockstruct.TreeReader;
 import reika.dragonapi.interfaces.registry.TreeType;
@@ -70,7 +70,7 @@ public class ItemBedrockAxe extends AxeItem {
 
     @Override
     public boolean canAttackBlock(BlockState b, Level pLevel, BlockPos pPos, Player pPlayer) {
-        return b.getMaterial() == Material.WOOD || b.getMaterial() == Material.LEAVES;// || b.getMaterial().isToolNotRequired();
+        return b.getMapColor(pLevel, pPos) == MapColor.WOOD || b.getMapColor(pLevel, pPos) == MapColor.PLANT;// || b.getMaterial().isToolNotRequired();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ItemBedrockAxe extends AxeItem {
 //            return 30F;
 //        if (b == TwilightForestHandler.BlockEntry.TOWERMACHINE.getBlock())
 //            return 24F;
-        if (b.getMaterial() == Material.WOOD) {
+        if (b.getBlock().defaultMapColor() == MapColor.WOOD) {
             return 20F;
         }
 //        if (field_150914_c.contains(b))
@@ -96,7 +96,7 @@ public class ItemBedrockAxe extends AxeItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack is, BlockPos pos, Player ep) {
-        Level level = ep.getLevel();
+        Level level = ep.level();
         Block id = level.getBlockState(pos).getBlock();
         TreeType type = ReikaTreeHelper.getTree(id);
         TreeReader tree = new TreeReader();

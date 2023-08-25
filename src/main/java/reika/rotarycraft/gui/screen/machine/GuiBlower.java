@@ -10,6 +10,8 @@
 package reika.rotarycraft.gui.screen.machine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
@@ -20,6 +22,7 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.GuiPowerOnlyMachine;
 import reika.rotarycraft.blockentities.BlockEntityBlower;
 import reika.rotarycraft.gui.container.machine.BlowerContainer;
+import reika.rotarycraft.registry.PacketRegistry;
 
 public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerContainer> {
 
@@ -28,7 +31,7 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
 
     public GuiBlower(BlowerContainer container, Inventory inv, Component title) {
         super(container, inv, title);
-        tile = (BlockEntityBlower) inv.player.level.getBlockEntity(container.tile.getBlockPos());
+        tile = (BlockEntityBlower) inv.player.level().getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 192;
         inventory = inv;
@@ -56,7 +59,7 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
     }
 
     protected void actionPerformed(Button b) {
-    /*todo    if (b.id < 24000) {
+        /*if (b.id < 24000) {
             PacketRegistry id = null;
             switch (b.id) {
                 case 0:
@@ -78,7 +81,7 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
     }
 
     @Override
-    protected void renderBg(PoseStack stack, float pPartialTick, int pX, int pY) {
+    protected void renderBg(GuiGraphics stack, float pPartialTick, int pX, int pY) {
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
 
@@ -88,7 +91,7 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
         for (int i = 0; i < tile.matchingItems.length; i++) {
             ItemStack is = tile.matchingItems[i];
             if (is != null) {
-                api.drawItemStack(stack, itemRenderer, font, is, x + i % 9 * 18, y + i / 9 * dy);
+                api.drawItemStack(stack, Minecraft.getInstance().getItemRenderer(), font, is, x + i % 9 * 18, y + i / 9 * dy);
             }
         }
 

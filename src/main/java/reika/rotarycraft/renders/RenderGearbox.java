@@ -12,6 +12,7 @@ package reika.rotarycraft.renders;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -168,7 +169,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
             stack.scale(sc, sc, sc);
             stack.mulPose(new Quaternionf(var11, 0.0F, 1.0F, 0.0F));
             String s = tile.reduction ? "Torque" : "Speed";
-            Minecraft.getInstance().font.draw(stack, s, 0, 0, 0xffffff);
+//            Minecraft.getInstance().font.drawInBatch(s, 0, 0, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
             stack.scale(1 / sc, 1 / sc, 1 / sc);
             stack.translate(-par2, -par4, -par6);
         }

@@ -28,7 +28,7 @@ public class Tests {
 
         @Override
         public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-            if (!player.isShiftKeyDown() && player.level.isClientSide() && hand.equals(InteractionHand.MAIN_HAND)) {
+            if (!player.isShiftKeyDown() && player.level().isClientSide() && hand.equals(InteractionHand.MAIN_HAND)) {
                 return InteractionResultHolder.success(this.getDefaultInstance());
             } else if (player.isShiftKeyDown()) {
 

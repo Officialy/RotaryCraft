@@ -23,8 +23,8 @@
 //import net.minecraft.world.level.block.entity.BlockEntityTicker;
 //import net.minecraft.world.level.block.entity.BlockEntityType;
 //import net.minecraft.world.level.block.state.BlockState;
-//import net.minecraft.world.level.material.Material;
-//import net.minecraft.world.level.storage.loot.LootContext;
+//
+//import net.minecraft.world.level.storage.loot.LootParams;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
 //import reika.rotarycraft.auxiliary.RotaryAux;

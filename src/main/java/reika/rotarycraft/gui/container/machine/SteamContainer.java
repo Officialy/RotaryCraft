@@ -25,7 +25,7 @@ public class SteamContainer extends IOMachineContainer<BlockEntitySteamEngine> {
 
     //Client
     public SteamContainer(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntitySteamEngine) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntitySteamEngine) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public SteamContainer(int id, Inventory inv, BlockEntitySteamEngine te) {

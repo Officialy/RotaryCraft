@@ -18,7 +18,7 @@
 //import net.minecraft.world.level.Explosion;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.StainedGlassPaneBlock;
-//import net.minecraft.world.level.material.Material;
+//
 //import reika.rotarycraft.RotaryCraft;
 //
 //public class BlockBlastPane extends StainedGlassPaneBlock {

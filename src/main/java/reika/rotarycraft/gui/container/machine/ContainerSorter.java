@@ -25,7 +25,7 @@ public class ContainerSorter extends IOMachineContainer<BlockEntitySorting> {
     private final BlockEntitySorting sorter;
     //Client
     public ContainerSorter(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntitySorting) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntitySorting) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public ContainerSorter(int id, Inventory inventory, BlockEntitySorting te) {

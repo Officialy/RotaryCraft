@@ -62,7 +62,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
         AABB above = new AABB(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 3, pos.getZ() + 1);
         List<LivingEntity> in = world.getEntitiesOfClass(LivingEntity.class, above);
         for (LivingEntity o : in) {
-            if (o.isOnGround() && !o.isShiftKeyDown())
+            if (o.onGround() && !o.isShiftKeyDown())
                 return true;
         }
         return false;

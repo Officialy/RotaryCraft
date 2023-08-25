@@ -10,6 +10,7 @@
 package reika.rotarycraft.gui.screen.machine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.core.Direction;
@@ -40,7 +41,7 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Beve
 
     public GuiBevel(BevelContainer id, Inventory inventory, Component title) {
         super(id, inventory, title);
-        bevel = (BlockEntityBevelGear) inventory.player.level.getBlockEntity(id.tile.getBlockPos());
+        bevel = (BlockEntityBevelGear) inventory.player.level().getBlockEntity(id.tile.getBlockPos());
         imageHeight = 192;
         this.inventory = inventory;
         posn = bevel.direction;
@@ -138,22 +139,22 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Beve
     }
 
     @Override
-    public void render(PoseStack poseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(poseStack, pMouseX, pMouseY, pPartialTick);
+    public void render(GuiGraphics stack, int pMouseX, int pMouseY, float pPartialTick) {
+        super.render(stack, pMouseX, pMouseY, pPartialTick);
 
         int j = (width - imageWidth) / 2 - 2;
         int k = (height - imageHeight) / 2 - 12;
 
-        font.draw(poseStack, "Input Side", j + 24, k + 32, 4210752);
-        font.draw(poseStack, "Output Side", j + 99, k + 32, 4210752);
+        stack.drawString(font,  "Input Side", j + 24, k + 32, 4210752);
+        stack.drawString(font,  "Output Side", j + 99, k + 32, 4210752);
 
         if (ConfigRegistry.COLORBLIND.getState()) {
             for (int i = 0; i < 6; i++) {
-                font.draw(poseStack, String.valueOf(i), 30, 49 + i * 22, 0);
+                stack.drawString(font,  String.valueOf(i), 30, 49 + i * 22, 0);
             }
 
             for (int i = 0; i < 6; i++) {
-                font.draw(poseStack, String.valueOf(i), imageWidth - 68, 49 + i * 22, 0);
+                stack.drawString(font,  String.valueOf(i), imageWidth - 68, 49 + i * 22, 0);
             }
         }
     }

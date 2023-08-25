@@ -12,28 +12,25 @@ package reika.rotarycraft.auxiliary;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraft.world.level.material.MapColor;
 import reika.dragonapi.instantiable.data.collections.OneWayCollections;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.EnvironmentalHeatSource;
 import reika.rotarycraft.api.power.ShaftMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
-
-import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
-import reika.rotarycraft.registry.*;
+import reika.rotarycraft.registry.ConfigRegistry;
+import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryItems;
 
 import java.awt.*;
 import java.util.Set;
@@ -117,11 +114,11 @@ public class RotaryAux {
 
     public static boolean isMufflingBlock(Level world, BlockPos pos) {
         BlockState b = world.getBlockState(pos);
-        return b.getMaterial() == Material.WOOL;//  || b == todo Block.getBlockFromName("Rockwool");
+        return b.getMapColor(world, pos) == MapColor.WOOL;//  || b == todo Block.getBlockFromName("Rockwool");
     }
 
     public static boolean isNextToIce(Level world, BlockPos pos) {
-        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.ICE) != null)
+        if (ReikaWorldHelper.checkForAdjMaterial(world, pos.getX(), pos.getY(), pos.getZ(), MapColor.ICE) != null)
             return true;
         Block b = world.getBlockState(pos.below()).getBlock();
         if (b instanceof EnvironmentalHeatSource ehs) {
@@ -131,7 +128,7 @@ public class RotaryAux {
     }
 
     public static boolean isNextToWater(Level world, BlockPos pos) {
-        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.WATER) != null)
+        if (ReikaWorldHelper.checkForAdjMaterial(world, pos.getX(), pos.getY(), pos.getZ(), MapColor.WATER) != null)
             return true;
         for (int i = 1; i <= 2; i++) {
             Block b = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).getBlock();
@@ -155,7 +152,7 @@ public class RotaryAux {
     }
 
     public static boolean isNextToLava(Level world, BlockPos pos) {
-        if (ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.LAVA) != null)
+        if (ReikaWorldHelper.checkForAdjMaterial(world, pos.getX(), pos.getY(), pos.getZ(), MapColor.FIRE) != null)
             return true;
         for (int i = 1; i <= 2; i++) {
             Block b = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).getBlock();
@@ -181,7 +178,7 @@ public class RotaryAux {
 
     public static boolean isAboveLava(Level world, BlockPos pos) {
         Block b = world.getBlockState(pos.below()).getBlock();
-        if (b.defaultBlockState().getMaterial() == Material.LAVA)
+        if (b.defaultBlockState().getMapColor(world, pos) == MapColor.FIRE)
             return true;
         for (int i = 1; i <= 2; i++) {
             b = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).getBlock();

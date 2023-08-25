@@ -215,7 +215,7 @@ public class BlockGearbox extends BlockBasicMachine {
 //    }
 
     /*@Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         ArrayList<ItemStack> ret = new ArrayList<>();
         BlockEntityGearbox gbx = (BlockEntityGearbox) builder.getLevel().getBlockEntity(pos);
         ItemStack is = gbx.getGearboxType().getGearboxItem(gbx.getRatio());

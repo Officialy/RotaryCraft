@@ -18,7 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+
+import net.minecraft.world.level.material.MapColor;
 import reika.dragonapi.instantiable.data.collections.ChancedOutputList;
 import reika.dragonapi.instantiable.data.maps.BlockMap;
 import reika.dragonapi.libraries.ReikaPlayerAPI;
@@ -92,7 +93,7 @@ public class ItemBedrockShovel extends ShovelItem {
 
     @Override
     public boolean canAttackBlock(BlockState b, Level pLevel, BlockPos pPos, Player pPlayer) {
-        return b.getMaterial() != Material.STONE && b.getMaterial() != Material.METAL;
+        return b.getMapColor(pLevel, pPos) != MapColor.STONE && b.getMapColor(pLevel, pPos) != MapColor.METAL;
     }
 
     @Override
@@ -103,12 +104,12 @@ public class ItemBedrockShovel extends ShovelItem {
     @Override
     public boolean onBlockStartBreak(ItemStack is, BlockPos pos, Player ep) {
         if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(ep)) {
-            ChancedOutputList co = extraDrops.get(ep.level.getBlockState(pos).getBlock());
+            ChancedOutputList co = extraDrops.get(ep.level().getBlockState(pos).getBlock());
             if (co != null) {
                 double mult = Math.sqrt(1 + EnchantmentHelper.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE, ep)); //ep was is??
                 Collection<ItemStack> c = co.calculate(mult);
                 for (ItemStack drop : c) {
-                    ReikaItemHelper.dropItem(ep.level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
+                    ReikaItemHelper.dropItem(ep.level(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
                 }
             }
         }
@@ -119,11 +120,11 @@ public class ItemBedrockShovel extends ShovelItem {
     public float getDestroySpeed(ItemStack i, BlockState b) {
         if (b == null)
             return 0;
-        if (b.getMaterial() == Material.GRASS)
+        if (b.getBlock().defaultMapColor() == MapColor.GRASS)
             return 24F;
-        if (b.getMaterial() == Material.DIRT)
+        if (b.getBlock().defaultMapColor() == MapColor.DIRT)
             return 24F;
-        if (b.getMaterial() == Material.SAND)
+        if (b.getBlock().defaultMapColor() == MapColor.SAND)
             return 24F;
         //if (ModList.TINKERER.isLoaded() && b == TinkerBlockHandler.getInstance().gravelOreID)
         //    return 36F;
@@ -133,7 +134,7 @@ public class ItemBedrockShovel extends ShovelItem {
     }
 
     public boolean isAcceleratedOn(BlockState b) {
-        return /*field_150914_c.contains(b) || */b.getMaterial() == Material.GRASS || b.getMaterial() == Material.DIRT || b.getMaterial() == Material.SAND;
+        return /*field_150914_c.contains(b) || */b.getBlock().defaultMapColor() == MapColor.GRASS || b.getBlock().defaultMapColor() == MapColor.DIRT || b.getBlock().defaultMapColor() == MapColor.SAND;
     }
 
 }

@@ -21,7 +21,7 @@ import reika.rotarycraft.base.blockentity.RemoteControlMachine;
 public class ContainerRemoteControl extends CoreContainer<RemoteControlMachine> {
 
     public ContainerRemoteControl(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf byteBuf) {
-        super(type, id, playerInv, (RemoteControlMachine) playerInv.player.level.getBlockEntity(byteBuf.readBlockPos()));
+        super(type, id, playerInv, (RemoteControlMachine) playerInv.player.level().getBlockEntity(byteBuf.readBlockPos()));
 
         this.addSlot(new SlotItemHandler(ii, 0, 80, 17));
 

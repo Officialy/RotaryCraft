@@ -11,6 +11,7 @@ package reika.rotarycraft.gui.screen.machine;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,14 +29,14 @@ public class ReservoirScreen extends NonPoweredMachineScreen<BlockEntityReservoi
 
     public ReservoirScreen(ReservoirContainer container, Inventory inv, Component title) {
         super(container, inv, title);
-        reservoir = (BlockEntityReservoir) inv.player.level.getBlockEntity(container.tile.getBlockPos());
+        reservoir = (BlockEntityReservoir) inv.player.level().getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 96;
         inventory = inv;
     }
 
     @Override
-    protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pX, int pY) {
+    protected void renderBg(GuiGraphics pPoseStack, float pPartialTick, int pX, int pY) {
         super.renderBg(pPoseStack, pPartialTick, pX, pY);
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;

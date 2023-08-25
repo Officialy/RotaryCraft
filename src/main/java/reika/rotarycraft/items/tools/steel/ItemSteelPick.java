@@ -17,7 +17,7 @@ import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
@@ -61,7 +61,7 @@ public class ItemSteelPick extends PickaxeItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState block) {
-        if (block.getMaterial() == Material.GLASS)
+        if (block.getBlock().defaultMapColor() == MapColor.NONE)
             return 8F;
         float amt = super.getDestroySpeed(stack, block);
         return amt > 1 ? amt * 1.2F : 1;

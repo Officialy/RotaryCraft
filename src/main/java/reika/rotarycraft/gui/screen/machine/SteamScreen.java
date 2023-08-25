@@ -10,6 +10,7 @@
 package reika.rotarycraft.gui.screen.machine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.ScreenUtils;
@@ -23,14 +24,14 @@ public class SteamScreen extends EngineScreen<BlockEntitySteamEngine, SteamConta
 
     public SteamScreen(SteamContainer container, Inventory inv, Component text) { //BlockEntitySteamEngine te
         super(container, inv, text);
-        steam = (BlockEntitySteamEngine) inv.player.level.getBlockEntity(container.tile.getBlockPos());
+        steam = (BlockEntitySteamEngine) inv.player.level().getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 79;
         inventory = inv;
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float pPartialTick, int pX, int pY) {
+    protected void renderBg(GuiGraphics poseStack, float pPartialTick, int pX, int pY) {
         super.renderBg(poseStack, pPartialTick, pX, pY);
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;

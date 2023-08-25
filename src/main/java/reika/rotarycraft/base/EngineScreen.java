@@ -2,6 +2,7 @@ package reika.rotarycraft.base;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import reika.dragonapi.base.CoreContainer;
@@ -15,7 +16,7 @@ public abstract class EngineScreen<E extends BlockEntityEngine, T extends CoreCo
     protected EngineScreen(T container, Inventory inv, Component c) {
         super(container, inv, c);
         inventory = inv;
-        engine = (BlockEntityEngine) inv.player.level.getBlockEntity(container.tile.getBlockPos());
+        engine = (BlockEntityEngine) inv.player.level().getBlockEntity(container.tile.getBlockPos());
     }
 
     @Override
@@ -24,7 +25,7 @@ public abstract class EngineScreen<E extends BlockEntityEngine, T extends CoreCo
     }
 
     @Override
-    protected void renderLabels(PoseStack stack, int pMouseX, int pMouseY) {
+    protected void renderLabels(GuiGraphics stack, int pMouseX, int pMouseY) {
         if (engine.getEngineType().burnsFuel()) {
             int j = (width - imageWidth) / 2;
             int k = (height - imageHeight) / 2;

@@ -192,7 +192,7 @@ public class EMPSparkRenderer {
         private void drawBolt(LightningBolt bolt, BufferBuilder v5, int color, double brightness) {
             v5.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION);
             v5.color(color & 0xffffff, color, color, (int) (brightness * ReikaColorAPI.getAlpha(color))); //todo fix color
-            for (int i = 0; i < bolt.maxUpStep; i++) { //todo figure out wtf nsteps is
+            for (int i = 0; i < bolt.getStepHeight(); i++) { //todo figure out wtf nsteps is
                 DecimalPosition p = new DecimalPosition(bolt.getPosition(i));
                 v5.vertex(p.xCoord, p.yCoord, p.zCoord);
             }

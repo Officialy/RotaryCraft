@@ -30,7 +30,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
     /**
      * The crafting matrix inventory (3x3).
      */
-    public CraftingContainer craftMatrix = new CraftingContainer(this, 3, 3);
+    public CraftingContainer craftMatrix = new TransientCraftingContainer(this, 3, 3);
     public ResultContainer craftResult = new ResultContainer();
     public Player player;
 
@@ -42,7 +42,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
     //Server
     public ContainerHandCraft(final int id, Inventory inventory, Player player) {
         super(RotaryMenus.HAND_CRAFT.get(), id);
-        level = player.getLevel();
+        level = player.level();
         this.player = player;
         this.addSlot(new ResultSlot(player, craftMatrix, craftResult, 0, 124, 35));
 

@@ -161,7 +161,7 @@
 //        LivingEntity elb = (LivingEntity) ent;
 //        if (elb.isAlive() || elb.getHealth() <= 0)
 //            return false;
-//        if (ent.isOnGround() || ent.isInWater() || ent.isInLava())
+//        if (ent.onGround() || ent.isInWater() || ent.isInLava())
 //            return false;
 //        if (elb instanceof net.minecraft.world.entity.FlyingMob && ReikaEntityHelper.isHostile(elb)) {
 //            return ReikaMathLibrary.py3d(ent.getY() - worldPosition.getX() - 0.5, ent.getY() - worldPosition.getY() - 0.5, ent.getZ() - worldPosition.getZ() - 0.5) > 2;

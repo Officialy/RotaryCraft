@@ -27,7 +27,7 @@ public class ContainerEthanol extends IOMachineContainer<BlockEntityGasEngine> {
 
     //Client
     public ContainerEthanol(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityGasEngine) inv.player.level.getBlockEntity(data.readBlockPos()));
+        this(id, inv, (BlockEntityGasEngine) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
     public ContainerEthanol(final int id, Inventory player, BlockEntityGasEngine engine) {

@@ -44,6 +44,8 @@ import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.dragonapi.modinteract.ReikaXPFluidHelper;
 import reika.rotarycraft.RotaryConfig;
+import reika.rotarycraft.api.event.VacuumItemAbsorbEvent;
+import reika.rotarycraft.api.event.VacuumXPAbsorbEvent;
 import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 
@@ -150,13 +152,13 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         AABB box = this.getBox(world, pos);
 
         ///Do not merge these, they have slightly different code!
-        List<Entity> inbox = world.getEntitiesOfClass(Entity.class, box, ReikaEntityHelper.itemOrXPSelector);
+        List<Entity> inbox = world.getEntitiesOfClass(Entity.class, box, e -> e instanceof ItemEntity || e instanceof ExperienceOrb);
         double v = Math.max(1, power / 1048576D);
         for (Entity ent : inbox) {
             if (ent.tickCount > 5) {
                 //Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.getY, ent.getY(), ent.posZ, x+0.5, y+0.5, z+0.5);
                 //if (ReikaWorldHelper.canBlockSee(world, pos, ent.getY, ent.getY(), ent.posZ, this.getRange()+2)) {
-                if (true || ReikaWorldHelper.canBlockSee(world, pos, ent.getY(), ent.getY(), ent.getZ(), this.getRange() + 2)) {
+                if (true || ReikaWorldHelper.canBlockSee(world, pos.getX(), pos.getY(), pos.getZ(), ent.getY(), ent.getY(), ent.getZ(), this.getRange() + 2)) {
                     double dx = (worldPosition.getX() + 0.5 - ent.getY());
                     double dy = (worldPosition.getY() + 0.5 - ent.getY());
                     double dz = (worldPosition.getZ() + 0.5 - ent.getZ());
@@ -195,7 +197,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         AABB close = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).expandTowards(0.25D, 0.25D, 0.25D);
         List<ItemEntity> closeitems = world.getEntitiesOfClass(ItemEntity.class, close);
         for (ItemEntity ent : closeitems) {
-            if (ent.pickupDelay <= 0) {
+            if (ent.hasPickUpDelay()) {
                 ItemStack is = ent.getItem();
                 int targetslot = this.checkForStack(is);
                 if (targetslot != -1) {
@@ -209,7 +211,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
                 }
                 ent.kill();
                 world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.1F + 0.5F * DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat(), false);
-//      todo          MinecraftForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy() : null));
+                MinecraftForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy() : null));
             } else {
                 suck = true;
             }
@@ -221,7 +223,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
             experience += val;
             xp.kill();
             world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.BLOCKS, 0.1F, 0.5F * ((DragonAPI.rand.nextFloat() - DragonAPI.rand.nextFloat()) * 0.7F + 1.8F), false);
-//     todo       MinecraftForge.EVENT_BUS.post(new VacuumXPAbsorbEvent(this, val));
+            MinecraftForge.EVENT_BUS.post(new VacuumXPAbsorbEvent(this, val));
         }
     }
 

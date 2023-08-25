@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -383,8 +383,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     protected abstract void playSounds(Level world, BlockPos pos, float pitchMultiplier, float vol);
 
     protected final boolean isMuffled(Level world, BlockPos pos) {
-        if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getMaterial() == Material.CLOTH_DECORATION) {// || this.getMachine(Direction.UP) == MachineRegistry.ECU) {
-            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getMaterial() == Material.CLOTH_DECORATION)// || this.getMachine(Direction.DOWN) == MachineRegistry.ECU)
+        if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getMapColor(world, pos) == MapColor.WOOL) {// || this.getMachine(Direction.UP) == MachineRegistry.ECU) {
+            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getMapColor(world, pos) == MapColor.WOOL)// || this.getMachine(Direction.DOWN) == MachineRegistry.ECU)
                 return true;
         }
         for (int i = 0; i < 6; i++) {
@@ -395,7 +395,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
                 int dz = pos.getZ() + dir.getStepZ();
                 if ((dir != write.getOpposite() && dir != write) || dir == Direction.UP) {
                     Block b = world.getBlockState(new BlockPos(dx, dy, dz)).getBlock();
-                    if (b.defaultBlockState().getMaterial() != Material.CLOTH_DECORATION)
+                    if (b.defaultBlockState().getMapColor(world, pos) != MapColor.WOOL)
                         return false;
                 }
             }
@@ -407,7 +407,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public final void updateEntity(Level world, BlockPos pos) {
         super.updateEntity();
         super.updateBlockEntity();
-        RotaryCraft.LOGGER.debug("power = " + power);
+//        RotaryCraft.LOGGER.debug("power = " + power);
         this.getIOSides(world, pos.getX(), pos.getY(), pos.getZ(), getBlockState().getValue(BlockRotaryCraftMachine.FACING));
         timer.updateTicker("temperature");
         if (this.isShutdown()) {
@@ -417,7 +417,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         } else {
             if (!level.isClientSide() || RotaryAux.getPowerOnClient) {
                 timer.setCap("fuel", type.getFuelUnitDuration());
-                RotaryCraft.LOGGER.debug("initializing");
+//                RotaryCraft.LOGGER.debug("initializing");
                 this.initialize(world, pos);
             }
             power = (long) torque * (long) omega;

@@ -10,6 +10,7 @@
 package reika.rotarycraft.gui.screen.machine.inventory;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.ScreenUtils;
@@ -22,7 +23,7 @@ public class GuiPerformance extends EngineScreen<BlockEntityPerformanceEngine, P
 
     public GuiPerformance(PerformanceContainer container, Inventory p5ep, Component title) {
         super(container, p5ep, title);
-        engine = (BlockEntityPerformanceEngine) inventory.player.level.getBlockEntity(container.tile.getBlockPos());
+        engine = (BlockEntityPerformanceEngine) inventory.player.level().getBlockEntity(container.tile.getBlockPos());
         imageWidth = 176;
         imageHeight = 166;
     }
@@ -48,7 +49,7 @@ public class GuiPerformance extends EngineScreen<BlockEntityPerformanceEngine, P
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
+    protected void renderBg(GuiGraphics poseStack, float par1, int par2, int par3) {
         super.renderBg(poseStack, par1, par2, par3);
 
         int j = (width - imageWidth) / 2;
