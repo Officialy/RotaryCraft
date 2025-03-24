@@ -520,7 +520,7 @@ public class GuiHandbook extends Screen {
 //            int dy = y - k;
 //            if (HandbookNotifications.instance.newAlerts() || PackModificationTracker.instance.modificationsExist(RotaryCraft.getInstance())) {
 //                if (ReikaMathLibrary.isValueInsideBoundsIncl(261, 377, dx) && ReikaMathLibrary.isValueInsideBoundsIncl(22, 36, dy)) {
-//                    minecraft.getSoundManager().play(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+//                    minecraft.getSoundManager().play(PositionedSoundRecord.func_147674_a(ResourceLocation.parse("gui.button.press"), 1.0F));
 //                    int screen = -1;
 //                    int page = -1;
 //

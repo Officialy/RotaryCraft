@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class CompressorModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/modinterface/");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/modinterface/");
 
     private final ModelPart ring1;
     private final ModelPart base;

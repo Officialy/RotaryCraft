@@ -19,7 +19,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class LandmineModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/landminetex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/landminetex.png");
 
     private final ModelPart shape2;
     private final ModelPart shape2a;

@@ -27,7 +27,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class ReservoirModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/reservoirtex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/reservoirtex.png");
 
     private final ModelPart mx;
     private final ModelPart mz;

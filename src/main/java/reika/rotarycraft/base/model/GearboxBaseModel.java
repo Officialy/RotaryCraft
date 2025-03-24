@@ -20,7 +20,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public abstract class GearboxBaseModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/gear/geartex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/gear/geartex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;

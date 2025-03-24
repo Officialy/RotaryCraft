@@ -107,7 +107,7 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
         Tesselator tess = Tesselator.getInstance();
         BufferBuilder v5 = tess.getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, new ResourceLocation("textures/block/glass.png"));
+        RenderSystem.setShaderTexture(0, ResourceLocation.parse("textures/block/glass.png"));
         v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR_NORMAL);
         v5.vertex(m, dd, h, 1 - dd).uv(u, dv).color(255).normal(0, 1, 0).endVertex();
         v5.vertex(m, 1 - dd, h, 1 - dd).uv(du, dv).color(255).normal(0, 1, 0).endVertex();

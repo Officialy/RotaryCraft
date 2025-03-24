@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class RailGunModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/turret/railguntex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/turret/railguntex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape1a;

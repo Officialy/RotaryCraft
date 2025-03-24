@@ -22,7 +22,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class SteamTurbineModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/converter/steamturbtex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/converter/steamturbtex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape1a;

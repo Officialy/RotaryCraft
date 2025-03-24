@@ -152,6 +152,6 @@
 //
 //    @Override
 //    protected ResourceLocation getGuiTexture() {
-//        return new ResourceLocation("heatergui");
+//        return ResourceLocation.parse("heatergui");
 //    }
 //}

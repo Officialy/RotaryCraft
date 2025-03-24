@@ -18,7 +18,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class Gearbox8Model extends GearboxBaseModel {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/gear/");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/gear/");
 
     private final ModelPart shape12;
     private final ModelPart shape13;

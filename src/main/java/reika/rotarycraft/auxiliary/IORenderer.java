@@ -9,31 +9,19 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.BeaconRenderer;
-import net.minecraft.client.renderer.chunk.RenderChunkRegion;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
-import reika.dragonapi.libraries.rendering.ReikaColorAPI;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
 import reika.rotarycraft.api.power.ShaftPowerReceiver;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
@@ -43,8 +31,6 @@ import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.RotaryItems;
-
-import java.awt.*;
 
 public abstract class IORenderer {
     private static final float expand = 1;
@@ -260,12 +246,12 @@ public abstract class IORenderer {
 
     private static void renderBox(PoseStack stack, float x, float y, float z, int[] color) {
 //        RotaryCraft.LOGGER.info("Rendering box at " + x + ", " + y + ", " + z);
-        if (color[3] > 255)
-            color[3] = 255;
+        if (color[3] > 255) color[3] = 255;
 
         ReikaRenderHelper.prepareGeoDraw(true);
         RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
         RenderSystem.disableCull();
 
         Tesselator tesselator = Tesselator.getInstance();
@@ -314,9 +300,10 @@ public abstract class IORenderer {
         builder.vertex(matrix, x + expand, y + expand, z + expand).color(color[0], color[1], color[2], (int) (color[3] * 0.375)).normal(stack.last().normal(), 1, 1, 1).endVertex();
         tesselator.end();
 
+        RenderSystem.depthMask(true);
         RenderSystem.lineWidth(1.0f);
         ReikaRenderHelper.exitGeoDraw();
-        RenderSystem.disableDepthTest();
+        RenderSystem.enableDepthTest();
         RenderSystem.enableCull();
         stack.popPose();
     }

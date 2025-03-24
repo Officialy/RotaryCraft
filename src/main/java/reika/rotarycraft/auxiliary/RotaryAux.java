@@ -61,6 +61,10 @@ public class RotaryAux {
 
     public static boolean hasGui(Level world, BlockPos pos, Player ep) {
         MachineRegistry m = MachineRegistry.getMachine(world, pos);
+        if (m == null){
+            RotaryCraft.LOGGER.error("Has gui failed because machine is null");
+            return false;
+        }
         if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE /*todo add other engines when added*/) {
             BlockEntityEngine te = (BlockEntityEngine) world.getBlockEntity(pos);
             if (te == null)

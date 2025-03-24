@@ -116,7 +116,7 @@ public abstract class HslaFluid extends ForgeFlowingFluid {
 
     @Override
     public boolean canBeReplacedWith(FluidState state, BlockGetter world, BlockPos pos, Fluid fluid, Direction direction) {
-        return direction == Direction.DOWN && !fluid.is(FluidTags.create(new ResourceLocation("molten_metal")));
+        return direction == Direction.DOWN && !fluid.is(FluidTags.create(ResourceLocation.parse("molten_metal")));
     }
 
     @Override

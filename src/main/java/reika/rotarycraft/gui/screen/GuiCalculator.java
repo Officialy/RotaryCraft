@@ -10,7 +10,6 @@
 package reika.rotarycraft.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -18,7 +17,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-
 import net.minecraftforge.client.gui.ScreenUtils;
 
 public class GuiCalculator extends Screen {
@@ -55,7 +53,7 @@ public class GuiCalculator extends Screen {
         int posY = (height - imageHeight) / 2 - 8;
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, new ResourceLocation("rotarycraft", "textures/screen/calcgui.png"));
+        RenderSystem.setShaderTexture(0, ResourceLocation.fromNamespaceAndPath("rotarycraft", "textures/screen/calcgui.png"));
         ScreenUtils.drawTexturedModalRect(stack, posX, posY, 0, 0, imageWidth, imageHeight, 0);
         this.drawKeys();
     }

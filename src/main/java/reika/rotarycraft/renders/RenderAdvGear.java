@@ -108,7 +108,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                     VertexConsumer bedCoilTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/coiltex_bed.png"))));
                     coilModel.renderAll(stack, bedCoilTex, pPackedLight, tile, null, -tile.phi);
                 } else {
-                    VertexConsumer coilTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/coiltex.png"))));
+                    VertexConsumer coilTex = bufferSource.getBuffer(RenderType.entityCutout(coilModel.getTexture()));
                     coilModel.renderAll(stack, coilTex, pPackedLight, tile, null, -tile.phi);
                 }
             }

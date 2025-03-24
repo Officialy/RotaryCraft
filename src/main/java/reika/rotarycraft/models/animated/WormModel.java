@@ -1,23 +1,16 @@
 package reika.rotarycraft.models.animated;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import reika.rotarycraft.base.RotaryModelBase;
-import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
 
@@ -27,7 +20,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class WormModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/animated");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/shafttex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;
@@ -544,7 +537,7 @@ public class WormModel extends RotaryModelBase {
         shape12a3.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape121.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XN.rotationDegrees(-phi*2));
+        stack.mulPose(Axis.XN.rotationDegrees(phi*2));
         stack.translate(0, -1, 0);
 
         stack.translate(0, 1, 0);
@@ -563,8 +556,8 @@ public class WormModel extends RotaryModelBase {
         double c = -0.125;
         stack.translate(a, b, c);
         stack.mulPose(Axis.XN.rotationDegrees(phi));
-//        shape12a2.setRotationPoint(0, 0, 0);
-//        shape12a5.setRotationPoint(0, 0, 0);
+        shape12a2.setInitialPose(PartPose.rotation(0, 0, 0));
+        shape12a5.setInitialPose(PartPose.rotation(0, 0, 0));
         shape12a2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape12a5.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         stack.mulPose(Axis.XP.rotationDegrees(phi));
@@ -574,10 +567,10 @@ public class WormModel extends RotaryModelBase {
         a = 0.1; b = 1.25; c = -0.125;
         stack.translate(a, b, c);
         stack.mulPose(Axis.XN.rotationDegrees(phi));
-//        shape12a9.setRotationPoint(0, 0, 0);
-//        shape12a4.setRotationPoint(0, 0, 0);
-//        shape12a1.setRotationPoint(0, 0, 0);
-//        shape12a0.setRotationPoint(0, 0, 0);
+        shape12a9.setInitialPose(PartPose.rotation(0, 0, 0));
+        shape12a4.setInitialPose(PartPose.rotation(0, 0, 0));
+        shape12a1.setInitialPose(PartPose.rotation(0, 0, 0));
+        shape12a0.setInitialPose(PartPose.rotation(0, 0, 0));
         shape12a9.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape12a4.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape12a1.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
@@ -588,12 +581,12 @@ public class WormModel extends RotaryModelBase {
         a = -0.03125; b = 1.25; c = 0.1875;
         stack.translate(a, b, c);
         stack.mulPose(Axis.ZP.rotationDegrees(phi));
-//        shape12.setRotationPoint(0, 0, -3F);
-//        shape123.setRotationPoint(0, 0, -3F);
-//        shape124.setRotationPoint(0, 0, -3F);
-//        shape122a.setRotationPoint(0, 0, -3F);
-//        shape122b.setRotationPoint(0, 0, 0);
-//        shape122.setRotationPoint(0, 0, 0);
+        shape12.setInitialPose(PartPose.rotation(0, 0, -3F));
+        shape123.setInitialPose(PartPose.rotation(0, 0, -3F));
+        shape124.setInitialPose(PartPose.rotation(0, 0, -3F));
+        shape122a.setInitialPose(PartPose.rotation(0, 0, -3F));
+        shape122b.setInitialPose(PartPose.rotation(0, 0, 0));
+        shape122.setInitialPose(PartPose.rotation(0, 0, 0));
         shape12.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape123.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         shape124.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class BeamMirrorModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/animated");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/animated");
 
     private final ModelPart shape1;
     private final ModelPart shape4;

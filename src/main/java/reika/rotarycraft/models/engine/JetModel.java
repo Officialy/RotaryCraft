@@ -18,7 +18,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class JetModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/engine/");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/");
 
     private final ModelPart shape1;
     private final ModelPart shape3;

@@ -25,7 +25,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.interfaces.blockentity.GuiController;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.ComplexIO;
 import reika.rotarycraft.api.power.PowerAcceptor;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
@@ -42,17 +41,6 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
     private static final HashBiMap<Integer, ImmutablePair<Direction, Direction>> directions = HashBiMap.create();
 
     static {
-		/*
-		for (int i = 0; i < 6; i++) {
-			Direction dir = Direction.values()[i];
-			for (int k = 0; k < 6; k++) {
-				Direction dir2 = Direction.values()[k];
-				if (dir != dir2 && dir != dir2.getOpposite()) {
-					registerDirection(dir, dir2);
-				}
-			}
-		}
-		 */
         for (int i = 0; i < 24; i++) { //do it this way to preserve ordering
             registerDirectionValue(i);
         }
@@ -338,10 +326,10 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
 
     @Override
     protected void animateWithTick(Level world, BlockPos pos) {
-        //if (!this.isInWorld()) {
-        //   phi = 0;
-        //   return;
-        //}
+        if (!this.isInWorld()) {
+           phi = 0;
+           return;
+        }
         phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
     }
 

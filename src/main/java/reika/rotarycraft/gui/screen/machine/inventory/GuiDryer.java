@@ -65,6 +65,6 @@
 //
 //    @Override
 //    protected ResourceLocation getGuiTexture() {
-//        return new ResourceLocation("drygui");
+//        return ResourceLocation.parse("drygui");
 //    }
 //}

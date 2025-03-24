@@ -10,7 +10,6 @@
 package reika.rotarycraft.gui.screen.machine;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -18,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.client.gui.ScreenUtils;
-import reika.dragonapi.libraries.rendering.ReikaColorAPI;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.gui.container.machine.ReservoirContainer;
@@ -56,6 +54,9 @@ public class ReservoirScreen extends NonPoweredMachineScreen<BlockEntityReservoi
 //            RenderSystem.setShaderColor(ReikaColorAPI.getRed(props.getTintColor()), ReikaColorAPI.getGreen(props.getTintColor()), ReikaColorAPI.getBlue(props.getTintColor()), ReikaColorAPI.getAlpha(props.getTintColor()));
             RenderSystem.setShaderTexture(0, new ResourceLocation(props.getStillTexture().getNamespace(), "textures/" + props.getStillTexture().getPath() + ".png"));
             ScreenUtils.drawTexturedModalRect(pPoseStack, j + x, k + y, 16, i2, 8, 44 - i2, 0);
+//   todo update to guiGraphics
+//    guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(props.getStillTexture().getNamespace(), "textures/" + props.getStillTexture().getPath() + ".png"), j + x, k + y, 16, i2, 8, 44 - i2, 0);
+
 //            this.drawTexturedModelRectFromIcon(x, y, tex, 8, i2);
         }
 

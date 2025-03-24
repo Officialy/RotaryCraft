@@ -1,8 +1,4 @@
 package reika.rotarycraft.models.animated;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import reika.rotarycraft.base.RotaryModelBase;
-import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -11,14 +7,18 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.model.GearboxBaseModel;
+
+import java.util.ArrayList;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class Gearbox4Model extends GearboxBaseModel {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/gear/");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/gear/");
 
     private final ModelPart shape12;
     private final ModelPart shape13;

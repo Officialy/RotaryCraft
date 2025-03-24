@@ -43,6 +43,6 @@
 //
 //    @Override
 //    protected ResourceLocation getGuiTexture() {
-//        return new ResourceLocation("compostergui");
+//        return ResourceLocation.parse("compostergui");
 //    }
 //}

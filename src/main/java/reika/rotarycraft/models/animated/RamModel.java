@@ -21,7 +21,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class RamModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/animated");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/animated");
 
     private final ModelPart shape1;
     private final ModelPart a;

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class MicroTurbineModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/engine/microtex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/microtex.png");
 
     private final ModelPart shape2;
     private final ModelPart shape1;

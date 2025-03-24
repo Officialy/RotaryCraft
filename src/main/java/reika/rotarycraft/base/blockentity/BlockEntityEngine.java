@@ -148,7 +148,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     public static boolean isAirFluid(Fluid f) {
-        return f.equals(ForgeRegistries.FLUIDS.getValue(new ResourceLocation("air"))) || f.equals(ForgeRegistries.FLUIDS.getValue(new ResourceLocation("oxygen"))) || f.equals(ForgeRegistries.FLUIDS.getValue(new ResourceLocation("rc_oxygen")));
+        return f.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("air"))) || f.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("oxygen"))) || f.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc_oxygen")));
     }
 
     public final EngineType getEngineType() {
@@ -800,7 +800,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             return 0;
         if (f.equals(Fluids.WATER)) {
             return water.fill(resource, doFill);
-        } else if (f.equals(ForgeRegistries.FLUIDS.getValue(new ResourceLocation("rc_lubricant")))) {
+        } else if (f.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc_lubricant")))) {
             return lubricant.fill(resource, doFill);
         } else if (isAirFluid(f)) {
             return air.fill(resource, doFill);
@@ -821,16 +821,16 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             int dy = worldPosition.getY() + from.getStepY();
             int dz = worldPosition.getZ() + from.getStepZ();
             return dx == backx && dy == worldPosition.getY() && dz == backz;
-        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(new ResourceLocation("rc lubricant")))) {
+        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc lubricant")))) {
             int dx = worldPosition.getX() + from.getStepX();
             int dy = worldPosition.getY() + from.getStepY();
             int dz = worldPosition.getZ() + from.getStepZ();
             return dx == backx && dy == worldPosition.getY() && dz == backz;
-        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(new ResourceLocation("rc jet fuel")))) {
+        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc jet fuel")))) {
             return from == this.getFuelInputDirection();
-        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(new ResourceLocation("rc ethanol")))) {
+        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc ethanol")))) {
             return from == this.getFuelInputDirection();
-        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(new ResourceLocation("bioethanol")))) {
+        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("bioethanol")))) {
             return from == this.getFuelInputDirection();
         }
         return false;

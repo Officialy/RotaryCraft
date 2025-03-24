@@ -19,7 +19,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class SplitterModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/crosstex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/crosstex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape3;

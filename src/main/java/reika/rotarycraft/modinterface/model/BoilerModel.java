@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class BoilerModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/modinterface/");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/modinterface/");
 
     private final ModelPart shape1b;
     private final ModelPart shape1c;

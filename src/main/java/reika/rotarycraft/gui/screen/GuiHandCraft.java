@@ -23,7 +23,7 @@ import net.minecraftforge.client.gui.ScreenUtils;
 import reika.rotarycraft.gui.container.ContainerHandCraft;
 
 public class GuiHandCraft extends AbstractContainerScreen<ContainerHandCraft> implements RecipeUpdateListener {
-    private static final ResourceLocation textures = new ResourceLocation("textures/gui/container/crafting_table.png");
+    private static final ResourceLocation textures = ResourceLocation.parse("textures/gui/container/crafting_table.png");
     private final RecipeBookComponent recipeBookComponent = new RecipeBookComponent();
 
     public GuiHandCraft(ContainerHandCraft container, Inventory inventory, Component title) {

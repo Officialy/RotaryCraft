@@ -393,9 +393,21 @@ public enum MachineRegistry implements TileEnum {
 //            return GPR;
         if (id == RotaryBlocks.BEDROCK_GEARBOX_2x.get() || id == RotaryBlocks.BEDROCK_GEARBOX_4x.get() ||
                 id == RotaryBlocks.BEDROCK_GEARBOX_8x.get() || id == RotaryBlocks.BEDROCK_GEARBOX_16x.get() ||
-                id == RotaryBlocks.HSLA_GEARBOX_2x.get() || id == RotaryBlocks.HSLA_GEARBOX_4x.get() || id == RotaryBlocks.HSLA_GEARBOX_8x.get() ||
-                id == RotaryBlocks.HSLA_GEARBOX_16x.get() || id == RotaryBlocks.DIAMOND_GEARBOX_2x.get() || id == RotaryBlocks.DIAMOND_GEARBOX_4x.get() ||
-                id == RotaryBlocks.DIAMOND_GEARBOX_8x.get() || id == RotaryBlocks.DIAMOND_GEARBOX_16x.get())
+
+                id == RotaryBlocks.HSLA_GEARBOX_2x.get() || id == RotaryBlocks.HSLA_GEARBOX_4x.get()
+                || id == RotaryBlocks.HSLA_GEARBOX_8x.get() || id == RotaryBlocks.HSLA_GEARBOX_16x.get()
+
+                || id == RotaryBlocks.DIAMOND_GEARBOX_2x.get() || id == RotaryBlocks.DIAMOND_GEARBOX_4x.get() ||
+                id == RotaryBlocks.DIAMOND_GEARBOX_8x.get() || id == RotaryBlocks.DIAMOND_GEARBOX_16x.get()
+
+                || id == RotaryBlocks.WOOD_GEARBOX_2x.get() || id == RotaryBlocks.WOOD_GEARBOX_4x.get()
+                || id == RotaryBlocks.WOOD_GEARBOX_8x.get() || id == RotaryBlocks.WOOD_GEARBOX_16x.get()
+
+                || id == RotaryBlocks.TUNGSTEN_GEARBOX_2x.get()  || id == RotaryBlocks.TUNGSTEN_GEARBOX_4x.get()
+                || id == RotaryBlocks.TUNGSTEN_GEARBOX_8x.get()  || id == RotaryBlocks.TUNGSTEN_GEARBOX_16x.get()
+
+                || id == RotaryBlocks.STONE_GEARBOX_2x.get()  || id == RotaryBlocks.STONE_GEARBOX_4x.get()
+                || id == RotaryBlocks.STONE_GEARBOX_8x.get()  || id == RotaryBlocks.STONE_GEARBOX_16x.get() )
             return GEARBOX;
         if (id == RotaryBlocks.HSLA_FLYWHEEL.get() || id == RotaryBlocks.BEDROCK_FLYWHEEL.get() || id == RotaryBlocks.DIAMOND_FLYWHEEL.get()
                 || id == RotaryBlocks.TUNGSTEN_FLYWHEEL.get() || id == RotaryBlocks.WOOD_FLYWHEEL.get())
@@ -903,13 +915,13 @@ public enum MachineRegistry implements TileEnum {
     static {
         for (int i = 0; i < machineList.length; i++) {
             var m = machineList.get(i);
-//            RotaryCraft.LOGGER.info("M on it's own: " + m);
-//            RotaryCraft.LOGGER.info("Name: " + m.getName());
+            RotaryCraft.LOGGER.info("M on it's own: " + m);
+            RotaryCraft.LOGGER.info("Name: " + m.getName());
             if (m.getBlockState() != null) {
                 var id = m.getBlockState().getBlock();
-//                RotaryCraft.LOGGER.info("ID: " + id);
-//           todo     if (machineMappings.containsKey(id))
-//                    throw new RegistrationException(RotaryCraft.getInstance(), "BlockState conflict " + id + ": " + m + " & " + machineMappings.get(id));
+                RotaryCraft.LOGGER.info("ID: " + id);
+                if (machineMappings.containsKey(id))
+                    throw new RegistrationException(RotaryCraft.getInstance(), "BlockState conflict " + id + ": " + m + " & " + machineMappings.get(id));
                 machineMappings.put(id, m);
             } else {
                 throw new RegistrationException(RotaryCraft.getInstance(), "BlockState is null for " + m);
@@ -996,4 +1008,6 @@ public enum MachineRegistry implements TileEnum {
             return false;
         return !this.isDummiedOut() && !this.isTechnical() && !this.isConfigDisabled();
     }
+
+
 }

@@ -20,7 +20,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class BigFurnaceModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/");
 
     private final ModelPart shape1;
     private final ModelPart shape2;

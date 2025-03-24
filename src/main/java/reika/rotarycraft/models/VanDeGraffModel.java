@@ -24,7 +24,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class VanDeGraffModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/vandegrafftex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/vandegrafftex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;

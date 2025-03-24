@@ -31,10 +31,7 @@ import reika.dragonapi.base.DragonAPIMod;
 import reika.dragonapi.instantiable.io.SoundLoader;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
-import reika.rotarycraft.auxiliary.FreezePotion;
-import reika.rotarycraft.auxiliary.HandbookNotifications;
-import reika.rotarycraft.auxiliary.HandbookTracker;
-import reika.rotarycraft.auxiliary.MachineDamage;
+import reika.rotarycraft.auxiliary.*;
 import reika.rotarycraft.gui.screen.GuiHandCraft;
 import reika.rotarycraft.gui.screen.machine.*;
 import reika.rotarycraft.gui.screen.machine.inventory.*;
@@ -117,6 +114,7 @@ public class RotaryCraft extends DragonAPIMod {
 
         LOGGER.info("RotaryCraft:" + " Creating Test items!");
         Tests.ITEMS.register(modEventBus);
+        RotaryCraftTabs.CREATIVE_MODE_TABS.register(modEventBus);
         DonatorController.instance.registerMod(this, DonatorController.reikaURL);
         ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new PacketHandlerCore());
 

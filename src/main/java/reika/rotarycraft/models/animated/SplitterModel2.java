@@ -22,7 +22,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class SplitterModel2 extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/bedsplittertex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/bedsplittertex.png");
 
     private final ModelPart main;
 

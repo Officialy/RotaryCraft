@@ -21,7 +21,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class ShaftVModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/transmission/shaft/");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/");
 
     private final ModelPart shape15b;
     private final ModelPart shape1;

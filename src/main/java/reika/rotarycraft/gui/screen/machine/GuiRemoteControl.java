@@ -26,6 +26,6 @@
 //
 //    @Override
 //    protected ResourceLocation getGuiTexture() {
-//        return new ResourceLocation("cctvgui");
+//        return ResourceLocation.parse("cctvgui");
 //    }
 //}

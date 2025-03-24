@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class PerformanceModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/engine/perftex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/perftex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape12;

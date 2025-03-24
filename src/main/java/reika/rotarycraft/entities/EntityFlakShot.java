@@ -82,7 +82,7 @@
 //        }
 //        if (el instanceof LivingEntity) {
 //            el.hurt(this.getDamageSource(), this.getAttackDamage());
-//            el.playSound(new SoundEvent(new ResourceLocation("damage.hit")), 2, 1);
+//            el.playSound(new SoundEvent(ResourceLocation.parse("damage.hit")), 2, 1);
 //        }
 //    }
 //

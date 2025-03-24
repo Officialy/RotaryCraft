@@ -28,7 +28,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class GrinderModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(MODID, "textures/blockentitytex/grindertex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/grindertex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;
