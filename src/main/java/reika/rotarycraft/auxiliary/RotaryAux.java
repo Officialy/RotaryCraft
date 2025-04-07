@@ -27,6 +27,7 @@ import reika.rotarycraft.api.interfaces.EnvironmentalHeatSource;
 import reika.rotarycraft.api.power.ShaftMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
+import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -73,10 +74,10 @@ public class RotaryAux {
                 return false;
             return te.getEngineType().hasGui();
         }
-        /*if (m == MachineRegistry.SPLITTER) {
+        if (m == MachineRegistry.SPLITTER) {
             BlockEntitySplitter te = (BlockEntitySplitter)world.getBlockEntity(pos);
-            return (te.getBlockMetadata() >= 8);
-        }*/
+            return true;//(te.getBlockMetadata() >= 8);
+        }
 //        if (m == MachineRegistry.SCREEN)
 //            return !ep.isCrouching();
         return m.hasGui();

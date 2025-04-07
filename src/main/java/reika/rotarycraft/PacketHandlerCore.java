@@ -11,10 +11,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import reika.dragonapi.DragonOptions;
 import reika.dragonapi.auxiliary.PacketTypes;
-import reika.dragonapi.instantiable.MusicScore;
 import reika.dragonapi.interfaces.PacketHandler;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
@@ -72,7 +70,7 @@ public class PacketHandlerCore implements PacketHandler {
         //System.out.print(packet.length);
         try {
             PacketTypes packetType = packet.getType();
-            ReikaJavaLibrary.pConsole("Recieved packet type: " + packetType + "\n" + "Containing data: " + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt());
+//            ReikaJavaLibrary.pConsole("Recieved packet type: " + packetType + "\n" + "Containing data: " + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt());
             switch (packetType) {
                 case FULLSOUND:
                     break;
@@ -84,12 +82,17 @@ public class PacketHandlerCore implements PacketHandler {
                     pack = PacketRegistry.getEnum(control);
                     break;
                 case DATA:
+                    System.out.println("Available bytes: " + inputStream.available());
                     control = inputStream.readInt();
                     pack = PacketRegistry.getEnum(control);
                     len = pack.numInts;
                     data = new int[len];
                     readinglong = pack.isLongPacket();
                     if (!readinglong) {
+                        if (inputStream.available() < len * 4) {
+                            ReikaJavaLibrary.pConsole("ERROR: Not enough data in stream for expected int count!");
+                            return;
+                        }
                         for (int i = 0; i < len; i++)
                             data[i] = inputStream.readInt();
                     } else

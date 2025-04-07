@@ -20,7 +20,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class HighGearModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/highgeartex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/highgeartex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;

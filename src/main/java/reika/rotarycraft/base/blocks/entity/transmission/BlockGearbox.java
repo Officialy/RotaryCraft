@@ -101,6 +101,9 @@ public class BlockGearbox extends BlockBasicMachine {
 
     @Override
     public boolean canEntityDestroy(BlockState state, BlockGetter level, BlockPos pos, Entity entity) {
+        if (!(entity instanceof Player)) {
+            return false;
+        }
         return canHarvest((Level) level, (Player) entity, pos);
     }
 
@@ -146,7 +149,7 @@ public class BlockGearbox extends BlockBasicMachine {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof BlockEntityGearbox&& !level.isClientSide) {
+        if (entity instanceof BlockEntityGearbox && !level.isClientSide) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
             serverPlayer.connection.send(new ClientboundOpenScreenPacket(0, RotaryMenus.GEARBOX.get(), Component.literal("Gearbox")));
             return InteractionResult.SUCCESS;

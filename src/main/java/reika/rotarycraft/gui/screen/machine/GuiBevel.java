@@ -9,7 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -18,7 +17,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import reika.dragonapi.base.CoreContainer;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
@@ -54,7 +52,7 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Beve
         int j = (width - imageWidth) / 2 - 2;
         int k = (height - imageHeight) / 2 - 12;
 
-        ResourceLocation file = new ResourceLocation(RotaryCraft.MODID, "textures/screen/bevelgui2.png");
+        ResourceLocation file = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/bevelgui2.png");
         int px = 176;
         for (int i = 0; i < 6; i++) {
             String s = Direction.values()[i].name().substring(0, 1);

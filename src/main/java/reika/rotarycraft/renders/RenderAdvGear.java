@@ -57,7 +57,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                 wormModel.renderAll(stack, wormTex, pPackedLight, tile, null, -tile.phi);
             }
             case CVT -> {
-                VertexConsumer cvtTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/cvttex.png"))));
+                VertexConsumer cvtTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/cvttex.png"))));
                 cvtModel.renderAll(stack, cvtTex, pPackedLight, tile, null, -tile.phi);
                 if (tile.isInWorld()) {
 //                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -105,7 +105,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
             }
             case COIL -> {
                 if (tile.isBedrockCoil()) {
-                    VertexConsumer bedCoilTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/coiltex_bed.png"))));
+                    VertexConsumer bedCoilTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/coiltex_bed.png"))));
                     coilModel.renderAll(stack, bedCoilTex, pPackedLight, tile, null, -tile.phi);
                 } else {
                     VertexConsumer coilTex = bufferSource.getBuffer(RenderType.entityCutout(coilModel.getTexture()));
@@ -113,7 +113,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                 }
             }
             case HIGH -> {
-                VertexConsumer highTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/shaft/highgeartex.png"))));
+                VertexConsumer highTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/highgeartex.png"))));
                 highGearModel.renderAll(stack, highTex, pPackedLight, tile, null, -tile.phi);
             }
         }

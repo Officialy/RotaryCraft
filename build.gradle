@@ -21,7 +21,7 @@ minecraft {
 
             property 'forge.logging.markers', 'REGISTRIES'
 
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'trace'
 
             mods {
                 "rotarycraft" {
@@ -39,10 +39,6 @@ minecraft {
             args '--nogui'
         }
 
-        gameTestServer {
-            property 'forge.enabledGameTestNamespaces', "rotarycraft"
-        }
-
         data {
             workingDirectory project.file('run-data')
             args '--mod', "rotarycraft", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
@@ -55,6 +51,10 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft 'net.minecraftforge:forge:1.20.1-47.4.0'
     implementation project(':DragonAPI')
+
+
+//    runtimeOnly project(':ElectriCraft')
+    runtimeOnly project(':GeoStrata')
 }
 
 jar {

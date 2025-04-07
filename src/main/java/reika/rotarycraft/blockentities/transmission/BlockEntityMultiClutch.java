@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.interfaces.blockentity.GuiController;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -166,6 +165,11 @@ public class BlockEntityMultiClutch extends BlockEntity1DTransmitter implements 
             case 4 -> write = Direction.WEST;
             case 5 -> write = Direction.EAST;
         }
+
+        if (write != null)
+            read = write.getOpposite();
+        else
+            read = null; // fail-safe fallback
     }
 
     public void setSideOfState(int state, int side) {

@@ -1,25 +1,15 @@
-/*******************************************************************************
- * @author Reika Kalseki
- *
- * Copyright 2017
- *
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
 package reika.rotarycraft.renders;
 
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.joml.Quaternionf;
-import org.lwjgl.opengl.GL11;
-import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
+import org.joml.Matrix4f;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
@@ -38,305 +28,148 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
 
     public void renderBlockEntityBevelAt(PoseStack stack, BlockEntityBevelGear tile, MultiBufferSource bufferSource, int light) {
         stack.pushPose();
-//        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-//        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//        stack.translate((float) par2, (float) par4 + 2.0F, (float) par6 + 1.0F);
-//        stack.scale(1.0F, -1.0F, -1.0F);
-        stack.translate(0.5F, 1.5F, 0.5F);
-        int var11 = 0;  //used to rotate the model into the X direction
-        int var12 = 0;  //used to rotate the model into the Y direction
-        int var13 = 0;  //used to rotate the model into the Z direction
-        int dir = 1;
-//        RotaryCraft.LOGGER.info(tile.direction);
-        if (tile.isInWorld()) {
-            switch (tile.direction) {
-                case 0 -> {
-                    var11 = 90;
-                    var12 = 0;
-                    var13 = 0;
-                }
-                case 1 -> {
-                    var11 = 180;
-                    var12 = 0;
-                    var13 = 0;
-                }
-                case 2 -> {
-                    var11 = 270;
-                    var12 = 0;
-                    var13 = 0;
-                }
-                case 3 -> {
-                    var11 = 0;
-                    var12 = 0;
-                    var13 = 0;
-                }
-                case 4 -> {
-                    var11 = 0;
-                    var12 = 0;
-                    var13 = 0;
-                    dir = -1;
-                }
-                case 5 -> {
-                    var11 = 90;
-                    var12 = 0;
-                    var13 = 0;
-                    dir = -1;
-                }
-                case 6 -> {
-                    var11 = 180;
-                    var12 = 0;
-                    var13 = 0;
-                    dir = -1;
-                }
-                case 7 -> {
-                    var11 = 270;
-                    var12 = 0;
-                    var13 = 0;
-                    dir = -1;
-                }
-                case 8 -> {
-                    var11 = 0;
-                    var12 = 270;
-                    var13 = 0;
-                    stack.translate(0F, 1F, 1F);
-                    dir = -1;
-                }
-                case 9 -> {
-                    var11 = 90;
-                    var12 = 270;
-                    var13 = 0;
-                    stack.translate(1F, 1F, -0F);
-                    dir = -1;
-                }
-                case 10 -> {
-                    var11 = 180;
-                    var12 = 270;
-                    var13 = 0;
-                    stack.translate(0F, 1F, -1F);
-                    dir = -1;
-                }
-                case 11 -> {
-                    var11 = -90;
-                    var12 = 270;
-                    var13 = 0;
-                    stack.translate(-1F, 1F, -0F);
-                    dir = -1;
-                }
-                case 12 -> {
-                    var11 = 0;
-                    var12 = 90;
-                    var13 = 0;
-                    stack.translate(0F, 1F, -1F);
-                    dir = -1;
-                }
-                case 13 -> {
-                    var11 = 90;
-                    var12 = 90;
-                    var13 = 0;
-                    stack.translate(-1F, 1F, -0F);
-                }
-                case 14 -> {
-                    var11 = 180;
-                    var12 = 90;
-                    var13 = 0;
-                    stack.translate(0F, 1F, 1F);
-                    dir = -1;
-                }
-                case 15 -> {
-                    var11 = -90;
-                    var12 = 90;
-                    var13 = 0;
-                    stack.translate(1F, 1F, -0F);
-                    dir = -1;
-                }
-                case 16 -> {
-                    var11 = 0;
-                    var12 = 90;
-                    var13 = 0;
-                    stack.translate(0F, 1F, -1F);
-                    dir = -1;
-                }
-                case 17 -> {
-                    var11 = 90;
-                    var12 = 90;
-                    var13 = 0;
-                    stack.translate(-1F, 1F, -0F);
-                    dir = -1;
-                }
-                case 18 -> {
-                    var11 = 180;
-                    var12 = 90;
-                    var13 = 0;
-                    stack.translate(0F, 1F, 1F);
-                    dir = -1;
-                }
-                case 19 -> {
-                    var11 = -90;
-                    var12 = 90;
-                    var13 = 0;
-                    stack.translate(1F, 1F, -0F);
-                    dir = -1;
-                }
-                case 20 -> {
-                    var11 = 0;
-                    var12 = 270;
-                    var13 = 0;
-                    stack.translate(0F, 1F, 1F);
-                }
-                case 21 -> {
-                    var11 = 90;
-                    var12 = 270;
-                    var13 = 0;
-                    stack.translate(1F, 1F, -0F);
-                }
-                case 22 -> {
-                    var11 = 180;
-                    var12 = 270;
-                    var13 = 0;
-                    stack.translate(0F, 1F, -1F);
-                }
-                case 23 -> {
-                    var11 = -90;
-                    var12 = 270;
-                    var13 = 0;
-                    stack.translate(-1F, 1F, 0F);
-                }
-            }
 
-            stack.mulPose(Axis.XP.rotationDegrees(var11));
-            stack.mulPose(Axis.YP.rotationDegrees(var12));
-            stack.mulPose(Axis.ZP.rotationDegrees(var13));
-        } else {
-            stack.mulPose(new Quaternionf(Axis.YP.rotationDegrees(90F)));
+        stack.translate(0.5, 1.5, 0.5);
+        stack.scale(1.0F, -1.0F, -1.0F);
+
+        int rotationY = 0;
+        int rotationX = 0;
+        int rotationZ = 0;
+        int dir = 1;
+
+        switch (tile.direction) {
+            case 0 -> rotationY = 90;
+            case 1 -> rotationY = 180;
+            case 2 -> rotationY = 270;
+            case 3 -> rotationY = 0;
+            case 4 -> { rotationY = 0; dir = -1; }
+            case 5 -> { rotationY = 90; dir = -1; }
+            case 6 -> { rotationY = 180; dir = -1; }
+            case 7 -> { rotationY = 270; dir = -1; }
+            case 8 -> { rotationY = 0; rotationX = 270; stack.translate(0, 1, 1); dir = -1; }
+            case 9 -> { rotationY = 90; rotationX = 270; stack.translate(1, 1, 0); dir = -1; }
+            case 10 -> { rotationY = 180; rotationX = 270; stack.translate(0, 1, -1); dir = -1; }
+            case 11 -> { rotationY = -90; rotationX = 270; stack.translate(-1, 1, 0); dir = -1; }
+            case 12 -> { rotationY = 0; rotationX = 90; stack.translate(0, 1, -1); dir = -1; }
+            case 13 -> { rotationY = 90; rotationX = 90; stack.translate(-1, 1, 0); }
+            case 14 -> { rotationY = 180; rotationX = 90; stack.translate(0, 1, 1); dir = -1; }
+            case 15 -> { rotationY = -90; rotationX = 90; stack.translate(1, 1, 0); dir = -1; }
+            case 16 -> { rotationY = 0; rotationX = 90; stack.translate(0, 1, -1); dir = -1; }
+            case 17 -> { rotationY = 90; rotationX = 90; stack.translate(-1, 1, 0); dir = -1; }
+            case 18 -> { rotationY = 180; rotationX = 90; stack.translate(0, 1, 1); dir = -1; }
+            case 19 -> { rotationY = -90; rotationX = 90; stack.translate(1, 1, 0); dir = -1; }
+            case 20 -> { rotationY = 0; rotationX = 270; stack.translate(0, 1, 1); }
+            case 21 -> { rotationY = 90; rotationX = 270; stack.translate(1, 1, 0); }
+            case 22 -> { rotationY = 180; rotationX = 270; stack.translate(0, 1, -1); }
+            case 23 -> { rotationY = -90; rotationX = 270; stack.translate(-1, 1, 0); }
         }
-        stack.mulPose(new Quaternionf(Axis.ZP.rotationDegrees(180F)));
-        //stack.translate(-0.5F, -0.5F, -0.5F);
-        //float var12 = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * par8;
+
+        if (rotationY != 0)
+            stack.mulPose(Axis.YP.rotationDegrees(rotationY));
+        if (rotationX != 0)
+            stack.mulPose(Axis.XP.rotationDegrees(rotationX));
+        if (rotationZ != 0)
+            stack.mulPose(Axis.ZP.rotationDegrees(rotationZ));
+
+
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(BevelModel.TEXTURE_LOCATION));
         bevelModel.renderAll(stack, vertexconsumer, light, tile, null, tile.phi * dir);
-//        if (tile.isInWorld())
-//            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         stack.popPose();
     }
 
     @Override
-    public void render(BlockEntityBevelGear tile, float p_112308_, PoseStack stack, MultiBufferSource bufferSource, int p_112311_, int p_112312_) {
+    public void render(BlockEntityBevelGear tile, float partialTicks, PoseStack stack, MultiBufferSource bufferSource, int light, int overlay) {
         if (this.doRenderModel(stack, tile))
-            this.renderBlockEntityBevelAt(stack, tile, bufferSource, p_112311_);
-        if (tile.isInWorld()) {// && MinecraftForgeClient.getRenderPass() == 1) {
-//            this.renderCompass(tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+            this.renderBlockEntityBevelAt(stack, tile, bufferSource, light);
+
+        if (tile.isInWorld()) {
             if (tile.iotick > 64 && ConfigRegistry.COLORBLIND.getState())
                 this.renderFaceNumbers(stack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), bufferSource);
-//            else
-//                this.renderFaceColors(tile, par2, par4, par6);
+
             IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+            renderCompass(tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), bufferSource, stack);
         }
-
     }
 
-    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double par2, double par4, double par6, MultiBufferSource bufferSource) {
-        stack.translate(par2, par4, par6);
+    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double x, double y, double z, MultiBufferSource bufferSource) {
+        stack.pushPose();
+        stack.translate(x, y, z);
         ReikaRenderHelper.disableLighting();
-        float s = 0.0625f;
+
+        float scale = 0.0625f;
         double d = 0.53;
+
         for (int i = 0; i < 6; i++) {
+            stack.pushPose();
+
+            int rx = 0, ry = 0, rz = 0;
+            double dx = 0, dy = 0, dz = 0;
             double l = -0.07;
-            int rx = 0;
-            int ry = 0;
-            int rz = 0;
-            double dx = 0;
-            double dy = 0;
-            double dz = 0;
+
             switch (i) {
-                case 0 -> {
-                    rx = 90;
-                    l = 0.07;
-                }
-                case 1 -> {
-                    rx = 90;
-                    dy = 1;
-                }
-                case 2 -> {
-                    rz = 180;
-                    dy = 1;
-                    dx = 1;
-                }
-                case 3 -> {
-                    dz = 1;
-                    l = 0.07;
-                }
-                case 4 -> {
-                    ry = 90;
-                    rz = 180;
-                    dy = 1;
-                }
-                case 5 -> {
-                    ry = -90;
-                    rz = 180;
-                    dy = 1;
-                    dx = 1;
-                    dz = 1;
-                }
+                case 0 -> { rx = 90; l = 0.07; }
+                case 1 -> { rx = 90; dy = 1; }
+                case 2 -> { rz = 180; dy = 1; dx = 1; }
+                case 3 -> { dz = 1; l = 0.07; }
+                case 4 -> { ry = 90; rz = 180; dy = 1; }
+                case 5 -> { ry = -90; rz = 180; dy = 1; dx = 1; dz = 1; }
             }
-            stack.translate(dx, 0, 0);
-            stack.translate(0, dy, 0);
-            stack.translate(0, 0, dz);
-            GL11.glRotated(rx, 1, 0, 0);
-            GL11.glRotated(ry, 0, 1, 0);
-            GL11.glRotated(rz, 0, 0, 1);
+
+            stack.translate(dx, dy, dz);
+            stack.mulPose(Axis.XP.rotationDegrees(rx));
+            stack.mulPose(Axis.YP.rotationDegrees(ry));
+            stack.mulPose(Axis.ZP.rotationDegrees(rz));
             stack.translate(d, 0.28, l);
-            stack.scale(s, s, s);
-            //Minecraft.getInstance().fontRenderer.draw("0", 0, 0, 0xffffff);
-            ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, this.getFontRenderer(), String.valueOf(i), 0, 0, 0xffffff, bufferSource);
-            stack.scale(1 / s, 1 / s, 1 / s);
-            stack.translate(-d, -0.28, -l);
-            GL11.glRotated(-rz, 0, 0, 1);
-            GL11.glRotated(-ry, 0, 1, 0);
-            GL11.glRotated(-rx, 1, 0, 0);
-            stack.translate(0, 0, -dz);
-            stack.translate(0, -dy, 0);
-            stack.translate(-dx, 0, 0);
+            stack.scale(scale, scale, scale);
+
+            Minecraft.getInstance().font.drawInBatch(
+                    String.valueOf(i),
+                    0,
+                    0,
+                    0xFFFFFF,
+                    false,
+                    stack.last().pose(),
+                    bufferSource,
+                    Font.DisplayMode.NORMAL,
+                    0,
+                    15728880
+            );
+
+            stack.popPose();
         }
+
         ReikaRenderHelper.enableLighting();
-        stack.translate(-par2, -par4, -par6);
+        stack.popPose();
     }
 
-    private void renderCompass(BlockEntity te, double p2, double p4, double p6) {
-        BlockEntityIOMachine io = (BlockEntityIOMachine) te;
-        ReikaRenderHelper.prepareGeoDraw(false);
-        double vo = 1.05;
+    private void renderCompass(BlockEntity tile, double x, double y, double z, MultiBufferSource bufferSource, PoseStack stack) {
+        BlockEntityIOMachine io = (BlockEntityIOMachine) tile;
         int[] rgb = {255, 255, 0};
-        //GL11.glDisable(GL11.GL_DEPTH_TEST);
-        //RenderSystem.enableBlend();
+        float alpha = Math.min(1F, io.iotick / 255F);
+        float vo = 1.05F;
+
         Tesselator tess = Tesselator.getInstance();
-        BufferBuilder v5 = tess.getBuilder();
-        v5.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR); // was GL_LINE_LOOP
-        v5.color(rgb[0], rgb[1], rgb[2], io.iotick);
-        v5.vertex(p2 - 0.5, p4 + vo, p6 + 0.5);
-        v5.vertex(p2 + 1.5, p4 + vo, p6 + 0.5);
-        v5.end();
-        v5.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR); // was GL_LINE_LOOP
-        v5.color(rgb[0], rgb[1], rgb[2], io.iotick);
-        v5.vertex(p2 + 0.5, p4 + vo, p6 - 0.5);
-        v5.vertex(p2 + 0.5, p4 + vo, p6 + 1.5);
-        v5.end();
-        v5.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        v5.color(rgb[0], rgb[1], rgb[2], io.iotick);
-        v5.vertex(p2 + 0.35, p4 + vo, p6 - 0.75);
-        v5.vertex(p2 + 0.35, p4 + vo, p6 - 1.25);
-        v5.end();
-        v5.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        v5.color(rgb[0], rgb[1], rgb[2], io.iotick);
-        v5.vertex(p2 + 0.35, p4 + vo, p6 - 1.25);
-        v5.vertex(p2 + 0.65, p4 + vo, p6 - 0.75);
-        v5.end();
-        v5.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-        v5.color(rgb[0], rgb[1], rgb[2], io.iotick);
-        v5.vertex(p2 + 0.65, p4 + vo, p6 - 0.75);
-        v5.vertex(p2 + 0.65, p4 + vo, p6 - 1.25);
-        v5.end();
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        ReikaRenderHelper.exitGeoDraw();
+        BufferBuilder buffer = tess.getBuilder();
+
+        stack.pushPose();
+        stack.translate(x, y + vo, z);
+        Matrix4f pose = stack.last().pose();
+
+        buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
+
+        addLine(buffer, pose, -0.5f, 0, 0.5f, 1.5f, 0, 0.5f, rgb, alpha);
+        addLine(buffer, pose, 0.5f, 0, -0.5f, 0.5f, 0, 1.5f, rgb, alpha);
+        addLine(buffer, pose, 0.35f, 0, -0.75f, 0.35f, 0, -1.25f, rgb, alpha);
+        addLine(buffer, pose, 0.35f, 0, -1.25f, 0.65f, 0, -0.75f, rgb, alpha);
+        addLine(buffer, pose, 0.65f, 0, -0.75f, 0.65f, 0, -1.25f, rgb, alpha);
+
+        tess.end();
+        stack.popPose();
+    }
+
+    private void addLine(BufferBuilder buffer, Matrix4f pose, float x1, float y1, float z1, float x2, float y2, float z2, int[] rgb, float alpha) {
+        buffer.vertex(pose, x1, y1, z1).color(rgb[0], rgb[1], rgb[2], (int)(alpha * 255)).endVertex();
+        buffer.vertex(pose, x2, y2, z2).color(rgb[0], rgb[1], rgb[2], (int)(alpha * 255)).endVertex();
     }
 
 }
