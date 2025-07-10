@@ -1,8 +1,8 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    // Apply the ModDevGradle Legacy Forge plugin
+    id 'net.neoforged.moddev.legacyforge' version '2.0.99'
 }
 
 version = '0.0.1a'
@@ -11,37 +11,30 @@ archivesBaseName = 'RotaryCraft'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-minecraft {
-    mappings channel: 'official', version: "1.20.1"
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+legacyForge {
+    // Develop against MinecraftForge version 47.4.0 for 1.20.1
+    version = "1.20.1-47.4.3"
+
+    // Validate AT files and raise errors when they have invalid targets
+    validateAccessTransformers = true
 
     runs {
-        configureEach {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'trace'
-
-            mods {
-                "rotarycraft" {
-                    source sourceSets.main
-                }
-            }
-        }
-
         client {
-            property 'forge.enabledGameTestNamespaces', "rotarycraft"
+            client()
         }
 
         server {
-            property 'forge.enabledGameTestNamespaces', "rotarycraft"
-            args '--nogui'
+            server()
         }
 
         data {
-            workingDirectory project.file('run-data')
-            args '--mod', "rotarycraft", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            data()
+        }
+    }
+
+    mods {
+        rotarycraft {
+            sourceSet sourceSets.main
         }
     }
 }
@@ -49,11 +42,10 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.4.0'
+    // ModDevGradle Legacy handles the minecraft dependency automatically
     implementation project(':DragonAPI')
 
-
-//    runtimeOnly project(':ElectriCraft')
+    runtimeOnly project(':ElectriCraft')
     runtimeOnly project(':GeoStrata')
 }
 
@@ -71,8 +63,22 @@ jar {
     }
 }
 
-jar.finalizedBy('reobfJar')
+// Note: reobfuscation is automatically configured by ModDevGradle Legacy
+// The reobfuscated jar will be in build/libs, non-obfuscated in build/devlibs
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
 }

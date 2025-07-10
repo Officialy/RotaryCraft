@@ -26,4 +26,7 @@ public interface ShaftPowerEmitter extends ShaftMachine, PowerGenerator {
      */
     boolean isEmitting();
 
+    default boolean isOutputtingTo(Direction side) {
+        return this.isEmitting() && this.canWriteTo(side);
+    }
 }

@@ -19,7 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.base.ItemRotaryTool;
 import reika.rotarycraft.gui.container.ContainerHandCraft;
 
@@ -42,7 +42,7 @@ public class ItemHandheldCrafting extends ItemRotaryTool implements MenuProvider
         return Component.translatable("item.handheldcrafting.name");
     }
 
-    @Nullable
+    
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerHandCraft(id, inventory, player);

@@ -29,8 +29,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.instantiable.data.collections.OneWayCollections.OneWaySet;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.KeyedItemStack;
@@ -81,8 +81,8 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     public boolean idle = false;
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+    
+    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
         if (capability == ForgeCapabilities.FLUID_HANDLER)
             return lazyFluidHandler.cast();
         return super.getCapability(capability, facing);
@@ -434,7 +434,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new ContainerGrinder(p_39954_, p_39955_, this);
     }
 }

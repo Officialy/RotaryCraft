@@ -32,8 +32,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.ParallelTicker;
@@ -101,8 +99,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+    
+    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
         if (capability == ForgeCapabilities.FLUID_HANDLER)
             return lazyFluidHandler.cast();
         return super.getCapability(capability, facing);

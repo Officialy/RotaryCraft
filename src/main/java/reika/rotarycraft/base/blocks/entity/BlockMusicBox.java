@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
@@ -24,12 +24,12 @@ public class BlockMusicBox extends BlockBasicMachine {
     }
 
     @Override
-    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public  <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> ((BlockEntityMusicBox) pBlockEntity).updateEntity(pLevel1, pPos));
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public  BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityMusicBox(pPos, pState);
     }
 

@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.modinteract.power.ReikaRFHelper;
@@ -153,7 +153,7 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implement
     }
 
     @Override
-    public @NotNull FluidStack getFluidInTank(int tank) {
+    public  FluidStack getFluidInTank(int tank) {
         return null;
     }
 
@@ -163,7 +163,7 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implement
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+    public boolean isFluidValid(int tank,  FluidStack stack) {
         return false;
     }
 
@@ -173,12 +173,12 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implement
     }
 
     @Override
-    public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+    public  FluidStack drain(FluidStack resource, FluidAction action) {
         return null;
     }
 
     @Override
-    public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+    public  FluidStack drain(int maxDrain, FluidAction action) {
         return null;
     }
 

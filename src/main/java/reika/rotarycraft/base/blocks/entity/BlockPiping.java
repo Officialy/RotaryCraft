@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootParams;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.blockentities.piping.BlockEntityPipe;
 
@@ -48,13 +48,13 @@ public class BlockPiping extends Block implements EntityBlock {
         return true;
     }
 
-    @Nullable
+
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new BlockEntityPipe(RotaryBlockEntities.PIPE.get(), pos, state);
     }
 
-    @Nullable
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {

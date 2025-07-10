@@ -16,7 +16,7 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraftforge.api.distmarker.Dist;
 //import net.minecraftforge.api.distmarker.OnlyIn;
-//import org.jetbrains.annotations.NotNull;
+//
 //import reika.dragonapi.auxiliary.ChunkManager;
 //import reika.dragonapi.interfaces.blockentity.ChunkLoadingTile;
 //import reika.dragonapi.interfaces.blockentity.BreakAction;
@@ -156,19 +156,19 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public ItemStack getStackInSlot(int slot) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
-//    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+//    public ItemStack insertItem(int slot,  ItemStack stack, boolean simulate) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public ItemStack extractItem(int slot, int amount, boolean simulate) {
 //        return null;
@@ -180,7 +180,7 @@
 //    }
 //
 //    @Override
-//    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//    public boolean isItemValid(int slot,  ItemStack stack) {
 //        return false;
 //    }
 //

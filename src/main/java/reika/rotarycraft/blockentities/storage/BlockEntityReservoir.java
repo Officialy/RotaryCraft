@@ -38,8 +38,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
@@ -103,8 +103,8 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+    
+    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
         if (capability == ForgeCapabilities.FLUID_HANDLER)
             return lazyFluidHandler.cast();
         return super.getCapability(capability, facing);
@@ -706,7 +706,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         return Component.literal("Reservoir");
     }
 
-    @Nullable
+    
     @Override
     public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new ReservoirContainer(p_39954_, p_39955_, this);

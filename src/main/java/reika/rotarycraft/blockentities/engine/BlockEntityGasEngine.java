@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.auxiliary.interfaces.UpgradeableMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -139,7 +139,7 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
 
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new ContainerEthanol(p_39954_, p_39955_, this);
     }
 }

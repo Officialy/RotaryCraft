@@ -201,7 +201,7 @@ public class BlockEntityBlockCannon extends BlockEntityLaunchCannon {
     }
 
 //    @Override
-//    public boolean isItemValid(int slot, @NotNull ItemStack is) {
+//    public boolean isItemValid(int slot,  ItemStack is) {
 //        if (ReikaItemHelper.isBlock(is))
 //            return true;
 //        return RotaryItems.SPAWNER.matchItem(is) || FluidContainerRegistry.getFluidForFilledItem(is) != null;

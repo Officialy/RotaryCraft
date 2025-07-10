@@ -112,6 +112,9 @@ public class RotaryCraft extends DragonAPIMod {
         LOGGER.info("RotaryCraft:" + " Creating Containers!");
         RotaryMenus.REGISTRY.register(modEventBus);
 
+        LOGGER.info("RotaryCraft:" + " Creating Sound Events!");
+        SoundRegistry.SOUND_EVENTS.register(modEventBus);
+
         LOGGER.info("RotaryCraft:" + " Creating Test items!");
         Tests.ITEMS.register(modEventBus);
         RotaryCraftTabs.CREATIVE_MODE_TABS.register(modEventBus);

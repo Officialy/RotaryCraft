@@ -79,21 +79,20 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Beve
         for (int i = 0; i < 6; i++) {
             String s = Direction.values()[i].name().substring(0, 1);
             if (BlockEntityBevelGear.isValid(in, Direction.values()[i])) {
-                if (out.ordinal() == i)
-                //i + 6
-                {
+                if (out.ordinal() == i) {
+                    // Output side button - ID should be i + 6
                     int finalI2 = i;
                     addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, 0,
-                            file, 256, 256, (button) -> actionPerformed(button, finalI2), Component.literal(s)));
+                            file, 256, 256, (button) -> actionPerformed(button, finalI2 + 6), Component.literal(s)));
                 } else {
                     int finalI1 = i;
                     addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px, i * 18, 0,
-                            file, 256, 256, (button) -> actionPerformed(button, finalI1), Component.literal(s)));
+                            file, 256, 256, (button) -> actionPerformed(button, finalI1 + 6), Component.literal(s)));
                 }
             } else {
                 int finalI = i;
                 addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, 212, 0, 0,
-                        file, 256, 256, (button) -> actionPerformed(button, finalI), Component.literal(s)));
+                        file, 256, 256, (button) -> actionPerformed(button, finalI + 6), Component.literal(s)));
             }
         }
     }
@@ -121,10 +120,12 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Beve
         super.actionPerformed(button, id);
         RotaryCraft.LOGGER.info("Button " + id + " pressed!");
         if (id < 6) {
+            // Input side button pressed
             in = Direction.values()[id];
             if (!BlockEntityBevelGear.isValid(in, out))
                 out = in.getStepY() != 0 ? Direction.EAST : Direction.DOWN;
-        } else if (id < 24000) {
+        } else if (id < 12) {
+            // Output side button pressed (id 6-11 map to directions 0-5)
             if (!BlockEntityBevelGear.isValid(in, Direction.values()[id - 6]))
                 return;
             out = Direction.values()[id - 6];

@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.interfaces.blockentity.GuiController;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.api.interfaces.ComplexIO;
@@ -170,15 +169,20 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
         return directions.inverse().containsKey(new ImmutablePair<>(read, write));
     }
 
+    public boolean isInverting() {
+        return true; // Assume default bevel gear behavior inverts rotation
+    }
+
     @Override
     public void updateBlockEntity() {
         super.updateBlockEntity();
 
-        if (this.getBlockEntityAge() == 0)
+        if (level.getGameTime() % 10 == 0) {
             this.findRoute(level, worldPosition);
+        }
 
         power = (long) omega * (long) torque;
-        this.getIOSides(level, worldPosition);
+        this.getIOSides();
         this.transferPower(level, worldPosition);
 
         this.basicPowerReceiver();
@@ -213,79 +217,98 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
         }
     }
 
-    public void getIOSides(Level world, BlockPos pos) {
+    public void getIOSides() {
         ImmutablePair<Direction, Direction> dirs = directions.get(direction);
-        read = dirs.left;
-        write = dirs.right;
+        if (dirs != null) {
+            read = dirs.left;
+            write = dirs.right;
+        } else {
+            // Handle invalid direction value
+            read = Direction.NORTH; // Default fallback
+            write = Direction.SOUTH; // Default fallback
+            // Log an error or handle appropriately
+            System.err.println("Invalid bevel gear direction: " + direction);
+
+            // Optionally reset to a valid direction
+            direction = 0;
+        }
     }
 
     @Override
     protected void transferPower(Level world, BlockPos pos) {
         if (world.isClientSide && !RotaryAux.getPowerOnClient)
             return;
+
+        this.getIOSides(); // Ensure I/O sides are set before power transfer
+
+        if (read == null || write == null) {
+            //RotaryCraft.LOGGER.warn("Bevel gear @ " + pos + " has null I/O sides, skipping power transfer.");
+            return;
+        }
+
         omegain = torquein = 0;
-        boolean isCentered = pos == worldPosition;
-        int dx = pos.getX() + read.getStepX();
-        int dy = pos.getY() + read.getStepY();
-        int dz = pos.getZ() + read.getStepZ();
-        MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, new BlockPos(dx, dy, dz));
-        BlockEntity te = isCentered ? getAdjacentBlockEntity(read) : world.getBlockEntity(new BlockPos(dx, dy, dz));
+        boolean isCentered = pos.equals(worldPosition);
+        BlockPos readPos = isCentered ? pos.relative(read) : new BlockPos(pos.getX() + read.getStepX(), pos.getY() + read.getStepY(), pos.getZ() + read.getStepZ());
+
+        MachineRegistry m = MachineRegistry.getMachine(world, readPos);
+        BlockEntity te = world.getBlockEntity(readPos);
+
+//        RotaryCraft.LOGGER.info("Bevel @ " + pos + ": Attempting to read power from " + read + " at " + readPos + ". Found TileEntity: " + te);
+
         if (this.isProvider(te)) {
-            if (m == MachineRegistry.WOOD_SHAFT || m ==
-                    MachineRegistry.STONE_SHAFT || m ==
-                    MachineRegistry.HSLA_SHAFT || m ==
-                    MachineRegistry.TUNGSTEN_SHAFT || m ==
-                    MachineRegistry.DIAMOND_SHAFT || m ==
-                    MachineRegistry.BEDROCK_SHAFT) {
-                BlockEntityShaft devicein = (BlockEntityShaft) te;
+//            RotaryCraft.LOGGER.info("Bevel @ " + pos + ": " + readPos + " is a valid provider.");
+            if (te instanceof BlockEntityShaft devicein) {
                 if (devicein.isCross()) {
                     this.readFromCross(devicein);
+//                    RotaryCraft.LOGGER.info("Reading from cross-shaft. Power: T=" + torquein + ", S=" + omegain);
                     return;
                 } else if (devicein.isWritingTo(this)) {
                     torquein = devicein.torque;
                     omegain = devicein.omega;
+//                    RotaryCraft.LOGGER.info("Reading from shaft. Power: T=" + torquein + ", S=" + omegain);
                 }
             }
             if (te instanceof SimpleProvider) {
                 this.copyStandardPower(te);
+//                RotaryCraft.LOGGER.info("Reading from simple provider. Power: T=" + torquein + ", S=" + omegain);
             }
             if (te instanceof ComplexIO pwr) {
                 Direction dir = this.getInputDirection().getOpposite();
                 omegain = pwr.getSpeedToSide(dir);
                 torquein = pwr.getTorqueToSide(dir);
+//                RotaryCraft.LOGGER.info("Reading from complex IO. Power: T=" + torquein + ", S=" + omegain);
             }
             if (te instanceof ShaftPowerEmitter sp) {
                 if (sp.isEmitting() && sp.canWriteTo(read.getOpposite())) {
                     torquein = sp.getTorque();
                     omegain = sp.getOmega();
+//                    RotaryCraft.LOGGER.info("Reading from power emitter. Power: T=" + torquein + ", S=" + omegain);
                 }
             }
-            if (m == MachineRegistry.SPLITTER) {
-                BlockEntitySplitter devicein = (BlockEntitySplitter) te;
+            if (te instanceof BlockEntitySplitter devicein) {
                 if (devicein.isSplitting()) {
                     this.readFromSplitter(world, pos, devicein);
                     torquein = torque;
                     omegain = omega;
+//                    RotaryCraft.LOGGER.info("Reading from splitter. Power: T=" + torquein + ", S=" + omegain);
                     return;
                 } else if (devicein.isWritingTo(this)) {
                     torquein = devicein.torque;
                     omegain = devicein.omega;
                 }
             }
-        } //else if (te instanceof WorldRift) {
-//            WorldRift sr = (WorldRift) te;
-//            WorldLocation loc = sr.getLinkTarget();
-//            if (loc != null)
-//                this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);
-//        } else {
-//            omega = 0;
-//            torque = 0;
-//            power = 0;
-//            return;
-//        }
+        } else {
+//            RotaryCraft.LOGGER.warn("Bevel @ " + pos + ": " + readPos + " is NOT a provider. Resetting power.");
+            omega = 0;
+            torque = 0;
+            power = 0;
+            return;
+        }
 
         omega = omegain;
         torque = torquein;
+        power = (long) omega * (long) torque;
+//        RotaryCraft.LOGGER.info("Bevel @ " + pos + ": Final power values: T=" + torque + ", S=" + omega + ", P=" + power);
     }
 
     @Override
@@ -303,7 +326,19 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
         if (!tag.contains("posn"))
             direction = directions.inverse().get(new ImmutablePair(read, write));
     }
+    @Override
+    public void saveAdditional(CompoundTag NBT) {
+        super.saveAdditional(NBT);
+        NBT.putInt("direction", direction);
+        NBT.putFloat("phi", phi);
+    }
 
+    @Override
+    public void load(CompoundTag NBT) {
+        super.load(NBT);
+        direction = NBT.getInt("direction");
+        phi = NBT.getFloat("phi");
+    }
     @Override
     protected String getTEName() {
         return "bevelgear";
@@ -321,7 +356,8 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
-
+        // This method is required by the abstract base class
+        // The actual update logic is handled in updateBlockEntity()
     }
 
     @Override
@@ -330,7 +366,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
            phi = 0;
            return;
         }
-        phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
+        phi += (float) ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
     }
 
     @Override
@@ -363,7 +399,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new BevelContainer(p_39954_, p_39955_, this);
     }
 }

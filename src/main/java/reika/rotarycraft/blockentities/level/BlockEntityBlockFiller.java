@@ -17,8 +17,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.base.OneSlotMachine;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -45,8 +45,8 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
     }
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+    
+    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
         if (capability == ForgeCapabilities.ITEM_HANDLER)
             return lazyItemHandler.cast();
         return super.getCapability(capability, facing);

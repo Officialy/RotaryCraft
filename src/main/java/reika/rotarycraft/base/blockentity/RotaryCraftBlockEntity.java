@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.base.BlockEntityBase;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.registry.TileEnum;
@@ -93,6 +93,7 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase
   @Override
   public void saveAdditional(CompoundTag tag) {
     super.saveAdditional(tag);
+    tag.putFloat("phi", phi);
     tag.putInt("tick", tickcount);
     tag.putBoolean("emp", disabled);
   }
@@ -100,6 +101,7 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase
   @Override
   public void load(CompoundTag nbt) {
     super.load(nbt);
+    phi = nbt.getFloat("phi");
     tickcount = nbt.getInt("tick");
     disabled = nbt.getBoolean("emp");
   }
@@ -140,7 +142,7 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase
     return Component.literal(getTEName());
   }
 
-  @Nullable
+  
   @Override
   public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
     return null;

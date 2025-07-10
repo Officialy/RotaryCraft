@@ -25,7 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.auxiliary.trackers.KeyWatcher;
 import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.ReikaNBTHelper;
@@ -260,7 +260,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
     }
 
     @Override
-    public void appendHoverText(ItemStack is, @Nullable Level level, List<Component> li, TooltipFlag flag) {
+    public void appendHoverText(ItemStack is,  Level level, List<Component> li, TooltipFlag flag) {
         for (int i = 0; i < PackUpgrades.list.length; i++) {
             PackUpgrades pack = PackUpgrades.list[i];
             if (pack.existsOn(is)) {

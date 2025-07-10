@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.checkerframework.checker.units.qual.C;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.base.ItemRotaryTool;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
     }
 
     @Override
-    public void appendHoverText(ItemStack is, @Nullable Level p_41422_, List<Component> li, TooltipFlag p_41424_) {
+    public void appendHoverText(ItemStack is,  Level p_41422_, List<Component> li, TooltipFlag p_41424_) {
         if (is.getTag() != null) {
             int magnet = is.getTag().getInt("magnet");
             if (is.getTag().contains("magnet")) {

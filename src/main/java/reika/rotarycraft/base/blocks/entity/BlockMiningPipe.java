@@ -47,7 +47,7 @@ public class BlockMiningPipe extends Block {
     }
 
     @Override
-    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, @Nullable Entity entity) {
+    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos,  Entity entity) {
         return SoundType.METAL;
     }
 
@@ -62,7 +62,7 @@ public class BlockMiningPipe extends Block {
     }
 
     @Override
-    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack stack) {
+    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state,  BlockEntity blockEntity, ItemStack stack) {
         level.playSound(player, pos, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 1, 1);
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
     }

@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.TensionStorage;
 import reika.rotarycraft.base.ItemBasic;
@@ -34,9 +34,9 @@ public class ItemCoil extends ItemBasic implements TensionStorage {
         super(new Properties().stacksTo(1), 1);
     }
 
-    @Nullable
+    
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack,  CompoundTag nbt) {
         if (!stack.getOrCreateTag().contains("energy")) {
             stack.getOrCreateTag().putDouble("energy", tension);
         }
@@ -44,7 +44,7 @@ public class ItemCoil extends ItemBasic implements TensionStorage {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> lore, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack,  Level pLevel, List<Component> lore, TooltipFlag pIsAdvanced) {
         lore.add(Component.literal("Tension: " + tension));
     }
 

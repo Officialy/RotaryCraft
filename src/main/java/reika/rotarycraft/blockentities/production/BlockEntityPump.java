@@ -28,8 +28,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.loading.FMLLoader;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
@@ -322,8 +322,8 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     }
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+    
+    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
         if (capability == ForgeCapabilities.FLUID_HANDLER)
             return holder.cast();
         return super.getCapability(capability, facing);

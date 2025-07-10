@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.registry.ReikaParticleHelper;
 import reika.rotarycraft.base.blockentity.BlockEntitySpringPowered;

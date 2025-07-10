@@ -19,7 +19,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.api.power.PowerGenerator;
@@ -188,7 +188,7 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 	}
 
 	@Override
-	public @NotNull FluidStack getFluidInTank(int tank) {
+	public  FluidStack getFluidInTank(int tank) {
 		return new FluidStack(RotaryFluids.STEAM.get(), 0);
 	}
 
@@ -198,7 +198,7 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 	}
 
 	@Override
-	public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+	public boolean isFluidValid(int tank,  FluidStack stack) {
 		return false;
 	}
 
@@ -208,12 +208,12 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 	}
 
 	@Override
-	public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+	public  FluidStack drain(FluidStack resource, FluidAction action) {
 		return null;
 	}
 
 	@Override
-	public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+	public  FluidStack drain(int maxDrain, FluidAction action) {
 		return null;
 	}
 

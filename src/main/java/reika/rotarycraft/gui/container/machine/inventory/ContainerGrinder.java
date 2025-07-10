@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;

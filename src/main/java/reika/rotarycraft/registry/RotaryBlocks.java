@@ -14,6 +14,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.api.RoCWoodTypes;
 import reika.rotarycraft.base.blocks.CanolaBlock;
 import reika.rotarycraft.base.blocks.entity.*;
 import reika.rotarycraft.base.blocks.entity.engine.*;
@@ -68,7 +69,7 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> TUNGSTEN_SHAFT = registerMachineBlock("tungsten_shaft", () -> new BlockShaft(MaterialRegistry.TUNGSTEN, BlockBehaviour.Properties.of().strength(20)));
     public static final RegistryObject<Block> DIAMOND_SHAFT = registerMachineBlock("diamond_shaft", () -> new BlockShaft(MaterialRegistry.DIAMOND, BlockBehaviour.Properties.of().strength(20)));
     public static final RegistryObject<Block> BEDROCK_SHAFT = registerMachineBlock("bedrock_shaft", () -> new BlockShaft(MaterialRegistry.BEDROCK, BlockBehaviour.Properties.of().strength(20)));
-
+    public static final RegistryObject<Block> FAN = registerMachineBlock("fan", () -> new BlockFan(BlockBehaviour.Properties.of().strength(20)));
     public static final RegistryObject<Block> TRANS = register("trans", () -> new Block(BlockBehaviour.Properties.of().strength(20)));
     public static final RegistryObject<Block> SOLAR_TOWER = registerMachineBlock("solar_tower", () -> new BlockSolarTower(BlockBehaviour.Properties.of().strength(20)));
     public static final RegistryObject<Block> BCENGINE = register("bcengine", () -> new Block(BlockBehaviour.Properties.of().strength(20)));
@@ -172,15 +173,6 @@ public class RotaryBlocks {
 
     private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of().strength(2.0F, 3.0F).sound(SoundType.WOOD);
 
-    static {
-//        for (RoCWoodTypes type : RoCWoodTypes.VALUES) {
-//            register(type.toString() + "_gearbox_2x", () -> new BlockGearbox(GearboxTypes.WOOD, WOOD_PROPERTIES));
-//            register(type + "_gearbox_4x", () -> new BlockGearbox(GearboxTypes.WOOD, WOOD_PROPERTIES));
-//            register(type + "_gearbox_8x", () -> new BlockGearbox(GearboxTypes.WOOD, WOOD_PROPERTIES));
-//            register(type + "_gearbox_16x", () -> new BlockGearbox(GearboxTypes.WOOD, WOOD_PROPERTIES));
-//        }
-    }
-
     private static <BLOCK extends Block> RegistryObject<BLOCK> register(final String name, final Supplier<BLOCK> blockFactory) {
         return register(name, blockFactory, block -> new BlockItem(block, new Item.Properties()));
     }
@@ -205,6 +197,7 @@ public class RotaryBlocks {
             }
         });
     }
+
     @FunctionalInterface
     private interface IBlockItemFactory<BLOCK extends Block> {
         Item create(BLOCK block);

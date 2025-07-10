@@ -19,7 +19,7 @@
 //import net.minecraft.world.level.material.Fluids;
 //import net.minecraftforge.fluids.FluidStack;
 //import net.minecraftforge.fluids.capability.IFluidHandler;
-//import org.jetbrains.annotations.NotNull;
+//
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.libraries.ReikaNBTHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -257,7 +257,7 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack getFluidInTank(int tank) {
 //        return null;
@@ -269,7 +269,7 @@
 //    }
 //
 //    @Override
-//    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+//    public boolean isFluidValid(int tank,  FluidStack stack) {
 //        return false;
 //    }
 //
@@ -278,13 +278,13 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack drain(FluidStack resource, FluidAction action) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack drain(int maxDrain, FluidAction action) {
 //        return null;

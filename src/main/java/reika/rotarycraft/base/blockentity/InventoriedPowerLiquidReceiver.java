@@ -25,8 +25,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.registry.MachineRegistry;
 
@@ -45,8 +45,8 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
     }
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+    
+    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
         if (capability == ForgeCapabilities.ITEM_HANDLER)
             return lazyItemHandler.cast();
         return super.getCapability(capability, facing);

@@ -1,0 +1,232 @@
+{
+  "electric": {
+    "sounds": [
+      "rotarycraft:elecengine"
+    ]
+  },
+  "wind": {
+    "sounds": [
+      "rotarycraft:windengine"
+    ]
+  },
+  "steam": {
+    "sounds": [
+      "rotarycraft:steamengine"
+    ]
+  },
+  "car": {
+    "sounds": [
+      "rotarycraft:gasengine"
+    ]
+  },
+  "hydro": {
+    "sounds": [
+      "rotarycraft:hydroengine"
+    ]
+  },
+  "micro": {
+    "sounds": [
+      "rotarycraft:microengine"
+    ]
+  },
+  "jet": {
+    "sounds": [
+      "rotarycraft:jetengine"
+    ]
+  },
+  "pulsejet": {
+    "sounds": [
+      "rotarycraft:pulsejet"
+    ]
+  },
+  "pump": {
+    "sounds": [
+      "rotarycraft:pump"
+    ]
+  },
+  "sprinkler": {
+    "sounds": [
+      "rotarycraft:sprinkler"
+    ]
+  },
+  "flywheel": {
+    "sounds": [
+      "rotarycraft:flywheel"
+    ]
+  },
+  "friction": {
+    "sounds": [
+      "rotarycraft:friction"
+    ]
+  },
+  "craft": {
+    "sounds": [
+      "rotarycraft:craft"
+    ]
+  },
+  "compress": {
+    "sounds": [
+      "rotarycraft:compress"
+    ]
+  },
+  "pneu": {
+    "sounds": [
+      "rotarycraft:pneu"
+    ]
+  },
+  "diesel": {
+    "sounds": [
+      "rotarycraft:diesel"
+    ]
+  },
+  "belt": {
+    "sounds": [
+      "rotarycraft:belt"
+    ]
+  },
+  "fan": {
+    "sounds": [
+      "rotarycraft:fan"
+    ]
+  },
+  "dynamo": {
+    "sounds": [
+      "rotarycraft:dynamo"
+    ]
+  },
+  "fridge": {
+    "sounds": [
+      "rotarycraft:fridge"
+    ]
+  },
+  "jetstart": {
+    "sounds": [
+      "rotarycraft:jetstart"
+    ]
+  },
+  "sonic": {
+    "sounds": [
+      "rotarycraft:sonic"
+    ]
+  },
+  "coil": {
+    "sounds": [
+      "rotarycraft:coil"
+    ]
+  },
+  "knockback": {
+    "sounds": [
+      "rotarycraft:knockback"
+    ]
+  },
+  "piledriver": {
+    "sounds": [
+      "rotarycraft:piledriver"
+    ]
+  },
+  "smokealarm": {
+    "sounds": [
+      "rotarycraft:smokealarm"
+    ]
+  },
+  "projector": {
+    "sounds": [
+      "rotarycraft:projector"
+    ]
+  },
+  "basslo": {
+    "sounds": [
+      "rotarycraft:music/basslo"
+    ]
+  },
+  "bass": {
+    "sounds": [
+      "rotarycraft:music/bass"
+    ]
+  },
+  "basshi": {
+    "sounds": [
+      "rotarycraft:music/basshi"
+    ]
+  },
+  "harplo": {
+    "sounds": [
+      "rotarycraft:music/harplo"
+    ]
+  },
+  "harp": {
+    "sounds": [
+      "rotarycraft:music/harp"
+    ]
+  },
+  "harphi": {
+    "sounds": [
+      "rotarycraft:music/harphi"
+    ]
+  },
+  "plinglo": {
+    "sounds": [
+      "rotarycraft:music/plinglo"
+    ]
+  },
+  "pling": {
+    "sounds": [
+      "rotarycraft:music/pling"
+    ]
+  },
+  "plinghi": {
+    "sounds": [
+      "rotarycraft:music/plinghi"
+    ]
+  },
+  "linebuild": {
+    "sounds": [
+      "rotarycraft:linebuild"
+    ]
+  },
+  "pack": {
+    "sounds": [
+      "rotarycraft:pack"
+    ]
+  },
+  "spark": {
+    "sounds": [
+      "rotarycraft:spark"
+    ]
+  },
+  "ingest_short": {
+    "sounds": [
+      "rotarycraft:ingest_short"
+    ]
+  },
+  "shortjet": {
+    "sounds": [
+      "rotarycraft:shortjet"
+    ]
+  },
+  "afterburner": {
+    "sounds": [
+      "rotarycraft:afterburner"
+    ]
+  },
+  "rumble2": {
+    "sounds": [
+      "rotarycraft:rumble2"
+    ]
+  },
+  "gatlingreload": {
+    "sounds": [
+      "rotarycraft:gatlingreload"
+    ]
+  },
+  "gatling": {
+    "sounds": [
+      "rotarycraft:gatling"
+    ]
+  },
+  "flameturret": {
+    "sounds": [
+      "rotarycraft:flameturret"
+    ]
+  }
+}

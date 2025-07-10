@@ -13,6 +13,7 @@ import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import reika.rotarycraft.blockentities.decorative.BlockEntityParticleEmitter;
 import reika.rotarycraft.blockentities.engine.*;
 import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
+import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
@@ -259,6 +260,9 @@ public class RotaryBlockEntities {
 
 //    public static final RegistryObject<BlockEntityType<BlockEntityFillingStation>> FILLING_STATION = BLOCK_ENTITIES.register("filling_station", () ->
 //            BlockEntityType.Builder.of(BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityFan>> FAN = BLOCK_ENTITIES.register("fan", () ->
+            BlockEntityType.Builder.of(BlockEntityFan::new, RotaryBlocks.FAN.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityGrinder>> GRINDER = BLOCK_ENTITIES.register("grinder", () ->
             BlockEntityType.Builder.of(BlockEntityGrinder::new, RotaryBlocks.GRINDER.get()).build(null));

@@ -32,7 +32,7 @@ public class BlockEntityDecoTank extends FluidHandlerBlockEntity {
         super(RotaryBlockEntities.DECO_TANK.get(), pos, state);
     }
 
-//    @Nullable
+//    
 //    @Override
 //    public ClientboundBlockEntityDataPacket getUpdatePacket() {
 //        return ClientboundBlockEntityDataPacket.create(getBlockPos(), this::getUpdateTag);

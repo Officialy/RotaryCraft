@@ -100,6 +100,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                         }
                         fr.drawInBatch(var15b, -10, 39, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
                     }
+                    
                     //GL11.glPopAttrib();
                 }
             }
@@ -118,6 +119,8 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
             }
         }
         stack.popPose();
+        RenderSystem.depthMask(true);
+        ReikaRenderHelper.enableEntityLighting();
     }
 
     @Override

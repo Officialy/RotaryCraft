@@ -56,6 +56,11 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
 
     @Override
     protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
+        // Only play sounds if the engine is actually producing power
+        if (power <= 0) {
+            return;
+        }
+        
         soundTick++;
         if (this.isMuffled(world, pos)) {
             volume *= 0.3125F;

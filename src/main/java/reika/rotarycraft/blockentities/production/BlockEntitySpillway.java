@@ -20,7 +20,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
@@ -227,7 +227,7 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
         return 0;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack getFluidInTank(int tank) {
         return null;
@@ -239,7 +239,7 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+    public boolean isFluidValid(int tank,  FluidStack stack) {
         return false;
     }
 
@@ -248,14 +248,14 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
         return 0;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
         return /*from == Direction.DOWN && */resource.getFluid() == Fluids.WATER ? tank.drain(resource.getAmount(), FluidAction.EXECUTE) : null;
 
     }
 
-    @NotNull
+    
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
         return null;

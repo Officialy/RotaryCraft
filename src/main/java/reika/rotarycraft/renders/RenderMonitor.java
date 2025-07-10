@@ -41,11 +41,22 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         stack.pushPose();
 
         BlockState blockstate = tile.getLevel() != null ? tile.getBlockState() : RotaryBlocks.DYNAMOMETER.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
-        stack.translate(0.5F, -0.5F, 0.5F);
-        float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
+
+        // Match 1.7.10 translation and rotation order
+        stack.translate(0.0F, 2.0F, 1.0F);
+        stack.scale(1.0F, -1.0F, -1.0F);
+        stack.translate(0.5F, 0.5F, 0.5F);
 
         if (tile.isInWorld()) {
-            stack.mulPose(Axis.XP.rotationDegrees(-f + 90));
+            Direction dir = blockstate.getValue(BlockRotaryCraftMachine.FACING);
+            int yRot = switch (dir) {
+                case SOUTH -> 0;
+                case NORTH -> 180;
+                case EAST -> 90;
+                case WEST -> 270;
+                default -> 0;
+            };
+            stack.mulPose(Axis.YP.rotationDegrees(yRot + 90));
         }
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(MonitorModel.TEXTURE_LOCATION));
         monitorModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
@@ -60,6 +71,7 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         ReikaRenderHelper.disableEntityLighting();
         stack.pushPose();
         stack.translate(0.5F, -0.5F, 0.5F);
+        // Adjust translation for EAST and NORTH
         Font fontRenderer = this.getFontRenderer();
         float var10 = 0.8f;
         stack.scale(var10, var10, var10);

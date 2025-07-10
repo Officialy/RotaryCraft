@@ -11,7 +11,7 @@
 //
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraftforge.fluids.FluidStack;
-//import org.jetbrains.annotations.NotNull;
+//
 //import reika.rotarycraft.api.Interfaces.TargetEntity;
 //import reika.rotarycraft.base.blockentity.BlockEntityFluidCannon;
 //import reika.rotarycraft.registry.MachineRegistry;
@@ -190,7 +190,7 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack getFluidInTank(int tank) {
 //        return null;
@@ -202,7 +202,7 @@
 //    }
 //
 //    @Override
-//    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+//    public boolean isFluidValid(int tank,  FluidStack stack) {
 //        return false;
 //    }
 //
@@ -211,13 +211,13 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack drain(FluidStack resource, FluidAction action) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack drain(int maxDrain, FluidAction action) {
 //        return null;
@@ -228,19 +228,19 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public ItemStack getStackInSlot(int slot) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
-//    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+//    public ItemStack insertItem(int slot,  ItemStack stack, boolean simulate) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public ItemStack extractItem(int slot, int amount, boolean simulate) {
 //        return null;
@@ -252,7 +252,7 @@
 //    }
 //
 //    @Override
-//    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//    public boolean isItemValid(int slot,  ItemStack stack) {
 //        return false;
 //    }
 //

@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.interfaces.RangedEffect;

@@ -20,7 +20,7 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.material.Fluids;
 //import net.minecraft.world.phys.AABB;
-//import org.jetbrains.annotations.NotNull;
+//
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.ItemMatch;
 //import reika.dragonapi.libraries.ReikaEntityHelper;
@@ -267,13 +267,13 @@
 //        return 18;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
-//    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+//    public ItemStack insertItem(int slot,  ItemStack stack, boolean simulate) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public ItemStack extractItem(int slot, int amount, boolean simulate) {
 //        return null;
@@ -285,7 +285,7 @@
 //    }
 //
 //    @Override
-//    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//    public boolean isItemValid(int slot,  ItemStack stack) {
 //        return isValidFuel(stack);
 //    }
 //

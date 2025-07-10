@@ -23,7 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.libraries.ReikaNBTHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.Fillable;
@@ -84,7 +84,7 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
     }
 
     @Override
-    public void appendHoverText(ItemStack is, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack is,  Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if (is.getOrCreateTag().getInt("ratio") > 0) {
             int ratio = getRatioFromIntegratedGearItem(is, false);
             pTooltipComponents.add(Component.translatable("tooltip.integratedgearbox.ratio").append(Component.literal(Math.abs(ratio) + "x")));

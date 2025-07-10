@@ -31,8 +31,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.interfaces.block.SemiUnbreakable;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -317,7 +317,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new LandmineContainer(p_39954_, p_39955_, this);
     }
 }

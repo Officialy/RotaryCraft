@@ -18,6 +18,7 @@ import reika.rotarycraft.modinterface.model.BoilerModel;
 import reika.rotarycraft.modinterface.model.MagneticModel;
 import reika.rotarycraft.modinterface.model.SteamTurbineModel;
 import reika.rotarycraft.renders.*;
+import reika.rotarycraft.renders.dm.RenderFan;
 import reika.rotarycraft.renders.dm.RenderFin;
 import reika.rotarycraft.renders.dmi.RenderGrinder;
 import reika.rotarycraft.renders.dmi.RenderWinder;
@@ -85,7 +86,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation CLUTCH = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "clutch"), "main");
     public static final ModelLayerLocation ITEM_CANNON = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "item_cannon"), "main");
     public static final ModelLayerLocation GRINDSTONE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "grindstone"), "main");
-
+    public static final ModelLayerLocation FAN = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "fan"), "main");
 
     public static void init(IEventBus bus) {
         bus.addListener(RotaryModelLayers::registerEntityRenderers);
@@ -134,6 +135,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.WINDER.get(), RenderWinder::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.AEROSOLIZER.get(), AerosolizerRenderer::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.CLUTCH.get(), RenderClutch::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.FAN.get(), RenderFan::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -191,5 +193,6 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(ITEM_CANNON, ItemCannonModel::createLayer);
         event.registerLayerDefinition(GRINDSTONE, GrindstoneModel::createLayer);
         event.registerLayerDefinition(SPILLWAY, SpillwayModel::createLayer);
+        event.registerLayerDefinition(FAN, FanModel::createLayer);
     }
 }

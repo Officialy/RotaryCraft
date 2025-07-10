@@ -74,7 +74,7 @@ public class BlockEntityMonitor extends BlockEntity1DTransmitter {
                 if (devicein.isCross()) {
                     this.readFromCross(devicein);
                     return;
-                } else if (devicein.isWritingToCoordinate(pos)) {
+                } else if (devicein.isWritingTo(this)) {
                     torquein = devicein.torque;
                     omegain = devicein.omega;
                 }

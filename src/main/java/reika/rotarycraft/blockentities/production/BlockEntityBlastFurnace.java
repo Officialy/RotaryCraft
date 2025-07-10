@@ -34,7 +34,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.interfaces.blockentity.XPProducer;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
@@ -232,7 +232,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         return 0;
     }
 
-    @Nullable
+    
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this, blockEntity -> this.getUpdateTag());
@@ -289,7 +289,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity implements
         return super.getCapability(cap, side);
     }
 
-    @Nullable
+    
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
         return null;

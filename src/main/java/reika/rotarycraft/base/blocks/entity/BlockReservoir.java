@@ -18,7 +18,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
@@ -29,13 +29,13 @@ public class BlockReservoir extends BlockBasicMachine {
         super(properties.noOcclusion());
     }
 
-    @Nullable
+
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityReservoir(pPos, pState);
     }
 
-    @Nullable
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {

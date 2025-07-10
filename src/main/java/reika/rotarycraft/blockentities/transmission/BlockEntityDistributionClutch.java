@@ -108,13 +108,23 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
     }
 
     private void getIOSides(Level world, BlockPos pos, Direction direction) {
-        switch (direction.ordinal()) {
-            case 0 -> read = Direction.EAST;
-            case 1 -> read = Direction.WEST;
-            case 2 -> read = Direction.SOUTH;
-            case 3 -> read = Direction.NORTH;
+        switch (direction) {
+            case DOWN -> read = Direction.EAST;
+            case UP -> read = Direction.WEST;
+            case NORTH -> read = Direction.SOUTH;
+            case SOUTH -> read = Direction.NORTH;
+            case WEST -> read = Direction.EAST;  // Added missing cases
+            case EAST -> read = Direction.WEST;  // Added missing cases
+            default -> read = Direction.NORTH;   // Default fallback
         }
-        write = read.getOpposite();
+
+        if (read != null) {
+            write = read.getOpposite();
+        } else {
+            // Handle the error case
+            read = Direction.NORTH;
+            write = Direction.SOUTH;
+        }
     }
 
     private void updateControl(Level world, BlockPos pos) {

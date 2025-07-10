@@ -23,8 +23,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 
 public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCannon implements IItemHandler, Container {
@@ -40,9 +38,9 @@ public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCanno
     public BlockEntityInventoriedCannon(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
+
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
         if (capability == ForgeCapabilities.ITEM_HANDLER)
             return lazyItemHandler.cast();
         return super.getCapability(capability, facing);
@@ -53,7 +51,8 @@ public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCanno
         super.invalidateCaps();
         lazyItemHandler.invalidate();
     }
-//        @Override
+
+    //        @Override
     public final void setInventorySlotContents(int i, ItemStack itemstack) {
         itemHandler.setStackInSlot(i, itemstack);
     }

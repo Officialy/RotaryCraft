@@ -12,7 +12,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.RotaryCraft;
 
 import java.util.Arrays;
@@ -169,7 +169,7 @@ public class BlastFurnaceRecipe implements Recipe<SimpleContainer> {
         }
 
         @Override
-        public @Nullable BlastFurnaceRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf byteBuf) {
+        public  BlastFurnaceRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf byteBuf) {
             NonNullList<Ingredient> inputs = NonNullList.withSize(7, Ingredient.EMPTY);
             inputs.replaceAll(ignored -> Ingredient.fromNetwork(byteBuf));
             ItemStack output = byteBuf.readItem();

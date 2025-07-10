@@ -28,8 +28,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.ModList;
 import reika.dragonapi.instantiable.HybridTank;
@@ -765,7 +765,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         return 1;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack getFluidInTank(int tank) {
         return new FluidStack(RotaryFluids.LUBRICANT.get(), 0);
@@ -777,7 +777,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+    public boolean isFluidValid(int tank,  FluidStack stack) {
         return false;
     }
 
@@ -786,13 +786,13 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         return 0;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
         return null;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
         return null;
@@ -814,7 +814,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new GearboxContainer(p_39954_, p_39955_, this);
     }
 }

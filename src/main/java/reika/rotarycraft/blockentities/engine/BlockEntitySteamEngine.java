@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -226,7 +226,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new SteamContainer(p_39954_, p_39955_, this);
     }
 

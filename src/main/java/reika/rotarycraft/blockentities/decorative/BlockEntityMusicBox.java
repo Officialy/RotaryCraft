@@ -28,7 +28,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.NoteBlockEvent;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.instantiable.MusicScore;
 import reika.dragonapi.instantiable.MusicScore.NoteData;
 import reika.dragonapi.instantiable.MusicScore.ScoreTrack;
@@ -751,7 +751,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new MusicContainer(p_39954_, p_39955_, this);
     }
 }

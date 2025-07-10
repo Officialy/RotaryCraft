@@ -12,7 +12,7 @@ package reika.rotarycraft.base.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
+
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
 import reika.rotarycraft.registry.MachineRegistry;
@@ -74,7 +74,7 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
         return 0;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack getFluidInTank(int tank) {
         return null;
@@ -86,7 +86,7 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+    public boolean isFluidValid(int tank,  FluidStack stack) {
         return false;
     }
 
@@ -98,13 +98,13 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
         return tank.fill(resource, action);
     }
 
-    @NotNull
+    
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
         return null;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
         return null;

@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.BlockEntityVacuum;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityTNTCannon;
@@ -17,13 +17,13 @@ public class BlockVacuum extends BlockBasicMachine {
         super(properties.noOcclusion());
     }
 
-    @Nullable
+    
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityVacuum(pPos, pState);
     }
 
-    @Nullable
+    
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {

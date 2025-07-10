@@ -24,7 +24,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;

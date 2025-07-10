@@ -20,7 +20,7 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.phys.AABB;
 //import net.minecraftforge.items.IItemHandler;
-//import org.jetbrains.annotations.NotNull;
+//
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaEntityHelper;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -192,13 +192,13 @@
 //        return 27;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
-//    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+//    public ItemStack insertItem(int slot,  ItemStack stack, boolean simulate) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public ItemStack extractItem(int slot, int amount, boolean simulate) {
 //        return null;
@@ -210,7 +210,7 @@
 //    }
 //
 //    @Override
-//    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//    public boolean isItemValid(int slot,  ItemStack stack) {
 //        return ReikaItemHelper.matchStacks(stack, RotaryItems.HSLA_STEEL_SCRAP);
 //    }
 //

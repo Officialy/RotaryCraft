@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;

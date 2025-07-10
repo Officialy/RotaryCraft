@@ -46,14 +46,14 @@
 //    }
 //
 //    @Override
-//    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+//    public  <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
 //        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
 //            ((BlockEntityAdvancedGear) pBlockEntity).updateEntity(pLevel1, pPos);
 //        });
 //    }
 //
 //    @Override
-//    public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+//    public  BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
 //        return new BlockEntityAdvancedGear(pPos, pState);
 //
 //    }
@@ -69,7 +69,7 @@
 //    }
 //
 //    @Override
-//    public void playerDestroy(Level world, Player player, BlockPos pos, BlockState p_49830_, @Nullable BlockEntity p_49831_, ItemStack p_49832_) {
+//    public void playerDestroy(Level world, Player player, BlockPos pos, BlockState p_49830_,  BlockEntity p_49831_, ItemStack p_49832_) {
 //        if (this.canHarvest(world, player, pos))
 //            this.harvestBlock(world, player, pos);
 //

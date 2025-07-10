@@ -67,10 +67,8 @@ public class PacketHandlerCore implements PacketHandler {
         CompoundTag NBT;
         String stringdata = null;
         UUID id = null;
-        //System.out.print(packet.length);
         try {
             PacketTypes packetType = packet.getType();
-//            ReikaJavaLibrary.pConsole("Recieved packet type: " + packetType + "\n" + "Containing data: " + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt() + ":" + inputStream.readInt());
             switch (packetType) {
                 case FULLSOUND:
                     break;
@@ -82,7 +80,7 @@ public class PacketHandlerCore implements PacketHandler {
                     pack = PacketRegistry.getEnum(control);
                     break;
                 case DATA:
-                    System.out.println("Available bytes: " + inputStream.available());
+//                    System.out.println("Available bytes: " + inputStream.available());
                     control = inputStream.readInt();
                     pack = PacketRegistry.getEnum(control);
                     len = pack.numInts;

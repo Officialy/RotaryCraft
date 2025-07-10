@@ -54,8 +54,6 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
     @Override
     public void render(GuiGraphics pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        this.renderBackground(pPoseStack);
-        this.renderTooltip(pPoseStack, pMouseX, pMouseY);
     }
 
     @Override

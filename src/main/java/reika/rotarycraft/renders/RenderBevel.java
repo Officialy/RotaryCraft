@@ -1,6 +1,11 @@
 package reika.rotarycraft.renders;
 
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -86,7 +91,9 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
             if (tile.iotick > 64 && ConfigRegistry.COLORBLIND.getState())
                 this.renderFaceNumbers(stack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), bufferSource);
 
+            stack.pushPose();
             IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+            stack.popPose();
             renderCompass(tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), bufferSource, stack);
         }
     }

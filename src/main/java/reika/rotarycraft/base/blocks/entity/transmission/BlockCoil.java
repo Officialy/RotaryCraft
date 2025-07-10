@@ -21,13 +21,13 @@ public class BlockCoil extends BlockBasicMachine {
         super(properties.noOcclusion());
     }
 
-    @Nullable
+
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new BlockEntityAdvancedGear(BlockEntityAdvancedGear.GearType.COIL, pos, state);
     }
 
-    @Nullable
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {

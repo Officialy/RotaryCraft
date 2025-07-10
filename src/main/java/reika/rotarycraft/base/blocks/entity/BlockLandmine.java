@@ -16,7 +16,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine;
 
@@ -26,13 +26,13 @@ public class BlockLandmine extends BlockBasicMachine {
         super(properties.noOcclusion());
     }
 
-    @Nullable
+    
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityLandmine(pPos, pState);
     }
 
-    @Nullable
+    
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {

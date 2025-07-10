@@ -14,7 +14,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,8 +23,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 
 public abstract class BlockEntityInventoryIOMachine extends BlockEntityIOMachine {
@@ -38,7 +35,7 @@ public abstract class BlockEntityInventoryIOMachine extends BlockEntityIOMachine
         }
 
         @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        public boolean isItemValid(int slot,  ItemStack stack) {
           return canPlaceItem(slot, stack);
         }
       };
@@ -50,9 +47,9 @@ public abstract class BlockEntityInventoryIOMachine extends BlockEntityIOMachine
   }
 
   @Override
-  @NotNull
+  
   public <T> LazyOptional<T> getCapability(
-      @NotNull Capability<T> capability, @Nullable Direction facing) {
+       Capability<T> capability,  Direction facing) {
     if (capability == ForgeCapabilities.ITEM_HANDLER) return lazyItemHandler.cast();
     return super.getCapability(capability, facing);
   }

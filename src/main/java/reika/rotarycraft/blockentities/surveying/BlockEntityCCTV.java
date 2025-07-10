@@ -21,7 +21,7 @@
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraftforge.api.distmarker.Dist;
 //import net.minecraftforge.fml.loading.FMLLoader;
-//import org.jetbrains.annotations.NotNull;
+//
 //import reika.dragonapi.libraries.mathsci.ReikaPhysicsHelper;
 //import reika.rotarycraft.base.blockentity.RemoteControlMachine;
 //import reika.rotarycraft.registry.MachineRegistry;
@@ -301,13 +301,13 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
-//    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+//    public ItemStack insertItem(int slot,  ItemStack stack, boolean simulate) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public ItemStack extractItem(int slot, int amount, boolean simulate) {
 //        return null;
@@ -319,7 +319,7 @@
 //    }
 //
 //    @Override
-//    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//    public boolean isItemValid(int slot,  ItemStack stack) {
 //        return false;
 //    }
 //

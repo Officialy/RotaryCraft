@@ -29,7 +29,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.interfaces.blockentity.PartialInventory;
@@ -75,7 +75,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     private CVTMode cvtMode = CVTMode.MANUAL;
     private CVTController controller;
     private ItemStack[] belts = new ItemStack[31];
-    private int targetTorque = 1;
+    private int targetTorque = 1;-
     private final GearType gearType;
     private boolean enabled = true;
 
@@ -777,7 +777,6 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                 nbttaglist.add(CompoundTag);
             }
         }
-        NBT.putFloat("phi", phi);
         NBT.put("Items", nbttaglist);
     }
 
@@ -800,7 +799,6 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                 belts[byte0] = ItemStack.of(CompoundTag);
             }
         }
-        phi = NBT.getFloat("phi");
     }
 
     @Override
@@ -814,12 +812,12 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     }
 
     @Override
-    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+    public  ItemStack insertItem(int slot,  ItemStack stack, boolean simulate) {
         return null;
     }
 
     @Override
-    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+    public  ItemStack extractItem(int slot, int amount, boolean simulate) {
         return null;
     }
 
@@ -829,7 +827,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     }
 
     @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+    public boolean isItemValid(int slot,  ItemStack stack) {
         return this.getGearType() == GearType.CVT && ReikaItemHelper.matchStacks(stack, RotaryItems.BELT);
     }
 
@@ -1012,7 +1010,7 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
     }
 
     @Override
-    public @NotNull FluidStack getFluidInTank(int tank) {
+    public  FluidStack getFluidInTank(int tank) {
         return null;
     }
 
@@ -1022,7 +1020,7 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+    public boolean isFluidValid(int tank,  FluidStack stack) {
         return false;
     }
 
@@ -1032,12 +1030,12 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
     }
 
     @Override
-    public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+    public  FluidStack drain(FluidStack resource, FluidAction action) {
         return null;
     }
 
     @Override
-    public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+    public  FluidStack drain(int maxDrain, FluidAction action) {
         return null;
     }
 

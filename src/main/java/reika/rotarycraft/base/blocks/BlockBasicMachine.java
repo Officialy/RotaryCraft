@@ -40,8 +40,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
 import reika.dragonapi.interfaces.blockentity.PlaceNotification;
 import reika.dragonapi.libraries.ReikaEntityHelper;
@@ -57,6 +57,7 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.CachedConnection;
 import reika.rotarycraft.auxiliary.interfaces.EnchantableMachine;
+import reika.rotarycraft.auxiliary.interfaces.NBTMachine;
 import reika.rotarycraft.auxiliary.interfaces.PressureTE;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -81,7 +82,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
     }
 
     @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState pState, @Nullable LivingEntity e, ItemStack pStack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState pState,  LivingEntity e, ItemStack pStack) {
         super.setPlacedBy(world, pos, pState, e, pStack);
         RotaryCraftBlockEntity te = (RotaryCraftBlockEntity) world.getBlockEntity(pos);
         if (e instanceof Player ep && te != null) {
@@ -190,8 +191,8 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             return InteractionResult.FAIL;
         if (is != null && is.getItem() == Items.ENCHANTED_BOOK && m.isEnchantable()) {
             if (((EnchantableMachine) te).getEnchantmentHandler().applyEnchants(is)) {
-//todo                if (!ep.isCreative())
-//                    ep.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                if (!ep.isCreative())
+                    ep.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 te.syncAllData(true);
                 return InteractionResult.SUCCESS;
             }
@@ -400,7 +401,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                 if (tr.isEmpty()) {
                                     tr.addLiquid(size * f.getAmount(), fluid);
                                     if (!ep.isCreative()) {
-                                        @NotNull FluidStack ret = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().drain(f, IFluidHandler.FluidAction.EXECUTE);
+                                         FluidStack ret = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().drain(f, IFluidHandler.FluidAction.EXECUTE);
                                         ep.setItemSlot(EquipmentSlot.MAINHAND, ret.isEmpty() ? ReikaItemHelper.getSizedItemStack(is, size) : ItemStack.EMPTY);
                                     }
                                     te.syncAllData(true);
@@ -410,7 +411,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                 } else if (f.getFluid().equals(tr.getFluid().getFluid())) {
                                     tr.addLiquid(size * f.getAmount(), fluid);
                                     if (!ep.isCreative()) {
-                                        @NotNull FluidStack ret = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().drain(f, IFluidHandler.FluidAction.EXECUTE);
+                                         FluidStack ret = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().drain(f, IFluidHandler.FluidAction.EXECUTE);
                                         ep.setItemSlot(EquipmentSlot.MAINHAND, ret.isEmpty() ? ReikaItemHelper.getSizedItemStack(is, size) : ItemStack.EMPTY);
                                     }
                                     te.syncAllData(true);
@@ -792,7 +793,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
     }
 
     @Override
-    public void appendHoverText(ItemStack is, @Nullable BlockGetter p_49817_, List<Component> li, TooltipFlag p_49819_) {
+    public void appendHoverText(ItemStack is,  BlockGetter p_49817_, List<Component> li, TooltipFlag p_49819_) {
         super.appendHoverText(is, p_49817_, li, p_49819_);
         MachineRegistry m = MachineRegistry.getMachineMapping(Block.byItem(is.getItem()));
         if (m == null) {
@@ -802,12 +803,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 //        ItemMachineRenderer ir = ClientProxy.machineItems;
 //        BlockEntity te = ir.getRenderingInstance(m, 0);
 
-//        if (m.isIncomplete()) {
-//            li.add("This machine is in development. Use at your own risk.");
-//        }
-//        if (m.hasNBTVariants() && is.stackTagCompound != null) {
-//            li.addAll(((NBTMachine)te).getDisplayTags(is.stackTagCompound));
-//        }
+    //    if (m.isIncomplete()) {
+        //    li.add("This machine is in development. Use at your own risk.");
+    //    }
+       //if (m.hasNBTVariants() && is.stackTagCompound != null) {
+       //    li.addAll(((NBTMachine)te).getDisplayTags(is.stackTagCompound));
+       //}
         /*if (m == MachineRegistry.FUELENGINE) {
             if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                 int t = TileEntityFuelEngine.GEN_TORQUE;
@@ -878,12 +879,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     li.add(Component.literal("Bedrock Upgrade"));
                 }
             }
-           /* todo BlockEntityEngine te = (BlockEntityEngine)MachineRegistry.AC_ENGINE.createTEInstanceForRender(i);
-            if (te instanceof NBTMachine && is.hasTag()) {
-                for (String s : ((NBTMachine)te).getDisplayTags(is.getTag())) {
-                    li.add(Component.literal(s));
-                }
-            }*/
+            // BlockEntityEngine te = (BlockEntityEngine) MachineRegistry.AC_ENGINE//.createTEInstanceForRender(i);
+            // if (te instanceof NBTMachine && is.hasTag()) {
+                // for (String s : ((NBTMachine)te).getDisplayTags(is.getTag())) {
+                    // li.add(Component.literal(s));
+                //}
+            //}
         }
     }
 }

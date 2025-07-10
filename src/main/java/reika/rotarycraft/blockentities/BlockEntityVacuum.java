@@ -33,7 +33,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
 import reika.dragonapi.interfaces.blockentity.XPProducer;
@@ -366,7 +366,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         return 0;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack getFluidInTank(int tank) {
         return null;
@@ -378,7 +378,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+    public boolean isFluidValid(int tank,  FluidStack stack) {
         return false;
     }
 
@@ -387,13 +387,13 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         return 0;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
         return null;
     }
 
-    @NotNull
+    
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
         return null;

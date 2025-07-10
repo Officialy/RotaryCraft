@@ -13,17 +13,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.instantiable.data.immutable.WorldLocation;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.IOMachine;
-import reika.rotarycraft.api.power.*;
+import reika.rotarycraft.api.power.AdvancedShaftPowerReceiver;
+import reika.rotarycraft.api.power.ShaftPowerEmitter;
+import reika.rotarycraft.api.power.ShaftPowerReceiver;
+import reika.rotarycraft.api.power.SimpleShaftPowerReceiver;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
@@ -297,11 +297,19 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
     }
 
     public boolean isWritingTo(PowerSourceTracker te) {
-        return true;//todo FIX MATCHTILE this.matchTile(te, write);
+        if (write == null || !(te instanceof BlockEntity))
+            return false;
+        BlockPos targetPos = ((BlockEntity) te).getBlockPos();
+        BlockPos writePos = this.worldPosition.relative(write);
+        return writePos.equals(targetPos);
     }
 
     public final boolean isWritingTo2(PowerSourceTracker te) {
-        return true;//todo FIX MATCHTILE this.matchTile(te, write2);
+        if (write2 == null || !(te instanceof BlockEntity))
+            return false;
+        BlockPos targetPos = ((BlockEntity) te).getBlockPos();
+        BlockPos writePos = this.worldPosition.relative(write2);
+        return writePos.equals(targetPos);
     }
 
     public final boolean isReadingFrom(PowerSourceTracker te) {
@@ -329,11 +337,11 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
             return;
         }
 //        RotaryCraft.LOGGER.info(!te.isWritingTo(this) && !te.isWritingTo2(this));
-       /*todo if (!te.isWritingTo(this) && !te.isWritingTo2(this)) {
+        if (!te.isWritingTo(this) && !te.isWritingTo2(this)) {
             omegain = 0;
             torquein = 0;
             return;
-        }*/
+        }
         torquein = te.torque;
         omegain = te.omega;
     }

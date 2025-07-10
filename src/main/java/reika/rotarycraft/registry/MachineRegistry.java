@@ -40,6 +40,7 @@ import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import reika.rotarycraft.blockentities.decorative.BlockEntityParticleEmitter;
 import reika.rotarycraft.blockentities.engine.*;
 import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
+import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
@@ -115,7 +116,7 @@ public enum MachineRegistry implements TileEnum {
     //    EXTRACTOR(true, "machine.extractor", BlockRotaryCraftMachine.class, BlockEntityExtractor.class, "RenderExtractor"),
 //    PULSEJET(true, "machine.pulsejet", RotaryBlocks.PULSE_JET_FURNACE.get(), BlockEntityPulseFurnace.class),
 //    COMPACTOR(true, "machine.compactor", BlockRotaryCraftMachine.class, BlockEntityCompactor.class, "RenderCompactor"),
-//    FAN("machine.fan", BlockRotaryCraftMachine.class, BlockEntityFan.class, "RenderFan"),
+   FAN("machine.fan", RotaryBlocks.FAN.get(), BlockEntityFan.class, (modelSet) -> new FanModel(modelSet.bakeLayer(RotaryModelLayers.FAN))),
     //    FRACTIONATOR(true, "machine.fractionator", BlockRotaryCraftMachine.class, BlockEntityFractionator.class, "RenderFraction"),
 //    GPR(true, "machine.gpr", BlockGPR.class, BlockEntityGPR.class),
     OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class/*, (modelSet) -> new ObsidianMakerModel(modelSet.bakeLayer(RotaryModelLayers.OBSIDIAN_MAKER))*/),
@@ -768,6 +769,18 @@ public enum MachineRegistry implements TileEnum {
     public boolean canBeFrictionHeated() {
         return FrictionHeatable.class.isAssignableFrom(te);
     }
+
+	public boolean hasNBTVariants() {
+		return NBTMachine.class.isAssignableFrom(te);
+	}
+
+	public boolean hasTemperature() {
+		return TemperatureTE.class.isAssignableFrom(te);
+	}
+
+	public boolean isTransmissionMachine() {
+		return BlockEntityTransmissionMachine.class.isAssignableFrom(te);
+	}
 
     public boolean canBeBroken() {
         return switch (this) {

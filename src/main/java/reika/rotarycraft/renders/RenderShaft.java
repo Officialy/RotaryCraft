@@ -12,22 +12,16 @@ package reika.rotarycraft.renders;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import org.joml.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
-import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 import reika.rotarycraft.models.animated.SplitterModel;
@@ -55,19 +49,25 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
 
             BlockState blockstate = tile.getLevel() != null ? tile.getBlockState() : RotaryBlocks.DYNAMOMETER.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
             stack.translate(0.5F, 1.5F, 0.5F);
-            float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
-            stack.mulPose(Axis.YP.rotationDegrees(-f + 90));
-            stack.mulPose(Axis.ZP.rotationDegrees(180));
+            stack.mulPose(Axis.ZP.rotationDegrees(180)); // Initial rotation to correct model orientation
+
+            Direction facing = blockstate.getValue(BlockRotaryCraftMachine.FACING);
+            if (facing.getAxis().isVertical()) {
+                // No additional rotation needed for vertical shafts as they align with the Y-axis by default
+            } else {
+                float f = facing.toYRot();
+                stack.mulPose(Axis.YP.rotationDegrees(-f + 90));
+            }
 
             if (tile.isCross()) {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(SplitterModel.TEXTURE_LOCATION + getImageFileName(tile))));
-                crossModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.phi, 0);
+                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.parse(SplitterModel.TEXTURE_LOCATION + getImageFileName(tile))));
+                crossModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.crossphi1, 0);
             } else if (tile.isVertical()) {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(ShaftVModel.TEXTURE_LOCATION + getImageFileName(tile))));
-                VShaftModelt.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.phi, 0);
+                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.parse(ShaftVModel.TEXTURE_LOCATION + getImageFileName(tile))));
+                VShaftModelt.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), -tile.phi, 0);
             } else {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(ShaftModel.TEXTURE_LOCATION + getImageFileName(tile))));
-                shaftModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.phi, 0);
+                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.parse(ShaftModel.TEXTURE_LOCATION + getImageFileName(tile))));
+                shaftModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), -tile.phi, 0);
 //                RotaryCraft.LOGGER.info("phi" + tile.phi);
             }
         }

@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.NotNull;
+
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
@@ -36,7 +36,7 @@ public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements
     }
 
     @Override
-    public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+    public  FluidStack drain(FluidStack resource, FluidAction action) {
         return this.canDrain(resource.getFluid()) ? tank.drain(resource.getAmount(), action) : null;
     }
 

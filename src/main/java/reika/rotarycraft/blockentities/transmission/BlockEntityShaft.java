@@ -54,6 +54,8 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
     private boolean isCrossForRender;
 
+    public boolean inverted = false;
+
     public BlockEntityShaft(MaterialRegistry materialType, BlockPos pos, BlockState state) {
         super(switch (materialType) {
             case WOOD -> RotaryBlockEntities.WOOD_SHAFT.get();
@@ -287,55 +289,70 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
     }
 
     public void getIOSides(Level world, BlockPos pos, Direction dir) {
-        switch (dir) {
-            case WEST -> {
-                read = Direction.EAST;
-                write = Direction.WEST;
+        read2 = null;
+        write2 = null;
+        if (this.isCross()) {
+            // This logic is based on the 4 cross meta values from the 1.7.10 code.
+            // The mapping from the FACING direction to a specific cross configuration is a best guess.
+            switch (dir) {
+                case NORTH: // Guessing this corresponds to old meta 9 (W/S -> E/N)
+                    read = Direction.WEST;
+                    read2 = Direction.SOUTH;
+                    write = Direction.EAST;
+                    write2 = Direction.NORTH;
+                    break;
+                case SOUTH: // Guessing this corresponds to old meta 8 (W/N -> E/S)
+                    read = Direction.WEST;
+                    read2 = Direction.NORTH;
+                    write = Direction.EAST;
+                    write2 = Direction.SOUTH;
+                    break;
+                case WEST: // Guessing this corresponds to old meta 7 (E/N -> W/S)
+                    read = Direction.EAST;
+                    read2 = Direction.NORTH;
+                    write = Direction.WEST;
+                    write2 = Direction.SOUTH;
+                    break;
+                case EAST: // Guessing this corresponds to old meta 6 (E/S -> W/N)
+                    read = Direction.EAST;
+                    read2 = Direction.SOUTH;
+                    write = Direction.WEST;
+                    write2 = Direction.NORTH;
+                    break;
+                default: // Vertical and other directions are not valid for cross shafts as per old code comments
+                    // Fallback to a simple configuration
+                    read = dir.getOpposite();
+                    write = dir;
+                    break;
             }
-            case EAST -> {
-                read = Direction.WEST;
-                write = Direction.EAST;
+        } else {
+            // This is the existing logic for simple shafts, which seems correct.
+            switch (dir) {
+                case WEST -> {
+                    read = Direction.EAST;
+                    write = Direction.WEST;
+                }
+                case EAST -> {
+                    read = Direction.WEST;
+                    write = Direction.EAST;
+                }
+                case NORTH -> {
+                    read = Direction.SOUTH;
+                    write = Direction.NORTH;
+                }
+                case SOUTH -> {
+                    read = Direction.NORTH;
+                    write = Direction.SOUTH;
+                }
+                case UP -> {    //moving up
+                    read = Direction.DOWN;
+                    write = Direction.UP;
+                }
+                case DOWN -> {    //moving down
+                    read = Direction.UP;
+                    write = Direction.DOWN;
+                }
             }
-            case NORTH -> {
-                read = Direction.SOUTH;
-                write = Direction.NORTH;
-            }
-            case SOUTH -> {
-                read = Direction.NORTH;
-                write = Direction.SOUTH;
-            }
-            case UP -> {    //moving up
-                read = Direction.DOWN;
-                write = Direction.UP;
-            }
-            case DOWN -> {    //moving down
-                read = Direction.UP;
-                write = Direction.DOWN;
-            }
-           /*todo case 6:    //cross - has 4 states
-                read = Direction.EAST;
-                read2 = Direction.SOUTH;
-                write = Direction.WEST;
-                write2 = Direction.NORTH;
-                break;
-            case 7:    //cross - has 4 states
-                read = Direction.EAST;
-                read2 = Direction.NORTH;
-                write = Direction.WEST;
-                write2 = Direction.SOUTH;
-                break;
-            case 8:    //cross - has 4 states
-                read = Direction.WEST;
-                read2 = Direction.NORTH;
-                write = Direction.EAST;
-                write2 = Direction.SOUTH;
-                break;
-            case 9:    //cross - has 4 states
-                read = Direction.WEST;
-                read2 = Direction.SOUTH;
-                write = Direction.EAST;
-                write2 = Direction.NORTH;
-                break;*/
         }
     }
 
@@ -490,17 +507,17 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
         MachineRegistry m = isCentered ? this.getMachine(read) : MachineRegistry.getMachine(world, dx, dy, dz);
         BlockEntity te = isCentered ? getAdjacentBlockEntity(read) : world.getBlockEntity(new BlockPos(dx, dy, dz));
 
-//        if (isCentered && ReikaBlockHelper.isPortalBlock(world, x + write.getStepX(), y + write.getStepY(), z + write.getStepZ())) {
-//            this.convertToPortal(world, pos, x + write.getStepX(), y + write.getStepY(), z + write.getStepZ());
-//        }
-
+        this.inverted = false; // Reset before checking
         if (this.isProvider(te)) {
-            if (m == MachineRegistry.WOOD_SHAFT || m ==
-                    MachineRegistry.STONE_SHAFT || m ==
-                    MachineRegistry.HSLA_SHAFT || m ==
-                    MachineRegistry.TUNGSTEN_SHAFT || m ==
-                    MachineRegistry.DIAMOND_SHAFT || m ==
-                    MachineRegistry.BEDROCK_SHAFT) {
+            if (te instanceof BlockEntityBevelGear) {
+                BlockEntityBevelGear gear = (BlockEntityBevelGear) te;
+                if (gear.getWriteDirection() == read.getOpposite()) {
+                    this.copyStandardPower(te);
+                    if (gear.isInverting()) {
+                        this.inverted = true;
+                    }
+                }
+            } else if (te instanceof BlockEntityShaft) {
                 BlockEntityShaft devicein = (BlockEntityShaft) te;
                 if (devicein.isCross()) {
                     this.readFromCross(devicein);
@@ -508,6 +525,11 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
                 } else if (devicein.isWritingTo(this)) {
                     torquein = devicein.torque;
                     omegain = devicein.omega;
+                    if (this.isVertical() && devicein.isVertical()) {
+                        this.inverted = !devicein.inverted;
+                    } else {
+                        this.inverted = devicein.inverted;
+                    }
                 }
             }
             if (te instanceof SimpleProvider) {
@@ -583,6 +605,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
         tag.putFloat("cphi1", crossphi1);
         tag.putFloat("cphi2", crossphi2);
+        tag.putBoolean("inverted", inverted);
     }
 
     @Override
@@ -599,6 +622,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
         crossphi1 = tag.getFloat("cphi1");
         crossphi2 = tag.getFloat("cphi2");
+        inverted = tag.getBoolean("inverted");
     }
 
     @Override
@@ -610,7 +634,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
     public void saveAdditional(CompoundTag NBT) {
         super.saveAdditional(NBT);
         NBT.putString("shafttype", materialType.name());
-        NBT.putFloat("phi", phi);
+        NBT.putBoolean("inverted", inverted);
     }
 
     @Override
@@ -627,6 +651,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
         }
         phi = NBT.getFloat("phi");
         materialType = mat;
+        inverted = NBT.getBoolean("inverted");
     }
 
     @Override

@@ -19,7 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+
 import reika.rotarycraft.base.ItemRotaryTool;
 
 public class ItemHandBook extends ItemRotaryTool implements MenuProvider {
@@ -40,7 +40,7 @@ public class ItemHandBook extends ItemRotaryTool implements MenuProvider {
         return Component.translatable("item.handbook.name");
     }
 
-    @Nullable
+
     @Override
     public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return null;//new HandBookMenu(p_39954_, p_39955_, p_39956_);

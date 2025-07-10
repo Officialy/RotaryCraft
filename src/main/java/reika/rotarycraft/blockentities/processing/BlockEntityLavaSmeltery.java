@@ -27,7 +27,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.Nullable;
+
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.XPProducer;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -353,7 +353,7 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new ContainerBigFurnace(p_39954_, p_39955_, this);
     }
 }

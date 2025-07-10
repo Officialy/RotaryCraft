@@ -42,7 +42,7 @@
 //import net.minecraftforge.common.MinecraftForge;
 //import net.minecraftforge.fluids.FluidStack;
 //import net.minecraftforge.fml.loading.FMLLoader;
-//import org.jetbrains.annotations.NotNull;
+//
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.dragonapi.libraries.ReikaAABBHelper;
@@ -1076,7 +1076,7 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack getFluidInTank(int tank) {
 //        return new FluidStack(RotaryFluids.JET_FUEL.get(), 0);
@@ -1088,7 +1088,7 @@
 //    }
 //
 //    @Override
-//    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+//    public boolean isFluidValid(int tank,  FluidStack stack) {
 //        return false;
 //    }
 //
@@ -1097,13 +1097,13 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack drain(FluidStack resource, FluidAction action) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public FluidStack drain(int maxDrain, FluidAction action) {
 //        return null;

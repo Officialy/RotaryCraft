@@ -16,7 +16,7 @@
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.phys.AABB;
-//import org.jetbrains.annotations.NotNull;
+//
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -236,13 +236,13 @@
 //        return 0;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
-//    public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+//    public ItemStack insertItem(int slot,  ItemStack stack, boolean simulate) {
 //        return null;
 //    }
 //
-//    @NotNull
+//    
 //    @Override
 //    public ItemStack extractItem(int slot, int amount, boolean simulate) {
 //        return null;
@@ -254,7 +254,7 @@
 //    }
 //
 //    @Override
-//    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+//    public boolean isItemValid(int slot,  ItemStack stack) {
 //        return false;
 //    }
 //

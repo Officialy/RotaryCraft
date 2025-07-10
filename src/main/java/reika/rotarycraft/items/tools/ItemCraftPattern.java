@@ -15,7 +15,7 @@
 //import net.minecraft.world.item.crafting.Recipe;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Blocks;
-//import org.jetbrains.annotations.Nullable;
+//
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
 //import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 //import reika.rotarycraft.RotaryCraft;
@@ -46,7 +46,7 @@
 //    }
 //
 //    @Override
-//    public void appendHoverText(ItemStack is, @Nullable Level p_41422_, List<Component> li, TooltipFlag p_41424_) {
+//    public void appendHoverText(ItemStack is,  Level p_41422_, List<Component> li, TooltipFlag p_41424_) {
 //        //FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 //        if (is.getTag() == null) {
 //            li.add(Component.literal("No Crafting Pattern."));

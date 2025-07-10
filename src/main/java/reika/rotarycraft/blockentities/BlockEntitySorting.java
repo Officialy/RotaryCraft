@@ -20,8 +20,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+
 import reika.dragonapi.instantiable.data.immutable.InventorySlot;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -307,7 +307,7 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
     }
 
     @Override
-    public @Nullable AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+    public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new ContainerSorter(p_39954_, p_39955_, this);
     }
 
