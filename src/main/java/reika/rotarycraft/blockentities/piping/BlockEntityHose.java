@@ -12,12 +12,10 @@ package reika.rotarycraft.blockentities.piping;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import reika.dragonapi.DragonAPI;
@@ -26,6 +24,7 @@ import reika.rotarycraft.auxiliary.interfaces.PumpablePipe;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryFluids;
 
 public class BlockEntityHose extends BlockEntityPiping implements PumpablePipe {
@@ -39,7 +38,7 @@ public class BlockEntityHose extends BlockEntityPiping implements PumpablePipe {
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.HOSE.get();
     }
 
     @Override

@@ -12,7 +12,6 @@ package reika.rotarycraft.blockentities.production;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -28,8 +27,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.loading.FMLLoader;
-
-
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
@@ -172,11 +169,11 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
             if (power / MINPOWER >= 4096)
                 mult *= 2;
         }
-        if (f.equals(Fluids.WATER))
+//        if (f.equals(Fluids.WATER))
 //            RotaryAdvancements.PUMP.triggerAchievement(this.getPlacer());
-            duplicationAmount = mult * ConfigRegistry.FREEWATER.getValue();
+        duplicationAmount = (int) (mult * ConfigRegistry.FREEWATER.getFloat());
         tank.addLiquid(fs.getAmount() * mult, f);
-        world.blockUpdated(loc, world.getBlockState(pos).getBlock());
+        world.blockUpdated(loc, world.getBlockState(loc).getBlock());
     }
 
     private boolean canMultiply(Fluid fluid) {

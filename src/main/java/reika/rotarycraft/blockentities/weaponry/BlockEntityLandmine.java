@@ -12,8 +12,6 @@ package reika.rotarycraft.blockentities.weaponry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,8 +29,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-
-
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.interfaces.block.SemiUnbreakable;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -303,8 +299,65 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     }
 
     @Override
+    public boolean isEmpty() {
+        for (int i = 0; i < this.getContainerSize(); i++) {
+            if (!itemHandler.getStackInSlot(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int i) {
+        if (i < 0 || i >= this.getContainerSize()) {
+            return ItemStack.EMPTY;
+        }
+        return itemHandler.getStackInSlot(i);
+    }
+
+    @Override
+    public ItemStack removeItem(int i, int i1) {
+        if (i < 0 || i >= this.getContainerSize()) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack stack = itemHandler.extractItem(i, i1, false);
+        if (stack.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+        return stack;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int i) {
+        if (i < 0 || i >= this.getContainerSize()) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack stack = itemHandler.getStackInSlot(i);
+        itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+        return stack;
+    }
+
+    @Override
+    public void setItem(int i, ItemStack itemStack) {
+        if (i < 0 || i >= this.getContainerSize()) {
+            return;
+        }
+        itemHandler.setStackInSlot(i, itemStack);
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        if (this.isRemoved()) {
+            return false;
+        }
+        return player.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64;
+    }
+
+    @Override
     public boolean hasAnInventory() {
-        return false;
+        return true;
     }
 
     @Override
@@ -319,5 +372,12 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     @Override
     public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return new LandmineContainer(p_39954_, p_39955_, this);
+    }
+
+    @Override
+    public void clearContent() {
+        for (int i = 0; i < this.getContainerSize(); i++) {
+            itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+        }
     }
 }

@@ -38,7 +38,7 @@ public class RotaryBlockEntities {
     public static final RegistryObject<BlockEntityType<BlockEntityShaft>> STONE_SHAFT = BLOCK_ENTITIES.register("stone_shaft", () ->
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STONE, pPos, pState), RotaryBlocks.STONE_SHAFT.get()).build(null));
     public static final RegistryObject<BlockEntityType<BlockEntityShaft>> HSLA_STEEL_SHAFT = BLOCK_ENTITIES.register("hsla_shaft", () ->
-            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STEEL, pPos, pState), RotaryBlocks.HSLA_SHAFT.get()).build(null));
+            BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.STEEL, pPos, pState), RotaryBlocks.HSLA_SHAFT.get(), RotaryBlocks.SHAFT_CROSS.get(), RotaryBlocks.SHAFT_MERGE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityShaft>> TUNGSTEN_SHAFT = BLOCK_ENTITIES.register("tungsten_shaft", () ->
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.TUNGSTEN, pPos, pState), RotaryBlocks.TUNGSTEN_SHAFT.get()).build(null));
@@ -96,11 +96,12 @@ public class RotaryBlockEntities {
     public static final RegistryObject<BlockEntityType<BlockEntityReservoir>> RESERVOIR = BLOCK_ENTITIES.register("reservoir", () ->
             BlockEntityType.Builder.of(BlockEntityReservoir::new, RotaryBlocks.RESERVOIR.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityPipe>> PIPE = BLOCK_ENTITIES.register("pipe", () ->
-            BlockEntityType.Builder.of((pos, state) -> new BlockEntityPipe(RotaryBlockEntities.PIPE.get(), pos, state), RotaryBlocks.PIPE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<BlockEntityPipe>> FLUID_PIPE = BLOCK_ENTITIES.register("fluid_pipe", () ->
+            BlockEntityType.Builder.of(BlockEntityPipe::new, RotaryBlocks.FLUID_PIPE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<BlockEntityHose>> HOSE = BLOCK_ENTITIES.register("hose", () ->
             BlockEntityType.Builder.of(BlockEntityHose::new, RotaryBlocks.HOSE.get()).build(null));
+
     public static final RegistryObject<BlockEntityType<BlockEntitySeparatorPipe>> SEPARATION = BLOCK_ENTITIES.register("separation", () ->
             BlockEntityType.Builder.of(BlockEntitySeparatorPipe::new, RotaryBlocks.SEPARATION.get()).build(null));
 

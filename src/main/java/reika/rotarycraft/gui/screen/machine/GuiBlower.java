@@ -9,8 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -22,7 +20,6 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.GuiPowerOnlyMachine;
 import reika.rotarycraft.blockentities.BlockEntityBlower;
 import reika.rotarycraft.gui.container.machine.BlowerContainer;
-import reika.rotarycraft.registry.PacketRegistry;
 
 public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerContainer> {
 
@@ -91,7 +88,7 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
         for (int i = 0; i < tile.matchingItems.length; i++) {
             ItemStack is = tile.matchingItems[i];
             if (is != null) {
-                api.drawItemStack(stack, Minecraft.getInstance().getItemRenderer(), font, is, x + i % 9 * 18, y + i / 9 * dy);
+                api.drawItemStack(stack, font, is, x + i % 9 * 18, y + i / 9 * dy);
             }
         }
 

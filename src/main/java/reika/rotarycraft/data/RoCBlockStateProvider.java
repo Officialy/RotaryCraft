@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.MachineRegistry;
-import reika.rotarycraft.registry.RotaryBlocks;
 
 import java.util.ArrayList;
 import java.util.Arrays;

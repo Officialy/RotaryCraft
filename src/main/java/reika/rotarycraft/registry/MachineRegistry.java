@@ -54,6 +54,7 @@ import reika.rotarycraft.blockentities.weaponry.*;
 import reika.rotarycraft.models.*;
 import reika.rotarycraft.models.animated.*;
 import reika.rotarycraft.models.animated.shaftonly.ClutchModel;
+import reika.rotarycraft.models.animated.shaftonly.CrossModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftModel;
 import reika.rotarycraft.models.engine.*;
 import reika.rotarycraft.modinterface.conversion.BlockEntityBoiler;
@@ -87,6 +88,8 @@ public enum MachineRegistry implements TileEnum {
     TUNGSTEN_SHAFT("machine.shaft", RotaryBlocks.TUNGSTEN_SHAFT.get(), BlockEntityShaft.class, (modelSet) -> new ShaftModel(modelSet.bakeLayer(RotaryModelLayers.SHAFT))),
     DIAMOND_SHAFT("machine.shaft", RotaryBlocks.DIAMOND_SHAFT.get(), BlockEntityShaft.class, (modelSet) -> new ShaftModel(modelSet.bakeLayer(RotaryModelLayers.SHAFT))),
     BEDROCK_SHAFT("machine.shaft", RotaryBlocks.BEDROCK_SHAFT.get(), BlockEntityShaft.class, (modelset) -> new ShaftModel(modelset.bakeLayer(RotaryModelLayers.SHAFT))),
+    SHAFT_CROSS("machine.shaft", RotaryBlocks.SHAFT_CROSS.get(), BlockEntityShaft.class, (modelset) -> new CrossModel(modelset.bakeLayer(RotaryModelLayers.SHAFT_CROSS))),
+    SHAFT_MERGE("machine.shaft", RotaryBlocks.SHAFT_MERGE.get(), BlockEntityShaft.class, (modelset) -> new CrossModel(modelset.bakeLayer(RotaryModelLayers.SHAFT_CROSS))),
 
     BEVELGEARS(true, "machine.bevel", RotaryBlocks.BEVEL_GEARS.get(), BlockEntityBevelGear.class, (modelSet) -> new BevelModel(modelSet.bakeLayer(RotaryModelLayers.BEVEL))),
     GEARBOX(true, "machine.gearbox", RotaryBlocks.HSLA_GEARBOX_2x.get(), BlockEntityGearbox.class, (modelSet) -> new GearboxModel(modelSet.bakeLayer(RotaryModelLayers.GEARBOX))),
@@ -100,7 +103,7 @@ public enum MachineRegistry implements TileEnum {
 
     //                       PIPES
     HOSE("machine.hose", RotaryBlocks.HOSE.get(), BlockEntityHose.class/*, (modelSet) -> new HoseModel(modelSet.bakeLayer(RotaryModelLayers.HOSE))*/),
-    PIPE("machine.pipe", RotaryBlocks.PIPE.get(), BlockEntityPipe.class/*, (modelSet) -> new PipeModel(modelSet.bakeLayer(RotaryModelLayers.PIPE))*/),
+    PIPE("machine.pipe", RotaryBlocks.FLUID_PIPE.get(), BlockEntityPipe.class/*, (modelSet) -> new PipeModel(modelSet.bakeLayer(RotaryModelLayers.PIPE))*/),
     FUELLINE("machine.fuelline", RotaryBlocks.FUEL_LINE.get(), BlockEntityFuelLine.class/*, (modelSet) -> new FuelLineModel(modelSet.bakeLayer(RotaryModelLayers.FUEL_LINE))*/),
     VALVE("machine.valve", RotaryBlocks.VALVE.get(), BlockEntityValve.class/*, (modelSet) -> new ValveModel(modelSet.bakeLayer(RotaryModelLayers.VALVE))*/),
     BYPASS("machine.bypass", RotaryBlocks.BYPASS.get(), BlockEntityBypass.class/*, (modelSet) -> new BypassModel(modelSet.bakeLayer(RotaryModelLayers.BYPASS))*/),

@@ -16,12 +16,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 
 public class BlockEntitySeparatorPipe extends BlockEntityPiping {
 
@@ -118,7 +118,7 @@ public class BlockEntitySeparatorPipe extends BlockEntityPiping {
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.SEPARATION.get();
     }
 
     @Override

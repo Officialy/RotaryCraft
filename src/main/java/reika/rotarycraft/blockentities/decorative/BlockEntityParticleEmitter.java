@@ -1,138 +1,152 @@
-/*******************************************************************************
- * @author Reika Kalseki
- *
- * Copyright 2017
- *
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
 package reika.rotarycraft.blockentities.decorative;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import reika.dragonapi.DragonAPI;
+import reika.dragonapi.base.OneSlotMachine;
+import reika.dragonapi.interfaces.blockentity.InertIInv;
 import reika.dragonapi.libraries.registry.ReikaParticleHelper;
+import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
 import reika.rotarycraft.base.blockentity.BlockEntitySpringPowered;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 
-public class BlockEntityParticleEmitter extends BlockEntitySpringPowered {// todo implements OneSlotMachine, InertIInv {
+/**
+ * Spring-powered decorative tile that continuously emits arbitrary particles.
+ * Slot 0 holds a charged HSLA steel spring; the spring drains over time using
+ * {@link BlockEntitySpringPowered} utilities. Redstone control is optional.
+ */
+public class BlockEntityParticleEmitter extends BlockEntitySpringPowered
+        implements OneSlotMachine, InertIInv, RangedEffect {
 
-    public ReikaParticleHelper particleType = ReikaParticleHelper.SMOKE;
-    public double pX = 0;
-    public double pY = 0;
-    public double pZ = 0;
-    public int particlesPerTick = 3;
+    /* --------------------------------------------------------------------- */
+    /*  Configurable fields (synced)                                         */
+    /* --------------------------------------------------------------------- */
+    public ReikaParticleHelper particleType   = ReikaParticleHelper.SMOKE;
+    public double pX = 0, pY = 0, pZ = 0;   // motion vector
+    public int    particlesPerTick = 3;
+    public boolean useRedstone     = false;
 
-    public boolean useRedstone = false;
+    /* --------------------------------------------------------------------- */
+    /*  Inventory (single-slot)                                              */
+    /* --------------------------------------------------------------------- */
+    private final ItemStackHandler inv = new ItemStackHandler(1) {
+        @Override protected void onContentsChanged(int slot) { setChanged(); }
+    };
+    private final LazyOptional<IItemHandler> cap = LazyOptional.of(() -> inv);
 
+    /* --------------------------------------------------------------------- */
+    /*  Construction                                                         */
+    /* --------------------------------------------------------------------- */
     public BlockEntityParticleEmitter(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.PARTICLE.get(), pos, state);
     }
 
+    /* --------------------------------------------------------------------- */
+    /*  Logic                                                                */
+    /* --------------------------------------------------------------------- */
     @Override
-    public int getBaseDischargeTime() {
-        return 600;
+    public void updateEntity(Level world, BlockPos pos) {
+        updateCoil();
+        if (!canEmit(world) || world.isClientSide) return;
+        for (int i = 0; i < particlesPerTick; i++) {
+            particleType.spawnAt(world,
+                    pos.getX() + DragonAPI.rand.nextDouble(),
+                    pos.getY() + 2 + DragonAPI.rand.nextDouble() * 4,
+                    pos.getZ() + DragonAPI.rand.nextDouble(),
+                    pX, pY, pZ);
+        }
     }
 
-    public boolean canEmit(Level world, BlockPos pos) {
-        if (!this.hasCoil())
-            return false;
+    private boolean canEmit(Level world) {
+        if (!hasCoil()) return false;
         return !useRedstone || this.hasRedstoneSignal();
     }
 
-
-    @Override
-    public Block getBlockEntityBlockID() {
-        return null;
-    }
-
-    @Override
-    public void updateEntity(Level world, BlockPos pos) {
-        this.updateCoil();
-        if (this.canEmit(world, pos)) {
-            for (int i = 0; i < particlesPerTick; i++) {
-                particleType.spawnAt(world, worldPosition.getX() + DragonAPI.rand.nextDouble(), worldPosition.getY() + 2 + DragonAPI.rand.nextDouble() * 4, worldPosition.getZ() + DragonAPI.rand.nextDouble(), pX, pY, pZ);
-            }
-        }
-    }
-
-    @Override
-    protected void animateWithTick(Level level, BlockPos blockPos) {
-
-    }
-
     private void updateCoil() {
-        if (!this.hasCoil()) {
-            return;
-        }
+        if (!hasCoil()) return;
         tickcount++;
-        if (tickcount > this.getUnwindTime()) {
-            ItemStack is = this.getDecrementedCharged();
-            itemHandler.setStackInSlot(0, is);
+        if (tickcount >= getUnwindTime()) {
+            inv.setStackInSlot(0, getDecrementedCharged());
             tickcount = 0;
         }
     }
 
-    @Override
-    public MachineRegistry getMachine() {
-        return MachineRegistry.PARTICLE;
+    /* --------------------------------------------------------------------- */
+    /*  Inventory plumbing                                                   */
+    /* --------------------------------------------------------------------- */
+    @Override public int  getContainerSize()        { return 1; }
+    @Override public boolean isEmpty()              { return inv.getStackInSlot(0).isEmpty(); }
+    @Override public ItemStack getItem(int i)       { return i==0? inv.getStackInSlot(0): ItemStack.EMPTY; }
+    @Override public ItemStack removeItem(int i,int cnt){ return i==0? inv.extractItem(0,cnt,false): ItemStack.EMPTY; }
+    @Override public ItemStack removeItemNoUpdate(int i){ if(i!=0) return ItemStack.EMPTY; ItemStack s=inv.getStackInSlot(0); inv.setStackInSlot(0, ItemStack.EMPTY); return s; }
+    @Override public void setItem(int i, ItemStack s){ if(i==0) inv.setStackInSlot(0,s); }
+    @Override public void clearContent()            { inv.setStackInSlot(0, ItemStack.EMPTY); }
+    @Override public boolean stillValid(Player p)   { return !isRemoved() && p.distanceToSqr(worldPosition.getCenter())<=64; }
+
+    /* Capability exposure */
+    @Override public <T> LazyOptional<T> getCapability(Capability<T> capIn, Direction side){
+        return capIn==ForgeCapabilities.ITEM_HANDLER? cap.cast() : super.getCapability(capIn,side);
+    }
+
+    /* --------------------------------------------------------------------- */
+    /*  Misc block-entity overrides                                          */
+    /* --------------------------------------------------------------------- */
+    @Override public MachineRegistry getMachine()   { return MachineRegistry.PARTICLE; }
+    @Override public Block getBlockEntityBlockID()  { return RotaryBlocks.PARTICLE.get(); }
+    @Override public int  getBaseDischargeTime()    { return 600; }
+    @Override public int  getRedstoneOverride()     { return 0; }
+    @Override protected void animateWithTick(Level l, BlockPos p) { }
+    @Override public boolean hasModelTransparency() { return false; }
+    @Override protected String getTEName()          { return "ParticleEmitter"; }
+
+    /* --------------------------------------------------------------------- */
+    /*  Sync                                                                 */
+    /* --------------------------------------------------------------------- */
+    @Override protected void writeSyncTag(CompoundTag tag){
+        super.writeSyncTag(tag);
+        tag.putInt("type", particleType.ordinal());
+        tag.putInt("ppt",  particlesPerTick);
+        tag.putDouble("vx", pX);
+        tag.putDouble("vy", pY);
+        tag.putDouble("vz", pZ);
+        tag.putBoolean("rs", useRedstone);
+    }
+    @Override protected void readSyncTag(CompoundTag tag){
+        super.readSyncTag(tag);
+        particleType      = ReikaParticleHelper.values()[tag.getInt("type")];
+        particlesPerTick  = tag.getInt("ppt");
+        pX = tag.getDouble("vx");
+        pY = tag.getDouble("vy");
+        pZ = tag.getDouble("vz");
+        useRedstone = tag.getBoolean("rs");
     }
 
     @Override
-    public boolean hasModelTransparency() {
-        return false;
+    public int getRange() {
+        return 8;
     }
 
-    @Override
-    public int getRedstoneOverride() {
-        return 0;
-    }
-
-    @Override
-    protected void writeSyncTag(CompoundTag NBT) {
-        super.writeSyncTag(NBT);
-
-        NBT.putInt("type", particleType.ordinal());
-    }
-
-    @Override
-    protected void readSyncTag(CompoundTag NBT) {
-        super.readSyncTag(NBT);
-
-        particleType = ReikaParticleHelper.values()[NBT.getInt("type")];
-    }
-
-    @Override
-    protected String getTEName() {
-        return null;
-    }
-
-    public boolean isParticleValid(ReikaParticleHelper p) {
-        if (p == ReikaParticleHelper.DRIPLAVA)
-            return false;
-        return p != ReikaParticleHelper.DRIPWATER;
-//    todo    if (p == ReikaParticleHelper.SUSPEND)
-//            return false;
-// todo p != ReikaParticleHelper.SNOWSHOVEL;
-    }
-
-    @Override
-    public int getContainerSize() {
-        return 0;
-    }
+    /* --------------------------------------------------------------------- */
+    /*  Interface fulfilment (RangedEffect)                                  */
+    /* --------------------------------------------------------------------- */
+    @Override public int getMaxRange() { return 8; } // cosmetic only
 
     @Override
     public boolean hasAnInventory() {
-        return false;
+        return true;
     }
 
     @Override

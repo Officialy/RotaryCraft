@@ -20,7 +20,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class CoilModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/coiltex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/");
 
     private final ModelPart shape1;
     private final ModelPart shape2;

@@ -16,7 +16,7 @@
 //import reika.rotarycraft.blockentities.BlockEntityItemFilter;
 //
 //
-//public class ContainerItemFilter extends CoreMenu {
+//public class ContainerItemFilter extends CoreContainer<> {
 //
 //    private final BlockEntityItemFilter filter;
 //

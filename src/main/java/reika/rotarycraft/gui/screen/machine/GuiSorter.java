@@ -9,10 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +38,7 @@ public class GuiSorter extends GuiPowerOnlyMachine<BlockEntitySorting, Container
         for (int k = 0; k < l * 3; k++) {
             ItemStack is = sorter.getMapping(k);
             if (is != null) {
-                api.drawItemStack(stack, Minecraft.getInstance().getItemRenderer(), font, is, x + k % l * 18, y + k / l * dy);
+                api.drawItemStack(stack, font, is, x + k % l * 18, y + k / l * dy);
             }
         }
     }

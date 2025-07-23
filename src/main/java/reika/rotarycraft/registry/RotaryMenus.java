@@ -1,5 +1,6 @@
 package reika.rotarycraft.registry;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
@@ -8,10 +9,15 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import reika.dragonapi.base.CoreContainer;
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 import reika.rotarycraft.gui.container.ContainerHandCraft;
 import reika.rotarycraft.gui.container.machine.*;
 import reika.rotarycraft.gui.container.machine.inventory.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.gui.container.machine.BlankContainer;
+import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
 
 import java.util.function.Supplier;
 
@@ -42,13 +48,17 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerHandCraft>> HAND_CRAFT = register("hand_craft", ContainerHandCraft::new);
 
     Supplier<MenuType<SteamContainer>> STEAM_ENGINE = register("steam_engine", SteamContainer::new);
-    Supplier<MenuType<BevelContainer>> BEVEL = register("bevel", BevelContainer::new);
+    Supplier<MenuType<BlankContainer<BlockEntityBevelGear>>> BEVEL = register("bevel", (id, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        BlockEntity te = inv.player.level().getBlockEntity(pos);
+        return new BlankContainer<>(RotaryMenus.BEVEL.get(), id, inv, (BlockEntityBevelGear) te);
+    });
     Supplier<MenuType<MusicContainer>> MUSIC = register("music", MusicContainer::new);
 
     Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", ContainerGrinder::new);
     Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);
 
-//    Supplier<MenuType<BlastFurnaceMenu>> BLAST_FURNACE = register("blast_furnace",   () -> IForgeMenuType.create(new BlastFurnaceMenu.Factory()));
+    Supplier<MenuType<ContainerBlastFurnace>> BLAST_FURNACE = register("blast_furnace", ContainerBlastFurnace::new);
 //
 //    Supplier<MenuType<GrinderMenu>> GRINDER = register("grinder", () -> IForgeMenuType.create(new GrinderMenu.Factory()));
 //
@@ -70,6 +80,11 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerSorter>> SORTER = register("sorter", ContainerSorter::new);
     Supplier<MenuType<ContainerBigFurnace>> BIG_FURNACE = register("big_furnace", ContainerBigFurnace::new);
     Supplier<MenuType<ContainerCVT>> CVT = register("cvt", ContainerCVT::new);
+    Supplier<MenuType<BlankContainer<BlockEntityAdvancedGear>>> COIL = register("coil", (id, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        BlockEntity te = inv.player.level().getBlockEntity(pos);
+        return new BlankContainer<>(RotaryMenus.COIL.get(), id, inv, (BlockEntityAdvancedGear) te);
+    });
 //    Supplier<MenuType<ContainerFillingStation>> FILLING_STATION = register("filling_station", ContainerFillingStation::new);
 
 }

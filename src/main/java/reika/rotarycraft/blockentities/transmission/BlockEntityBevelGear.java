@@ -31,9 +31,10 @@ import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 import reika.rotarycraft.base.blockentity.BlockEntity1DTransmitter;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
-import reika.rotarycraft.gui.container.machine.BevelContainer;
+import reika.rotarycraft.gui.container.machine.BlankContainer;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryMenus;
 
 public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements GuiController {
 
@@ -330,14 +331,12 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
     public void saveAdditional(CompoundTag NBT) {
         super.saveAdditional(NBT);
         NBT.putInt("direction", direction);
-        NBT.putFloat("phi", phi);
     }
 
     @Override
     public void load(CompoundTag NBT) {
         super.load(NBT);
         direction = NBT.getInt("direction");
-        phi = NBT.getFloat("phi");
     }
     @Override
     protected String getTEName() {
@@ -400,6 +399,6 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
 
     @Override
     public  AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return new BevelContainer(p_39954_, p_39955_, this);
+        return new BlankContainer<>(RotaryMenus.BEVEL.get(), p_39954_, p_39955_, this);
     }
 }

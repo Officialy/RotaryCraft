@@ -17,9 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -51,7 +49,7 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
         super(RotaryBlockEntities.COMPOSTER.get(), pos, state);
     }
 
-    public static final ArrayList<ItemStack> getAllCompostables() {
+    public static ArrayList<ItemStack> getAllCompostables() {
         ArrayList<ItemStack> items = new ArrayList<>();
         for (int i = 0; i < CompostMatter.list.length; i++) {
             items.addAll(CompostMatter.list[i].getAllItems());
@@ -216,7 +214,7 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
 
     @Override
     protected String getTEName() {
-        return null;
+        return "Composter";
     }
 
     @Override
@@ -258,6 +256,58 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
     }
 
     @Override
+    public boolean isEmpty() {
+        return itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(1).isEmpty() && itemHandler.getStackInSlot(2).isEmpty();
+    }
+
+    @Override
+    public ItemStack getItem(int i) {
+        if (i < 0 || i >= itemHandler.getSlots()) {
+            return ItemStack.EMPTY;
+        }
+        if (i == 2 && !ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(i), RotaryItems.COMPOST)) {
+            return ItemStack.EMPTY;
+        }
+        return itemHandler.getStackInSlot(i);
+    }
+
+    @Override
+    public ItemStack removeItem(int i, int i1) {
+        ItemStack stack = itemHandler.extractItem(i, i1, false);
+        if (stack.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        if (i == 2 && !ReikaItemHelper.matchStacks(stack, RotaryItems.COMPOST)) {
+            return ItemStack.EMPTY;
+        }
+        return stack;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int i) {
+        ItemStack stack = itemHandler.getStackInSlot(i);
+        itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+        return stack;
+    }
+
+    @Override
+    public void setItem(int i, ItemStack itemStack) {
+        if (i < 0 || i >= itemHandler.getSlots()) {
+            return;
+        }
+        if (i == 2 && !ReikaItemHelper.matchStacks(itemStack, RotaryItems.COMPOST)) {
+            return;
+        }
+        itemHandler.setStackInSlot(i, itemStack);
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return !this.isRemoved() && player.distanceToSqr(
+                worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64;
+    }
+
+    @Override
     public boolean hasAnInventory() {
         return true;
     }
@@ -265,6 +315,11 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
     @Override
     public boolean hasATank() {
         return false;
+    }
+
+    @Override
+    public void clearContent() {
+
     }
 
     private enum CompostMatter {

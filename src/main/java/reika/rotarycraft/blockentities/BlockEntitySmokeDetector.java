@@ -1,14 +1,4 @@
-/*******************************************************************************
- * @author Reika Kalseki
- *
- * Copyright 2017
- *
- * All rights reserved.
- * Distribution of the software in any form is only allowed with
- * explicit, prior permission from the owner.
- ******************************************************************************/
 package reika.rotarycraft.blockentities;
-
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -19,153 +9,127 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
 import reika.rotarycraft.base.blockentity.BlockEntitySpringPowered;
-import reika.rotarycraft.registry.*;
+import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.SoundRegistry;
 
 public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implements RangedEffect {
 
-    //public static int MINPOWER = 16; //runs off of 4AAA's (max power = 4W) , so 16W (one DC engine can run 64, or 8 at max range)
-    //public static int BASESPEED = 0;
-
-    public int soundDelay = -1;
-    private boolean isAlarm = false;
+    public int  soundDelay = -1;
+    private int unwindTick = 0;
+    private boolean isAlarm  = false;
     private boolean isLowBatt = false;
-    private int unwindtick = 0;
 
+    /* --------------------------------------------------------------------- */
+    /*  Construction                                                         */
+    /* --------------------------------------------------------------------- */
     public BlockEntitySmokeDetector(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.SMOKE_DETECTOR.get(), pos, state);
-
-        ///todo make the item handler only accept RotaryItems.HSLA_STEEL_SPRING.get().getDefaultInstance();
     }
 
-    public boolean isAlarming() {
-        return isAlarm;
+    /* --------------------------------------------------------------------- */
+    /*  State helpers                                                        */
+    /* --------------------------------------------------------------------- */
+    public boolean isAlarming()        { return isAlarm; }
+    public boolean lowBattery()        {
+        return hasCoil() && itemHandler.getStackInSlot(0).getTag().getInt("power") <= 8;
+    }
+    public int     getRange()          {
+        if (!hasCoil()) return 0;
+        int dmg = itemHandler.getStackInSlot(0).getTag().getInt("power");
+        int val = (int) ReikaMathLibrary.logbase(dmg * dmg, 2);
+        return Math.min(val, 8);
     }
 
-    @Override
-    public Block getBlockEntityBlockID() {
-        return RotaryBlocks.SMOKE_DETECTOR.get();
-    }
-
+    /* --------------------------------------------------------------------- */
+    /*  Tick logic                                                           */
+    /* --------------------------------------------------------------------- */
     @Override
     public void updateEntity(Level world, BlockPos pos) {
         tickcount++;
-        unwindtick++;
-//        this.getPower4Sided(0, 1, 0);
-//        if (this.power < MINPOWER)
-//        	return;
-        if (!this.checkValidCoil())
-            return;
-        if (unwindtick >= this.getUnwindTime()) {
-            itemHandler.setStackInSlot(0, this.getDecrementedCharged());
-            unwindtick = 0;
+        unwindTick++;
+
+        if (!hasCoil())         return;
+        if (unwindTick >= getUnwindTime()) {
+            itemHandler.setStackInSlot(0, getDecrementedCharged());
+            unwindTick = 0;
         }
-        //ReikaChatHelper.write(ReikaWorldHelper.findNearBlock(world, pos, 8, Blocks.FIRE.blockID));
-        if (ReikaWorldHelper.findNearBlock(world, pos, 8, Blocks.FIRE)) {
-            if (!isAlarm) {
-                isAlarm = true;
-                ReikaWorldHelper.causeAdjacentUpdates(world, pos);
-            }
-        } else {
-            if (isAlarm) {
-                isAlarm = false;
-                ReikaWorldHelper.causeAdjacentUpdates(world, pos);
-            }
+
+        boolean foundFire = ReikaWorldHelper.findNearBlock(world, pos, 8, Blocks.FIRE);
+        if (foundFire != isAlarm) {
+            isAlarm = foundFire;
+            ReikaWorldHelper.causeAdjacentUpdates(world, pos);
         }
-        isLowBatt = this.lowBattery();
-        if (isAlarm)
-            soundDelay = 4;
-        else if (isLowBatt)
-            soundDelay = 600;
-        else
-            soundDelay = -1;
+
+        isLowBatt = lowBattery();
+
+        soundDelay = isAlarm ? 4 : (isLowBatt ? 600 : -1);
+
         if (tickcount >= soundDelay && soundDelay != -1) {
             tickcount = 0;
             SoundRegistry.SMOKE.playSoundAtBlock(world, pos, 0.1F, 1);
-            world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1, 1, false);
+            world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
+                    SoundEvents.AMETHYST_BLOCK_CHIME,
+                    SoundSource.BLOCKS, 1, 1, false);
         }
     }
 
-    @Override
-    protected void animateWithTick(Level level, BlockPos blockPos) {
-
-    }
-
-    @Override
-    public int getRedstoneOverride() {
-        return 0;
-    }
+    /* --------------------------------------------------------------------- */
+    /*  Inventory I/O                                                        */
+    /* --------------------------------------------------------------------- */
+    @Override public int  getContainerSize()           { return 1; }
+    @Override public boolean hasAnInventory()          { return true; }
+    @Override public boolean hasATank()                { return false; }
+    @Override public boolean isEmpty()                 { return itemHandler.getStackInSlot(0).isEmpty(); }
 
     @Override
-    protected String getTEName() {
-        return "SmokeDetector";
-    }
-	/*
-	public int getReactionTime() {
-		int time = (int)(10-ReikaMathLibrary.logbase(this.omega, 2));
-		if (time < 1)
-			return 1;
-		return time;
-	}
-	 */
-
-    public boolean checkValidCoil() {
-        return this.hasCoil();
-    }
-
-    public int getRange() {
-        int overpower;
-        //overpower  = (int)(this.power/MINPOWER);
-        if (!this.checkValidCoil())
-            return 0;
-        int dmg = itemHandler.getStackInSlot(0).getTag().getInt("power");
-        overpower = (int) ReikaMathLibrary.logbase((long) dmg * dmg, 2);
-        return Math.min(overpower, 8);
-    }
-
-    public boolean lowBattery() {
-        if (!this.checkValidCoil())
-            return false;
-        return itemHandler.getStackInSlot(0).getTag().getInt("power") <= 8;
+    public ItemStack getItem(int slot) {
+        return slot == 0 ? itemHandler.getStackInSlot(0) : ItemStack.EMPTY;
     }
 
     @Override
-    public boolean hasModelTransparency() {
-        return false;
+    public ItemStack removeItem(int slot, int amount) {
+        return slot == 0 ? itemHandler.extractItem(0, amount, false) : ItemStack.EMPTY;
     }
 
     @Override
-    public MachineRegistry getMachine() {
-        return MachineRegistry.SMOKEDETECTOR;
+    public ItemStack removeItemNoUpdate(int slot) {
+        if (slot != 0) return ItemStack.EMPTY;
+        ItemStack stack = itemHandler.getStackInSlot(0);
+        itemHandler.setStackInSlot(0, ItemStack.EMPTY);
+        return stack;
     }
 
     @Override
-    public int getMaxRange() {
-        return this.getRange();
+    public void setItem(int slot, ItemStack stack) {
+        if (slot == 0) itemHandler.setStackInSlot(0, stack);
     }
 
     @Override
-    public int getBaseDischargeTime() {
-        return 1200;
+    public void clearContent() {
+        itemHandler.setStackInSlot(0, ItemStack.EMPTY);
     }
 
     @Override
-    public boolean hasAnInventory() {
-        return true;
+    public boolean stillValid(Player player) {
+        return !isRemoved() && player.distanceToSqr(
+                worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64;
     }
 
-    @Override
-    public boolean hasATank() {
-        return false;
-    }
-
-    @Override
-    public int getContainerSize() {
-        return 1;
-    }
-
+    /* --------------------------------------------------------------------- */
+    /*  Misc overrides                                                       */
+    /* --------------------------------------------------------------------- */
+    @Override protected void animateWithTick(Level level, BlockPos pos) {}
+    @Override public boolean hasModelTransparency()    { return false; }
+    @Override public Block getBlockEntityBlockID()     { return RotaryBlocks.SMOKE_DETECTOR.get(); }
+    @Override public MachineRegistry getMachine()      { return MachineRegistry.SMOKEDETECTOR; }
+    @Override public int  getMaxRange()                { return getRange(); }
+    @Override public int  getRedstoneOverride()        { return 0; }
+    @Override public int  getBaseDischargeTime()       { return 1200; }
+    @Override protected String getTEName()             { return "SmokeDetector"; }
 }

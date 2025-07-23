@@ -14,13 +14,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.api.RoCWoodTypes;
 import reika.rotarycraft.base.blocks.CanolaBlock;
 import reika.rotarycraft.base.blocks.entity.*;
 import reika.rotarycraft.base.blocks.entity.engine.*;
 import reika.rotarycraft.base.blocks.entity.pipe.*;
 import reika.rotarycraft.base.blocks.entity.transmission.*;
 import reika.rotarycraft.renders.item.MachineItemRenderer;
+import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -88,8 +88,8 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> SHIELD = register("shield", () -> new Block(BlockBehaviour.Properties.of().strength(5)));
     public static final RegistryObject<Block> BEDROCK = BLOCKS.register("bedrock", () -> new Block(BlockBehaviour.Properties.of().strength(-1)));
     public static final RegistryObject<Block> COKE = register("coke_block", () -> new Block(BlockBehaviour.Properties.of().strength(5)));
-    public static final RegistryObject<Block> SHAFT_CROSS = registerMachineBlock("cross", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of().strength(5)));
-    public static final RegistryObject<Block> SHAFT_MERGE = registerMachineBlock("merge", () -> new BlockShaft(MaterialRegistry.STEEL, BlockBehaviour.Properties.of().strength(5)));
+    public static final RegistryObject<Block> SHAFT_CROSS = registerMachineBlock("cross", () -> new BlockShaftSpecial(MaterialRegistry.STEEL, BlockBehaviour.Properties.of().strength(5), BlockEntityShaft.ShaftType.CROSS));
+    public static final RegistryObject<Block> SHAFT_MERGE = registerMachineBlock("merge", () -> new BlockShaftSpecial(MaterialRegistry.STEEL, BlockBehaviour.Properties.of().strength(5), BlockEntityShaft.ShaftType.MERGE));
     public static final RegistryObject<Block> SPLITTER = registerMachineBlock("splitter", () -> new BlockSplitter(BlockBehaviour.Properties.of().strength(5)));
     public static final RegistryObject<Block> SMOKE_DETECTOR = registerMachineBlock("smoke_detector", () -> new BlockSmokeDetector(BlockBehaviour.Properties.of().strength(5)));
     public static final RegistryObject<Block> DISTRIBUTION_CLUTCH = registerMachineBlock("distribution_clutch", () -> new BlockDistributionClutch(BlockBehaviour.Properties.of().strength(5)));
@@ -159,7 +159,7 @@ public class RotaryBlocks {
 
 
     public static final RegistryObject<Block> HOSE = registerMachineBlock("hose", () -> new BlockHose(BlockBehaviour.Properties.of().strength(5)));
-    public static final RegistryObject<Block> PIPE = registerMachineBlock("pipe", () -> new BlockPipe(BlockBehaviour.Properties.of().strength(5)));
+    public static final RegistryObject<Block> FLUID_PIPE = registerMachineBlock("fluid_pipe", () -> new BlockPipe(BlockBehaviour.Properties.of().strength(5)));
     public static final RegistryObject<Block> FUEL_LINE = registerMachineBlock("fuel_line", () -> new BlockFuelLine(BlockBehaviour.Properties.of().strength(5)));
     public static final RegistryObject<Block> VALVE = registerMachineBlock("valve", () -> new BlockValve(BlockBehaviour.Properties.of().strength(5)));
     public static final RegistryObject<Block> BYPASS = registerMachineBlock("bypass", () -> new BlockBypass(BlockBehaviour.Properties.of().strength(5)));
@@ -169,7 +169,6 @@ public class RotaryBlocks {
     public static final RegistryObject<Block> WORKTABLE = registerMachineBlock("worktable", () -> new BlockWorktable(BlockBehaviour.Properties.of().strength(5)));
     public static final RegistryObject<Block> VACUUM = registerMachineBlock("vacuum", () -> new BlockVacuum(BlockBehaviour.Properties.of().strength(5)));
     public static final RegistryObject<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(BlockBehaviour.Properties.of().strength(5)));
-
 
     private static final Block.Properties WOOD_PROPERTIES = Block.Properties.of().strength(2.0F, 3.0F).sound(SoundType.WOOD);
 

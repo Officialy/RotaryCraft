@@ -12,6 +12,7 @@ package reika.rotarycraft.renders;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.Fluid;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
@@ -20,6 +21,10 @@ import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 
 public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
+
+    public PipeRenderer(BlockEntityRendererProvider.Context context) {
+
+    }
 
     protected void renderLiquid(PoseStack stack, RenderableDuct tile, double par2, double par4, double par6, Direction dir) {
         Fluid f = tile.getAttributes();
@@ -296,13 +301,14 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
             ClientProxy.pipe.renderBlockInInventory(te, par2, par4, par6);
             stack.scale((float) (1 / s), (float) (1 / sy), (float) (1 / s));
         }*/
+        renderBlock(stack, te, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
     }
 
     private void renderBlock(PoseStack stack, RenderableDuct te, double par2, double par4, double par6) {
 //        IIcon ico = te.getBlockIcon();
-        float u = 1;//todo ico.getMinU();
+        float u = 0;//todo ico.getMinU();
         float v = 1;//todo ico.getMinV();
-        float du = 1;//todo  ico.getMaxU();
+        float du = 0;//todo  ico.getMaxU();
         float dv = 1;//todo  ico.getMaxV();
         stack.translate(par2, par4, par6);
         Tesselator tess = Tesselator.getInstance();
@@ -366,9 +372,9 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
         double g2 = 1 - g / 2;
 
 //        ico = Blocks.WOOL.getIcon(0, ReikaDyeHelper.BLACK.getWoolStack());
-        u = 1;//ico.getMinU();
+        u = 0;//ico.getMinU();
         v = 1;//ico.getMinV();
-        du = 1;// ico.getMaxU();
+        du = 0;// ico.getMaxU();
         dv = 1;// ico.getMaxV();
         float uu = du - u;
         float vv = dv - v;
@@ -440,9 +446,9 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
         float dd = 0.5F - size;
 
 //        IIcon ico = tile.getBlockIcon();
-        float u = 1;//todo ico.getMinU();
+        float u = 0;//todo ico.getMinU();
         float v = 1;//todo ico.getMinV();
-        float u2 = 1;//todo  ico.getMaxU();
+        float u2 = 0;//todo  ico.getMaxU();
         float v2 = 1;//todo  ico.getMaxV();
 
         float ddu = u2 - u;

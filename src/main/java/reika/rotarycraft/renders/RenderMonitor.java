@@ -59,7 +59,7 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
             stack.mulPose(Axis.YP.rotationDegrees(yRot + 90));
         }
         VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(MonitorModel.TEXTURE_LOCATION));
-        monitorModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
+        monitorModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, tile.phi, 0);
         stack.popPose();
 
         if (tile.isInWorld())

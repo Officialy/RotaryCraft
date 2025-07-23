@@ -567,7 +567,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     @Override
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
-        nbt.putFloat("phi", phi);
         timer.saveAdditional(nbt, "engine");
     }
 

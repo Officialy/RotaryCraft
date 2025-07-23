@@ -13,7 +13,7 @@
 //import reika.dragonapi.base.CoreMenu;
 //import reika.rotarycraft.RotaryCraft;
 //
-//public class ContainerDryingBed extends CoreMenu {
+//public class ContainerDryingBed extends CoreContainer<> {
 //    private final BlockEntityDryingBed te;
 //
 //    public ContainerDryingBed(Inventory playerInv, BlockEntityDryingBed par2BlockEntityDryingBed) {

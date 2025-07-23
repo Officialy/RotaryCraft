@@ -1,12 +1,9 @@
 package reika.rotarycraft.data;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryItems;
 
 public class RoCItemModelProvider extends ItemModelProvider {
@@ -21,9 +18,9 @@ public class RoCItemModelProvider extends ItemModelProvider {
                 this.basicItem(e.get())
         );
 
-        for (var machine : MachineRegistry.values()) {
-            basicItem(machine.getBlockState().getBlock().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
-        }
+//        for (var machine : MachineRegistry.values()) {
+//            basicItem(machine.getBlockState().getBlock().asItem()).parent(new ModelFile.UncheckedModelFile(new ResourceLocation(RotaryCraft.MODID, "block/blank")));
+//        }
     }
 
     /**

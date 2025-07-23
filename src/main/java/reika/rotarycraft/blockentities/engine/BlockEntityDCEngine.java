@@ -154,7 +154,6 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
         return 0;
     }
 
-
     @Override
     public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
         return 0;

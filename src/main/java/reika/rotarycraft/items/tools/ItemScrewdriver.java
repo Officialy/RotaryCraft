@@ -12,12 +12,8 @@ package reika.rotarycraft.items.tools;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
@@ -34,7 +30,6 @@ import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
 import reika.rotarycraft.blockentities.level.BlockEntityFloodlight;
 import reika.rotarycraft.blockentities.transmission.*;
 import reika.rotarycraft.registry.MachineRegistry;
-import reika.rotarycraft.registry.MaterialRegistry;
 
 import java.util.HashMap;
 
@@ -197,17 +192,26 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                     MachineRegistry.DIAMOND_SHAFT || m ==
                     MachineRegistry.BEDROCK_SHAFT) {
                 BlockEntityShaft ts = (BlockEntityShaft) te;
-                MaterialRegistry type = ts.getShaftType();
-                level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, switch (direction){
-                    case WEST -> Direction.EAST;
-                    case EAST -> Direction.SOUTH;
-                    case SOUTH -> Direction.NORTH;
-                    case NORTH -> Direction.UP;
-                    case UP -> Direction.DOWN;
-                    case DOWN -> Direction.WEST;
-                }), 3);
-                BlockEntityShaft ts1 = (BlockEntityShaft) te;
-                ts1.setShaftType(type);
+                Direction nextDir;
+                if (ts.isCross() || ts.isMerge()) {
+                    nextDir = switch (direction) {
+                        case WEST -> Direction.EAST;
+                        case EAST -> Direction.SOUTH;
+                        case SOUTH -> Direction.NORTH;
+                        case NORTH -> Direction.WEST;
+                        default -> Direction.WEST; // Fallback for invalid states
+                    };
+                } else {
+                    nextDir = switch (direction) {
+                        case WEST -> Direction.EAST;
+                        case EAST -> Direction.SOUTH;
+                        case SOUTH -> Direction.NORTH;
+                        case NORTH -> Direction.UP;
+                        case UP -> Direction.DOWN;
+                        case DOWN -> Direction.WEST;
+                    };
+                }
+                level.setBlock(pos, ts.getBlockState().setValue(BlockRotaryCraftMachine.FACING, nextDir), 3);
                 return InteractionResult.SUCCESS;
             }
             if (m == MachineRegistry.CLUTCH) {

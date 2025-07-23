@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +25,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 
-public abstract class InventoriedRCBlockEntity extends RotaryCraftBlockEntity {
+public abstract class InventoriedRCBlockEntity extends RotaryCraftBlockEntity implements Container {
 
     protected ItemStackHandler itemHandler = new ItemStackHandler(getContainerSize()){
         @Override
@@ -49,6 +50,7 @@ public abstract class InventoriedRCBlockEntity extends RotaryCraftBlockEntity {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
     }
+
     public final int[] getAccessibleSlotsFromSide(int var1) {
 //        if (this instanceof InertIInv)
 //            return new int[0];

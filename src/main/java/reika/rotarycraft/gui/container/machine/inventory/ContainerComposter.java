@@ -19,7 +19,7 @@
 //import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 //import reika.rotarycraft.registry.RotaryItems;
 //
-//public class ContainerComposter extends CoreMenu {
+//public class ContainerComposter extends CoreContainer<> {
 //    private final BlockEntityComposter composter;
 //    private int lastComposterCookTime;
 //

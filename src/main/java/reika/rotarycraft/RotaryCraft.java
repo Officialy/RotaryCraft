@@ -121,6 +121,9 @@ public class RotaryCraft extends DragonAPIMod {
         DonatorController.instance.registerMod(this, DonatorController.reikaURL);
         ReikaPacketHelper.registerPacketHandler(instance, packetChannel, new PacketHandlerCore());
 
+        RotaryRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        RotaryRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+
 //   todo     ReikaJavaLibrary.initClass(HandbookRegistry.class);
         ReikaJavaLibrary.initClass(SoundRegistry.class);
         this.finishTiming();
@@ -188,6 +191,7 @@ public class RotaryCraft extends DragonAPIMod {
         MenuScreens.register(RotaryMenus.MUSIC.get(), GuiMusic::new);
         MenuScreens.register(RotaryMenus.GRINDER.get(), GuiGrinder::new);
         MenuScreens.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
+        MenuScreens.register(RotaryMenus.BLAST_FURNACE.get(), GuiBlastFurnace::new);
 
         RotaryRenders.registerBlockColors();
         event.enqueueWork(RotaryRenders::registerRenderLayers);

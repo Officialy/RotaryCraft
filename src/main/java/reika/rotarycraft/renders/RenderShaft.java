@@ -24,7 +24,6 @@ import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
-import reika.rotarycraft.models.animated.SplitterModel;
 import reika.rotarycraft.models.animated.shaftonly.CrossModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftVModel;
@@ -60,7 +59,7 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
             }
 
             if (tile.isCross()) {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.parse(SplitterModel.TEXTURE_LOCATION + getImageFileName(tile))));
+                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.parse(ShaftVModel.TEXTURE_LOCATION + getImageFileName(tile))));
                 crossModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.crossphi1, 0);
             } else if (tile.isVertical()) {
                 VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.parse(ShaftVModel.TEXTURE_LOCATION + getImageFileName(tile))));

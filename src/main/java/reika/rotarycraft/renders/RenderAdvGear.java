@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.auxiliary.RotaryAux;
@@ -62,7 +61,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                 if (tile.isInWorld()) {
 //                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 //                    GL11.glDisable(GL11.GL_LIGHTING);
-                    ReikaRenderHelper.disableEntityLighting();
+//                    ReikaRenderHelper.disableEntityLighting();
                     Font fr = this.getFontRenderer();
                     float var10 = 0.6666667F * 0.8F;
                     stack.scale(var10, -var10, -var10);
@@ -72,7 +71,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                     stack.translate(-0.175F, -0.545F, -0.19F); //was 0.1X
                     stack.scale(var112, -var112, var112);
                     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                    RenderSystem.depthMask(false);
+//                    RenderSystem.depthMask(false);
                     stack.translate(5, -48, 37);
                     stack.scale(2, 2, 2);
                     String var15b;
@@ -106,21 +105,21 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
             }
             case COIL -> {
                 if (tile.isBedrockCoil()) {
-                    VertexConsumer bedCoilTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/coiltex_bed.png"))));
+                    VertexConsumer bedCoilTex = bufferSource.getBuffer(RenderType.entityCutout(coilModel.getTexture().withSuffix("coiltex_bed.png")));
                     coilModel.renderAll(stack, bedCoilTex, pPackedLight, tile, null, -tile.phi);
                 } else {
-                    VertexConsumer coilTex = bufferSource.getBuffer(RenderType.entityCutout(coilModel.getTexture()));
+                    VertexConsumer coilTex = bufferSource.getBuffer(RenderType.entityCutout(coilModel.getTexture().withSuffix("coiltex.png")));
                     coilModel.renderAll(stack, coilTex, pPackedLight, tile, null, -tile.phi);
                 }
             }
             case HIGH -> {
-                VertexConsumer highTex = bufferSource.getBuffer(RenderType.entityCutout((new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/transmission/highgeartex.png"))));
+                VertexConsumer highTex = bufferSource.getBuffer(RenderType.entityCutout((ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/blockentitytex/transmission/highgeartex.png"))));
                 highGearModel.renderAll(stack, highTex, pPackedLight, tile, null, -tile.phi);
             }
         }
         stack.popPose();
-        RenderSystem.depthMask(true);
-        ReikaRenderHelper.enableEntityLighting();
+//        RenderSystem.depthMask(true);
+//        ReikaRenderHelper.enableEntityLighting();
     }
 
     @Override

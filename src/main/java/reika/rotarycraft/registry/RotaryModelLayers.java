@@ -20,6 +20,7 @@ import reika.rotarycraft.modinterface.model.SteamTurbineModel;
 import reika.rotarycraft.renders.*;
 import reika.rotarycraft.renders.dm.RenderFan;
 import reika.rotarycraft.renders.dm.RenderFin;
+import reika.rotarycraft.renders.dm.RenderPump;
 import reika.rotarycraft.renders.dmi.RenderGrinder;
 import reika.rotarycraft.renders.dmi.RenderWinder;
 import reika.rotarycraft.renders.m.RenderReservoir;
@@ -136,6 +137,9 @@ public class RotaryModelLayers {
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.AEROSOLIZER.get(), AerosolizerRenderer::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.CLUTCH.get(), RenderClutch::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.FAN.get(), RenderFan::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.PUMP.get(), RenderPump::new);
+        //pipe renderer
+        event.registerBlockEntityRenderer(RotaryBlockEntities.FLUID_PIPE.get(), PipeRenderer::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {

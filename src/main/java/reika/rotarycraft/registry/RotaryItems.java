@@ -1,6 +1,5 @@
 package reika.rotarycraft.registry;
 
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -18,7 +17,6 @@ public class RotaryItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RotaryCraft.MODID);
 
     public static final RegistryObject<Item> IRON_SCRAP = ITEMS.register("iron_scrap", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> CUSTOMEXTRACT = ITEMS.register("customextract", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ALUMINUM_ALLOY_INGOT = ITEMS.register("aluminum_alloy_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ALUMINUM_ALLOY_CYLINDER = ITEMS.register("aluminum_alloy_cylinder", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> WOOD_FLYWHEEL_CORE = ITEMS.register("wood_flywheel_core", () -> new Item(new Item.Properties()));
@@ -112,7 +110,7 @@ public class RotaryItems {
     public static final RegistryObject<Item> SILICON = ITEMS.register("silicon", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SILICON_DUST = ITEMS.register("silicon_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> INDUCTIVE_BLEND = ITEMS.register("inductive_blend", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> ENDERIUM = ITEMS.register("enderium", () -> new Item(new Item.Properties()));
+//    public static final RegistryObject<Item> ENDERIUM = ITEMS.register("enderium", () -> new Item(new Item.Properties()));
 
     //public static final RegistryObject<Item> MOTION = ITEMS.register("motion", ItemMotionTracker::new);
     //public static final RegistryObject<Item> VACUUM = ITEMS.register("vacuum", ItemVacuum::new);
@@ -120,7 +118,7 @@ public class RotaryItems {
     //public static final RegistryObject<Item> GRAVELGUN = ITEMS.register("gravel_gun", ItemGravelGun::new);
     //public static final RegistryObject<Item> FIREBALL = ITEMS.register("fire_launcher", ItemFireballLauncher::new);
     //public static final RegistryObject<Item> CHARGED_GRAFTER = ITEMS.register("chargedgrafter", ItemChargedGrafter::new, ModList.FORESTRY);
-//    public static final RegistryObject<Item> CRAFTPATTERN = ITEMS.register("craft_pattern", () -> new ItemCraftPattern(new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> CRAFT_PATTERN = ITEMS.register("craft_pattern", () -> new ItemCraftPattern(new Item.Properties().stacksTo(16)));
     //public static final RegistryObject<Item> METER = ITEMS.register("meter", ItemMeter::new);
     // public static final RegistryObject<Item> DEBUG = ITEMS.register("debug", ItemDebug::new);
     //public static final RegistryObject<Item> PUMP = ITEMS.register("hand_pump", ItemPump::new);
@@ -234,10 +232,10 @@ public class RotaryItems {
     public static final RegistryObject<Item> COAL_DUST = ITEMS.register("coal_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLOUR = ITEMS.register("flour", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CALCULATOR = ITEMS.register("calculator", () -> new ItemCalculator(new Item.Properties()));
-    public static final RegistryObject<Item> COKE = ITEMS.register("coke", () -> new ItemCalculator(new Item.Properties()));
-    public static final RegistryObject<Item> NITRATE = ITEMS.register("nitrate", () -> new ItemCalculator(new Item.Properties()));
-    public static final RegistryObject<Item> SALT = ITEMS.register("salt", () -> new ItemCalculator(new Item.Properties()));
-    public static final RegistryObject<Item> SILVERIODIDE = ITEMS.register("silveriodide", () -> new ItemCalculator(new Item.Properties()));
+    public static final RegistryObject<Item> COKE = ITEMS.register("coke", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> NITRATE = ITEMS.register("nitrate", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SALT = ITEMS.register("salt", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SILVERIODIDE = ITEMS.register("silveriodide", () -> new Item(new Item.Properties()));
 
 
 

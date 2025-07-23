@@ -1,83 +1,157 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.gui.container.machine.inventory;
-//
-//import net.minecraft.world.entity.player.Inventory;
-//import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.inventory.Slot;
-//import net.minecraft.world.item.ItemStack;
-//import reika.dragonapi.base.CoreMenu;
-//import reika.dragonapi.instantiable.gui.Slot.SlotApprovedItems;
-//import reika.dragonapi.libraries.registry.ReikaItemHelper;
-//import reika.rotarycraft.registry.RotaryItems;
-//
-//public class ContainerBlastFurnace extends CoreMenu {
-//    private final BlockEntityBlastFurnace blast;
-//
-//    public ContainerBlastFurnace(Inventory player, BlockEntityBlastFurnace te) {
-//        super(player, te);
-//        blast = te;
-//        int getY = blast.xCoord;
-//        int posY = blast.yCoord;
-//        int posZ = blast.zCoord;
-//
-//        int id = 0;
-//        this.addSlot(new Slot(te, id, 26, 35));
-//        id++;
-//        for (int i = 0; i < 3; i++) {
-//            for (int j = 0; j < 3; j++) {
-//                this.addSlot(new Slot(te, id, 62 + j * 18, 17 + i * 18));
-//                id++;
-//            }
-//        }
-//        this.addSlot(new SlotFurnace(player, te, 10, 148, 35));
-//        this.addSlot(new Slot(te, 11, 26, 54));
-//        this.addSlot(new SlotFurnace(player, te, 12, 148, 17));
-//        this.addSlot(new SlotFurnace(player, te, 13, 148, 53));
-//
-//        this.addSlot(new Slot(te, 14, 26, 16));
-//
-//        this.addSlot(new SlotApprovedItems(te, BlockEntityBlastFurnace.PATTERN_SLOT, 123, 53).addItem(RotaryItems.CRAFTPATTERN.get()));
-//
-//        this.addPlayerInventory(player);
-//    }
-//
-//    @Override
-//    public ItemStack slotClick(int ID, int mouse, int action, Player ep) {
-//        if (ID >= 0 && ID < blast.getContainerSize()) {
-//            if (slots.get(ID).getClass() == Slot.class) {
-//                if (mouse == 2) {
-//                    blast.lockedSlots[ID] = !blast.lockedSlots[ID];
-//                    blast.syncAllData(false);
-//                    return null; //prevent creative item dupe
-//                }
-//            }
-//        }
-//        ItemStack is = super.slotClick(ID, mouse, action, ep);
-//        if (ID >= 0 && ID < blast.getContainerSize()) {
-//            if (ID == 10 || ID == 13 || ID == 12) {
-//                if (ReikaItemHelper.matchStacks(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), is)) {
-//                    RotaryAchievements.MAKESTEEL.triggerAchievement(ep);
-//                }
-//            }
-//        }
-//        return is;
-//    }
-//
-//    @Override
-//    protected ItemStack onShiftClickSlot(Player ep, int ID, ItemStack is) {
-//        if (ID < blast.getContainerSize() && (ID == 10 || ID == 13 || ID == 12)) {
-//            if (ReikaItemHelper.matchStacks(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), is)) {
-//                RotaryAchievements.MAKESTEEL.triggerAchievement(ep);
-//            }
-//        }
-//        return null;
-//    }
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2025
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.container.machine.inventory;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.SlotItemHandler;
+import reika.dragonapi.base.CoreContainer;
+import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
+import reika.dragonapi.instantiable.gui.slot.SlotApprovedItems;
+import reika.dragonapi.libraries.registry.ReikaItemHelper;
+import reika.rotarycraft.blockentities.production.BlockEntityBlastFurnace;
+import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.registry.RotaryMenus;
+
+/**
+ * 1.20.1-ported container for the RotaryCraft Blast Furnace.
+ */
+public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace> {
+
+    private final BlockEntityBlastFurnace blast;
+
+    /* --------------------------------------------------------------------- */
+    /*  Constructors                                                          */
+    /* --------------------------------------------------------------------- */
+
+    // --- Client side
+    public ContainerBlastFurnace(int id, Inventory inv, FriendlyByteBuf data) {
+        this(id, inv, (BlockEntityBlastFurnace) inv.player.level().getBlockEntity(data.readBlockPos()));
+    }
+
+    // --- Server side
+    public ContainerBlastFurnace(int id, Inventory playerInv, BlockEntityBlastFurnace te) {
+        super(RotaryMenus.BLAST_FURNACE.get(), id, playerInv, te);
+        this.blast = te;
+
+        int slot = 0;
+
+        // single input (slot 0 - center additive)
+        this.addSlot(new SlotItemHandler(ii, slot++, 26, 35));
+
+        // 3 × 3 grid (slots 1-9)
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                this.addSlot(new SlotItemHandler(ii, slot++, 62 + col * 18, 17 + row * 18));
+            }
+        }
+
+        // OUTPUT SLOTS - FIXED: Use the output inventory instead of internal inventory
+        // Slot 10: center output - use outputInv slot 0
+        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 0, 148, 35));
+
+        // Slot 11: lower additive (still internal inventory)
+        this.addSlot(new SlotItemHandler(ii, slot++, 26, 54));
+
+        // Slot 12: upper output - use outputInv slot 1
+        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 1, 148, 17));
+
+        // Slot 13: lower output - use outputInv slot 2
+        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 2, 148, 53));
+
+        // Slot 14: upper additive (still internal inventory)
+        this.addSlot(new SlotItemHandler(ii, slot++, 26, 16));
+
+        // recipe pattern (accepts only blank Craft Pattern item) - slot 15
+        this.addSlot(new SlotApprovedItems(te, BlockEntityBlastFurnace.PATTERN_SLOT, 123, 53)
+                .addItem(RotaryItems.CRAFT_PATTERN.get()));
+
+        // player inventory & hot-bar
+        this.addPlayerInventory(playerInv);
+    }
+
+    /* --------------------------------------------------------------------- */
+    /*  Click handling                                                        */
+    /* --------------------------------------------------------------------- */
+
+    /**
+     * Middle-click on an internal slot toggles its "locked" state
+     * (creative-only, prevents duping).
+     * Afterwards falls through to the normal click pipeline so regular
+     * behaviour is preserved.
+     */
+    @Override
+    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+        if (slotId >= 0 && slotId < blast.getContainerSize()) {
+            Slot slot = this.slots.get(slotId);
+            if (slot instanceof Slot && clickType == ClickType.CLONE && button == 2) { // middle-click
+                //blast.lockedSlots[slotId] = !blast.lockedSlots[slotId];
+                blast.syncAllData(false);
+                return; // cancel further handling – avoids creative-mode dupes
+            }
+        }
+        super.clicked(slotId, button, clickType, player);
+
+        /* Achievement hook – kept for parity, commented until achievements re-added
+        if (slotId == 10 || slotId == 12 || slotId == 13) {
+            ItemStack stack = this.slots.get(slotId).getItem();
+            if (ReikaItemHelper.matchStacks(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), stack)) {
+                // RotaryAchievements.MAKESTEEL.triggerAchievement(player);
+            }
+        }
+        */
+    }
+
+    /* --------------------------------------------------------------------- */
+    /*  Shift-click                                                           */
+    /* --------------------------------------------------------------------- */
+
+    /**
+     * Handles quick-move between player inventory and machine inventory.
+     * Also taps in to the old HSLA-Steel achievement trigger.
+     */
+    @Override
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack original = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+
+        if (slot != null && slot.hasItem()) {
+            ItemStack current = slot.getItem();
+            original = current.copy();
+
+            int machineSlots = blast.getContainerSize();
+
+            if (index < machineSlots) { // from machine → player
+                if (!this.moveItemStackTo(current, machineSlots, this.slots.size(), true))
+                    return ItemStack.EMPTY;
+            } else {                    // from player → machine
+                if (!this.moveItemStackTo(current, 0, machineSlots, false))
+                    return ItemStack.EMPTY;
+            }
+
+            if (current.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+
+            // achievement check on successful extraction
+            if ((index == 10 || index == 12 || index == 13) &&
+                    ReikaItemHelper.matchStacks(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), original)) {
+                // RotaryAchievements.MAKESTEEL.triggerAchievement(player);
+            }
+        }
+        return original;
+    }
+}

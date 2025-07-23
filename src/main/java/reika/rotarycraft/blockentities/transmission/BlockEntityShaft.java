@@ -42,6 +42,14 @@ import java.util.Collection;
 
 public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
+    public enum ShaftType {
+        NORMAL,
+        CROSS,
+        MERGE
+    }
+
+    private ShaftType shaftMode = ShaftType.NORMAL;
+
     public int[] readtorque = new int[2];
     public int[] readomega = new int[2];
     public boolean reading2Dir = false; //Is reading a 2-direction block (splitter, cross)
@@ -285,7 +293,15 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
     }
 
     public boolean isCross() {
-        return isCrossForRender;// || this.getBlockMetadata() >= 6;
+        return shaftMode == ShaftType.CROSS;
+    }
+
+    public boolean isMerge() {
+        return shaftMode == ShaftType.MERGE;
+    }
+
+    public void setShaftMode(ShaftType type) {
+        this.shaftMode = type;
     }
 
     public void getIOSides(Level world, BlockPos pos, Direction dir) {
@@ -494,7 +510,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
         if (world.isClientSide && !RotaryAux.getPowerOnClient)
             return;
         reading2Dir = false;
-        if (this.isCross()) {
+        if (this.isCross() && !this.isVertical()) {
             this.crossTransfer(world, pos, true, true);
             return;
         }
@@ -635,6 +651,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
         super.saveAdditional(NBT);
         NBT.putString("shafttype", materialType.name());
         NBT.putBoolean("inverted", inverted);
+        NBT.putString("shaftmode", shaftMode.name());
     }
 
     @Override
@@ -652,6 +669,9 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
         phi = NBT.getFloat("phi");
         materialType = mat;
         inverted = NBT.getBoolean("inverted");
+        if (NBT.contains("shaftmode")) {
+            shaftMode = ShaftType.valueOf(NBT.getString("shaftmode"));
+        }
     }
 
     @Override

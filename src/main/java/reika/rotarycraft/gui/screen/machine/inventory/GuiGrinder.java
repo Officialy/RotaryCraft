@@ -9,8 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine.inventory;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -21,7 +19,6 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.MachineScreen;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerGrinder;
-import reika.rotarycraft.registry.RotaryMenus;
 
 public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrinder> {
     private final BlockEntityGrinder grin;
@@ -60,7 +57,7 @@ public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrind
 
     @Override
     protected void drawPowerTab(GuiGraphics stack, int j, int k) {
-        var loc = new ResourceLocation(RotaryCraft.MODID, "textures/screen/powertab.png");
+        var loc = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/powertab.png");
         stack.blit(loc, width + k, k + 4, 0, 4, 42, height - 4);
 
         long frac = (grin.power * 29L) / grin.MINPOWER;

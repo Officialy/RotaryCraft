@@ -14,14 +14,9 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootParams;
-
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.blockentities.piping.BlockEntityPipe;
-
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
-import reika.rotarycraft.registry.RotaryBlockEntities;
 
 import java.util.List;
 
@@ -51,7 +46,7 @@ public class BlockPiping extends Block implements EntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BlockEntityPipe(RotaryBlockEntities.PIPE.get(), pos, state);
+        return new BlockEntityPipe(pos, state);
     }
 
 

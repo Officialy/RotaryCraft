@@ -1,187 +1,172 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.gui.screen.machine;
-//
-//import com.mojang.blaze3d.vertex.PoseStack;
-//import net.minecraft.world.entity.player.Player;
-//import net.minecraftforge.client.gui.ScreenUtils;
-//import org.lwjgl.opengl.GL11;
-//import reika.dragonapi.base.CoreMenu;
-//import reika.dragonapi.libraries.java.ReikaJavaLibrary;
-//import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
-//import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-//import reika.rotarycraft.RotaryCraft;
-//import reika.rotarycraft.base.GuiNonPoweredMachine;
-//import reika.rotarycraft.registry.PacketRegistry;
-//
-//public class GuiCoil extends GuiNonPoweredMachine {
-//
-//    private final BlockEntityAdvancedGear coil;
-//    private int omega;
-//    private int torque;
-//    private GuiTextField input;
-//    private GuiTextField input2;
-//    //private Level level = ModLoader.getMinecraftInstance().theWorld;
-//
-//    public GuiCoil(Player p5ep, BlockEntityAdvancedGear AdvancedGear) {
-//        super(new CoreMenu(p5ep, AdvancedGear), AdvancedGear);
-//        coil = AdvancedGear;
-//        imageHeight = coil.isCreative() ? 72 : 105;
-//        imageWidth = 176;
-//        ep = p5ep;
-//    }
-//
-//    @Override
-//    public void initGui() {
-//        super.initGui();
-//        int j = (width - imageWidth) / 2 + 8;
-//        int k = (height - imageHeight) / 2 - 12;
-//        input = new GuiTextField(font, j + imageWidth / 2 - 15, k + 30, 56, 16);
-//        input.setFocused(false);
-//        input.setMaxStringLength(8);
-//        input2 = new GuiTextField(font, j + imageWidth / 2 - 15, k + 60, 56, 16);
-//        input2.setFocused(false);
-//        input2.setMaxStringLength(8);
-//    }
-//
-//    @Override
-//    protected void keyTyped(char c, int i) {
-//        super.keyTyped(c, i);
-//        input.textboxKeyTyped(c, i);
-//        input2.textboxKeyTyped(c, i);
-//    }
-//
-//    @Override
-//    protected void mouseClicked(int i, int j, int k) {
-//        super.mouseClicked(i, j, k);
-//        input.mouseClicked(i, j, k);
-//        input2.mouseClicked(i, j, k);
-//    }
-//
-//    @Override
-//    public void updateScreen() {
-//        super.updateScreen();
-//        boolean valid1 = true;
-//        boolean valid2 = true;
-//        if (input.getText().isEmpty() && input2.getText().isEmpty()) {
-//            return;
-//        }
-//        if (input.getText().isEmpty())
-//            valid1 = false;
-//        if (input2.getText().isEmpty())
-//            valid2 = false;
-//        if (!input.getText().isEmpty() && !(input.getText().matches("^[0-9 ]+$"))) {
-//            omega = 0;
-//            input.deleteFromCursor(-1);
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.ordinal(), coil, omega);
-//            valid1 = false;
-//        }
-//        if (!input2.getText().isEmpty() && !(input2.getText().matches("^[0-9 ]+$"))) {
-//            torque = 0;
-//            input2.deleteFromCursor(-1);
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.ordinal(), coil, torque);
-//            valid2 = false;
-//        }
-//        if (!valid1 && !valid2)
-//            return;
-//        //ModLoader.getMinecraftInstance().thePlayer.addChatMessage("435");
-//        //System.out.println(input.getText());
-//        if (valid1) {
-//            omega = ReikaJavaLibrary.safeIntParse(input.getText());
-//            if (omega >= 0) {
-//                if (omega > RotaryConfig.omegalimit)
-//                    omega = RotaryConfig.omegalimit;
-//                if (omega > coil.getMaximumEmission()) {
-//                    omega = coil.getMaximumEmission();
-//                    input.setText(String.valueOf(coil.getMaximumEmission()));
-//                }
-//                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.ordinal(), coil, omega);
-//            }
-//        }
-//        if (valid2) {
-//            torque = ReikaJavaLibrary.safeIntParse(input2.getText());
-//            if (torque >= 0) {
-//                if (torque > RotaryConfig.torquelimit)
-//                    torque = RotaryConfig.torquelimit;
-//                if (torque > coil.getMaximumEmission()) {
-//                    torque = coil.getMaximumEmission();
-//                    input2.setText(String.valueOf(coil.getMaximumEmission()));
-//                }
-//                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.ordinal(), coil, torque);
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public boolean labelInventory() {
-//        return false;
-//    }
-//
-//    /**
-//     * Draw the foreground layer for the GuiContainer (everything in front of the items)
-//     */
-//    @Override
-//    protected void drawGuiContainerForegroundLayer(int a, int b) {
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//
-//        ReikaTextureHelper.bindFontTexture();
-//
-//        font.draw("Output Speed", imageWidth / 2 - 82, 22, 4210752);
-//        if (!coil.isCreative())
-//            font.draw(String.format("(Max %d)", coil.getMaximumEmission()), imageWidth / 2 - 82, 37, 4210752);
-//        font.draw("Output Torque", imageWidth / 2 - 82, 52, 4210752);
-//
-//        font.draw("rad/s", imageWidth / 2 + 53, 22, 4210752);
-//        font.draw("Nm", imageWidth / 2 + 53, 52, 4210752);
-//
-//        if (!coil.isCreative()) {
-//            double e = coil.getEnergy() / 20D;
-//            String s = String.format("Stored Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(e), ReikaEngLibrary.getSIPrefix(e));
-//            font.draw(s, imageWidth / 2 - 82, 80 - 8, 4210752);
-//
-//            long max = coil.getMaxStorageCapacity();
-//            s = String.format("Max Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max));
-//            font.draw(s, imageWidth / 2 - 82, 80 - 8 + 14, 4210752);
-//
-//            String i = "/Reika/RotaryCraft/Textures/GUI/" + this.getGuiTexture() + ".png";
-//            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//            ReikaTextureHelper.bindTexture(RotaryCraft.class, i);
-//            int h = (int) (e * 40 / max);
-//            if (e > 0 && h == 0)
-//                h = 1;
-//            ScreenUtils.drawTexturedModalRect(128, 57, 178, 2, h, 40);
-//        }
-//
-//        if (!input.isFocused())
-//            font.draw(String.format("%d", coil.getReleaseOmega()), imageWidth / 2 - 3, 22, 0xffffffff);
-//        if (!input2.isFocused())
-//            font.draw(String.format("%d", coil.getReleaseTorque()), imageWidth / 2 - 3, 52, 0xffffffff);
-//
-//        super.drawGuiContainerForegroundLayer(a, b);
-//    }
-//
-//    /**
-//     * Draw the background layer for the GuiContainer (everything behind the items)
-//     */
-//    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(poseStack, par1, par2, par3);
-//
-//        input.drawTextBox();
-//        input2.drawTextBox();
-//    }
-//
-//    @Override
-//    protected String getGuiTexture() {
-//        return coil.isCreative() ? "coilgui" : "coilgui2";
-//    }
-//
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.screen.machine;
+
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import reika.dragonapi.libraries.io.ReikaPacketHelper;
+import reika.dragonapi.libraries.java.ReikaJavaLibrary;
+import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
+import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.base.NonPoweredMachineScreen;
+import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
+import reika.rotarycraft.gui.container.machine.BlankContainer;
+import reika.rotarycraft.registry.PacketRegistry;
+
+public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, BlankContainer<BlockEntityAdvancedGear>> {
+    private final BlockEntityAdvancedGear coil;
+    private EditBox inputOmega;
+    private EditBox inputTorque;
+    private int omega;
+    private int torque;
+
+    /**
+     * This screen expects the menu to be opened with a BlockPos in the buffer, and the container to provide the tile entity.
+     */
+    public GuiCoil(BlankContainer<BlockEntityAdvancedGear> container, Inventory inv, Component title) {
+        super(container, inv, title);
+        coil = container.tile;
+        imageHeight = coil.isCreative() ? 72 : 105;
+        imageWidth = 176;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        int j = (width - imageWidth) / 2 + 8;
+        int k = (height - imageHeight) / 2 - 12;
+        inputOmega = new EditBox(font, j + imageWidth / 2 - 15, k + 30, 56, 16, Component.literal("Omega"));
+        inputOmega.setMaxLength(8);
+        inputOmega.setValue("");
+        inputOmega.setFocused(false);
+        addRenderableWidget(inputOmega);
+        inputTorque = new EditBox(font, j + imageWidth / 2 - 15, k + 60, 56, 16, Component.literal("Torque"));
+        inputTorque.setMaxLength(8);
+        inputTorque.setValue("");
+        inputTorque.setFocused(false);
+        addRenderableWidget(inputTorque);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        boolean handled = super.keyPressed(keyCode, scanCode, modifiers);
+        handled |= inputOmega.keyPressed(keyCode, scanCode, modifiers);
+        handled |= inputTorque.keyPressed(keyCode, scanCode, modifiers);
+        return handled;
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        boolean handled = super.charTyped(codePoint, modifiers);
+        handled |= inputOmega.charTyped(codePoint, modifiers);
+        handled |= inputTorque.charTyped(codePoint, modifiers);
+        return handled;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        boolean handled = super.mouseClicked(mouseX, mouseY, button);
+        handled |= inputOmega.mouseClicked(mouseX, mouseY, button);
+        handled |= inputTorque.mouseClicked(mouseX, mouseY, button);
+        return handled;
+    }
+
+    @Override
+    protected void containerTick() {
+        super.containerTick();
+        boolean valid1 = true;
+        boolean valid2 = true;
+        String omegaText = inputOmega.getValue();
+        String torqueText = inputTorque.getValue();
+        if (omegaText.isEmpty() && torqueText.isEmpty()) {
+            return;
+        }
+        if (omegaText.isEmpty())
+            valid1 = false;
+        if (torqueText.isEmpty())
+            valid2 = false;
+        if (!omegaText.isEmpty() && !(omegaText.matches("^[0-9 ]+$"))) {
+            omega = 0;
+            inputOmega.setValue(omegaText.substring(0, Math.max(0, omegaText.length() - 1)));
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.ordinal(), coil, omega);
+            valid1 = false;
+        }
+        if (!torqueText.isEmpty() && !(torqueText.matches("^[0-9 ]+$"))) {
+            torque = 0;
+            inputTorque.setValue(torqueText.substring(0, Math.max(0, torqueText.length() - 1)));
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.ordinal(), coil, torque);
+            valid2 = false;
+        }
+        if (!valid1 && !valid2)
+            return;
+        if (valid1) {
+            omega = ReikaJavaLibrary.safeIntParse(omegaText);
+            if (omega >= 0) {
+                int max = Math.min(coil.getMaximumEmission(), /*RotaryConfig.omegalimit*/Integer.MAX_VALUE);
+                if (omega > max) {
+                    omega = max;
+                    inputOmega.setValue(String.valueOf(max));
+                }
+                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.ordinal(), coil, omega);
+            }
+        }
+        if (valid2) {
+            torque = ReikaJavaLibrary.safeIntParse(torqueText);
+            if (torque >= 0) {
+                int max = Math.min(coil.getMaximumEmission(), /*RotaryConfig.torquelimit*/Integer.MAX_VALUE);
+                if (torque > max) {
+                    torque = max;
+                    inputTorque.setValue(String.valueOf(max));
+                }
+                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.ordinal(), coil, torque);
+            }
+        }
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        int j = (width - imageWidth) / 2;
+        int k = (height - imageHeight) / 2;
+        graphics.drawString(font, "Output Speed", imageWidth / 2 - 82, 22, 4210752, false);
+        if (!coil.isCreative())
+            graphics.drawString(font, String.format("(Max %d)", coil.getMaximumEmission()), imageWidth / 2 - 82, 37, 4210752, false);
+        graphics.drawString(font, "Output Torque", imageWidth / 2 - 82, 52, 4210752, false);
+        graphics.drawString(font, "rad/s", imageWidth / 2 + 53, 22, 4210752, false);
+        graphics.drawString(font, "Nm", imageWidth / 2 + 53, 52, 4210752, false);
+        if (!coil.isCreative()) {
+            double e = coil.getEnergy() / 20D;
+            String s = String.format("Stored Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(e), ReikaEngLibrary.getSIPrefix(e));
+            graphics.drawString(font, s, imageWidth / 2 - 82, 80 - 8, 4210752, false);
+            long max = coil.getMaxStorageCapacity();
+            s = String.format("Max Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max));
+            graphics.drawString(font, s, imageWidth / 2 - 82, 80 - 8 + 14, 4210752, false);
+        }
+        if (!inputOmega.isFocused())
+            graphics.drawString(font, String.format("%d", coil.getReleaseOmega()), imageWidth / 2 - 3, 22, 0xffffffff, false);
+        if (!inputTorque.isFocused())
+            graphics.drawString(font, String.format("%d", coil.getReleaseTorque()), imageWidth / 2 - 3, 52, 0xffffffff, false);
+        super.renderLabels(graphics, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
+        inputOmega.render(graphics, mouseX, mouseY, partialTick);
+        inputTorque.render(graphics, mouseX, mouseY, partialTick);
+    }
+
+    @Override
+    protected String getGuiTexture() {
+        return coil.isCreative() ? "coilgui" : "coilgui2";
+    }
+}

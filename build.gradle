@@ -29,14 +29,15 @@ legacyForge {
 
         data {
             data()
+            programArguments.addAll([
+                "--mod", "rotarycraft",
+                "--all",
+                "--output", file("src/generated/resources").getAbsolutePath(),
+                "--existing", file("src/main/resources").getAbsolutePath(),
+            ])
         }
     }
 
-    mods {
-        rotarycraft {
-            sourceSet sourceSets.main
-        }
-    }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }

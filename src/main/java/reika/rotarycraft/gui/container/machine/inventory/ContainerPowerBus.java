@@ -13,7 +13,7 @@
 //import net.minecraft.world.entity.player.Player;
 //import net.minecraft.world.inventory.Slot;
 //
-//public class ContainerPowerBus extends CoreMenu {
+//public class ContainerPowerBus extends CoreContainer<> {
 //
 //    private final BlockEntityPowerBus te;
 //

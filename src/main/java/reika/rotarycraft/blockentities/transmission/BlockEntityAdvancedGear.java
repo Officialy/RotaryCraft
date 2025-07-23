@@ -75,7 +75,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     private CVTMode cvtMode = CVTMode.MANUAL;
     private CVTController controller;
     private ItemStack[] belts = new ItemStack[31];
-    private int targetTorque = 1;-
+    private int targetTorque = 1;
     private final GearType gearType;
     private boolean enabled = true;
 
@@ -440,9 +440,9 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
             double rx = ReikaRandomHelper.getRandomPlusMinus(pos.getX(), r);
             double ry = ReikaRandomHelper.getRandomPlusMinus(pos.getY(), r);
             double rz = ReikaRandomHelper.getRandomPlusMinus(pos.getZ(), r);
-            world.explode(null, rx, ry, rz, 8, ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE); //todo Explosioninteraction
+            world.explode(null, rx, ry, rz, 8, ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.BLOCK); //todo Explosioninteraction
         }
-        world.explode(null, pos.getX(), pos.getY(), pos.getZ(), pow, ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+        world.explode(null, pos.getX(), pos.getY(), pos.getZ(), pow, ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.BLOCK);
     }
 
     private void destroy(Level world, BlockPos pos) {
@@ -496,32 +496,32 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     public int getMaxRatio() {
         if (belts[0] == null)
             return 1;
-        /* todo if (belts[0].getItem() != RotaryItems.BELT.get() || belts[0].getItemDamage() != RotaryItems.BELT.get().getItemDamage())
+         if (belts[0].getItem() != RotaryItems.BELT.get() || belts[0] != RotaryItems.BELT.get().getDefaultInstance())
             return 1;
         for (int i = 1; i <= 2; i++) {
             if (belts[i] == null)
                 return 2;
-            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i].getItemDamage() != RotaryItems.BELT.get().getItemDamage())
+            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i] != RotaryItems.BELT.get().getDefaultInstance())
                 return 2;
         }
         for (int i = 3; i <= 6; i++) {
             if (belts[i] == null)
                 return 4;
-            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i].getItemDamage() != RotaryItems.BELT.get().getItemDamage())
+            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i] != RotaryItems.BELT.get().getDefaultInstance())
                 return 4;
         }
         for (int i = 7; i <= 14; i++) {
             if (belts[i] == null)
                 return 8;
-            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i].getItemDamage() != RotaryItems.BELT.get().getItemDamage())
+            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i] != RotaryItems.BELT.get().getDefaultInstance())
                 return 8;
         }
         for (int i = 15; i <= 30; i++) {
             if (belts[i] == null)
                 return 16;
-            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i].getItemDamage() != RotaryItems.BELT.get().getItemDamage())
+            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i] != RotaryItems.BELT.get().getDefaultInstance())
                 return 16;
-        }*/
+        }
         return 32;
     }
 

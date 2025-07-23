@@ -12,11 +12,11 @@ package reika.rotarycraft.blockentities.production;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.interfaces.blockentity.TriggerableAction;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -27,10 +27,14 @@ import reika.rotarycraft.auxiliary.interfaces.AlternatingRedstoneUser;
 import reika.rotarycraft.base.ItemChargedArmor;
 import reika.rotarycraft.base.ItemChargedTool;
 import reika.rotarycraft.base.blockentity.InventoriedRCBlockEntity;
+import reika.rotarycraft.items.tools.ItemCraftPattern;
 import reika.rotarycraft.items.tools.ItemJetPack;
 import reika.rotarycraft.items.tools.ItemJetPack.PackUpgrades;
 import reika.rotarycraft.items.tools.bedrock.ItemBedrockArmor.HelmetUpgrades;
-import reika.rotarycraft.registry.*;
+import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class BlockEntityWorktable extends InventoriedRCBlockEntity implements TriggerableAction, AlternatingRedstoneUser {
 
@@ -480,12 +484,59 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
         return 19;
     }
 
+    @Override
+    public boolean isEmpty() {
+        for (int i = 0; i < 19; i++) {
+            if (!itemHandler.getStackInSlot(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int i) {
+        if (i >= 0 && i < itemHandler.getSlots()) {
+            return itemHandler.getStackInSlot(i);
+        }
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack removeItem(int i, int i1) {
+        if (i >= 0 && i < itemHandler.getSlots()) {
+            return itemHandler.extractItem(i, i1, false);
+        }
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int i) {
+        if (i >= 0 && i < itemHandler.getSlots()) {
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            itemHandler.setStackInSlot(i, ItemStack.EMPTY);
+            return stack;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void setItem(int i, ItemStack itemStack) {
+        if (i >= 0 && i < itemHandler.getSlots()) {
+            itemHandler.setStackInSlot(i, itemStack);
+        }
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return !isRemoved() && player.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64;
+    }
+
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         if (i >= 9)
             return false;
         //return hasProgram ? itemHandler[i+18] != null && ReikaItemHelper.matchStacks(itemHandler[i+18], itemstack) : true;
-//todo        return !RotaryItems.CRAFT_PATTERN.matchItem(itemHandler[18]) || ItemCraftPattern.checkPatternForMatch(this, RecipeMode.WORKTABLE, i, i, itemstack, itemHandler[18]);
-        return false;
+        return !RotaryItems.CRAFT_PATTERN.get().getDefaultInstance().is(itemHandler.getStackInSlot(18).getItem()) || ItemCraftPattern.checkPatternForMatch(this, ItemCraftPattern.RecipeMode.WORKTABLE, i, i, itemstack, itemHandler.getStackInSlot(18));
     }
 
     //        @Override
@@ -581,6 +632,11 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
     @Override
     public boolean hasATank() {
         return false;
+    }
+
+    @Override
+    public void clearContent() {
+
     }
 }
 

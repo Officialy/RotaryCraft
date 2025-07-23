@@ -10,9 +10,7 @@
 package reika.rotarycraft.registry;
 
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,14 +19,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.registries.RegistryObject;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
-import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.auxiliary.HandbookAuxData;
 import reika.rotarycraft.auxiliary.HandbookNotifications;
 import reika.rotarycraft.auxiliary.RotaryDescriptions;
 import reika.rotarycraft.auxiliary.interfaces.HandbookEntry;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
-import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.gui.screen.GuiHandbook;
 
 import java.util.*;
@@ -270,7 +266,7 @@ public enum HandbookRegistry implements HandbookEntry {
     BEDTOOLS("Bedrock Tools"),
     BEDARMOR("Bedrock Armor"),
     TARGETER(RotaryItems.TARGET),
-    //    IOGOGGLES(RotaryItems.IOGOGGLES),
+        IOGOGGLES(RotaryItems.IO_GOGGLES),
     //CKEY(RotaryItems.KEY),
 //    MINECART(RotaryItems.MINECART),
 //    TILESELECT(RotaryItems.TILESELECTOR),
@@ -542,7 +538,7 @@ public enum HandbookRegistry implements HandbookEntry {
         int id = 0;
         for (HandbookRegistry handbookRegistry : tabList) {
             if (handbookRegistry.getScreen() == screen/* && !tabList[i].isDummiedOut()*/) {
-                li.add(new ImageButton(id, j - 20, k + handbookRegistry.getRelativeTabPosn() * 20, 20, 20, 0, 0, new ResourceLocation(RotaryCraft.MODID, handbookRegistry.getTabImageFile()), null)); //todo onpress
+                li.add(new ImageButton(id, j - 20, k + handbookRegistry.getRelativeTabPosn() * 20, 20, 20, 0, 0, ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, handbookRegistry.getTabImageFile()), null)); //todo onpress
                 //ReikaJavaLibrary.pConsole("Adding "+tabList[i]+" with ID "+id+" to screen "+screen);
                 id++;
             }
@@ -553,7 +549,7 @@ public enum HandbookRegistry implements HandbookEntry {
         //ReikaJavaLibrary.pConsole(screen+"   "+page);
         if (screen < TERMS.getScreen())
             return TOC;
-        HandbookRegistry h = null;//todo HandbookAuxData.getMapping(screen, page);
+        HandbookRegistry h = HandbookAuxData.getMapping(screen, page);
         return h != null ? h : TOC;
         //throw new RuntimeException("Handbook screen "+screen+" and page "+page+" do not correspond to an entry!");
     }
@@ -939,9 +935,10 @@ public enum HandbookRegistry implements HandbookEntry {
             for (int i = 0; i < RotaryItems.SLIDE.getNumberMetadatas(); i++)
                 li.add(RotaryItems.SLIDE.getStackOfMetadata(i));
             return li;
-        }
-        //if (this == BEDINGOT)
-        //	return ReikaJavaLibrary.makeListFrom(RotaryItems.BEDROCK_ALLOY_INGOT);
+        }*/
+        if (this == BEDINGOT)
+        	return ReikaJavaLibrary.makeListFrom(RotaryItems.BEDROCK_ALLOY_INGOT.get().getDefaultInstance());
+        /*
         if (this == ALLOYING) {
             ArrayList<ItemStack> is = new ArrayList<>();
             ArrayList<BlastFurnacePattern> li = RecipesBlastFurnace.getRecipes().getAllAlloyingRecipes();
@@ -960,7 +957,7 @@ public enum HandbookRegistry implements HandbookEntry {
             return ReikaJavaLibrary.makeListFrom(RotaryItems.SILVERIODIDE.get().getDefaultInstance());
         if (this == EXPLOSIVES)
             return ReikaJavaLibrary.makeListFrom(RotaryItems.SHELL.get().getDefaultInstance());
-//    todo    if (this == MINECART)
+//        if (this == MINECART)
 //            return ReikaJavaLibrary.makeListFrom(RotaryItems.MINECART.get().getDefaultInstance());
         return ReikaJavaLibrary.makeListFrom(RotaryItems.HSLA_PLATE.get().getDefaultInstance());
     }
@@ -1071,16 +1068,16 @@ public enum HandbookRegistry implements HandbookEntry {
             return RotaryItems.BEDROCK_DUST.get().getDefaultInstance();
 //        if (this == FLAKES)
 //            return RotaryItems.GOLDOREFLAKES;
-       /* todo if (this == BEDTOOLS)
-            return RotaryItems.BEDROCK_ALLOY_PICK.getEnchantedStack();
+        if (this == BEDTOOLS)
+            return RotaryItems.BEDROCK_ALLOY_PICK.get().getDefaultInstance();
         if (this == BEDARMOR)
-            return RotaryItems.BEDROCK_ALLOY_HELMET.getEnchantedStack();
+            return RotaryItems.BEDROCK_ALLOY_HELMET.get().getDefaultInstance();
         if (this == STEELTOOLS)
-            return RotaryItems.HSLA_STEEL_PICKAXE.getEnchantedStack();
+            return RotaryItems.HSLA_STEEL_PICKAXE.get().getDefaultInstance();
         if (this == STEELARMOR)
-            return RotaryItems.HSLA_HELMET.getEnchantedStack();
+            return RotaryItems.HSLA_HELMET.get().getDefaultInstance();
         if (this == JETPACK)
-            return RotaryItems.BEDROCK_ALLOY_CHESTPLATE.getEnchantedStack();*/
+            return RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance();
         if (this == JUMPBOOTS)
             return RotaryItems.JUMP.get().getDefaultInstance();
         if (this.isCrafting())

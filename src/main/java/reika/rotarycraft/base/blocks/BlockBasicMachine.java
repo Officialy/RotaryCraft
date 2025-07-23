@@ -74,6 +74,7 @@ import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.registry.*;
 
 import java.util.List;
+import net.minecraft.world.MenuProvider;
 
 public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
@@ -782,7 +783,8 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         }
         if (te != null && RotaryAux.hasGui(level, pos, ep) && te.isPlayerAccessible(ep)) {
             if (!level.isClientSide()) {
-                NetworkHooks.openScreen((ServerPlayer) ep, te, pos);
+                // Use the block entity as the MenuProvider, which should now provide a BlankContainer-based menu
+                NetworkHooks.openScreen((ServerPlayer) ep, (MenuProvider) te, pos);
             }
             ep.swing(InteractionHand.MAIN_HAND, true);
             return InteractionResult.SUCCESS;

@@ -471,7 +471,10 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
 
         NBT.putByte("conn", ReikaArrayHelper.booleanToByteBitflags(connections));
 
-        ReikaNBTHelper.writeFluidToNBT(NBT, new FluidStack(this.getAttributes(), 0));
+        Fluid attr = this.getAttributes();
+        if (attr != null) {
+            ReikaNBTHelper.writeFluidToNBT(NBT, new FluidStack(attr, 0));
+        }
         NBT.putInt("level", this.getFluidLevel());
     }
 

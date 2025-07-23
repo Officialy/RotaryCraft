@@ -20,7 +20,7 @@ import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.blockentities.engine.*;
 
 public enum EngineType {
-    DC(256, 4, EngineClass.ELECTRIC, BlockEntityDCEngine.class),
+    DC(65536, 1024, EngineClass.ELECTRIC, BlockEntityDCEngine.class),
     WIND(1024, 8, EngineClass.KINETIC, BlockEntityWindEngine.class),
     STEAM(512, 32, EngineClass.THERMAL, BlockEntitySteamEngine.class),
     GAS(512, 128, EngineClass.PISTON, BlockEntityGasEngine.class),

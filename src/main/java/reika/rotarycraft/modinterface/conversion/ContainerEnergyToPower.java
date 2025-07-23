@@ -15,7 +15,7 @@
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.blockentity.EnergyToPowerBase;
 //
-//public class ContainerEnergyToPower extends CoreMenu {
+//public class ContainerEnergyToPower extends CoreContainer<> {
 //
 //	private EnergyToPowerBase engine;
 //

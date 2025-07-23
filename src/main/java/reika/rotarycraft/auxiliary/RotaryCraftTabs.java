@@ -50,7 +50,6 @@ public class RotaryCraftTabs {
     public static void onBuildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTab() == ROTARYCRAFT.get()) {
             event.accept(RotaryItems.IRON_SCRAP.get());
-            event.accept(RotaryItems.CUSTOMEXTRACT.get());
             event.accept(RotaryItems.ALUMINUM_ALLOY_INGOT.get());
             event.accept(RotaryItems.ALUMINUM_ALLOY_CYLINDER.get());
             event.accept(RotaryItems.WOOD_FLYWHEEL_CORE.get());
@@ -114,7 +113,6 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.SILICON.get());
             event.accept(RotaryItems.SILICON_DUST.get());
             event.accept(RotaryItems.INDUCTIVE_BLEND.get());
-            event.accept(RotaryItems.ENDERIUM.get());
             event.accept(RotaryItems.SLUDGE.get());
             event.accept(RotaryItems.SAWDUST.get());
             event.accept(RotaryItems.HSLA_STEEL_GEAR.get());

@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -39,13 +38,13 @@ public class BlockEntityPipe extends BlockEntityPiping implements TemperatureTE,
     private int liquidLevel = 0;
     private int temperature;
 
-    public BlockEntityPipe(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
+    public BlockEntityPipe(BlockPos pos, BlockState state) {
+        super(RotaryBlockEntities.FLUID_PIPE.get(), pos, state);
     }
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.FLUID_PIPE.get();
     }
 
     @Override
