@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.ForgeHooks;
+import net.neoforged.common.ForgeHooks;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.ReikaInventoryHelper;

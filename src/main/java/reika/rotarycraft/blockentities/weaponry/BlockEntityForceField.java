@@ -18,8 +18,8 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.phys.AABB;
 //import net.minecraft.world.phys.Vec3;
-//import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.eventbus.api.Event;
+//import net.neoforged.common.NeoForge;
+//import net.neoforged.eventbus.api.Event;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -245,7 +245,7 @@
 //                }
 //            }
 //            Event evt = new ForceFieldEvent(this, threat);
-//            MinecraftForge.EVENT_BUS.post(evt);
+//            NeoForge.EVENT_BUS.post(evt);
 //
 //            if (evt.getResult() == Result.ALLOW) {
 //                threat.kill();

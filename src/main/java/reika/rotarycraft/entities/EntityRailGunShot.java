@@ -43,7 +43,7 @@
 //import net.minecraft.world.phys.AABB;
 //import net.minecraft.world.phys.HitResult;
 //import net.minecraft.world.phys.Vec3;
-//import net.minecraftforge.common.MinecraftForge;
+//import net.neoforged.common.NeoForge;
 //
 //import java.util.List;
 //
@@ -170,7 +170,7 @@
 //        int x0 = (int) Math.floor(x);
 //        int y0 = (int) Math.floor(y);
 //        int z0 = (int) Math.floor(z);
-//        MinecraftForge.EVENT_BUS.post(new RailgunImpactEvent(world, x0, y0, z0, this.getPower()));
+//        NeoForge.EVENT_BUS.post(new RailgunImpactEvent(world, x0, y0, z0, this.getPower()));
 //        LivingEntity el;
 //        Entity ent;
 //        ReikaParticleHelper.EXPLODE.spawnAt(world, x0, y0, z0);

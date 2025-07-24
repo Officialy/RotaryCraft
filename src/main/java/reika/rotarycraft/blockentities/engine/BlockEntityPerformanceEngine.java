@@ -24,9 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.fluids.FluidStack;
+import net.neoforged.fluids.FluidType;
+import net.neoforged.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaInventoryHelper;

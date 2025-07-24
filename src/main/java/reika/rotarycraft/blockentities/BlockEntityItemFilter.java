@@ -9,7 +9,7 @@
 // ******************************************************************************/
 //package reika.rotarycraft.blockentities;
 //
-//import net.minecraftforge.fml.loading.FMLLoader;
+//import net.neoforged.fml.loading.FMLLoader;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 //import reika.rotarycraft.registry.MachineRegistry;
@@ -26,7 +26,7 @@
 //import net.minecraft.world.item.Item;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
-//import net.minecraftforge.api.distmarker.Dist;
+//import net.neoforged.api.distmarker.Dist;
 //
 //import java.util.*;
 //

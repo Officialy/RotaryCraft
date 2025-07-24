@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.registries.ForgeRegistries;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.rotarycraft.base.ItemRotaryTool;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;

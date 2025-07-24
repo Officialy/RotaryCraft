@@ -19,7 +19,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.client.gui.ScreenUtils;
+import net.neoforged.client.gui.ScreenUtils;
 import reika.rotarycraft.gui.container.ContainerHandCraft;
 
 public class GuiHandCraft extends AbstractContainerScreen<ContainerHandCraft> implements RecipeUpdateListener {

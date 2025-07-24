@@ -17,7 +17,7 @@
 //import net.minecraft.world.inventory.Slot;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
-//import net.minecraftforge.network.IContainerFactory;
+//import net.neoforged.network.IContainerFactory;
 //import reika.dragonapi.instantiable.BasicInventory;
 //import reika.rotarycraft.registry.RotaryItems;
 //import reika.rotarycraft.registry.RotaryMenuTypes;

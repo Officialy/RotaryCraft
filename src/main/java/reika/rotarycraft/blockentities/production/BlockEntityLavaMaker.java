@@ -15,8 +15,8 @@
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
-//import net.minecraftforge.fluids.FluidStack;
-//import net.minecraftforge.fluids.capability.IFluidHandler;
+//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.fluids.capability.IFluidHandler;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;

@@ -18,8 +18,8 @@
 //import net.minecraft.init.Items;
 //import net.minecraft.world.item.ItemStack;
 //
-//import net.minecraftforge.fluids.Fluid;
-//import net.minecraftforge.fluids.Fluids;
+//import net.neoforged.fluids.Fluid;
+//import net.neoforged.fluids.Fluids;
 //
 //import reika.dragonapi.libraries.io.ReikaPacketHelper;
 //import reika.dragonapi.libraries.java.ReikaJavaLibrary;

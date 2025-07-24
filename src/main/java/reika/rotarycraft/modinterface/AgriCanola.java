@@ -33,7 +33,7 @@
 //
 //import net.minecraft.world.level.BlockGetter;
 //import net.minecraft.world.level.Level;
-//import net.minecraftforge.api.distmarker.Dist;
+//import net.neoforged.api.distmarker.Dist;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.Auxiliary.Trackers.ReflectiveFailureTracker;
 //import reika.dragonapi.libraries.Java.ReikaJavaLibrary;

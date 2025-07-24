@@ -15,7 +15,7 @@
 //
 //import net.minecraft.world.Container;
 //import net.minecraft.world.entity.player.Player;
-//import net.minecraftforge.api.distmarker.Dist;
+//import net.neoforged.api.distmarker.Dist;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;
 //
 //import cpw.mods.fml.relauncher.Side;

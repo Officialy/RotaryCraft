@@ -22,7 +22,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.fluids.FluidStack;
 
 import reika.dragonapi.libraries.ReikaNBTHelper;
 import reika.rotarycraft.RotaryCraft;

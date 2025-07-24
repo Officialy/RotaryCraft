@@ -24,9 +24,9 @@
 //import net.minecraft.item.Item;
 //import net.minecraft.world.item.ItemStack;
 //
-//import net.minecraftforge.client.IItemRenderer;
-//import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-//import net.minecraftforge.client.MinecraftForgeClient;
+//import net.neoforged.client.IItemRenderer;
+//import net.neoforged.client.IItemRenderer.ItemRenderType;
+//import net.neoforged.client.MinecraftForgeClient;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;

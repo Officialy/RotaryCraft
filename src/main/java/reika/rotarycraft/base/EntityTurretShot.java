@@ -20,9 +20,9 @@ import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryManager;
+import net.neoforged.entity.IEntityAdditionalSpawnData;
+import net.neoforged.registries.ForgeRegistries;
+import net.neoforged.registries.RegistryManager;
 import reika.rotarycraft.auxiliary.TurretDamage;
 import reika.rotarycraft.base.blockentity.BlockEntityAimedCannon;
 

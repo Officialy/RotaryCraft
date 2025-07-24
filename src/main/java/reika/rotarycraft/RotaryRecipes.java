@@ -6,8 +6,8 @@
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.item.Items;
 //import net.minecraft.world.level.block.Blocks;
-//import net.minecraftforge.fml.loading.FMLLoader;
-//import net.minecraftforge.registries.ForgeRegistries;
+//import net.neoforged.fml.loading.FMLLoader;
+//import net.neoforged.registries.ForgeRegistries;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.auxiliary.trackers.ItemMaterialController;
 //import reika.dragonapi.instantiable.ItemMaterial;

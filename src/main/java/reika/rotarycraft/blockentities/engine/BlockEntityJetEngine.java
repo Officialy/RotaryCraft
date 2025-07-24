@@ -38,10 +38,10 @@
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.level.material.Fluids;
 //import net.minecraft.world.phys.AABB;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.fluids.FluidStack;
-//import net.minecraftforge.fml.loading.FMLLoader;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.common.NeoForge;
+//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.fml.loading.FMLLoader;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.StepTimer;
@@ -400,7 +400,7 @@
 //        int z = pos.getZ();
 //
 //        RotaryAdvancements.JETFAIL.triggerAchievement(this.getPlacer());
-//        MinecraftForge.EVENT_BUS.post(new JetEngineEnterFailureEvent(this));
+//        NeoForge.EVENT_BUS.post(new JetEngineEnterFailureEvent(this));
 //        ReikaSoundHelper.playSoundAtBlock(world, pos, "DragonAPI.rand.explode", 2, 0.75F);
 //        SoundRegistry.INGESTION.playSoundAtBlock(this, 0.5F, 1);
 //
@@ -610,7 +610,7 @@
 //    }
 //
 //    private void fail(Level world, BlockPos pos) {
-//        MinecraftForge.EVENT_BUS.post(new JetEngineExplosionEvent(this));
+//        NeoForge.EVENT_BUS.post(new JetEngineExplosionEvent(this));
 //        int r = 6;
 //        for (int i = -r; i <= r; i++) {
 //            for (int j = -r; j <= r; j++) {

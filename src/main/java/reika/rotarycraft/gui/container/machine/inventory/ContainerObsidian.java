@@ -15,7 +15,7 @@
 //import net.minecraft.world.inventory.Slot;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraftforge.network.IContainerFactory;
+//import net.neoforged.network.IContainerFactory;
 //import reika.rotarycraft.base.IOMachineMenu;
 //import reika.rotarycraft.blockentities.production.BlockEntityObsidianMaker;
 //import reika.rotarycraft.registry.RotaryMenuTypes;

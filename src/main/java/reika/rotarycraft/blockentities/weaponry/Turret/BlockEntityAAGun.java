@@ -19,7 +19,7 @@
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.phys.AABB;
-//import net.minecraftforge.items.IItemHandler;
+//import net.neoforged.items.IItemHandler;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaEntityHelper;

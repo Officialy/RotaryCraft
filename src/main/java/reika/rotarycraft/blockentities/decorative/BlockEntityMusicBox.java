@@ -24,10 +24,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.NoteBlockEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.NeoForge;
+import net.neoforged.event.level.NoteBlockEvent;
 
 import reika.dragonapi.instantiable.MusicScore;
 import reika.dragonapi.instantiable.MusicScore.NoteData;
@@ -207,7 +207,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         playDelay[channel] = n.length.tickLength;
         playIndex[channel]++;
 //        NoteBlockEvent.Play e = new NoteBlockEvent.Play(this, n.pitch, n.getTickLength(), channel);
-//        MinecraftForge.EVENT_BUS.post(e); //todo noteblock event
+//        NeoForge.EVENT_BUS.post(e); //todo noteblock event
     }
 
     @Override

@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.client.gui.ScreenUtils;
+import net.neoforged.client.gui.ScreenUtils;
 import reika.dragonapi.instantiable.gui.ColorButton;
 import reika.dragonapi.instantiable.gui.PianoKeyboard;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;

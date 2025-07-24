@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.common.ForgeConfigSpec;
 import reika.dragonapi.auxiliary.trackers.PlayerHandler;
 import reika.dragonapi.instantiable.Alert;
 import reika.dragonapi.interfaces.configuration.ConfigList;

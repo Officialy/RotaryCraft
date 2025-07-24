@@ -18,10 +18,10 @@
 //import net.minecraft.world.World;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.common.util.Direction;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.common.util.Direction;
 //
-//import net.minecraftforge.fml.loading.FMLLoader;
+//import net.neoforged.fml.loading.FMLLoader;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.asm.APIStripper.Strippable;
 //import reika.dragonapi.asm.DependentMethodStripper.ModDependent;

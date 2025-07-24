@@ -11,7 +11,7 @@
 //
 //import reika.rotarycraft.blockentities.Weaponry.BlockEntityAirGun;
 //import net.minecraft.BlockEntity.BlockEntity;
-//import net.minecraftforge.client.MinecraftForgeClient;
+//import net.neoforged.client.MinecraftForgeClient;
 //import org.lwjgl.opengl.GL11;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
 //import reika.rotarycraft.auxiliary.IORenderer;

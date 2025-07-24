@@ -13,9 +13,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.common.SoundActions;
-import net.minecraftforge.fluids.FluidType;
+import net.neoforged.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.common.SoundActions;
+import net.neoforged.fluids.FluidType;
 import org.joml.Vector3f;
 import reika.rotarycraft.RotaryCraft;
 

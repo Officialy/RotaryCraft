@@ -13,7 +13,7 @@
 //
 //import net.minecraft.entity.player.Player;
 //
-//import net.minecraftforge.fluids.Fluid;
+//import net.neoforged.fluids.Fluid;
 //
 //import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
 //import reika.rotarycraft.base.GuiPowerOnlyMachine;

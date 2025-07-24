@@ -15,7 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.fluids.FluidStack;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;

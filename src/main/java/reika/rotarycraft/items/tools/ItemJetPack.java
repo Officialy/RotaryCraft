@@ -24,7 +24,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.fluids.FluidStack;
 
 import reika.dragonapi.auxiliary.trackers.KeyWatcher;
 import reika.dragonapi.libraries.ReikaFluidHelper;

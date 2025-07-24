@@ -18,8 +18,8 @@
 //import net.minecraft.client.renderer.Tessellator;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.util.IIcon;
-//import net.minecraftforge.fluids.Fluid;
-//import net.minecraftforge.fluids.FluidRegistry;
+//import net.neoforged.fluids.Fluid;
+//import net.neoforged.fluids.FluidRegistry;
 //
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.dragonapi.libraries.rendering.ReikaGuiAPI;

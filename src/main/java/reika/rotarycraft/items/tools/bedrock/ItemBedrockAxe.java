@@ -179,7 +179,7 @@ public class ItemBedrockAxe extends AxeItem {
                 Iterator<ItemStack> it = items.iterator();
                 while (it.hasNext()) {
                     ItemStack in = it.next();
-                    if (MinecraftForge.EVENT_BUS.post(new EntityItemPickupEvent(ep, new ItemEntity(level, dx + 0.5, dy + 0.5, dz + 0.5, is))))
+                    if (NeoForge.EVENT_BUS.post(new EntityItemPickupEvent(ep, new ItemEntity(level, dx + 0.5, dy + 0.5, dz + 0.5, is))))
                         it.remove();
                     else if (ReikaInventoryHelper.addToIInv(in, ep.getInventory()))
                         it.remove();

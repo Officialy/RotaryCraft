@@ -10,7 +10,7 @@
 //package reika.rotarycraft.renders.m;
 //
 //import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraftforge.client.MinecraftForgeClient;
+//import net.neoforged.client.MinecraftForgeClient;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
 //import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 //

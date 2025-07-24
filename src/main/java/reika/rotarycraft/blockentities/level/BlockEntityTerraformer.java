@@ -19,7 +19,7 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraft.world.level.material.Fluids;
-//import net.minecraftforge.fluids.FluidStack;
+//import net.neoforged.fluids.FluidStack;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.ItemReq;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.registries.ForgeRegistries;
 import reika.dragonapi.ModList;
 import reika.dragonapi.auxiliary.EnumDifficulty;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;

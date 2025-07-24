@@ -14,7 +14,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.items.SlotItemHandler;
 import reika.dragonapi.base.CoreContainer;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine;
 import reika.rotarycraft.registry.RotaryMenus;

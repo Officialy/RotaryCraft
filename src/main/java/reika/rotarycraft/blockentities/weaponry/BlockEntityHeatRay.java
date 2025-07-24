@@ -26,8 +26,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.extensions.IForgeBlockEntity;
+import net.neoforged.common.NeoForge;
+import net.neoforged.common.extensions.IForgeBlockEntity;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.dragonapi.interfaces.block.SemiTransparent;
@@ -150,7 +150,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
             public boolean doEffect(Level world, BlockPos pos, long power, int range, int tickcount, BlockEntityHeatRay te) {
                 if (!world.isClientSide) {
                     world.explode(null, pos.getX(), pos.getY(), pos.getZ(), 5F, true, Level.ExplosionInteraction.BLOCK);
-                    MinecraftForge.EVENT_BUS.post(new HeatRayNetherDetonationEvent(world, pos));
+                    NeoForge.EVENT_BUS.post(new HeatRayNetherDetonationEvent(world, pos));
                     if (world.dimension() == Level.NETHER && range >= 500) {
 //                        RotaryAdvancements.NETHERHEATRAY.triggerAchievement(te.getPlacer());
                     }

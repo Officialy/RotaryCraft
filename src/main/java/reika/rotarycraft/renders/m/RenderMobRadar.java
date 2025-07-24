@@ -20,7 +20,7 @@
 //import net.minecraft.client.renderer.Tesselator;
 //import net.minecraft.entity.LivingEntity;
 //import net.minecraft.entity.player.Player;
-//import net.minecraftforge.client.MinecraftForgeClient;
+//import net.neoforged.client.MinecraftForgeClient;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;

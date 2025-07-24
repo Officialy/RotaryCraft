@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.common.NeoForge;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -97,7 +97,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
     }
 
     public void fail(Level world, BlockPos pos, boolean speed) {
-        MinecraftForge.EVENT_BUS.post(new ShaftFailureEvent(this, speed, materialType.ordinal()));
+        NeoForge.EVENT_BUS.post(new ShaftFailureEvent(this, speed, materialType.ordinal()));
         failed = true;
         if (speed) {
             world.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1F, Level.ExplosionInteraction.BLOCK);

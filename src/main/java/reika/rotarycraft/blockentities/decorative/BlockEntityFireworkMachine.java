@@ -17,7 +17,7 @@
 //import net.minecraft.world.item.enchantment.Enchantment;
 //import net.minecraft.world.item.enchantment.Enchantments;
 //import net.minecraft.world.level.Level;
-//import net.minecraftforge.common.MinecraftForge;
+//import net.neoforged.common.NeoForge;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -93,7 +93,7 @@
 //            return;
 //        EntityFireworkRocket firework = new EntityFireworkRocket(world, x + 0.5, y + 1.25, z + 0.5, rocket);
 //        world.addFreshEntity(firework);
-//        MinecraftForge.EVENT_BUS.post(new FireworkLaunchEvent(this, firework));
+//        NeoForge.EVENT_BUS.post(new FireworkLaunchEvent(this, firework));
 //        //-------TEST CODE----------
 //        //ItemEntity ent = new ItemEntity(world, x, y+1, z, star);
 //        //world.addFreshEntity(ent);

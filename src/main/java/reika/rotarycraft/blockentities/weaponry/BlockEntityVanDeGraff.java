@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.common.NeoForge;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.data.WeightedRandom;
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
@@ -222,7 +222,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
                 e.hurt(e.damageSources().magic(), Integer.MAX_VALUE);
             }
         }
-        MinecraftForge.EVENT_BUS.post(new VDGAttackEvent(this, charge, dmg));
+        NeoForge.EVENT_BUS.post(new VDGAttackEvent(this, charge, dmg));
         SoundRegistry.SPARK.playSoundAtBlock(level, worldPosition, 1.25F, 1F);
     }
 

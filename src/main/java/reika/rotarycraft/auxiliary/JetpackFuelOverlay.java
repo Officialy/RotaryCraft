@@ -16,10 +16,10 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.client.event.RenderGuiOverlayEvent;
+import net.neoforged.client.gui.overlay.VanillaGuiOverlay;
+import net.neoforged.fml.common.Mod;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.items.tools.ItemJetPack;
 import reika.rotarycraft.registry.RotaryFluids;
@@ -28,7 +28,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 @Mod.EventBusSubscriber(modid = RotaryCraft.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)

@@ -22,8 +22,8 @@
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.level.material.Fluids;
-//import net.minecraftforge.fluids.FluidStack;
-//import net.minecraftforge.fluids.capability.IFluidHandler;
+//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.fluids.capability.IFluidHandler;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.HybridTank;

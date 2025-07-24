@@ -238,7 +238,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
             }
             ItemStack out = wr.getOutput().copy();
             out.setCount(out.getCount() * crafts);
-            MinecraftForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, out));
+            NeoForge.EVENT_BUS.post(new WorktableCraftEvent(this, ep, true, out));
         }
         if (crafts > 0) {
             for (int i = 0; i < 9; ++i) {

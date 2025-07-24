@@ -1,7 +1,7 @@
 package reika.rotarycraft.data;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.common.data.LanguageProvider;
 import reika.rotarycraft.RotaryCraft;
 
 public class RotaryLang extends LanguageProvider {

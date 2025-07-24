@@ -9,7 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.common.NeoForge;
 import reika.dragonapi.instantiable.data.maps.PlayerMap;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class TutorialTracker {
 //    private final EnumMap<EngineType, HintList> engineHints = new EnumMap(EngineType.class);
 
     private TutorialTracker() {
-        MinecraftForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(this);
     }
 //
 //    public void placeMachine(MachineRegistry m, Player ep) {

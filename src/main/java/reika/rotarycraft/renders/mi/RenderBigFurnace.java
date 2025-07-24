@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.client.extensions.common.IClientFluidTypeExtensions;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 

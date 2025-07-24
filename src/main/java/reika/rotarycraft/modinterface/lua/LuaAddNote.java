@@ -10,7 +10,7 @@
 //package reika.rotarycraft.modinterface.Lua;
 //
 //import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraftforge.event.level.NoteBlockEvent;
+//import net.neoforged.event.level.NoteBlockEvent;
 //import reika.dragonapi.libraries.mathsci.ReikaMusicHelper;
 //import reika.dragonapi.modinteract.lua.LuaMethod;
 //

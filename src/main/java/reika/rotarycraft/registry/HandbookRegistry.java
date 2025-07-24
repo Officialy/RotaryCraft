@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.registries.RegistryObject;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.HandbookAuxData;

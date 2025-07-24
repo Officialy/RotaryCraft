@@ -19,8 +19,8 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.material.Fluid;
-//import net.minecraftforge.fluids.FluidStack;
-//import net.minecraftforge.registries.ForgeRegistries;
+//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.registries.ForgeRegistries;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.instantiable.StepTimer;

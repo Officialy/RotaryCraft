@@ -2,8 +2,8 @@ package reika.rotarycraft.base.fluids.fluidtypes;
 
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.common.SoundActions;
+import net.neoforged.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.common.SoundActions;
 import org.joml.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraftforge.fluids.FluidType;
+import net.neoforged.fluids.FluidType;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.RotaryFluids;
 

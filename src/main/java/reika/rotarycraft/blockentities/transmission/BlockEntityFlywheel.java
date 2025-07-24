@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.common.NeoForge;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaPhysicsHelper;
@@ -85,7 +85,7 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
         float f = ReikaPhysicsHelper.getExplosionFromEnergy(e);
         if (!world.isClientSide)
             world.explode(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), f, ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
-        MinecraftForge.EVENT_BUS.post(new FlywheelFailureEvent(this, f));
+        NeoForge.EVENT_BUS.post(new FlywheelFailureEvent(this, f));
     }
 
     private double getDensity() {

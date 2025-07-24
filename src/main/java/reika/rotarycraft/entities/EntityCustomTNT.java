@@ -6,7 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.neoforged.entity.IEntityAdditionalSpawnData;
 
 public class EntityCustomTNT extends PrimedTnt implements IEntityAdditionalSpawnData {
 

@@ -20,8 +20,8 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.level.material.Fluid;
-//import net.minecraftforge.common.capabilities.ForgeCapabilities;
-//import net.minecraftforge.fluids.FluidStack;
+//import net.neoforged.common.capabilities.ForgeCapabilities;
+//import net.neoforged.fluids.FluidStack;
 //
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;

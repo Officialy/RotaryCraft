@@ -17,8 +17,8 @@
 //import net.minecraft.core.Direction;
 //import net.minecraft.init.Blocks;
 //
-//import net.minecraftforge.client.MinecraftForgeClient;
-//import net.minecraftforge.common.util.Direction;
+//import net.neoforged.client.MinecraftForgeClient;
+//import net.neoforged.common.util.Direction;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;

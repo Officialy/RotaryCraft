@@ -23,9 +23,9 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraft.world.phys.AABB;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.fml.loading.FMLLoader;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.common.NeoForge;
+//import net.neoforged.fml.loading.FMLLoader;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.ReikaPlayerAPI;
@@ -237,7 +237,7 @@
 //                            ReikaInventoryHelper.addOrSetStack(is, inv, 0);
 //                    }
 //                    RotaryAdvancements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
-//                    MinecraftForge.EVENT_BUS.post(new BedrockDigEvent(this, pos));
+//                    NeoForge.EVENT_BUS.post(new BedrockDigEvent(this, pos));
 //                    if (world.isClientSide)
 //                        this.incrementStep(world, mx, my, mz);
 //                }

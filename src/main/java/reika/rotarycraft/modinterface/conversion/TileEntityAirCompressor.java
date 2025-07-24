@@ -18,7 +18,7 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.world.World;
-//import net.minecraftforge.common.util.Direction;
+//import net.neoforged.common.util.Direction;
 //
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;

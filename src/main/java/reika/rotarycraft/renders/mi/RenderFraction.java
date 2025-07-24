@@ -9,7 +9,7 @@
 // ******************************************************************************/
 //package reika.rotarycraft.renders.mi;
 //
-//import net.minecraftforge.client.MinecraftForgeClient;
+//import net.neoforged.client.MinecraftForgeClient;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;

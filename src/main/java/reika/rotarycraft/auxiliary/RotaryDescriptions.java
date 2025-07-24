@@ -12,10 +12,10 @@ package reika.rotarycraft.auxiliary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.common.NeoForge;
+import net.neoforged.fluids.FluidType;
+import net.neoforged.fml.loading.FMLLoader;
 import reika.dragonapi.instantiable.data.maps.PluralMap;
 import reika.dragonapi.instantiable.io.XMLInterface;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
@@ -66,7 +66,7 @@ public final class RotaryDescriptions {
     static {
         loadNumericalData();
 
-        MinecraftForge.EVENT_BUS.register(new ReloadListener());
+        NeoForge.EVENT_BUS.register(new ReloadListener());
     }
 
     private static XMLInterface loadData(String name) {

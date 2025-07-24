@@ -24,7 +24,7 @@
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.phys.AABB;
-//import net.minecraftforge.fluids.FluidStack;
+//import net.neoforged.fluids.FluidStack;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.Interpolation;

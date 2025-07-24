@@ -11,7 +11,7 @@
 //
 //import org.lwjgl.opengl.GL11;
 //
-//import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraftforge.client.MinecraftForgeClient;
+//import net.minecraft.world.level.block.entity.BlockEntity;import net.neoforged.client.MinecraftForgeClient;
 //
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
 //import reika.rotarycraft.auxiliary.IORenderer;

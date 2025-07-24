@@ -25,7 +25,7 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.phys.Vec3;
-//import net.minecraftforge.common.MinecraftForge;
+//import net.neoforged.common.NeoForge;
 //
 //public class EntityGasMinecart extends Minecart {
 //
@@ -158,7 +158,7 @@
 //     */
 //    @Override
 //    public boolean interactFirst(Player par1Player) {
-//        if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, par1Player))) {
+//        if (NeoForge.EVENT_BUS.post(new MinecartInteractEvent(this, par1Player))) {
 //            return true;
 //        }
 //        ItemStack itemstack = par1Player.inventory.getSelected();
@@ -231,7 +231,7 @@
 //
 //    @Override
 //    public void applyEntityCollision(Entity par1Entity) {
-//        MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent(this, par1Entity));
+//        NeoForge.EVENT_BUS.post(new MinecartCollisionEvent(this, par1Entity));
 //        if (getCollisionHandler() != null) {
 //            getCollisionHandler().onEntityCollision(this, par1Entity);
 //            return;

@@ -12,9 +12,9 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.common.capabilities.ForgeCapabilities;
+import net.neoforged.items.IItemHandlerModifiable;
+import net.neoforged.items.SlotItemHandler;
 
 import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
 import reika.rotarycraft.RotaryCraft;

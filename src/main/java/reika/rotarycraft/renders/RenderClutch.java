@@ -13,7 +13,7 @@
 //import com.mojang.math.Quaternion;
 //import net.minecraft.client.renderer.MultiBufferSource;
 //import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraftforge.client.MinecraftForgeClient;
+//import net.neoforged.client.MinecraftForgeClient;
 //import org.lwjgl.opengl.GL11;
 //import reika.dragonapi.instantiable.rendering.TessellatorVertexList;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;

@@ -21,7 +21,7 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //
-//import net.minecraftforge.common.MinecraftForge;
+//import net.neoforged.common.NeoForge;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.data.blockstruct.TreeReader;
 //import reika.dragonapi.instantiable.data.immutable.BlockKey;
@@ -259,7 +259,7 @@
 //        if (ReikaRandomHelper.doWithChance(f)) {
 //            int fortune = enchantments.getEnchantment(Enchantment.fortune);
 //            ArrayList<ItemStack> ret = b.getDrops(world, pos, meta, fortune);
-//            MinecraftForge.EVENT_BUS.post(new HarvestDropsEvent(pos, world, b, meta, fortune, 1, ret, this.getPlacer(), false));
+//            NeoForge.EVENT_BUS.post(new HarvestDropsEvent(pos, world, b, meta, fortune, 1, ret, this.getPlacer(), false));
 //            if (tree.getTreeType() == ModWoodList.SLIME) {
 //                Block log = tree.getTreeType().getLogID();
 //                if (b == log) {

@@ -19,7 +19,7 @@
 //import net.minecraft.world.item.ItemStack;
 //
 //import net.minecraft.world.biome.Biome;
-//import net.minecraftforge.fluids.FluidStack;
+//import net.neoforged.fluids.FluidStack;
 //
 //import reika.dragonapi.instantiable.gui.ImageButton;
 //import reika.dragonapi.libraries.io.ReikaPacketHelper;

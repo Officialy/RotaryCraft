@@ -14,10 +14,10 @@
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.api.distmarker.OnlyIn;
-//import net.minecraftforge.fluids.FluidStack;
-//import net.minecraftforge.fluids.capability.IFluidHandler;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.api.distmarker.OnlyIn;
+//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.fluids.capability.IFluidHandler;
 //import reika.dragonapi.instantiable.data.Collections.ChancedOutputList.ItemWithChance;
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.instantiable.TemporaryInventory;

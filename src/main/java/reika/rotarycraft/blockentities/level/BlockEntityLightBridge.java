@@ -13,7 +13,7 @@
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.world.level.Level;
-//import net.minecraftforge.common.MinecraftForge;
+//import net.neoforged.common.NeoForge;
 //import reika.dragonapi.interfaces.blockentity.BreakAction;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
@@ -90,7 +90,7 @@
 //        }
 //        //}
 //        else {
-//            MinecraftForge.EVENT_BUS.post(new LightBridgePowerLossEvent(this));
+//            NeoForge.EVENT_BUS.post(new LightBridgePowerLossEvent(this));
 //            this.lightsOut(world, pos);
 //        }
 //    }

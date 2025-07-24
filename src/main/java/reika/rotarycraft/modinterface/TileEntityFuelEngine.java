@@ -20,13 +20,13 @@
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.level.material.Fluids;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.common.util.Direction;
-//import net.minecraftforge.fluids.Fluid;
-//import net.minecraftforge.fluids.FluidRegistry;
-//import net.minecraftforge.fluids.FluidStack;
-//import net.minecraftforge.fluids.FluidTankInfo;
-//import net.minecraftforge.fluids.IFluidHandler;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.common.util.Direction;
+//import net.neoforged.fluids.Fluid;
+//import net.neoforged.fluids.FluidRegistry;
+//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.fluids.FluidTankInfo;
+//import net.neoforged.fluids.IFluidHandler;
 //
 //import reika.dragonapi.asm.APIStripper.Strippable;
 //import reika.dragonapi.instantiable.HybridTank;
@@ -38,7 +38,7 @@
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 //import reika.dragonapi.libraries.registry.ReikaParticleHelper;
 //import reika.dragonapi.modinteract.AtmosphereHandler;
-//import net.minecraftforge.fluids.capability.IFluidHandler;
+//import net.neoforged.fluids.capability.IFluidHandler;
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.rotarycraft.api.Power.PowerGenerator;

@@ -16,7 +16,7 @@
 //import net.minecraft.world.level.biome.Biome;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraft.world.level.material.Fluids;
-//import net.minecraftforge.fluids.capability.IFluidHandler;
+//import net.neoforged.fluids.capability.IFluidHandler;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;

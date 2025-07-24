@@ -22,9 +22,9 @@
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.fml.loading.FMLLoader;
-//import net.minecraftforge.oredict.OreDictionary;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.fml.loading.FMLLoader;
+//import net.neoforged.oredict.OreDictionary;
 //import reika.dragonapi.modinteract.DeepInteract.AEPatternHandling;
 //import reika.dragonapi.modinteract.DeepInteract.MESystemReader;
 //import reika.dragonapi.ModList;

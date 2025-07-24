@@ -23,7 +23,7 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
-//import net.minecraftforge.common.MinecraftForge;
+//import net.neoforged.common.NeoForge;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.interfaces.blockentity.GuiController;
 //import reika.dragonapi.instantiable.StepTimer;
@@ -266,7 +266,7 @@
 //                for (Entity e : c)
 //                    flagNoDespawn(e);
 //            }
-//            MinecraftForge.EVENT_BUS.post(new SpawnerControllerSpawnEvent(te, this.getEntity()));
+//            NeoForge.EVENT_BUS.post(new SpawnerControllerSpawnEvent(te, this.getEntity()));
 //        }
 //
 //        private Class<? extends LivingEntity> getEntity() {

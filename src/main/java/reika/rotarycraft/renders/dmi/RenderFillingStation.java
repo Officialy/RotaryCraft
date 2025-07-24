@@ -19,11 +19,11 @@
 //import net.minecraft.item.Item;
 //import net.minecraft.world.item.ItemStack;
 //
-//import net.minecraftforge.client.IItemRenderer;
-//import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-//import net.minecraftforge.client.MinecraftForgeClient;
-//import net.minecraftforge.fluids.Fluid;
-//import net.minecraftforge.fluids.FluidRegistry;
+//import net.neoforged.client.IItemRenderer;
+//import net.neoforged.client.IItemRenderer.ItemRenderType;
+//import net.neoforged.client.MinecraftForgeClient;
+//import net.neoforged.fluids.Fluid;
+//import net.neoforged.fluids.FluidRegistry;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;

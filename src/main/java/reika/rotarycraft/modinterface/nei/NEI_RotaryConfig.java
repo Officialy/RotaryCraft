@@ -14,7 +14,7 @@
 //import net.minecraft.block.Block;
 //import net.minecraft.item.Item;
 //import net.minecraft.world.item.ItemStack;
-//import net.minecraftforge.oredict.OreDictionary;
+//import net.neoforged.oredict.OreDictionary;
 //
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
 //import reika.dragonapi.modregistry.ModOreList;

@@ -17,7 +17,7 @@
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //
 //import net.minecraft.world.phys.AABB;
-//import net.minecraftforge.eventbus.api.Event;
+//import net.neoforged.eventbus.api.Event;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.base.BlockTieredResource;
 //import reika.dragonapi.instantiable.data.immutable.BlockKey;
@@ -29,9 +29,9 @@
 //import java.util.List;
 //import java.util.Locale;
 //
-//import net.minecraftforge.common.IPlantable;
-//import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+//import net.neoforged.common.IPlantable;
+//import net.neoforged.common.NeoForge;
+//import net.neoforged.event.entity.player.EntityItemPickupEvent;
 //import reika.dragonapi.interfaces.registry.TreeType;
 //import reika.dragonapi.libraries.ReikaAABBHelper;
 //import reika.dragonapi.libraries.ReikaEnchantmentHelper;
@@ -242,7 +242,7 @@
 //    }
 //
 //    private void handleItem(ItemStack drop, Player ep) {
-//        if (!MinecraftForge.EVENT_BUS.post(new EntityItemPickupEvent(ep, new ItemEntity(ep.level, ep.getX(), ep.getY(), ep.getZ(), drop))))
+//        if (!NeoForge.EVENT_BUS.post(new EntityItemPickupEvent(ep, new ItemEntity(ep.level, ep.getX(), ep.getY(), ep.getZ(), drop))))
 //            ReikaPlayerAPI.addOrDropItem(drop, ep);
 //    }
 //

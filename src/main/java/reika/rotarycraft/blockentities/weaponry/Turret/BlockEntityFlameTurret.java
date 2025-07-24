@@ -10,7 +10,7 @@
 //package reika.rotarycraft.blockentities.weaponry.Turret;
 //
 //import net.minecraft.world.item.ItemStack;
-//import net.minecraftforge.fluids.FluidStack;
+//import net.neoforged.fluids.FluidStack;
 //
 //import reika.rotarycraft.api.Interfaces.TargetEntity;
 //import reika.rotarycraft.base.blockentity.BlockEntityFluidCannon;

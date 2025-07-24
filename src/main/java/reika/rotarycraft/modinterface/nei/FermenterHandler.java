@@ -19,7 +19,7 @@
 //import net.minecraft.init.Blocks;
 //import net.minecraft.init.Items;
 //import net.minecraft.world.item.ItemStack;
-//import net.minecraftforge.fluids.FluidRegistry;
+//import net.neoforged.fluids.FluidRegistry;
 //
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;

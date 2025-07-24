@@ -19,8 +19,8 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.entity.BlockEntityType;
 //import net.minecraft.world.level.block.state.BlockState;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.fml.loading.FMLLoader;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.fml.loading.FMLLoader;
 //
 //import reika.dragonapi.libraries.mathsci.ReikaPhysicsHelper;
 //import reika.rotarycraft.base.blockentity.RemoteControlMachine;

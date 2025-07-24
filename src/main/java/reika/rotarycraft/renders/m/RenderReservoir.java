@@ -22,7 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.client.extensions.common.IClientFluidTypeExtensions;
 import org.joml.Matrix4f;
 import reika.dragonapi.instantiable.data.DynamicAverage;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;

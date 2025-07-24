@@ -64,7 +64,7 @@ public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
     public void render(BlockEntityMirror tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityMirrorAt(stack, tile, multiBufferSource, i);
-        if ((tile).isInWorld())// && MinecraftForge.getRenderType() == RenderType.solid())
+        if ((tile).isInWorld())// && NeoForge.getRenderType() == RenderType.solid())
             IORenderer.renderIO(stack, multiBufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
     }
 

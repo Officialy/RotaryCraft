@@ -6,10 +6,10 @@
 //import net.minecraft.util.IIcon;
 //import net.minecraft.util.BlockHitResult;
 //import net.minecraft.world.World;
-//import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.common.util.Direction;
-//import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-//import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+//import net.neoforged.common.NeoForge;
+//import net.neoforged.common.util.Direction;
+//import net.neoforged.event.entity.player.PlayerInteractEvent;
+//import net.neoforged.event.entity.player.PlayerInteractEvent.Action;
 //
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.asm.DependentMethodStripper.ModDependent;
@@ -48,7 +48,7 @@
 //	@Override
 //	public boolean onLeftClick(Level world, int x, int y, int z, Player ep, ItemStack wand, Direction side) {
 //		ep.setCurrentItemOrArmor(0, RotaryItems.SCREWDRIVER.get());
-//		if (!MinecraftForge.EVENT_BUS.post(new PlayerInteractEvent(ep, Action.LEFT_CLICK_BLOCK, x, y, z, side.ordinal(), world)))
+//		if (!NeoForge.EVENT_BUS.post(new PlayerInteractEvent(ep, Action.LEFT_CLICK_BLOCK, x, y, z, side.ordinal(), world)))
 //			world.getBlock(x, y, z).onBlockClicked(world, x, y, z, ep);
 //		ep.setCurrentItemOrArmor(0, wand);
 //		this.playSound(world, x, y, z);
@@ -96,7 +96,7 @@
 //			hold = hold.copy();
 //		player.setCurrentItemOrArmor(0, is);
 //		boolean ret = world.getBlock(x, y, z).onBlockActivated(world, x, y, z, player, mov.sideHit, a, b, c);
-//		//MinecraftForge.EVENT_BUS.post(new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, x, y, z, mov.sideHit, world));
+//		//NeoForge.EVENT_BUS.post(new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, x, y, z, mov.sideHit, world));
 //		player.setCurrentItemOrArmor(0, hold);
 //		return ret;
 //	}

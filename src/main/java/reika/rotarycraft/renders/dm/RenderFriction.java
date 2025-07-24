@@ -12,7 +12,7 @@
 //import reika.rotarycraft.blockentities.auxiliary.BlockEntityFurnaceHeater;
 //import net.minecraft.BlockEntity.BlockEntity;
 //import net.minecraft.client.renderer.Tesselator;
-//import net.minecraftforge.client.MinecraftForgeClient;
+//import net.neoforged.client.MinecraftForgeClient;
 //import org.lwjgl.opengl.GL11;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
 //import reika.rotarycraft.auxiliary.HeatRippleRenderer;

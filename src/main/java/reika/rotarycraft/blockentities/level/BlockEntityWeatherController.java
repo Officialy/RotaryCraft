@@ -18,8 +18,8 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.storage.WorldInfo;
-//import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.oredict.OreDictionary;
+//import net.neoforged.common.NeoForge;
+//import net.neoforged.oredict.OreDictionary;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaEntityHelper;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -88,7 +88,7 @@
 //        boolean storm = rainmode == RainMode.SUPERSTORM;
 //        wi.setRaining(rain);
 //        wi.setThundering(thunder);
-//        MinecraftForge.EVENT_BUS.post(new WeatherControlEvent(this, rain, thunder, storm));
+//        NeoForge.EVENT_BUS.post(new WeatherControlEvent(this, rain, thunder, storm));
 //    }
 //
 //    @Override

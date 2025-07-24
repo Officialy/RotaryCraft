@@ -19,8 +19,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.FluidHandlerBlockEntity;
+import net.neoforged.fluids.FluidType;
+import net.neoforged.fluids.capability.FluidHandlerBlockEntity;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 

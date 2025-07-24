@@ -17,9 +17,9 @@
 //import net.minecraft.block.Block;
 //import net.minecraft.client.renderer.Tesselator;
 //
-//import net.minecraftforge.client.MinecraftForgeClient;
-//import net.minecraftforge.common.util.Direction;
-//import net.minecraftforge.fluids.Fluid;
+//import net.neoforged.client.MinecraftForgeClient;
+//import net.neoforged.common.util.Direction;
+//import net.neoforged.fluids.Fluid;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;

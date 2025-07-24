@@ -14,8 +14,8 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.util.Mth;
 //import net.minecraft.world.World;
-//import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.common.util.Direction;
+//import net.neoforged.common.NeoForge;
+//import net.neoforged.common.util.Direction;
 //
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.asm.APIStripper.Strippable;
@@ -196,7 +196,7 @@
 //
 //	@ModDependent(ModList.IC2)
 //	private void addTileToNet() {
-//		MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+//		NeoForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
 //	}
 //
 //	@Override
@@ -207,6 +207,6 @@
 //
 //	@ModDependent(ModList.IC2)
 //	private void removeTileFromNet() {
-//		MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+//		NeoForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 //	}
 //}

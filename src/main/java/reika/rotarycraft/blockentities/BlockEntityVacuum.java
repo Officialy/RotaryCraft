@@ -28,11 +28,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.common.NeoForge;
+import net.neoforged.common.capabilities.ForgeCapabilities;
+import net.neoforged.fluids.FluidStack;
+import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.items.IItemHandler;
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
@@ -211,7 +211,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
                 }
                 ent.kill();
                 world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.1F + 0.5F * DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat(), false);
-                MinecraftForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy() : null));
+                NeoForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy() : null));
             } else {
                 suck = true;
             }
@@ -223,7 +223,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
             experience += val;
             xp.kill();
             world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.BLOCKS, 0.1F, 0.5F * ((DragonAPI.rand.nextFloat() - DragonAPI.rand.nextFloat()) * 0.7F + 1.8F), false);
-            MinecraftForge.EVENT_BUS.post(new VacuumXPAbsorbEvent(this, val));
+            NeoForge.EVENT_BUS.post(new VacuumXPAbsorbEvent(this, val));
         }
     }
 

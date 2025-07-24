@@ -16,7 +16,7 @@ import reika.dragonapi.libraries.java.ReikaStringParser;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLLoader;
 import org.apache.commons.codec.Charsets;
 
 import java.io.BufferedReader;

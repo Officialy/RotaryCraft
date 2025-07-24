@@ -12,7 +12,7 @@
 //import org.lwjgl.opengl.GL11;
 //
 //import net.minecraft.entity.player.Player;
-//import net.minecraftforge.fluids.Fluids;
+//import net.neoforged.fluids.Fluids;
 //
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;

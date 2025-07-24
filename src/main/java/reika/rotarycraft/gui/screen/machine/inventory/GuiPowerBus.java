@@ -13,7 +13,7 @@
 //
 //import net.minecraft.client.gui.Button;
 //import net.minecraft.entity.player.Player;
-//import net.minecraftforge.common.util.Direction;
+//import net.neoforged.common.util.Direction;
 //
 //import reika.dragonapi.instantiable.gui.ImageButton;
 //import reika.dragonapi.libraries.io.ReikaPacketHelper;

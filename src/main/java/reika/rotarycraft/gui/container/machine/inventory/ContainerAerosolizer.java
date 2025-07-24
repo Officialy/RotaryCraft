@@ -11,8 +11,8 @@ package reika.rotarycraft.gui.container.machine.inventory;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.common.capabilities.ForgeCapabilities;
+import net.neoforged.items.SlotItemHandler;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.level.BlockEntityAerosolizer;
 import reika.rotarycraft.registry.RotaryMenus;

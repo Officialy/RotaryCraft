@@ -21,9 +21,9 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.world.World;
-//import net.minecraftforge.common.util.Direction;
+//import net.neoforged.common.util.Direction;
 //
-//import net.minecraftforge.energy.IEnergyStorage;
+//import net.neoforged.energy.IEnergyStorage;
 //import reika.dragonapi.asm.APIStripper.Strippable;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;

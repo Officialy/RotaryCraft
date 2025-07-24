@@ -14,7 +14,7 @@
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.world.World;
-//import net.minecraftforge.common.util.Direction;
+//import net.neoforged.common.util.Direction;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.DragonAPICore;

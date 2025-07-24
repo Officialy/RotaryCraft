@@ -14,10 +14,10 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.common.capabilities.ForgeCapabilities;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.fluids.capability.IFluidHandlerItem;
+import net.neoforged.network.NetworkHooks;
 
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
