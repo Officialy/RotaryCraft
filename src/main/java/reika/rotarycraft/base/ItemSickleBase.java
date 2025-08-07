@@ -17,7 +17,7 @@
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //
 //import net.minecraft.world.phys.AABB;
-//import net.neoforged.eventbus.api.Event;
+//import net.neoforged.bus.api.Event;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.base.BlockTieredResource;
 //import reika.dragonapi.instantiable.data.immutable.BlockKey;

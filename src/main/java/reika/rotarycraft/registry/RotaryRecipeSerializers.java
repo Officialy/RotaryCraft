@@ -9,7 +9,7 @@ import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
 
 public class RotaryRecipeSerializers {
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, RotaryCraft.MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, RotaryCraft.MODID);
 
     public static final RegistryObject<RecipeSerializer<ShapelessBlastFurnaceRecipe>> BLAST_FURNACE_SHAPELESS = RECIPE_SERIALIZERS.register("blast_furnace_shapeless", ShapelessBlastFurnaceRecipe.Serializer::new);
 

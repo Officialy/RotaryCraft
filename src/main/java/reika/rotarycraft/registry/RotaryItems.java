@@ -14,7 +14,7 @@ import reika.rotarycraft.items.tools.steel.*;
 
 public class RotaryItems {
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RotaryCraft.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, RotaryCraft.MODID);
 
     public static final RegistryObject<Item> IRON_SCRAP = ITEMS.register("iron_scrap", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ALUMINUM_ALLOY_INGOT = ITEMS.register("aluminum_alloy_ingot", () -> new Item(new Item.Properties()));

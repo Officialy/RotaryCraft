@@ -19,7 +19,7 @@
 //import net.minecraft.world.phys.AABB;
 //import net.minecraft.world.phys.Vec3;
 //import net.neoforged.common.NeoForge;
-//import net.neoforged.eventbus.api.Event;
+//import net.neoforged.bus.api.Event;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;

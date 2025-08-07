@@ -14,8 +14,8 @@ import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 
 public class GuiOneSlotScreen<E extends BlockEntityPowerReceiver, T extends CoreContainer<E>> extends MachineScreen<E, T> {
 
-    public static final ResourceLocation ONE_SLOT = new ResourceLocation(RotaryCraft.MODID, "textures/gui/basic_gui_oneslot.png");
-    public static final ResourceLocation POWERTAB = new ResourceLocation(RotaryCraft.MODID, "textures/gui/powertab.png");
+    public static final ResourceLocation ONE_SLOT = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/gui/basic_gui_oneslot.png");
+    public static final ResourceLocation POWERTAB = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/gui/powertab.png");
     protected Container iinv;
 
     public GuiOneSlotScreen(Inventory pl, T par1Container, Component title) {

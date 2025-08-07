@@ -23,8 +23,8 @@ import java.util.function.Consumer;
 
 public class LubricantFluidType extends FluidType {
 
-    public static final ResourceLocation LUBRICANT_FLUID_STILL_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/lubricant");
-    public static final ResourceLocation LUBRICANT_FLUID_FLOWING_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/lubricant_anim");
+    public static final ResourceLocation LUBRICANT_FLUID_STILL_TEXTURE = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/lubricant");
+    public static final ResourceLocation LUBRICANT_FLUID_FLOWING_TEXTURE = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/lubricant_anim");
     public static final ResourceLocation LUBRICANT_FLUID_OVERLAY_TEXTURE = LUBRICANT_FLUID_STILL_TEXTURE;
 
     public LubricantFluidType() {

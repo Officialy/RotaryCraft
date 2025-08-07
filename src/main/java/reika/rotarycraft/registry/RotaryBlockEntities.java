@@ -30,7 +30,7 @@ import reika.rotarycraft.modinterface.conversion.BlockEntitySteam;
 
 public class RotaryBlockEntities {
 
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RotaryCraft.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, RotaryCraft.MODID);
 
     public static final RegistryObject<BlockEntityType<BlockEntityShaft>> WOOD_SHAFT = BLOCK_ENTITIES.register("wood_shaft", () ->
             BlockEntityType.Builder.of((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.WOOD, pPos, pState), RotaryBlocks.WOOD_SHAFT.get()).build(null));

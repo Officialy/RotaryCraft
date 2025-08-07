@@ -27,8 +27,8 @@ import java.util.function.Supplier;
 
 public class RotaryBlocks {
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, RotaryCraft.MODID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RotaryCraft.MODID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, RotaryCraft.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, RotaryCraft.MODID);
 
     public static final RegistryObject<Block> GPR = registerMachineBlock("gpr", () -> new Block(BlockBehaviour.Properties.of().strength(20)));
     public static final RegistryObject<Block> WOOD_FLYWHEEL = registerMachineBlock("wood_flywheel", () -> new BlockGearbox(GearboxTypes.WOOD, BlockBehaviour.Properties.of().strength(20)));

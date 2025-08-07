@@ -23,8 +23,8 @@ import java.util.function.Consumer;
 
 public class JetFuelFluidType extends FluidType {
 
-    public static final ResourceLocation JETFUEL_FLUID_STILL_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/jetfuel");
-    public static final ResourceLocation JETFUEL_FLUID_FLOWING_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/jetfuel_anim");
+    public static final ResourceLocation JETFUEL_FLUID_STILL_TEXTURE = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/jetfuel");
+    public static final ResourceLocation JETFUEL_FLUID_FLOWING_TEXTURE = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/jetfuel_anim");
     public static final ResourceLocation JETFUEL_FLUID_OVERLAY_TEXTURE = JETFUEL_FLUID_STILL_TEXTURE;
 
     public JetFuelFluidType() {

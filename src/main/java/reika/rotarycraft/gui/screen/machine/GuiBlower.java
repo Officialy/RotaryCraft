@@ -45,7 +45,7 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
 
-        ResourceLocation s = new ResourceLocation(RotaryCraft.MODID, "textures/gui/blowergui.png");
+        ResourceLocation s = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/gui/blowergui.png");
 
         for (int i = 0; i < 3; i++) {
             int u = 176;

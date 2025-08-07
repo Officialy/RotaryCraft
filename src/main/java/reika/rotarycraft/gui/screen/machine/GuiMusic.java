@@ -56,8 +56,8 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
         super.init();
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
-        ResourceLocation note = new ResourceLocation(RotaryCraft.MODID,"textures/screen/musicbuttons.png");
-        ResourceLocation put =  new ResourceLocation(RotaryCraft.MODID, "textures/screen/buttons.png");
+        ResourceLocation note = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID,"textures/screen/musicbuttons.png");
+        ResourceLocation put =  ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/buttons.png");
         addRenderableWidget(new Button.Builder(Component.nullToEmpty("Save"), (button) -> actionPerformed(button, 100)).pos(j + 10, k + 6).size(40, 20).build());// j + 10, k + 6, 40, 20,
         addRenderableWidget(new Button.Builder(Component.nullToEmpty("Load"), (button) -> actionPerformed(button, 101)).pos(j + 50, k + 6).size( 40, 20).build());
         addRenderableWidget(new Button.Builder(Component.nullToEmpty("Load Demo"), (button) -> actionPerformed(button, 102)).pos(j + imageWidth / 2 + 40, k + 6).size( 80, 20).build());

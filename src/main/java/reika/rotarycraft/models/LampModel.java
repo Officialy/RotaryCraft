@@ -24,7 +24,7 @@ import reika.rotarycraft.RotaryCraft;
 
 
 public class LampModel extends RotaryModelBase {
-    public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(RotaryCraft.MODID, "textures/blockentitytex/lamptex.png");
+    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/blockentitytex/lamptex.png");
     private final ModelPart shape1;
     private final ModelPart shape2;
     private final ModelPart shape3;

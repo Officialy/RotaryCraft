@@ -10,7 +10,7 @@ import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
 
 public class RotaryRecipeTypes {
 
-    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, RotaryCraft.MODID);
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, RotaryCraft.MODID);
 
     
     public static final RegistryObject<RecipeType<ShapelessBlastFurnaceRecipe>> BLAST_FURNACE_SHAPELESS = RECIPE_TYPES.register("blast_furnace_shapeless", () -> new RecipeType<ShapelessBlastFurnaceRecipe>() {});

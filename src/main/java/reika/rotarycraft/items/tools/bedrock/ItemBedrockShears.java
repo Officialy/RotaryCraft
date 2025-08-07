@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.common.IForgeShearable;
-import net.neoforged.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 import reika.dragonapi.base.BlockTieredResource;
 import reika.dragonapi.libraries.ReikaPlayerAPI;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;

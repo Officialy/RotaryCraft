@@ -83,7 +83,7 @@ public enum SoundRegistry implements CustomDistanceSound {
     FLAMETURRET("flameturret");
 
     // DeferredRegister for sound events
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, RotaryCraft.MODID);
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, RotaryCraft.MODID);
 
     // Static map for sound event registration
     private static final HashMap<SoundRegistry, RegistryObject<SoundEvent>> SOUND_EVENT_MAP = new HashMap<>();
@@ -98,7 +98,7 @@ public enum SoundRegistry implements CustomDistanceSound {
         // Register all sound events
         for (SoundRegistry sound : values()) {
             SOUND_EVENT_MAP.put(sound, SOUND_EVENTS.register(sound.eventName, 
-                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(RotaryCraft.MODID, sound.eventName))));
+                () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, sound.eventName))));
         }
         
         // Create name lookup map
@@ -129,9 +129,9 @@ public enum SoundRegistry implements CustomDistanceSound {
         }
         
         if (this.isNote())
-            path = new ResourceLocation(RotaryCraft.MODID, SOUND_FOLDER + MUSIC_FOLDER + name + SOUND_EXT);
+            path = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, SOUND_FOLDER + MUSIC_FOLDER + name + SOUND_EXT);
         else
-            path = new ResourceLocation(RotaryCraft.MODID, SOUND_FOLDER + name + SOUND_EXT);
+            path = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, SOUND_FOLDER + name + SOUND_EXT);
     }
 
     // Get the registered SoundEvent

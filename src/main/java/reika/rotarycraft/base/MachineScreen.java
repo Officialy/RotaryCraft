@@ -62,7 +62,7 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
         clearWidgets();
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
-        ResourceLocation file = new ResourceLocation(RotaryCraft.MODID, "textures/screen/buttons.png");
+        ResourceLocation file = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/buttons.png");
         //24000, 24001
         addRenderableWidget(new ImageButton(j - 17, k + 4, 18, imageHeight - 12, 72, 0, 0, file, 256, 256, pButton -> RotaryCraft.LOGGER.info("Button 1 pressed"), Component.translatable("Info")));// 0xffffff
         addRenderableWidget(new ImageButton(j - 17, k + imageHeight - 8, 18, 4, 72, 252, 0, file, 256, 256, pButton -> RotaryCraft.LOGGER.info("Button 2 pressed"), Component.translatable("Info")));//button 0xffffff

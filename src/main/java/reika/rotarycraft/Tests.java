@@ -16,7 +16,7 @@ import net.neoforged.registries.RegistryObject;
 
 public class Tests {
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RotaryCraft.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, RotaryCraft.MODID);
 
     public static final RegistryObject<Item> TEST_ITEM = ITEMS.register("test_item", () -> new ItemTest(new Item.Properties()));
 

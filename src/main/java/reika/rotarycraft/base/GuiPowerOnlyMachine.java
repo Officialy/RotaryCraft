@@ -12,7 +12,7 @@ import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 
 public abstract class GuiPowerOnlyMachine<E extends RotaryCraftBlockEntity, T extends CoreContainer<E>> extends MachineScreen<E, T> {
 
-    private static final ResourceLocation POWER_ONLY = new ResourceLocation(RotaryCraft.MODID + "textures/gui/power_only.png");
+    private static final ResourceLocation POWER_ONLY = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/gui/power_only.png");
     BlockEntityPowerReceiver pwr;
 
     public GuiPowerOnlyMachine(T inv, Inventory par1Container, Component component) {

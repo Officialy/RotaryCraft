@@ -23,8 +23,8 @@ import java.util.function.Consumer;
 
 public class LiquidNitrogenFluidType extends FluidType {
 
-    public static final ResourceLocation NITROGEN_FLUID_STILL_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/nitrogen");
-    public static final ResourceLocation NITROGEN_FLUID_FLOWING_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/nitrogen_anim");
+    public static final ResourceLocation NITROGEN_FLUID_STILL_TEXTURE = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/nitrogen");
+    public static final ResourceLocation NITROGEN_FLUID_FLOWING_TEXTURE = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/nitrogen_anim");
     public static final ResourceLocation NITROGEN_FLUID_OVERLAY_TEXTURE = NITROGEN_FLUID_STILL_TEXTURE;
 
     public LiquidNitrogenFluidType() {

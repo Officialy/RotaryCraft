@@ -23,8 +23,8 @@ import java.util.function.Consumer;
 
 public class EthanolFluidType extends FluidType {
 
-    public static final ResourceLocation ETHANOL_FLUID_STILL_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/ethanol");
-    public static final ResourceLocation ETHANOL_FLUID_FLOWING_TEXTURE = new ResourceLocation(RotaryCraft.MODID, "block/fluid/ethanol_anim");
+    public static final ResourceLocation ETHANOL_FLUID_STILL_TEXTURE = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/ethanol");
+    public static final ResourceLocation ETHANOL_FLUID_FLOWING_TEXTURE = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/ethanol_anim");
     public static final ResourceLocation ETHANOL_FLUID_OVERLAY_TEXTURE = ETHANOL_FLUID_STILL_TEXTURE;
 
     public EthanolFluidType() {
