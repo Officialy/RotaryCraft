@@ -25,8 +25,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.XPProducer;
@@ -75,11 +75,11 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
 
         smelter.setCap(this.getOperationTime());
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (this.canSmelt()) {
                 smelter.update();
                 if (smelter.checkCap())
-                    if (!level.isClientSide)
+                    if (!level.isClientSide())
                         this.smelt();
             } else
                 smelter.reset();
@@ -100,9 +100,9 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
         int n = this.getNumberInputSlots();
         for (int i = 0; i < n; i++) {
             ItemStack is = itemHandler.getStackInSlot(i);
-            if (is != null) {
+            if (!is.isEmpty()) {
                 ItemStack to = new ItemStack(Items.STONE);// = FurnaceRecipes.smelting().getSmeltingResult(is);
-                if (to != null) {
+                if (!to.isEmpty()) {
                     boolean add = false;
                     if (itemHandler.getStackInSlot(i + n).isEmpty()) {
                         itemHandler.setStackInSlot(i + n, to.copy());
@@ -129,9 +129,9 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
         int n = this.getNumberInputSlots();
         for (int i = 0; i < n; i++) {
             ItemStack is = itemHandler.getStackInSlot(i);
-            if (is != null) {
+            if (!is.isEmpty()) {
                 ItemStack to = new ItemStack(Items.STONE);//FurnaceRecipes.smelting().getSmeltingResult(is);
-                if (to != null) {
+                if (!to.isEmpty()) {
                     return true;
                 }
             }
@@ -235,7 +235,7 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
     @Override
@@ -282,8 +282,8 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
 
-        temperature = tag.getInt("temp");
-        xp = tag.getFloat("xp");
+        temperature = tag.getIntOr("temp", 0);
+        xp = tag.getFloatOr("xp", 0);
     }
 
     @Override

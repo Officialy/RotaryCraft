@@ -19,9 +19,9 @@
 //import net.minecraft.client.renderer.Tessellator;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.util.IIcon;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidContainerRegistry;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidContainerRegistry;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
@@ -178,8 +178,8 @@
 //
 //		String s = r.recipe.getFluid().getLocalizedName();
 //		int l = Minecraft.getMinecraft().fontRenderer.width(s);
-//		Minecraft.getMinecraft().fontRenderer.drawString(s, x-l-5, y2-4, 0);
-//		Minecraft.getMinecraft().fontRenderer.drawString(r.recipe.getFluid().amount+" mB", x+20, y2-4, 0);
+//		Minecraft.getMinecraft().fontRenderer.text(s, x-l-5, y2-4, 0);
+//		Minecraft.getMinecraft().fontRenderer.text(r.recipe.getFluid().amount+" mB", x+20, y2-4, 0);
 //	}
 //
 //}

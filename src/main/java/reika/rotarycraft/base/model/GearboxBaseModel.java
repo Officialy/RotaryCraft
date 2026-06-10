@@ -8,8 +8,9 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
 
@@ -20,7 +21,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public abstract class GearboxBaseModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/gear/geartex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/gear/geartex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;
@@ -33,14 +34,15 @@ public abstract class GearboxBaseModel extends RotaryModelBase {
     private final ModelPart shape9;
     private final ModelPart shape10;
     private final ModelPart shape11;
-    private final ModelPart root;
+    // 1.21.5: Model already has a protected `root`; expose a wider-access alias for subclasses.
+    protected final ModelPart gearboxRoot;
 
     private final Collection<ModelPart> base = new ArrayList<>();
     private final Collection<ModelPart> supportColumns = new ArrayList<>();
 
     public GearboxBaseModel(ModelPart modelPart) {
-        super(RenderType::entityCutout);
-        this.root = modelPart;
+        super(modelPart, RenderTypes::entityCutout);
+        this.gearboxRoot = modelPart;
 
         this.shape1 = modelPart.getChild("shape1");
         this.shape2 = modelPart.getChild("shape2");
@@ -149,7 +151,8 @@ public abstract class GearboxBaseModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int light,  BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, 0, 0, 1, 1, 1, 1);
+        // 1.21.5: ModelPart#render now takes (PoseStack, VertexConsumer, int packedLight, int packedOverlay, int color).
+        root.render(stack, tex, 0, 0, 0xFFFFFFFF);
     }
 
 /*    protected final void renderSupports(PoseStack stack, BlockEntity te, ArrayList li) {
@@ -163,3 +166,4 @@ public abstract class GearboxBaseModel extends RotaryModelBase {
 //        GL11.glColor4f(1, 1, 1, 1);
     }*/
 }
+

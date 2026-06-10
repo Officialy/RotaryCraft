@@ -9,15 +9,13 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.client.gui.ScreenUtils;
 
 public class GuiCalculator extends Screen {
 
@@ -47,21 +45,19 @@ public class GuiCalculator extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics stack, int p_98419_, int x, float z) {
-        super.render(stack, p_98419_, x, z);
+    public void extractRenderState(GuiGraphicsExtractor stack, int p_98419_, int x, float z) {
+        super.extractRenderState(stack, p_98419_, x, z);
         int posX = (width - imageWidth) / 2;
         int posY = (height - imageHeight) / 2 - 8;
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, ResourceLocation.fromNamespaceAndPath("rotarycraft", "textures/screen/calcgui.png"));
-        ScreenUtils.drawTexturedModalRect(stack, posX, posY, 0, 0, imageWidth, imageHeight, 0);
+        stack.blit(RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath("rotarycraft", "textures/screen/calcgui.png"), posX, posY, 0, 0, imageWidth, imageHeight, 256, 256);
         this.drawKeys();
     }
     private void drawKeys() {
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2 - 8;
         int color = 0x000000;/*
-    	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "π", j+16, k+141-18, color);
+    	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "Ãâ‚¬", j+16, k+141-18, color);
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "Int", j+16, k+141-54, color);
 
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "Exp", j+34, k+141, color);
@@ -111,14 +107,14 @@ public class GuiCalculator extends Screen {
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "+", j+160, k+141, color);
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "-", j+160, k+141-18, color);
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "*", j+160, k+141-36, color);
-    	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "÷", j+160, k+141-54, color);
-    	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "±", j+160, k+141-72, color);
+    	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "ÃƒÂ·", j+160, k+141-54, color);
+    	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "Ã‚Â±", j+160, k+141-72, color);
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "M-", j+160, k+141-90, color);
 
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "=", j+178, k+131, color);
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "1/x", j+178, k+131-26, color);
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "%", j+178, k+131-26-18, color);
-    	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "√", j+178, k+131-26-36, color);
+    	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "Ã¢Ë†Å¡", j+178, k+131-26-36, color);
     	ImageButton.drawCenteredStringNoShadow(this.fontRenderer, "M-", j+178, k+131-26-54, color);*/
     }
 }

@@ -1,15 +1,20 @@
 package reika.rotarycraft.auxiliary.recipemanagers;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.SimpleContainer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import reika.dragonapi.interfaces.IBonusYield;
 import reika.dragonapi.interfaces.IHasXP;
@@ -17,11 +22,17 @@ import reika.dragonapi.interfaces.IHeatRecipe;
 import reika.rotarycraft.registry.RotaryRecipeSerializers;
 import reika.rotarycraft.registry.RotaryRecipeTypes;
 
-public class ShapelessBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBonusYield, IHasXP, IHeatRecipe {
-    private final ResourceLocation id;
-    protected final NonNullList<Ingredient> ingredients;
-    protected final NonNullList<Ingredient> additives;
-    private final ItemStack output;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ShapelessBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYield, IHasXP, IHeatRecipe {
+
+    protected final List<Ingredient> ingredients;
+    protected final List<Ingredient> additives;
+    // 1.21.5: stored as ItemStackTemplate (deferred Holder<Item>) so the recipe can be built
+    // during datagen before Item components are bound. Convert to ItemStack on demand in
+    // {@link #assemble} / {@link #getOutput}, by which time the registry is frozen.
+    private final ItemStackTemplate output;
     private final float operatingTemperature;
     private final float experience;
     private final float timeMultiplier;
@@ -29,8 +40,7 @@ public class ShapelessBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBo
     private final int bonusMin;
     private final int bonusMax;
 
-    public ShapelessBlastFurnaceRecipe(ResourceLocation id, NonNullList<Ingredient> ingredients, NonNullList<Ingredient> additives, ItemStack output, float temperature, float experience, float timeMultiplier, int bonusChance, int bonusMin, int bonusMax) {
-        this.id = id;
+    public ShapelessBlastFurnaceRecipe(List<Ingredient> ingredients, List<Ingredient> additives, ItemStackTemplate output, float temperature, float experience, float timeMultiplier, int bonusChance, int bonusMin, int bonusMax) {
         this.ingredients = ingredients;
         this.additives = additives;
         this.output = output;
@@ -55,28 +65,25 @@ public class ShapelessBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBo
     }
 
     @Override
-    public boolean matches(SimpleContainer inv, Level lvl) {
-        if (lvl.isClientSide) return false;
+    public boolean matches(RecipeInput input, Level lvl) {
+        if (lvl.isClientSide()) return false;
 
-        // Build a working copy of the inventory so we can mark slots “used”
-        ItemStack[] remaining = new ItemStack[inv.getContainerSize()];
+        ItemStack[] remaining = new ItemStack[input.size()];
         for (int i = 0; i < remaining.length; i++)
-            remaining[i] = inv.getItem(i).copy();
+            remaining[i] = input.getItem(i).copy();
 
-        /* ------- check main ingredients (order-agnostic) -------- */
         for (Ingredient ing : ingredients) {
             boolean matched = false;
             for (ItemStack itemStack : remaining) {
                 if (!itemStack.isEmpty() && ing.test(itemStack)) {
-                    itemStack.shrink(1);   // mark as used
+                    itemStack.shrink(1);
                     matched = true;
                     break;
                 }
             }
-            if (!matched) return false;       // missing one ingredient
+            if (!matched) return false;
         }
 
-        /* ------- check additives (each must appear at least once) -------- */
         for (Ingredient add : additives) {
             boolean matched = false;
             for (ItemStack stack : remaining) {
@@ -85,52 +92,58 @@ public class ShapelessBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBo
                     break;
                 }
             }
-            if (!matched) return false;       // additive missing
+            if (!matched) return false;
         }
 
         return true;
     }
 
-
     @Override
-    public ItemStack assemble(SimpleContainer p_44001_, RegistryAccess p_267165_) {
-        return output.copy();
+    public ItemStack assemble(RecipeInput input) {
+        return output.create();
     }
 
-    @Override
-    public boolean canCraftInDimensions(int p_43999_, int p_44000_) {
-        return true;
+    public ItemStack getOutput() {
+        return output.create();
     }
 
-    @Override
-    public ItemStack getResultItem(RegistryAccess p_267052_) {
-        return output.copy();
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public NonNullList<Ingredient> getAdditives() {
+    public List<Ingredient> getAdditives() {
         return additives;
     }
 
     @Override
-    public ResourceLocation getId() {
-        return id;
+    public boolean showNotification() {
+        return true;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.create(ingredients);
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.BLAST_FURNACE_MISC;
+    }
+
+    @Override
+    public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return RotaryRecipeSerializers.BLAST_FURNACE_SHAPELESS.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<RecipeInput>> getType() {
         return RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get();
     }
-
 
     /* IBonusYield */
     @Override public int bonusChance() { return bonusChance; }
@@ -140,84 +153,47 @@ public class ShapelessBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBo
     @Override public float xpPerItem() { return experience; }
     @Override public float requiredTemperature() { return operatingTemperature; }
 
-    public static class Serializer implements RecipeSerializer<ShapelessBlastFurnaceRecipe> {
+    public static final MapCodec<ShapelessBlastFurnaceRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(r -> r.ingredients),
+            Ingredient.CODEC.listOf().fieldOf("additives").forGetter(r -> r.additives),
+            ItemStackTemplate.CODEC.fieldOf("output").forGetter(r -> r.output),
+            Codec.FLOAT.fieldOf("temperature").forGetter(r -> r.operatingTemperature),
+            Codec.FLOAT.fieldOf("experience").forGetter(r -> r.experience),
+            Codec.FLOAT.fieldOf("timeMultiplier").forGetter(r -> r.timeMultiplier),
+            Codec.INT.optionalFieldOf("bonusChance", 0).forGetter(r -> r.bonusChance),
+            Codec.INT.optionalFieldOf("bonusMin", 0).forGetter(r -> r.bonusMin),
+            Codec.INT.optionalFieldOf("bonusMax", 0).forGetter(r -> r.bonusMax)
+    ).apply(inst, ShapelessBlastFurnaceRecipe::new));
 
-        @Override
-        public ShapelessBlastFurnaceRecipe fromJson(ResourceLocation id, JsonObject json) {
-            NonNullList<Ingredient> ingredients = NonNullList.create();
-            JsonArray ia = GsonHelper.getAsJsonArray(json, "ingredients");
-            for (int i = 0; i < ia.size(); i++)
-                ingredients.add(Ingredient.fromJson(ia.get(i)));
-
-            NonNullList<Ingredient> additives = NonNullList.create();
-            JsonArray aa = GsonHelper.getAsJsonArray(json, "additives");
-            for (int i = 0; i < aa.size(); i++)
-                additives.add(Ingredient.fromJson(aa.get(i)));
-
-            ItemStack output      = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
-            float     temp        = GsonHelper.getAsFloat(json, "temperature");
-            float     xp          = GsonHelper.getAsFloat(json, "experience");
-            float     timeMul     = GsonHelper.getAsFloat(json, "timeMultiplier");
-            int       chance      = GsonHelper.getAsInt  (json, "bonusChance", 0);
-            int       min         = GsonHelper.getAsInt  (json, "bonusMin",    0);
-            int       max         = GsonHelper.getAsInt  (json, "bonusMax",    0);
-
-            return new ShapelessBlastFurnaceRecipe(
-                    id, ingredients, additives, output,
-                    temp, xp, timeMul,
-                    chance, min, max);
-        }
-
-        @Override
-        public ShapelessBlastFurnaceRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-
-            /* main ingredients */
-            int ingCount = buf.readVarInt();
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(ingCount, Ingredient.EMPTY);
-            for (int i = 0; i < ingCount; i++)
-                ingredients.set(i, Ingredient.fromNetwork(buf));
-
-            /* additives */
-            int addCount = buf.readVarInt();
-            NonNullList<Ingredient> additives = NonNullList.withSize(addCount, Ingredient.EMPTY);
-            for (int i = 0; i < addCount; i++)
-                additives.set(i, Ingredient.fromNetwork(buf));
-
-            /* scalar data */
-            ItemStack output      = buf.readItem();
-            float     temp        = buf.readFloat();
-            float     xp          = buf.readFloat();
-            float     timeMul     = buf.readFloat();
-            int       chance      = buf.readInt();
-            int       min         = buf.readInt();
-            int       max         = buf.readInt();
-
-            return new ShapelessBlastFurnaceRecipe(
-                    id, ingredients, additives, output,
-                    temp, xp, timeMul,
-                    chance, min, max);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, ShapelessBlastFurnaceRecipe recipe) {
-            /* main ingredients */
-            buf.writeVarInt(recipe.ingredients.size());
-            for (Ingredient ing : recipe.ingredients)
-                ing.toNetwork(buf);
-
-            /* additives */
-            buf.writeVarInt(recipe.additives.size());
-            for (Ingredient add : recipe.additives)
-                add.toNetwork(buf);
-
-            /* scalar data */
-            buf.writeItem(recipe.output);
-            buf.writeFloat(recipe.operatingTemperature);
-            buf.writeFloat(recipe.experience);
-            buf.writeFloat(recipe.timeMultiplier);
-            buf.writeInt (recipe.bonusChance);
-            buf.writeInt (recipe.bonusMin);
-            buf.writeInt (recipe.bonusMax);
-        }
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, ShapelessBlastFurnaceRecipe> STREAM_CODEC = StreamCodec.of(
+            (buf, r) -> {
+                buf.writeVarInt(r.ingredients.size());
+                for (Ingredient ing : r.ingredients) Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ing);
+                buf.writeVarInt(r.additives.size());
+                for (Ingredient ing : r.additives) Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ing);
+                ItemStackTemplate.STREAM_CODEC.encode(buf, r.output);
+                buf.writeFloat(r.operatingTemperature);
+                buf.writeFloat(r.experience);
+                buf.writeFloat(r.timeMultiplier);
+                buf.writeVarInt(r.bonusChance);
+                buf.writeVarInt(r.bonusMin);
+                buf.writeVarInt(r.bonusMax);
+            },
+            buf -> {
+                int ic = buf.readVarInt();
+                List<Ingredient> ings = new ArrayList<>();
+                for (int i = 0; i < ic; i++) ings.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
+                int ac = buf.readVarInt();
+                List<Ingredient> adds = new ArrayList<>();
+                for (int i = 0; i < ac; i++) adds.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
+                ItemStackTemplate out = ItemStackTemplate.STREAM_CODEC.decode(buf);
+                float temp = buf.readFloat();
+                float xp = buf.readFloat();
+                float tm = buf.readFloat();
+                int bc = buf.readVarInt();
+                int bmin = buf.readVarInt();
+                int bmax = buf.readVarInt();
+                return new ShapelessBlastFurnaceRecipe(ings, adds, out, temp, xp, tm, bc, bmin, bmax);
+            }
+    );
 }

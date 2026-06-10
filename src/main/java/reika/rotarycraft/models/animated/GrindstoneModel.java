@@ -14,14 +14,15 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class GrindstoneModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/animated");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/grindstonetex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;
@@ -44,11 +45,10 @@ public class GrindstoneModel extends RotaryModelBase {
     private final ModelPart shape6;
     private final ModelPart shape7;
     private final ModelPart shape7a;
-    private final ModelPart root;
+    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
 
     public GrindstoneModel(ModelPart modelPart) {
-        super(RenderType::entityCutout);
-        this.root = modelPart;
+        super(modelPart, RenderTypes::entityCutout);
 
         this.shape1 = modelPart.getChild("shape1");
         this.shape2 = modelPart.getChild("shape2");
@@ -228,13 +228,50 @@ public class GrindstoneModel extends RotaryModelBase {
         return LayerDefinition.create(definition, 128, 128);
     }
 
-        @Override
+    /**
+     * Mirrors original ModelGrindstone.renderAll.
+     * Stone disc (shape2/2a–2h, shape4/4a) rotates around Z at pivot y=0.9375.
+     * Static parts: shape1, shape3/3a–3c, shape5/5a, shape6, shape7/7a.
+     */
+    @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        // Static base
+        shape1.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        // Rotating grindstone disc: pivot y = 0.9375 blocks, rotate Z by phi
+        stack.pushPose();
+        double d = 0.9375;
+        stack.translate(0.0, d, 0.0);
+        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.translate(0.0, -d, 0.0);
+        shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2c.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2d.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2e.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2f.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2g.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2h.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.popPose();
+
+        // Static frame parts
+        shape3.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape5.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3c.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape5a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape6.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return TEXTURE_LOCATION;
     }
 }
+

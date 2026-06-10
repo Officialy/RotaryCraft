@@ -104,8 +104,6 @@
 //        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 //        GL11.glDisable(GL11.GL_TEXTURE_2D);
 //        GL11.glDisable(GL11.GL_LIGHTING);
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
 //
 //        stack.translate(par2, par4, par6);
 //

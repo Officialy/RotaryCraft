@@ -9,7 +9,7 @@
 // ******************************************************************************/
 //package reika.rotarycraft.blockentities;
 //
-//import net.neoforged.fml.loading.FMLLoader;
+//import net.neoforged.fml.loading.FMLEnvironment;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 //import reika.rotarycraft.registry.MachineRegistry;
@@ -52,7 +52,7 @@
 //    public BlockEntityItemFilter() {
 //        if (ModList.APPENG.isLoaded()) {
 //            aeGridBlock = new BasicAEInterface(this, this.getMachine().getCraftedProduct());
-//            aeGridNode = FMLLoader.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock) aeGridBlock) : null;
+//            aeGridNode = FMLEnvironment.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock) aeGridBlock) : null;
 //
 //            //for (int i = 0; i < lock.length; i++) {
 //            //	lock[i] = new CraftingLock();
@@ -118,17 +118,17 @@
 //
 //        if (ModList.APPENG.isLoaded() && power >= MINPOWER) {
 //            updateTimer.update();
-//            if (updateTimer.checkCap() && !world.isClientSide) {
+//            if (updateTimer.checkCap() && !world.isClientSide()) {
 //                this.buildCache();
 //            }
 //
 //            if (network != null)
 //                network.tick();
-//            if (aeGridBlock != null && !world.isClientSide) {
+//            if (aeGridBlock != null && !world.isClientSide()) {
 //                ((BasicAEInterface) aeGridBlock).setPowerCost(power >= MINPOWER ? 2 : 1);
 //            }
 //
-//            if (!world.isClientSide && network != null && data != null && itemHandler.getStackInSlot(1) == null && !MEStacks.isEmpty()) {
+//            if (!world.isClientSide() && network != null && data != null && itemHandler.getStackInSlot(1) == null && !MEStacks.isEmpty()) {
 //                int idx = DragonAPI.rand.nextInt(MEStacks.size());
 //                ItemStack is = MEStacks.get(idx);
 //                is = ReikaItemHelper.getSizedItemStack(is, is.getMaxStackSize());
@@ -149,7 +149,7 @@
 //        if (ModList.APPENG.isLoaded()) {
 //            Object oldNode = aeGridNode;
 //            if (aeGridNode == null) {
-//                aeGridNode = FMLLoader.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock) aeGridBlock) : null;
+//                aeGridNode = FMLEnvironment.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock) aeGridBlock) : null;
 //            }
 //            if (aeGridNode != null)
 //                ((IGridNode) aeGridNode).updateState();
@@ -170,7 +170,7 @@
 //                for (ItemStack is : network.getRawMESystemContents()) {
 //                    if (this.matchItem(is)) {
 //                        if (ModularLogger.instance.isEnabled(LOGGER_ID))
-//                            ModularLogger.instance.log(LOGGER_ID, "@ " + this + " [" + this.hasRedstoneSignal() + "], " + is.getDisplayName() + ":" + is.getItemDamage() + " {" + is.getTag() + "}" + " matches " + data);
+//                            ModularLogger.instance.log(LOGGER_ID, "@ " + this + " [" + this.hasRedstoneSignal() + "], " + is.getDisplayName() + ":" + is.getItemDamage() + " {" + is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() + "}" + " matches " + data);
 //                        MEStacks.add(ReikaItemHelper.getSizedItemStack(is, 1));
 //                    } else {
 //                        if (ModularLogger.instance.isEnabled(LOGGER_ID))
@@ -218,7 +218,7 @@
 //        super.load(NBT);
 //
 //        if (NBT.contains("data")) {
-//            data = MatchData.createFromNBT(NBT.getCompound("data"));
+//            data = MatchData.createFromNBT(NBT.getCompoundOrEmpty("data"));
 //        }
 //
 //        this.rebuildBlacklist();
@@ -318,7 +318,7 @@
 //            metadata = is.getItemDamage();
 //            modID = ReikaItemHelper.getRegistrantMod(is);
 //            oreDict = ReikaItemHelper.getOreNamesArray(is);
-//            nbt = is.getTag() != null ? is.getTag().copy() : null;
+//            nbt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy() : null;
 //            matchOre = ReikaArrayHelper.getArrayOf(MatchType.MATCH, oreDict.length);
 //            if (nbt != null) {
 //                matchNBT = nbt.copy();
@@ -356,11 +356,11 @@
 //
 //        public static MatchData createFromNBT(CompoundTag tag) {
 //
-//            CompoundTag val = tag.getCompound("value");
-//            Item itemID = (Item) Item.itemRegistry.getObject(val.getString("item"));
-//            int metadata = val.getInt("dmg");
-//            String modID = val.getString("mod");
-//            CompoundTag nbt = val.getCompound("nbt");
+//            CompoundTag val = tag.getCompoundOrEmpty("value");
+//            Item itemID = (Item) Item.itemRegistry.getObject(val.getStringOr("item", ""));
+//            int metadata = val.getIntOr("dmg", 0);
+//            String modID = val.getStringOr("mod", "");
+//            CompoundTag nbt = val.getCompoundOrEmpty("nbt");
 //            ListTag ore = val.getTagList("ores", NBTTypes.STRING.ID);
 //            ArrayList<String> li = new ArrayList<>();
 //            for (Object o : ore.tagList) {
@@ -375,19 +375,19 @@
 //                classList.add(s);
 //            }
 //
-//            CompoundTag settings = tag.getCompound("settings");
-//            MatchType matchID = MatchType.list[settings.getInt("item")];
-//            MatchType matchMetadata = MatchType.list[settings.getInt("dmg")];
-//            MatchType matchMod = MatchType.list[settings.getInt("mod")];
-//            MatchType doCheckNBT = MatchType.list[settings.getInt("checknbt")];
-//            MatchType doCheckOre = MatchType.list[settings.getInt("checkore")];
-//            CompoundTag ore2 = settings.getCompound("ores");
+//            CompoundTag settings = tag.getCompoundOrEmpty("settings");
+//            MatchType matchID = MatchType.list[settings.getIntOr("item", 0)];
+//            MatchType matchMetadata = MatchType.list[settings.getIntOr("dmg", 0)];
+//            MatchType matchMod = MatchType.list[settings.getIntOr("mod", 0)];
+//            MatchType doCheckNBT = MatchType.list[settings.getIntOr("checknbt", 0)];
+//            MatchType doCheckOre = MatchType.list[settings.getIntOr("checkore", 0)];
+//            CompoundTag ore2 = settings.getCompoundOrEmpty("ores");
 //            MatchType[] matchOre = new MatchType[oreDict.length];
 //            for (int i = 0; i < oreDict.length; i++) {
 //                matchOre[i] = MatchType.list[ore2.getInt(oreDict[i])];
 //            }
-//            CompoundTag matchNBT = settings.getCompound("nbt");
-//            CompoundTag classes = settings.getCompound("classes");
+//            CompoundTag matchNBT = settings.getCompoundOrEmpty("nbt");
+//            CompoundTag classes = settings.getCompoundOrEmpty("classes");
 //            HashMap<String, MatchType> matchClasses = new HashMap();
 //            for (Object o : classes.func_150296_c()) {
 //                String s = (String) o;
@@ -502,12 +502,12 @@
 //                    //ReikaJavaLibrary.pConsole(m.displayName+" > "+m.tags+" == "+matchNBT);
 //                    if (m.tags != null) {
 //                        for (String s : m.tags) {
-//                            b = b.getCompound(s);
+//                            b = b.getCompoundOrEmpty(s);
 //                        }
 //                    }
-//                    CompoundTag tag = b.getCompound(m.displayName);
+//                    CompoundTag tag = b.getCompoundOrEmpty(m.displayName);
 //                    //ReikaJavaLibrary.pConsole(tag.func_150296_c()+" ("+m+") of "+b+" {"+b.func_150296_c()+"}");
-//                    MatchType match = MatchType.list[tag.getInt("type")];
+//                    MatchType match = MatchType.list[tag.getIntOr("type", 0)];
 //                    tag.putInt("type", match.getNext().ordinal());
 //                    //ReikaJavaLibrary.pConsole(match.getNext()+" for "+tag);
 //                    break;
@@ -573,9 +573,9 @@
 //            for (Object o : tag.func_150296_c()) {
 //                String s = (String) o;
 //                NBTBase b = tag.getTag(s);
-//                CompoundTag match = !tags.isEmpty() && tags.getLast().equals("tag") ? matchRef.getCompound("tag").getCompound(s) : matchRef.getCompound(s);
+//                CompoundTag match = !tags.isEmpty() && tags.getLast().equals("tag") ? matchRef.getCompoundOrEmpty("tag").getCompoundOrEmpty(s) : matchRef.getCompoundOrEmpty(s);
 //                //ReikaJavaLibrary.pConsole(match+" from "+s+" in "+matchRef+" with "+tags);
-//                MatchType m = MatchType.list[match.getInt("type")];
+//                MatchType m = MatchType.list[match.getIntOr("type", 0)];
 //                if (b instanceof ListTag) {
 //                    MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", "", m);
 //                    md.tags = new LinkedList(tags);
@@ -606,8 +606,8 @@
 //            for (int i = 0; i < tag.tagList.size(); i++) {
 //                String s = "#" + i;
 //                NBTBase b = (NBTBase) tag.tagList.get(i);
-//                CompoundTag match = matchRef.getCompound(s);
-//                MatchType m = MatchType.list[match.getInt("type")];
+//                CompoundTag match = matchRef.getCompoundOrEmpty(s);
+//                MatchType m = MatchType.list[match.getIntOr("type", 0)];
 //                if (b instanceof ListTag) {
 //                    MatchDisplay md = new MatchDisplay(this, SettingType.NBT, s, "", "", m);
 //                    md.tags = new LinkedList(tags);
@@ -669,25 +669,25 @@
 //                n++;
 //            } while (c1 != null && c1 != Item.class && c2 != null && c2 != Item.class);
 //            if (doCheckNBT != MatchType.IGNORE) {
-//                if (nbt == is.getTag()) {
+//                if (nbt == is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()) {
 //                    if (doCheckNBT.check(true))
 //                        return true;
 //                    if (doCheckNBT == MatchType.MISMATCH)
 //                        return false;
 //                }
-//                if (nbt == null && is.getTag() != null) {
+//                if (nbt == null && is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
 //                    if (!doCheckNBT.check(false))
 //                        return false;
 //                    if (doCheckNBT == MatchType.MISMATCH)
 //                        return true;
 //                }
-//                if (nbt != null && is.getTag() == null) {
+//                if (nbt != null && is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null) {
 //                    if (!doCheckNBT.check(false))
 //                        return false;
 //                    if (doCheckNBT == MatchType.MISMATCH)
 //                        return true;
 //                }
-//                return this.tryMatchNBT(is.getTag(), nbt, matchNBT);
+//                return this.tryMatchNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), nbt, matchNBT);
 //            }
 //            return true;
 //        }
@@ -697,9 +697,9 @@
 //            for (Object o : matchRef.func_150296_c()) {
 //                String s = (String) o;
 //                NBTBase b2 = NBT.getTag(s);
-//                CompoundTag match = matchRef.getCompound(s);
+//                CompoundTag match = matchRef.getCompoundOrEmpty(s);
 //                //ReikaJavaLibrary.pConsole(s+" > "+match+" & "+b2);
-//                MatchType m = MatchType.list[match.getInt("type")];
+//                MatchType m = MatchType.list[match.getIntOr("type", 0)];
 //                if (m == MatchType.IGNORE)
 //                    continue;
 //                NBTBase val = match.getTag("tag");
@@ -743,8 +743,8 @@
 //            for (int i = 0; i < parentRef.tagList.size(); i++) {
 //                String s = "#" + i;
 //                NBTBase b2 = (NBTBase) parentRef.tagList.get(i);
-//                CompoundTag match = matchRef.getCompound(s);
-//                MatchType m = MatchType.list[match.getInt("type")];
+//                CompoundTag match = matchRef.getCompoundOrEmpty(s);
+//                MatchType m = MatchType.list[match.getIntOr("type", 0)];
 //                if (m == MatchType.IGNORE)
 //                    continue;
 //                NBTBase val = match.getTag("tag");
@@ -913,3 +913,5 @@
 //
 //
 //}
+
+

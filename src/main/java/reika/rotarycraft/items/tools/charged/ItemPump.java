@@ -23,8 +23,8 @@
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.phys.HitResult;
 //import net.neoforged.bus.api.Event;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //import reika.dragonapi.libraries.ReikaNBTHelper;
 //import reika.dragonapi.libraries.io.ReikaChatHelper;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
@@ -56,7 +56,7 @@
 //                if (id != Blocks.AIR) {
 //                    if (ReikaWorldHelper.isLiquidSourceBlock(world, pos)) {
 //                        Fluid f = ReikaFluidHelper.lookupFluidForBlock(id);
-//                        if (f != null && !world.isClientSide) {
+//                        if (f != null && !world.isClientSide()) {
 //                            this.drainLiquid(world, pos, is, f);
 //                        } else {
 //                            RotaryCraft.LOGGER.debug("Null fluid for block " + id + ", yet was marked as such!");
@@ -71,13 +71,13 @@
 //    }
 //
 //    private void drainLiquid(Level world, BlockPos pos, ItemStack is, Fluid f) {
-//        Fluid f2 = is.getTag() == null ? null : ReikaNBTHelper.getFluidFromNBT(is.getTag());
+//        Fluid f2 = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null ? null : ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag());
 //        if (f2 == null) {
-//            if (is.getTag() == null)
+//            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
 //                is.put(new CompoundTag());
 //            this.drainAndFill(world, pos, is, f, 1000);
 //        } else {
-//            int amt = is.getTag().getInt("lvl");
+//            int amt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0);
 //            if (f2.equals(f)) {
 //                if (amt < BlockEntityReservoir.CAPACITY) {
 //                    this.drainAndFill(world, pos, is, f, amt + 1000);
@@ -100,10 +100,10 @@
 //                            Block id = world.getBlockState(dx, dy, dz).getBlock();
 //                            Fluid f3 = ReikaFluidHelper.lookupFluidForBlock(id);
 //                            if (f3 == f) {
-//                                int amt = is.getTag().getInt("lvl");
+//                                int amt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0);
 //                                this.drainAndFill(world, dx, dy, dz, is, f3, amt + 1000);
 //                            }
-//                            if (is.getTag().getInt("lvl") >= BlockEntityReservoir.CAPACITY)
+//                            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0) >= BlockEntityReservoir.CAPACITY)
 //                                return;
 //                        }
 //                    }
@@ -113,8 +113,8 @@
 //    }
 //
 //    private void drainAndFill(Level world, BlockPos pos, ItemStack is, Fluid f, int amt) {
-//        ReikaNBTHelper.writeFluidToNBT(is.getTag(), f);
-//        is.getTag().putInt("lvl", amt);
+//        ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), f);
+//        is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("lvl", amt);
 //        world.setBlockToAir(pos);
 //        is.setItemDamage(is.getItemDamage() - 1);
 //    }
@@ -134,40 +134,40 @@
 //        BlockEntity te = world.getBlockEntity(pos);
 //        if (te instanceof IFluidHandler) {
 //            IFluidHandler fl = (IFluidHandler) te;
-//            int amt = is.getTag() != null ? is.getTag().getInt("lvl") : 0;
+//            int amt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0) : 0;
 //            if (this.getMode(is) == Modes.PLACE) {
-//                Fluid f = is.getTag() != null ? ReikaNBTHelper.getFluidFromNBT(is.getTag()) : null;
+//                Fluid f = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()) : null;
 //                FluidStack f2 = fl.drain(Direction.values()[s], 1, false);
 //                if (f2 != null) {
 //                    if (f == null || f == f2.getFluid()) {
 //                        int space = BlockEntityReservoir.CAPACITY - amt;
 //                        FluidStack fs = fl.drain(Direction.values()[s], space, true);
 //                        if (fs != null) {
-//                            if (is.getTag() == null)
+//                            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
 //                                is.put(new CompoundTag());
-//                            is.getTag().putInt("lvl", amt + fs.amount);
-//                            ReikaNBTHelper.writeFluidToNBT(is.getTag(), fs.getFluid());
+//                            is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("lvl", amt + fs.amount);
+//                            ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), fs.getFluid());
 //                        }
 //                    }
 //                }
 //            } else {
 //                if (amt > 0) {
-//                    Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getTag());
+//                    Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag());
 //                    for (int i = 0; i < 6; i++) {
 //                        int d = fl.fill(Direction.values()[i], new FluidStack(f, amt), true);
 //                        amt -= d;
 //                    }
-//                    is.getTag().putInt("lvl", amt);
+//                    is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("lvl", amt);
 //                    if (amt == 0)
-//                        ReikaNBTHelper.writeFluidToNBT(is.getTag(), null);
+//                        ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), null);
 //                }
 //            }
 //            return true;
 //        } else if (this.getMode(is) == Modes.PLACE) {
 //            if (is.getDamageValue() > 0) {
 //                this.warnCharge(is);
-//                int amt = is.getTag().getInt("lvl");
-//                Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getTag());
+//                int amt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0);
+//                Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag());
 //                if (f != null && amt >= 1000) {
 //                    Block b = f.getBlock();
 //                    if (b != null) {
@@ -177,9 +177,9 @@
 //                        int dz = z + dir.getStepZ();
 //                        if (world.getBlockState(new BlockPos(dx, dy, dz)).isAir() || (world.getBlockState(new BlockPos(dx, dy, dz)).getBlock() == b && !ReikaWorldHelper.isLiquidSourceBlock(world, dx, dy, dz))) {
 //                            world.setBlock(dx, dy, dz, b);
-//                            is.getTag().putInt("lvl", amt - 1000);
+//                            is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("lvl", amt - 1000);
 //                            if (amt <= 1000)
-//                                ReikaNBTHelper.writeFluidToNBT(is.getTag(), null);
+//                                ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), null);
 //                            is.setDamageValue(is.getDamageValue() - 1);
 //                            for (int i = -1; i <= 1; i++) {
 //                                for (int k = -1; k <= 1; k++) {
@@ -201,16 +201,16 @@
 //
 //    private Modes getMode(ItemStack is) {
 //        //return Modes.list[is.getItemDamage()];
-//        if (is.getTag() == null)
+//        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
 //            return Modes.DRAIN;
-//        return Modes.list[is.getTag().getInt("mode")];
+//        return Modes.list[is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("mode", 0)];
 //    }
 //
 //    private void setMode(ItemStack is, Modes m) {
-//        if (is.getTag() == null)
+//        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
 //            is.put(new CompoundTag());
 //        //is.setItemDamage(m.ordinal());
-//        is.getTag().putInt("mode", m.ordinal());
+//        is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("mode", m.ordinal());
 //    }
 //
 //    private void incrementMode(ItemStack is) {
@@ -219,12 +219,12 @@
 //
 //    @Override
 //    public void addInformation(ItemStack is, Player ep, List li, boolean par4) {
-//        CompoundTag nbt = is.getTag();
+//        CompoundTag nbt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
 //        if (nbt != null) {
 //            Fluid f = ReikaNBTHelper.getFluidFromNBT(nbt);
 //            if (f != null) {
 //                String fluid = f.getRegistryName().toString();
-//                int amt = nbt.getInt("lvl");
+//                int amt = nbt.getIntOr("lvl", 0);
 //                String amount = String.format("%d", amt);
 //                String s = "Contents: " + amount + " mB of " + fluid;
 //                li.add(s);

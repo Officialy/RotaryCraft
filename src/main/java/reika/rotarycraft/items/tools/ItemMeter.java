@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import reika.dragonapi.interfaces.blockentity.ThermalTile;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.java.ReikaStringParser;
@@ -52,7 +52,7 @@ import java.util.Collection;
 
 public class ItemMeter extends ItemRotaryTool {
     public ItemMeter() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ItemMeter extends ItemRotaryTool {
         Player ep = context.getPlayer();
         BlockPos pos = context.getClickedPos();
 
-        if (world.isClientSide && ConfigRegistry.CLEARCHAT.getState())
+        if (world.isClientSide() && ConfigRegistry.CLEARCHAT.getState())
             ReikaChatHelper.clearChat();
         Block bk = world.getBlockState(pos).getBlock();
         BlockEntity tile = world.getBlockEntity(pos);
@@ -130,7 +130,7 @@ public class ItemMeter extends ItemRotaryTool {
 
         if (tile instanceof BlockEntityEngine) {
             BlockEntityEngine te = (BlockEntityEngine) tile;
-            world.blockUpdated(tile.getBlockPos(), te.getTEBlock());
+            world.updateNeighborsAt(tile.getBlockPos(), te.getTEBlock());
             long power = te.power;
             this.sendMessage(ep, String.format("%s producing %s", name, RotaryAux.formatPowerIO(te)));
             if (te.getEngineType().isAirBreathing() && te.isDrowned(world, pos))
@@ -276,7 +276,7 @@ public class ItemMeter extends ItemRotaryTool {
             BlockEntityPiping te = (BlockEntityPiping) tile;
             Fluid f = te.getAttributes();
             if (f != null) {
-                this.sendMessage(ep, String.format("Pipe has %s of %s", RotaryAux.formatLiquidAmount(te.getFluidLevel()), ForgeRegistries.FLUIDS.getKey(f).getNamespace()));
+                this.sendMessage(ep, String.format("Pipe has %s of %s", RotaryAux.formatLiquidAmount(te.getFluidLevel()), BuiltInRegistries.FLUID.getKey(f).getNamespace()));
                 return InteractionResult.SUCCESS;
             } else {
                 this.sendMessage(ep, "Pipe is empty.");

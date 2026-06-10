@@ -26,7 +26,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -39,10 +40,10 @@ import java.util.function.Function;
 
 public class BlockMiningPipe extends Block {
 
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
     public BlockMiningPipe() {
-        super(Properties.of().mapColor(MapColor.METAL).strength(5, 6).sound(SoundType.METAL));
+        super(reika.rotarycraft.registry.RotaryBlocks.blockProperties().mapColor(MapColor.METAL).strength(5, 6).sound(SoundType.METAL));
         //this.blockIndexInTexture = 60; Material.METAL, "mining_pipe", 0
     }
 
@@ -67,9 +68,10 @@ public class BlockMiningPipe extends Block {
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
     }
 
+    // 1.21.5: Block#getShapeForEachState now returns Function<BlockState, VoxelShape>.
     @Override
-    protected ImmutableMap<BlockState, VoxelShape> getShapeForEachState(Function<BlockState, VoxelShape> p_152459_) {
-        return super.getShapeForEachState(p_152459_);
+    protected Function<BlockState, VoxelShape> getShapeForEachState(Function<BlockState, VoxelShape> shapeFn) {
+        return super.getShapeForEachState(shapeFn);
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_48725_) {

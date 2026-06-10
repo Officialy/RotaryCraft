@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/tnt_cannon",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/tnt_cannon",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/tnt_cannon"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/tnt_cannon",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/tnt_cannon",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/tnt_cannon",
+      "y": 270
+    }
+  }
+}

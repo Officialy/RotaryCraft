@@ -24,8 +24,13 @@ public class BlockDistributionClutch extends BlockBasicMachine {
     
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
+        if (pLevel.isClientSide()) {
+            @SuppressWarnings("unchecked")
+            BlockEntityTicker<T> t = (BlockEntityTicker<T>) clientPhiTicker(BlockEntityDistributionClutch.class);
+            return t;
+        }
+        return (pLevel1, pPos, pState1, pBlockEntity) -> {
             ((BlockEntityDistributionClutch) pBlockEntity).updateEntity(pLevel1, pPos);
-        });
+        };
     }
 }

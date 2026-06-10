@@ -40,7 +40,7 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
     }
 
     public int getExpectedCoilLife() {
-        return this.getUnwindTime() * itemHandler.getStackInSlot(this.getCoilSlot()).getTag().getInt("energy");
+        return this.getUnwindTime() * itemHandler.getStackInSlot(this.getCoilSlot()).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0);
     }
 
 
@@ -61,7 +61,11 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
         ItemStack in = itemHandler.getStackInSlot(this.getCoilSlot());
         if (isCreative)
             return in;
-        return new ItemStack(in.getItem(), in.getCount(), getUpdateTag()); //todo check if this tag is fucked
+        // 1.21.5: ItemStack(Item, int, CompoundTag) ctor was removed (NBT is now per-component).
+        // Use copyWithCount + custom-data attach so the discharged stack carries any persistent
+        // component state forward. For springs we don't actually need the NBT to follow, so a plain
+        // copy-with-count is the correct behaviour.
+        return in.copyWithCount(in.getCount());
     }
 
     protected final boolean hasCoil() {
@@ -70,7 +74,7 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
         if (DragonAPI.debugtest)
             return true;
         ItemStack is = itemHandler.getStackInSlot(this.getCoilSlot());
-        if (is == null)
+        if (is.isEmpty())
             return false;
         Item i = is.getItem();
         return is.getDamageValue() > 0 && i instanceof TensionStorage;
@@ -80,7 +84,7 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        isCreative = NBT.getBoolean("creative");
+        isCreative = NBT.getBooleanOr("creative", false);
     }
 
     @Override

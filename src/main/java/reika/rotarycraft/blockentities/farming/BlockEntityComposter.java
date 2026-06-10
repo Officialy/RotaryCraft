@@ -77,6 +77,7 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
         tempTimer.update();
         if (tempTimer.checkCap()) {
             this.updateTemperature(world, pos);
@@ -106,7 +107,7 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
     private int getCompostValue() {
         if (temperature < MINTEMP || temperature > KILLTEMP)
             return 0;
-        if (itemHandler.getStackInSlot(0).isEmpty() || !itemHandler.getStackInSlot(1).isEmpty())
+        if (itemHandler.getStackInSlot(0).isEmpty() || itemHandler.getStackInSlot(1).isEmpty())
             return 0;
         if (itemHandler.getStackInSlot(1).getItem() != RotaryItems.YEAST.get())
             return 0;
@@ -207,9 +208,9 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        temperature = NBT.getInt("temperature");
+        temperature = NBT.getIntOr("temperature", 0);
 
-        composterCookTime = NBT.getInt("timer");
+        composterCookTime = NBT.getIntOr("timer", 0);
     }
 
     @Override
@@ -327,7 +328,7 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
         CRAP(1, Items.EGG, Items.COOKIE, Items.WHEAT, RotaryItems.CANOLA_SEEDS, RotaryItems.CANOLA_HUSKS),
         SUGARCANE(2, Items.SUGAR_CANE),
         PLANT(1, Blocks.OAK_SAPLING, Blocks.ACACIA_SAPLING, Blocks.BAMBOO_SAPLING, Blocks.SPRUCE_SAPLING, Blocks.DARK_OAK_SAPLING, Blocks.JUNGLE_SAPLING, Blocks.BIRCH_SAPLING, Blocks.LILY_PAD, Blocks.POPPY, Blocks.DANDELION, Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM, Blocks.CORNFLOWER),
-        LEAF(2, Blocks.AZALEA_LEAVES, Blocks.AZALEA, Blocks.ACACIA_LEAVES, Blocks.BIRCH_LEAVES, Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.SPRUCE_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.FLOWERING_AZALEA_LEAVES, Blocks.GRASS, Blocks.VINE, Blocks.TALL_GRASS, Blocks.SUNFLOWER, Blocks.ROSE_BUSH, Blocks.SWEET_BERRY_BUSH),
+        LEAF(2, Blocks.AZALEA_LEAVES, Blocks.AZALEA, Blocks.ACACIA_LEAVES, Blocks.BIRCH_LEAVES, Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.SPRUCE_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.FLOWERING_AZALEA_LEAVES, Blocks.GRASS_BLOCK, Blocks.VINE, Blocks.TALL_GRASS, Blocks.SUNFLOWER, Blocks.ROSE_BUSH, Blocks.SWEET_BERRY_BUSH),
         MEAT(4, Items.BEEF, Items.COOKED_BEEF, Items.COOKED_PORKCHOP, Items.PORKCHOP, Items.COOKED_CHICKEN, Items.CHICKEN),
         FISH(3, Items.COOKED_COD, Items.COOKED_SALMON, Items.SALMON, Items.COD),
         VEGGIE(2, Items.POTATO, Items.CARROT, Items.BAKED_POTATO, Items.POISONOUS_POTATO, Items.BREAD, Items.APPLE, Items.MELON),
@@ -341,17 +342,10 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
             this.value = value;
             for (int i = 0; i < items.length; i++) {
                 ItemStack is = null;
-                if (items[i] instanceof ItemStack)
-                    is = (ItemStack) items[i];
-//                else if (items[i] instanceof Block)
-//                    is = new ItemStack((Block) items[i], 1, OreDictionary.WILDCARD_VALUE);
-//                else if (items[i] instanceof Item)
-//                    is = new ItemStack((Item) items[i], 1, OreDictionary.WILDCARD_VALUE);
-//                else if (items[i] instanceof String) {
-//                    ArrayList<ItemStack> li = OreDictionary.getOres((String) items[i]);
-//                    this.items.addAll(li);
-//                    continue;
-//                }
+                if (items[i] instanceof ItemStack stack)
+                    is = stack;
+                else if (items[i] instanceof net.minecraft.world.level.ItemLike il)
+                    is = new ItemStack(il);
                 if (is != null)
                     this.items.add(is);
             }

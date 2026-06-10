@@ -12,15 +12,17 @@ package reika.rotarycraft.renders;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
 import org.joml.Quaternionf;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
 import reika.rotarycraft.models.animated.MirrorModel;
-import reika.rotarycraft.models.engine.WindModel;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
 public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
@@ -44,12 +46,12 @@ public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
         int var11 = 1;     //used to rotate the model about metadata
         int var12 = 0;
         if (!tile.isInWorld()) {
-            stack.mulPose(new Quaternionf(-90, 0, 1, 0));
+            stack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90));
         }
         stack.translate(0, var12, 0);
         stack.scale(1, var11, 1);
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid((WindModel.TEXTURE_LOCATION)));
-        mirrorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid(MirrorModel.TEXTURE_LOCATION));
+        mirrorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.scale(1, var11, 1);
         stack.translate(0, -var12, 0);
 
@@ -61,11 +63,14 @@ public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
     }
 
     @Override
-    public void render(BlockEntityMirror tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
-        if (this.doRenderModel(stack, tile))
-            this.renderBlockEntityMirrorAt(stack, tile, multiBufferSource, i);
-        if ((tile).isInWorld())// && NeoForge.getRenderType() == RenderType.solid())
-            IORenderer.renderIO(stack, multiBufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return MirrorModel.TEXTURE_LOCATION;
     }
 
+    @Override
+    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+        if (be instanceof BlockEntityMirror mirror)
+            renderBlockEntityMirrorAt(stack, mirror, mbs, light);
+    }
 }
+

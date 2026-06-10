@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "e": "minecraft:lapis_lazuli",
+    "p": "minecraft:ender_pearl",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "ses",
+    "epe",
+    "ses"
+  ],
+  "result": {
+    "id": "rotarycraft:refresher"
+  }
+}

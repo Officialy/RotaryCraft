@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:crafting_table",
+    "I": "minecraft:iron_ingot",
+    "W": "minecraft:oak_planks"
+  },
+  "pattern": [
+    "WIW",
+    "ICI",
+    "WIW"
+  ],
+  "result": {
+    "id": "rotarycraft:worktable"
+  }
+}

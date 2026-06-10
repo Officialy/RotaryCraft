@@ -11,7 +11,7 @@ package reika.rotarycraft.api;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.lang.reflect.Field;
 import java.util.Collection;

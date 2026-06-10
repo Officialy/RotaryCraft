@@ -132,7 +132,7 @@
 //        }
 //        numchanges = powerchanges.size();
 //        lastpower = pw;
-//        if (numchanges > 10 && !level.isClientSide) {
+//        if (numchanges > 10 && !level.isClientSide()) {
 //            this.getBlockEntityBlockID().dropBlockAsItem(level, xCoord, yCoord, zCoord, this.getMachineIndex(), 0);
 //            level.setBlockToAir(xCoord, yCoord, zCoord);
 //            level.explode(null, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 4F, RotaryConfig.COMMON.BLOCKDAMAGE.getState());
@@ -174,7 +174,7 @@
 //            return;
 //        }
 //        float f;
-//        if (!level.isClientSide && numUsingPlayers != 0) {
+//        if (!level.isClientSide() && numUsingPlayers != 0) {
 //            numUsingPlayers = 0;
 //            f = 5.0F;
 //            List list = level.getEntities(Player.class, AABB.getBoundingBox(xCoord - f, yCoord - f, zCoord - f, xCoord + 1 + f, yCoord + 1 + f, zCoord + 1 + f));
@@ -280,10 +280,10 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        numchanges = NBT.getInt("chng");
-//        numUsingPlayers = NBT.getInt("player");
+//        numchanges = NBT.getIntOr("chng", 0);
+//        numUsingPlayers = NBT.getIntOr("player", 0);
 //
-//        page = NBT.getInt("pg");
+//        page = NBT.getIntOr("pg", 0);
 //    }
 //
 //    public void writeInventoryToItem(ItemStack is) {
@@ -301,17 +301,17 @@
 //            }
 //        }
 //
-//        is.getTag().put("Items", nbttaglist);
+//        is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().put("Items", nbttaglist);
 //    }
 //
 //    public void readInventoryFromItem(ItemStack is) {
-//        if (is.getTag() != null) {
-//            ListTag nbttaglist = is.getTag().getTagList("Items", NBTTypes.COMPOUND.ID);
+//        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
+//            ListTag nbttaglist = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getTagList("Items", NBTTypes.COMPOUND.ID);
 //            inv = new ItemStack[this.getContainerSize()];
 //
 //            for (int i = 0; i < nbttaglist.size(); i++) {
-//                CompoundTag CompoundTag = nbttaglist.getCompound(i);
-//                short byte0 = CompoundTag.getShort("Slot");
+//                CompoundTag CompoundTag = nbttaglist.getCompoundOrEmpty(i);
+//                short byte0 = CompoundTag.getShortOr("Slot", (short)0);
 //
 //                if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
 //                    inv[byte0] = ItemStack.of(CompoundTag);

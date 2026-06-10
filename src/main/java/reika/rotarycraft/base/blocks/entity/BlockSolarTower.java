@@ -29,4 +29,7 @@ public class BlockSolarTower extends BlockBasicMachine {
             ((BlockEntitySolarTower) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

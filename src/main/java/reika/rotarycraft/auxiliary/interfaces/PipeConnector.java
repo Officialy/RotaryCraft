@@ -10,8 +10,8 @@
 package reika.rotarycraft.auxiliary.interfaces;
 
 import net.minecraft.core.Direction;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
 

@@ -14,13 +14,13 @@
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.core.Direction;
 //import net.minecraft.nbt.CompoundTag;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.material.Fluid;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.registries.ForgeRegistries;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.minecraft.core.registries.BuiltInRegistries;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.instantiable.StepTimer;
@@ -68,7 +68,7 @@
 //        if (tempTimer.checkCap())
 //            this.updateTemperature(world, pos);
 //
-//        if (!level.isClientSide) {
+//        if (!level.isClientSide()) {
 //            int n = this.getNumberConsecutiveOperations();
 //            for (int i = 0; i < n; i++)
 //                this.doOperation(n > 1);
@@ -199,7 +199,7 @@
 //        if (RotaryAux.isNextToIce(world, pos))
 //            Tamb -= 30;
 //
-//        ItemStack cryo = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ModList.THERMALFOUNDATION.getModid(), "dustCryotheum")).getDefaultInstance();//GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modid, "dustCryotheum", 1);
+//        ItemStack cryo = BuiltInRegistries.ITEM.getValue(Identifier.parse(ModList.THERMALFOUNDATION.getModid(), "dustCryotheum")).getDefaultInstance();//GameRegistry.findItemStack(ModList.THERMALFOUNDATION.modid, "dustCryotheum", 1);
 //        if (ReikaItemHelper.matchStacks(RotaryItems.DRY_ICE.get().getDefaultInstance(), itemHandler.getStackInSlot(1)) || (cryo != null && ReikaItemHelper.matchStacks(cryo, itemHandler.getStackInSlot(1)))) {
 //            Tamb -= 40;
 //            if (temperature > Tamb + 4 || DragonAPI.rand.nextInt(20) == 0)
@@ -239,7 +239,7 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        temperature = NBT.getInt("temp");
+//        temperature = NBT.getIntOr("temp", 0);
 //    }
 //
 //    @Override

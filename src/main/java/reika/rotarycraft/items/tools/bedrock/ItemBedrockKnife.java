@@ -22,7 +22,7 @@ public class ItemBedrockKnife extends ItemRotaryTool {
     }
 
     @Override
-    public void onCraftedBy(ItemStack p_41447_, Level p_41448_, Player p_41449_) {
+    public void onCraftedBy(ItemStack p_41447_, Player p_41449_) {
         //  RotaryAdvancements.BEDROCKTOOLS.triggerAchievement(ep);
 
     }

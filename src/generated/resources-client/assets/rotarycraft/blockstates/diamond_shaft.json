@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/diamond_shaft",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/diamond_shaft",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/diamond_shaft"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/diamond_shaft",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/diamond_shaft",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/diamond_shaft",
+      "y": 270
+    }
+  }
+}

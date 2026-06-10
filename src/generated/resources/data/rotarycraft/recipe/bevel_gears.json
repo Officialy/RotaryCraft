@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "G": "rotarycraft:hsla_steel_gear",
+    "I": "rotarycraft:hsla_steel_ingot",
+    "S": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "ISB",
+    "SGB",
+    "BBB"
+  ],
+  "result": {
+    "count": 4,
+    "id": "rotarycraft:bevel_gears"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/grinder",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "grinder"
+    }
+  }
+}

@@ -21,7 +21,7 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.data.blockstruct.TreeReader;
 //import reika.dragonapi.instantiable.data.immutable.BlockKey;
@@ -111,7 +111,7 @@
 //        if (this.isJammed())
 //            return;
 //
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //
 //        if (tree.isEmpty() && this.hasWood()) {
@@ -208,7 +208,7 @@
 //                if (fall) {
 //                    EntityFallingBlock e = new EntityFallingBlock(world, c.xCoord + 0.5, c.yCoord + 0.65, c.zCoord + 0.5, drop, dropmeta);
 //                    e.field_145812_b = -5000;
-//                    if (!world.isClientSide) {
+//                    if (!world.isClientSide()) {
 //                        world.addFreshEntity(e);
 //                    }
 //                    c.setBlock(world, Blocks.AIR);
@@ -512,10 +512,10 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        jam = NBT.getInt("jam");
-//        jamColor = NBT.getInt("jamc");
+//        jam = NBT.getIntOr("jam", 0);
+//        jamColor = NBT.getIntOr("jamc", 0);
 //
-//        cuttingTree = NBT.getBoolean("cutting");
+//        cuttingTree = NBT.getBooleanOr("cutting", false);
 //    }
 //
 //    @Override

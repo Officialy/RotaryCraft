@@ -11,7 +11,7 @@ package reika.rotarycraft.items.tools.bedrock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -28,17 +28,17 @@ import reika.rotarycraft.registry.ConfigRegistry;
 public class ItemBedrockHoe extends HoeItem {
 
     public ItemBedrockHoe() {
-        super(Tiers.NETHERITE, 1, 3.0F, new Item.Properties().setNoRepair());
+        super(ToolMaterial.NETHERITE, 1, 3.0F, reika.rotarycraft.registry.RotaryItems.itemProperties());
 
     }
 
-    @Override
+    // 1.21.5: HoeItem doesn't override onCraftedBy (Item does, no-op default). Drop @Override.
     public void onCraftedBy(ItemStack p_41447_, Level p_41448_, Player p_41449_) {
         //return RotaryAchievements.BEDROCKTOOLS.triggerAchievement(ep);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player ep, InteractionHand hand) {
+    public InteractionResult use(Level world, Player ep, InteractionHand hand) {
         int r = 2;
         if (hand.equals(InteractionHand.MAIN_HAND)) {
             for (int i = -r; i <= r; i++) {
@@ -62,17 +62,17 @@ public class ItemBedrockHoe extends HoeItem {
                                     if (id != Blocks.AIR) {
                                         if (id == Blocks.DIRT || id == Blocks.FARMLAND || id.isFertile(world.getBlockState(ep.blockPosition()), world, new BlockPos(dx, ep.blockPosition().getY(), dz))) {
 
-                                            world.setBlock(new BlockPos(dx, ep.blockPosition().getY(), dz), Blocks.GRASS.defaultBlockState(), 0);
+                                            world.setBlock(new BlockPos(dx, ep.blockPosition().getY(), dz), Blocks.GRASS_BLOCK.defaultBlockState(), 0);
                                             if (slot != -1 && !ep.isCreative()) {
                                                 ItemStack seed = ep.getInventory().getItem(slot);
                                                 int count = seed.getCount();
                                                 seed.setCount(count - 1);
                                                 if (seed.getCount() <= 0) {
                                                     ep.getInventory().setItem(slot, null);
-                                                    return InteractionResultHolder.success(this.getDefaultInstance());
+                                                    return InteractionResult.SUCCESS;
                                                 }
                                             }
-                                            ReikaSoundHelper.playStepSound(world, dx, ep.blockPosition().getY(), dz, Blocks.GRASS, 0.4F, 1);
+                                            ReikaSoundHelper.playStepSound(world, dx, ep.blockPosition().getY(), dz, Blocks.GRASS_BLOCK, 0.4F, 1);
                                         }
                                     }
                                 }
@@ -82,7 +82,7 @@ public class ItemBedrockHoe extends HoeItem {
                 }
             }
         }
-        return InteractionResultHolder.fail(this.getDefaultInstance());
+        return InteractionResult.FAIL;
     }
 
 }

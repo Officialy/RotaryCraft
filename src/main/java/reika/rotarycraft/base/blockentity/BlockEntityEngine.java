@@ -12,7 +12,7 @@ package reika.rotarycraft.base.blockentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,11 +27,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.fluids.capability.IFluidHandler;
-import net.neoforged.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.minecraft.core.registries.BuiltInRegistries;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.ParallelTicker;
@@ -74,7 +72,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     protected final HybridTank fuel = new HybridTank("enginefuel", FUELCAP);
     protected final HybridTank air = new HybridTank("engineoxygen", 1000);
     protected final HybridTank[] tanks = {water, lubricant, fuel, air};
-    private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
     /**
      * For timing control
      */
@@ -99,36 +96,18 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     @Override
-    
-    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
-        if (capability == ForgeCapabilities.FLUID_HANDLER)
-            return lazyFluidHandler.cast();
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
     public void onLoad() {
         super.onLoad();
         for (HybridTank tank : tanks) {
             if (tank == water && !requiresWater) {
-                lazyFluidHandler = LazyOptional.of(() -> tank);
             }
             if (tank == lubricant && !requiresLubricant) {
-                lazyFluidHandler = LazyOptional.of(() -> tank);
             }
             if (tank == fuel && !requiresFuel) {
-                lazyFluidHandler = LazyOptional.of(() -> tank);
             }
             if (tank == air && !requiresAir) {
-                lazyFluidHandler = LazyOptional.of(() -> tank);
             }
         }
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyFluidHandler.invalidate();
     }
 
     static int getIntegratedGearTorque(int torque, int gear) {
@@ -146,7 +125,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     public static boolean isAirFluid(Fluid f) {
-        return f.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("air"))) || f.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("oxygen"))) || f.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc_oxygen")));
+        return f.equals(BuiltInRegistries.FLUID.getValue(Identifier.parse("air"))) || f.equals(BuiltInRegistries.FLUID.getValue(Identifier.parse("oxygen"))) || f.equals(BuiltInRegistries.FLUID.getValue(Identifier.parse("rc_oxygen")));
     }
 
     public final EngineType getEngineType() {
@@ -544,10 +523,10 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
 
-        type = EngineType.setType(tag.getInt("type"));
+        type = EngineType.setType(tag.getIntOr("type", 0));
 
         if (this.hasTemperature())
-            temperature = tag.getInt("temperature");
+            temperature = tag.getIntOr("temperature", 0);
 
         if (type.requiresLubricant())
             lubricant.readFromNBT(tag);
@@ -558,10 +537,10 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             fuel.readFromNBT(tag);
 
         if (tag.contains("fueltimer")) {
-            timer.setCap("fuel", tag.getInt("fueltimer"));
+            timer.setCap("fuel", tag.getIntOr("fueltimer", 0));
         }
 
-        integratedGear = tag.getInt("gear");
+        integratedGear = tag.getIntOr("gear", 0);
     }
 
     @Override
@@ -574,7 +553,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public void load(CompoundTag tag) {
         super.load(tag);
         timer.load(tag, "engine");
-        phi = tag.getFloat("phi");
+        phi = tag.getFloatOr("phi", 0);
 
         if (omega > type.getSpeed())
             omega = type.getSpeed();
@@ -603,9 +582,9 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public final boolean canExtractItem(int i, ItemStack itemstack, int j) {
         if (type == EngineType.AC) {
             if (ReikaItemHelper.matchStacks(itemstack, RotaryItems.HSLA_SHAFT_CORE) || ReikaItemHelper.matchStacks(itemstack, RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE)) {
-                if (itemstack.getTag() == null)
+                if (itemstack.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
                     return true;
-                return itemstack.getTag().getInt("magnet") == 0;
+                return itemstack.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0) == 0;
             }
             return false;
         }
@@ -694,34 +673,15 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         if (type.isJetFueled() || type.isEthanolFueled())
             if ((p == MachineRegistry.FUELLINE || p == MachineRegistry.BEDPIPE) && side == (isFlipped ? Direction.UP : Direction.DOWN))
                 return true;
+        // Water inlet (and the lubricant inlet) is on the engine's "back" face, i.e. the side
+        // opposite the power output (FACING). Legacy keyed this off block metadata; the ported
+        // engines store orientation in the FACING blockstate property instead.
+        Direction back = getBlockState().getValue(BlockRotaryCraftMachine.FACING).getOpposite();
         if (type.isWaterPiped() && p.isStandardPipe()) {
-            switch (side) {
-                case EAST:
-//                    return this.getBlockMetadata() == 0;
-                case SOUTH:
-//                    return this.getBlockMetadata() == 2;
-                case WEST:
-//                    return this.getBlockMetadata() == 1;
-                case NORTH:
-//                    return this.getBlockMetadata() == 3;
-                default:
-                    return false;
-            }
+            return side.getStepY() == 0 && side == back;
         }
         if (type.requiresLubricant() && (p == MachineRegistry.HOSE || p == MachineRegistry.BEDPIPE)) {
-            //ReikaJavaLibrary.pConsole(this.getBlockMetadata()+":"+side.name());
-            switch (side) {
-                case EAST:
-//                    return this.getBlockMetadata() == 0;
-                case SOUTH:
-//                    return this.getBlockMetadata() == 2;
-                case WEST:
-//                    return this.getBlockMetadata() == 1;
-                case NORTH:
-//                    return this.getBlockMetadata() == 3;
-                default:
-                    return false;
-            }
+            return side.getStepY() == 0 && side == back;
         }
         return false;
     }
@@ -790,44 +750,46 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         return power;
     }
 
-/*    @Override
-    public final int fill(Direction from, FluidStack resource, FluidAction doFill) {
+    @Override
+    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction doFill) {
+        if (resource == null || resource.isEmpty())
+            return 0;
         Fluid f = resource.getFluid();
         if (!this.canFill(from, f))
             return 0;
-        if (f.equals(Fluids.WATER)) {
+        if (f == Fluids.WATER) {
             return water.fill(resource, doFill);
-        } else if (f.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc_lubricant")))) {
+        } else if (f == RotaryFluids.LUBRICANT.get()) {
             return lubricant.fill(resource, doFill);
-        } else if (isAirFluid(f)) {
+        } else if (isAirFluid(f) && type.isAirBreathing()) {
             return air.fill(resource, doFill);
         } else {
             return fuel.fill(resource, doFill);
         }
-    }*/
+    }
 
-    //        @Override
+    @Override
+    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
+        return FluidStack.EMPTY;
+    }
+
     public final boolean canFill(Direction from, Fluid fluid) {
         if (isAirFluid(fluid)) {
             return type.isAirBreathing() && from == this.getFuelInputDirection();
         }
-//        if (!type.canReceiveFluid(fluid))
-//            return false;
-        if (fluid.equals(Fluids.WATER)) {
+        if (fluid == Fluids.WATER) {
             int dx = worldPosition.getX() + from.getStepX();
             int dy = worldPosition.getY() + from.getStepY();
             int dz = worldPosition.getZ() + from.getStepZ();
             return dx == backx && dy == worldPosition.getY() && dz == backz;
-        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc lubricant")))) {
+        } else if (fluid == RotaryFluids.LUBRICANT.get()) {
             int dx = worldPosition.getX() + from.getStepX();
             int dy = worldPosition.getY() + from.getStepY();
             int dz = worldPosition.getZ() + from.getStepZ();
             return dx == backx && dy == worldPosition.getY() && dz == backz;
-        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc jet fuel")))) {
+        } else if (fluid == RotaryFluids.JET_FUEL.get()) {
             return from == this.getFuelInputDirection();
-        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("rc ethanol")))) {
-            return from == this.getFuelInputDirection();
-        } else if (fluid.equals(ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse("bioethanol")))) {
+        } else if (fluid == RotaryFluids.ETHANOL.get()) {
             return from == this.getFuelInputDirection();
         }
         return false;

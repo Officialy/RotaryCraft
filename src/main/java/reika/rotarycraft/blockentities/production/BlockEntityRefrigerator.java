@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
@@ -62,6 +62,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
     }
 
     public void updateEntity(Level world, BlockPos pos) {
+        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
 //        this.getIOSides(world, pos);
         this.getPower(false);
         timer.setCap(this.getOperationTime());
@@ -79,7 +80,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
         for (int i = 0; i < n; i++)
             this.doOperation(n > 1);
 
-        if (!world.isClientSide)
+        if (!world.isClientSide())
             time = timer.getTick();
     }
 
@@ -87,7 +88,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
         if (this.canProgress()) {
             timer.update();
             if (multiple || timer.checkCap()) {
-                if (!level.isClientSide)
+                if (!level.isClientSide())
                     this.cycle();
             }
         } else {
@@ -102,7 +103,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
             return false;
         if (!tank.canTakeIn(this.getProducedLN2()))
             return false;
-        return ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(0), Blocks.ICE.defaultBlockState()) && (itemHandler.getStackInSlot(1) == null || itemHandler.getStackInSlot(1).getCount() < itemHandler.getStackInSlot(1).getMaxStackSize());
+        return ReikaItemHelper.matchStackWithBlock(itemHandler.getStackInSlot(0), Blocks.ICE.defaultBlockState()) && (itemHandler.getStackInSlot(1).isEmpty() || itemHandler.getStackInSlot(1).getCount() < itemHandler.getStackInSlot(1).getMaxStackSize());
     }
 
     private void cycle() {
@@ -117,8 +118,9 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
             }
             if (DragonAPI.rand.nextInt(4) == 0) {
                 int n = DragonAPI.rand.nextInt(20) == 0 ? 4 : (DragonAPI.rand.nextInt(4) == 0 ? 2 : 1);
-                if (itemHandler.getStackInSlot(1) != null)
-                    n = Math.min(n, RotaryItems.DRY_ICE.get().getMaxStackSize() - itemHandler.getStackInSlot(1).getCount());
+                if (!itemHandler.getStackInSlot(1).isEmpty())
+                    // 1.21.5: Item#getMaxStackSize now requires an ItemStack argument.
+                    n = Math.min(n, RotaryItems.DRY_ICE.get().getMaxStackSize(RotaryItems.DRY_ICE.get().getDefaultInstance()) - itemHandler.getStackInSlot(1).getCount());
                 ReikaInventoryHelper.addOrSetStack(ReikaItemHelper.getSizedItemStack(RotaryItems.DRY_ICE.get().getDefaultInstance(), n), itemHandler, 1);
             }
         }
@@ -155,7 +157,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
     @Override
@@ -203,7 +205,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        time = NBT.getInt("timer");
+        time = NBT.getIntOr("timer", 0);
     }
 
     @Override
@@ -232,11 +234,10 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
         if (f > 0.1) {
 //todo            ReikaSoundHelper.playSoundAtBlock(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), "dragonAPI.rand.fizz", 1.2F, 0.8F);
             float hearts = f * 4;
-            AABB box = ReikaAABBHelper.getBlockAABB(this).expandTowards(5, 5, 5);
+            AABB box = ReikaAABBHelper.getBlockAABB(this).inflate(5, 5, 5);
             List<LivingEntity> li = level.getEntitiesOfClass(LivingEntity.class, box);
-            RotaryCraft.freezeDamage.lastMachine = this;
             for (LivingEntity e : li) {
-                e.hurt(RotaryCraft.freezeDamage, hearts * 2);
+                e.hurt(RotaryCraft.freezeDamage.get(level), hearts * 2);
             }
             ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.FRIDGEBREAK.ordinal(), this, 24);
         }

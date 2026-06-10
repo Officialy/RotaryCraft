@@ -9,7 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -36,8 +36,6 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
     public GuiCoil(BlankContainer<BlockEntityAdvancedGear> container, Inventory inv, Component title) {
         super(container, inv, title);
         coil = container.tile;
-        imageHeight = coil.isCreative() ? 72 : 105;
-        imageWidth = 176;
     }
 
     @Override
@@ -58,26 +56,26 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        boolean handled = super.keyPressed(keyCode, scanCode, modifiers);
-        handled |= inputOmega.keyPressed(keyCode, scanCode, modifiers);
-        handled |= inputTorque.keyPressed(keyCode, scanCode, modifiers);
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
+        boolean handled = super.keyPressed(event);
+        handled |= inputOmega.keyPressed(event);
+        handled |= inputTorque.keyPressed(event);
         return handled;
     }
 
     @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        boolean handled = super.charTyped(codePoint, modifiers);
-        handled |= inputOmega.charTyped(codePoint, modifiers);
-        handled |= inputTorque.charTyped(codePoint, modifiers);
+    public boolean charTyped(net.minecraft.client.input.CharacterEvent event) {
+        boolean handled = super.charTyped(event);
+        handled |= inputOmega.charTyped(event);
+        handled |= inputTorque.charTyped(event);
         return handled;
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        boolean handled = super.mouseClicked(mouseX, mouseY, button);
-        handled |= inputOmega.mouseClicked(mouseX, mouseY, button);
-        handled |= inputTorque.mouseClicked(mouseX, mouseY, button);
+    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+        boolean handled = super.mouseClicked(event, doubleClick);
+        handled |= inputOmega.mouseClicked(event, doubleClick);
+        handled |= inputTorque.mouseClicked(event, doubleClick);
         return handled;
     }
 
@@ -134,35 +132,35 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
-        graphics.drawString(font, "Output Speed", imageWidth / 2 - 82, 22, 4210752, false);
+        graphics.text(font, "Output Speed", imageWidth / 2 - 82, 22, 4210752, false);
         if (!coil.isCreative())
-            graphics.drawString(font, String.format("(Max %d)", coil.getMaximumEmission()), imageWidth / 2 - 82, 37, 4210752, false);
-        graphics.drawString(font, "Output Torque", imageWidth / 2 - 82, 52, 4210752, false);
-        graphics.drawString(font, "rad/s", imageWidth / 2 + 53, 22, 4210752, false);
-        graphics.drawString(font, "Nm", imageWidth / 2 + 53, 52, 4210752, false);
+            graphics.text(font, String.format("(Max %d)", coil.getMaximumEmission()), imageWidth / 2 - 82, 37, 4210752, false);
+        graphics.text(font, "Output Torque", imageWidth / 2 - 82, 52, 4210752, false);
+        graphics.text(font, "rad/s", imageWidth / 2 + 53, 22, 4210752, false);
+        graphics.text(font, "Nm", imageWidth / 2 + 53, 52, 4210752, false);
         if (!coil.isCreative()) {
             double e = coil.getEnergy() / 20D;
             String s = String.format("Stored Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(e), ReikaEngLibrary.getSIPrefix(e));
-            graphics.drawString(font, s, imageWidth / 2 - 82, 80 - 8, 4210752, false);
+            graphics.text(font, s, imageWidth / 2 - 82, 80 - 8, 4210752, false);
             long max = coil.getMaxStorageCapacity();
             s = String.format("Max Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max));
-            graphics.drawString(font, s, imageWidth / 2 - 82, 80 - 8 + 14, 4210752, false);
+            graphics.text(font, s, imageWidth / 2 - 82, 80 - 8 + 14, 4210752, false);
         }
         if (!inputOmega.isFocused())
-            graphics.drawString(font, String.format("%d", coil.getReleaseOmega()), imageWidth / 2 - 3, 22, 0xffffffff, false);
+            graphics.text(font, String.format("%d", coil.getReleaseOmega()), imageWidth / 2 - 3, 22, 0xffffffff, false);
         if (!inputTorque.isFocused())
-            graphics.drawString(font, String.format("%d", coil.getReleaseTorque()), imageWidth / 2 - 3, 52, 0xffffffff, false);
-        super.renderLabels(graphics, mouseX, mouseY);
+            graphics.text(font, String.format("%d", coil.getReleaseTorque()), imageWidth / 2 - 3, 52, 0xffffffff, false);
+        super.extractLabels(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        super.renderBg(graphics, partialTick, mouseX, mouseY);
-        inputOmega.render(graphics, mouseX, mouseY, partialTick);
-        inputTorque.render(graphics, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        inputOmega.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        inputTorque.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override

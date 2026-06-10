@@ -22,8 +22,8 @@
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.level.material.Fluids;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.HybridTank;
@@ -78,13 +78,13 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        pulseFurnaceCookTime = NBT.getShort("CookTime");
+//        pulseFurnaceCookTime = NBT.getShortOr("CookTime", (short)0);
 //
 //        water.readFromNBT(NBT);
 //        fuel.readFromNBT(NBT);
 //        accel.readFromNBT(NBT);
 //
-//        temperature = NBT.getInt("temp");
+//        temperature = NBT.getIntOr("temp", 0);
 //    }
 //
 //    @Override
@@ -218,7 +218,7 @@
 //        super.updateBlockEntity();
 //        this.testIdle();
 //        soundtick++;
-//        if (tickcount >= 20 && !world.isClientSide) {
+//        if (tickcount >= 20 && !world.isClientSide()) {
 //            this.updateTemperature(world, pos);
 //            tickcount = 0;
 //        }
@@ -234,7 +234,7 @@
 //        tickcount++;
 //        tickcount2++;
 //
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            int tick = 1;
 //            if (!fuel.isEmpty() && power > 0 && omega >= MINSPEED && accel.getLevel() > 10) {
 //                tick = 4;

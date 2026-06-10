@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/steam_engine",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "steam_engine"
+    }
+  }
+}

@@ -10,7 +10,7 @@
 //package reika.rotarycraft.guis.Machine.Inventory;
 //
 //import com.mojang.blaze3d.vertex.PoseStack;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.world.Container;
 //import net.neoforged.client.gui.ScreenUtils;
 //import org.lwjgl.input.Mouse;
@@ -114,8 +114,8 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(poseStack, par1, par2, par3);
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
+//        super.extractBackground(poseStack, par2, par3, par1);
 //        input.drawTextBox();
 //    }
 //
@@ -151,7 +151,7 @@
 //    }
 //
 //    @Override
-//    protected ResourceLocation getGuiTexture() {
-//        return ResourceLocation.parse("heatergui");
+//    protected Identifier getGuiTexture() {
+//        return Identifier.parse("heatergui");
 //    }
 //}

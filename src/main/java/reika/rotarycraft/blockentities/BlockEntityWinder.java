@@ -90,16 +90,16 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
             if (tickcount < this.getOperationTime())
                 return;
             tickcount = 0;
-            if (itemHandler.getStackInSlot(0).getTag().getInt("energy") >= this.getMaxWind())
+            if (itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0) >= this.getMaxWind())
                 return;
-            itemHandler.getStackInSlot(0).getTag().putInt("energy", itemHandler.getStackInSlot(0).getTag().getInt("energy") - 1); // = new ItemStack(itemHandler.getStackInSlot(0).getItem(), 1, itemHandler.getStackInSlot(0).getTag().getInt("energy") + 1); todo testme
-            if (!world.isClientSide && this.breakCoil()) {
+            itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("energy", itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0) - 1); // = new ItemStack(itemHandler.getStackInSlot(0).getItem(), 1, itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0) + 1); todo testme
+            if (!world.isClientSide() && this.breakCoil()) {
                 itemHandler.setStackInSlot(0, ItemStack.EMPTY);
 //                world.playLocalSound(pos, "DragonAPI.rand.break", 1F, 1F);
-                world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 1F, 1F, true);
+                world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_BREAK.value(), SoundSource.BLOCKS, 1F, 1F, true);
             }
         } else {
-            if (itemHandler.getStackInSlot(0).getTag().getInt("energy") <= 0) {
+            if (itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0) <= 0) {
                 omega = 0;
                 torque = 0;
                 power = 0;
@@ -111,7 +111,7 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
             if (tickcount < this.getUnwindTime())
                 return;
             tickcount = 0;
-            itemHandler.getStackInSlot(0).getTag().putInt("energy", itemHandler.getStackInSlot(0).getTag().getInt("energy") - 1); //todo testme
+            itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("energy", itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0) - 1); //todo testme
         }
 
     }
@@ -124,13 +124,13 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
 
     private boolean breakCoil() {
         ItemStack is = itemHandler.getStackInSlot(0);
-        if (is == null)
+        if (is.isEmpty())
             return false;
         if (!(is.getItem() instanceof TensionStorage ts))
             return false;
         if (!ts.isBreakable(is))
             return false;
-        int dmg = itemHandler.getStackInSlot(0).getTag().getInt("energy");
+        int dmg = itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0);
         double diff = dmg / 65536D * DifficultyEffects.BREAKCOIL.getDouble();
         boolean rand = ReikaRandomHelper.doWithChance(diff);
         return rand;
@@ -139,7 +139,7 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
     public int getOperationTime() {
         if (itemHandler.getStackInSlot(0).isEmpty())
             return 1;
-        int base = (int) ReikaMathLibrary.logbase(itemHandler.getStackInSlot(0).getTag().getInt("energy"), 2);
+        int base = (int) ReikaMathLibrary.logbase(itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0), 2);
         double factor = 1D / (int) (ReikaMathLibrary.logbase(omega + 1, 2));
         return (int) (base * factor);
     }
@@ -163,7 +163,7 @@ public class BlockEntityWinder extends InventoriedPowerReceiver implements Simpl
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        winding = NBT.getBoolean("winding");
+        winding = NBT.getBooleanOr("winding", false);
     }
 
     @Override

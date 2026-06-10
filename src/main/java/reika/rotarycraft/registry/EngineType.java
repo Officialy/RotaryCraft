@@ -20,7 +20,13 @@ import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.blockentities.engine.*;
 
 public enum EngineType {
-    DC(65536, 1024, EngineClass.ELECTRIC, BlockEntityDCEngine.class),
+    // 26.1 fix: the DC engine had been ported with JET-engine values (65536 omega × 1024 torque
+    // = 67 MW), which over-revved every steel shaft in the world — the user reported "dc engine
+    // still blows up shafts after a certain amount of time after being on" and the BE dump
+    // showed omega=65536 / torque=1024. Restore the legacy 1.7 values: 256 rpm × 4 Nm = 1 kW.
+    // The header comment ("DC Engine = 1-4Nm @ 1600-2400 rpm") was already accurate; only the
+    // enum constants were wrong.
+    DC(256, 4, EngineClass.ELECTRIC, BlockEntityDCEngine.class),
     WIND(1024, 8, EngineClass.KINETIC, BlockEntityWindEngine.class),
     STEAM(512, 32, EngineClass.THERMAL, BlockEntitySteamEngine.class),
     GAS(512, 128, EngineClass.PISTON, BlockEntityGasEngine.class),
@@ -28,8 +34,8 @@ public enum EngineType {
     SPORT(1024, 256, EngineClass.PISTON, BlockEntityPerformanceEngine.class),
     //HYDRO(32, 16384, EngineClass.KINETIC, BlockEntityHydroEngine.class), //double speed, add new lava engine as 524kW? no
     MICRO(131072, 16, EngineClass.TURBINE, BlockEntityMicroturbine.class),
+    JET(65536, 1024, EngineClass.TURBINE, BlockEntityJetEngine.class),
     ;
-//  JET(65536, 1024, EngineClass.TURBINE, BlockEntityJetEngine.class);
 
     public static final EngineType[] engineList = values();
     public final Class<? extends BlockEntityEngine> engineClass;
@@ -95,7 +101,7 @@ public enum EngineType {
     }
 
     public boolean isJetFueled() {
-        return /*this == JET || */this == MICRO;
+        return this == JET || this == MICRO;
     }
 
     public boolean isEthanolFueled() {
@@ -107,34 +113,40 @@ public enum EngineType {
     }
 
     public boolean hasGui() {
-        return this == STEAM || this == GAS ||/* this == AC ||*/ this == SPORT || this == MICRO;// || this == JET;
+        return this == STEAM || this == GAS ||/* this == AC ||*/ this == SPORT || this == MICRO || this == JET;
     }
 
     public boolean burnsFuel() {
-        return this == STEAM || this == GAS || this == SPORT || this == MICRO; //|| this == JET;
+        return this == STEAM || this == GAS || this == SPORT || this == MICRO || this == JET;
     }
 
     public int getSoundLength() {
+        // 26.1 fix: re-tuned re-trigger intervals to match the actual {@code .ogg} file durations
+        // so the loops play without audible gaps (legacy values were inherited from 1.7 wav
+        // sources). Approximate durations from the bundled assets at ~20 kB/s Vorbis encode:
+        //   elecengine  ≈ 3.9 s → 78  ticks
+        //   gasengine   ≈ 4.2 s → 84  ticks  (was 88, ~0.2 s gap)
+        //   steamengine ≈ 2.6 s → 53  ticks  (was 49, sample re-fired before tail; user reported)
+        //   windengine  ≈ 4.9 s → 98  ticks  (was 105 → 0.35 s gap)
+        //   jetengine   ≈ 1.5 s → 30  ticks  (was 79, ~2.5 s of silence between loops — bad)
+        //   microengine ≈ 0.9 s → 18  ticks  (was 20, close enough but tightened)
         if (this.carNoise()) {
-            return 88;
+            return 84;
         }
         if (this.electricNoise()) {
-            return 74;
+            return 78;
         }
         if (this.steamNoise()) {
-            return 49;
+            return 53;
         }
-//        if (this.waterNoise()) {
-//            return 59;
-//        }
         if (this.windNoise()) {
-            return 105;
+            return 98;
         }
-//        if (this.jetNoise()) {
-//            return 79;
-//        }
+        if (this.jetNoise()) {
+            return 30;
+        }
         if (this.turbineNoise()) {
-            return 20;
+            return 18;
         }
         return 0;
     }
@@ -144,7 +156,7 @@ public enum EngineType {
     }
 
     public boolean isAirBreathing() {
-        return this == GAS || this == SPORT || this == MICRO;// || this == JET;
+        return this == GAS || this == SPORT || this == MICRO || this == JET;
     }
 
     public boolean electricNoise() {
@@ -163,12 +175,12 @@ public enum EngineType {
         return this == STEAM;
     }
 
-//    public boolean jetNoise() {
-//        return this == JET;
-//    }
+    public boolean jetNoise() {
+        return this == JET;
+    }
 
     public boolean turbineNoise() {
-        return /*this == JET || */this == MICRO;
+        return this == JET || this == MICRO;
     }
 
     public boolean windNoise() {
@@ -176,8 +188,8 @@ public enum EngineType {
     }
 
     public boolean canHurtPlayer() {
-//        if (this == JET)
-//            return true;
+        if (this == JET)
+            return true;
         if (this == SPORT)
             return true;
         return this == WIND;// this == HYDRO;
@@ -212,13 +224,14 @@ public enum EngineType {
             //case AC -> 600;
             case SPORT -> 6;
             case MICRO -> 48;
-            //case JET -> 2;
+            case JET -> 2;
             default -> 0;
         };
     }
 
     public ItemStack getCraftedProduct() {
-        switch (this) {
+        // Returns the placed block's BlockItem for use in advancement icons / handbook display.
+        Item item = switch (this) {
             case DC -> RotaryBlocks.DC_ENGINE.get().asItem();
             case WIND -> RotaryBlocks.WIND_ENGINE.get().asItem();
             case STEAM -> RotaryBlocks.STEAM_ENGINE.get().asItem();
@@ -227,9 +240,9 @@ public enum EngineType {
             case SPORT -> RotaryBlocks.PERFORMANCE_ENGINE.get().asItem();
 //          case HYDRO -> RotaryBlocks.HYDROKINETIC_ENGINE.get().asItem();
             case MICRO -> RotaryBlocks.MICRO_TURBINE.get().asItem();
-//          case JET -> RotaryBlocks.GAS_TURBINE.get().asItem();
-        }
-        return ItemStack.EMPTY;
+            case JET -> RotaryBlocks.JET_ENGINE.get().asItem();
+        };
+        return item != null && item != net.minecraft.world.item.Items.AIR ? new ItemStack(item) : ItemStack.EMPTY;
     }
 
     public boolean isEMPImmune() {
@@ -261,7 +274,7 @@ public enum EngineType {
                 if (fluid.equals(RotaryFluids.LUBRICANT.get()))
                     return true;
                 }*/
-            case MICRO/*, JET*/ -> {
+            case MICRO, JET -> {
                 if (fluid.equals(RotaryFluids.JET_FUEL.get()))
                     return true;
             }
@@ -275,7 +288,7 @@ public enum EngineType {
     public Fluid getFuelType() {
         return switch (this) {
             case GAS, SPORT -> RotaryFluids.ETHANOL.get();
-            case MICRO/*, JET*/ -> RotaryFluids.JET_FUEL.get();
+            case MICRO, JET -> RotaryFluids.JET_FUEL.get();
             default -> null;
         };
     }

@@ -13,10 +13,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
@@ -42,17 +45,24 @@ public class RenderSolarTower extends RotaryTERenderer<BlockEntitySolarTower> {
         stack.pushPose();
         stack.translate(0.5F, -0.5F, 0.5F);
         stack.mulPose(Axis.YP.rotationDegrees(f));
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(SolarTowerModel.TEXTURE_LOCATION));
-        modelSolar.renderToBuffer(stack, vertexconsumer, packetLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(SolarTowerModel.TEXTURE_LOCATION));
+        modelSolar.renderToBuffer(stack, vertexconsumer, packetLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.popPose();
     }
 
     @Override
-    public void render(BlockEntitySolarTower tile, float p_112308_, PoseStack stack, MultiBufferSource bufferSource, int packetLight, int overlay) {
-        if (this.doRenderModel(stack, tile))
-            this.renderBlockEntitySolarAt(tile, stack, bufferSource, packetLight);
-        if ((tile).isInWorld()) {// && MinecraftForgeClient.getRenderPass() == 1) {
-            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
-        }
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return SolarTowerModel.TEXTURE_LOCATION;
+    }
+
+    @Override
+    protected boolean useEntityCutout() {
+        return true;
+    }
+
+    @Override
+    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+        if (be instanceof BlockEntitySolarTower solar)
+            renderBlockEntitySolarAt(solar, stack, mbs, light);
     }
 }

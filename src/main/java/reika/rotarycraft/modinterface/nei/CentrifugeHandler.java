@@ -22,9 +22,9 @@
 //import net.minecraft.client.renderer.Tessellator;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.util.IIcon;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidContainerRegistry;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidContainerRegistry;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //
 //import reika.dragonapi.instantiable.data.Collections.ChancedOutputList.ItemWithChance;
 //import reika.dragonapi.instantiable.ModInteract.PositionedStackWithTooltip;
@@ -212,7 +212,7 @@
 //			Font fr = Minecraft.getMinecraft().fontRenderer;
 //			String s = f.getLocalizedName()+" ("+fs.amount+" mB) ("+r.recipe.getFluidChance()+"%)";
 //			int l = fr.width(s);
-//			fr.drawString(s, 166-l, 70, 0);
+//			fr.text(s, 166-l, 70, 0);
 //		}
 //	}
 //

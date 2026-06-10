@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "c": "rotarycraft:circuit_board",
+    "n": "rotarycraft:sonar_unit",
+    "p": "rotarycraft:hsla_steel_plate",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sps",
+    "pcp",
+    "sns"
+  ],
+  "result": {
+    "id": "rotarycraft:cave_scanner"
+  }
+}

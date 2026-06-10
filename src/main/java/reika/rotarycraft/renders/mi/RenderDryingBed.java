@@ -24,8 +24,8 @@
 //import net.neoforged.client.IItemRenderer;
 //import net.neoforged.client.IItemRenderer.ItemRenderType;
 //import net.neoforged.client.MinecraftForgeClient;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidRegistry;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidRegistry;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
@@ -92,7 +92,6 @@
 //            //int col = 0;
 //            //int row = 0;
 //            //ItemRenderer.renderItemIn2D(v5, 0.0625F+0.0625F*col, 0.0625F*row, 0.0625F*col, 0.0625F+0.0625F*row, 256, 256, thick);
-//            RenderSystem.enableBlend();
 //            //GL11.glDisable(GL11.GL_ALPHA_TEST);
 //            //GL11.glDisable(GL11.GL_CULL_FACE);
 //            GL11.glColor4f(1, 1, 1, 1.2F * te.progress / 400F);
@@ -181,7 +180,6 @@
 //                }
 //                stack.popPose();
 //            }
-//            RenderSystem.disableBlend();
 //            //GL11.glEnable(GL11.GL_CULL_FACE);
 //            //GL11.glEnable(GL11.GL_ALPHA_TEST);
 //
@@ -201,7 +199,6 @@
 //            float dv = ico.getMaxV();
 //            int l = tile.getLevel();
 //            if (!f.equals(FluidRegistry.LAVA)) {
-//                RenderSystem.enableBlend();
 //            }
 //            double h = l > 0 ? 0.8125 + l * 0.125 / tile.getCapacity() : 0.5;
 //            if (f.getLuminosity() > 0 && tile.hasLevel())
@@ -214,7 +211,6 @@
 //            v5.addVertexWithUV(0 + 0.0625, h, 0 + 0.0625, u, dv);
 //            v5.end();
 //            ReikaRenderHelper.enableLighting();
-//            RenderSystem.disableBlend();
 //        }
 //    }
 //

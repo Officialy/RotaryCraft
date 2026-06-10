@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:hsla_steel_gear_2x",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_rod",
+    "g": "rotarycraft:hsla_steel_gear",
+    "r": "rotarycraft:circuit_board",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sgs",
+    "SGS",
+    "PrP"
+  ],
+  "result": {
+    "id": "rotarycraft:distribution_clutch"
+  }
+}

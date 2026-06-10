@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_belt": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:belt"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:van_de_graff"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_belt"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:van_de_graff"
+    ]
+  }
+}

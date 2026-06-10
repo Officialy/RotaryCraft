@@ -98,7 +98,6 @@
 //        stack.translate(par2, par4, par6);
 //        if (tile.isOutputEnabled())
 //            GL11.glDisable(GL11.GL_LIGHTING);
-//        RenderSystem.enableBlend();
 //        GL11.glDisable(GL11.GL_TEXTURE_2D);
 //
 //        boolean vert = tile.getBlockMetadata() >= 4;

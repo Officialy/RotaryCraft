@@ -6,7 +6,7 @@ import reika.rotarycraft.api.interfaces.RailGunAmmo;
 public abstract class ItemRailgunAmmoBase extends ItemBasic implements RailGunAmmo {
 
     public ItemRailgunAmmoBase() {
-        super(new Properties(), 16);
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties(), 16);
     }
 
     public RailGunAmmoType getAmmo(ItemStack is, int pwr) {

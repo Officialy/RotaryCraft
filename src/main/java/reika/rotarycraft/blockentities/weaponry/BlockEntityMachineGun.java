@@ -145,7 +145,7 @@
 //        ar.setLocationAndAngles(x + 0.5, y + 0.8, z + 0.5, 0, 0);
 //        ar.motionX = vx;
 //        ar.motionZ = vz;
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            ar.velocityChanged = true;
 //            world.addFreshEntity(ar);
 //        }

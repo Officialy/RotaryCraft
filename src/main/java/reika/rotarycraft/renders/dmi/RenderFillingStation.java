@@ -22,8 +22,8 @@
 //import net.neoforged.client.IItemRenderer;
 //import net.neoforged.client.IItemRenderer.ItemRenderType;
 //import net.neoforged.client.MinecraftForgeClient;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidRegistry;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidRegistry;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
@@ -126,7 +126,6 @@
 //        if (!tr.isEmpty() && tr.isInWorld()) {
 //            Fluid f = tr.getFluid();
 //            if (!f.equals(FluidRegistry.LAVA)) {
-//                RenderSystem.enableBlend();
 //            }
 //            ReikaLiquidRenderer.bindFluidTexture(f);
 //            IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
@@ -155,7 +154,6 @@
 //            ReikaRenderHelper.enableLighting();
 //        }
 //        stack.translate(-par2, -par4, -par6);
-//        RenderSystem.disableBlend();
 //    }
 //
 //    private void renderItem(BlockEntity tile, double par2, double par4, double par6) {

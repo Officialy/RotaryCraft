@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.common.ForgeHooks;
+// 1.21.5: net.neoforged.common.ForgeHooks no longer exists; usages stubbed.
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -64,13 +64,14 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
         idle = false;
     }
 
-    public void updateBlockEntity() {
+    @Override
+    public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
         tickcount++;
         tickcount2++;
         this.getPowerBelow();
         if (tickcount2 >= 20) {
-            this.updateTemperature(level, worldPosition);
+            this.updateTemperature(world, pos);
             tickcount2 = 0;
         }
         if (power < MINPOWER)
@@ -80,17 +81,17 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
             this.addHeat();
             tickcount = 0;
         }
-        this.transferHeat(level, worldPosition.above());
+        this.transferHeat(world, pos.above());
         if (temperature >= 240) {
-            this.ignite(level, worldPosition);
+            this.ignite(world, pos);
         }
     }
 
     private void ignite(Level world, BlockPos pos) {
-        AABB box = new AABB(pos, new BlockPos(pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1));
+        AABB box = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1);
         List<LivingEntity> inbox = world.getEntitiesOfClass(LivingEntity.class, box);
         for (LivingEntity hot : inbox) {
-            hot.setSecondsOnFire(temperature / 50);
+            hot.igniteForSeconds(temperature / 50);
         }
     }
 
@@ -132,9 +133,13 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
         int itemheat = -1;
         int slot = -1;
         for (int i = 0; i < itemHandler.getSlots(); i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
+            if (!itemHandler.getStackInSlot(i).isEmpty()) {
                 //ReikaChatHelper.writeInt(BlockEntityFurnace.getItemBurnTime(itemHandler.getStackInSlot(i)));
-                int heat = ForgeHooks.getBurnTime(itemHandler.getStackInSlot(i), RecipeType.SMELTING) / 25;
+                // 1.21.5: ForgeHooks.getBurnTime was replaced by Level#fuelValues() + FuelValues#burnDuration.
+                // We previously fell back to a constant of 4; keep that fallback when level/fuel-values aren't
+                // available (e.g. during early load) but otherwise look up the real burn duration.
+                int heat = level != null ? level.fuelValues().burnDuration(itemHandler.getStackInSlot(i)) : 4;
+                if (heat <= 0) heat = 4;
                 if (heat <= maxT && heat > itemheat) {
                     itemheat = heat;
                     item = itemHandler.getStackInSlot(i);
@@ -150,7 +155,7 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
                 if (leftover > 0) {
                     ItemEntity ei = new ItemEntity(level, worldPosition.getX() + DragonAPI.rand.nextFloat(), worldPosition.getY() + DragonAPI.rand.nextFloat(), worldPosition.getZ() + DragonAPI.rand.nextFloat(), new ItemStack(Items.LAVA_BUCKET, leftover));
                     ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
-                    if (!level.isClientSide)
+                    if (!level.isClientSide())
                         level.addFreshEntity(ei);
                 }
             }
@@ -160,7 +165,7 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
     }
 
     private void transferHeat(Level world, BlockPos pos) {
-        if (!world.isClientSide)
+        if (!world.isClientSide())
             ReikaWorldHelper.temperatureEnvironment(world, worldPosition.below(), temperature);
         MachineRegistry id = MachineRegistry.getMachine(world, pos);
         BlockEntity te = world.getBlockEntity(pos);
@@ -189,8 +194,8 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        temperature = tag.getInt("temperature");
-        setTemperature = tag.getInt("stemp");
+        temperature = tag.getIntOr("temperature", 0);
+        setTemperature = tag.getIntOr("stemp", 0);
     }
 
     @Override
@@ -230,11 +235,6 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
     @Override
     public Block getBlockEntityBlockID() {
         return null;
-    }
-
-    @Override
-    public void updateEntity(Level level, BlockPos blockPos) {
-
     }
 
     @Override

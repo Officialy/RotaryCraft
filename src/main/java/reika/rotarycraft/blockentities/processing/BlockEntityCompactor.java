@@ -125,9 +125,9 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        compactorCookTime = NBT.getShort("CookTime");
-//        temperature = NBT.getInt("temperature");
-//        pressure = NBT.getInt("pressure");
+//        compactorCookTime = NBT.getShortOr("CookTime", (short)0);
+//        temperature = NBT.getIntOr("temperature", 0);
+//        pressure = NBT.getIntOr("pressure", 0);
 //    }
 //
 //    /**
@@ -300,7 +300,7 @@
 //            tempTick--;
 //        tickcount++;
 //        //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d", this.power, this.omega, this.torque));
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            int n = this.getNumberConsecutiveOperations();
 //            for (int i = 0; i < n; i++)
 //                flag1 |= this.doOperation(n > 1);

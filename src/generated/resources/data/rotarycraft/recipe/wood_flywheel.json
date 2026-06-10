@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "M": "rotarycraft:mount",
+    "W": "rotarycraft:wood_flywheel_core"
+  },
+  "pattern": [
+    "W",
+    "M"
+  ],
+  "result": {
+    "id": "rotarycraft:wood_flywheel"
+  }
+}

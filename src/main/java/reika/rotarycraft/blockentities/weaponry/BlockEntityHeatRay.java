@@ -26,8 +26,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.common.NeoForge;
-import net.neoforged.common.extensions.IForgeBlockEntity;
+import net.neoforged.neoforge.common.NeoForge;
+// 1.21.5: net.neoforged.common.extensions.IForgeBlockEntity no longer exists; usages stubbed.
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.dragonapi.interfaces.block.SemiTransparent;
@@ -119,7 +119,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
         addBlockEffect(Blocks.GRAVEL, new BlockChangeLaserEffect(Blocks.COBBLESTONE));
         addBlockEffect(Blocks.MOSSY_COBBLESTONE, new BlockChangeLaserEffect(Blocks.COBBLESTONE));
 
-        addBlockEffect(Blocks.GRASS, new BlockChangeLaserEffect(Blocks.DIRT));
+        addBlockEffect(Blocks.GRASS_BLOCK, new BlockChangeLaserEffect(Blocks.DIRT));
         addBlockEffect(Blocks.MYCELIUM, new BlockChangeLaserEffect(Blocks.DIRT));
 
         addBlockEffect(Blocks.DIRT, sandifyEffect);
@@ -132,7 +132,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
             public boolean doEffect(Level world, BlockPos pos, long power, int range, int tickcount, BlockEntityHeatRay te) {
                 world.setBlock(pos, Blocks.AIR.defaultBlockState(), 1);
                 PrimedTnt var6 = new PrimedTnt(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, null);
-                if (!world.isClientSide)
+                if (!world.isClientSide())
                     world.addFreshEntity(var6);
 //                world.playSound(var6, "DragonAPI.rand.fuse", 1.0F, 1.0F);
                 world.addParticle(ParticleTypes.LAVA, pos.getX() + DragonAPI.rand.nextFloat(), pos.getY() + DragonAPI.rand.nextFloat(), pos.getZ() + DragonAPI.rand.nextFloat(), 0, 0, 0);
@@ -148,7 +148,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
         addBlockEffect(Blocks.NETHERRACK, new LaserEffect() {
             @Override
             public boolean doEffect(Level world, BlockPos pos, long power, int range, int tickcount, BlockEntityHeatRay te) {
-                if (!world.isClientSide) {
+                if (!world.isClientSide()) {
                     world.explode(null, pos.getX(), pos.getY(), pos.getZ(), 5F, true, Level.ExplosionInteraction.BLOCK);
                     NeoForge.EVENT_BUS.post(new HeatRayNetherDetonationEvent(world, pos));
                     if (world.dimension() == Level.NETHER && range >= 500) {
@@ -184,7 +184,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
         power = (long) omega * (long) torque;
 //        this.getIOSides(world, pos);
         this.getPower(false);
-        //if ((world.getDayTime()&2) == 2) //halves load
+        //if ((world.getOverworldClockTime()&2) == 2) //halves load
         this.makeBeam(world, pos);
     }
 
@@ -219,7 +219,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
                 if (this.affectBlock(world, new BlockPos(dx, dy, dz), step, id.getBlock(), maxdist)) {
                     blocked = true;
                 }
-                if (id instanceof SemiTransparent st) {
+                if (id.getBlock() instanceof SemiTransparent st) {
                     if (st.isOpaque())
                         blocked = true;
                 } //else if (todo id.isOpaqueCube())
@@ -229,11 +229,11 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
             List<Entity> inzone = level.getEntitiesOfClass(Entity.class, zone);
             for (Entity caught : inzone) {
                 if (!(caught instanceof ItemEntity)) //Do not burn drops
-                    caught.setSecondsOnFire(this.getBurnTime());    // 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
+                    caught.igniteForSeconds(this.getBurnTime());    // 1 Hearts worth of fire at min power, +1 heart for every 65kW extra
                 if (caught instanceof PrimedTnt)
-                    world.addParticle(ParticleTypes.LAVA, caught.getY() + DragonAPI.rand.nextFloat(), caught.getY() + DragonAPI.rand.nextFloat(), caught.getZ() + DragonAPI.rand.nextFloat(), 0, 0, 0);
+                    world.addParticle(ParticleTypes.LAVA, caught.getX() + DragonAPI.rand.nextFloat(), caught.getY() + DragonAPI.rand.nextFloat(), caught.getZ() + DragonAPI.rand.nextFloat(), 0, 0, 0);
                 if (caught instanceof Laserable) {
-                    ((Laserable) caught).whenInBeam(world, new BlockPos(Mth.floor(caught.getY()), Mth.floor(caught.getY()), Mth.floor(caught.getZ())), power, step);
+                    ((Laserable) caught).whenInBeam(world, new BlockPos(Mth.floor(caught.getX()), Mth.floor(caught.getY()), Mth.floor(caught.getZ())), power, step);
                 }
             }
         }
@@ -251,80 +251,35 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
     }
 
     private AABB getBurnZone(int step) {
-        int minx = 0;
-        int miny = 0;
-        int minz = 0;
-        int maxx = 0;
-        int maxy = 0;
-        int maxz = 0;
-
-//        switch (meta) {
-//            case 0:
-//                minx = xCoord - step;
-//                maxx = xCoord - 1;
-//                miny = yCoord;
-//                maxy = yCoord;
-//                minz = zCoord;
-//                maxz = zCoord;
-//                break;
-//            case 1:
-//                minx = xCoord + 1;
-//                maxx = xCoord + step;
-//                miny = yCoord;
-//                maxy = yCoord + 1;
-//                minz = zCoord;
-//                maxz = zCoord + 1;
-//                break;
-//            case 2:
-//                maxz = zCoord + step;
-//                minz = zCoord + 1;
-//                miny = yCoord;
-//                maxy = yCoord + 1;
-//                minx = xCoord;
-//                maxx = xCoord + 1;
-//                break;
-//            case 3:
-//                maxz = zCoord - 1;
-//                minz = zCoord - step;
-//                miny = yCoord;
-//                maxy = yCoord + 1;
-//                minx = xCoord;
-//                maxx = xCoord + 1;
-//                break;
-//            case 4:
-//                miny = yCoord;
-//                maxz = zCoord + 1;
-//                miny = yCoord + 1;
-//                maxy = yCoord + step;
-//                minx = xCoord;
-//                maxx = xCoord + 1;
-//                break;
-//            case 5:
-//                minz = zCoord;
-//                maxz = zCoord + 1;
-//                miny = yCoord - 1;
-//                maxy = yCoord - step - 1;
-//                minx = xCoord;
-//                maxx = xCoord + 1;
-//                break;
-//        }
-		/*ReikaWorldHelper.legacySetBlockWithNotify(this.level, minx, miny, minz, 20);
-    	ReikaWorldHelper.legacySetBlockWithNotify(this.level, minx, maxy, minz, 20);
-    	ReikaWorldHelper.legacySetBlockWithNotify(this.level, maxx, maxy, maxz, 20);
-    	ReikaWorldHelper.legacySetBlockWithNotify(this.level, maxx, miny, maxz, 20);*/
-        return new AABB(minx, miny, minz, maxx, maxy, maxz);//.expand(0.25D, 0.25D, 0.25D);
+        int x = worldPosition.getX();
+        int y = worldPosition.getY();
+        int z = worldPosition.getZ();
+        int sx = facing.getStepX();
+        int sy = facing.getStepY();
+        int sz = facing.getStepZ();
+        int ex = x + sx * step;
+        int ey = y + sy * step;
+        int ez = z + sz * step;
+        int minx = Math.min(x + (sx > 0 ? 1 : 0), ex);
+        int miny = Math.min(y + (sy > 0 ? 1 : 0), ey);
+        int minz = Math.min(z + (sz > 0 ? 1 : 0), ez);
+        int maxx = Math.max(x + (sx < 0 ? 0 : 1), ex + (sx != 0 ? 0 : 1));
+        int maxy = Math.max(y + (sy < 0 ? 0 : 1), ey + (sy != 0 ? 0 : 1));
+        int maxz = Math.max(z + (sz < 0 ? 0 : 1), ez + (sz != 0 ? 0 : 1));
+        return new AABB(minx, miny, minz, maxx, maxy, maxz);
     }
 
     private boolean affectBlock(Level world, BlockPos pos, int step, Block id, int maxdist) {
         if (id == Blocks.AIR)
             return false;
-        if (id instanceof IForgeBlockEntity) {
-            BlockEntity te = world.getBlockEntity(pos);
-            if (te instanceof Laserable) {
-                ((Laserable) te).whenInBeam(world, pos, power, step);
-                if (((Laserable) te).blockBeam(world, pos, power))
-                    return true;
-            }
+        // 1.21.5: IForgeBlockEntity gate is gone (all BlockEntities use the unified API now),
+        // so the legacy `if (block.hasBlockEntity())` short-circuit isn't needed — just check
+        // whether the tile at this position is a Laserable.
+        BlockEntity te = world.getBlockEntity(pos);
+        if (te instanceof Laserable laserable) {
+            laserable.whenInBeam(world, pos, power, step);
+            if (laserable.blockBeam(world, pos, power))
+                return true;
         }
         if (id instanceof Laserable) {
             ((Laserable) id).whenInBeam(world, pos, power, step);

@@ -214,7 +214,7 @@ public enum MaterialRegistry {
     public ItemStack getShaftItem() {
         //return MachineRegistry.SHAFT.getCraftedMetadataProduct(this.INDEX());
         ItemStack is = new ItemStack(MachineRegistry.SHAFT.getBlock().getBlock());
-        is.getOrCreateTag().putString("material", this.name());
+        is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putString("material", this.name());
         return is;
     }*/
 
@@ -224,8 +224,11 @@ public enum MaterialRegistry {
             case STONE:
             case STEEL:
                 return 1 - (0.11D * this.ordinal());
-            //case TUNGSTEN:
-            //    return 0.70;
+            case TUNGSTEN:
+                // 26.1 fix: legacy port left this commented out, defaulting to 1.0 which made
+                // tungsten weaker than steel at high omegas (steel's exponent is 0.78). Restore
+                // the proper 0.70 so tungsten can survive jet-engine output as designed.
+                return 0.70;
             case DIAMOND:
                 return 0.67;
             default:

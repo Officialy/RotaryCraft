@@ -18,7 +18,7 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.world.World;
-//import net.neoforged.common.util.Direction;
+//import net.neoforged.neoforge.common.util.Direction;
 //
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -180,7 +180,7 @@
 //	@Override
 //	protected void readSyncTag(CompoundTag NBT) {
 //		super.readSyncTag(NBT);
-//		pressure = NBT.getInt("pressure");
+//		pressure = NBT.getIntOr("pressure", 0);
 //	}
 //
 //	@Override

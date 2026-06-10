@@ -127,7 +127,7 @@ public class BlockEntityMultiClutch extends BlockEntity1DTransmitter implements 
 
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
-        if (world.isClientSide)
+        if (world.isClientSide())
             return;
         redLevel = world.getBestNeighborSignal(pos);
         this.getIOSides(world, pos);
@@ -193,7 +193,7 @@ public class BlockEntityMultiClutch extends BlockEntity1DTransmitter implements 
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
 
-        control = tag.getIntArray("set");
+        control = tag.getIntArray("set").orElse(new int[0]);
     }
 
     @Override

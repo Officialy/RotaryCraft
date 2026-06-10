@@ -31,7 +31,8 @@ public class BlockBlastGlass extends Block {
     private final ArrayList<Integer> allDirs = new ArrayList<>();
 
     public BlockBlastGlass() {
-        super(Properties.copy(Blocks.GLASS).strength(10, 6000F));
+        // 1.21.5: Properties.copy → Properties.ofFullCopy
+        super(Properties.ofFullCopy(Blocks.GLASS).strength(10, 6000F));
         //this.setCreativeTab(RotaryCraft.ROTARY);
         //this.setHarvestLevel("pickaxe", 3);
         //this.blockIndexInTexture = 74;
@@ -81,12 +82,11 @@ public class BlockBlastGlass extends Block {
      */
     @Override
     public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-        ItemStack item = player.getInventory().getSelected();
-        if (item == null)
+        // 1.21.5: Inventory.getSelected → getSelectedItem; Item.canAttackBlock removed.
+        ItemStack item = player.getInventory().getSelectedItem();
+        if (item == null || item.isEmpty())
             return false;
-        if (item.getItem() == Items.DIAMOND_PICKAXE || item.getItem() == RotaryItems.BEDROCK_ALLOY_PICK.get())
-            return true;
-        return item.getItem().canAttackBlock(Blocks.OBSIDIAN.defaultBlockState(), player.level(), pos, player);
+        return item.getItem() == Items.DIAMOND_PICKAXE || item.getItem() == RotaryItems.BEDROCK_ALLOY_PICK.get();
     }
 
     /**

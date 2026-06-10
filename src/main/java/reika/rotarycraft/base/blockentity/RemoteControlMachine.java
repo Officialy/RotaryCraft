@@ -49,7 +49,7 @@ public abstract class RemoteControlMachine extends BlockEntitySpringPowered {
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        colors = NBT.getIntArray("color");
+        colors = NBT.getIntArray("color").orElse(new int[0]);
     }
 
     @Override

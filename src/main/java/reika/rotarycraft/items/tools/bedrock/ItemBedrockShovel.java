@@ -9,132 +9,153 @@
  ******************************************************************************/
 package reika.rotarycraft.items.tools.bedrock;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraft.world.level.material.MapColor;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import reika.dragonapi.instantiable.data.collections.ChancedOutputList;
 import reika.dragonapi.instantiable.data.maps.BlockMap;
-import reika.dragonapi.libraries.ReikaPlayerAPI;
-import reika.dragonapi.libraries.registry.ReikaItemHelper;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.registry.ConfigRegistry;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
-
+/**
+ * 26.1 bedrock shovel.
+ * <p>
+ * Functional behaviour:
+ * <ul>
+ *   <li>Massive destroy-speed (24x) on grass / dirt / sand-mapped blocks.</li>
+ *   <li>Extra random drops per source block — the same per-block chance table the 1.7.10
+ *       original carried (grass→seeds/clay/mycelium, dirt→glowstone/diamond rolls, sand→gunpowder,
+ *       clay→bone/soul-sand/gold-nugget, soul-sand→blaze powder/nether wart/quartz).
+ *       Drops are added via a {@link BlockDropsEvent} listener — the 1.7.10 hook
+ *       ({@code onBlockStartBreak} / {@code Item#breakBlock}) was removed in 26.1.</li>
+ * </ul>
+ */
+@EventBusSubscriber(modid = RotaryCraft.MODID)
 public class ItemBedrockShovel extends ShovelItem {
 
-    private static final BlockMap<ChancedOutputList> extraDrops = new BlockMap();
+    /**
+     * Drop registrations queued at class-init time. We can't build {@link ItemStack}s during the
+     * static initializer in 26.1 — Item components aren't bound until later in mod loading and
+     * {@code new ItemStack(item)} dereferences {@code Holder.Reference#components} which throws
+     * "Components not bound yet". So we record the raw (source, extra, chance) tuples and
+     * materialise the actual {@link ChancedOutputList} table lazily on first event dispatch.
+     */
+    private record PendingDrop(Block source, ItemLike extra, float chance) {}
+
+    private static final List<PendingDrop> pendingDrops = new ArrayList<>();
+    private static volatile BlockMap<ChancedOutputList> extraDrops; // built lazily
 
     static {
-        addDrop(Blocks.GRASS, Items.WHEAT_SEEDS.getDefaultInstance(), 10);
-        addDrop(Blocks.GRASS, Items.CLAY_BALL.getDefaultInstance(), 5);
-        addDrop(Blocks.GRASS, Blocks.MYCELIUM, 0.5F);
-        addDrop(Blocks.GRASS, Items.PUMPKIN_SEEDS.getDefaultInstance(), 5);
-        addDrop(Blocks.GRASS, Items.MELON_SEEDS.getDefaultInstance(), 5);
+        queue(Blocks.GRASS_BLOCK, Items.WHEAT_SEEDS, 10);
+        queue(Blocks.GRASS_BLOCK, Items.CLAY_BALL, 5);
+        queue(Blocks.GRASS_BLOCK, Blocks.MYCELIUM, 0.5F);
+        queue(Blocks.GRASS_BLOCK, Items.PUMPKIN_SEEDS, 5);
+        queue(Blocks.GRASS_BLOCK, Items.MELON_SEEDS, 5);
 
-        addDrop(Blocks.DIRT, Items.WHEAT_SEEDS.getDefaultInstance(), 10);
-        addDrop(Blocks.DIRT, Items.GLOWSTONE_DUST.getDefaultInstance(), 2);
-        addDrop(Blocks.DIRT, Items.NETHER_WART.getDefaultInstance(), 0.5F);
-        addDrop(Blocks.DIRT, Items.EMERALD.getDefaultInstance(), 0.05F);
-        addDrop(Blocks.DIRT, Items.DIAMOND.getDefaultInstance(), 0.05F);
+        queue(Blocks.DIRT, Items.WHEAT_SEEDS, 10);
+        queue(Blocks.DIRT, Items.GLOWSTONE_DUST, 2);
+        queue(Blocks.DIRT, Items.NETHER_WART, 0.5F);
+        queue(Blocks.DIRT, Items.EMERALD, 0.05F);
+        queue(Blocks.DIRT, Items.DIAMOND, 0.05F);
 
-        addDrop(Blocks.SAND, Items.GUNPOWDER.getDefaultInstance(), 2);
+        queue(Blocks.SAND, Items.GUNPOWDER, 2);
 
-        addDrop(Blocks.CLAY, Items.BONE.getDefaultInstance(), 5);
-        addDrop(Blocks.CLAY, Blocks.SOUL_SAND, 2);
-        addDrop(Blocks.CLAY, Items.GOLD_NUGGET.getDefaultInstance(), 4);
+        queue(Blocks.CLAY, Items.BONE, 5);
+        queue(Blocks.CLAY, Blocks.SOUL_SAND, 2);
+        queue(Blocks.CLAY, Items.GOLD_NUGGET, 4);
 
-        addDrop(Blocks.SOUL_SAND, Items.BLAZE_POWDER.getDefaultInstance(), 4);
-        addDrop(Blocks.SOUL_SAND, Items.NETHER_WART.getDefaultInstance(), 5);
-        addDrop(Blocks.SOUL_SAND, Items.QUARTZ.getDefaultInstance(), 2);
-
-//        if (ModList.MAGICBEES.isLoaded()) {
-//            ItemStack is = ReikaItemHelper.lookupItem("magicbees:miscResources:3");
-//            if (is != null)
-//                addDrop(Blocks.SOUL_SAND, is, 1);
-//        }
+        queue(Blocks.SOUL_SAND, Items.BLAZE_POWDER, 4);
+        queue(Blocks.SOUL_SAND, Items.NETHER_WART, 5);
+        queue(Blocks.SOUL_SAND, Items.QUARTZ, 2);
     }
-
-    private int index;
 
     public ItemBedrockShovel() {
-        super(Tiers.GOLD, 4, -2.8F, new Item.Properties().durability(0).setNoRepair());
-        // this.blocksEffectiveAgainst = par4ArrayOfBlock;
-        //efficiencyOnProperMaterial = 20F;
-        // this.efficiencyOnProperMaterial = par3ToolMaterial.getEfficiencyOnProperMaterial();
+        super(ToolMaterial.NETHERITE, 4F, -2.8F, reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1));
     }
 
-    private static void addDrop(Block b, Block i, float chance) {
-        addDrop(b, new ItemStack(i), chance);
+    private static void queue(Block source, ItemLike extra, float chance) {
+        pendingDrops.add(new PendingDrop(source, extra, chance));
     }
 
-    public static void addDrop(Block b, ItemStack is, float chance) {
-        ChancedOutputList co = extraDrops.get(b);
+    /**
+     * Public addDrop hook for external callers — same legacy signature, except it queues into
+     * the same lazy buffer if the component map isn't built yet, otherwise inserts directly.
+     */
+    public static void addDrop(Block source, ItemStack extra, float chance) {
+        BlockMap<ChancedOutputList> table = extraDrops;
+        if (table == null) {
+            // Still in component-not-bound window; keep deferring. ItemLike is captured raw and
+            // a single-stack list is created lazily.
+            pendingDrops.add(new PendingDrop(source, extra.getItem(), chance));
+            return;
+        }
+        appendDrop(table, source, extra, chance);
+    }
+
+    private static void appendDrop(BlockMap<ChancedOutputList> table, Block source, ItemStack extra, float chance) {
+        ChancedOutputList co = table.get(source);
         if (co == null) {
             co = new ChancedOutputList(false);
-            extraDrops.put(b, co);
+            table.put(source, co);
         }
-        co.addItem(is, chance);
+        co.addItem(extra, chance);
     }
 
-//    public int getHarvestLevel(ItemStack stack, String toolClass) {
-//        return toolClass == null || toolClass.toLowerCase(Locale.ENGLISH).contains("shovel") || toolClass.toLowerCase(Locale.ENGLISH).contains("spade") ? Integer.MAX_VALUE : super.getHarvestLevel(stack, toolClass);
-//    }
-
-    @Override
-    public boolean canAttackBlock(BlockState b, Level pLevel, BlockPos pPos, Player pPlayer) {
-        return b.getMapColor(pLevel, pPos) != MapColor.STONE && b.getMapColor(pLevel, pPos) != MapColor.METAL;
-    }
-
-    @Override
-    public int getEnchantmentValue() {
-        return Items.IRON_SHOVEL.getEnchantmentValue();//(Items.IRON_SHOVEL.getDefaultInstance());
-    }
-
-    @Override
-    public boolean onBlockStartBreak(ItemStack is, BlockPos pos, Player ep) {
-        if (ConfigRegistry.FAKEBEDROCK.getState() || !ReikaPlayerAPI.isFake(ep)) {
-            ChancedOutputList co = extraDrops.get(ep.level().getBlockState(pos).getBlock());
-            if (co != null) {
-                double mult = Math.sqrt(1 + EnchantmentHelper.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE, ep)); //ep was is??
-                Collection<ItemStack> c = co.calculate(mult);
-                for (ItemStack drop : c) {
-                    ReikaItemHelper.dropItem(ep.level(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
-                }
+    /** Materialises the {@link ChancedOutputList} table the first time it's needed. */
+    private static BlockMap<ChancedOutputList> ensureTable() {
+        BlockMap<ChancedOutputList> table = extraDrops;
+        if (table != null) return table;
+        synchronized (pendingDrops) {
+            table = extraDrops;
+            if (table != null) return table;
+            table = new BlockMap<>();
+            for (PendingDrop pd : pendingDrops) {
+                appendDrop(table, pd.source(), new ItemStack(pd.extra()), pd.chance());
             }
+            extraDrops = table;
+            return table;
         }
-        return false;
+    }
+
+    @SubscribeEvent
+    public static void onBlockDrops(BlockDropsEvent event) {
+        ItemStack tool = event.getTool();
+        if (!(tool.getItem() instanceof ItemBedrockShovel)) return;
+        ChancedOutputList table = ensureTable().get(event.getState().getBlock());
+        if (table == null) return;
+        var bonus = table.calculate();
+        if (bonus.isEmpty()) return;
+        var level = event.getLevel();
+        var pos = event.getPos();
+        for (ItemStack drop : bonus) {
+            event.getDrops().add(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop));
+        }
     }
 
     @Override
     public float getDestroySpeed(ItemStack i, BlockState b) {
-        if (b == null)
-            return 0;
-        if (b.getBlock().defaultMapColor() == MapColor.GRASS)
+        if (b == null) return 0;
+        var color = b.getBlock().defaultMapColor();
+        if (color == MapColor.GRASS || color == MapColor.DIRT || color == MapColor.SAND) {
             return 24F;
-        if (b.getBlock().defaultMapColor() == MapColor.DIRT)
-            return 24F;
-        if (b.getBlock().defaultMapColor() == MapColor.SAND)
-            return 24F;
-        //if (ModList.TINKERER.isLoaded() && b == TinkerBlockHandler.getInstance().gravelOreID)
-        //    return 36F;
-        //if (field_150914_c.contains(b))
-        //    return 24F;
+        }
         return 1F;
     }
 
     public boolean isAcceleratedOn(BlockState b) {
-        return /*field_150914_c.contains(b) || */b.getBlock().defaultMapColor() == MapColor.GRASS || b.getBlock().defaultMapColor() == MapColor.DIRT || b.getBlock().defaultMapColor() == MapColor.SAND;
+        var color = b.getBlock().defaultMapColor();
+        return color == MapColor.GRASS || color == MapColor.DIRT || color == MapColor.SAND;
     }
-
 }

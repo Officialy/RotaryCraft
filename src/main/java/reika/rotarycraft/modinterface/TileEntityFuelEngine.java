@@ -21,12 +21,12 @@
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.level.material.Fluids;
 //import net.neoforged.api.distmarker.Dist;
-//import net.neoforged.common.util.Direction;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidRegistry;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.fluids.FluidTankInfo;
-//import net.neoforged.fluids.IFluidHandler;
+//import net.neoforged.neoforge.common.util.Direction;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidRegistry;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.FluidTankInfo;
+//import net.neoforged.neoforge.fluids.IFluidHandler;
 //
 //import reika.dragonapi.asm.APIStripper.Strippable;
 //import reika.dragonapi.instantiable.HybridTank;
@@ -38,7 +38,7 @@
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 //import reika.dragonapi.libraries.registry.ReikaParticleHelper;
 //import reika.dragonapi.modinteract.AtmosphereHandler;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.rotarycraft.api.Power.PowerGenerator;
@@ -337,7 +337,7 @@
 //		watertank.load(NBT);
 //		lubetank.load(NBT);
 //
-//		temperature = NBT.getInt("temp");
+//		temperature = NBT.getIntOr("temp", 0);
 //	}
 //
 //	@Override

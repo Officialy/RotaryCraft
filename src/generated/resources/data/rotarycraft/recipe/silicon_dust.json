@@ -1,0 +1,19 @@
+{
+  "type": "rotarycraft:blast_furnace_shapeless",
+  "additives": [
+    "rotarycraft:aluminum_alloy_powder",
+    "minecraft:blaze_powder"
+  ],
+  "bonusChance": 80,
+  "bonusMax": 1,
+  "bonusMin": 1,
+  "experience": 0.0,
+  "ingredients": [
+    "minecraft:sand"
+  ],
+  "output": {
+    "id": "rotarycraft:silicon_dust"
+  },
+  "temperature": 700.0,
+  "timeMultiplier": 1.0
+}

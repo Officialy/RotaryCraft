@@ -13,7 +13,7 @@
 //import net.minecraft.client.gui.components.Button;
 //import net.minecraft.client.gui.components.ImageButton;
 //import net.minecraft.core.Direction;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 //import reika.rotarycraft.RotaryCraft;
 //import reika.rotarycraft.base.GuiNonPoweredMachine;
@@ -144,15 +144,15 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(PoseStack poseStack, par1, par2, par3);
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
+//        super.extractBackground(PoseStack poseStack, par1, par2, par3);
 //
 //        for (int idx = 0; idx < selectedAmounts.length; idx++)
 //            selectedAmounts[idx].drawTextBox();
 //    }
 //
 //    @Override
-//    protected ResourceLocation getGuiTexture() {
+//    protected Identifier getGuiTexture() {
 //        return "distribclutchgui";
 //    }
 //}

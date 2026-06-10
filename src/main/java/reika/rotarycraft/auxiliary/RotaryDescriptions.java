@@ -13,9 +13,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.common.NeoForge;
-import net.neoforged.fluids.FluidType;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.fml.loading.FMLEnvironment;
 import reika.dragonapi.instantiable.data.maps.PluralMap;
 import reika.dragonapi.instantiable.io.XMLInterface;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
@@ -81,7 +81,7 @@ public final class RotaryDescriptions {
     }
 
     private static String getParent(boolean locale) {
-        return locale && FMLLoader.getDist() == Dist.CLIENT ? getLocalizedParent() : "resources/";
+        return locale && FMLEnvironment.getDist() == Dist.CLIENT ? getLocalizedParent() : "resources/";
     }
 
     private static String getLocalizedParent() {
@@ -579,3 +579,5 @@ public final class RotaryDescriptions {
 
     }
 }
+
+

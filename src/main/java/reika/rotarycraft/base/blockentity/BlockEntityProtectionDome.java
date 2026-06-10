@@ -72,9 +72,9 @@ public abstract class BlockEntityProtectionDome extends BlockEntityPowerReceiver
         return range;
     }
 
-    @Override
+    // 1.21.5: BlockEntity.getRenderBoundingBox removed; INFINITE_EXTENT_AABB → AABB.INFINITE.
     public final AABB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
+        return AABB.INFINITE;
     }
 
     @Override
@@ -86,7 +86,7 @@ public abstract class BlockEntityProtectionDome extends BlockEntityPowerReceiver
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        setRange = tag.getInt("setRange");
+        setRange = tag.getIntOr("setRange", 0);
     }
 
     protected final void spawnParticles(Level world, BlockPos pos) {
@@ -97,7 +97,7 @@ public abstract class BlockEntityProtectionDome extends BlockEntityPowerReceiver
 
     protected final AABB getRangedBox() {
         int r = this.getRange();
-        return new AABB(worldPosition, new BlockPos(worldPosition.getX() + 1, worldPosition.getY() + 1, worldPosition.getZ() + 1)).expandTowards(r, r, r);
+        return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 1, worldPosition.getZ() + 1).inflate(r, r, r);
     }
 
     @Override

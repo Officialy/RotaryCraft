@@ -52,7 +52,7 @@
 //	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 //		super.drawGuiContainerForegroundLayer(par1, par2);
 //
-//		font.drawString(I18n.get("container.inventory"), xSize-58, (ySize - 97) + 4, 0xffffff);
+//		font.text(I18n.get("container.inventory"), xSize-58, (ySize - 97) + 4, 0xffffff);
 //		int j = (width - xSize) / 2;
 //		int k = (height - ySize) / 2;
 //

@@ -18,8 +18,8 @@
 //import net.minecraft.client.renderer.Tesselator;
 //
 //import net.neoforged.client.MinecraftForgeClient;
-//import net.neoforged.common.util.Direction;
-//import net.neoforged.fluids.Fluid;
+//import net.neoforged.neoforge.common.util.Direction;
+//import net.neoforged.neoforge.fluids.Fluid;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
@@ -103,13 +103,9 @@
 //        BlockEntityGroundHydrator tr = (BlockEntityGroundHydrator) tile;
 //        if (this.doRenderModel(tr)) {
 //            this.renderBlockEntityGroundHydratorAt(tr, par2, par4, par6, par8);
-//            RenderSystem.enableBlend();
-//            RenderSystem.defaultBlendFunc();
 //            this.renderCover(tr, par2, par4, par6);
 //        }
 //
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
 //        if (MinecraftForgeClient.getRenderPass() == 1) {
 //            this.renderLiquid(tr, par2, par4, par6);
 //            if (tr.getLevel() > 0)

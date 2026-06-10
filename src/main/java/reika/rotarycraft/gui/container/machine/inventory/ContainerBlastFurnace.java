@@ -12,10 +12,9 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.items.SlotItemHandler;
 import reika.dragonapi.base.CoreContainer;
 import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
 import reika.dragonapi.instantiable.gui.slot.SlotApprovedItems;
@@ -48,12 +47,12 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
         int slot = 0;
 
         // single input (slot 0 - center additive)
-        this.addSlot(new SlotItemHandler(ii, slot++, 26, 35));
+        this.addSlot(ii.slot(slot++, 26, 35));
 
-        // 3 × 3 grid (slots 1-9)
+        // 3 Ã— 3 grid (slots 1-9)
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                this.addSlot(new SlotItemHandler(ii, slot++, 62 + col * 18, 17 + row * 18));
+                this.addSlot(ii.slot(slot++, 62 + col * 18, 17 + row * 18));
             }
         }
 
@@ -62,7 +61,7 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
         this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 0, 148, 35));
 
         // Slot 11: lower additive (still internal inventory)
-        this.addSlot(new SlotItemHandler(ii, slot++, 26, 54));
+        this.addSlot(ii.slot(slot++, 26, 54));
 
         // Slot 12: upper output - use outputInv slot 1
         this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 1, 148, 17));
@@ -71,7 +70,7 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
         this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 2, 148, 53));
 
         // Slot 14: upper additive (still internal inventory)
-        this.addSlot(new SlotItemHandler(ii, slot++, 26, 16));
+        this.addSlot(ii.slot(slot++, 26, 16));
 
         // recipe pattern (accepts only blank Craft Pattern item) - slot 15
         this.addSlot(new SlotApprovedItems(te, BlockEntityBlastFurnace.PATTERN_SLOT, 123, 53)
@@ -79,6 +78,11 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
 
         // player inventory & hot-bar
         this.addPlayerInventory(playerInv);
+
+        // 26.1: sync progress + temperature to the client so the screen can draw the cook
+        // arrow and temperature text. Without this, getTemperature()/getCookScaled() always
+        // return 0 on the client and the UI looks empty even when the furnace is smelting.
+        this.addDataSlots(blast.getContainerData());
     }
 
     /* --------------------------------------------------------------------- */
@@ -92,18 +96,18 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
      * behaviour is preserved.
      */
     @Override
-    public void clicked(int slotId, int button, ClickType clickType, Player player) {
+    public void clicked(int slotId, int button, ContainerInput ContainerInput, Player player) {
         if (slotId >= 0 && slotId < blast.getContainerSize()) {
             Slot slot = this.slots.get(slotId);
-            if (slot instanceof Slot && clickType == ClickType.CLONE && button == 2) { // middle-click
+            if (slot instanceof Slot && ContainerInput == ContainerInput.CLONE && button == 2) { // middle-click
                 //blast.lockedSlots[slotId] = !blast.lockedSlots[slotId];
                 blast.syncAllData(false);
-                return; // cancel further handling – avoids creative-mode dupes
+                return; // cancel further handling â€“ avoids creative-mode dupes
             }
         }
-        super.clicked(slotId, button, clickType, player);
+        super.clicked(slotId, button, ContainerInput, player);
 
-        /* Achievement hook – kept for parity, commented until achievements re-added
+        /* Achievement hook â€“ kept for parity, commented until achievements re-added
         if (slotId == 10 || slotId == 12 || slotId == 13) {
             ItemStack stack = this.slots.get(slotId).getItem();
             if (ReikaItemHelper.matchStacks(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), stack)) {
@@ -132,10 +136,10 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
 
             int machineSlots = blast.getContainerSize();
 
-            if (index < machineSlots) { // from machine → player
+            if (index < machineSlots) { // from machine â†’ player
                 if (!this.moveItemStackTo(current, machineSlots, this.slots.size(), true))
                     return ItemStack.EMPTY;
-            } else {                    // from player → machine
+            } else {                    // from player â†’ machine
                 if (!this.moveItemStackTo(current, 0, machineSlots, false))
                     return ItemStack.EMPTY;
             }

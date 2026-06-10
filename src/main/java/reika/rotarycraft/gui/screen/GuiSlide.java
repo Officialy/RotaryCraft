@@ -29,8 +29,8 @@
 //
 //    public GuiSlide(SlideContainer, Inventory inventory, TextComponent title, ItemStack in) {
 //        super();
-//        if (in.getTag() != null)
-//            file = in.getTag().getString("file");
+//        if (in.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null)
+//            file = in.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getStringOr("file", "");
 //    }
 //
 //    @Override

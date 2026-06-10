@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:circuit_board",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "T": "minecraft:tnt",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "STS",
+    "TCs",
+    "STS"
+  ],
+  "result": {
+    "id": "rotarycraft:self_destruct"
+  }
+}

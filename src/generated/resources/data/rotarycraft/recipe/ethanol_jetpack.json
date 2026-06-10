@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "C": "rotarycraft:combustor",
+    "R": "rotarycraft:reservoir",
+    "c": "rotarycraft:compressor",
+    "d": "rotarycraft:diffuser"
+  },
+  "pattern": [
+    "CRC",
+    "cBc",
+    "d d"
+  ],
+  "result": {
+    "id": "rotarycraft:ethanol_jetpack"
+  }
+}

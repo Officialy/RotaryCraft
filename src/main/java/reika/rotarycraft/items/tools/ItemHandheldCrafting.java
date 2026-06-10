@@ -12,7 +12,7 @@ package reika.rotarycraft.items.tools;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -28,13 +28,13 @@ public class ItemHandheldCrafting extends ItemRotaryTool implements MenuProvider
     public ItemStack[] items = new ItemStack[9];
 
     public ItemHandheldCrafting() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player ep, InteractionHand hand) {
+    public InteractionResult use(Level world, Player ep, InteractionHand hand) {
         if (!world.isClientSide()) ep.openMenu(this);
-        return InteractionResultHolder.pass(this.getDefaultInstance());
+        return InteractionResult.PASS;
     }
 
     @Override

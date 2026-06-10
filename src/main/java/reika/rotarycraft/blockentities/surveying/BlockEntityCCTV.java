@@ -20,7 +20,7 @@
 //import net.minecraft.world.level.block.entity.BlockEntityType;
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.neoforged.api.distmarker.Dist;
-//import net.neoforged.fml.loading.FMLLoader;
+//import net.neoforged.fml.loading.FMLEnvironment;
 //
 //import reika.dragonapi.libraries.mathsci.ReikaPhysicsHelper;
 //import reika.rotarycraft.base.blockentity.RemoteControlMachine;
@@ -129,7 +129,7 @@
 //    }
 //
 //    private void setPlayerCam() {
-//        if (FMLLoader.getDist() != Dist.CLIENT)
+//        if (FMLEnvironment.getDist() != Dist.CLIENT)
 //            return;
 //        Minecraft mc = Minecraft.getInstance();
 //        LivingEntity e = mc.renderviewentity; //renderviewentity
@@ -158,7 +158,7 @@
 //     * Actually moves the ingame camera to the preset coords
 //     */
 //    private void alignCameras(boolean toPlayer) {
-//        if (FMLLoader.getDist() != Dist.CLIENT)
+//        if (FMLEnvironment.getDist() != Dist.CLIENT)
 //            return;
 //        Minecraft mc = Minecraft.getInstance();
 //        LivingEntity e = mc.renderViewEntity;
@@ -185,9 +185,9 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        theta = NBT.getFloat("thetad");
-//        owner = NBT.getString("sowner");
-//        cameraIsMoved = NBT.getBoolean("moved");
+//        theta = NBT.getFloatOr("thetad", 0);
+//        owner = NBT.getStringOr("sowner", "");
+//        cameraIsMoved = NBT.getBooleanOr("moved", false);
 //    }
 //
 //    @Override
@@ -333,3 +333,5 @@
 //        return false;
 //    }
 //}
+
+

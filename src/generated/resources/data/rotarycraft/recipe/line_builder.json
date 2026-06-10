@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "rotarycraft:hsla_steel_plate",
+    "b": "rotarycraft:bedrock_alloy_ingot",
+    "g": "rotarycraft:hsla_steel_gear_2x",
+    "p": "minecraft:piston",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sbs",
+    "sps",
+    "PgP"
+  ],
+  "result": {
+    "id": "rotarycraft:line_builder"
+  }
+}

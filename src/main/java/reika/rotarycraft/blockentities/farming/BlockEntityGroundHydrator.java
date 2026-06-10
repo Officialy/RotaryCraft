@@ -19,8 +19,8 @@
 //import net.minecraft.world.level.block.entity.BlockEntityType;
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.phys.AABB;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.ModList;
@@ -83,7 +83,7 @@
 //
 //    @Override
 //    public void updateEntity(Level world, BlockPos pos) {
-//        if (!world.isClientSide && tank.getLevel() >= FLUID_PER_BLOCK && DragonAPI.rand.nextInt(this.getTickRate(world)) == 0) {
+//        if (!world.isClientSide() && tank.getLevel() >= FLUID_PER_BLOCK && DragonAPI.rand.nextInt(this.getTickRate(world)) == 0) {
 //            BlockPos c = coordinateRand.getRandomEntry().offset(pos);
 //            Block b = world.getBlockState(c).getBlock();
 //            boolean flag = false;

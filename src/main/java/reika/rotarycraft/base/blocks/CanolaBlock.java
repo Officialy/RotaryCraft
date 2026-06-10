@@ -10,10 +10,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.common.IPlantable;
 import reika.rotarycraft.registry.RotaryItems;
 
-public class CanolaBlock extends CropBlock implements IPlantable {
+// 1.21.5: net.neoforged.common.IPlantable was removed — placement now uses the
+// SweetBerryBush / CropBlock built-in farmland checks instead.
+public class CanolaBlock extends CropBlock {
 
     public static final int MAX_AGE = 9;
     public static final IntegerProperty AGE_9 = IntegerProperty.create("age", 0, 9);

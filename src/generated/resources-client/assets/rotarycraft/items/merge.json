@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/merge",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "shaft_merge"
+    }
+  }
+}

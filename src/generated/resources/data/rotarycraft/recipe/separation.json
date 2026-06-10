@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass",
+    "O": "minecraft:lapis_block",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sGs",
+    "OGO",
+    "sGs"
+  ],
+  "result": {
+    "count": 4,
+    "id": "rotarycraft:separation"
+  }
+}

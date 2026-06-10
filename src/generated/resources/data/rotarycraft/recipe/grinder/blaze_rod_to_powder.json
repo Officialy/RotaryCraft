@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:grinder",
+  "input": "minecraft:blaze_rod",
+  "output": {
+    "count": 3,
+    "id": "minecraft:blaze_powder"
+  }
+}

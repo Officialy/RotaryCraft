@@ -122,7 +122,7 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
 //        if (scale.power < scale.MINPOWER) {
 //            return;
 //        }

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/floodlight",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/floodlight",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/floodlight"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/floodlight",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/floodlight",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/floodlight",
+      "y": 270
+    }
+  }
+}

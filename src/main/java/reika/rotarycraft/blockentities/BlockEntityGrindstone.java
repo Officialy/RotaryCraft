@@ -15,15 +15,15 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.SwordItem;
+// 1.21.5: SwordItem removed; swords are now plain Items via Properties.sword.
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.RotaryAux;
@@ -71,7 +71,7 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
             return;
         tickcount = 0;
 
-        if (world.isClientSide)
+        if (world.isClientSide())
             return;
 
         int n = this.getNumberConsecutiveOperations();
@@ -91,8 +91,9 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     }
 
     private void createUsesTag() {
-        if (!itemHandler.getStackInSlot(0).getOrCreateTag().contains(NBT_TAG))
-            itemHandler.getStackInSlot(0).getOrCreateTag().putInt(NBT_TAG, itemHandler.getStackInSlot(0).getMaxDamage() * 2);
+        ItemStack is = itemHandler.getStackInSlot(0);
+        if (!reika.dragonapi.libraries.registry.ReikaItemHelper.getOrCreateStackTag(is).contains(NBT_TAG))
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt(NBT_TAG, is.getMaxDamage() * 2));
     }
 
     public void getIOSides(Level world, BlockPos pos, int metadata) {
@@ -109,16 +110,16 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     }
 
     private void repair() {
-        int dmg = itemHandler.getStackInSlot(0).getDamageValue();
+        ItemStack stack = itemHandler.getStackInSlot(0);
+        int dmg = stack.getDamageValue();
         int newdmg = dmg - 1;
-        itemHandler.getStackInSlot(0).setDamageValue(newdmg);
-        int repair = itemHandler.getStackInSlot(0).getTag().getInt(NBT_TAG);
-        itemHandler.getStackInSlot(0).getTag().putInt(NBT_TAG, repair - 1);
-        //ReikaJavaLibrary.pConsole(itemHandler.getStackInSlot(0).getTag());
+        stack.setDamageValue(newdmg);
+        int repair = reika.dragonapi.libraries.registry.ReikaItemHelper.getOrCreateStackTag(stack).getIntOr(NBT_TAG, 0);
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(stack, __T__ -> __T__.putInt(NBT_TAG, repair - 1));
     }
 
     public int getMinimumDamageForItem(ItemStack is) {
-        return is.getTag() != null && is.getTag().contains(NBT_TAG) ? is.getMaxDamage() - Mth.ceil(is.getTag().getInt(NBT_TAG) / 2F) : 0;
+        return reika.dragonapi.libraries.registry.ReikaItemHelper.hasStackTag(is) && reika.dragonapi.libraries.registry.ReikaItemHelper.getStackTag(is).contains(NBT_TAG) ? is.getMaxDamage() - Mth.ceil(reika.dragonapi.libraries.registry.ReikaItemHelper.getStackTag(is).getIntOr(NBT_TAG, 0) / 2F) : 0;
     }
 
     public boolean hasValidItem() {
@@ -146,11 +147,13 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack is) {
-        return is.isDamageableItem() && (is.getItem() instanceof ShearsItem || is.getItem() instanceof SwordItem);// || is.getItem() instanceof ItemTool);
+        // 1.21.5: SwordItem was collapsed into plain Item + Item.Properties.sword(...). The
+        // replacement detection is the swords tag (matches every modded sword that opts in too).
+        return is.isDamageableItem() && (is.getItem() instanceof ShearsItem || is.is(net.minecraft.tags.ItemTags.SWORDS));
     }
 
     @Override

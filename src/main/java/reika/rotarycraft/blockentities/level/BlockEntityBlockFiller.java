@@ -12,11 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.items.IItemHandler;
-import net.neoforged.items.ItemStackHandler;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 
 
 import reika.dragonapi.base.OneSlotMachine;
@@ -32,30 +28,15 @@ import reika.rotarycraft.registry.RotaryBlocks;
 public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements OneSlotMachine {
 
 
-    protected ItemStackHandler itemHandler = new ItemStackHandler(1) {
+    protected ManagedItemHandler itemHandler = new ManagedItemHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
-    private final LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public BlockEntityBlockFiller(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.FILLER.get(), pos, state);
-    }
-
-    @Override
-    
-    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
-        if (capability == ForgeCapabilities.ITEM_HANDLER)
-            return lazyItemHandler.cast();
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
     }
 
     @Override
@@ -85,7 +66,7 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
     }
 
     private BlockKey getBlock(ItemStack is) {
-        if (is == null)
+        if (is.isEmpty())
             return null;
       /*  if (ModList.BOTANIA.isLoaded() && is.getItem() instanceof IBlockProvider) {
             return this.getBlockFromBotania((IBlockProvider) is.getItem(), is);
@@ -96,9 +77,9 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
 
 /* todo   @ModDependent(ModList.BOTANIA)
     private BlockKey getBlockFromBotania(IBlockProvider item, ItemStack is) {
-        if (is.getTag() == null)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
             return null;
-        String n = is.getTag().getString("blockName");
+        String n = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getStringOr("blockName", "");
         Block b = Block.getBlockFromName(n);
         return b != null ? new BlockKey(b) : null;
     }*/
@@ -187,13 +168,18 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
 
         ListTag nbttaglist = new ListTag();
 
+        // 26.1: ItemStack.save(CompoundTag) removed; round-trip via ItemStack.CODEC + RegistryOps.
+        // Also fixed an old inverted-emptiness bug — the legacy loop only saved EMPTY slots.
+        var regAccSave = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
+        var opsSave = regAccSave.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
         for (int i = 0; i < itemHandler.getSlots(); i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
-                CompoundTag CompoundTag = new CompoundTag();
-                CompoundTag.putShort("Slot", (short) i);
-                itemHandler.getStackInSlot(i).save(CompoundTag);
-                nbttaglist.add(CompoundTag);
-                //ReikaJavaLibrary.pConsole(i+":"+itemHandler.getStackInSlot(i));
+            var stack = itemHandler.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                CompoundTag entry = new CompoundTag();
+                entry.putShort("Slot", (short) i);
+                net.minecraft.world.item.ItemStack.CODEC.encodeStart(opsSave, stack).result()
+                        .ifPresent(stackTag -> entry.put("Stack", stackTag));
+                nbttaglist.add(entry);
             }
         }
 
@@ -219,23 +205,27 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
     public void load(CompoundTag NBT) {
         super.load(NBT);
 
-        ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
-        itemHandler = new ItemStackHandler(1) {
+        ListTag nbttaglist = NBT.getListOrEmpty("Items");
+        itemHandler = new ManagedItemHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
             }
         };
+        // 26.1: ItemStack.of removed; round-trip via ItemStack.CODEC + RegistryOps.
+        var regAccLoad = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
+        var opsLoad = regAccLoad.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
         for (int i = 0; i < nbttaglist.size(); i++) {
-            CompoundTag CompoundTag = nbttaglist.getCompound(i);
-            short byte0 = CompoundTag.getShort("Slot");
-
-            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
-                itemHandler.setStackInSlot(byte0, ItemStack.of(CompoundTag));
-                //ReikaJavaLibrary.pConsole(byte0+":"+inv[byte0]);
+            CompoundTag entry = nbttaglist.getCompoundOrEmpty(i);
+            short slot = entry.getShortOr("Slot", (short) 0);
+            if (slot >= 0 && slot < itemHandler.getSlots()) {
+                var stackTag = entry.get("Stack");
+                if (stackTag != null) {
+                    var loaded = net.minecraft.world.item.ItemStack.CODEC.parse(opsLoad, stackTag).result().orElse(ItemStack.EMPTY);
+                    itemHandler.setStackInSlot(slot, loaded);
+                }
             } else {
-                RotaryCraft.LOGGER.error(this + " tried to load an inventory slot " + byte0 + " from NBT!");
-                //Thread.dumpStack();
+                RotaryCraft.LOGGER.error(this + " tried to load an inventory slot " + slot + " from NBT!");
             }
         }
     }

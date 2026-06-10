@@ -29,4 +29,7 @@ public class BlockVanDeGraff extends BlockBasicMachine {
             ((BlockEntityVanDeGraff) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

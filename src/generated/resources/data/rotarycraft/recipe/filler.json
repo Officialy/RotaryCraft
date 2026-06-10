@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "p": "minecraft:chest",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sss",
+    "sps",
+    "s s"
+  ],
+  "result": {
+    "id": "rotarycraft:filler"
+  }
+}

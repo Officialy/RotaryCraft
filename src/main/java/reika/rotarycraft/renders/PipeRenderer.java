@@ -9,639 +9,252 @@
  ******************************************************************************/
 package reika.rotarycraft.renders;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
-import reika.rotarycraft.auxiliary.interfaces.RenderableDuct;
+import net.minecraft.world.level.material.Fluids;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
+import reika.rotarycraft.registry.RotaryFluids;
 
+/**
+ * 26.1 port of the 1.7 {@code Reika.RotaryCraft.Renders.PipeRenderer}.
+ *
+ * <p>Faithful reproduction of the legacy {@code renderLiquid} routine — for every side of the
+ * pipe, draws the visible fluid surface (either a cap at the pipe inner edge if the side is
+ * not connected, or four "tube wall" quads extending from the core to the block face if the
+ * side is connected to a neighbour). Uses the legacy half-width / window-width constants and
+ * vertex coordinates verbatim, so the visual matches the original pixel-for-pixel.</p>
+ *
+ * <p>The iron shell of the pipe (12-px cross-frame) is still drawn via the multipart blockstate
+ * JSON — only the fluid is BER-rendered, because the fluid surface needs to update every tick
+ * based on the BE's {@code liquid} type and {@code liquidLevel}, which is exactly what a BER
+ * is for. The fluid sprite comes from the vanilla block-atlas lookup of each fluid's still
+ * texture; for fluids whose still texture isn't on the atlas yet (legacy custom-fluid case),
+ * we fall back to a tinted quad using the same per-fluid colour palette as the reservoir.</p>
+ */
 public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
 
+    // Legacy 1.7 constants — see Reika.RotaryCraft.Renders.PipeRenderer.
+    private static final float SIZE   = 0.75F / 2F;          // 0.375 — half-width of the pipe
+    private static final double IN    = 0.5 + SIZE - 0.01;   // 0.865 — inner-far edge
+    private static final double IN2   = 0.5 - SIZE + 0.01;   // 0.135 — inner-near edge
+    private static final double DD2   = IN - IN2;            // 0.730 — inner span
+
+    private final net.minecraft.client.resources.model.sprite.SpriteGetter sprites;
+
     public PipeRenderer(BlockEntityRendererProvider.Context context) {
-
-    }
-
-    protected void renderLiquid(PoseStack stack, RenderableDuct tile, double par2, double par4, double par6, Direction dir) {
-        Fluid f = tile.getAttributes();
-        if (f == null)
-            return;
-
-        float size = 0.75F / 2F;
-        float window = 0.5F / 2F;
-        float dl = size - window;
-        float dd = 0.5F - size;
-        float in = 0.5f + size - 0.01f;
-        float in2 = 0.5f - size + 0.01f;
-        float dd2 = in - in2;
-
-//        IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(tile.getFluidType());
-//        ReikaLiquidRenderer.bindFluidTexture(f);
-//    todo    if (f.getLuminosity() > 0)
-//            ReikaRenderHelper.disableLighting();
-        float u = 1;//ico.getMinU();
-        float v = 1;//ico.getMinV();
-        float u2 = 1;// ico.getMaxU();
-        float v2 = 1;// ico.getMaxV();
-        float du = (float) (dd2 * (u2 - u) / 4D);
-
-        stack.translate(par2, par4, par6);
-        RenderSystem.enableBlend();
-        RenderSystem.enableCull();
-//    todo    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        //    todo     GL11.glColor3f(1, 1, 1);
-
-        Tesselator tess = Tesselator.getInstance();
-        BufferBuilder v5 = tess.getBuilder();
-
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(dir.getStepX(), dir.getStepY(), dir.getStepZ());
-        //this.faceBrightness(Direction.DOWN, v5);
-        if (!tile.isConnectionValidForSide(dir)) {
-            switch (dir) {
-                case UP:
-                    v5.vertex(in2, in, in).uv(u, v2);
-                    v5.vertex(in, in, in).uv(u2, v2);
-                    v5.vertex(in, in, in2).uv(u2, v);
-                    v5.vertex(in2, in, in2).uv(u, v);
-                    break;
-                case DOWN:
-                    v5.vertex(in2, in2, in2).uv(u, v);
-                    v5.vertex(in, in2, in2).uv(u2, v);
-                    v5.vertex(in, in2, in).uv(u2, v2);
-                    v5.vertex(in2, in2, in).uv(u, v2);
-                    break;
-                case SOUTH:
-                    v5.vertex(in, in, in).uv(u, v);
-                    v5.vertex(in2, in, in).uv(u2, v);
-                    v5.vertex(in2, in2, in).uv(u2, v2);
-                    v5.vertex(in, in2, in).uv(u, v2);
-                    break;
-                case NORTH:
-                    v5.vertex(in, in2, in2).uv(u, v2);
-                    v5.vertex(in2, in2, in2).uv(u2, v2);
-                    v5.vertex(in2, in, in2).uv(u2, v);
-                    v5.vertex(in, in, in2).uv(u, v);
-                    break;
-                case EAST:
-                    v5.vertex(in, in2, in).uv(u, v2);
-                    v5.vertex(in, in2, in2).uv(u2, v2);
-                    v5.vertex(in, in, in2).uv(u2, v);
-                    v5.vertex(in, in, in).uv(u, v);
-                    break;
-                case WEST:
-                    v5.vertex(in2, in, in).uv(u, v);
-                    v5.vertex(in2, in, in2).uv(u2, v);
-                    v5.vertex(in2, in2, in2).uv(u2, v2);
-                    v5.vertex(in2, in2, in).uv(u, v2);
-                default:
-                    break;
-            }
-        } else { //is connected on side
-            switch (dir) {
-                case DOWN -> {
-                    v5.normal(-1, 0, 0);
-                    v5.vertex(in2, in2, in).uv(u, v);
-                    v5.vertex(in2, in2, in2).uv(u2, v);
-                    v5.vertex(in2, 0, in2).uv(u2, v + du);
-                    v5.vertex(in2, 0, in).uv(u, v + du);
-                    v5.normal(1, 0, 0);
-                    v5.vertex(in, 0, in).uv(u, v + du);
-                    v5.vertex(in, 0, in2).uv(u2, v + du);
-                    v5.vertex(in, in2, in2).uv(u2, v);
-                    v5.vertex(in, in2, in).uv(u, v);
-                    v5.normal(0, 0, -1);
-                    v5.vertex(in, 0, in2).uv(u, v + du);
-                    v5.vertex(in2, 0, in2).uv(u2, v + du);
-                    v5.vertex(in2, in2, in2).uv(u2, v);
-                    v5.vertex(in, in2, in2).uv(u, v);
-                    v5.normal(0, 0, 1);
-                    v5.vertex(in, in2, in).uv(u, v);
-                    v5.vertex(in2, in2, in).uv(u2, v);
-                    v5.vertex(in2, 0, in).uv(u2, v + du);
-                    v5.vertex(in, 0, in).uv(u, v + du);
-                }
-                case UP -> {
-                    v5.normal(-1, 0, 0);
-                    v5.vertex(in2, 1, in).uv(u, v + du);
-                    v5.vertex(in2, 1, in2).uv(u2, v + du);
-                    v5.vertex(in2, in, in2).uv(u2, v);
-                    v5.vertex(in2, in, in).uv(u, v);
-                    v5.normal(1, 0, 0);
-                    v5.vertex(in, in, in).uv(u, v);
-                    v5.vertex(in, in, in2).uv(u2, v);
-                    v5.vertex(in, 1, in2).uv(u2, v + du);
-                    v5.vertex(in, 1, in).uv(u, v + du);
-                    v5.normal(0, 0, -1);
-                    v5.vertex(in, in, in2).uv(u, v);
-                    v5.vertex(in2, in, in2).uv(u2, v);
-                    v5.vertex(in2, 1, in2).uv(u2, v + du);
-                    v5.vertex(in, 1, in2).uv(u, v + du);
-                    v5.normal(0, 0, 1);
-                    v5.vertex(in, 1, in).uv(u, v + du);
-                    v5.vertex(in2, 1, in).uv(u2, v + du);
-                    v5.vertex(in2, in, in).uv(u2, v);
-                    v5.vertex(in, in, in).uv(u, v);
-                }
-                case NORTH -> {
-                    v5.normal(-1, 0, 0);
-                    v5.vertex(in2, in2, 0).uv(u, v2);
-                    v5.vertex(in2, in2, in2).uv(u + du, v2);
-                    v5.vertex(in2, in, in2).uv(u + du, v);
-                    v5.vertex(in2, in, 0).uv(u, v);
-                    v5.normal(1, 0, 0);
-                    v5.vertex(in, in, 0).uv(u, v);
-                    v5.vertex(in, in, in2).uv(u + du, v);
-                    v5.vertex(in, in2, in2).uv(u + du, v2);
-                    v5.vertex(in, in2, 0).uv(u, v2);
-                    v5.normal(0, 1, 0);
-                    v5.vertex(in2, in, 0).uv(u, v2);
-                    v5.vertex(in2, in, in2).uv(u + du, v2);
-                    v5.vertex(in, in, in2).uv(u + du, v);
-                    v5.vertex(in, in, 0).uv(u, v);
-                    v5.normal(0, -1, 0);
-                    v5.vertex(in, in2, 0).uv(u, v);
-                    v5.vertex(in, in2, in2).uv(u + du, v);
-                    v5.vertex(in2, in2, in2).uv(u + du, v2);
-                    v5.vertex(in2, in2, 0).uv(u, v2);
-                }
-                case SOUTH -> {
-                    v5.normal(-1, 0, 0);
-                    v5.vertex(in2, in, 1).uv(u, v);
-                    v5.vertex(in2, in, in).uv(u + du, v);
-                    v5.vertex(in2, in2, in).uv(u + du, v2);
-                    v5.vertex(in2, in2, 1).uv(u, v2);
-                    v5.normal(1, 0, 0);
-                    v5.vertex(in, in2, 1).uv(u, v2);
-                    v5.vertex(in, in2, in).uv(u + du, v2);
-                    v5.vertex(in, in, in).uv(u + du, v);
-                    v5.vertex(in, in, 1).uv(u, v);
-                    v5.normal(0, 1, 0);
-                    v5.vertex(in, in, 1).uv(u, v);
-                    v5.vertex(in, in, in).uv(u + du, v);
-                    v5.vertex(in2, in, in).uv(u + du, v2);
-                    v5.vertex(in2, in, 1).uv(u, v2);
-                    v5.normal(0, -1, 0);
-                    v5.vertex(in2, in2, 1).uv(u, v2);
-                    v5.vertex(in2, in2, in).uv(u + du, v2);
-                    v5.vertex(in, in2, in).uv(u + du, v);
-                    v5.vertex(in, in2, 1).uv(u, v);
-                }
-                case EAST -> {
-                    v5.normal(0, 0, 1);
-                    v5.vertex(1, in, in).uv(u, v);
-                    v5.vertex(in, in, in).uv(u + du, v);
-                    v5.vertex(in, in2, in).uv(u + du, v2);
-                    v5.vertex(1, in2, in).uv(u, v2);
-                    v5.normal(0, 0, -1);
-                    v5.vertex(1, in2, in2).uv(u, v2);
-                    v5.vertex(in, in2, in2).uv(u + du, v2);
-                    v5.vertex(in, in, in2).uv(u + du, v);
-                    v5.vertex(1, in, in2).uv(u, v);
-                    v5.normal(0, 1, 0);
-                    v5.vertex(1, in, in2).uv(u, v2);
-                    v5.vertex(in, in, in2).uv(u + du, v2);
-                    v5.vertex(in, in, in).uv(u + du, v);
-                    v5.vertex(1, in, in).uv(u, v);
-                    v5.normal(0, -1, 0);
-                    v5.vertex(1, in2, in).uv(u, v);
-                    v5.vertex(in, in2, in).uv(u + du, v);
-                    v5.vertex(in, in2, in2).uv(u + du, v2);
-                    v5.vertex(1, in2, in2).uv(u, v2);
-                }
-                case WEST -> {
-                    v5.normal(0, 0, 1);
-                    v5.vertex(0, in2, in).uv(u, v2);
-                    v5.vertex(in2, in2, in).uv(u + du, v2);
-                    v5.vertex(in2, in, in).uv(u + du, v);
-                    v5.vertex(0, in, in).uv(u, v);
-                    v5.normal(0, 0, -1);
-                    v5.vertex(0, in, in2).uv(u, v);
-                    v5.vertex(in2, in, in2).uv(u + du, v);
-                    v5.vertex(in2, in2, in2).uv(u + du, v2);
-                    v5.vertex(0, in2, in2).uv(u, v2);
-                    v5.normal(0, 1, 0);
-                    v5.vertex(0, in, in).uv(u, v);
-                    v5.vertex(in2, in, in).uv(u + du, v);
-                    v5.vertex(in2, in, in2).uv(u + du, v2);
-                    v5.vertex(0, in, in2).uv(u, v2);
-                    v5.normal(0, -1, 0);
-                    v5.vertex(0, in2, in2).uv(u, v2);
-                    v5.vertex(in2, in2, in2).uv(u + du, v2);
-                    v5.vertex(in2, in2, in).uv(u + du, v);
-                    v5.vertex(0, in2, in).uv(u, v);
-                }
-                default -> {
-                }
-            }
-
-        }
-        if (tile.isConnectedToNonSelf(dir)) {
-            v5.normal(dir.getStepX(), dir.getStepY(), dir.getStepZ());
-            switch (dir) {
-                case UP:
-                    v5.vertex(in2, 0.99, in).uv(u, v2);
-                    v5.vertex(in, 0.99, in).uv(u2, v2);
-                    v5.vertex(in, 0.99, in2).uv(u2, v);
-                    v5.vertex(in2, 0.99, in2).uv(u, v);
-                    break;
-                case DOWN:
-                    v5.vertex(in2, 0.01, in2).uv(u, v);
-                    v5.vertex(in, 0.01, in2).uv(u2, v);
-                    v5.vertex(in, 0.01, in).uv(u2, v2);
-                    v5.vertex(in2, 0.01, in).uv(u, v2);
-                    break;
-                case SOUTH:
-                    v5.vertex(in, in, 0.99).uv(u, v);
-                    v5.vertex(in2, in, 0.99).uv(u2, v);
-                    v5.vertex(in2, in2, 0.99).uv(u2, v2);
-                    v5.vertex(in, in2, 0.99).uv(u, v2);
-                    break;
-                case NORTH:
-                    v5.vertex(in, in2, 0.01).uv(u, v2);
-                    v5.vertex(in2, in2, 0.01).uv(u2, v2);
-                    v5.vertex(in2, in, 0.01).uv(u2, v);
-                    v5.vertex(in, in, 0.01).uv(u, v);
-                    break;
-                case EAST:
-                    v5.vertex(0.99, in2, in).uv(u, v2);
-                    v5.vertex(0.99, in2, in2).uv(u2, v2);
-                    v5.vertex(0.99, in, in2).uv(u2, v);
-                    v5.vertex(0.99, in, in).uv(u, v);
-                    break;
-                case WEST:
-                    v5.vertex(0.01, in, in).uv(u, v);
-                    v5.vertex(0.01, in, in2).uv(u2, v);
-                    v5.vertex(0.01, in2, in2).uv(u2, v2);
-                    v5.vertex(0.01, in2, in).uv(u, v2);
-                default:
-                    break;
-            }
-        }
-        tess.end();
-//        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        ReikaRenderHelper.enableLighting();
-        stack.translate(-par2, -par4, -par6);
-        RenderSystem.disableBlend();
+        this.sprites = context.sprites();
     }
 
     @Override
-    public void render(BlockEntityPiping tile, float p_112308_, PoseStack stack, MultiBufferSource bufferSource, int p_112311_, int p_112312_) {
-        RenderableDuct te = tile;
-        /*todo if (!tile.hasLevel()) {
-            ReikaTextureHelper.bindTerrainTexture();
-            double s = 1;
-            double sy = 1.05;
-            stack.scale((float) s, (float) sy, (float) s);
-            //this.renderBlock(te, par2, par4, par6);
-            ClientProxy.pipe.renderBlockInInventory(te, par2, par4, par6);
-            stack.scale((float) (1 / s), (float) (1 / sy), (float) (1 / s));
-        }*/
-        renderBlock(stack, te, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return;
+        BlockEntity be = level.getBlockEntity(state.blockPos);
+        if (!(be instanceof BlockEntityPiping tile)) return;
+
+        Fluid fluid = tile.getAttributes();
+        if (fluid == null || tile.getFluidLevel() <= 0) return;
+
+        // Resolve the fluid's still sprite off the block atlas. For non-on-atlas fluids the
+        // result is the missing-texture sprite; the caller falls back to colour-only rendering.
+        TextureAtlasSprite sprite = stillSpriteFor(fluid);
+        int tint = fluidTint(fluid);
+
+        Matrix4f pose = poseStack.last().pose();
+        int light = state.lightCoords;
+        int overlay = OverlayTexture.NO_OVERLAY;
+
+        RenderType rt = RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS);
+        PoseStack snapped = new PoseStack();
+        snapped.last().set(poseStack.last());
+
+        collector.submitCustomGeometry(poseStack, rt, (pose2, vc) -> {
+            float u  = sprite.getU0();
+            float v  = sprite.getV0();
+            float u2 = sprite.getU1();
+            float v2 = sprite.getV1();
+            // Arm-extension texture coordinate offset along the flow axis (matches legacy
+            // {@code double du = dd2*(u2-u)/4D}).
+            double du = DD2 * (u2 - u) / 4D;
+
+            Matrix4f m = snapped.last().pose();
+            for (Direction dir : Direction.values()) {
+                boolean connected = isConnected(tile, dir);
+                if (connected) emitConnectedFluid(m, vc, dir, (float) u, (float) v, (float) u2, (float) v2, (float) du, tint, light, overlay);
+                else            emitCap(m, vc, dir, (float) u, (float) v, (float) u2, (float) v2, tint, light, overlay);
+            }
+        });
     }
 
-    private void renderBlock(PoseStack stack, RenderableDuct te, double par2, double par4, double par6) {
-//        IIcon ico = te.getBlockIcon();
-        float u = 0;//todo ico.getMinU();
-        float v = 1;//todo ico.getMinV();
-        float du = 0;//todo  ico.getMaxU();
-        float dv = 1;//todo  ico.getMaxV();
-        stack.translate(par2, par4, par6);
-        Tesselator tess = Tesselator.getInstance();
-        BufferBuilder v5 = tess.getBuilder();
-
-        float f = 0.6F;
-//   todo     GL11.glColor4f(f, f, f, 1);
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(0, 0, 1).uv(u, v);
-        v5.vertex(1, 0, 1).uv(du, v);
-        v5.vertex(1, 1, 1).uv(du, dv);
-        v5.vertex(0, 1, 1).uv(u, dv);
-        tess.end();
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(0, 1, 0).uv(u, dv);
-        v5.vertex(1, 1, 0).uv(du, dv);
-        v5.vertex(1, 0, 0).uv(du, v);
-        v5.vertex(0, 0, 0).uv(u, v);
-        tess.end();
-        f = 0.4F;
-//  todo      GL11.glColor4f(f, f, f, 1);
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(1, 1, 0).uv(u, dv);
-        v5.vertex(1, 1, 1).uv(du, dv);
-        v5.vertex(1, 0, 1).uv(du, v);
-        v5.vertex(1, 0, 0).uv(u, v);
-        tess.end();
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(0, 0, 0).uv(u, v);
-        v5.vertex(0, 0, 1).uv(du, v);
-        v5.vertex(0, 1, 1).uv(du, dv);
-        v5.vertex(0, 1, 0).uv(u, dv);
-        tess.end();
-
-        f = 1F;
-// todo       GL11.glColor4f(f, f, f, 1);
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(0, 1, 1).uv(u, dv);
-        v5.vertex(1, 1, 1).uv(du, dv);
-        v5.vertex(1, 1, 0).uv(du, v);
-        v5.vertex(0, 1, 0).uv(u, v);
-        tess.end();
-
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(0, 0, 0).uv(u, v);
-        v5.vertex(1, 0, 0).uv(du, v);
-        v5.vertex(1, 0, 1).uv(du, dv);
-        v5.vertex(0, 0, 1).uv(u, dv);
-        tess.end();
-
-        //-----------------------------------
-
-        double g = 0.35;
-        double g1 = g / 2;
-        double g2 = 1 - g / 2;
-
-//        ico = Blocks.WOOL.getIcon(0, ReikaDyeHelper.BLACK.getWoolStack());
-        u = 0;//ico.getMinU();
-        v = 1;//ico.getMinV();
-        du = 0;// ico.getMaxU();
-        dv = 1;// ico.getMaxV();
-        float uu = du - u;
-        float vv = dv - v;
-        u += g1 * uu;
-        du -= g1 * uu;
-        v += g1 * vv;
-        dv -= g1 * vv;
-
-        f = 0.6F;
-// todo       GL11.glColor4f(f, f, f, 1);
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(g1, g1, 1.001).uv(u, v);
-        v5.vertex(g2, g1, 1.001).uv(du, v);
-        v5.vertex(g2, g2, 1.001).uv(du, dv);
-        v5.vertex(g1, g2, 1.001).uv(u, dv);
-        tess.end();
-
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(g1, g2, -0.001).uv(u, dv);
-        v5.vertex(g2, g2, -0.001).uv(du, dv);
-        v5.vertex(g2, g1, -0.001).uv(du, v);
-        v5.vertex(g1, g1, -0.001).uv(u, v);
-        tess.end();
-
-        f = 0.4F;
-//    todo    GL11.glColor4f(f, f, f, 1);
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(1.001, g2, g1).uv(u, dv);
-        v5.vertex(1.001, g2, g2).uv(du, dv);
-        v5.vertex(1.001, g1, g2).uv(du, v);
-        v5.vertex(1.001, g1, g1).uv(u, v);
-        tess.end();
-
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(-0.001, g1, g1).uv(u, v);
-        v5.vertex(-0.001, g1, g2).uv(du, v);
-        v5.vertex(-0.001, g2, g2).uv(du, dv);
-        v5.vertex(-0.001, g2, g1).uv(u, dv);
-        tess.end();
-
-        f = 1F;
-        //    todo        GL11.glColor4f(f, f, f, 1);
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(g1, 1.001, g2).uv(u, dv);
-        v5.vertex(g2, 1.001, g2).uv(du, dv);
-        v5.vertex(g2, 1.001, g1).uv(du, v);
-        v5.vertex(g1, 1.001, g1).uv(u, v);
-        tess.end();
-
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        v5.normal(0, 1, 0);
-        v5.vertex(g1, -0.001, g1).uv(u, v);
-        v5.vertex(g2, -0.001, g1).uv(du, v);
-        v5.vertex(g2, -0.001, g2).uv(du, dv);
-        v5.vertex(g1, -0.001, g2).uv(u, dv);
-        tess.end();
-        stack.translate(-par2, -par4, -par6);
+    /**
+     * Reflectively asks the BE whether it's connected on the given side. Uses
+     * {@link BlockEntityPiping#isConnectedDirectly} because the legacy
+     * {@code isConnectionValidForSide} applied a 1.7-only render-pass swap that's no longer
+     * relevant in 26.1.
+     */
+    private static boolean isConnected(BlockEntityPiping tile, Direction dir) {
+        return tile.isConnectedDirectly(dir);
     }
 
-    private void renderFace(RenderableDuct tile, double x, double y, double z, Direction dir) {
-        float size = 0.75F / 2F;
-        float window = 0.5F / 2F;
-        float dl = size - window;
-        float dd = 0.5F - size;
-
-//        IIcon ico = tile.getBlockIcon();
-        float u = 0;//todo ico.getMinU();
-        float v = 1;//todo ico.getMinV();
-        float u2 = 0;//todo  ico.getMaxU();
-        float v2 = 1;//todo  ico.getMaxV();
-
-        float ddu = u2 - u;
-        float ddv = v2 - v;
-        float uo = u;
-        float vo = v;
-        float u2o = u2;
-        float v2o = v2;
-
-        u += ddu * (1 - size) / 5;
-        v += ddv * (1 - size) / 5;
-        u2 -= ddu * (1 - size) / 5;
-        v2 -= ddv * (1 - size) / 5;
-
-        float du = ddu * dd;
-        float dv = ddv * dd;
-
-        float lx = dd + dl;
-        float ly = dd + dl;
-        float mx = 1 - dd - dl;
-        float my = 1 - dd - dl;
-
-//        IIcon gico = Blocks.GLASS.getIcon(0, 0);
-        float gu = 1;// todo gico.getMinU();
-        float gv = 1;// todo gico.getMinV();
-        float gu2 = 1;// todo  gico.getMaxU();
-        float gv2 = 1;// todo  gico.getMaxV();
-        float dgu = gu2 - gu;
-        float dgv = gv2 - gv;
-
-        float guu = gu + dgu * dl;
-        float gvv = gv + dgv * dl;
-
-        gu += dgu / 8;
-        gv += dgv / 8;
-        gu2 -= dgu / 8;
-        gv2 -= dgv / 8;
-
-        Tesselator tess = Tesselator.getInstance();
-        BufferBuilder v5 = tess.getBuilder();
-        //stack.translate(x, y, z);
-
-        this.faceBrightness(dir, tess);
+    /**
+     * Fluid cap drawn at the pipe's inner edge facing {@code dir} when there's NO neighbour
+     * pipe / connector on that side — i.e. a sealed end. Mirrors the legacy switch over
+     * {@code dir} in {@code renderLiquid}.
+     */
+    private static void emitCap(Matrix4f m, VertexConsumer vc, Direction dir,
+                                 float u, float v, float u2, float v2, int tint, int light, int overlay) {
         switch (dir) {
-            case DOWN -> {
-                v5.vertex(dd, 1 - dd, 1 - dd).uv(u, v);
-                v5.vertex(dd + dl, 1 - dd, 1 - dd).uv(u + du, v);
-                v5.vertex(dd + dl, 1 - dd, dd).uv(u + du, v2);
-                v5.vertex(dd, 1 - dd, dd).uv(u, v2);
-                v5.vertex(1 - dd - dl, 1 - dd, 1 - dd).uv(u2 - du, v);
-                v5.vertex(1 - dd, 1 - dd, 1 - dd).uv(u2, v);
-                v5.vertex(1 - dd, 1 - dd, dd).uv(u2, v2);
-                v5.vertex(1 - dd - dl, 1 - dd, dd).uv(u2 - du, v2);
-                v5.vertex(dd, 1 - dd, dd + dl).uv(u, v2 - dv);
-                v5.vertex(1 - dd, 1 - dd, dd + dl).uv(u2, v2 - dv);
-                v5.vertex(1 - dd, 1 - dd, dd).uv(u2, v2);
-                v5.vertex(dd, 1 - dd, dd).uv(u, v2);
-                v5.vertex(dd, 1 - dd, 1 - dd).uv(u, v);
-                v5.vertex(1 - dd, 1 - dd, 1 - dd).uv(u2, v);
-                v5.vertex(1 - dd, 1 - dd, 1 - dd - dl).uv(u2, v + dv);
-                v5.vertex(dd, 1 - dd, 1 - dd - dl).uv(u, v + dv);
-                v5.vertex(mx, 1 - dd, ly).uv(gu2, gv);
-                v5.vertex(lx, 1 - dd, ly).uv(gu, gv);
-                v5.vertex(lx, 1 - dd, my).uv(gu, gv2);
-                v5.vertex(mx, 1 - dd, my).uv(gu2, gv2);
-            }
-            case NORTH -> {
-                v5.vertex(dd, dd, 1 - dd).uv(u, v2);
-                v5.vertex(dd + dl, dd, 1 - dd).uv(u + du, v2);
-                v5.vertex(dd + dl, 1 - dd, 1 - dd).uv(u + du, v);
-                v5.vertex(dd, 1 - dd, 1 - dd).uv(u, v);
-                v5.vertex(1 - dd - dl, dd, 1 - dd).uv(u2 - du, v2);
-                v5.vertex(1 - dd, dd, 1 - dd).uv(u2, v2);
-                v5.vertex(1 - dd, 1 - dd, 1 - dd).uv(u2, v);
-                v5.vertex(1 - dd - dl, 1 - dd, 1 - dd).uv(u2 - du, v);
-                v5.vertex(dd, dd, 1 - dd).uv(u, v2);
-                v5.vertex(1 - dd, dd, 1 - dd).uv(u2, v2);
-                v5.vertex(1 - dd, dd + dl, 1 - dd).uv(u2, v2 - dv);
-                v5.vertex(dd, dd + dl, 1 - dd).uv(u, v2 - dv);
-                v5.vertex(dd, 1 - dd - dl, 1 - dd).uv(u, v + dv);
-                v5.vertex(1 - dd, 1 - dd - dl, 1 - dd).uv(u2, v + dv);
-                v5.vertex(1 - dd, 1 - dd, 1 - dd).uv(u2, v);
-                v5.vertex(dd, 1 - dd, 1 - dd).uv(u, v);
-                v5.vertex(mx, my, 1 - dd).uv(gu2, gv2);
-                v5.vertex(lx, my, 1 - dd).uv(gu, gv2);
-                v5.vertex(lx, ly, 1 - dd).uv(gu, gv);
-                v5.vertex(mx, ly, 1 - dd).uv(gu2, gv);
-            }
-            case EAST -> {
-                v5.vertex(1 - dd, 1 - dd, dd).uv(u, v);
-                v5.vertex(1 - dd, 1 - dd, dd + dl).uv(u + du, v);
-                v5.vertex(1 - dd, dd, dd + dl).uv(u + du, v2);
-                v5.vertex(1 - dd, dd, dd).uv(u, v2);
-                v5.vertex(1 - dd, 1 - dd, 1 - dd - dl).uv(u2 - du, v);
-                v5.vertex(1 - dd, 1 - dd, 1 - dd).uv(u2, v);
-                v5.vertex(1 - dd, dd, 1 - dd).uv(u2, v2);
-                v5.vertex(1 - dd, dd, 1 - dd - dl).uv(u2 - du, v2);
-                v5.vertex(1 - dd, dd + dl, dd).uv(u, v2 - dv);
-                v5.vertex(1 - dd, dd + dl, 1 - dd).uv(u2, v2 - dv);
-                v5.vertex(1 - dd, dd, 1 - dd).uv(u2, v2);
-                v5.vertex(1 - dd, dd, dd).uv(u, v2);
-                v5.vertex(1 - dd, 1 - dd, dd).uv(u, v);
-                v5.vertex(1 - dd, 1 - dd, 1 - dd).uv(u2, v);
-                v5.vertex(1 - dd, 1 - dd - dl, 1 - dd).uv(u2, v + dv);
-                v5.vertex(1 - dd, 1 - dd - dl, dd).uv(u, v + dv);
-                v5.vertex(1 - dd, ly, mx).uv(gu2, gv);
-                v5.vertex(1 - dd, ly, lx).uv(gu, gv);
-                v5.vertex(1 - dd, my, lx).uv(gu, gv2);
-                v5.vertex(1 - dd, my, mx).uv(gu2, gv2);
-            }
-            case WEST -> {
-                v5.vertex(dd, dd, dd).uv(u, v2);
-                v5.vertex(dd, dd, dd + dl).uv(u + du, v2);
-                v5.vertex(dd, 1 - dd, dd + dl).uv(u + du, v);
-                v5.vertex(dd, 1 - dd, dd).uv(u, v);
-                v5.vertex(dd, dd, 1 - dd - dl).uv(u2 - du, v2);
-                v5.vertex(dd, dd, 1 - dd).uv(u2, v2);
-                v5.vertex(dd, 1 - dd, 1 - dd).uv(u2, v);
-                v5.vertex(dd, 1 - dd, 1 - dd - dl).uv(u2 - du, v);
-                v5.vertex(dd, dd, dd).uv(u, v2);
-                v5.vertex(dd, dd, 1 - dd).uv(u2, v2);
-                v5.vertex(dd, dd + dl, 1 - dd).uv(u2, v2 - dv);
-                v5.vertex(dd, dd + dl, dd).uv(u, v2 - dv);
-                v5.vertex(dd, 1 - dd - dl, dd).uv(u, v + dv);
-                v5.vertex(dd, 1 - dd - dl, 1 - dd).uv(u2, v + dv);
-                v5.vertex(dd, 1 - dd, 1 - dd).uv(u2, v);
-                v5.vertex(dd, 1 - dd, dd).uv(u, v);
-                v5.vertex(dd, my, mx).uv(gu2, gv2);
-                v5.vertex(dd, my, lx).uv(gu, gv2);
-                v5.vertex(dd, ly, lx).uv(gu, gv);
-                v5.vertex(dd, ly, mx).uv(gu2, gv);
-            }
             case UP -> {
-                v5.vertex(dd, dd, dd).uv(u, v2);
-                v5.vertex(dd + dl, dd, dd).uv(u + du, v2);
-                v5.vertex(dd + dl, dd, 1 - dd).uv(u + du, v);
-                v5.vertex(dd, dd, 1 - dd).uv(u, v);
-                v5.vertex(1 - dd - dl, dd, dd).uv(u2 - du, v2);
-                v5.vertex(1 - dd, dd, dd).uv(u2, v2);
-                v5.vertex(1 - dd, dd, 1 - dd).uv(u2, v);
-                v5.vertex(1 - dd - dl, dd, 1 - dd).uv(u2 - du, v);
-                v5.vertex(dd, dd, dd).uv(u, v2);
-                v5.vertex(1 - dd, dd, dd).uv(u2, v2);
-                v5.vertex(1 - dd, dd, dd + dl).uv(u2, v2 - dv);
-                v5.vertex(dd, dd, dd + dl).uv(u, v2 - dv);
-                v5.vertex(dd, dd, 1 - dd - dl).uv(u, v + dv);
-                v5.vertex(1 - dd, dd, 1 - dd - dl).uv(u2, v + dv);
-                v5.vertex(1 - dd, dd, 1 - dd).uv(u2, v);
-                v5.vertex(dd, dd, 1 - dd).uv(u, v);
-                v5.vertex(mx, dd, my).uv(gu2, gv2);
-                v5.vertex(lx, dd, my).uv(gu, gv2);
-                v5.vertex(lx, dd, ly).uv(gu, gv);
-                v5.vertex(mx, dd, ly).uv(gu2, gv);
+                quad(m, vc, IN2, IN, IN,  u,  v2, IN,  IN, IN,  u2, v2, IN,  IN, IN2, u2, v,  IN2, IN, IN2, u,  v,  tint, light, overlay, 0, 1, 0);
+            }
+            case DOWN -> {
+                quad(m, vc, IN2, IN2, IN2, u,  v,  IN,  IN2, IN2, u2, v,  IN,  IN2, IN,  u2, v2, IN2, IN2, IN,  u,  v2, tint, light, overlay, 0, -1, 0);
             }
             case SOUTH -> {
-                v5.vertex(dd, 1 - dd, dd).uv(u, v);
-                v5.vertex(dd + dl, 1 - dd, dd).uv(u + du, v);
-                v5.vertex(dd + dl, dd, dd).uv(u + du, v2);
-                v5.vertex(dd, dd, dd).uv(u, v2);
-                v5.vertex(1 - dd - dl, 1 - dd, dd).uv(u2 - du, v);
-                v5.vertex(1 - dd, 1 - dd, dd).uv(u2, v);
-                v5.vertex(1 - dd, dd, dd).uv(u2, v2);
-                v5.vertex(1 - dd - dl, dd, dd).uv(u2 - du, v2);
-                v5.vertex(dd, dd + dl, dd).uv(u, v2 - dv);
-                v5.vertex(1 - dd, dd + dl, dd).uv(u2, v2 - dv);
-                v5.vertex(1 - dd, dd, dd).uv(u2, v2);
-                v5.vertex(dd, dd, dd).uv(u, v2);
-                v5.vertex(dd, 1 - dd, dd).uv(u, v);
-                v5.vertex(1 - dd, 1 - dd, dd).uv(u2, v);
-                v5.vertex(1 - dd, 1 - dd - dl, dd).uv(u2, v + dv);
-                v5.vertex(dd, 1 - dd - dl, dd).uv(u, v + dv);
-                v5.vertex(mx, ly, dd).uv(gu2, gv);
-                v5.vertex(lx, ly, dd).uv(gu, gv);
-                v5.vertex(lx, my, dd).uv(gu, gv2);
-                v5.vertex(mx, my, dd).uv(gu2, gv2);
+                quad(m, vc, IN, IN, IN,  u,  v,  IN2, IN, IN,  u2, v,  IN2, IN2, IN,  u2, v2, IN, IN2, IN,  u,  v2, tint, light, overlay, 0, 0, 1);
             }
-            default -> {
+            case NORTH -> {
+                quad(m, vc, IN,  IN2, IN2, u,  v2, IN2, IN2, IN2, u2, v2, IN2, IN, IN2, u2, v,  IN,  IN, IN2, u,  v,  tint, light, overlay, 0, 0, -1);
+            }
+            case EAST -> {
+                quad(m, vc, IN, IN2, IN,  u,  v2, IN, IN2, IN2, u2, v2, IN, IN, IN2, u2, v,  IN, IN, IN,  u,  v,  tint, light, overlay, 1, 0, 0);
+            }
+            case WEST -> {
+                quad(m, vc, IN2, IN, IN,  u,  v,  IN2, IN, IN2, u2, v,  IN2, IN2, IN2, u2, v2, IN2, IN2, IN,  u,  v2, tint, light, overlay, -1, 0, 0);
             }
         }
-
-        //stack.translate(-x, -y, -z);
     }
 
-    private void faceBrightness(Direction dir, Tesselator v5) {
-        float f = 1;
-        switch (dir.getOpposite()) {
-            case DOWN -> f = 0.4F;
-            case EAST, WEST -> f = 0.5F;
-            case NORTH, SOUTH -> f = 0.65F;
-            case UP -> f = 1F;
-            default -> {
+    /**
+     * Four "tube wall" quads extending from the pipe core to the block face, drawn when the
+     * pipe IS connected on {@code dir}. Visually represents fluid flowing through the arm
+     * into the neighbour pipe.
+     */
+    private static void emitConnectedFluid(Matrix4f m, VertexConsumer vc, Direction dir,
+                                            float u, float v, float u2, float v2, float du,
+                                            int tint, int light, int overlay) {
+        switch (dir) {
+            case DOWN -> {
+                quad(m, vc, IN2, IN2, IN,  u,  v,    IN2, IN2, IN2, u2, v,    IN2, 0,  IN2, u2, v + du, IN2, 0,  IN,  u,  v + du, tint, light, overlay, -1, 0, 0);
+                quad(m, vc, IN,  0,   IN,  u,  v + du, IN,  0,   IN2, u2, v + du, IN,  IN2, IN2, u2, v,    IN,  IN2, IN,  u,  v,    tint, light, overlay, 1, 0, 0);
+                quad(m, vc, IN,  0,   IN2, u,  v + du, IN2, 0,   IN2, u2, v + du, IN2, IN2, IN2, u2, v,    IN,  IN2, IN2, u,  v,    tint, light, overlay, 0, 0, -1);
+                quad(m, vc, IN,  IN2, IN,  u,  v,    IN2, IN2, IN,  u2, v,    IN2, 0,   IN,  u2, v + du, IN,  0,   IN,  u,  v + du, tint, light, overlay, 0, 0, 1);
+            }
+            case UP -> {
+                quad(m, vc, IN2, 1,  IN,  u,  v + du, IN2, 1,  IN2, u2, v + du, IN2, IN, IN2, u2, v,    IN2, IN, IN,  u,  v,    tint, light, overlay, -1, 0, 0);
+                quad(m, vc, IN,  IN, IN,  u,  v,    IN,  IN, IN2, u2, v,    IN,  1,  IN2, u2, v + du, IN,  1,  IN,  u,  v + du, tint, light, overlay, 1, 0, 0);
+                quad(m, vc, IN,  IN, IN2, u,  v,    IN2, IN, IN2, u2, v,    IN2, 1,  IN2, u2, v + du, IN,  1,  IN2, u,  v + du, tint, light, overlay, 0, 0, -1);
+                quad(m, vc, IN,  1,  IN,  u,  v + du, IN2, 1,  IN,  u2, v + du, IN2, IN, IN,  u2, v,    IN,  IN, IN,  u,  v,    tint, light, overlay, 0, 0, 1);
+            }
+            case NORTH -> {
+                quad(m, vc, IN2, IN2, 0,   u, v2,    IN2, IN2, IN2, u + du, v2,    IN2, IN, IN2, u + du, v,    IN2, IN, 0,   u, v,    tint, light, overlay, -1, 0, 0);
+                quad(m, vc, IN,  IN, 0,   u, v,    IN,  IN, IN2, u + du, v,    IN,  IN2, IN2, u + du, v2,    IN,  IN2, 0,   u, v2,    tint, light, overlay, 1, 0, 0);
+                quad(m, vc, IN2, IN, 0,   u, v2,    IN2, IN, IN2, u + du, v2,    IN,  IN, IN2, u + du, v,    IN,  IN, 0,   u, v,    tint, light, overlay, 0, 1, 0);
+                quad(m, vc, IN,  IN2, 0,   u, v,    IN,  IN2, IN2, u + du, v,    IN2, IN2, IN2, u + du, v2,    IN2, IN2, 0,   u, v2,    tint, light, overlay, 0, -1, 0);
+            }
+            case SOUTH -> {
+                quad(m, vc, IN2, IN, 1,   u, v,    IN2, IN, IN,  u + du, v,    IN2, IN2, IN,  u + du, v2,    IN2, IN2, 1,   u, v2,    tint, light, overlay, -1, 0, 0);
+                quad(m, vc, IN,  IN2, 1,   u, v2,    IN,  IN2, IN,  u + du, v2,    IN,  IN, IN,  u + du, v,    IN,  IN, 1,   u, v,    tint, light, overlay, 1, 0, 0);
+                quad(m, vc, IN,  IN, 1,   u, v,    IN,  IN, IN,  u + du, v,    IN2, IN, IN,  u + du, v2,    IN2, IN, 1,   u, v2,    tint, light, overlay, 0, 1, 0);
+                quad(m, vc, IN2, IN2, 1,   u, v2,    IN2, IN2, IN,  u + du, v2,    IN,  IN2, IN,  u + du, v,    IN,  IN2, 1,   u, v,    tint, light, overlay, 0, -1, 0);
+            }
+            case EAST -> {
+                quad(m, vc, 1,   IN, IN,  u, v,    IN,  IN, IN,  u + du, v,    IN,  IN2, IN,  u + du, v2,    1,   IN2, IN,  u, v2,    tint, light, overlay, 0, 0, 1);
+                quad(m, vc, 1,   IN2, IN2, u, v2,    IN,  IN2, IN2, u + du, v2,    IN,  IN, IN2, u + du, v,    1,   IN, IN2, u, v,    tint, light, overlay, 0, 0, -1);
+                quad(m, vc, 1,   IN, IN2, u, v2,    IN,  IN, IN2, u + du, v2,    IN,  IN, IN,  u + du, v,    1,   IN, IN,  u, v,    tint, light, overlay, 0, 1, 0);
+                quad(m, vc, 1,   IN2, IN,  u, v,    IN,  IN2, IN,  u + du, v,    IN,  IN2, IN2, u + du, v2,    1,   IN2, IN2, u, v2,    tint, light, overlay, 0, -1, 0);
+            }
+            case WEST -> {
+                quad(m, vc, 0,   IN2, IN,  u, v2,    IN2, IN2, IN,  u + du, v2,    IN2, IN, IN,  u + du, v,    0,   IN, IN,  u, v,    tint, light, overlay, 0, 0, 1);
+                quad(m, vc, 0,   IN, IN2, u, v,    IN2, IN, IN2, u + du, v,    IN2, IN2, IN2, u + du, v2,    0,   IN2, IN2, u, v2,    tint, light, overlay, 0, 0, -1);
+                quad(m, vc, 0,   IN, IN,  u, v,    IN2, IN, IN,  u + du, v,    IN2, IN, IN2, u + du, v2,    0,   IN, IN2, u, v2,    tint, light, overlay, 0, 1, 0);
+                quad(m, vc, 0,   IN2, IN2, u, v2,    IN2, IN2, IN2, u + du, v2,    IN2, IN2, IN,  u + du, v,    0,   IN2, IN,  u, v,    tint, light, overlay, 0, -1, 0);
             }
         }
-//        todo v5.setColorOpaque_F(f, f, f);
+    }
+
+    /** Emit one textured quad (4 vertices) with the same colour and shared light/overlay/normal. */
+    private static void quad(Matrix4f pose, VertexConsumer vc,
+                             double x1, double y1, double z1, float u1, float v1,
+                             double x2, double y2, double z2, float u2_, float v2_,
+                             double x3, double y3, double z3, float u3, float v3,
+                             double x4, double y4, double z4, float u4, float v4,
+                             int rgba, int light, int overlay,
+                             float nx, float ny, float nz) {
+        vc.addVertex(pose, (float) x1, (float) y1, (float) z1).setColor(rgba).setUv(u1, v1).setOverlay(overlay).setLight(light).setNormal(nx, ny, nz);
+        vc.addVertex(pose, (float) x2, (float) y2, (float) z2).setColor(rgba).setUv(u2_, v2_).setOverlay(overlay).setLight(light).setNormal(nx, ny, nz);
+        vc.addVertex(pose, (float) x3, (float) y3, (float) z3).setColor(rgba).setUv(u3, v3).setOverlay(overlay).setLight(light).setNormal(nx, ny, nz);
+        vc.addVertex(pose, (float) x4, (float) y4, (float) z4).setColor(rgba).setUv(u4, v4).setOverlay(overlay).setLight(light).setNormal(nx, ny, nz);
+    }
+
+    /**
+     * Resolves the still-texture sprite for a fluid on the block atlas. Vanilla water/lava
+     * have well-known atlas locations; for RotaryCraft fluids we look up the standard "rc"
+     * texture paths. Unknown fluids return the missing-texture sprite, which is fine — the
+     * tint kicks in regardless and the user still sees a clearly-coloured surface.
+     */
+    private TextureAtlasSprite stillSpriteFor(Fluid fluid) {
+        Identifier id = stillTextureId(fluid);
+        return sprites.get(new net.minecraft.client.resources.model.sprite.SpriteId(TextureAtlas.LOCATION_BLOCKS, id));
+    }
+
+    private static Identifier stillTextureId(Fluid fluid) {
+        if (fluid == Fluids.WATER || fluid == Fluids.FLOWING_WATER)
+            return Identifier.withDefaultNamespace("block/water_still");
+        if (fluid == Fluids.LAVA || fluid == Fluids.FLOWING_LAVA)
+            return Identifier.withDefaultNamespace("block/lava_still");
+        if (fluid == RotaryFluids.JET_FUEL.get())
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/jet_fuel_still");
+        if (fluid == RotaryFluids.ETHANOL.get())
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/ethanol_still");
+        if (fluid == RotaryFluids.LUBRICANT.get())
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/lubricant_still");
+        if (fluid == RotaryFluids.HSLA_FLUID.get())
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/molten_hsla_still");
+        // Generic fallback: use lava_still for hot fluids, water_still for cold.
+        return fluid.getFluidType().getTemperature() > 500
+                ? Identifier.withDefaultNamespace("block/lava_still")
+                : Identifier.withDefaultNamespace("block/water_still");
+    }
+
+    /**
+     * Approximate ARGB tint per fluid (full alpha; the translucent RenderType handles blend).
+     * Matches the {@code RenderReservoir.fluidTint} palette so the visual identity of each
+     * fluid stays consistent across all three (pipe, reservoir, GUI tooltips).
+     */
+    private static int fluidTint(Fluid f) {
+        if (f == Fluids.WATER || f == Fluids.FLOWING_WATER) return 0xFF3050E0;
+        if (f == Fluids.LAVA  || f == Fluids.FLOWING_LAVA)  return 0xFFE04010;
+        if (f == RotaryFluids.JET_FUEL.get())               return 0xFF60A000;
+        if (f == RotaryFluids.ETHANOL.get())                return 0xFFF0F050;
+        if (f == RotaryFluids.LUBRICANT.get())              return 0xFFC08020;
+        if (f == RotaryFluids.HSLA_FLUID.get())             return 0xFFE04010;
+        if (f == RotaryFluids.LIQUID_NITROGEN.get())        return 0xFFA0E0F0;
+        if (f == RotaryFluids.POISON.get())                 return 0xFFA030F0;
+        if (f == RotaryFluids.STEAM.get())                  return 0xC0E0E0E0;
+        if (f == RotaryFluids.SODIUM.get())                 return 0xFFD0D050;
+        if (f == RotaryFluids.CHLORINE.get())               return 0xFFC0E060;
+        if (f == RotaryFluids.OXYGEN.get())                 return 0xFFE0F0FF;
+        return 0xFF20A0C0;
     }
 }

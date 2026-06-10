@@ -8,11 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.items.IItemHandler;
-import net.neoforged.items.ItemStackHandler;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.base.OneSlotMachine;
 import reika.dragonapi.interfaces.blockentity.InertIInv;
@@ -42,10 +38,9 @@ public class BlockEntityParticleEmitter extends BlockEntitySpringPowered
     /* --------------------------------------------------------------------- */
     /*  Inventory (single-slot)                                              */
     /* --------------------------------------------------------------------- */
-    private final ItemStackHandler inv = new ItemStackHandler(1) {
+    private final ManagedItemHandler inv = new ManagedItemHandler(1) {
         @Override protected void onContentsChanged(int slot) { setChanged(); }
     };
-    private final LazyOptional<IItemHandler> cap = LazyOptional.of(() -> inv);
 
     /* --------------------------------------------------------------------- */
     /*  Construction                                                         */
@@ -59,8 +54,9 @@ public class BlockEntityParticleEmitter extends BlockEntitySpringPowered
     /* --------------------------------------------------------------------- */
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
         updateCoil();
-        if (!canEmit(world) || world.isClientSide) return;
+        if (!canEmit(world) || world.isClientSide()) return;
         for (int i = 0; i < particlesPerTick; i++) {
             particleType.spawnAt(world,
                     pos.getX() + DragonAPI.rand.nextDouble(),
@@ -97,9 +93,6 @@ public class BlockEntityParticleEmitter extends BlockEntitySpringPowered
     @Override public boolean stillValid(Player p)   { return !isRemoved() && p.distanceToSqr(worldPosition.getCenter())<=64; }
 
     /* Capability exposure */
-    @Override public <T> LazyOptional<T> getCapability(Capability<T> capIn, Direction side){
-        return capIn==ForgeCapabilities.ITEM_HANDLER? cap.cast() : super.getCapability(capIn,side);
-    }
 
     /* --------------------------------------------------------------------- */
     /*  Misc block-entity overrides                                          */
@@ -126,12 +119,12 @@ public class BlockEntityParticleEmitter extends BlockEntitySpringPowered
     }
     @Override protected void readSyncTag(CompoundTag tag){
         super.readSyncTag(tag);
-        particleType      = ReikaParticleHelper.values()[tag.getInt("type")];
-        particlesPerTick  = tag.getInt("ppt");
-        pX = tag.getDouble("vx");
-        pY = tag.getDouble("vy");
-        pZ = tag.getDouble("vz");
-        useRedstone = tag.getBoolean("rs");
+        particleType      = ReikaParticleHelper.values()[tag.getIntOr("type", 0)];
+        particlesPerTick  = tag.getIntOr("ppt", 0);
+        pX = tag.getDoubleOr("vx", 0);
+        pY = tag.getDoubleOr("vy", 0);
+        pZ = tag.getDoubleOr("vz", 0);
+        useRedstone = tag.getBooleanOr("rs", false);
     }
 
     @Override

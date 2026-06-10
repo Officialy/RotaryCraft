@@ -56,7 +56,7 @@
 //        //todo this.noCharge();
 //
 //        this.warnCharge(is);
-//        //if (!world.isClientSide) {
+//        //if (!world.isClientSide()) {
 //        DecimalPosition part = ReikaVectorHelper.getPlayerLookCoords(ep, 1);
 //        for (int i = 0; i < 12; i++) {
 //            double px = ReikaRandomHelper.getRandomPlusMinus(part.xCoord, 0.3);
@@ -99,7 +99,7 @@
 //            return false;
 //        if (is.getItemDamage() < 8192 && !ep.capabilities.isCreative())
 //            return false;
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            //ReikaChatHelper.write(mov);
 //            //ReikaChatHelper.writeBlockAtCoords(world, pos);
 //            Block id = world.getBlock(pos);

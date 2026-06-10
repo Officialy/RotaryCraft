@@ -16,7 +16,7 @@ import net.minecraft.world.item.CreativeModeTab;
 public class ItemSlide extends ItemBasic {
 
     public ItemSlide() {
-        super(new Properties(), 1);
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties(), 1);
     }
 
 }

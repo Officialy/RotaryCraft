@@ -26,9 +26,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
-import net.neoforged.items.IItemHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
@@ -57,6 +57,12 @@ import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
 
 import reika.rotarycraft.registry.*;
 
+// TODO(1.21.9): the {@code IItemHandler} and {@code IFluidHandler} interfaces here are both
+// the deprecated NeoForge ones. The class has hand-written {@code getSlots/getStackInSlot/
+// insertItem/extractItem/getSlotLimit/isItemValid} implementations rather than holding an
+// internal ManagedItemHandler, so a clean migration needs an actual storage refactor. Kept
+// implementing the legacy interfaces for now; suppression is documented technical debt.
+@SuppressWarnings("removal")
 public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements IItemHandler, PowerGenerator, PartialInventory, PartialTank, PipeConnector, IFluidHandler, ToggleTile, CVTController {
 
     public static final int WORMRATIO = 64;
@@ -270,7 +276,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                         return;
                     }
                 }
-                if (omega > 0 && (level.getDayTime() & 4) == 4)
+                if (omega > 0 && (level.getOverworldClockTime() & 4) == 4)
                     lubricant.removeLiquid((int) ReikaMathLibrary.logbase(Math.max(omega, torque), 2));
             } else {
                 omega = torque = 0;
@@ -382,7 +388,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
         this.transferPower(world, pos);
         isReleasing = enabled && this.hasRedstoneSignal();
         //ReikaJavaLibrary.pConsole(energy/20+"/"+this.getMaxStorageCapacity(), Dist.DEDICATED_SERVER);
-        if (!isCreative && !world.isClientSide && energy / 20 >= this.getMaxStorageCapacity()) {
+        if (!isCreative && !world.isClientSide() && energy / 20 >= this.getMaxStorageCapacity()) {
             this.overChargeExplosion(world, pos);
         }
         if (!isReleasing) {
@@ -460,7 +466,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                             world.setBlockAndUpdate(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k), Blocks.AIR.defaultBlockState());
                         }
                     }
-                    if (!world.isClientSide && DragonAPI.rand.nextInt(8) == 0)
+                    if (!world.isClientSide() && DragonAPI.rand.nextInt(8) == 0)
                         ReikaWorldHelper.ignite(world, new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k));
                 }
             }
@@ -550,7 +556,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     @Override
     protected void transferPower(Level world, BlockPos pos) {
         this.calculateRatio();
-        if (level.isClientSide && !RotaryAux.getPowerOnClient)
+        if (level.isClientSide() && !RotaryAux.getPowerOnClient)
             return;
         performRatio = true;
         omegain = torquein = 0;
@@ -683,7 +689,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                                 world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLAZE_HURT, SoundSource.BLOCKS, 0.1F, 1F, false);
                             }
                         }
-                        if (omega > 0 && (world.getDayTime() & 4) == 4)
+                        if (omega > 0 && (world.getOverworldClockTime() & 4) == 4)
                             lubricant.removeLiquid((int) (DifficultyEffects.LUBEUSAGE.getChance() * ReikaMathLibrary.logbase(Math.max(omega, torque), 2)));
                     } else {
                         omega = torque = 0;
@@ -743,23 +749,23 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        ratio = NBT.getInt("ratio");
-        energy = NBT.getLong("e");
-        releaseOmega = NBT.getInt("relo");
-        releaseTorque = NBT.getInt("relt");
-        cvtMode = CVTMode.list[NBT.getInt("mode")];
-        if (NBT.getBoolean("redstone")) //porting pre-placed redstone ones
+        ratio = NBT.getIntOr("ratio", 0);
+        energy = NBT.getLongOr("e", 0L);
+        releaseOmega = NBT.getIntOr("relo", 0);
+        releaseTorque = NBT.getIntOr("relt", 0);
+        cvtMode = CVTMode.list[NBT.getIntOr("mode", 0)];
+        if (NBT.getBooleanOr("redstone", false)) //porting pre-placed redstone ones
             cvtMode = CVTMode.REDSTONE;
-        cvtState[0] = CVTState.list[NBT.getInt("cvtoff")];
-        cvtState[1] = CVTState.list[NBT.getInt("cvton")];
-        isBedrockCoil = NBT.getBoolean("bedrock");
-        isCreative = NBT.getBoolean("creative");
-        torquemode = NBT.getBoolean("trq");
-        targetTorque = NBT.getInt("target");
-        torquein = NBT.getInt("torquein");
+        cvtState[0] = CVTState.list[NBT.getIntOr("cvtoff", 0)];
+        cvtState[1] = CVTState.list[NBT.getIntOr("cvton", 0)];
+        isBedrockCoil = NBT.getBooleanOr("bedrock", false);
+        isCreative = NBT.getBooleanOr("creative", false);
+        torquemode = NBT.getBooleanOr("trq", false);
+        targetTorque = NBT.getIntOr("target", 0);
+        torquein = NBT.getIntOr("torquein", 0);
 
         if (NBT.contains("t_enable"))
-            enabled = NBT.getBoolean("t_enable");
+            enabled = NBT.getBooleanOr("t_enable", false);
 
         lubricant.readFromNBT(NBT);
     }
@@ -769,12 +775,16 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
         super.saveAdditional(NBT);
         ListTag nbttaglist = new ListTag();
 
+        // 26.1: ItemStack.save(CompoundTag) removed; round-trip via ItemStack.CODEC + RegistryOps.
+        var regAccSave = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
+        var opsSave = regAccSave.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
         for (int i = 0; i < belts.length; i++) {
-            if (belts[i] != null) {
-                CompoundTag CompoundTag = new CompoundTag();
-                CompoundTag.putByte("Slot", (byte) i);
-                belts[i].save(CompoundTag);
-                nbttaglist.add(CompoundTag);
+            if (belts[i] != null && !belts[i].isEmpty()) {
+                CompoundTag entry = new CompoundTag();
+                entry.putByte("Slot", (byte) i);
+                net.minecraft.world.item.ItemStack.CODEC.encodeStart(opsSave, belts[i]).result()
+                        .ifPresent(stackTag -> entry.put("Stack", stackTag));
+                nbttaglist.add(entry);
             }
         }
         NBT.put("Items", nbttaglist);
@@ -788,15 +798,21 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     @Override
     public void load(CompoundTag NBT) {
         super.load(NBT);
-        ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
+        ListTag nbttaglist = NBT.getListOrEmpty("Items");
         belts = new ItemStack[this.getSlots()];
 
+        var regAccLoad = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
+        var opsLoad = regAccLoad.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
         for (int i = 0; i < nbttaglist.size(); i++) {
-            CompoundTag CompoundTag = nbttaglist.getCompound(i);
-            byte byte0 = CompoundTag.getByte("Slot");
-
-            if (byte0 >= 0 && byte0 < belts.length) {
-                belts[byte0] = ItemStack.of(CompoundTag);
+            CompoundTag entry = nbttaglist.getCompoundOrEmpty(i);
+            byte slot = entry.getByteOr("Slot", (byte) 0);
+            if (slot >= 0 && slot < belts.length) {
+                var stackTag = entry.get("Stack");
+                if (stackTag != null) {
+                    belts[slot] = net.minecraft.world.item.ItemStack.CODEC.parse(opsLoad, stackTag).result().orElse(ItemStack.EMPTY);
+                } else {
+                    belts[slot] = ItemStack.EMPTY;
+                }
             }
         }
     }
@@ -907,7 +923,7 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
     }
 
     public void setEnergyFromNBT(CompoundTag NBT) {
-        energy = NBT.getLong("energy");
+        energy = NBT.getLongOr("energy", 0L);
     }
 
     @Override
@@ -1001,7 +1017,7 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
     @Override
@@ -1045,7 +1061,7 @@ todo    public ItemStack decrStackSize(int var1, int var2) {
     }
 
     public void setLubricantFromNBT(CompoundTag NBT) {
-        lubricant.setContents(NBT.getInt("lube"), RotaryFluids.LUBRICANT.get());
+        lubricant.setContents(NBT.getIntOr("lube", 0), RotaryFluids.LUBRICANT.get());
     }
 
     @Override

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "M": "rotarycraft:mixer",
+    "P": "rotarycraft:fluid_pipe",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "p": "minecraft:glass_pane"
+  },
+  "pattern": [
+    "SpS",
+    "PMP",
+    "BBB"
+  ],
+  "result": {
+    "id": "rotarycraft:obsidian_maker"
+  }
+}

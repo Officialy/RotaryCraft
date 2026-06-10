@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:condenser",
+    "G": "minecraft:gold_ingot",
+    "I": "rotarycraft:impeller",
+    "P": "rotarycraft:hsla_steel_plate",
+    "c": "minecraft:cobblestone",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "ccc",
+    "CIs",
+    "PGP"
+  ],
+  "result": {
+    "id": "rotarycraft:steam_engine"
+  }
+}

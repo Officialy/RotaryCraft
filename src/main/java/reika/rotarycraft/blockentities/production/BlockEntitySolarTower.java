@@ -22,8 +22,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
@@ -95,13 +95,12 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         return MachineRegistry.SOLARTOWER;
     }
 
-    @Override
-    public void updateBlockEntity() {
+    private void doSolarTowerTick() {
         super.updateBlockEntity();
         this.searchForPlant(level, worldPosition);
         topLocation = this.getTopOfTower();
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             int temp = (int) (5 * size * overallBrightness);
             for (int i = -3; i <= 3; i++) {
                 for (int j = -3; j <= 3; j++) {
@@ -119,7 +118,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
                 List<LivingEntity> in = level.getEntitiesOfClass(LivingEntity.class, above);
                 for (LivingEntity e : in) {
                     if (!e.hasEffect(MobEffects.FIRE_RESISTANCE))
-                        e.setSecondsOnFire(3);
+                        e.igniteForSeconds(3);
                 }
             }
         }
@@ -310,7 +309,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
-
+        this.doSolarTowerTick();
     }
 
     @Override
@@ -337,8 +336,8 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         super.readSyncTag(NBT);
         tank.readFromNBT(NBT);
 
-        temperature = NBT.getInt("temp");
-        currentConsumption = NBT.getInt("flow");
+        temperature = NBT.getIntOr("temp", 0);
+        currentConsumption = NBT.getIntOr("flow", 0);
     }
 
     @Override
@@ -363,7 +362,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
 

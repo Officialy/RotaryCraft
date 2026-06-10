@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForge;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -112,7 +112,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
             ItemEntity ei = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.25, pos.getZ() + 0.5, item);
 
             ei.setDeltaMovement(0.4F + 0.6F * DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat() / 5, DragonAPI.rand.nextFloat() / 5);
-            if (world.isClientSide)
+            if (world.isClientSide())
                 return;
             ei.hurtMarked = true;
             if (DragonAPI.rand.nextInt(24) == 0)
@@ -130,7 +130,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
             ItemEntity ei = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, item);
             ei.setDeltaMovement(0.4F + 0.6F * DragonAPI.rand.nextFloat() / 5, DragonAPI.rand.nextFloat() / 5, DragonAPI.rand.nextFloat() / 5);
-            if (world.isClientSide)
+            if (world.isClientSide())
                 return;
             ei.hurtMarked = true;
             if (DragonAPI.rand.nextInt(24) == 0)
@@ -507,7 +507,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
     @Override
     protected void transferPower(Level world, BlockPos pos) {
-        if (world.isClientSide && !RotaryAux.getPowerOnClient)
+        if (world.isClientSide() && !RotaryAux.getPowerOnClient)
             return;
         reading2Dir = false;
         if (this.isCross() && !this.isVertical()) {
@@ -627,18 +627,18 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        failed = tag.getBoolean("failed");
+        failed = tag.getBooleanOr("failed", false);
 
-        readtorque = tag.getIntArray("readtorque");
-        readomega = tag.getIntArray("readomega");
+        readtorque = tag.getIntArray("readtorque").orElse(new int[0]);
+        readomega = tag.getIntArray("readomega").orElse(new int[0]);
         if (readtorque.length != 2)
             readtorque = new int[2];
         if (readomega.length != 2)
             readomega = new int[2];
 
-        crossphi1 = tag.getFloat("cphi1");
-        crossphi2 = tag.getFloat("cphi2");
-        inverted = tag.getBoolean("inverted");
+        crossphi1 = tag.getFloatOr("cphi1", 0);
+        crossphi2 = tag.getFloatOr("cphi2", 0);
+        inverted = tag.getBooleanOr("inverted", false);
     }
 
     @Override
@@ -659,18 +659,18 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
         super.load(NBT);
         MaterialRegistry mat = MaterialRegistry.WOOD;
         if (NBT.contains("shafttype")) {
-            mat = MaterialRegistry.valueOf(NBT.getString("shafttype"));
+            mat = MaterialRegistry.valueOf(NBT.getStringOr("shafttype", ""));
         } else if (NBT.contains("type")) {
-            int idx = NBT.getInt("type");
+            int idx = NBT.getIntOr("type", 0);
             if (idx >= MaterialRegistry.TUNGSTEN.ordinal())
                 idx++;
             mat = MaterialRegistry.matList[idx];
         }
-        phi = NBT.getFloat("phi");
+        phi = NBT.getFloatOr("phi", 0);
         materialType = mat;
-        inverted = NBT.getBoolean("inverted");
+        inverted = NBT.getBooleanOr("inverted", false);
         if (NBT.contains("shaftmode")) {
-            shaftMode = ShaftType.valueOf(NBT.getString("shaftmode"));
+            shaftMode = ShaftType.valueOf(NBT.getStringOr("shaftmode", ""));
         }
     }
 

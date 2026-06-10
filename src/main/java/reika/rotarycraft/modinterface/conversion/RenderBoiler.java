@@ -16,7 +16,7 @@
 //import org.lwjgl.opengl.GL12;
 //
 //import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //
 //import reika.rotarycraft.auxiliary.IORenderer;
 //import reika.rotarycraft.base.RotaryTERenderer;

@@ -19,12 +19,15 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fluids.FluidType;
-import net.neoforged.fluids.capability.FluidHandlerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.fluids.FluidType;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
-public class BlockEntityDecoTank extends FluidHandlerBlockEntity {
+// 1.21.5 NOTE: FluidHandlerBlockEntity was removed; capability-based fluid block entities
+// now expose IFluidHandler through RegisterCapabilitiesEvent. This stub keeps the type
+// available so the rest of the codebase compiles; fluid storage will be wired separately.
+public class BlockEntityDecoTank extends BlockEntity {
 
     public static final int CAPACITY = 10 * FluidType.BUCKET_VOLUME;
 
@@ -32,20 +35,9 @@ public class BlockEntityDecoTank extends FluidHandlerBlockEntity {
         super(RotaryBlockEntities.DECO_TANK.get(), pos, state);
     }
 
-//    
-//    @Override
-//    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-//        return ClientboundBlockEntityDataPacket.create(getBlockPos(), this::getUpdateTag);
-//    }
-
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
         return new CompoundTag();
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        load(pkt.getTag());
     }
 
     public enum TankFlags {

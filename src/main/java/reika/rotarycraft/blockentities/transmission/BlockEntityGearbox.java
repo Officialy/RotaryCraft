@@ -26,8 +26,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 
 import reika.dragonapi.DragonAPI;
@@ -242,7 +242,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         tickcount++;
         this.getIOSides(world, pos, false);
 
-        if ((world.getDayTime() & 31) == 0)
+        if ((world.getOverworldClockTime() & 31) == 0)
             ReikaWorldHelper.causeAdjacentUpdates(world, pos);
 
         this.transferPower(world, pos);
@@ -253,7 +253,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
             this.updateTemperature(world, pos);
         }
 
-        if (!world.isClientSide && power == 0 && this.isLiving() && DragonAPI.rand.nextInt(20) == 0) {
+        if (!world.isClientSide() && power == 0 && this.isLiving() && DragonAPI.rand.nextInt(20) == 0) {
             if (damage > 0 && (!type.needsLubricant() || tank.getFluidLevel() >= 25)) {
                 this.repair(1);
                 if (type.needsLubricant()) {
@@ -269,19 +269,19 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         int oldlube = 0;
         if (type.needsLubricant() && omega > 0 && this.getBearingTier().material.ordinal() < MaterialRegistry.BEDROCK.ordinal()) {
             if (tank.isEmpty()) {
-                if (!world.isClientSide && damage < MAX_DAMAGE && DragonAPI.rand.nextInt(40) == 0 && this.tickcount >= 100) {
+                if (!world.isClientSide() && damage < MAX_DAMAGE && DragonAPI.rand.nextInt(40) == 0 && this.tickcount >= 100) {
                     damage++;
 //                    RotaryAdvancements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
                 }
                 if (DragonAPI.rand.nextDouble() * DragonAPI.rand.nextDouble() > this.getDamagedPowerFactor()) {
-                    if (type.material.isFlammable() && !world.isClientSide)
+                    if (type.material.isFlammable() && !world.isClientSide())
                         ReikaWorldHelper.ignite(world, pos);
                     world.addParticle(ParticleTypes.CRIT, pos.getX() + DragonAPI.rand.nextFloat(), pos.getY() + DragonAPI.rand.nextFloat(), pos.getZ() + DragonAPI.rand.nextFloat(), -0.5 + DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat(), -0.5 + DragonAPI.rand.nextFloat());
                     if (DragonAPI.rand.nextInt(5) == 0) {
                         world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, type.material.getDamageNoise(), SoundSource.BLOCKS, 1F, 1F, false);
                     }
                 }
-            } else if (!world.isClientSide && type.consumesLubricant() && this.getBearingTier().material.ordinal() < MaterialRegistry.DIAMOND.ordinal()) {
+            } else if (!world.isClientSide() && type.consumesLubricant() && this.getBearingTier().material.ordinal() < MaterialRegistry.DIAMOND.ordinal()) {
                 if (tickcount >= 80) {
                     tank.removeLiquid(Math.max(1, (int) (DifficultyEffects.LUBEUSAGE.getChance() * this.getLubricantConsumptionFactor())));
                     tickcount = 0;
@@ -339,7 +339,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     @Override
     protected void transferPower(Level world, BlockPos pos) {
         this.calculateRatio();
-        if (level.isClientSide && !RotaryAux.getPowerOnClient)
+        if (level.isClientSide() && !RotaryAux.getPowerOnClient)
             return;
         performRatio = true;
         omegain = torquein = 0;
@@ -485,12 +485,12 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        reduction = tag.getBoolean("reduction");
-        damage = tag.getInt("damage");
-        failed = tag.getBoolean("fail");
-        temperature = tag.getInt("temp");
+        reduction = tag.getBooleanOr("reduction", false);
+        damage = tag.getIntOr("damage", 0);
+        failed = tag.getBooleanOr("fail", false);
+        temperature = tag.getIntOr("temp", 0);
         if (tag.contains("bearing"))
-            bearingTier = GearboxTypes.valueOf(tag.getString("bearing"));
+            bearingTier = GearboxTypes.valueOf(tag.getStringOr("bearing", ""));
 
         tank.readFromNBT(tag);
     }
@@ -511,9 +511,9 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     public void load(CompoundTag nbt) {
         GearboxTypes gear = GearboxTypes.WOOD;
         if (nbt.contains("geartype")) {
-            gear = GearboxTypes.valueOf(nbt.getString("geartype"));
+            gear = GearboxTypes.valueOf(nbt.getStringOr("geartype", ""));
         } else if (nbt.contains("type")) {
-            int idx = nbt.getInt("type");
+            int idx = nbt.getIntOr("type", 0);
             if (idx >= MaterialRegistry.TUNGSTEN.ordinal())
                 idx++;
             MaterialRegistry mat = MaterialRegistry.matList[idx];
@@ -523,7 +523,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
 //        super.load(NBT);
     }
 
-    @Override
+    // 1.21.5: BlockEntity#serializeNBT now takes HolderLookup.Provider; no longer override.
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
         nbt.putString("geartype", type.name());
@@ -575,7 +575,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
     @Override
@@ -662,7 +662,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
 
     @Override
     public void overheat(Level world, BlockPos pos) {
-        if (type.material.isFlammable() && !world.isClientSide)
+        if (type.material.isFlammable() && !world.isClientSide())
             ReikaWorldHelper.ignite(world, pos);
     }
 
@@ -704,11 +704,11 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     @Override
     public void setDataFromItemStackTag(CompoundTag tag) {
         if (tag != null) {
-            damage = tag.getInt("damage");
-            this.setLubricant(tag.getInt("lube"));
+            damage = tag.getIntOr("damage", 0);
+            this.setLubricant(tag.getIntOr("lube", 0));
             if (tag.contains("bearing")) {
                 try {
-                    bearingTier = GearboxTypes.valueOf(tag.getString("bearing"));
+                    bearingTier = GearboxTypes.valueOf(tag.getStringOr("bearing", ""));
                 } catch (Exception e) {
                     RotaryCraft.LOGGER.error("Invalid gearbox item with data " + tag);
                 }
@@ -754,7 +754,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     public void repair(Level world, BlockPos pos, int tier) {
 //        damage = 60;
         int mod = Math.max(1, 64 / ReikaMathLibrary.intpow2(2, tier));
-        if (!world.isClientSide && this.tickcount % mod == 0) {
+        if (!world.isClientSide() && this.tickcount % mod == 0) {
             int amt = Math.max(1, Math.min(damage / 8, (int) (Math.sqrt(tier) / 20D)));
             this.repair(amt);
         }

@@ -276,9 +276,9 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        temperature = NBT.getInt("temperature");
+//        temperature = NBT.getIntOr("temperature", 0);
 //
-//        fermenterCookTime = NBT.getShort("CookTime");
+//        fermenterCookTime = NBT.getShortOr("CookTime", (short)0);
 //    }
 //
 //    @Override

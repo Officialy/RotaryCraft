@@ -13,7 +13,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -39,8 +40,17 @@ public class BlockFan extends BlockBasicMachine {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
+        if (pLevel.isClientSide()) {
+            // 26.1: client-side phi integration so the fan blades visibly spin.
+            @SuppressWarnings("unchecked")
+            BlockEntityTicker<T> t = (BlockEntityTicker<T>) clientPhiTicker(BlockEntityFan.class);
+            return t;
+        }
+        return (pLevel1, pPos, pState1, pBlockEntity) -> {
             ((BlockEntityFan) pBlockEntity).updateEntity(pLevel1, pPos);
-        });
+        };
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 } 

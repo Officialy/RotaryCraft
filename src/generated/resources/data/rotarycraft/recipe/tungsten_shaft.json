@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "M": "rotarycraft:mount",
+    "S": "rotarycraft:tungsten_alloy_ingot"
+  },
+  "pattern": [
+    "S",
+    "M"
+  ],
+  "result": {
+    "count": 8,
+    "id": "rotarycraft:tungsten_shaft"
+  }
+}

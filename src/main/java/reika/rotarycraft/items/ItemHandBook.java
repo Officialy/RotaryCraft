@@ -12,7 +12,7 @@ package reika.rotarycraft.items;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,14 +25,14 @@ import reika.rotarycraft.base.ItemRotaryTool;
 public class ItemHandBook extends ItemRotaryTool implements MenuProvider {
 
     public ItemHandBook() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         player.openMenu(this);
         //RotaryAdvancements.RCUSEBOOK.triggerAchievement(player);
-        return InteractionResultHolder.pass(this.getDefaultInstance()); //todo interactionresult stuff
+        return InteractionResult.PASS; //todo interactionresult stuff
     }
 
     @Override

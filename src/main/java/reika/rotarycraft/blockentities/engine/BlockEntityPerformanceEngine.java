@@ -24,9 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.FluidType;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -68,13 +68,13 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
 
     @Override
     protected void internalizeFuel() {
-        if (itemHandler.getStackInSlot(0) != ItemStack.EMPTY && fuel.getFluidLevel() + FluidType.BUCKET_VOLUME < FUELCAP) {
+        if (!itemHandler.getStackInSlot(0).isEmpty() && fuel.getFluidLevel() + FluidType.BUCKET_VOLUME < FUELCAP) {
             if (itemHandler.getStackInSlot(0).getItem() == RotaryItems.ETHANOL.get()) {
                 ReikaInventoryHelper.decrStack(0, itemHandler);
                 fuel.addLiquid(1000, RotaryFluids.ETHANOL.get());
             }
         }
-        if (itemHandler.getStackInSlot(1) != null && additives < FUELCAP / FluidType.BUCKET_VOLUME) { //additives
+        if (!itemHandler.getStackInSlot(1).isEmpty() && additives < FUELCAP / FluidType.BUCKET_VOLUME) {
             Item id = itemHandler.getStackInSlot(1).getItem();
             if (id == Items.BLAZE_POWDER || id == Items.REDSTONE || id == Items.GUNPOWDER) {
                 ReikaInventoryHelper.decrStack(1, itemHandler);
@@ -205,7 +205,7 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
         super.readSyncTag(tag);
 
         if (type.usesAdditives())
-            additives = tag.getInt("additive");
+            additives = tag.getIntOr("additive", 0);
     }
 
     @Override
@@ -241,16 +241,6 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
     @Override
     public boolean hasATank() {
         return true;
-    }
-
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
-
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
     }
 
     @Override

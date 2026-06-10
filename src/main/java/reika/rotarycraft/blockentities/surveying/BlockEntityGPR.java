@@ -222,11 +222,11 @@
 //    public void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        getStepX() = NBT.getInt("xoff");
-//        getStepY() = NBT.getInt("yoff");
-//        getStepZ() = NBT.getInt("zoff");
+//        getStepX() = NBT.getIntOr("xoff", 0);
+//        getStepY() = NBT.getIntOr("yoff", 0);
+//        getStepZ() = NBT.getIntOr("zoff", 0);
 //
-//        xdir = NBT.getBoolean("xd");
+//        xdir = NBT.getBooleanOr("xd", false);
 //    }
 //
 //    @Override

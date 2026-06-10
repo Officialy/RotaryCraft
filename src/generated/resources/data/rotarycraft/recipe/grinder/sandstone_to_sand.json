@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:grinder",
+  "input": "minecraft:sandstone",
+  "output": {
+    "count": 4,
+    "id": "minecraft:sand"
+  }
+}

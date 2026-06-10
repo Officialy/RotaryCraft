@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.model.GearboxBaseModel;
 
@@ -18,7 +18,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class Gearbox4Model extends GearboxBaseModel {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/gear/");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/gear/");
 
     private final ModelPart shape12;
     private final ModelPart shape13;
@@ -44,11 +44,11 @@ public class Gearbox4Model extends GearboxBaseModel {
     private final ModelPart shape33;
     private final ModelPart shape34;
     private final ModelPart shape35;
-    private final ModelPart root;
+    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
 
     public Gearbox4Model(ModelPart modelPart) {
         super(modelPart);
-        this.root = modelPart;
+        // 1.21.5: Model.root is final and set by super(modelPart, ...); assignment removed.
 
         this.shape12 = modelPart.getChild("shape12");
         this.shape13 = modelPart.getChild("shape13");
@@ -320,11 +320,11 @@ public class Gearbox4Model extends GearboxBaseModel {
 
         @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
     @Override
-    public ResourceLocation getTexture() {
-        return TEXTURE_LOCATION;
+    public Identifier getTexture() {
+        return Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/gear/geartex.png");
     }
 }

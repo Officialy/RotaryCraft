@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass",
+    "W": "minecraft:oak_planks"
+  },
+  "pattern": [
+    "WGW",
+    "WGW",
+    "WGW"
+  ],
+  "result": {
+    "id": "rotarycraft:hose"
+  }
+}

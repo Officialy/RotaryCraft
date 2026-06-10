@@ -1,0 +1,16 @@
+{
+  "type": "rotarycraft:blast_furnace_shapeless",
+  "additives": [
+    "rotarycraft:tungsten_flakes",
+    "minecraft:obsidian"
+  ],
+  "experience": 0.0,
+  "ingredients": [
+    "rotarycraft:spring_steel_ingot"
+  ],
+  "output": {
+    "id": "rotarycraft:tungsten_alloy_ingot"
+  },
+  "temperature": 1100.0,
+  "timeMultiplier": 1.0
+}

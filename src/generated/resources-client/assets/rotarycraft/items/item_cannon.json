@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/item_cannon",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "itemcannon"
+    }
+  }
+}

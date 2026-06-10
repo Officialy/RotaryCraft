@@ -12,9 +12,7 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
-import net.neoforged.common.capabilities.ForgeCapabilities;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.items.SlotItemHandler;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
@@ -33,10 +31,10 @@ public class PerformanceContainer extends IOMachineContainer<BlockEntityPerforma
         super(RotaryMenus.PERFORMANCE_ENGINE.get(), id, inv, par2BlockEntityEngine);
         engine = par2BlockEntityEngine;
 
-        engine.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
-            this.addSlot(new SlotItemHandler(itemHandler, 0, 58, 36));
-            this.addSlot(new SlotItemHandler(itemHandler, 1, 103, 36));
-        });
+        // 1.21.5: wire slots directly against the BE's ManagedItemHandler. BlockEntityInventoryIOMachine
+        // exposes `itemHandler` publicly, so we no longer need a Forge capability lookup here.
+        this.addSlot(engine.itemHandler.slot(0, 58, 36));
+        this.addSlot(engine.itemHandler.slot(1, 103, 36));
 
         this.addPlayerInventory(inv);
     }

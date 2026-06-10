@@ -17,8 +17,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.u
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -85,6 +85,7 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 
 	@Override
 	public void updateEntity(Level world, BlockPos pos) {
+	    super.updateBlockEntity();
 		this.getIOSides(world, pos, world.getBlockState(pos).getValue(BlockRotaryCraftMachine.FACING));
 		write = this.getFacing().getOpposite();
 
@@ -150,7 +151,7 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 
 	@Override
 	public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-		return null;
+		return FluidStack.EMPTY;
 	}
 	@Override
 	public boolean canFill(Direction from, Fluid fluid) {

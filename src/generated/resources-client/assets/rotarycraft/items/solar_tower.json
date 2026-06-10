@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/solar_tower",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "solartower"
+    }
+  }
+}

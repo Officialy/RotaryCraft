@@ -79,7 +79,7 @@
 //				int y = dy+i/w*18;
 //				String tip = null;
 //				if (is.stackTagCompound != null && is.stackTagCompound.hasKey("dropTooltip")) {
-//					tip = is.stackTagCompound.getString("dropTooltip");
+//					tip = is.stackTagCompound.getStringOr("dropTooltip", "");
 //					is.stackTagCompound.removeTag("dropTooltip");
 //				}
 //				pos.add(tip != null ? new PositionedStackWithTooltip(is, x, y, tip) : new PositionedStack(is, x, y));

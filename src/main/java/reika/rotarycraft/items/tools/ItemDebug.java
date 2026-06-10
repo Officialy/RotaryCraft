@@ -11,7 +11,7 @@ package reika.rotarycraft.items.tools;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BaseSpawner;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
-import net.neoforged.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.rotarycraft.base.ItemRotaryTool;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -39,11 +39,11 @@ import reika.rotarycraft.registry.MachineRegistry;
 public class ItemDebug extends ItemRotaryTool {
 
     public ItemDebug() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player ep, InteractionHand hand) {
+    public InteractionResult use(Level world, Player ep, InteractionHand hand) {
         //ReikaChatHelper.clearChat();
         if (hand.equals(InteractionHand.MAIN_HAND)) {
             if (!ep.isShiftKeyDown()) {
@@ -58,7 +58,7 @@ public class ItemDebug extends ItemRotaryTool {
             BlockEntity te = world.getBlockEntity(ep.blockPosition());
             if (ep.isCrouching() && te instanceof BlockEntitySpringPowered sp) {
                 sp.isCreative = !sp.isCreative;
-                return InteractionResultHolder.pass(this.getDefaultInstance()); //todo check if this works
+                return InteractionResult.PASS; //todo check if this works
             }
             MachineRegistry m = MachineRegistry.getMachine(world, ep.blockPosition());
             if (m == MachineRegistry.BEVELGEARS) {
@@ -88,20 +88,16 @@ public class ItemDebug extends ItemRotaryTool {
                     ReikaChatHelper.write(String.format("%d", tile.getFluidLevel()));
                 }
             }
-            if (world.getBlockState(ep.blockPosition()).getBlock() == Blocks.SPAWNER) {
-                SpawnerBlockEntity tile = (SpawnerBlockEntity) te;
-                if (tile != null) {
-                    BaseSpawner lgc = tile.getSpawner();
-                    CompoundTag tag = lgc.getSpawnerBlockEntity().getUpdateTag();
-                    tag.putInt("Delay", 0);
-                    lgc.getSpawnerBlockEntity().load(tag);
-                }
+            if (world.getBlockState(ep.blockPosition()).getBlock() == Blocks.SPAWNER && te instanceof SpawnerBlockEntity tile) {
+                CompoundTag spawnData = tile.saveCustomOnly(world.registryAccess()).getCompoundOrEmpty("SpawnData");
+                String id = spawnData.getCompoundOrEmpty("entity").getString("id").orElse("unknown");
+                ReikaChatHelper.write("Spawner spawns: " + id);
             }
             if (m != null && m.isStandardPipe()) {
                 BlockEntityPipe tile = (BlockEntityPipe) te;
                 if (tile != null) {
                     if (tile.getAttributes() != null)
-                        ReikaChatHelper.write(String.format("%s  %d  %d", ForgeRegistries.FLUIDS.getKey(tile.getAttributes()).getNamespace(), tile.getFluidLevel(), tile.getPressure()));
+                        ReikaChatHelper.write(String.format("%s  %d  %d", BuiltInRegistries.FLUID.getKey(tile.getAttributes()).getNamespace(), tile.getFluidLevel(), tile.getPressure()));
                     else
                         ReikaChatHelper.write("Pipe is empty.");
                 }
@@ -109,7 +105,7 @@ public class ItemDebug extends ItemRotaryTool {
             if (m == MachineRegistry.PUMP) {
                 BlockEntityPump tile = (BlockEntityPump) te;
                 if (tile != null) {
-                    ReikaChatHelper.write(String.format("%s  %d", tile.getFluidLevel() <= 0 ? 0 : ForgeRegistries.FLUIDS.getKey(tile.getLiquid().getFluid()).getNamespace(), tile.getLevel()));
+                    ReikaChatHelper.write(String.format("%s  %d", tile.getFluidLevel() <= 0 ? 0 : BuiltInRegistries.FLUID.getKey(tile.getLiquid().getFluid()).getNamespace(), tile.getLevel()));
                 }
             }
             if (m == MachineRegistry.RESERVOIR) {
@@ -117,7 +113,7 @@ public class ItemDebug extends ItemRotaryTool {
                 if (ep.isShiftKeyDown())
                     tile.isCreative = !tile.isCreative;
                 else if (tile != null && !tile.isEmpty()) {
-                    ReikaChatHelper.write(String.format("%s  %d", ForgeRegistries.FLUIDS.getKey(tile.getFluid().getFluid()).getNamespace(), tile.getLevel()));
+                    ReikaChatHelper.write(String.format("%s  %d", BuiltInRegistries.FLUID.getKey(tile.getFluid().getFluid()).getNamespace(), tile.getLevel()));
                 }
             }
 //        if (m == MachineRegistry.EXTRACTOR) {
@@ -203,6 +199,6 @@ public class ItemDebug extends ItemRotaryTool {
             }
         }
 
-        return InteractionResultHolder.pass(this.getDefaultInstance());
+        return InteractionResult.PASS;
     }
 }

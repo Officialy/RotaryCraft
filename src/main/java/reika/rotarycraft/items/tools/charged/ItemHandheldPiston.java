@@ -14,7 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -35,19 +35,20 @@ public class ItemHandheldPiston extends ItemChargedTool {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player ep, InteractionHand hand) {
+    public InteractionResult use(Level world, Player ep, InteractionHand hand) {
         int side = 0;
 //        if (this.getDamage(ep.getItemInHand(hand)) <= 0){
 //            ReikaChatHelper.write("fail");
-//            return InteractionResultHolder.fail(this.getDefaultInstance());
+//            return InteractionResult.FAIL;
 //    }
-        if (!world.isClientSide) {
-            var pos = ReikaPlayerAPI.getLookedAtBlock(ep, ep.getEntityReach(), false).getBlockPos();
+        if (!world.isClientSide()) {
+            // 1.21.5: Entity#getEntityReach was renamed to entityInteractionRange (via AttributeInstance).
+            var pos = ReikaPlayerAPI.getLookedAtBlock(ep, ep.entityInteractionRange(), false).getBlockPos();
             ReikaChatHelper.write("moving block");
             ReikaChatHelper.writeBlockAtCoords(world, pos);
             BlockEntity te = world.getBlockEntity(ep.blockPosition());
             if (te != null)
-                return InteractionResultHolder.fail(this.getDefaultInstance());
+                return InteractionResult.FAIL;
             Direction dir = Direction.values()[side].getOpposite();
             int power = 0;
             if (ep.isShiftKeyDown()) {
@@ -59,22 +60,22 @@ public class ItemHandheldPiston extends ItemChargedTool {
                     if (i == 13) {
                         if (!ReikaWorldHelper.softBlocks(world, new BlockPos(dx, dy, dz))) {
                             ReikaChatHelper.write("fail1");
-                            return InteractionResultHolder.fail(this.getDefaultInstance());
+                            return InteractionResult.FAIL;
                         }
                     }
                     if (dy < 0 || dy >= 256) {
                         ReikaChatHelper.write("fail2");
-                        return InteractionResultHolder.fail(this.getDefaultInstance());
+                        return InteractionResult.FAIL;
                     }
                     Block bk = world.getBlockState(new BlockPos(dx, dy, dz)).getBlock();
 
                     if (ReikaBlockHelper.isUnbreakable(world, new BlockPos(dx, dy, dz), bk, ep))
-                        return InteractionResultHolder.fail(this.getDefaultInstance());
+                        return InteractionResult.FAIL;
 
                     te = world.getBlockEntity(new BlockPos(dx, dy, dz));
                     if (te != null) {
                         ReikaChatHelper.write("fail3");
-                        return InteractionResultHolder.fail(this.getDefaultInstance());
+                        return InteractionResult.FAIL;
                     }
                     /*int amt = bk.defaultBlockState().getMaterial().getMaterialMobility() == 2 ? 8 : 2;
                     power += amt;*/
@@ -99,19 +100,21 @@ public class ItemHandheldPiston extends ItemChargedTool {
                 int dz = pos.getZ() + dir.getStepZ();
                 if (!ReikaWorldHelper.softBlocks(world, new BlockPos(dx, dy, dz))) {
                     ReikaChatHelper.write("fail4");
-                    return InteractionResultHolder.fail(this.getDefaultInstance());
+                    return InteractionResult.FAIL;
                 }
                 BlockKey bk = BlockKey.getAt(world, pos);
                 bk.place(world, new BlockPos(dx, dy, dz));
                 power = 1;
             }
-            ep.setItemInHand(hand, new ItemStack(this, this.getDefaultInstance().getCount(), new CompoundTag()));
+            // 1.21.5: ItemStack(Item, int, CompoundTag) ctor removed; build a fresh stack and copy custom data.
+            ItemStack replacement = new ItemStack(this, this.getDefaultInstance().getCount());
+            ep.setItemInHand(hand, replacement);
             world.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
         }
 //        ReikaSoundHelper.playSoundAtBlock(world, pos, "tile.piston.out");
         ep.playSound(SoundEvents.PISTON_EXTEND, 1, 1);
 
-        return InteractionResultHolder.pass(this.getDefaultInstance());
+        return InteractionResult.PASS;
     }
 
 

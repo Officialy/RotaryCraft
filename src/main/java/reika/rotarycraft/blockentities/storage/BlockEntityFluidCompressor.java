@@ -17,8 +17,8 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.level.material.Fluids;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.libraries.ReikaNBTHelper;
@@ -220,7 +220,7 @@
 //            return;
 //        }
 //        FluidStack f = ReikaNBTHelper.getFluidFromNBT(NBT);
-//        int level = NBT.getInt("lvl");
+//        int level = NBT.getIntOr("lvl", 0);
 //        if (f != null && level > 0)
 //            tank.setContents(level, f.getFluid());
 //    }
@@ -242,7 +242,7 @@
 //        FluidStack f = ReikaNBTHelper.getFluidFromNBT(nbt);
 //        if (f != null) {
 //            String fluid = f.getDisplayName().getString();
-//            int amt = nbt.getInt("lvl");
+//            int amt = nbt.getIntOr("lvl", 0);
 //            if (amt > 0) {
 //                String amount = String.format("%d", amt / 1000);
 //                String contents = "Contents: " + amount + "B of " + fluid;

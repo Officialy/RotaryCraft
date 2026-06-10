@@ -16,17 +16,18 @@ import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.entity.projectile.hurtingprojectile.Fireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.entity.IEntityAdditionalSpawnData;
-import net.neoforged.registries.ForgeRegistries;
-import net.neoforged.registries.RegistryManager;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.minecraft.core.registries.BuiltInRegistries;
 import reika.rotarycraft.auxiliary.TurretDamage;
 import reika.rotarycraft.base.blockentity.BlockEntityAimedCannon;
 
-public abstract class EntityTurretShot extends Fireball implements IEntityAdditionalSpawnData {
+// 1.21.5: IEntityAdditionalSpawnData → IEntityWithComplexSpawn; Fireball constructor now
+// expects a Vec3 movement instead of three doubles; Entity#makeBoundingBox takes a Vec3.
+public abstract class EntityTurretShot extends Fireball implements IEntityWithComplexSpawn {
 
     protected BlockEntityAimedCannon gun;
 
@@ -35,7 +36,10 @@ public abstract class EntityTurretShot extends Fireball implements IEntityAdditi
     }
 
     public EntityTurretShot(Level world, BlockPos pos, BlockPos vpos, BlockEntityAimedCannon te) {
-        super(EntityType.FIREBALL, pos.getX(), pos.getY(), pos.getZ(), vpos.getX(), vpos.getY(), vpos.getZ(), world);
+        super(EntityType.FIREBALL, world);
+        this.setPos(pos.getX(), pos.getY(), pos.getZ());
+        net.minecraft.world.phys.Vec3 direction = new net.minecraft.world.phys.Vec3(vpos.getX() - pos.getX(), vpos.getY() - pos.getY(), vpos.getZ() - pos.getZ()).normalize().scale(0.1);
+        this.setDeltaMovement(direction);
         gun = te;
     }
 
@@ -49,8 +53,16 @@ public abstract class EntityTurretShot extends Fireball implements IEntityAdditi
     }
 
     @Override
-    protected AABB makeBoundingBox() {
-        return new AABB(blockPosition().getX() + 0.4, blockPosition().getY() + 0.4, blockPosition().getZ() + 0.4, blockPosition().getX() + 0.6, blockPosition().getY() + 0.6, blockPosition().getZ() + 0.6);
+    protected AABB makeBoundingBox(net.minecraft.world.phys.Vec3 pos) {
+        return new AABB(pos.x + 0.4, pos.y + 0.4, pos.z + 0.4, pos.x + 0.6, pos.y + 0.6, pos.z + 0.6);
+    }
+
+    @Override
+    public void writeSpawnData(net.minecraft.network.RegistryFriendlyByteBuf data) {
+    }
+
+    @Override
+    public void readSpawnData(net.minecraft.network.RegistryFriendlyByteBuf data) {
     }
 
     protected abstract int getAttackDamage();

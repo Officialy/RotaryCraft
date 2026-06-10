@@ -22,7 +22,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import reika.dragonapi.libraries.ReikaNBTHelper;
 import reika.rotarycraft.RotaryCraft;
@@ -55,8 +55,8 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
     }
 
     public static int getRatioFromIntegratedGearItem(ItemStack is, boolean requireFill) {
-        int ratio = is.getTag().getInt("ratio");
-        if (requireFill && is.getTag() == null)
+        int ratio = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("ratio", 0);
+        if (requireFill && is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
             return 0;
         ItemIntegratedGearbox i = (ItemIntegratedGearbox) is.getItem();
         if (requireFill && !i.isFull(is))
@@ -83,32 +83,33 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
         return InteractionResult.FAIL;
     }
 
+    // 1.21.5: Item.appendHoverText now takes (ItemStack, TooltipContext, TooltipDisplay, Consumer<Component>, TooltipFlag).
     @Override
-    public void appendHoverText(ItemStack is,  Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if (is.getOrCreateTag().getInt("ratio") > 0) {
+    public void appendHoverText(ItemStack is, net.minecraft.world.item.Item.TooltipContext ctx, net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("ratio", 0) > 0) {
             int ratio = getRatioFromIntegratedGearItem(is, false);
-            pTooltipComponents.add(Component.translatable("tooltip.integratedgearbox.ratio").append(Component.literal(Math.abs(ratio) + "x")));
+            pTooltipComponents.accept(Component.translatable("tooltip.integratedgearbox.ratio").append(Component.literal(Math.abs(ratio) + "x")));
             ratio = getRatioFromIntegratedGearItem(is, true);
             if (ratio > 0) {
-                pTooltipComponents.add(Component.translatable("tooltip.integratedgearbox.torquemode"));
+                pTooltipComponents.accept(Component.translatable("tooltip.integratedgearbox.torquemode"));
             } else if (ratio < 0) {
-                pTooltipComponents.add(Component.translatable("tooltip.integratedgearbox.speedmode"));
+                pTooltipComponents.accept(Component.translatable("tooltip.integratedgearbox.speedmode"));
             } else {
-                pTooltipComponents.add(Component.translatable("tooltip.integratedgearbox.requiresfill"));
-                if (is.getTag() != null) {
+                pTooltipComponents.accept(Component.translatable("tooltip.integratedgearbox.requiresfill"));
+                if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
                     int amt = this.getCurrentFillLevel(is);
                     Fluid f = this.getCurrentFluid(is);
-                    pTooltipComponents.add(Component.literal("Is " + (amt * 100F / this.getCapacity(is))).append("%" + Component.translatable("tooltip.integratedgearbox.filled") + new FluidStack(f, amt)));
+                    pTooltipComponents.accept(Component.literal("Is " + (amt * 100F / this.getCapacity(is))).append("%" + Component.translatable("tooltip.integratedgearbox.filled") + new FluidStack(f, amt)));
                 }
             }
         } else {
-            pTooltipComponents.add(Component.translatable("tooltip.integratedgearbox.gearandfluid"));
+            pTooltipComponents.accept(Component.translatable("tooltip.integratedgearbox.gearandfluid"));
         }
     }
 
     @Override
     public boolean isValidFluid(FluidStack f, ItemStack is) {
-        return is.getTag() != null ? f.equals(ReikaNBTHelper.getFluidFromNBT(is.getTag())) : this.isValidFluid(f);
+        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? f.equals(ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag())) : this.isValidFluid(f);
     }
 
     private boolean isValidFluid(FluidStack f) {
@@ -124,7 +125,7 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
 
     @Override
     public int getCurrentFillLevel(ItemStack is) {
-        return is.getTag() != null ? is.getTag().getInt("lvl") : 0;
+        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0) : 0;
     }
 
     @Override
@@ -138,20 +139,21 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
         if (!this.isValidFluid(f)) {
             return 0;
         }
-        ReikaNBTHelper.writeFluidToNBT(is.getOrCreateTag(), f);
-        liq = is.getTag().getInt("lvl");
-        if (!f.equals(ReikaNBTHelper.getFluidFromNBT(is.getTag()))) {
+        ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), f);
+        liq = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0);
+        if (!f.equals(ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()))) {
             return 0;
         }
 
-        int toadd = Math.min(amt, this.getCapacity(is) - liq);
-        is.getTag().putInt("lvl", liq + toadd);
+        final int toadd = Math.min(amt, this.getCapacity(is) - liq);
+        final int fLiq = liq;
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("lvl", fLiq + toadd));
         return toadd;
     }
 
     @Override
     public boolean isFull(ItemStack is) {
-        return is.getTag() != null && this.getCurrentFillLevel(is) >= this.getCapacity(is);
+        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null && this.getCurrentFillLevel(is) >= this.getCapacity(is);
     }
 
     private boolean canFill(ItemStack is) {
@@ -160,7 +162,7 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
 
     @Override
     public Fluid getCurrentFluid(ItemStack is) {
-        return is.getTag() != null ? ReikaNBTHelper.getFluidFromNBT(is.getTag()).getFluid() : null;
+        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()).getFluid() : null;
     }
 
 }

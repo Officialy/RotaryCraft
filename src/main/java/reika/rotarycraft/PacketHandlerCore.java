@@ -190,11 +190,12 @@ public class PacketHandlerCore implements PacketHandler {
             e.printStackTrace();
             return;
         }
+        // 1.7.10 → 1.21.5: the legacy port had `if (te == null) return;` here, which silently
+        // dropped every packet whose (x,y,z) wasn't a loaded tile — including all the non-tile
+        // packets in the switch (MUSICPARTICLE, FERTILIZER, GRAVELGUN, SLIDE, FRIDGEBREAK,
+        // SPARKLOC, …). Do the lookup once, allow null, and let the per-case casts (or the outer
+        // NPE catch) handle tile-targeted packets whose target was destroyed mid-flight.
         BlockEntity te = world.getBlockEntity(new BlockPos(x, y, z));
-		//todo This apparently breaks all non-block packets
-		if (te == null) {
-			return;
-		}
         try {
             switch (pack) {
                /* case BORERTOGGLEALL: {
@@ -422,18 +423,18 @@ public class PacketHandlerCore implements PacketHandler {
                     ((EnergyToPowerBase) te).incrementRedstoneState();
                     break;
                 case FERTILIZER:
-                    if (world.isClientSide) {
+                    if (world.isClientSide()) {
                         ReikaParticleHelper.BONEMEAL.spawnAroundBlock(world, new BlockPos(x, y, z), 4);
                     }
                     break;
                 case GRAVELGUN:
                     //ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
                     ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, new BlockPos(x, y, z), 1);
-                    world.playLocalSound(x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1, 1F, false);
+                    world.playLocalSound(x, y, z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 1, 1F, false);
                     break;
                 case SLIDE: {
                     ItemStack is = ep.getMainHandItem();
-                    is.getOrCreateTag().putString("file", stringdata);
+                    is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putString("file", stringdata);
                     break;
                 }
                 /*case POWERBUS:

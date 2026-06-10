@@ -13,12 +13,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
@@ -60,8 +63,8 @@ public class RenderSmokeDetector extends RotaryTERenderer<BlockEntitySmokeDetect
             stack.mulPose(Axis.YP.rotationDegrees(-f));
         }
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(SmokeDetectorModel.TEXTURE_LOCATION));
-        smokeDetectorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(SmokeDetectorModel.TEXTURE_LOCATION));
+        smokeDetectorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
 //     todo       if (tile.isInWorld())
 //                GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -70,13 +73,19 @@ public class RenderSmokeDetector extends RotaryTERenderer<BlockEntitySmokeDetect
     }
 
     @Override
-    public void render(BlockEntitySmokeDetector tile, float pPartialTick, PoseStack stack, MultiBufferSource multiBufferSource, int pPackedLight, int pPackedOverlay) {
-        if (this.doRenderModel(stack, tile)) {
-            this.renderBlockEntitySmokeDetectorAt(stack, tile, multiBufferSource, pPackedLight);
-//            RotaryCraft.LOGGER.info("Rendering Smoke Detector");
-        }
-        if (tile.hasLevel())
-            IORenderer.renderIO(stack, multiBufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return SmokeDetectorModel.TEXTURE_LOCATION;
     }
 
+    @Override
+    protected boolean useEntityCutout() {
+        return true;
+    }
+
+    @Override
+    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+        if (be instanceof BlockEntitySmokeDetector detector)
+            renderBlockEntitySmokeDetectorAt(stack, detector, mbs, light);
+    }
 }
+

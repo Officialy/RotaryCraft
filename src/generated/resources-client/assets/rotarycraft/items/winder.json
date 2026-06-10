@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/winder",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "winder"
+    }
+  }
+}

@@ -16,8 +16,8 @@
 //import net.minecraft.world.level.Level;
 //import net.neoforged.api.distmarker.Dist;
 //import net.neoforged.api.distmarker.OnlyIn;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //import reika.dragonapi.instantiable.data.Collections.ChancedOutputList.ItemWithChance;
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.instantiable.TemporaryInventory;
@@ -177,7 +177,7 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        progressTime = NBT.getInt("CookTime");
+//        progressTime = NBT.getIntOr("CookTime", 0);
 //        tank.load(NBT);
 //    }
 //

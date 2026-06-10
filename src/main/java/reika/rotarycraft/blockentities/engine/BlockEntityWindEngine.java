@@ -18,8 +18,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.libraries.ReikaDirectionHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -55,7 +55,7 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
             case 2 -> d = 1;
             case 3 -> d = -1;
         }
-        AABB box = new AABB(pos.getX() + c, pos.getY(), pos.getZ() + d, pos.getX() + 1 + c, pos.getY() + 1, pos.getZ() + 1 + d).expandTowards(a, 1, b);
+        AABB box = new AABB(pos.getX() + c, pos.getY(), pos.getZ() + d, pos.getX() + 1 + c, pos.getY() + 1, pos.getZ() + 1 + d).inflate(a, 1, b);
         List<LivingEntity> in = world.getEntitiesOfClass(LivingEntity.class, box);
         for (LivingEntity ent : in) {
             ent.hurt(ent.damageSources().generic(), 1);
@@ -142,10 +142,9 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
         this.dealBladeDamage(world, pos);
     }
 
-    @Override
-
+    // 1.21.5: BlockEntity.getRenderBoundingBox removed; renderers compute their own bounds.
     public AABB getRenderBoundingBox() {
-        return new AABB(worldPosition).expandTowards(1, 1, 1);//ReikaAABBHelper.getBlockAABB(xCoord, yCoord, zCoord).expand(1, 1, 1);
+        return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 1, worldPosition.getZ() + 1).inflate(1, 1, 1);
     }
 
     @Override
@@ -178,16 +177,6 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
     @Override
     public int getAmbientTemperature() {
         return 0;
-    }
-
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
-
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
     }
 
     private static class WindClearanceCheck {

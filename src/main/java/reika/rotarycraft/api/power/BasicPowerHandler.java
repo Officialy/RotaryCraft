@@ -51,9 +51,9 @@ public final class BasicPowerHandler {
     }
 
     public void load(CompoundTag NBT) {
-        omega = NBT.getInt("omg");
-        torque = NBT.getInt("tq");
-        power = NBT.getLong("pwr");
+        omega = NBT.getIntOr("omg", 0);
+        torque = NBT.getIntOr("tq", 0);
+        power = NBT.getLongOr("pwr", 0L);
     }
 
     public void saveAdditional(CompoundTag NBT) {

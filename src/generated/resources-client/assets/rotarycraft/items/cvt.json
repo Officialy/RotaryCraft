@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/cvt",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "cvt"
+    }
+  }
+}

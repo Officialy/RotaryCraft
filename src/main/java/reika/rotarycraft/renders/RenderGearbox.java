@@ -14,11 +14,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import com.mojang.math.Axis;
 import org.joml.Quaternionf;
 import reika.dragonapi.ModList;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
@@ -30,6 +32,8 @@ import reika.rotarycraft.models.animated.Gearbox16Model;
 import reika.rotarycraft.models.animated.Gearbox4Model;
 import reika.rotarycraft.models.animated.Gearbox8Model;
 import reika.rotarycraft.models.animated.GearboxModel;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
@@ -81,62 +85,56 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
     public void renderBlockEntityGearboxAt(PoseStack stack, BlockEntityGearbox tile, MultiBufferSource bufferSource, int light, int overlay) {
 //        this.setupGL(stack, tile, par2, par4, par6);
 
-        int var11 = 0;     //used to rotate the model about metadata
         if (tile.isInWorld()) {
-  /*todo          switch (tile.getBlockMetadata() & 3) {
-                case 0:
-                    var11 = 0;
-                    break;
-                case 1:
-                    var11 = 180;
-                    break;
-                case 2:
-                    var11 = 90;
-                    break;
-                case 3:
-                    var11 = 270;
-                    break;
-            }*/
-            stack.mulPose(new Quaternionf(var11, 0.0F, 1.0F, 0.0F));
+            // 26.1 fix: legacy port left the gearbox at the block's local origin (corner),
+            // with no facing rotation and no Z-axis flip, so the model appeared offset and
+            // upside-down to the user ("gearboxes look messed up"). Mirror the
+            // splitter/shaft mount: translate to top-centre, yaw by -facing-90°, flip Z 180°.
+            var blockstate = tile.getLevel() != null ? tile.getBlockState()
+                    : RotaryBlocks.HSLA_GEARBOX_2x.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, net.minecraft.core.Direction.SOUTH);
+            float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
+            stack.translate(0.5F, 1.5F, 0.5F);
+            stack.mulPose(Axis.YP.rotationDegrees(-f - 90));
+            stack.mulPose(Axis.ZP.rotationDegrees(180));
             ArrayList li = ReikaJavaLibrary.makeListFrom(tile.getBearingTier());
 
             switch (tile.getRatio()) {
                 case 2 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(GearboxModel.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(GearboxModel.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
                     gearboxModel.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
                 }
                 case 4 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(Gearbox4Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox4Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
                     gearboxModel4.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
                 }
                 case 8 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(Gearbox8Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox8Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
                     gearboxModel8.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
                 }
                 case 16 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(Gearbox16Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox16Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
                     gearboxModel16.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
                 }
             }
 
         } else {
             //ReikaChatHelper.write(this.itemMetadata);
-            stack.mulPose(new Quaternionf(-90, 0.0F, 1.0F, 0.0F));
+            stack.mulPose(Axis.YP.rotationDegrees(-90));
             switch (tile.getRatio()) {
                 case 2 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(GearboxModel.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(GearboxModel.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
                     gearboxModel.renderAll(stack, vertexconsumer, light, tile, null);
                 }
                 case 4 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(Gearbox4Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox4Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
                     gearboxModel4.renderAll(stack, vertexconsumer, light, tile, null);
                 }
                 case 8 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(Gearbox8Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox8Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
                     gearboxModel8.renderAll(stack, vertexconsumer, light, tile, null);
                 }
                 case 16 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation.tryParse(Gearbox16Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox16Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
                     gearboxModel16.renderAll(stack, vertexconsumer, light, tile, null);
                 }
             }
@@ -167,7 +165,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
             stack.translate(par2, par4, par6);
             float sc = 0.1f;
             stack.scale(sc, sc, sc);
-            stack.mulPose(new Quaternionf(var11, 0.0F, 1.0F, 0.0F));
+            stack.mulPose(Axis.YP.rotationDegrees(var11));
             String s = tile.reduction ? "Torque" : "Speed";
 //            Minecraft.getInstance().font.drawInBatch(s, 0, 0, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
             stack.scale(1 / sc, 1 / sc, 1 / sc);
@@ -182,7 +180,6 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
         if (tr.getLubricant() > 0) {
             Fluid f = RotaryFluids.LUBRICANT.get();
             ReikaLiquidRenderer.bindFluidTexture(f);
-            RenderSystem.enableBlend();
             IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
             int c = 0xffffff;
             if (tr.isLiving()) {
@@ -227,7 +224,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
         stack.popPose();
     }*/
 
-    @Override
+    // 1.21.5: render -> submit; @Override dropped
     public void render(BlockEntityGearbox tile, float p_112308_, PoseStack stack, MultiBufferSource bufferSource, int packetLight, int overlay) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityGearboxAt(stack, tile, bufferSource, packetLight, overlay);
@@ -240,4 +237,38 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
 //         todo   this.renderLiquid(stack, tile);
         }
     }
+
+    /**
+     * 1.21.5 submit hook. Mirrors the engine/shaft pattern: snapshot the outer pose so the
+     * deferred lambda doesn't see a popped stack, pre-compute the RenderType (one per gearbox
+     * ratio × material combination), and use a single-RT MultiBufferSource adapter so the
+     * existing {@code renderBlockEntityGearboxAt} code keeps working unchanged.
+     */
+    @Override
+    public void submit(net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState state,
+                       PoseStack poseStack,
+                       net.minecraft.client.renderer.SubmitNodeCollector collector,
+                       net.minecraft.client.renderer.state.level.CameraRenderState camera) {
+        net.minecraft.world.level.Level level = Minecraft.getInstance().level;
+        if (level == null) return;
+        net.minecraft.world.level.block.entity.BlockEntity be = level.getBlockEntity(state.blockPos);
+        if (!(be instanceof BlockEntityGearbox tile)) return;
+        if (!this.doRenderModel(poseStack, tile)) return;
+
+        // The per-ratio GearboxModel subclasses share the same texture directory; pick the file
+        // by material via {@link GearboxTypes#getBaseGearboxTexture}.
+        RenderType rt = RenderTypes.entityCutout(textureWithSuffix(GearboxModel.TEXTURE_LOCATION, tile.getGearboxType().getBaseGearboxTexture()));
+
+        PoseStack snapped = new PoseStack();
+        snapped.last().set(poseStack.last());
+        int light = state.lightCoords;
+        collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
+            MultiBufferSource oneRT = ignored -> vc;
+            renderBlockEntityGearboxAt(snapped, tile, oneRT, light, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY);
+        });
+        if (tile.isInWorld()) {
+            IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
+        }
+    }
 }
+

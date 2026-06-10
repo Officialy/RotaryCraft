@@ -16,8 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.auxiliary.interfaces.RedstoneUpgradeable;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -80,7 +80,7 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
 
     @Override
     protected void affectSurroundings(Level world, BlockPos pos) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
 //            if (getAdjacentBlockEntity(write) instanceof BlockEntityExtractor) {
 //                RotaryAdvancements.DUMBEXTRACTOR.triggerAchievement(this.getPlacer());
 //            }
@@ -94,7 +94,7 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
 
     @Override
     public boolean canUpgradeWith(ItemStack item) {
-        return !this.hasRedstoneUpgrade() && RotaryItems.UPGRADE.get() == item.getItem() && item.getTag().getString("upgradeType").equals(ItemEngineUpgrade.UpgradeType.REDSTONE.name());
+        return !this.hasRedstoneUpgrade() && RotaryItems.UPGRADE.get() == item.getItem() && item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getStringOr("upgradeType", "").equals(ItemEngineUpgrade.UpgradeType.REDSTONE.name());
     }
 
     @Override
@@ -121,7 +121,7 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        hasUpgrade = tag.getBoolean("redstoneUpgrade");
+        hasUpgrade = tag.getBooleanOr("redstoneUpgrade", false);
     }
 
     @Override
@@ -133,9 +133,11 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
     public void breakBlock() {
         super.breakBlock();
         if (this.hasRedstoneUpgrade()) {
-            ReikaItemHelper.dropItem(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, new ItemStack(RotaryItems.UPGRADE.get(), 1, new CompoundTag() {{
-                putString("upgrade", ItemEngineUpgrade.UpgradeType.REDSTONE.name());
-            }}));
+            // 1.21.5: ItemStack(Item, int, CompoundTag) constructor removed and CompoundTag became final.
+            // Attach the upgrade type via the CUSTOM_DATA component instead.
+            ItemStack upgrade = new ItemStack(RotaryItems.UPGRADE.get(), 1);
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(upgrade, __T__ -> __T__.putString("upgrade", ItemEngineUpgrade.UpgradeType.REDSTONE.name()));
+            ReikaItemHelper.dropItem(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, upgrade);
         }
     }
 
@@ -154,13 +156,4 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
         return 0;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
-
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
-    }
 }

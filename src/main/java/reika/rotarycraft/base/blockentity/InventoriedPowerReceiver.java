@@ -10,53 +10,34 @@
 package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.items.IItemHandler;
-import net.neoforged.items.ItemStackHandler;
-import reika.rotarycraft.RotaryCraft;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.util.ProblemReporter;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 
 public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver {
 
-    protected ItemStackHandler itemHandler = new ItemStackHandler(getContainerSize()) {
+    public ManagedItemHandler itemHandler = new ManagedItemHandler(getContainerSize()) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     public InventoriedPowerReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
     @Override
-    
-    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
-        if (capability == ForgeCapabilities.ITEM_HANDLER)
-            return lazyItemHandler.cast();
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
     public void onLoad() {
         super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
     }
 
     public void openInventory() {
@@ -98,56 +79,30 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
         return this.isPlayerAccessible(var1);
     }
 
+    // 1.21.5: BlockEntity#saveAdditional/loadAdditional now take ValueOutput/ValueInput.
+    // ManagedItemHandler#serialize(ValueOutput)/deserialize(ValueInput) is the new bridge for
+    // the inventory contents.
     @Override
-    public void saveAdditional(CompoundTag NBT) {
-
-        ListTag nbttaglist = new ListTag();
-
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            if (!itemHandler.getStackInSlot(i).isEmpty()) {
-                CompoundTag CompoundTag = new CompoundTag();
-                CompoundTag.putShort("Slot", (short) i);
-                itemHandler.getStackInSlot(i).save(CompoundTag);
-                nbttaglist.add(CompoundTag);
-                //ReikaJavaLibrary.pConsole(i+":"+itemHandler.getStackInSlot(i));
-            }
-        }
-
-        NBT.put("Items", nbttaglist);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        TagValueOutput nested = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess());
+        itemHandler.serialize(nested);
+        output.store("ItemsRaw", net.minecraft.nbt.CompoundTag.CODEC, nested.buildResult());
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        super.deserializeNBT(nbt);
-    }
-
-    @Override
-    public CompoundTag serializeNBT() {
-        return super.serializeNBT();
-    }
-
-    @Override
-    public void load(CompoundTag NBT) {
-
-        ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
-        itemHandler = new ItemStackHandler(getContainerSize()) {
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        itemHandler = new ManagedItemHandler(getContainerSize()) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
             }
         };
-
-        for (int i = 0; i < nbttaglist.size(); i++) {
-            CompoundTag CompoundTag = nbttaglist.getCompound(i);
-            short byte0 = CompoundTag.getShort("Slot");
-
-            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
-                itemHandler.setStackInSlot(byte0, ItemStack.of(CompoundTag));
-                //ReikaJavaLibrary.pConsole(byte0+":"+inv[byte0]);
-            } else {
-                RotaryCraft.LOGGER.error(this + " tried to load an inventory slot " + byte0 + " from NBT!");
-                //Thread.dumpStack();
-            }
+        java.util.Optional<CompoundTag> raw = input.read("ItemsRaw", net.minecraft.nbt.CompoundTag.CODEC);
+        if (raw.isPresent()) {
+            net.minecraft.world.level.storage.ValueInput nested = net.minecraft.world.level.storage.TagValueInput.create(ProblemReporter.DISCARDING, this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
+            itemHandler.deserialize(nested);
         }
     }
 

@@ -18,10 +18,10 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.world.World;
 //import net.minecraft.world.level.material.Fluid;
-//import net.neoforged.common.NeoForge;
-//import net.neoforged.common.util.Direction;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidRegistry;
+//import net.neoforged.neoforge.common.NeoForge;
+//import net.neoforged.neoforge.common.util.Direction;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidRegistry;
 //
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.asm.APIStripper.Strippable;
@@ -218,7 +218,7 @@
 //
 //	public final void setDataFromItemStackTag(CompoundTag nbt) {
 //		if (nbt != null) {
-//			upgraded = nbt.getBoolean("upgrade");
+//			upgraded = nbt.getBooleanOr("upgrade", false);
 //		}
 //	}
 //
@@ -239,7 +239,7 @@
 //	protected void readSyncTag(CompoundTag NBT) {
 //		super.readSyncTag(NBT);
 //
-//		upgraded = NBT.getBoolean("upgrade");
+//		upgraded = NBT.getBooleanOr("upgrade", false);
 //	}
 //
 //	@Override

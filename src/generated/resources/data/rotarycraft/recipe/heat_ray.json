@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "rotarycraft:hsla_steel_plate",
+    "B": "rotarycraft:heat_ray_core",
+    "L": "rotarycraft:lens",
+    "O": "minecraft:obsidian",
+    "P": "rotarycraft:power_module",
+    "b": "rotarycraft:heat_ray_barrel"
+  },
+  "pattern": [
+    "OOO",
+    "BLb",
+    "#P#"
+  ],
+  "result": {
+    "id": "rotarycraft:heat_ray"
+  }
+}

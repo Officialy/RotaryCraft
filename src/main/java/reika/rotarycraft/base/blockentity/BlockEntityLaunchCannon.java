@@ -34,6 +34,7 @@ public abstract class BlockEntityLaunchCannon extends InventoriedPowerReceiver i
 
     @Override
     public void updateBlockEntity() {
+        super.updateBlockEntity();
     }
 
     protected abstract boolean fire(Level world, BlockPos pos, int slot);
@@ -47,11 +48,11 @@ public abstract class BlockEntityLaunchCannon extends InventoriedPowerReceiver i
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        velocity = tag.getInt("svelocity");
-        phi = tag.getInt("sphi");
-        theta = tag.getInt("stheta");
-        targetMode = tag.getBoolean("istarget");
-        target = tag.getIntArray("targetxyz");
+        velocity = tag.getIntOr("svelocity", 0);
+        phi = tag.getIntOr("sphi", 0);
+        theta = tag.getIntOr("stheta", 0);
+        targetMode = tag.getBooleanOr("istarget", false);
+        target = tag.getIntArray("targetxyz").orElse(new int[0]);
     }
 
     @Override

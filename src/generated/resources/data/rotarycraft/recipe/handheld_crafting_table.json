@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "c": "minecraft:crafting_table",
+    "g": "minecraft:gold_ingot",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " g ",
+    "scs",
+    " g "
+  ],
+  "result": {
+    "id": "rotarycraft:handheld_crafting_table"
+  }
+}

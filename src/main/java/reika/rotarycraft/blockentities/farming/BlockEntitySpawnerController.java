@@ -23,7 +23,7 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.interfaces.blockentity.GuiController;
 //import reika.dragonapi.instantiable.StepTimer;
@@ -62,7 +62,7 @@
 //        lgc.maxNearbyEntities = Short.MAX_VALUE;
 //        lgc.activatingRangeFromPlayer = Short.MAX_VALUE;
 //
-//        if (world.isClientSide) {
+//        if (world.isClientSide()) {
 //            double var1 = x + world.DragonAPI.rand.nextFloat();
 //            double var3 = y + world.DragonAPI.rand.nextFloat();
 //            double var5 = z + world.DragonAPI.rand.nextFloat();
@@ -78,11 +78,11 @@
 //                //int var4 = world.getEntities(var13.getClass(), AABB.getBoundingBox(pos, x+1, y+1, z+1).expand(spawnRange*2, 4, spawnRange*2)).size();
 //
 //                if (toSpawn != null) {
-//                    double ex = x + (world.random.nextDouble() - world.random.nextDouble()) * lgc.spawnRange;
-//                    double ey = y + world.random.nextInt(3) - 1;
-//                    double ez = z + (world.random.nextDouble() - world.random.nextDouble()) * lgc.spawnRange;
+//                    double ex = x + (world.getRandom().nextDouble() - world.getRandom().nextDouble()) * lgc.spawnRange;
+//                    double ey = y + world.getRandom().nextInt(3) - 1;
+//                    double ez = z + (world.getRandom().nextDouble() - world.getRandom().nextDouble()) * lgc.spawnRange;
 //                    LivingEntity livingSpawn = toSpawn instanceof LivingEntity ? (LivingEntity) toSpawn : null;
-//                    toSpawn.setLocationAndAngles(ex, ey, ez, world.random.nextFloat() * 360, 0);
+//                    toSpawn.setLocationAndAngles(ex, ey, ez, world.getRandom().nextFloat() * 360, 0);
 //
 //                    if (livingSpawn == null || livingSpawn.getCanSpawnHere()) {
 //                        lgc.func_98265_a(toSpawn);
@@ -138,13 +138,13 @@
 //    private void shutdownSpawner(Level world, BlockPos pos) {
 //        control.setInactive();
 //        for (int i = 0; i < 4; i++) {
-//            double var1 = xCoord + level.random.nextFloat();
+//            double var1 = xCoord + level.getRandom().nextFloat();
 //            double var3 = (float) yCoord - 1 + level.DragonAPI.rand.nextFloat();
-//            double var5 = zCoord + level.random.nextFloat();
+//            double var5 = zCoord + level.getRandom().nextFloat();
 //            double var11 = xCoord - 0.25 + 1.5 * level.DragonAPI.rand.nextFloat();
 //            double var15 = zCoord - 0.25 + 1.5 * level.DragonAPI.rand.nextFloat();
 //            level.addParticle("reddust", var11, var3, var15, 0, 0, 0);
-//            level.addParticle("crit", var1, var3, var5, -0.3 + 0.6 * level.random.nextFloat(), 0.4 * level.random.nextFloat(), -0.3 + 0.6 * level.random.nextFloat());
+//            level.addParticle("crit", var1, var3, var5, -0.3 + 0.6 * level.getRandom().nextFloat(), 0.4 * level.getRandom().nextFloat(), -0.3 + 0.6 * level.getRandom().nextFloat());
 //        }
 //    }
 //
@@ -196,8 +196,8 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        this.setDelay(NBT.getInt("setdelay"));
-//        disable = NBT.getBoolean("disable");
+//        this.setDelay(NBT.getIntOr("setdelay", 0));
+//        disable = NBT.getBooleanOr("disable", false);
 //    }
 //
 //    @Override

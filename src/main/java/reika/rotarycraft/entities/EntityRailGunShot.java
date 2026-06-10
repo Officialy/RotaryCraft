@@ -31,7 +31,7 @@
 //import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 //import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 //import net.minecraft.world.entity.decoration.ItemFrame;
-//import net.minecraft.world.entity.decoration.Painting;
+//import net.minecraft.world.entity.decoration.painting.Painting;
 //import net.minecraft.world.entity.item.ItemEntity;
 //import net.minecraft.world.entity.player.Player;
 //import net.minecraft.world.item.ItemStack;
@@ -43,7 +43,7 @@
 //import net.minecraft.world.phys.AABB;
 //import net.minecraft.world.phys.HitResult;
 //import net.minecraft.world.phys.Vec3;
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //
 //import java.util.List;
 //

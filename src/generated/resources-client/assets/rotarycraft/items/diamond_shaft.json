@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/diamond_shaft",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "diamond_shaft"
+    }
+  }
+}

@@ -16,8 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -50,23 +50,23 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     @Override
     protected boolean getRequirements(Level world, BlockPos pos) {
         ItemStack is = itemHandler.getStackInSlot(0);
-        if (is == null)
+        if (is.isEmpty())
             return false;
         if (!ReikaItemHelper.matchStacks(is, RotaryItems.HSLA_SHAFT_CORE) && !ReikaItemHelper.matchStacks(is, RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE))
             return false;
-        if (is.getTag() == null)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
             return false;
-        if (!is.getTag().contains("magnet"))
+        if (!is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("magnet"))
             return false;
-        if (is.getTag().getInt("magnet") <= 0)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0) <= 0)
             return false;
 
         redstone.update(world, pos);
         boolean ac = redstone.isAlternating();
 
-        if (!world.isClientSide && ac && timer.checkCap("fuel")) {
+        if (!world.isClientSide() && ac && timer.checkCap("fuel")) {
             if (ReikaItemHelper.matchStacks(is, RotaryItems.HSLA_SHAFT_CORE) || DragonAPI.rand.nextBoolean()) {
-                int m = is.getTag().getInt("magnet");
+                int m = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0);
                 this.magnetize(is, m - 1);
             }
         }
@@ -75,12 +75,15 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     }
 
     private void magnetize(ItemStack is, int amt) {
-        if (amt > 0)
-            is.getTag().putInt("magnet", amt);
-        else {
-            is.getTag().remove("magnet");
-            if (is.getTag().isEmpty())
-                is.save(null);
+        if (amt > 0) {
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("magnet", amt));
+        } else {
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("magnet"));
+            // 1.21.5: if the custom-data tag is now empty, drop the component entirely so the
+            // stack doesn't serialise an empty CUSTOM_DATA on save (legacy behaviour: setTag(null)).
+            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().isEmpty()) {
+                is.remove(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
+            }
         }
     }
 
@@ -116,7 +119,7 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
 
     @Override
     public int getCoreMagnetization() {
-        return itemHandler.getStackInSlot(0) != ItemStack.EMPTY && itemHandler.getStackInSlot(0).getTag() != null ? itemHandler.getStackInSlot(0).getTag().getInt("magnet") : 0;
+        return !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0) : 0;
     }
 
     @Override
@@ -156,7 +159,7 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
         super.readSyncTag(NBT);
 
         redstone.reset();
-        if (NBT.getBoolean("redstoneUpgrade"))
+        if (NBT.getBooleanOr("redstoneUpgrade", false))
             redstone.addIntegrated();
     }
 
@@ -186,15 +189,5 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
     @Override
     public int getAmbientTemperature() {
         return 0;
-    }
-
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
-
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
     }
 }

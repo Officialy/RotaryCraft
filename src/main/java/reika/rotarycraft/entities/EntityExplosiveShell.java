@@ -35,7 +35,7 @@ public class EntityExplosiveShell extends EntityRailgunShotBase {
 		motionY = vy;
 		motionZ = vz;
 		//ReikaJavaLibrary.pConsole(vx+" , "+vy+" , "+vz);
-		if (!world.isClientSide)
+		if (!world.isClientSide())
 			velocityChanged = true;
 	}
 
@@ -97,10 +97,10 @@ public class EntityExplosiveShell extends EntityRailgunShotBase {
 			return;
 		}
 
-		if (!level.isClientSide && (shootingEntity != null && shootingEntity.isAlive() || !level.blockExists(pos)))
+		if (!level.isClientSide() && (shootingEntity != null && shootingEntity.isAlive() || !level.blockExists(pos)))
 			this.kill();
 		else {
-			if (tickCount > 80 && !level.isClientSide)
+			if (tickCount > 80 && !level.isClientSide())
 				this.onHit(null);
 			this.onEntityUpdate();
 			Vec3 var15 = Vec3.createVectorHelper(getY, getY(), getZ);

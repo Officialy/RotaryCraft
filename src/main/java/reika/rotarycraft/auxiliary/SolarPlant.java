@@ -183,7 +183,8 @@ public class SolarPlant {
         if (sun > 0.21) {
             return (int) (15 * sun);
         }
-        int moon = world.getMoonPhase();
+        // level's day-time (one full lunar cycle is 8 minecraft days, 24000 ticks each).
+        int moon = (int) ((world.getDefaultClockTime() / 24000L) % 8L);
         float phase = switch (moon) {
             case 0 -> 1;
             case 1, 7 -> 0.8F;

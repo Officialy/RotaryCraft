@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import reika.dragonapi.auxiliary.PopupWriter;
 import reika.rotarycraft.base.ItemRotaryTool;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -26,7 +26,7 @@ public class ItemCalculator extends ItemRotaryTool {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (hand.equals(InteractionHand.MAIN_HAND)) {
             Minecraft.getInstance().setScreen(new GuiCalculator(player, level));
         }

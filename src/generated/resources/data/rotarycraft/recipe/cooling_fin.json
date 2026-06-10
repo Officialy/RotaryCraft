@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "SSS",
+    "SSS",
+    "PPP"
+  ],
+  "result": {
+    "count": 3,
+    "id": "rotarycraft:cooling_fin"
+  }
+}

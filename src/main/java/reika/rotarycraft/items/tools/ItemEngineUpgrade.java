@@ -18,8 +18,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.checkerframework.checker.units.qual.C;
-
 import reika.rotarycraft.base.ItemRotaryTool;
 
 import java.util.List;
@@ -30,24 +28,25 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
     private static UpgradeType type;
 
     public ItemEngineUpgrade() {
-        super(new Properties().stacksTo(16));
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(16));
     }
 
+    // 1.21.5: Item.appendHoverText now takes (ItemStack, TooltipContext, TooltipDisplay, Consumer<Component>, TooltipFlag).
     @Override
-    public void appendHoverText(ItemStack is,  Level p_41422_, List<Component> li, TooltipFlag p_41424_) {
-        if (is.getTag() != null) {
-            int magnet = is.getTag().getInt("magnet");
-            if (is.getTag().contains("magnet")) {
-                li.add(Component.literal(String.format("Magnetized to %d microTeslas", magnet)));
+    public void appendHoverText(ItemStack is, net.minecraft.world.item.Item.TooltipContext ctx, net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> li, TooltipFlag flag) {
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
+            int magnet = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0);
+            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("magnet")) {
+                li.accept(Component.literal(String.format("Magnetized to %d microTeslas", magnet)));
             } else if (magnet < 720) {
-                li.add(Component.literal("Must be magnetized to 720 microTeslas to be used"));
+                li.accept(Component.literal("Must be magnetized to 720 microTeslas to be used"));
             }
 
-            if (is.getTag().contains("upgradeType")) {
-                li.add(Component.literal(is.getTag().getString("upgradeType").toLowerCase(Locale.ROOT)));
+            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("upgradeType")) {
+                li.accept(Component.literal(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getStringOr("upgradeType", "").toLowerCase(Locale.ROOT)));
             }
         } else {
-            li.add(Component.literal("Must be magnetized to 720 microTeslas to be used"));
+            li.accept(Component.literal("Must be magnetized to 720 microTeslas to be used"));
         }
     }
 

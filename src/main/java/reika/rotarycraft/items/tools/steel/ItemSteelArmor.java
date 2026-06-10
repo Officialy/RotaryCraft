@@ -17,7 +17,7 @@ import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemSteelArmor extends ItemRotaryArmor {
 
-    public ItemSteelArmor(Type slot, Properties properties) {
+    public ItemSteelArmor(net.minecraft.world.item.equipment.ArmorType slot, Properties properties) {
         super(Materials.HSLA_STEEL, slot, properties);
     }
 
@@ -31,7 +31,7 @@ public class ItemSteelArmor extends ItemRotaryArmor {
         return true;
     }
 
-    @Override
+    // 1.21.5: Item.isValidRepairItem replaced by Properties.repairable(...); kept as helper.
     public boolean isValidRepairItem(ItemStack tool, ItemStack item) {
         return tool.getItem() == this && item.getItem() == RotaryItems.HSLA_STEEL_INGOT.get();
     }

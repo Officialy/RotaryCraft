@@ -73,7 +73,7 @@
 //        super.updateBlockEntity();
 //        this.getPowerBelow();
 //
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //
 //        this.consumePotions();
@@ -108,7 +108,7 @@
 //
 //    private void decay(Level world, BlockPos pos) {
 //        Block id = world.getBlockState(pos).getBlock();
-//        if (!world.isClientSide && !ReikaPlayerAPI.playerCanBreakAt((WorldServer) level, pos, id, meta, this.getServerPlacer()))
+//        if (!world.isClientSide() && !ReikaPlayerAPI.playerCanBreakAt((WorldServer) level, pos, id, meta, this.getServerPlacer()))
 //            return;
 //        boolean flag = false;
 //        if (id != Blocks.AIR) {

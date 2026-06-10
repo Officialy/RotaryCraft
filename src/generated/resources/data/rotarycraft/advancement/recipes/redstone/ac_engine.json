@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_gold_coil": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:gold_coil"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:ac_engine"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_gold_coil"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:ac_engine"
+    ]
+  }
+}

@@ -21,8 +21,8 @@ import reika.dragonapi.libraries.java.ReikaStringParser;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import java.util.Locale;
 
@@ -101,13 +101,13 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
     
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
-    
+
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
     @Override

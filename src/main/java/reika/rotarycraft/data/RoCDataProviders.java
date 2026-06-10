@@ -1,40 +1,40 @@
 package reika.rotarycraft.data;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.common.data.ExistingFileHelper;
-import net.neoforged.data.event.GatherDataEvent;
-import net.neoforged.eventbus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import reika.rotarycraft.RotaryCraft;
 
-@Mod.EventBusSubscriber(modid = RotaryCraft.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class RoCDataProviders {
+/**
+ * 1.21.5 datagen entry point for RotaryCraft.
+ * <p>
+ * NeoForge 26.x split {@link GatherDataEvent} into {@link GatherDataEvent.Client} and
+ * {@link GatherDataEvent.Server}. Client-side providers (block-/item-models, lang) attach
+ * to the client event; data-side providers (recipes, loot tables, tags) attach to the
+ * server event. Mod-level providers register via {@code event.createProvider(...)} / {@code addProvider}.
+ * <p>
+ * Both handlers must be {@code static} — {@code @EventBusSubscriber} only auto-registers static methods.
+ */
+@EventBusSubscriber(modid = RotaryCraft.MODID)
+public final class RoCDataProviders {
+
+    private RoCDataProviders() {}
 
     @SubscribeEvent
-    public static void registerDataProviders(final GatherDataEvent event) {
-        final DataGenerator dataGenerator = event.getGenerator();
-        final ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-
-        final RoCItemModelProvider itemModelProvider = new RoCItemModelProvider(dataGenerator, existingFileHelper);
-        dataGenerator.addProvider(true, itemModelProvider);
-        dataGenerator.addProvider(true, new RotaryRecipeProvider(dataGenerator.getPackOutput()));
-//        dataGenerator.addProvider(true, new RoCBlockLootTableProvider(dataGenerator));
-//        dataGenerator.addProvider(true, new RoCAdvancementProvider(dataGenerator));
-//        dataGenerator.addProvider(true, new RoCBlockTagsProvider(dataGenerator));
-//        dataGenerator.addProvider(true, new RoCItemTagsProvider(dataGenerator));
-        dataGenerator.addProvider(true, new RotaryLang(dataGenerator, "en_us"));
-        dataGenerator.addProvider(true, new RoCBlockStateProvider(dataGenerator, itemModelProvider.existingFileHelper));
-
+    public static void onGatherClient(GatherDataEvent.Client event) {
+        // Client-side resources: language, block / item models.
+        event.createProvider(output -> new RotaryLang(output, "en_us"));
+        event.createProvider(RoCModelProvider::new);
     }
 
-    protected static String name(Block block) {
-        return ForgeRegistries.BLOCKS.getKey(block).getPath();
-    }
-
-    protected static String name(Item item) {
-        return ForgeRegistries.ITEMS.getKey(item).getPath();
+    @SubscribeEvent
+    public static void onGatherServer(GatherDataEvent.Server event) {
+        // Recipe provider: emits crafting / smelting JSONs under data/rotarycraft/recipe/.
+        // Starter coverage is the HSLA steel base chain + transmission components; extend
+        // RoCRecipeProvider#buildRecipes incrementally.
+        event.createProvider(RoCRecipeProvider::new);
+        // Block loot tables: every machine block drops itself; canola uses crop drops.
+        event.createProvider(RoCLootProvider::new);
+        // Tag providers will plug in here too as they're built.
     }
 }

@@ -65,7 +65,7 @@
 //
 //    @Override
 //    protected void onFirstTick(Level world, BlockPos pos) {
-//        if (ModList.FORESTRY.isLoaded() && !world.isClientSide)
+//        if (ModList.FORESTRY.isLoaded() && !world.isClientSide())
 //            pathfinder = new EntityPathSpline(this);
 //    }
 //
@@ -79,7 +79,7 @@
 //        int range = this.getRange();
 //        AABB box = this.getBox(pos, range);
 //        List<LivingEntity> inbox = world.getEntities(LivingEntity.class, box);
-//        if (!inbox.isEmpty() && (world.getDayTime() & 3) == 0) {
+//        if (!inbox.isEmpty() && (world.getOverworldClockTime() & 3) == 0) {
 //            for (LivingEntity ent : inbox) {
 //                if (this.canRepel(ent)) {
 //                    this.applyEffect(world, pos, ent, false);
@@ -109,7 +109,7 @@
 //                if (ReikaWorldHelper.checkForAdjMaterial(world, pos, Material.lava) == null) {
 //                    EntityChicken ec = new EntityChicken(world);
 //                    ec.setLocationAndAngles(x + DragonAPI.rand.nextDouble(), y + DragonAPI.rand.nextDouble() + 0.5, z + DragonAPI.rand.nextDouble(), DragonAPI.rand.nextFloat() * 90, DragonAPI.rand.nextFloat() * 360);
-//                    if (!world.isClientSide)
+//                    if (!world.isClientSide())
 //                        world.addFreshEntity(ec);
 //                } else {
 //                    ReikaInventoryHelper.addToIInv(new ItemStack(Items.cooked_chicken), this, true);
@@ -143,7 +143,7 @@
 //    private void dropHeldItem(Level world, BlockPos pos, LivingEntity ent) {
 //        ItemStack held = ent.getHeldItem();
 //        ent.setCurrentItemOrArmor(0, null);
-//        if (held != null && !world.isClientSide) {
+//        if (held != null && !world.isClientSide()) {
 //            ItemEntity ei = new ItemEntity(world, ent.getY, ent.getY() + ent.getEyeHeight(), ent.posZ, held);
 //            ei.motionX = -0.2F + 0.4F * DragonAPI.rand.nextFloat();
 //            ei.motionZ = -0.2F + 0.4F * DragonAPI.rand.nextFloat();
@@ -162,14 +162,14 @@
 //    }
 //
 //    private void applyEffect(Level world, BlockPos pos, LivingEntity ent, boolean attract) {
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //        if (ent instanceof EntityTameable && ((EntityTameable) ent).isSitting()) {
 //            return;
 //        }
 //
-//        long time = level.getDayTime();
-//        if (time - ent.getEntityData().getLong("baitbox") < 20)
+//        long time = level.getOverworldClockTime();
+//        if (time - ent.getEntityData().getLongOr("baitbox", 0L) < 20)
 //            return;
 //        ent.getEntityData().putLong("baitbox", time);
 //
@@ -203,7 +203,7 @@
 //            float var1 = (float) ReikaMathLibrary.py3d(ent.motionX, 0, ent.motionZ);
 //            ent.renderYawOffset += (-((float) Math.atan2(ent.motionX, ent.motionZ)) * 180.0F / (float) Math.PI - ent.renderYawOffset) * 0.1F;
 //            ent.rotationYaw = ent.renderYawOffset;
-//            if (!world.isClientSide)
+//            if (!world.isClientSide())
 //                ent.velocityChanged = true;
 //        }
 //        if (ent instanceof EntityBat) {
@@ -219,7 +219,7 @@
 //            float var1 = (float) ReikaMathLibrary.py3d(ent.motionX, 0, ent.motionZ);
 //            ent.renderYawOffset += (-((float) Math.atan2(ent.motionX, ent.motionZ)) * 180.0F / (float) Math.PI - ent.renderYawOffset) * 0.1F;
 //            ent.rotationYaw = ent.renderYawOffset;
-//            if (!world.isClientSide)
+//            if (!world.isClientSide())
 //                ent.velocityChanged = true;
 //        }
 //    }

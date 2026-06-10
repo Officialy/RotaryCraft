@@ -19,7 +19,7 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraft.world.level.material.Fluids;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.ItemReq;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -184,7 +184,7 @@
 //        if (tickcount >= this.getOperationTime()) {
 //            int index = DragonAPI.rand.nextInt(coords.getSize());
 //            BlockPos xz = coords.getNthColumn(index);
-//            if (!world.isClientSide) {
+//            if (!world.isClientSide()) {
 //                if (this.setBiome(world, xz.xCoord, xz.zCoord)) {
 //                    //ReikaJavaLibrary.pConsole(Arrays.toString(xz), Dist.DEDICATED_SERVER);
 //                    //ReikaJavaLibrary.pConsole("Removing "+x+", "+z);
@@ -222,7 +222,7 @@
 //    }
 //
 //    private boolean setBiome(Level world, int x, int z) {
-//        if (!world.isClientSide && !ReikaPlayerAPI.playerCanBreakAt((WorldServer) world, x, yCoord, z, this.getServerPlacer()))
+//        if (!world.isClientSide() && !ReikaPlayerAPI.playerCanBreakAt((WorldServer) world, x, yCoord, z, this.getServerPlacer()))
 //            return false;
 //        Biome from = world.getBiomeGenForCoords(x, z);
 //        if (!this.isValidTarget(from)) {
@@ -337,7 +337,7 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        int tg = NBT.getInt("tg");
+//        int tg = NBT.getIntOr("tg", 0);
 //        if (tg != -1)
 //            target = Biome.biomeList[tg];
 //    }

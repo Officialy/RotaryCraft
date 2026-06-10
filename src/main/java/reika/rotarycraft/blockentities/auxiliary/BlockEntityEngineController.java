@@ -17,8 +17,8 @@
 //import net.minecraft.world.level.block.entity.BlockEntityType;
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.level.material.Fluid;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //
 //import reika.dragonapi.instantiable.HybridTank;
 //import reika.dragonapi.libraries.java.ReikaStringParser;
@@ -216,9 +216,9 @@
 //
 //        tank.load(NBT);
 //
-//        setting = EngineSettings.list[NBT.getInt("lvl")];
+//        setting = EngineSettings.list[NBT.getIntOr("lvl", 0)];
 //
-//        redstoneMode = NBT.getBoolean("redstone");
+//        redstoneMode = NBT.getBooleanOr("redstone", false);
 //    }
 //
 //    @Override

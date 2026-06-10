@@ -9,82 +9,81 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.client.event.RenderGuiOverlayEvent;
-import net.neoforged.client.gui.overlay.VanillaGuiOverlay;
-import net.neoforged.fml.common.Mod;
-import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.items.tools.ItemJetPack;
-import reika.rotarycraft.registry.RotaryFluids;
-import reika.rotarycraft.registry.RotaryItems;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluid;
-import net.neoforged.eventbus.api.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.gui.GuiLayer;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.api.interfaces.Fillable;
+import reika.rotarycraft.items.tools.ItemJetPack;
 
-@Mod.EventBusSubscriber(modid = RotaryCraft.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class JetpackFuelOverlay {
+/**
+ * 26.1 HUD overlay that draws a fuel bar above the experience-level layer while the player
+ * is wearing an {@link ItemJetPack}. Replaces the legacy {@code RenderGuiOverlayEvent} hook
+ * (gone with the VanillaGuiOverlay API) — overlays are now registered via
+ * {@link RegisterGuiLayersEvent} as {@link GuiLayer}s.
+ */
+@EventBusSubscriber(modid = RotaryCraft.MODID, value = Dist.CLIENT)
+public final class JetpackFuelOverlay implements GuiLayer {
 
     public static final JetpackFuelOverlay instance = new JetpackFuelOverlay();
+    private static final Identifier ID = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "jetpack_fuel");
 
-    private JetpackFuelOverlay() {
+    /** Width of the fuel bar in pixels (matches the vanilla EXP bar width). */
+    private static final int BAR_WIDTH = 182;
+    /** Bar height in pixels. */
+    private static final int BAR_HEIGHT = 5;
 
-    }
+    private JetpackFuelOverlay() {}
 
     @SubscribeEvent
-    public void eventHandler(RenderGuiOverlayEvent event) {
-        if (event.getOverlay() == VanillaGuiOverlay.HELMET.type()) {
-            Player ep = Minecraft.getInstance().player;
-            ItemStack is = ep.getItemBySlot(EquipmentSlot.CHEST);
-            if (is != null) {
-                if (is != null) {
-                    if (is.getItem() == RotaryItems.JETPACK.get() || is.getItem() == RotaryItems.BEDROCK_ALLOY_PACK.get() || is.getItem() == RotaryItems.HSLA_STEEL_PACK.get()) {
-                        ItemJetPack i = (ItemJetPack) is.getItem();
-                        int fuel = i.getCurrentFillLevel(is);
-                        float frac = fuel / (float) i.getCapacity(is);
-                        Fluid fluid = fuel > 0 ? i.getCurrentFluid(is) : null;
-                        Minecraft.getInstance().textureManager.bindForSetup(new ResourceLocation(RotaryCraft.MODID, "textures/gui/overlays.png"));
-                        Tesselator tess = Tesselator.getInstance();
-                        BufferBuilder v5 = tess.getBuilder();
-                        int height = event.getWindow().getGuiScaledHeight();
-                        int width = event.getWindow().getGuiScaledWidth();
-                        float w = 4 / 128F;
-                        float h = 32 / 128F;
-                        float f = 1 - frac;
-                        float dy = h * f;
-                        //ReikaJavaLibrary.pConsole(1-frac);
-                        float u = w;
-                        if (fluid != null && fluid.equals(RotaryFluids.JET_FUEL))
-                            u += w;
-                        RenderSystem.enableBlend();
-                        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-                        v5.vertex(4, height / 2 + 32, 0).uv(0, h).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
-                        v5.vertex(12, height / 2 + 32, 0).uv(w, h).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
-                        v5.vertex(12, height / 2 - 32, 0).uv(w, 0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
-                        v5.vertex(4, height / 2 - 32, 0).uv(0, 0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
-
-                        v5.vertex(4, height / 2 + 32, 0).uv(u, h).color(1.0f, 1.0f, 1.0f, 0.75f).endVertex();
-                        v5.vertex(12, height / 2 + 32, 0).uv(u + w, h).color(1.0f, 1.0f, 1.0f, 0.75f).endVertex();
-                        v5.vertex(12, height / 2 - 32 + f * 64, 0).uv(u + w, f * h).color(1.0f, 1.0f, 1.0f, 0.75f).endVertex();
-                        v5.vertex(4, height / 2 - 32 + f * 64, 0).uv(u, f * h).color(1.0f, 1.0f, 1.0f, 0.75f).endVertex();
-                        tess.end();
-                        event.getGuiGraphics().drawString(Minecraft.getInstance().font, String.format("%d%s", Math.round(frac * 100), "%"), 1, height / 2 - 40, 0xffffff);
-                        event.getGuiGraphics().drawString(Minecraft.getInstance().font, String.format("%dmB", fuel), 1, height / 2 + 33, 0xffffff);
-//                        ReikaTextureHelper.bindHUDTexture();
-                        //RenderSystem.disableBlend();
-                    }
-                }
-            }
-        }
+    public static void register(RegisterGuiLayersEvent event) {
+        // Draw above the experience-level layer so the bar sits in the same vertical strip.
+        // 26.1 renamed the old EXPERIENCE_BAR layer; EXPERIENCE_LEVEL is the closest equivalent.
+        event.registerAbove(VanillaGuiLayers.EXPERIENCE_LEVEL, ID, instance);
     }
 
+    @Override
+    public void render(GuiGraphicsExtractor gui, DeltaTracker delta) {
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        if (player == null) return;
+
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (!(chest.getItem() instanceof ItemJetPack jp) || !(jp instanceof Fillable fillable)) return;
+
+        int capacity = fillable.getCapacity(chest);
+        if (capacity <= 0) return;
+        int current = fillable.getCurrentFillLevel(chest);
+        float ratio = Math.max(0F, Math.min(1F, current / (float) capacity));
+
+        int screenW = gui.guiWidth();
+        int screenH = gui.guiHeight();
+        int x = (screenW - BAR_WIDTH) / 2;
+        // Sit just above the EXP bar (which is at screenH - 32 -ish). We offset by 6 px so the
+        // jetpack bar doesn't visually merge with vanilla experience.
+        int y = screenH - 38;
+
+        int filled = Math.round(BAR_WIDTH * ratio);
+        // Background frame
+        gui.fill(x - 1, y - 1, x + BAR_WIDTH + 1, y + BAR_HEIGHT + 1, 0xff202020);
+        gui.fill(x, y, x + BAR_WIDTH, y + BAR_HEIGHT, 0xff404040);
+        // Fill: orange when low (<25%), green otherwise.
+        int colour = ratio < 0.25F ? 0xffd24f1f : 0xff3fbf3f;
+        gui.fill(x, y, x + filled, y + BAR_HEIGHT, colour);
+
+        // Compact numeric readout to the right of the bar.
+        String label = current + " / " + capacity + " mB";
+        gui.text(mc.font, Component.literal(label), x + BAR_WIDTH + 4, y - 1, 0xffffffff, true);
+    }
 }

@@ -12,22 +12,20 @@ package reika.rotarycraft.blockentities.transmission;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForge;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaPhysicsHelper;
-import reika.rotarycraft.RotaryConfig;
+import reika.rotarycraft.api.event.FlywheelFailureEvent;
 import reika.rotarycraft.api.interfaces.ComplexIO;
 import reika.rotarycraft.api.power.PowerGenerator;
 import reika.rotarycraft.api.power.PowerTracker;
 import reika.rotarycraft.api.power.ShaftMerger;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
-import reika.rotarycraft.api.event.FlywheelFailureEvent;
 import reika.rotarycraft.auxiliary.PowerSourceList;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.TorqueUsage;
@@ -83,7 +81,7 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
     private void fail(Level world, BlockPos pos, double e) {
         failed = true;
         float f = ReikaPhysicsHelper.getExplosionFromEnergy(e);
-        if (!world.isClientSide)
+        if (!world.isClientSide())
             world.explode(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), f, ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
         NeoForge.EVENT_BUS.post(new FlywheelFailureEvent(this, f));
     }
@@ -107,14 +105,20 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
 
     @Override
     public Block getBlockEntityBlockID() {
-        return RotaryBlocks.HSLA_FLYWHEEL.get(); //todo other flywheels
+        return switch (this.getTypeOrdinal()) {
+            case WOOD -> RotaryBlocks.WOOD_FLYWHEEL.get();
+            case STONE, IRON -> RotaryBlocks.HSLA_FLYWHEEL.get();
+            case GOLD, DEPLETEDU -> RotaryBlocks.DIAMOND_FLYWHEEL.get();
+            case TUNGSTEN -> RotaryBlocks.TUNGSTEN_FLYWHEEL.get();
+            case BEDROCK -> RotaryBlocks.BEDROCK_FLYWHEEL.get();
+        };
     }
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
         this.loadType();
-//        this.getIOSides(world, pos);
+        this.getIOSidesFromFacing();
         if (failed) {
             omega = 0;
             torque = 0;
@@ -171,6 +175,14 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
                 break;
         }
         write = read.getOpposite();
+    }
+
+    private void getIOSidesFromFacing() {
+        net.minecraft.world.level.block.state.BlockState state = this.getBlockState();
+        if (state != null && state.hasProperty(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
+            read = state.getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING);
+            write = read.getOpposite();
+        }
     }
 
     public void process(Level world, BlockPos pos) {
@@ -351,9 +363,9 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        failed = tag.getBoolean("failed");
+        failed = tag.getBooleanOr("failed", false);
 
-        type = Flywheels.list[tag.getInt("typeIdx")];
+        type = Flywheels.list[tag.getIntOr("typeIdx", 0)];
     }
 
     @Override

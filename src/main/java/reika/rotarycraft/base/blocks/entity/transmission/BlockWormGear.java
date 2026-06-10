@@ -25,8 +25,16 @@ public class BlockWormGear extends BlockBasicMachine {
     
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
+        if (pLevel.isClientSide()) {
+            @SuppressWarnings("unchecked")
+            BlockEntityTicker<T> t = (BlockEntityTicker<T>) clientPhiTicker(BlockEntityAdvancedGear.class);
+            return t;
+        }
+        return (pLevel1, pPos, pState1, pBlockEntity) -> {
             ((BlockEntityAdvancedGear) pBlockEntity).updateEntity(pLevel1, pPos);
-        });
+        };
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

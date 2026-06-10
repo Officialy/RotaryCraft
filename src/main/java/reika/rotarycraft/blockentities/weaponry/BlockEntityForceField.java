@@ -13,12 +13,12 @@
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.world.entity.Entity;
 //import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.entity.projectile.Fireball;
+//import net.minecraft.world.entity.projectile.hurtingprojectile.Fireball;
 //import net.minecraft.world.item.enchantment.Enchantment;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.phys.AABB;
 //import net.minecraft.world.phys.Vec3;
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //import net.neoforged.bus.api.Event;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.ModList;
@@ -81,13 +81,13 @@
 //        if (this.isAtBorder(pos) || threat instanceof EntityArrow) {
 //            if (threat instanceof EntityWitherSkull) {
 //                ((EntityWitherSkull) threat).kill();
-//                if (!world.isClientSide)
+//                if (!world.isClientSide())
 //                    world.explode(null, pos, 1F, false);
 //                tickcount = 0;
 //            }
 //            if (threat instanceof Fireball) {
 //                if (((EntityFireball) threat).shootingEntity instanceof EntityGhast) {
-//                    if (!world.isClientSide)
+//                    if (!world.isClientSide())
 //                        world.explode(null, pos, 2F, true);
 //                }
 //                if (((Fireball) threat).shootingEntity instanceof EntityBlaze) {
@@ -96,7 +96,7 @@
 //                    world.playAuxSFX(1008, (int) x, (int) y, (int) z, 1);
 //                }
 //                if (((EntityFireball) threat).shootingEntity instanceof Player) {
-//                    if (!world.isClientSide)
+//                    if (!world.isClientSide())
 //                        world.explode(null, pos, 2F, true);
 //                }
 //                threat.kill();
@@ -153,7 +153,7 @@
 //                for (int j = 0; j < 3 + DragonAPI.rand.nextInt(3); j++)
 //                    world.addParticle("snowballpoof", x - 0.2 + 0.4 * DragonAPI.rand.nextFloat(), y - 0.2 + 0.4 * DragonAPI.rand.nextFloat(), z - 0.2 + 0.4 * DragonAPI.rand.nextFloat(), 0, 0, 0);
 //                world.playLocalSound(pos, "DragonAPI.rand.glass", 1F, 5F);
-//                if (!world.isClientSide && DragonAPI.rand.nextInt(8) == 0) {
+//                if (!world.isClientSide() && DragonAPI.rand.nextInt(8) == 0) {
 //                    byte var2 = 1;
 //                    if (DragonAPI.rand.nextInt(32) == 0)
 //                        var2 = 4;
@@ -194,19 +194,19 @@
 //            }
 //            if (threat instanceof PrimedTnt) {
 //                threat.kill();
-//                if (!world.isClientSide)
+//                if (!world.isClientSide())
 //                    world.explode(null, pos, 4F, true);
 //                tickcount = 0;
 //            }
 //            if (ModExplosiveHandler.getInstance().isModExplosive(threat)) {
 //                threat.kill();
-//                if (!world.isClientSide)
+//                if (!world.isClientSide())
 //                    world.explode(null, pos, 4F, true);
 //                tickcount = 0;
 //            }
 //            if (InterfaceCache.IMISSILE.instanceOf(threat)) {
 //                ((IMissileEntity) threat).destroyMissile(this, null, 1, false, true, true);
-//                if (!world.isClientSide)
+//                if (!world.isClientSide())
 //                    world.explode(null, pos, 4F, true);
 //                tickcount = 0;
 //            }
@@ -223,7 +223,7 @@
 //                    threat.motionY = mult * dy / dist / 10;
 //                threat.motionZ = mult * dz / dist / 10;
 //                threat.rotationYaw = threat.rotationYaw - 30 + DragonAPI.rand.nextInt(61);
-//                //if (!world.isClientSide)
+//                //if (!world.isClientSide())
 //                threat.velocityChanged = true;
 //            }
 //            if (threat instanceof EntityWolf) {
@@ -240,7 +240,7 @@
 //                        threat.motionY = mult * dy / dist / 15;
 //                    threat.motionZ = mult * dz / dist / 15;
 //                    threat.rotationYaw = DragonAPI.rand.nextInt(360);
-//                    //if (!world.isClientSide)
+//                    //if (!world.isClientSide())
 //                    threat.velocityChanged = true;
 //                }
 //            }
@@ -283,7 +283,7 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        setRange = NBT.getInt("setRange");
+//        setRange = NBT.getIntOr("setRange", 0);
 //    }
 //
 //    @Override

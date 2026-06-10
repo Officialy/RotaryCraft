@@ -21,9 +21,9 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.world.World;
-//import net.neoforged.common.util.Direction;
+//import net.neoforged.neoforge.common.util.Direction;
 //
-//import net.neoforged.energy.IEnergyStorage;
+//import net.neoforged.neoforge.energy.IEnergyStorage;
 //import reika.dragonapi.asm.APIStripper.Strippable;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -201,12 +201,12 @@
 //	protected void readSyncTag(CompoundTag NBT) {
 //		super.readSyncTag(NBT);
 //
-//		upgraded = NBT.getBoolean("upgrade");
+//		upgraded = NBT.getBooleanOr("upgrade", false);
 //	}
 //
 //	public final void setDataFromItemStackTag(CompoundTag nbt) {
 //		if (nbt != null) {
-//			upgraded = nbt.getBoolean("upgrade");
+//			upgraded = nbt.getBooleanOr("upgrade", false);
 //		}
 //	}
 //

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass",
+    "O": "minecraft:sandstone"
+  },
+  "pattern": [
+    "OGO",
+    "OGO",
+    "OGO"
+  ],
+  "result": {
+    "count": 4,
+    "id": "rotarycraft:bypass"
+  }
+}

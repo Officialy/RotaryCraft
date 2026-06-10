@@ -22,15 +22,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+// 26.1: PotionUtils removed; potion contents now live on DataComponents.POTION_CONTENTS
+// (PotionContents record). MobEffectInstance.save/load also removed — replaced by
+// MobEffectInstance.CODEC, used in PotionApplication.load/saveAdditional below.
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
@@ -73,8 +77,7 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
         idle = empty;
     }
 
-    @Override
-    public void updateBlockEntity() {
+    private void doAerosolizerTick() {
         super.updateBlockEntity();
         power = (long) omega * (long) torque;
         this.getSummativeSidedPower();
@@ -107,11 +110,11 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
     }
 
     private void consumeBottlesAndStorePotions() {
-        if (level.isClientSide)
+        if (level.isClientSide())
             return;
         for (int i = 0; i < 9; i++) {
             ItemStack inslot = this.getStackInSlot(i);
-            if (inslot != null) {
+            if (!inslot.isEmpty()) {
                 PotionApplication eff = this.getEffectFromItem(inslot);
                 if (eff != null) {
                     int num = inslot.getCount() * eff.amount;
@@ -159,9 +162,11 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
 				}
 			}
 			 */
-            List<MobEffectInstance> li = PotionUtils.getMobEffects(is);
+            PotionContents pc = is.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+            List<MobEffectInstance> li = new ArrayList<>();
+            pc.getAllEffects().forEach(li::add);
             for (MobEffectInstance p : li) {
-                if (!p.getEffect().isInstantenous()) {
+                if (!p.getEffect().value().isInstantenous()) {
                     boolean extended = false;//todo PotionHelper.checkFlag(dmg, 6); //Bit 6 is enhanced
                     boolean level2 = p.getAmplifier() > 0;
                     return new PotionApplication(ReikaJavaLibrary.makeListFrom(new MobEffectInstance(p.getEffect(), 0)), extended ? 3 : 1, level2 ? 1 : 0);
@@ -192,42 +197,42 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
 
         boolean exit = false;
         for (int i = 1; i < this.getRange() && !exit; i++) {
-            if (world.getBlockState(new BlockPos(pos.getX() + i, pos.getY(), pos.getZ())).isSolidRender(world, pos))
+            if (world.getBlockState(new BlockPos(pos.getX() + i, pos.getY(), pos.getZ())).isSolidRender())
                 exit = true;
             else
                 maxx = pos.getX() + i;
         }
         exit = false;
         for (int i = 1; i < this.getRange() && !exit; i++) {
-            if (world.getBlockState(new BlockPos(pos.getX() - i, pos.getY(), pos.getZ())).isSolidRender(world, pos))
+            if (world.getBlockState(new BlockPos(pos.getX() - i, pos.getY(), pos.getZ())).isSolidRender())
                 exit = true;
             else
                 minx = pos.getX() - i;
         }
         exit = false;
         for (int i = 1; i < this.getRange() && !exit; i++) {
-            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() + i, pos.getZ())).isSolidRender(world, pos))
+            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() + i, pos.getZ())).isSolidRender())
                 exit = true;
             else
                 maxy = pos.getY() + i;
         }
         exit = false;
         for (int i = 1; i < this.getRange() && !exit; i++) {
-            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).isSolidRender(world, pos))
+            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() - i, pos.getZ())).isSolidRender())
                 exit = true;
             else
                 miny = pos.getX() - i;
         }
         exit = false;
         for (int i = 1; i < this.getRange() && !exit; i++) {
-            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + i)).isSolidRender(world, pos))
+            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + i)).isSolidRender())
                 exit = true;
             else
                 maxz = pos.getZ() + i;
         }
         exit = false;
         for (int i = 1; i < this.getRange() && !exit; i++) {
-            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - i)).isSolidRender(world, pos))
+            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - i)).isSolidRender())
                 exit = true;
             else
                 minz = pos.getZ() - i;
@@ -238,7 +243,7 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
     }
 
     private void dispense2(Level world, BlockPos pos, AABB room, int i) { // id, duration, amplifier
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (potions[i] != null) {
                 List<MobEffectInstance> effects = potions[i].effects;
                 if (effects != null && !effects.isEmpty()) {
@@ -279,13 +284,13 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
         super.readSyncTag(NBT);
         for (int i = 0; i < 9; i++) {
             if (NBT.contains("potion_" + i)) {
-                CompoundTag tag = NBT.getCompound("potion_" + i);
+                CompoundTag tag = NBT.getCompoundOrEmpty("potion_" + i);
                 potions[i] = PotionApplication.load(tag);
             } else {
                 potions[i] = null;
             }
         }
-        potionLevel = NBT.getIntArray("levels");
+        potionLevel = NBT.getIntArray("levels").orElse(new int[9]);
     }
 
     @Override
@@ -338,7 +343,7 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
-
+        this.doAerosolizerTick();
     }
 
     @Override
@@ -427,8 +432,10 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
     //@Override
     public int fill(Direction from, FluidStack resource, boolean doFill) {
         if (doFill && this.canFill(from, resource.getFluid())) {
+            ItemStack poison = new ItemStack(Items.POTION, 1);
+            poison.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.POISON));
             for (int i = 0; i < 9; i++) {
-                PotionApplication eff = this.getEffectFromItem(PotionUtils.setPotion(new ItemStack(Items.POTION, 1), Potions.POISON));
+                PotionApplication eff = this.getEffectFromItem(poison);
                 if (this.tryAddPotionToSlot(i, resource.getAmount(), eff))
                     return resource.getAmount();
             }
@@ -485,15 +492,15 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
         }
 
         public static PotionApplication load(CompoundTag NBT) {
-            int amt = NBT.getInt("amount");
-            int lvl = NBT.getInt("level");
-            int c = NBT.getInt("color");
+            int amt = NBT.getIntOr("amount", 0);
+            int lvl = NBT.getIntOr("level", 0);
+            int c = NBT.getIntOr("color", 0);
             ArrayList<MobEffectInstance> fx = new ArrayList<>();
-            ListTag li = NBT.getList("effects", Tag.TAG_COMPOUND);
-            for (Object o : li) {
-                CompoundTag tag = (CompoundTag) o;
-                MobEffectInstance p = (MobEffectInstance) PotionUtils.getCustomEffects(tag);
-                fx.add(p);
+            ListTag li = NBT.getListOrEmpty("effects");
+            // 26.1: MobEffectInstance.load was removed in favour of MobEffectInstance.CODEC.
+            // We decode each list entry through the codec; null/invalid entries are skipped.
+            for (var o : li) {
+                MobEffectInstance.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, o).result().ifPresent(fx::add);
             }
             return new PotionApplication(fx, amt, lvl);
         }
@@ -502,17 +509,17 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
             int sum = 0;
             for (MobEffectInstance p : li) {
                 //sum += Potion.potionTypes[p.getPotionID()].getLiquidColor(); todo check if getcolor works for potions
-                sum = p.getEffect().getColor();
+                sum = p.getEffect().value().getColor();
             }
             return sum / li.size();
         }
 
         public void saveAdditional(CompoundTag NBT) {
             ListTag li = new ListTag();
+            // 26.1: MobEffectInstance.save was removed in favour of MobEffectInstance.CODEC.
+            // We encode each effect through the codec; failed encodings drop the entry.
             for (MobEffectInstance eff : effects) {
-                CompoundTag tag = new CompoundTag();
-                eff.save(tag);//writeCustomMobEffectToNBT(tag);
-                li.add(tag);
+                MobEffectInstance.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, eff).result().ifPresent(li::add);
             }
             NBT.put("effects", li);
             NBT.putInt("amount", amount);

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/merge",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/merge",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/merge"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/merge",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/merge",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/merge",
+      "y": 270
+    }
+  }
+}

@@ -45,7 +45,7 @@
 //        ItemStack var3 = craftMatrix.getStackInSlotOnClosing(0);
 //        if (var3 != null) {
 //            if (!ReikaInventoryHelper.addToIInv(var3, par1Player.inventory)) {
-//                if (!level.isClientSide)
+//                if (!level.isClientSide())
 //                    par1Player.dropPlayerItemWithRandomChoice(var3, true);
 //            }
 //            if (FluidContainerRegistry.isFilledContainer(var3)) {

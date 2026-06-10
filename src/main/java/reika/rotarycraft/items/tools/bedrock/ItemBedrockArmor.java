@@ -10,14 +10,11 @@
 package reika.rotarycraft.items.tools.bedrock;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -32,64 +29,21 @@ import reika.dragonapi.ModList;
 import reika.dragonapi.libraries.ReikaEnchantmentHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.base.ItemRotaryArmor;
-
-import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.Materials;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.HashMap;
 import java.util.Locale;
 
-//@Strippable(value = {"forestry.api.apiculture.IArmorApiarist"})
-public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiarist {
+// 1.21.5 NOTE: Enchantments constants are now ResourceKey<Enchantment>; legacy
+// HashMap<Enchantment, Integer> APIs and getEnchantmentValue / onEntityItemUpdate have
+// been removed. ItemBedrockArmor is trimmed to the bits that still compile while we
+// rebuild the rest against the new APIs.
+public class ItemBedrockArmor extends ItemRotaryArmor {
 
-    public ItemBedrockArmor(Type slot, Properties properties) {
+    public ItemBedrockArmor(net.minecraft.world.item.equipment.ArmorType slot, Properties properties) {
         super(Materials.BEDROCK_ALLOY, slot, properties);
-    }
-
-//    public static boolean isWearingFullSuitOf(LivingEntity e) {
-//        return ReikaEntityHelper.isEntityWearingFullSuitOf(e, (ItemStack is) -> isValidBedrockArmorItem(is));
-//    }
-//
-//    @ModDependent(ModList.CHROMATICRAFT)
-//    private static boolean checkFloatstoneBoots(ItemStack is) {
-//        if (ChromaItems.FLOATBOOTS.matchWith(is)) {
-//            ItemStack in = ItemFloatstoneBoots.getSpecialItem(is);
-//            if (in != null) {
-//                return isValidBedrockArmorItem(in);
-//            }
-//        }
-//        return false;
-//    }
-//
-//    public static boolean isValidBedrockArmorItem(ItemStack is) {
-//        if (is == null)
-//            return false;
-//        if (ModList.CHROMATICRAFT.isLoaded()) {
-//            if (checkFloatstoneBoots(is))
-//                return true;
-//        }
-//        RotaryItems ir = RotaryItems.getEntry(is);
-//        if (ir == null)
-//            return false;
-//        if (!ir.isBedrockTypeArmor())
-//            return false;
-//        return true;
-//    }
-
-
-    @Override
-    public Component getDescription() {
-        super.getDescription();
-        for (int i = 0; i < HelmetUpgrades.list.length; i++) {
-            HelmetUpgrades g = HelmetUpgrades.list[i];
-            if (g.isAvailable && g.existsOn(this.getDefaultInstance())) {
-                return Component.literal("Upgraded: " + g.name());
-            }
-        }
-        return (Component) Component.EMPTY;
     }
 
     @Override
@@ -100,14 +54,12 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
         ep.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(Double.MAX_VALUE);
     }
 
-    public HashMap<Enchantment, Integer> getDefaultEnchantments() {
-        HashMap<Enchantment, Integer> map = new HashMap<>();
+    public HashMap<ResourceKey<Enchantment>, Integer> getDefaultEnchantments() {
+        HashMap<ResourceKey<Enchantment>, Integer> map = new HashMap<>();
         if (this == RotaryItems.BEDROCK_ALLOY_HELMET.get()) {
             map.put(Enchantments.PROJECTILE_PROTECTION, 4);
             map.put(Enchantments.RESPIRATION, 3);
         }
-
-
         if (this == RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get() || this == RotaryItems.BEDROCK_ALLOY_LEGGINGS.get() || this == RotaryItems.BEDROCK_ALLOY_BOOTS.get()) {
             switch (RotaryItems.getArmorType(this)) {
                 case 0 -> {
@@ -117,7 +69,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
                 case 1 -> map.put(Enchantments.BLAST_PROTECTION, 4);
                 case 2 -> map.put(Enchantments.FIRE_PROTECTION, 4);
                 case 3 -> {
-                    map.put(Enchantments.FALL_PROTECTION, 4);
+                    map.put(Enchantments.FEATHER_FALLING, 4);
                     map.put(Enchantments.DEPTH_STRIDER, 4);
                 }
             }
@@ -125,43 +77,21 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
         return map;
     }
 
+    // 1.21.5: Item#inventoryTick signature is now (ItemStack, ServerLevel, Entity, EquipmentSlot).
     @Override
-    public void inventoryTick(ItemStack is, Level world, Entity entity, int par4, boolean p_41408_) {
-        this.forceEnchantments(is, world, entity, par4);
-    }
-
-    /**
-     * Called by the default implemetation of EntityItem's onUpdate method, allowing
-     * for cleaner control over the update of the item without having to write a
-     * subclass.
-     *
-     * @param stack
-     * @param entity The entity Item
-     * @return Return true to skip any further update code.
-     */
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        ItemStack is = entity.getItem();
-        HashMap<Enchantment, Integer> map = this.getDefaultEnchantments();
-        for (Enchantment e : map.keySet()) {
-            if (!ReikaEnchantmentHelper.hasEnchantment(e, is)) {
-                entity.playSound(SoundEvents.ITEM_BREAK, 1, 1);
-                entity.kill();
-            }
-        }
-        return false;
+    public void inventoryTick(ItemStack is, net.minecraft.server.level.ServerLevel world, Entity entity, net.minecraft.world.entity.EquipmentSlot slot) {
+        this.forceEnchantments(is, world, entity, slot == null ? 0 : slot.getIndex(0));
     }
 
     private void forceEnchantments(ItemStack is, Level world, Entity entity, int slot) {
-        HashMap<Enchantment, Integer> map = this.getDefaultEnchantments();
-        for (Enchantment e : map.keySet()) {
+        HashMap<ResourceKey<Enchantment>, Integer> map = this.getDefaultEnchantments();
+        for (ResourceKey<Enchantment> e : map.keySet()) {
             if (!ReikaEnchantmentHelper.hasEnchantment(e, is)) {
-                entity.playSound(SoundEvents.ITEM_BREAK, 1, 1);
+                entity.playSound(SoundEvents.ITEM_BREAK.value(), 1, 1);
                 if (entity instanceof Player ep) {
                     ep.getInventory().setItem(slot, ItemStack.EMPTY);
                     ep.hurt(ep.damageSources().generic(), 10);
                     ReikaChatHelper.sendChatToPlayer(ep, "The damaged tool has broken.");
-                    is = ItemStack.EMPTY;
                     break;
                 }
             }
@@ -177,23 +107,6 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
     public boolean canBeDamaged() {
         return false;
     }
-
-//    @Override
-//    public double getDamageMultiplier(DamageSource src) { todo damagemultiplier
-//        return src.isUnblockable() ? 0.75 : 0.35;
-//    }
-
-
-    @Override
-    public int getEnchantmentValue() {
-        return ConfigRegistry.PREENCHANT.getState() ? 0 : Items.IRON_PICKAXE.getEnchantmentValue();//(Items.IRON_PICKAXE.getDefaultInstance());
-    }
-//    @Override
-//    public boolean protectEntity(LivingEntity entity, ItemStack armor, String cause, boolean doProtect) {
-//        ItemStack head = entity.getEquipmentInSlot(4);
-//        RotaryItems ir = head != null ? RotaryItems.getEntry(head) : null;
-//        return ir != null && ir.isBedrockArmor() && HelmetUpgrades.APIARIST.existsOn(head);
-//    }
 
     public enum HelmetUpgrades {
         NIGHTVISION(),
@@ -217,7 +130,8 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
         }
 
         public boolean existsOn(ItemStack is) {
-            return is.getTag() != null && is.getTag().getBoolean(this.getNBT());
+            net.minecraft.nbt.CompoundTag tag = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+            return tag != null && tag.getBooleanOr(this.getNBT(), false);
         }
 
         private String getNBT() {
@@ -225,7 +139,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
         }
 
         public void enable(ItemStack is, boolean set) {
-            is.getOrCreateTag().putBoolean(this.getNBT(), set);
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean(this.getNBT(), set));
         }
 
         public ItemStack[] getUpgradeItems() {
@@ -234,9 +148,8 @@ public class ItemBedrockArmor extends ItemRotaryArmor {//implements IArmorApiari
                 case VISOR ->
                         new ItemStack[]{new ItemStack(Blocks.GREEN_STAINED_GLASS, 1), new ItemStack(Items.DIAMOND), new ItemStack(Blocks.GREEN_STAINED_GLASS, 1)};
                 case APIARIST ->
-                        ReikaArrayHelper.getArrayOf(/*ForestryHandler.CraftingMaterials.WOVENSILK.getItem()*/new ItemStack(Items.PINK_CARPET), 8);
+                        ReikaArrayHelper.getArrayOf(new ItemStack(Items.PINK_CARPET), 8);
             };
         }
     }
-
 }

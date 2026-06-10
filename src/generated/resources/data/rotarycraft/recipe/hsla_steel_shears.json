@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " B",
+    "B "
+  ],
+  "result": {
+    "id": "rotarycraft:hsla_steel_shears"
+  }
+}

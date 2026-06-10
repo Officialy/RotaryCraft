@@ -16,7 +16,7 @@
 //import net.minecraft.world.level.biome.Biome;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.minecraft.world.level.material.Fluids;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -208,7 +208,7 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        temperature = NBT.getInt("temp");
+//        temperature = NBT.getIntOr("temp", 0);
 //    }
 //
 //    @Override

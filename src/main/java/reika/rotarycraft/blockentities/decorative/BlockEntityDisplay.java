@@ -238,13 +238,13 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //        //ReikaJavaLibrary.pConsole(Arrays.toString(NBT.getIntArray("Bcolor")));
-//        //rgb = NBT.getIntArray("color");
-//        //Brgb = NBT.getIntArray("Bcolor");
+//        //rgb = NBT.getIntArray("color").orElse(new int[0]);
+//        //Brgb = NBT.getIntArray("Bcolor").orElse(new int[0]);
 //
-//        isArgonBlue = NBT.getBoolean("argon");
-//        color = ReikaDyeHelper.dyes[NBT.getInt("dye")];
+//        isArgonBlue = NBT.getBooleanOr("argon", false);
+//        color = ReikaDyeHelper.dyes[NBT.getIntOr("dye", 0)];
 //
-//        message = NBT.getString("msg");
+//        message = NBT.getStringOr("msg", "");
 //    }
 //
 //    @Override

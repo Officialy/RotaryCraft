@@ -24,8 +24,8 @@
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.phys.AABB;
 //import net.neoforged.api.distmarker.Dist;
-//import net.neoforged.common.NeoForge;
-//import net.neoforged.fml.loading.FMLLoader;
+//import net.neoforged.neoforge.common.NeoForge;
+//import net.neoforged.fml.loading.FMLEnvironment;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.instantiable.data.immutable.BlockKey;
@@ -145,7 +145,7 @@
 //        List<Entity> inzone = world.getEntities(Entity.class, zone);
 //        for (Entity ent : inzone) {
 //            if (ent != null) {
-//                if (ent.onGround && !world.isClientSide)
+//                if (ent.onGround && !world.isClientSide())
 //                    ent.motionY += 0.5 / ReikaMathLibrary.doubpow(ReikaMathLibrary.py3d(ent.getY - x, ent.getY() - y, ent.posZ - z), 0.5);
 //                ent.velocityChanged = true;
 //            }
@@ -233,7 +233,7 @@
 //			world.setBlockToAir(pos);*/
 //        if (drop == null)
 //            return;
-//        if (FMLLoader.getDist() == Dist.CLIENT)
+//        if (FMLEnvironment.getDist() == Dist.CLIENT)
 //            return;
 //        ItemEntity ent = new ItemEntity(world, pos, drop);
 //        world.addFreshEntity(ent);
@@ -244,7 +244,7 @@
 //        if (tofall.func_149831_e(world, x, y - 1, z)) {
 //            byte var8 = 32;
 //            if (!tofall.fallInstantly && world.hasChunksAt(x - var8, y - var8, z - var8, x + var8, y + var8, z + var8)) {
-//                if (!world.isClientSide) {
+//                if (!world.isClientSide()) {
 //                    EntityFallingBlock var9 = new EntityFallingBlock(world, x + 0.5F, y + 0.5F, z + 0.5F, tofall, world.getBlockMetadata(pos));
 //                    //tofall.onStartFalling(var9);
 //                    world.addFreshEntity(var9);
@@ -390,7 +390,7 @@
 //        for (int i = -2; i < 3; i++) {
 //            for (int j = -2; j < 3; j++) {
 //                Block id = world.getBlock(x + i, y, z + j);
-//                if (!world.isClientSide && ReikaPlayerAPI.playerCanBreakAt((WorldServer) world, x + i, y, z + j, id, meta, this.getServerPlacer())) {
+//                if (!world.isClientSide() && ReikaPlayerAPI.playerCanBreakAt((WorldServer) world, x + i, y, z + j, id, meta, this.getServerPlacer())) {
 //                    if (id != Blocks.AIR && i * j != 4 && i * j != -4) {
 //                        if (id == Blocks.mob_spawner) {
 //                            BlockEntityMobSpawner spw = (BlockEntityMobSpawner) world.getBlockEntity(x + i, y, z + j);
@@ -446,7 +446,7 @@
 //        if (flag) {
 //            BlockKey blockTo = this.getBlockProduct(world, pos, id, meta);
 //            ArrayList<ItemStack> li = this.getDrops(world, pos);
-//            if (!world.isClientSide)
+//            if (!world.isClientSide())
 //                blockTo.place(world, pos);
 //            if (blockTo.blockID == Blocks.AIR) {
 //                //Blocks.blocksList[id].dropBlockAsItem(world, x+i, y, z+j, meta, 0);
@@ -457,7 +457,7 @@
 //    }
 //
 //    private void spawnSpawner(Level world, BlockPos pos, BlockEntityMobSpawner spw) {
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //        ItemStack is = RotaryItems.SPAWNER.get();
 //        ReikaSpawnerHelper.addMobNBTToItem(is, spw);
@@ -478,11 +478,11 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        step = NBT.getInt("step");
-//        step2 = NBT.getInt("step2");
-//        climbing = NBT.getBoolean("climbing");
-//        active = NBT.getBoolean("active");
-//        smashed = NBT.getBoolean("smashed");
+//        step = NBT.getIntOr("step", 0);
+//        step2 = NBT.getIntOr("step2", 0);
+//        climbing = NBT.getBooleanOr("climbing", false);
+//        active = NBT.getBooleanOr("active", false);
+//        smashed = NBT.getBooleanOr("smashed", false);
 //    }
 //
 //    @Override
@@ -528,3 +528,5 @@
 //    }
 //
 //}
+
+

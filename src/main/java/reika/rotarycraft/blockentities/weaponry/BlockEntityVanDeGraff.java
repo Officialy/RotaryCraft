@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
 import net.minecraft.world.phys.AABB;
-import net.neoforged.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForge;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.data.WeightedRandom;
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
@@ -127,17 +127,17 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
         if (charge <= 0)
             return;
 
-        AABB box = new AABB(pos).expandTowards(r, r, r);
+        AABB box = new AABB(pos).inflate(r, r, r);
         LivingEntity e = ReikaWorldHelper.getClosestLivingEntityNoPlayers(world, worldPosition, box, true);
         if (e != null) {
-            EntityDischarge d = new EntityDischarge(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, charge, e.getY(), e.getY() + e.getEyeHeight() * 0.8, e.getZ());
-            if (!world.isClientSide) {
+            EntityDischarge d = new EntityDischarge(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, charge, e.getX(), e.getY() + e.getEyeHeight() * 0.8, e.getZ());
+            if (!world.isClientSide()) {
                 this.shock(e);
                 world.addFreshEntity(d);
             }
             charge = 0;
         }
-        if (charge > 2097152 && !world.isClientSide) {
+        if (charge > 2097152 && !world.isClientSide()) {
             this.detonate(world, pos);
         }
 
@@ -169,7 +169,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
         if (b == Blocks.TNT) {
             world.setBlock(new BlockPos(dx, dy, dz), Blocks.AIR.defaultBlockState(), 0);
             PrimedTnt e = new PrimedTnt(world, dx + 0.5D, dy + 0.5D, dz + 0.5D, null);
-            if (!world.isClientSide)
+            if (!world.isClientSide())
                 world.addFreshEntity(e);
 //            world.playSound(e, "DragonAPI.rand.fuse", 1.0F, 1.0F);
             world.addParticle(ParticleTypes.LAVA, dx + DragonAPI.rand.nextFloat(), dy + DragonAPI.rand.nextFloat(), dz + DragonAPI.rand.nextFloat(), 0, 0, 0);
@@ -178,9 +178,11 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
 
     private void detonate(Level world, BlockPos pos) {
         //LightningBolt b = new LightningBolt(world, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
-        LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(level);
-        //world.addFreshEntity(b);
-        world.addFreshEntity(bolt);
+        // 1.21.5: EntityType.create now requires (ServerLevel, Consumer<T>, BlockPos, EntitySpawnReason, boolean, boolean).
+        if (level instanceof net.minecraft.server.level.ServerLevel sl) {
+            LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(sl, null, pos, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED, false, false);
+            if (bolt != null) world.addFreshEntity(bolt);
+        }
         charge = 0;
         world.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
         world.explode(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 4F, true, Level.ExplosionInteraction.BLOCK);
@@ -201,7 +203,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
         }
         SoundRegistry.SPARK.playSoundAtBlock(level, worldPosition, 0.25F, 1F);
         EntityDischarge d = new EntityDischarge(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), charge, worldPosition.getX() + dx, worldPosition.getY() + dy, worldPosition.getZ() + dz);
-        if (!level.isClientSide)
+        if (!level.isClientSide())
             level.addFreshEntity(d);
         charge = 0;
     }
@@ -215,8 +217,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
 //            dmg /= 2;
 
         if (dmg > 0) {
-            RotaryCraft.shock.lastMachine = this;
-            e.hurt(RotaryCraft.shock, dmg);
+            e.hurt(RotaryCraft.shock.get(level), dmg);
             if (e instanceof Creeper) {
                 level.explode(e, e.blockPosition().getX(), e.blockPosition().getY(), e.blockPosition().getZ(), 3F, Level.ExplosionInteraction.BLOCK);
                 e.hurt(e.damageSources().magic(), Integer.MAX_VALUE);
@@ -264,7 +265,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        charge = tag.getInt("c");
+        charge = tag.getIntOr("c", 0);
     }
 
     @Override

@@ -12,14 +12,14 @@ package reika.rotarycraft.items.tools.charged;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import reika.dragonapi.instantiable.data.immutable.DecimalPosition;
 import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
@@ -37,10 +37,10 @@ public class ItemUltrasound extends ItemChargedTool {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player ep, InteractionHand hand) {
+    public InteractionResult use(Level world, Player ep, InteractionHand hand) {
 //        if (is.getItemDamage() <= 0) {
 //            this.noCharge();
-//            return InteractionResultHolder.fail(this.getDefaultInstance());
+//            return InteractionResult.FAIL;
 //        } todo add nocharge feature
         this.warnCharge(this.getDefaultInstance());
 //        ReikaChatHelper.writeString(String.format("%.3f", look.xCoord)+" "+String.format("%.3f", look.yCoord)+" "+String.format("%.3f", look.zCoord));
@@ -76,6 +76,6 @@ public class ItemUltrasound extends ItemChargedTool {
                     ReikaChatHelper.clearChat(); //clr
             }
         }
-        return InteractionResultHolder.success(this.getDefaultInstance());
+        return InteractionResult.SUCCESS;
     }
 }

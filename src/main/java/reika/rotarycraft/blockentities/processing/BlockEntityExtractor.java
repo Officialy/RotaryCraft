@@ -153,9 +153,9 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        extractorCookTime = NBT.getIntArray("CookTime");
-//        drillTime = NBT.getInt("drill");
-//        bedrock = NBT.getBoolean("bedrock");
+//        extractorCookTime = NBT.getIntArray("CookTime").orElse(new int[0]);
+//        drillTime = NBT.getIntOr("drill", 0);
+//        bedrock = NBT.getBooleanOr("bedrock", false);
 //    }
 //
 //    @Override
@@ -201,7 +201,7 @@
 //        if (DragonAPI.debugtest)
 //            tank.addLiquid(1000, Fluids.WATER);
 //        this.testIdle();
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //        this.throughPut();
 //        if (!bedrock) {

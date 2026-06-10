@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/landmine",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "landmine"
+    }
+  }
+}

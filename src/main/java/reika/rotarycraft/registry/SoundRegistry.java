@@ -10,7 +10,7 @@
 package reika.rotarycraft.registry;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -18,9 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.registries.DeferredRegister;
-import net.neoforged.registries.ForgeRegistries;
-import net.neoforged.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.dragonapi.interfaces.registry.CustomDistanceSound;
 import reika.dragonapi.interfaces.registry.SoundEnum;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
@@ -86,7 +86,7 @@ public enum SoundRegistry implements CustomDistanceSound {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, RotaryCraft.MODID);
 
     // Static map for sound event registration
-    private static final HashMap<SoundRegistry, RegistryObject<SoundEvent>> SOUND_EVENT_MAP = new HashMap<>();
+    private static final HashMap<SoundRegistry, DeferredHolder<SoundEvent, SoundEvent>> SOUND_EVENT_MAP = new HashMap<>();
 
     public static final String SOUND_FOLDER = "sounds/";
     private static final String SOUND_DIR = "sounds/";
@@ -98,7 +98,7 @@ public enum SoundRegistry implements CustomDistanceSound {
         // Register all sound events
         for (SoundRegistry sound : values()) {
             SOUND_EVENT_MAP.put(sound, SOUND_EVENTS.register(sound.eventName, 
-                () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, sound.eventName))));
+                () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, sound.eventName))));
         }
         
         // Create name lookup map
@@ -107,7 +107,7 @@ public enum SoundRegistry implements CustomDistanceSound {
         }
     }
 
-    private final ResourceLocation path;
+    private final Identifier path;
     private final String name;
     private final String eventName;
     private boolean isVolumed = false;
@@ -129,9 +129,9 @@ public enum SoundRegistry implements CustomDistanceSound {
         }
         
         if (this.isNote())
-            path = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, SOUND_FOLDER + MUSIC_FOLDER + name + SOUND_EXT);
+            path = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, SOUND_FOLDER + MUSIC_FOLDER + name + SOUND_EXT);
         else
-            path = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, SOUND_FOLDER + name + SOUND_EXT);
+            path = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, SOUND_FOLDER + name + SOUND_EXT);
     }
 
     // Get the registered SoundEvent
@@ -221,7 +221,7 @@ public enum SoundRegistry implements CustomDistanceSound {
         return this.name();
     }
 
-    public ResourceLocation getPath() {
+    public Identifier getPath() {
         return path;
     }
 

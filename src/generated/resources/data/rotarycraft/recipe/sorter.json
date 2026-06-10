@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:circuit_board",
+    "H": "minecraft:hopper",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SHS",
+    " C ",
+    "P P"
+  ],
+  "result": {
+    "id": "rotarycraft:sorter"
+  }
+}

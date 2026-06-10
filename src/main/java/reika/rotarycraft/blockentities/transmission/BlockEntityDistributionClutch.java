@@ -99,7 +99,7 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
         this.getIOSides(world, pos, getBlockState().getValue(BlockRotaryCraftMachine.FACING));
-        if (!RotaryAux.getPowerOnClient && world.isClientSide)
+        if (!RotaryAux.getPowerOnClient && world.isClientSide())
             return;
         this.updateControl(world, pos);
         this.intakePower(world, pos);
@@ -171,7 +171,7 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
     }
 
     private void intakePower(Level world, BlockPos pos) {
-        if (!RotaryAux.getPowerOnClient && world.isClientSide)
+        if (!RotaryAux.getPowerOnClient && world.isClientSide())
             return;
         omegain = torquein = 0;
         boolean isCentered = pos.getX() == worldPosition.getX() && pos.getY() == worldPosition.getY() && pos.getZ() == worldPosition.getZ();
@@ -271,11 +271,11 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
 
         //ReikaJavaLibrary.pConsole("in "+NBT+" gives "+Arrays.toString(outputTorques), xCoord == 514);
 
-        requestedTorques = tag.getIntArray("req");
-        outputTorques = tag.getIntArray("output");
-        enabledSides = ReikaArrayHelper.booleanFromBitflags(tag.getInt("sides"), 4);
+        requestedTorques = tag.getIntArray("req").orElse(new int[0]);
+        outputTorques = tag.getIntArray("output").orElse(new int[0]);
+        enabledSides = ReikaArrayHelper.booleanFromBitflags(tag.getIntOr("sides", 0), 4);
 
-        control = ControlMode.list[tag.getInt("control")];
+        control = ControlMode.list[tag.getIntOr("control", 0)];
     }
 
     @Override

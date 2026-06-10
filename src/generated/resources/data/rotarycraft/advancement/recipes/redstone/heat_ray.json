@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_power_module": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:power_module"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:heat_ray"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_power_module"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:heat_ray"
+    ]
+  }
+}

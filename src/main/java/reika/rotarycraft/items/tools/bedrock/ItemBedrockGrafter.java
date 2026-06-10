@@ -24,7 +24,7 @@ public class ItemBedrockGrafter extends ItemRotaryTool {// implements IToolGraft
     }
 
     @Override
-    public void onCraftedBy(ItemStack itemStack, Level level, Player player) {
+    public void onCraftedBy(ItemStack itemStack, Player player) {
         //RotaryAchievements.BEDROCKTOOLS.triggerAchievement(player);
     }
 

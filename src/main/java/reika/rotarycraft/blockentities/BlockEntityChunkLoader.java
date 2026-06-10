@@ -43,7 +43,7 @@
 //    public void updateEntity(Level world, BlockPos pos) {
 //        super.updateBlockEntity();
 //        this.getPowerBelow();
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            if (omega >= MINSPEED) {
 //                this.load();
 //            } else {
@@ -109,7 +109,7 @@
 //
 //    @Override
 //    protected void onInvalidateOrUnload(Level world, BlockPos pos, boolean invalid) {
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //        if (invalid) {
 //            this.unload();
@@ -137,7 +137,7 @@
 //
 //    @Override
 //    public void breakBlock() {
-//        if (!level.isClientSide)
+//        if (!level.isClientSide())
 //            this.unload();
 //    }
 //

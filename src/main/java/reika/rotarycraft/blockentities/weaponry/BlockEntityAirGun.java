@@ -39,7 +39,7 @@
 //
 //        //ReikaJavaLibrary.pConsole(tickcount+"/"+this.getFireRate()+":"+ReikaInventoryHelper.checkForItem(Items.arrow.itemID, inv));
 //
-//        if (tickcount >= this.getOperationTime() && !world.isClientSide) {
+//        if (tickcount >= this.getOperationTime() && !world.isClientSide()) {
 //            AABB box = this.drawAABB(pos);
 //            List<LivingEntity> li = world.getEntities(LivingEntity.class, box);
 //            if (li.size() > 0 && !ReikaEntityHelper.allAreDead(li, false)) {

@@ -10,9 +10,9 @@
 //package reika.rotarycraft.items.tools.charged;
 //
 //import net.minecraft.world.InteractionHand;
-//import net.minecraft.world.InteractionResultHolder;
+//import net.minecraft.world.InteractionResult;
 //import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.entity.projectile.LargeFireball;
+//import net.minecraft.world.entity.projectile.hurtingprojectile.LargeFireball;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.item.Items;
 //import net.minecraft.world.level.Level;
@@ -39,7 +39,7 @@
 //        ef.accelerationZ = ef.motionZ;
 //        ef.field_92057_e = (int) (charge);
 //        ef.getY() = ep.getY() + 1;
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            world.playSoundAtEntity(ep, "mob.ghast.fireball", 1, 1);
 //            world.addFreshEntity(ef);
 //        }
@@ -105,7 +105,7 @@
 //     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, Player
 //     */
 //    @Override
-//    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+//    public InteractionResult use(Level level, Player player, InteractionHand hand) {
 //        if (is.getItemDamage() <= 0) {
 //            this.noCharge();
 //            return is;

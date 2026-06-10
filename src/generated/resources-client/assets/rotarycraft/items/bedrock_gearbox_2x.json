@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/bedrock_gearbox_2x",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "gearbox"
+    }
+  }
+}

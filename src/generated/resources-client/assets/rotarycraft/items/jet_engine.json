@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/jet_engine",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "jet_engine"
+    }
+  }
+}

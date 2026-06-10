@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "p": "rotarycraft:fluid_pipe",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sps",
+    "s s"
+  ],
+  "result": {
+    "id": "rotarycraft:spiller"
+  }
+}

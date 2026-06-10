@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:friction_heater",
+  "input": "rotarycraft:hsla_steel_scrap",
+  "output": {
+    "id": "rotarycraft:hsla_steel_ingot"
+  },
+  "temperature": 1000.0
+}

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/bedrock_flywheel",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/bedrock_flywheel",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/bedrock_flywheel"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/bedrock_flywheel",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/bedrock_flywheel",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/bedrock_flywheel",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/wood_shaft",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "wood_shaft"
+    }
+  }
+}

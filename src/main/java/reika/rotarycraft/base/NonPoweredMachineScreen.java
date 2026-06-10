@@ -1,7 +1,7 @@
 package reika.rotarycraft.base;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import reika.dragonapi.base.CoreContainer;
@@ -13,8 +13,12 @@ public abstract class NonPoweredMachineScreen<E extends RotaryCraftBlockEntity, 
         super(container, inv, name);
     }
 
+    public NonPoweredMachineScreen(T container, Inventory inv, Component name, int imageWidth, int imageHeight) {
+        super(container, inv, name, imageWidth, imageHeight);
+    }
+
     @Override
-    protected void drawPowerTab(GuiGraphics stack, int j, int k) {
+    protected void drawPowerTab(GuiGraphicsExtractor stack, int j, int k) {
 
     }
 }

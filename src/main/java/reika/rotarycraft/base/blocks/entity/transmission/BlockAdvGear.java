@@ -85,14 +85,14 @@
 //            ItemStack is = null;//todo MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(te.getBlockMetadata() / 4);
 //            if (te.getGearType().storesEnergy()) {
 //                long e = te.getEnergy();
-//                if (is.getTag() == null)
-//                    is.getOrCreateTag();
-//                is.getTag().putLong("energy", e);
-//                is.getTag().putBoolean("bedrock", te.isBedrockCoil());
+//                if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+//                    is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+//                is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putLong("energy", e);
+//                is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putBoolean("bedrock", te.isBedrockCoil());
 //            }
 //            if (te.getGearType().isLubricated()) {
 //                int lube = te.getLubricant();
-//                is.getOrCreateTag().putInt("lube", lube);
+//                is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("lube", lube);
 //            }
 //            if (te.isUnHarvestable()) {
 //                is = ReikaItemHelper.getSizedItemStack(RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance(), 2 + DragonAPI.rand.nextInt(12));
@@ -110,4 +110,5 @@
 //
 //
 //
-//}
+//
+

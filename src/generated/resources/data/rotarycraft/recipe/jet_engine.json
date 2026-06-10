@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:compound_compressor",
+    "D": "rotarycraft:diffuser",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:aluminum_alloy_ingot",
+    "T": "rotarycraft:compound_turbine",
+    "c": "rotarycraft:high_temperature_combustor",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "DCS",
+    "ScS",
+    "PTs"
+  ],
+  "result": {
+    "id": "rotarycraft:jet_engine"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "_comment": "Jade plugin entrypoint registry. Lists FQCNs of @WailaPlugin-annotated classes that Jade should load. Only loaded when Jade is present at runtime; ignored otherwise.",
+  "plugins": [
+    "reika.rotarycraft.modinterface.jade.RotaryJadePlugin"
+  ]
+}

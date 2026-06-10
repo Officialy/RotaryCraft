@@ -87,7 +87,7 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase
   protected void readSyncTag(CompoundTag NBT) {
     super.readSyncTag(NBT);
 
-    isFlipped = NBT.getBoolean("flip");
+    isFlipped = NBT.getBooleanOr("flip", false);
   }
 
   @Override
@@ -101,9 +101,9 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase
   @Override
   public void load(CompoundTag nbt) {
     super.load(nbt);
-    phi = nbt.getFloat("phi");
-    tickcount = nbt.getInt("tick");
-    disabled = nbt.getBoolean("emp");
+    phi = nbt.getFloatOr("phi", 0);
+    tickcount = nbt.getIntOr("tick", 0);
+    disabled = nbt.getBooleanOr("emp", false);
   }
 
   public boolean isShutdown() {

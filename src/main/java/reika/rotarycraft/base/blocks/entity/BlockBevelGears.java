@@ -24,6 +24,20 @@ public class BlockBevelGears extends BlockBasicMachine {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> ((BlockEntityBevelGear) pBlockEntity).updateBlockEntity());
+        if (pLevel.isClientSide()) {
+            // 26.1 fix: animate phi locally from the synced omega so the bevel gear visibly
+            // spins on the client; phi itself is not part of the sync packet.
+            return (lvl, pos, st, be) -> {
+                BlockEntityBevelGear bg = (BlockEntityBevelGear) be;
+                if (bg.omega > 0) {
+                    bg.phi += (float) reika.dragonapi.libraries.mathsci.ReikaMathLibrary
+                            .doubpow(reika.dragonapi.libraries.mathsci.ReikaMathLibrary.logbase(bg.omega + 1, 2), 1.05);
+                }
+            };
+        }
+        return (pLevel1, pPos, pState1, pBlockEntity) -> ((BlockEntityBevelGear) pBlockEntity).updateEntity(pLevel1, pPos);
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

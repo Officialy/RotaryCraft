@@ -15,8 +15,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.registry.*;
 
@@ -94,17 +94,14 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
     }
 
     @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
-
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
-    }
-
-    @Override
     public MachineRegistry getMachine() {
         return MachineRegistry.MICRO_TURBINE;
+    }
+
+    @Override
+    public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id,
+                                                                          net.minecraft.world.entity.player.Inventory inv,
+                                                                          net.minecraft.world.entity.player.Player player) {
+        return new reika.rotarycraft.gui.container.machine.inventory.ContainerMicroTurbine(id, inv, this);
     }
 }

@@ -22,7 +22,7 @@
 //import net.minecraft.world.entity.LivingEntity;
 //import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 //import net.minecraft.world.entity.decoration.ItemFrame;
-//import net.minecraft.world.entity.decoration.Painting;
+//import net.minecraft.world.entity.decoration.painting.Painting;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.Blocks;
@@ -45,7 +45,7 @@
 //        motionX = vx;
 //        motionY = vy;
 //        motionZ = vz;
-//        if (!world.isClientSide)
+//        if (!world.isClientSide())
 //            velocityChanged = true;
 //        gun = r;
 //        parameters = f;
@@ -80,7 +80,7 @@
 //            return;
 //        }
 //        //ReikaChatHelper.write(this.tickCount);
-//        if (!level.isClientSide && (tickCount > 240 || shootingEntity != null && shootingEntity.isAlive() || !level.blockExists((int) getY(), (int) getY(), (int) getZ()))) {
+//        if (!level.isClientSide() && (tickCount > 240 || shootingEntity != null && shootingEntity.isAlive() || !level.blockExists((int) getY(), (int) getY(), (int) getZ()))) {
 //            this.kill();
 //        } else {
 //            this.onEntityUpdate();
@@ -106,7 +106,7 @@
 //        if (isAlive())
 //            return;
 //        Level world = level;
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //        double x = getX();
 //        double y = getY();
@@ -145,7 +145,7 @@
 //    @Override
 //    protected void applyAttackEffectsToEntity(Level world, Entity ent) {
 //        ent.hurt(this.getDamageSource().setIsFire(), this.getAttackDamage());
-//        ent.setSecondsOnFire(parameters.burnTime);
+//        ent.igniteForSeconds(parameters.burnTime);
 //    }
 //
 //    @Override

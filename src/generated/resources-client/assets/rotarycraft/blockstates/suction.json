@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/suction",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/suction",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/suction"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/suction",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/suction",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/suction",
+      "y": 270
+    }
+  }
+}

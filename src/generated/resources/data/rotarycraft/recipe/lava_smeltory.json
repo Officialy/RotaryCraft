@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "F": "minecraft:furnace",
+    "R": "rotarycraft:reservoir",
+    "S": "rotarycraft:hsla_steel_plate"
+  },
+  "pattern": [
+    "SFS",
+    "FRF",
+    "SRS"
+  ],
+  "result": {
+    "id": "rotarycraft:lava_smeltory"
+  }
+}

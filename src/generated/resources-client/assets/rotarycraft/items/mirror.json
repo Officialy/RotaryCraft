@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/mirror",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "mirror"
+    }
+  }
+}

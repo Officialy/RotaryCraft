@@ -12,7 +12,7 @@ package reika.rotarycraft.api;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 /**
  * For fetching RotaryItems items from the enum.
@@ -56,7 +56,7 @@ public class ItemFetcher {
     public static Item getItemByUnlocalizedName(String name) {
         for (int i = 0; i < itemList.length; i++) {
             Item it = itemList[i];
-            String sg = ForgeRegistries.ITEMS.getKey(it).getNamespace(); //todo check if this is right
+            String sg = BuiltInRegistries.ITEM.getKey(it).getNamespace(); //todo check if this is right
             if (name.equals(sg))
                 return it;
         }

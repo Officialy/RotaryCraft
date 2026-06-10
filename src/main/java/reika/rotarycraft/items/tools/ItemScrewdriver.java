@@ -62,7 +62,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
     }
 
    /* {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             Block id = world.getBlockState(pos).getBlock();
             damage = world.getBlockMetadata(pos);
             if (id == Blocks.END_PORTAL_FRAME) {
@@ -95,7 +95,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
     }*/
 
     public ItemScrewdriver() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
         var s = context.getClickedFace(); //I'm assuming S was the direction of the face that was clicked
         var direction = Direction.NORTH;
         // if (ReikaPlayerAPI.isFakeOrNotInteractable(ep, new BlockPos(ep.position()), 8))
-        //    return return InteractionResultHolder.fail(this.getDefaultInstance());;
+        //    return return InteractionResult.FAIL;;
 
         if (te instanceof RotaryCraftBlockEntity) {
             RotaryCraftBlockEntity t = (RotaryCraftBlockEntity) te;
@@ -329,25 +329,33 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                 }
                 return InteractionResult.SUCCESS;
             }
-         /*  todo if (m == MachineRegistry.SPLITTER && (!ep.isShiftKeyDown())) {
+            if (m == MachineRegistry.SPLITTER) {
                 BlockEntitySplitter clicked = (BlockEntitySplitter) te;
-                if (direction < 7 || (direction < 15 && direction > 7))
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 1]), 3);
-                if (direction == 7)
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[0]), 3);
-                if (direction == 15)
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[8]), 3);
-
+                int ioside = clicked.getIoside();
+                if (ep.isShiftKeyDown()) {
+                    // 26.1 port: legacy shift-click toggled merge/split by flipping bit 3 of
+                    // {@code ioside} ({@code +/-8}). Our port stores {@code ioside} as a real
+                    // BE field with the same layout (low 3 bits = orientation, bit 3 = split
+                    // flag), so {@link BlockEntitySplitter#setSplitting} does exactly that.
+                    clicked.setSplitting(!clicked.isSplitting());
+                } else {
+                    // Cycle through the 4 orientations within the current mode (merge 0-3 or
+                    // split 8-11). Legacy mapping incremented {@code ioside} and wrapped from
+                    // 7→0 (merge) or 15→8 (split). We keep that behaviour but ignore the legacy
+                    // values 4-7 / 12-15 — our split-mode layout only uses 0-3 / 8-11.
+                    int base = ioside & 8;          // preserve mode bit
+                    int orient = (ioside & 3) + 1;  // advance orientation
+                    if (orient > 3) orient = 0;
+                    clicked.setIoside(base | orient);
+                }
+                // The BE's {@link BlockEntitySplitter#updateEntity} reads {@code ioside} every
+                // tick and calls {@code getIOSides} which rewrites read/write/read2/write2.
+                // Trigger a {@code syncAllData} so the client sees the new ioside immediately
+                // (the IO renderer reads getReadDirection/getWriteDirection on the client).
+                clicked.syncAllData(true);
+                ep.swing(InteractionHand.MAIN_HAND);
                 return InteractionResult.SUCCESS;
             }
-            if (m == MachineRegistry.SPLITTER && (ep.isShiftKeyDown())) {    // Toggle in/out
-                BlockEntitySplitter clicked = (BlockEntitySplitter) te;
-                if (direction < 8)
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction + 8]), 3);
-                else
-                    level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.values()[direction - 8]), 3);
-                return InteractionResult.SUCCESS;
-            }*/
             int max = m.getNumberDirections();
             RotaryCraftBlockEntity t = (RotaryCraftBlockEntity) te;
             if (max == 2){
@@ -359,7 +367,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
             }
 
             t.onRedirect();
-            level.blockUpdated(pos, te.getBlockState().getBlock());
+            level.updateNeighborsAt(pos, te.getBlockState().getBlock());
             ReikaWorldHelper.causeAdjacentUpdates(level, pos);
 
             return InteractionResult.SUCCESS;

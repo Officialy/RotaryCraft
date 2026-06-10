@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:bedrock_alloy_ingot",
+    "G": "rotarycraft:blastglass"
+  },
+  "pattern": [
+    "BGB",
+    "BGB",
+    "BGB"
+  ],
+  "result": {
+    "id": "rotarycraft:bedrock_pipe"
+  }
+}

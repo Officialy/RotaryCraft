@@ -19,8 +19,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -136,19 +136,17 @@ public class BlockEntityBlockCannon extends BlockEntityLaunchCannon {
     private void fireBlock(BlockToFire b, Level world, BlockPos pos) {
         FallingBlockEntity e = FallingBlockEntity.fall(world, new BlockPos(pos.getX(), pos.getY() + 1 , pos.getZ()), b.toFire.blockID);
         if (b.toFire.blockID == Blocks.SPAWNER.defaultBlockState()) {
-            SpawnerBlockEntity spw = new SpawnerBlockEntity(pos, b.toFire.blockID); //todo check if this works
+            SpawnerBlockEntity spw = new SpawnerBlockEntity(pos, b.toFire.blockID);
             //ReikaSpawnerHelper.setSpawnerFromItemNBT(b.referenceItem, spw, true);
-            CompoundTag nbt = new CompoundTag();
-            spw.serializeNBT(); //swp.save(nbt);
-            e.blockData = nbt;
+            // 26.1: serializeNBT/save(CompoundTag) replaced by saveWithoutMetadata(provider)
+            // which returns a CompoundTag — exactly what FallingBlockEntity.blockData expects.
+            e.blockData = spw.saveWithoutMetadata(world.registryAccess());
         }
         double[] vel = ReikaPhysicsHelper.polarToCartesian(velocity / 20D, theta, phi);
-        e.xo = vel[0];
-        e.yo = vel[1];
-        e.zo = vel[2];
+        e.setDeltaMovement(vel[0], vel[1], vel[2]);
         //e.shouldDropItem = false;
         e.time = -10000;
-        if (!world.isClientSide)
+        if (!world.isClientSide())
             world.addFreshEntity(e);
     }
 

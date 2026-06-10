@@ -62,8 +62,8 @@ public class BlockEntityFloodlight extends BlockEntityBeamMachine implements Ran
         if (power >= MINPOWER)
             RotaryAdvancements.FLOODLIGHT.triggerAchievement(this.getPlacer());
         power = (long) omega * (long) torque;
-        if (!world.isClientSide) {
-            if ((world.getDayTime() & 8) == 8) //almost unnoticeable light lag, but big FPS increase
+        if (!world.isClientSide()) {
+            if ((world.getOverworldClockTime() & 8) == 8) //almost unnoticeable light lag, but big FPS increase
                 this.makeBeam(world, pos);
         }
     }
@@ -161,8 +161,8 @@ public class BlockEntityFloodlight extends BlockEntityBeamMachine implements Ran
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        beammode = tag.getBoolean("beam");
-        fresnel = tag.getBoolean("lens");
+        beammode = tag.getBooleanOr("beam", false);
+        fresnel = tag.getBooleanOr("lens", false);
     }
 
     @Override

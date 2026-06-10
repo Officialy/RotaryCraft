@@ -9,14 +9,14 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import reika.dragonapi.instantiable.gui.ImagedGuiButton;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.NonPoweredMachineScreen;
@@ -38,9 +38,8 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Blan
     private Direction out;
 
     public GuiBevel(BlankContainer<BlockEntityBevelGear> id, Inventory inventory, Component title) {
-        super(id, inventory, title);
+        super(id, inventory, title, 176, 192);
         bevel = (BlockEntityBevelGear) inventory.player.level().getBlockEntity(id.tile.getBlockPos());
-        imageHeight = 192;
         this.inventory = inventory;
         posn = bevel.direction;
         this.getIOFromDirection();
@@ -52,48 +51,29 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Blan
         int j = (width - imageWidth) / 2 - 2;
         int k = (height - imageHeight) / 2 - 12;
 
-        ResourceLocation file = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/bevelgui2.png");
+        Identifier file = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/bevelgui2.png");
         int px = 176;
+        // Input-side selectors (ids 0-5). Legacy always took the px path here (the validity
+        // check was short-circuited with "true ||"); selected side uses the lit column (px+18).
         for (int i = 0; i < 6; i++) {
             String s = Direction.values()[i].name().substring(0, 1);
-            if (true) {
-                if (in.ordinal() == i)
-                //id is i
-                //pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffTex, pResourceLocation, pTextureWidth, pTextureHeight, pOnPress, pMessage
-                //x,  y,  width,  height,    u,           v,           display    string,          color,          shadow?,    filepath
-                {
-                    int finalI = i;
-                    addRenderableWidget(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, 0,
-                            file, 256, 256, (button) -> actionPerformed(button, finalI), Component.literal(s)));
-                } else {
-                    int finalI1 = i;
-                    addRenderableWidget(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, px, i * 18, 0,
-                            file, 256, 256, (button) -> actionPerformed(button, finalI1), Component.literal(s)));
-                }
-            } else {
-                int finalI2 = i;
-                addRenderableWidget(new ImageButton(j + 40, k + 8 + 48 + i * 22, 18, 18, 212, 0, 0,
-                        file, 256, 256, (button) -> actionPerformed(button, finalI2), Component.literal(s)));
-            }
+            int finalI = i;
+            int u = in.ordinal() == i ? px + 18 : px;
+            addRenderableWidget(new ImagedGuiButton(i, j + 40, k + 8 + 48 + i * 22, 18, 18, u, i * 18, s, 0, false, file, b -> actionPerformed(b, finalI)));
         }
+        // Output-side selectors (ids 6-11). Invalid combos render the disabled icon at 212,0.
         for (int i = 0; i < 6; i++) {
             String s = Direction.values()[i].name().substring(0, 1);
+            int finalI = i;
+            int u, v;
             if (BlockEntityBevelGear.isValid(in, Direction.values()[i])) {
-                if (out.ordinal() == i) {
-                    // Output side button - ID should be i + 6
-                    int finalI2 = i;
-                    addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px + 18, i * 18, 0,
-                            file, 256, 256, (button) -> actionPerformed(button, finalI2 + 6), Component.literal(s)));
-                } else {
-                    int finalI1 = i;
-                    addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, px, i * 18, 0,
-                            file, 256, 256, (button) -> actionPerformed(button, finalI1 + 6), Component.literal(s)));
-                }
+                u = out.ordinal() == i ? px + 18 : px;
+                v = i * 18;
             } else {
-                int finalI = i;
-                addRenderableWidget(new ImageButton(j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, 212, 0, 0,
-                        file, 256, 256, (button) -> actionPerformed(button, finalI + 6), Component.literal(s)));
+                u = 212;
+                v = 0;
             }
+            addRenderableWidget(new ImagedGuiButton(i + 6, j + imageWidth - 40 - 18, k + 8 + 48 + i * 22, 18, 18, u, v, s, 0, false, file, b -> actionPerformed(b, finalI + 6)));
         }
     }
 
@@ -138,22 +118,22 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Blan
     }
 
     @Override
-    public void render(GuiGraphics stack, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(stack, pMouseX, pMouseY, pPartialTick);
+    public void extractRenderState(GuiGraphicsExtractor stack, int pMouseX, int pMouseY, float pPartialTick) {
+        super.extractRenderState(stack, pMouseX, pMouseY, pPartialTick);
 
         int j = (width - imageWidth) / 2 - 2;
         int k = (height - imageHeight) / 2 - 12;
 
-        stack.drawString(font,  "Input Side", j + 24, k + 32, 4210752);
-        stack.drawString(font,  "Output Side", j + 99, k + 32, 4210752);
+        stack.text(font,  "Input Side", j + 24, k + 32, 4210752);
+        stack.text(font,  "Output Side", j + 99, k + 32, 4210752);
 
         if (ConfigRegistry.COLORBLIND.getState()) {
             for (int i = 0; i < 6; i++) {
-                stack.drawString(font,  String.valueOf(i), 30, 49 + i * 22, 0);
+                stack.text(font,  String.valueOf(i), j + 30, k + 49 + i * 22, 0);
             }
 
             for (int i = 0; i < 6; i++) {
-                stack.drawString(font,  String.valueOf(i), imageWidth - 68, 49 + i * 22, 0);
+                stack.text(font,  String.valueOf(i), j + imageWidth - 68, k + 49 + i * 22, 0);
             }
         }
     }

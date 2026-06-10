@@ -14,7 +14,7 @@
 //import reika.rotarycraft.registry.MachineRegistry;
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.network.FriendlyByteBuf;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.sounds.SoundEvent;
 //import net.minecraft.util.Mth;
 //import net.minecraft.world.entity.Entity;
@@ -40,7 +40,7 @@
 //        motionX = vx;
 //        motionY = vy;
 //        motionZ = vz;
-//        if (!world.isClientSide)
+//        if (!world.isClientSide())
 //            velocityChanged = true;
 //    }
 //
@@ -82,7 +82,7 @@
 //        }
 //        if (el instanceof LivingEntity) {
 //            el.hurt(this.getDamageSource(), this.getAttackDamage());
-//            el.playSound(new SoundEvent(ResourceLocation.parse("damage.hit")), 2, 1);
+//            el.playSound(new SoundEvent(Identifier.parse("damage.hit")), 2, 1);
 //        }
 //    }
 //
@@ -101,10 +101,10 @@
 //            this.onHit(null);
 //            return;
 //        }
-//        if (!level.isClientSide && (shootingEntity != null && shootingEntity.isAlive() || !level.blockExists(pos)))
+//        if (!level.isClientSide() && (shootingEntity != null && shootingEntity.isAlive() || !level.blockExists(pos)))
 //            this.kill();
 //        else {
-//            if (tickCount > 80 && !level.isClientSide)
+//            if (tickCount > 80 && !level.isClientSide())
 //                this.onHit(null);
 //            this.onEntityUpdate();
 //            Vec3 var15 = Vec3.createVectorHelper(getX(), getY(), getZ());

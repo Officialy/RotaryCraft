@@ -19,7 +19,7 @@
 //import net.minecraft.world.item.ItemStack;
 //
 //import net.minecraft.world.biome.Biome;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //
 //import reika.dragonapi.instantiable.gui.ImageButton;
 //import reika.dragonapi.libraries.io.ReikaPacketHelper;
@@ -121,8 +121,8 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack,float par1, int par2, int par3) {
-//        super.renderBg(PoseStack poseStack,par1, par2, par3);
+//    public void extractBackground(PoseStack poseStack,float par1, int par2, int par3) {
+//        super.extractBackground(PoseStack poseStack,par1, par2, par3);
 //
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;

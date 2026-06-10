@@ -11,7 +11,7 @@ package reika.rotarycraft.api.interfaces;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 /**
  * For items that use fuel or some other fluid and can be filled in the filling station.

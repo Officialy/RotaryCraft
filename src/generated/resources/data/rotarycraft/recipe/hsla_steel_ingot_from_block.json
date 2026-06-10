@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "rotarycraft:hsla_steel_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "rotarycraft:hsla_steel_ingot"
+  }
+}

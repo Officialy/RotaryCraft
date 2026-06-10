@@ -111,7 +111,7 @@
 //            return;
 //
 //        EntitySonicShot e = new EntitySonicShot(world, this, placer);
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            world.addFreshEntity(e);
 //        }
 ////        ReikaSoundHelper.playSoundAtBlock(world, pos, "DragonAPI.rand.explode");
@@ -263,7 +263,7 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        pressure = NBT.getInt("press");
+//        pressure = NBT.getIntOr("press", 0);
 //    }
 //
 //    public int getDistanceToSurface() {

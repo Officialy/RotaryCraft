@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "N": "minecraft:note_block",
+    "R": "minecraft:redstone",
+    "S": "minecraft:stone_slab"
+  },
+  "pattern": [
+    " S ",
+    "RRR",
+    " N "
+  ],
+  "result": {
+    "id": "rotarycraft:smoke_detector"
+  }
+}

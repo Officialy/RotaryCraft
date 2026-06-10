@@ -10,8 +10,9 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class MicroTurbineModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/microtex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/microtex.png");
 
     private final ModelPart shape2;
     private final ModelPart shape1;
@@ -87,11 +88,10 @@ public class MicroTurbineModel extends RotaryModelBase {
     private final ModelPart shape8a1b1;
     private final ModelPart shape8a1b2;
     private final ModelPart shape8a1b3;
-    private final ModelPart root;
+    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
 
     public MicroTurbineModel(ModelPart modelPart) {
-        super(RenderType::entityCutout);
-        this.root = modelPart;
+        super(modelPart, RenderTypes::entityCutout);
 
         this.shape2 = modelPart.getChild("shape2");
         this.shape1 = modelPart.getChild("shape1");
@@ -617,12 +617,95 @@ public class MicroTurbineModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1,1,1,1);
+        final int LM = packedLightIn;
+        final int OV = OverlayTexture.NO_OVERLAY;
+        final int COL = 0xFFFFFFFF;
 
+        shape2.render(stack, tex, LM, OV, COL);
+        shape1.render(stack, tex, LM, OV, COL);
+        shape1a.render(stack, tex, LM, OV, COL);
+        shape1b.render(stack, tex, LM, OV, COL);
+        shape1c.render(stack, tex, LM, OV, COL);
+        shape1d.render(stack, tex, LM, OV, COL);
+        shape1e.render(stack, tex, LM, OV, COL);
+        shape1f.render(stack, tex, LM, OV, COL);
+        shape1g.render(stack, tex, LM, OV, COL);
+        shape1h.render(stack, tex, LM, OV, COL);
+        shape3.render(stack, tex, LM, OV, COL);
+        shape3a.render(stack, tex, LM, OV, COL);
+        shape3b.render(stack, tex, LM, OV, COL);
+
+        // Turbine fan: rotate Z at pivot y=1 by phi
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.translate(0, -1, 0);
+        shape4.render(stack, tex, LM, OV, COL);
+        shape4a.render(stack, tex, LM, OV, COL);
+        stack.popPose();
+
+        shape5.render(stack, tex, LM, OV, COL);
+        shape5a.render(stack, tex, LM, OV, COL);
+        shape5b.render(stack, tex, LM, OV, COL);
+        shape5c.render(stack, tex, LM, OV, COL);
+        shape5d.render(stack, tex, LM, OV, COL);
+        shape5e.render(stack, tex, LM, OV, COL);
+        shape5f.render(stack, tex, LM, OV, COL);
+        shape5g.render(stack, tex, LM, OV, COL);
+        shape5h.render(stack, tex, LM, OV, COL);
+        shape5i.render(stack, tex, LM, OV, COL);
+        shape5j.render(stack, tex, LM, OV, COL);
+        shape5k.render(stack, tex, LM, OV, COL);
+        shape6.render(stack, tex, LM, OV, COL);
+        shape6a.render(stack, tex, LM, OV, COL);
+        shape6b.render(stack, tex, LM, OV, COL);
+        shape6c.render(stack, tex, LM, OV, COL);
+        shape7.render(stack, tex, LM, OV, COL);
+        shape6d.render(stack, tex, LM, OV, COL);
+        shape6e.render(stack, tex, LM, OV, COL);
+        shape6f.render(stack, tex, LM, OV, COL);
+        shape7a.render(stack, tex, LM, OV, COL);
+        shape6g.render(stack, tex, LM, OV, COL);
+        shape6h.render(stack, tex, LM, OV, COL);
+        shape3c.render(stack, tex, LM, OV, COL);
+        shape8.render(stack, tex, LM, OV, COL);
+        shape9a.render(stack, tex, LM, OV, COL);
+        shape9b.render(stack, tex, LM, OV, COL);
+        shape9c.render(stack, tex, LM, OV, COL);
+        shape9d.render(stack, tex, LM, OV, COL);
+
+        // Inner turbine: rotate Z at pivot y=1 by phi*2
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi * 2));
+        stack.translate(0, -1, 0);
+        shape10.render(stack, tex, LM, OV, COL);
+        shape10a.render(stack, tex, LM, OV, COL);
+        shape10b.render(stack, tex, LM, OV, COL);
+        shape10c.render(stack, tex, LM, OV, COL);
+        shape10d.render(stack, tex, LM, OV, COL);
+        stack.popPose();
+
+        shape11.render(stack, tex, LM, OV, COL);
+        shape9e.render(stack, tex, LM, OV, COL);
+        shape9f.render(stack, tex, LM, OV, COL);
+        shape9g.render(stack, tex, LM, OV, COL);
+        shape9h.render(stack, tex, LM, OV, COL);
+        shape9h1.render(stack, tex, LM, OV, COL);
+        shape9h2.render(stack, tex, LM, OV, COL);
+        shape8a4.render(stack, tex, LM, OV, COL);
+        shape8a1b.render(stack, tex, LM, OV, COL);
+        shape8a1.render(stack, tex, LM, OV, COL);
+        shape8a3.render(stack, tex, LM, OV, COL);
+        shape8a2.render(stack, tex, LM, OV, COL);
+        shape8a1b1.render(stack, tex, LM, OV, COL);
+        shape8a1b2.render(stack, tex, LM, OV, COL);
+        shape8a1b3.render(stack, tex, LM, OV, COL);
     }
 
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return TEXTURE_LOCATION;
     }
 }
+

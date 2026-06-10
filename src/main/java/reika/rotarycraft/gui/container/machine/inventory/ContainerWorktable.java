@@ -17,7 +17,6 @@ import net.minecraft.world.inventory.FurnaceResultSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.items.SlotItemHandler;
 import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
 import reika.dragonapi.interfaces.ReikaCraftingContainer;
 import reika.rotarycraft.blockentities.production.BlockEntityWorktable;
@@ -39,7 +38,7 @@ public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorkta
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                this.addSlot(new SlotItemHandler(ii, i * 3 + j, dx + 26 + j * 18, 17 + i * 18));
+                this.addSlot(ii.slot(i * 3 + j, dx + 26 + j * 18, 17 + i * 18));
             }
         }
         dx += 96 - 28 + 4;
@@ -78,43 +77,35 @@ public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorkta
         return ItemStack.EMPTY;//todo wr.isRecycling() ? wr.getRecycling().getResultItem() : wr.getOutput();
     }
 
-    @Override
-    public void clearContent() {
+        public void clearContent() {
 
     }
 
-    @Override
-    public int getContainerSize() {
+        public int getContainerSize() {
         return 0;
     }
 
-    @Override
-    public boolean isEmpty() {
+        public boolean isEmpty() {
         return false;
     }
 
-    @Override
-    public ItemStack getItem(int p_18941_) {
+        public ItemStack getItem(int p_18941_) {
         return null;
     }
 
-    @Override
-    public ItemStack removeItem(int p_18942_, int p_18943_) {
+        public ItemStack removeItem(int p_18942_, int p_18943_) {
         return null;
     }
 
-    @Override
-    public ItemStack removeItemNoUpdate(int p_18951_) {
+        public ItemStack removeItemNoUpdate(int p_18951_) {
         return null;
     }
 
-    @Override
-    public void setItem(int p_18944_, ItemStack p_18945_) {
+        public void setItem(int p_18944_, ItemStack p_18945_) {
 
     }
 
-    @Override
-    public void setChanged() {
+        public void setChanged() {
 
     }
 

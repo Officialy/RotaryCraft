@@ -6,10 +6,10 @@
 //import net.minecraft.util.IIcon;
 //import net.minecraft.util.BlockHitResult;
 //import net.minecraft.world.World;
-//import net.neoforged.common.NeoForge;
-//import net.neoforged.common.util.Direction;
-//import net.neoforged.event.entity.player.PlayerInteractEvent;
-//import net.neoforged.event.entity.player.PlayerInteractEvent.Action;
+//import net.neoforged.neoforge.common.NeoForge;
+//import net.neoforged.neoforge.common.util.Direction;
+//import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+//import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.Action;
 //
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.asm.DependentMethodStripper.ModDependent;

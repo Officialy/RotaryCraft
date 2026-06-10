@@ -88,7 +88,7 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
         timer.update();
 
         if (timer.checkCap()) {
-            if (!world.isClientSide) {
+            if (!world.isClientSide()) {
                 this.shiftBlocks(world, pos);
                 phi = 0.5F;
             }
@@ -162,7 +162,7 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
 
     public BlockKey getNextBlockToAdd() {
         ItemStack is = ReikaInventoryHelper.getNextBlockInInventory(itemHandler, true);
-        if (is == null)
+        if (is.isEmpty())
             return null;
         return ReikaItemHelper.getWorldBlockFromItem(is);
     }
@@ -182,7 +182,7 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
         Block id = level.getBlockState(new BlockPos(rx, ry, rz)).getBlock();
         if (id == Blocks.BEDROCK)
             return Integer.MIN_VALUE;
-//        if (!level.isClientSide && !ReikaPlayerAPI.playerCanBreakAt((ServerLevel) level, rx, ry, rz, this.getServerPlacer()))
+//        if (!level.isClientSide() && !ReikaPlayerAPI.playerCanBreakAt((ServerLevel) level, rx, ry, rz, this.getServerPlacer()))
 //            return Integer.MIN_VALUE;
         int maxr = this.getMaxRange();
         BlockEntity te = level.getBlockEntity(new BlockPos(rx, ry, rz));
@@ -200,7 +200,7 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
                 if (!im.canBePushed(level, new BlockPos(rx, ry, rz), i, torque, power))
                     return Integer.MIN_VALUE;
             }
-//            if (!level.isClientSide && !ReikaPlayerAPI.playerCanBreakAt((ServerLevel) level, rx, ry, rz, this.getServerPlacer()))
+//            if (!level.isClientSide() && !ReikaPlayerAPI.playerCanBreakAt((ServerLevel) level, rx, ry, rz, this.getServerPlacer()))
 //                return Integer.MIN_VALUE;
             BlockEntity tile = level.getBlockEntity(new BlockPos(rx, ry, rz));
             if (tile != null)

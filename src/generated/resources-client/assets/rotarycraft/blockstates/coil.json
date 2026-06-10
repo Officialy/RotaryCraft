@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/coil",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/coil",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/coil"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/coil",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/coil",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/coil",
+      "y": 270
+    }
+  }
+}

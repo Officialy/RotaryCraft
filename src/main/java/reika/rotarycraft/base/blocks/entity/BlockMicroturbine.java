@@ -29,4 +29,7 @@ public class BlockMicroturbine extends BlockBasicMachine {
             ((BlockEntityMicroturbine) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

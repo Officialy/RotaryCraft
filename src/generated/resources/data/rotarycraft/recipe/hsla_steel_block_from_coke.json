@@ -1,0 +1,17 @@
+{
+  "type": "rotarycraft:blast_furnace_shapeless",
+  "additives": [
+    "rotarycraft:coke",
+    "minecraft:gunpowder",
+    "minecraft:sand"
+  ],
+  "experience": 5.4,
+  "ingredients": [
+    "minecraft:iron_block"
+  ],
+  "output": {
+    "id": "rotarycraft:hsla_steel_block"
+  },
+  "temperature": 600.0,
+  "timeMultiplier": 1.0
+}

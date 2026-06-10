@@ -1,99 +1,31 @@
 package reika.rotarycraft.registry;
 
-import net.minecraft.sounds.SoundEvent;
+import java.util.EnumMap;
+import java.util.Map;
+
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.crafting.Ingredient;
-import reika.rotarycraft.RotaryCraft;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 
 public class Materials {
 
-    public static ArmorMaterial HSLA_STEEL = new ArmorMaterial() {
+    private static Map<ArmorType, Integer> defense(int value) {
+        EnumMap<ArmorType, Integer> map = new EnumMap<>(ArmorType.class);
+        for (ArmorType type : ArmorType.values())
+            map.put(type, value);
+        return map;
+    }
 
-        @Override
-        public int getDurabilityForType(ArmorItem.Type p_266807_) {
-            return 37;
-        }
+    // 26.1: ArmorMaterial is a record. Custom armor textures need a registered EquipmentAsset +
+    // client model JSON; we reuse vanilla IRON/DIAMOND equipment assets so the armor renders with
+    // the right silhouette. The defense/durability values match the 1.7.10 originals. Wire custom
+    // assets later if you want bespoke HSLA / bedrock armor textures.
+    public static final ArmorMaterial HSLA_STEEL = new ArmorMaterial(
+            37, defense(3), 6, SoundEvents.ARMOR_EQUIP_IRON, 6F, 3F, ItemTags.REPAIRS_IRON_ARMOR, EquipmentAssets.IRON);
 
-        @Override
-        public int getDefenseForType(ArmorItem.Type p_267168_) {
-            return 3;
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return 6;
-        }
-
-        @Override
-        public SoundEvent getEquipSound() {
-            return SoundEvents.ARMOR_EQUIP_IRON;
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return Ingredient.of(RotaryItems.HSLA_STEEL_INGOT.get());
-        }
-
-        @Override
-        public String getName() {
-            return RotaryCraft.MODID + ":" + "hsla_steel";
-        }
-
-        @Override
-        public float getToughness() {
-            return 6;
-        }
-
-        @Override
-        public float getKnockbackResistance() {
-            return 3;
-        }
-    };
-
-    public static ArmorMaterial BEDROCK_ALLOY = new ArmorMaterial() {
-        @Override
-        public int getDurabilityForType(ArmorItem.Type p_40410_) {
-            return 37;
-        }
-
-        @Override
-        public int getDefenseForType(ArmorItem.Type p_40411_) {
-            return 15;
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return 12;
-        }
-
-        @Override
-        public SoundEvent getEquipSound() {
-            return SoundEvents.ARMOR_EQUIP_IRON;
-        }
-
-        @Override
-        public Ingredient getRepairIngredient() {
-            return Ingredient.of(RotaryItems.HSLA_STEEL_INGOT.get());
-        }
-
-        @Override
-        public String getName() {
-            return RotaryCraft.MODID + ":" + "bedrock_alloy";
-        }
-
-        @Override
-        public float getToughness() {
-            return 14;
-        }
-
-        @Override
-        public float getKnockbackResistance() {
-            return 8;
-        }
-    };
-
+    public static final ArmorMaterial BEDROCK_ALLOY = new ArmorMaterial(
+            37, defense(15), 12, SoundEvents.ARMOR_EQUIP_IRON, 14F, 8F, ItemTags.REPAIRS_DIAMOND_ARMOR, EquipmentAssets.DIAMOND);
 
 }

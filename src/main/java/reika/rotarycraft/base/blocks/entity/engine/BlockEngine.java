@@ -33,8 +33,9 @@ public class BlockEngine extends Block {
         super(p_49795_);
     }
 
+    // 1.21.5: Block#getShapeForEachState now returns Function<BlockState, VoxelShape>.
     @Override
-    protected ImmutableMap<BlockState, VoxelShape> getShapeForEachState(Function<BlockState, VoxelShape> shape) {
+    protected Function<BlockState, VoxelShape> getShapeForEachState(Function<BlockState, VoxelShape> shape) {
 //        float minx = (float) minX;
 //        float maxx = (float) maxX;
 //        float miny = (float) minY;
@@ -141,10 +142,10 @@ public class BlockEngine extends Block {
 //                if (eng.getEngineType() == EngineType.JET) {
 //                    BlockEntityJetEngine tj = (BlockEntityJetEngine) eng;
 //                    if (tj.FOD > 0) {
-//                        todrop.getOrCreateTag().putInt("damage", tj.FOD);
+//                        todrop.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("damage", tj.FOD);
 //                    }
 //                } else if (eng.getEngineType() == EngineType.HYDRO) {
-//                    todrop.getOrCreateTag().putBoolean("bed", ((BlockEntityHydroEngine) eng).isBedrock());
+//                    todrop.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putBoolean("bed", ((BlockEntityHydroEngine) eng).isBedrock());
 //                }
 //                if (eng.isUnHarvestable()) {
 //                    todrop = ReikaItemHelper.getSizedItemStack(RotaryItems.HSLA_STEEL_SCRAP, 2 + par5Random.nextInt(12));
@@ -178,7 +179,7 @@ public class BlockEngine extends Block {
 //        if (tile.getEngineType() == EngineType.JET) {
 //            BlockEntityJetEngine tj = (BlockEntityJetEngine) tile;
 //            is.put(new CompoundTag());
-//            is.getTag().putInt("damage", tj.FOD);
+//            is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("damage", tj.FOD);
 //        }
 //        return ret;
 //    }

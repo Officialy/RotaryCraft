@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -78,34 +78,6 @@ public class BlockEntityMirror extends RotaryCraftBlockEntity implements SolarPl
     }
 
 
-    public void updateBlockEntity(Level world, BlockPos pos) {
-        if (broken)
-            return;
-
-        this.searchForPlant(world, pos);
-
-        if (world.isClientSide && (this.tickcount < 400 || rotatingLarge || Math.abs(world.getDayTime() % 8) == Math.abs(System.identityHashCode(this) % 8))) {
-            this.adjustAim(world, pos);
-        }
-
-        if (!world.isClientSide) {
-            AABB above = new AABB(pos.getX() + 0.25, pos.getY() + 1, pos.getZ() + 0.25, pos.getX() + 0.75, pos.getY() + 1.5, pos.getZ() + 0.75);
-            List<Entity> in = world.getEntitiesOfClass(Entity.class, above);
-            for (Entity e : in) {
-                if (ReikaEntityHelper.isSolidEntity(e)) {
-                    double m = ReikaEntityHelper.getEntityMass(e);
-                    //ReikaJavaLibrary.pConsole(m+" kg moving at "+e.motionY+" b/s, E: "+(m-e.motionY*20));
-                    if (e.yo < -0.1 && m - e.yo * 20 > 80) { //todo check motion, was motionY
-                        //ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MIRROR.ordinal(), this, new PacketTarget.RadiusTarget(this, 32));
-                        e.hurt(e.damageSources().cactus(), 1);
-                        this.breakMirror(world, pos);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public boolean hasModelTransparency() {
         return false;
@@ -137,7 +109,7 @@ public class BlockEntityMirror extends RotaryCraftBlockEntity implements SolarPl
         float finalphi;
         float finaltheta;
 
-        long tot = world.getDayTime();
+        long tot = world.getOverworldClockTime();
         int time = (int) (tot % 12000);
 
         time = this.forceDuskDawnAiming(tot, time);
@@ -148,7 +120,7 @@ public class BlockEntityMirror extends RotaryCraftBlockEntity implements SolarPl
         //rises in +90 sets in 270 (+x, -x)
         float movespeed = 0.5F;
 
-        double[] angs = ReikaPhysicsHelper.cartesianToPolar(pos.getX() - target.getX(), pos.getY() - target.getY(), pos.getX() - target.getZ());
+        double[] angs = ReikaPhysicsHelper.cartesianToPolar(pos.getX() - target.getX(), pos.getY() - target.getY(), pos.getZ() - target.getZ());
         float targetphi = (float) angs[2];
         float targettheta = (float) angs[1];
 
@@ -233,7 +205,7 @@ public class BlockEntityMirror extends RotaryCraftBlockEntity implements SolarPl
 
     public void breakMirror(Level world, BlockPos pos) {
         broken = true;
-        if (FMLLoader.getDist() == Dist.CLIENT) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             //ReikaRenderHelper.addModelledBlockParticles("/Reika/RotaryCraft/Textures/BlockEntityTex/", world, pos, this.getMachine().getBlockState(), Minecraft.getInstance().effectRenderer, ReikaJavaLibrary.makeListFrom(new double[]{0, 0, 1, 1}), RotaryCraft.class);
         }
         //ReikaSoundHelper.playBreakSound(world, pos, Blocks.GLASS);
@@ -250,7 +222,31 @@ public class BlockEntityMirror extends RotaryCraftBlockEntity implements SolarPl
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
+        super.updateEntity();
+        if (broken)
+            return;
 
+        this.searchForPlant(level, blockPos);
+
+        if (level.isClientSide() && (this.tickcount < 400 || rotatingLarge || Math.abs(level.getOverworldClockTime() % 8) == Math.abs(System.identityHashCode(this) % 8))) {
+            this.adjustAim(level, blockPos);
+        }
+
+        if (!level.isClientSide()) {
+            AABB above = new AABB(blockPos.getX() + 0.25, blockPos.getY() + 1, blockPos.getZ() + 0.25, blockPos.getX() + 0.75, blockPos.getY() + 1.5, blockPos.getZ() + 0.75);
+            List<Entity> in = level.getEntitiesOfClass(Entity.class, above);
+            for (Entity e : in) {
+                if (ReikaEntityHelper.isSolidEntity(e)) {
+                    double m = ReikaEntityHelper.getEntityMass(e);
+                    double motY = e.getDeltaMovement().y;
+                    if (motY < -0.1 && m - motY * 20 > 80) {
+                        e.hurt(e.damageSources().cactus(), 1);
+                        this.breakMirror(level, blockPos);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -272,7 +268,7 @@ public class BlockEntityMirror extends RotaryCraftBlockEntity implements SolarPl
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        broken = NBT.getBoolean("broke");
+        broken = NBT.getBooleanOr("broke", false);
     }
 
     @Override
@@ -334,3 +330,5 @@ public class BlockEntityMirror extends RotaryCraftBlockEntity implements SolarPl
         return false;
     }
 }
+
+

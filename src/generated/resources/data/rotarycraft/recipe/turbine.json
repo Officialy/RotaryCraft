@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "H": "rotarycraft:hsla_steel_ingot",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "HPH",
+    "PSP",
+    "HPH"
+  ],
+  "result": {
+    "id": "rotarycraft:turbine"
+  }
+}

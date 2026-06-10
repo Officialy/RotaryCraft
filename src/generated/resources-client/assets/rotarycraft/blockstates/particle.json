@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/particle",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/particle",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/particle"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/particle",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/particle",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/particle",
+      "y": 270
+    }
+  }
+}

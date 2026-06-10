@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:circuit_board",
+    "D": "minecraft:dispenser",
+    "I": "rotarycraft:impeller",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SDS",
+    "PCP",
+    "SIS"
+  ],
+  "result": {
+    "count": 4,
+    "id": "rotarycraft:particle"
+  }
+}

@@ -19,7 +19,7 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -65,7 +65,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     }
 
     private boolean checkForArrow(Level world, BlockPos pos) {
-        AABB above = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).expandTowards(1, 1, 1);
+        AABB above = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).inflate(1, 1, 1);
         List<Arrow> in = world.getEntitiesOfClass(Arrow.class, above);
         return in.size() > 0;
     }
@@ -100,7 +100,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     public void detonate(Level world, BlockPos pos) {
         if (chain)
             this.chainedExplosion(world, pos);
-        if (itemHandler.getStackInSlot(1) != null && !itemHandler.getStackInSlot(2).isEmpty() && !itemHandler.getStackInSlot(3).isEmpty() && !itemHandler.getStackInSlot(4).isEmpty()) {
+        if (!itemHandler.getStackInSlot(1).isEmpty() && !itemHandler.getStackInSlot(2).isEmpty() && !itemHandler.getStackInSlot(3).isEmpty() && !itemHandler.getStackInSlot(4).isEmpty()) {
             boolean flag = true;
             for (int i = 1; i <= 4; i++) {
         if (ReikaItemHelper.matchStackWithBlock(
@@ -112,11 +112,11 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
         float power = this.getExplosionPower();
         world.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
         if (flaming) {
-            if (!world.isClientSide)
+            if (!world.isClientSide())
                 world.explode(null, pos.getX(), pos.getY(), pos.getZ(), power, true, Level.ExplosionInteraction.BLOCK);
-        } else if (!world.isClientSide)
+        } else if (!world.isClientSide())
             world.explode(null, pos.getX(), pos.getY(), pos.getZ(), power, Level.ExplosionInteraction.BLOCK);
-        AABB region = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).expandTowards(2, 2, 2);
+        AABB region = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).inflate(2, 2, 2);
         List<LivingEntity> in = world.getEntitiesOfClass(LivingEntity.class, region);
         for (int i = 0; i < in.size(); i++) {
             LivingEntity e = in.get(i);
@@ -124,9 +124,11 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
                 if (!((Player) e).isCreative()) {
                     RotaryAdvancements.LANDMINE.triggerAchievement((Player) e);
                 }
-                e.hurt(e.damageSources().explosion(new Explosion(world, null, e.getX(), e.getY(), e.getZ(), power, false, Explosion.BlockInteraction.DESTROY)), (int) power * 4);
+                // 1.21.5: Explosion became abstract; damageSources().explosion(source, owner) takes the source entity directly.
+                e.hurt(e.damageSources().explosion(null, null), (int) power * 4);
                 e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
-                e.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 450, 5));
+                // 1.21.5: MobEffects.CONFUSION → MobEffects.NAUSEA
+                e.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 450, 5));
                 if (poison)
                     e.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
                 if (e instanceof Creeper) {
@@ -134,7 +136,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
                 }
             }
             if (shrapnel) {
-                AABB region2 = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).expandTowards(8, 8, 8);
+                AABB region2 = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).inflate(8, 8, 8);
                 List in2 = world.getEntitiesOfClass(LivingEntity.class, region2);
                 for (int i2 = 0; i < in2.size(); i++) {
                     LivingEntity e2 = (LivingEntity) in2.get(i2);
@@ -163,7 +165,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
 
     private void getExplosionModifiers() {
         for (int i = 5; i <= 8; i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
+            if (!itemHandler.getStackInSlot(i).isEmpty()) {
                 if (itemHandler.getStackInSlot(i).getItem() == Items.BLAZE_POWDER)
                     flaming = true;
                 if (itemHandler.getStackInSlot(i).getItem() == Items.SPIDER_EYE)
@@ -179,7 +181,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     private float getExplosionPower() {
         int num = 0;
         for (int i = 1; i <= 4; i++)
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
+            if (!itemHandler.getStackInSlot(i).isEmpty()) {
                 if (itemHandler.getStackInSlot(i).getItem() == Items.GUNPOWDER)
                     num++;
             }
@@ -233,7 +235,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
         for (int i = 0; i < 12; i++) {
             PrimedTnt tnt = new PrimedTnt(world, pos.getX() - 5 + DragonAPI.rand.nextInt(11), pos.getY() - 5 + DragonAPI.rand.nextInt(11), pos.getZ() - 5 + DragonAPI.rand.nextInt(11), null);
             tnt.setFuse(5 + DragonAPI.rand.nextInt(10));
-            if (!world.isClientSide)
+            if (!world.isClientSide())
                 world.addFreshEntity(tnt);
         }
     }
@@ -250,6 +252,7 @@ public class BlockEntityLandmine extends BlockEntitySpringPowered {
     }
 
     public void updateEntity(Level world, BlockPos pos) {
+        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
         if (!this.hasCoil())
             return;
         tickcount++;

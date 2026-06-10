@@ -56,18 +56,49 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
         super(type, pos, state);
     }
 
+    /**
+     * 26.1 PERF: opt out of the legacy 5×-in-first-20-ticks {@code syncAllData(true)} burst.
+     * Same reasoning as {@link reika.rotarycraft.base.blockentity.BlockEntityPiping}: a typical
+     * RotaryCraft setup has many IOMachines per chunk (engines + shaft chains + gearboxes +
+     * pumps), and the burst times the number of BEs becomes a per-chunk-load packet storm.
+     * Runtime omega/torque/power changes still ship via the periodic {@code BE_NBT_SYNC}
+     * flow, and vanilla's {@code BlockEntity.getUpdatePacket} covers initial state delivery
+     * for clients joining the BE's chunk afterwards.
+     */
+    @Override
+    protected boolean shouldDoInitialFullSync() {
+        return false;
+    }
+
     public void updateBlockEntity() {
         updateEntity();
         if (iotick > 0) {
             iotick -= 8;
         }
         superCalled = true;
-        level.sendBlockUpdated(worldPosition, this.getBlockState(), this.getBlockState(), 2);
+        // 26.1 PERF: removed {@code level.sendBlockUpdated(pos, state, state, 2)} that used to
+        // live here. It was queuing a ClientboundBlockUpdatePacket to every nearby client EVERY
+        // TICK per IOMachine — even though oldState == newState (no actual blockstate change).
+        // Clients receive the packet, mark the chunk section dirty, and re-mesh. For ~50
+        // IOMachines (engines + shafts + gearboxes + pumps + dynamos in a typical RotaryCraft
+        // setup), that's 1000 redundant client chunk re-meshes per second — a major source of
+        // the client-side frame stutter the user reported. The BE's runtime fields (omega,
+        // torque, power) sync via {@code BE_NBT_SYNC} which is the dedicated BE NBT path; no
+        // blockstate update is needed. If a future user finds a case that genuinely required
+        // this (e.g. a custom blockstate property derived from BE runtime state), call
+        // {@code level.sendBlockUpdated} explicitly from THAT path only.
     }
 
     @Override
     protected void onDataSync(boolean fullNBT) {
-        this.recursiveSyncPower(fullNBT, new ArrayList<>());
+        // 26.1 PERF: removed the {@code recursiveSyncPower} call that used to live here. It
+        // walked the entire connected IOMachine network on every sync, populating an
+        // {@code ArrayList<BlockEntityIOMachine>} that the method DID NOTHING WITH — the
+        // result was discarded. So the cost was 6 BE lookups per node + N HashSet.contains
+        // checks per walk, with no actual side effect on the network. The legacy 1.7 code may
+        // have had a different intent (push power state through the network), but in the port
+        // it became pure overhead. For 50 IOMachines × ~5 sync calls/sec × 6 neighbour walks
+        // = ~1,500 wasted BE lookups/sec.
     }
 
     private void recursiveSyncPower(boolean fullNBT, Collection<BlockEntityIOMachine> li) {
@@ -126,35 +157,35 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        torque = tag.getInt("torque");
-        omega = tag.getInt("omega");
-        power = tag.getLong("power");
-        iotick = tag.getInt("io");
+        torque = tag.getIntOr("torque", 0);
+        omega = tag.getIntOr("omega", 0);
+        power = tag.getLongOr("power", 0L);
+        iotick = tag.getIntOr("io", 0);
 
         if (torque < 0 || torque == Double.POSITIVE_INFINITY || Double.isNaN(torque))
             torque = 0;
         if (omega < 0 || omega == Double.POSITIVE_INFINITY || Double.isNaN(omega))
             omega = 0;
 
-        int r1 = tag.getInt("read1");
-        int r2 = tag.getInt("read2");
-        int r3 = tag.getInt("read3");
-        int r4 = tag.getInt("read4");
+        int r1 = tag.getIntOr("read1", 0);
+        int r2 = tag.getIntOr("read2", 0);
+        int r3 = tag.getIntOr("read3", 0);
+        int r4 = tag.getIntOr("read4", 0);
         this.read = r1 != -1 ? dirs[r1] : null;
         this.read2 = r2 != -1 ? dirs[r2] : null;
         this.read3 = r3 != -1 ? dirs[r3] : null;
         this.read4 = r4 != -1 ? dirs[r4] : null;
 
-        int w1 = tag.getInt("write1");
-        int w2 = tag.getInt("write2");
+        int w1 = tag.getIntOr("write1", 0);
+        int w2 = tag.getIntOr("write2", 0);
         write = w1 != -1 ? dirs[w1] : null;
         write2 = w2 != -1 ? dirs[w2] : null;
 
-        isOmniSided = tag.getBoolean("omni");
+        isOmniSided = tag.getBooleanOr("omni", false);
 
-        pointoffsetx = tag.getInt("pox");
-        pointoffsety = tag.getInt("poy");
-        pointoffsetz = tag.getInt("poz");
+        pointoffsetx = tag.getIntOr("pox", 0);
+        pointoffsety = tag.getIntOr("poy", 0);
+        pointoffsetz = tag.getIntOr("poz", 0);
     }
 
     public final Direction getReadDirection() {
@@ -393,6 +424,7 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
     }
 
     private void writeToReceiver(Direction dir, int om, int tq) {
+        if (dir == null) return;
         BlockEntity te = getAdjacentBlockEntity(dir);
         this.setPower(te, dir, om, tq);
     }

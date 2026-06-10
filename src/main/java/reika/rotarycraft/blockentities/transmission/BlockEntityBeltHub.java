@@ -81,7 +81,7 @@
 //        if (power > 0)
 //            this.playSound(world, pos);
 //
-//        if (world.isRaining() && world.canLightningStrikeAt(pos.above()) && world.getDayTime() % 1024 == 0)
+//        if (world.isRaining() && world.canLightningStrikeAt(pos.above()) && world.getOverworldClockTime() % 1024 == 0)
 //            this.makeWet();
 //
 //        if (wetTimer > 0 && power > 0)
@@ -339,11 +339,11 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        isEmitting = NBT.getBoolean("emit");
+//        isEmitting = NBT.getBooleanOr("emit", false);
 //
 //        otherEnd = BlockPos.load("endpoint", NBT);
 //
-//        wetTimer = NBT.getInt("wet");
+//        wetTimer = NBT.getIntOr("wet", 0);
 //    }
 //
 //    @Override
@@ -387,7 +387,7 @@
 //
 //    @Override
 //    public final void breakBlock() {
-//        if (!level.isClientSide) {
+//        if (!level.isClientSide()) {
 //            int num = this.getDistanceToTarget() - 1;
 //            num = Math.min(num, RotaryItems.BELT.get().getMaxStackSize());
 //            if (!this.hasValidConnection())

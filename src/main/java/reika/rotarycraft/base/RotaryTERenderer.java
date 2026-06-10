@@ -2,6 +2,15 @@ package reika.rotarycraft.base;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.dragonapi.auxiliary.trackers.SpecialDayTracker;
 import reika.dragonapi.base.BlockEntityBase;
@@ -9,6 +18,7 @@ import reika.dragonapi.base.BlockEntityRenderBase;
 import reika.dragonapi.base.DragonAPIMod;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
 
@@ -31,12 +41,23 @@ public abstract class RotaryTERenderer<TE extends BlockEntity> extends BlockEnti
         return SpecialDayTracker.instance.loadXmasTextures();
     }
 
+    /**
+     * Builds a texture {@link net.minecraft.resources.Identifier} by appending a file-name
+     * {@code suffix} (e.g. {@code "shafttexw.png"}) to a directory-prefix Identifier whose
+     * path already ends in {@code "/"}. Used by renderers whose models share a folder but pick
+     * a per-instance file name (shafts by material, gearboxes by gear material, etc.) — avoids
+     * the {@code Identifier.parse(prefix + suffix)} idiom, which goes through
+     * {@code Identifier.toString()} and re-parses the namespace prefix.
+     */
+    protected static net.minecraft.resources.Identifier textureWithSuffix(net.minecraft.resources.Identifier prefix, String suffix) {
+        return net.minecraft.resources.Identifier.fromNamespaceAndPath(prefix.getNamespace(), prefix.getPath() + suffix);
+    }
+
 /*    protected void renderFaceColors(BlockEntityIOMachine te, double p2, double p4, double p6) {
         double offset = 0.0625;
         int alpha = te.iotick;
         Color[] colors = RotaryAux.sideColors;
         ReikaRenderHelper.prepareGeoDraw(true);
-        RenderSystem.defaultBlendFunc();
 
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder v5 = tesselator.getBuilder();
@@ -149,5 +170,42 @@ public abstract class RotaryTERenderer<TE extends BlockEntity> extends BlockEnti
     @Override
     protected final boolean doRenderModel(PoseStack stack, BlockEntityBase te) {
         return this.isValidMachineRenderPass(te);
+    }
+
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return null;
+    }
+
+    protected boolean useEntityCutout() {
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    }
+
+    @Override
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return;
+        BlockEntity be = level.getBlockEntity(state.blockPos);
+        if (be == null) return;
+        if (!(be instanceof BlockEntityBase bbe)) return;
+        if (!this.doRenderModel(poseStack, bbe)) return;
+
+        Identifier tex = this.getSubmitTexture(be);
+        if (tex == null) return;
+
+        RenderType rt = this.useEntityCutout() ? RenderTypes.entityCutout(tex) : RenderTypes.entitySolid(tex);
+        PoseStack snapped = new PoseStack();
+        snapped.last().set(poseStack.last());
+        int light = state.lightCoords;
+        collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
+            MultiBufferSource oneRT = ignored -> vc;
+            this.renderModel(snapped, be, oneRT, light);
+        });
+        if (be instanceof BlockEntityIOMachine ioMachine && ioMachine.isInWorld()) {
+            IORenderer.renderIO(poseStack, collector, ioMachine, ioMachine.getBlockPos());
+        }
     }
 }

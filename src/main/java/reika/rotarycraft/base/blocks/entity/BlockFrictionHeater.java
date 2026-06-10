@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityFurnaceHeater;
 
 public class BlockFrictionHeater extends BlockBasicMachine {
 
@@ -15,19 +16,15 @@ public class BlockFrictionHeater extends BlockBasicMachine {
         super(properties.noOcclusion());
     }
 
-    
+
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-//        return new BlockEntityFurnaceHeater(pPos, pState);
-        return null;
+        return new BlockEntityFurnaceHeater(pPos, pState);
     }
 
-    
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-//        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
-//            ((BlockEntityFurnaceHeater) pBlockEntity).updateEntity(pLevel1, pPos);
-//        });
-        return null;
+        return (pLevel1, pPos, pState1, pBlockEntity) -> ((BlockEntityFurnaceHeater) pBlockEntity).updateEntity(pLevel1, pPos);
     }
 }

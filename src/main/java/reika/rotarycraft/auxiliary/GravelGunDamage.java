@@ -10,6 +10,7 @@
 package reika.rotarycraft.auxiliary;
 
 import reika.dragonapi.instantiable.CustomStringDamageSource;
+import reika.rotarycraft.registry.RotaryDamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
@@ -18,7 +19,7 @@ public class GravelGunDamage extends CustomStringDamageSource {
     private final Player player;
 
     public GravelGunDamage(Player ep) {
-        super("was hit by supersonic flint");
+        super(CustomStringDamageSource.resolve(ep.level(), RotaryDamageTypes.MACHINE), "was hit by supersonic flint");
         player = ep;
     }
 

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "b": "rotarycraft:belt",
+    "g": "minecraft:glass_pane",
+    "h": "rotarycraft:hub",
+    "p": "rotarycraft:hsla_steel_plate",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "shs",
+    "gbg",
+    "php"
+  ],
+  "result": {
+    "id": "rotarycraft:van_de_graff"
+  }
+}

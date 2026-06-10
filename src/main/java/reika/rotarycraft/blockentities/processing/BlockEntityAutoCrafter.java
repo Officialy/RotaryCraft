@@ -23,7 +23,7 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.neoforged.api.distmarker.Dist;
-//import net.neoforged.fml.loading.FMLLoader;
+//import net.neoforged.fml.loading.FMLEnvironment;
 //import net.neoforged.oredict.OreDictionary;
 //import reika.dragonapi.modinteract.DeepInteract.AEPatternHandling;
 //import reika.dragonapi.modinteract.DeepInteract.MESystemReader;
@@ -78,7 +78,7 @@
 //    public BlockEntityAutoCrafter() {
 //        if (ModList.APPENG.isLoaded()) {
 //            aeGridBlock = new BasicAEInterface(this, this.getMachine().getCraftedProduct());
-//            aeGridNode = FMLLoader.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock) aeGridBlock) : null;
+//            aeGridNode = FMLEnvironment.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock) aeGridBlock) : null;
 //
 //            //for (int i = 0; i < lock.length; i++) {
 //            //	lock[i] = new CraftingLock();
@@ -143,21 +143,21 @@
 //        this.tickCraftingDisplay();
 //
 //        updateTimer.update();
-//        if (updateTimer.checkCap() && !world.isClientSide) {
+//        if (updateTimer.checkCap() && !world.isClientSide()) {
 //            this.buildCache();
 //        }
 //
 //        if (ModList.APPENG.isLoaded()) {
 //            if (network != null)
 //                network.tick();
-//            if (aeGridBlock != null && !world.isClientSide) {
+//            if (aeGridBlock != null && !world.isClientSide()) {
 //                ((BasicAEInterface) aeGridBlock).setPowerCost(power >= MINPOWER ? 4 : 1);
 //            }
 //        }
 //
 //        if (power >= MINPOWER) {
 //            tick++;
-//            if (!world.isClientSide) {
+//            if (!world.isClientSide()) {
 //                hasWork.tick();
 //                if (hasWork.hasWork()) {
 //                    //ReikaJavaLibrary.pConsole("Executing tick");
@@ -224,7 +224,7 @@
 //        if (ModList.APPENG.isLoaded()) {
 //            Object oldNode = aeGridNode;
 //            if (aeGridNode == null) {
-//                aeGridNode = FMLLoader.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock) aeGridBlock) : null;
+//                aeGridNode = FMLEnvironment.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock) aeGridBlock) : null;
 //            }
 //            if (aeGridNode != null)
 //                ((IGridNode) aeGridNode).updateState();
@@ -330,7 +330,7 @@
 //    }
 //
 //    private ItemStack[] getIngredients(ItemStack is) {
-//        if (is.getItem() == RotaryItems.CRAFTPATTERN.get() && is.getTag() != null) {
+//        if (is.getItem() == RotaryItems.CRAFTPATTERN.get() && is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
 //            return ItemCraftPattern.getItems(is);
 //        } else if (ModList.APPENG.isLoaded() && InterfaceCache.AEPATTERN.instanceOf(is.getItem())) {
 //            if (!AEPatternHandling.isCraftingRecipe(is, level))
@@ -342,7 +342,7 @@
 //    }
 //
 //    private ItemStack getOutput(ItemStack is) {
-//        if (is.getItem() == RotaryItems.CRAFTPATTERN.get() && is.getTag() != null && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING) {
+//        if (is.getItem() == RotaryItems.CRAFTPATTERN.get() && is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null && ItemCraftPattern.getMode(is) == RecipeMode.CRAFTING) {
 //            return ItemCraftPattern.getResult(is);
 //        } else if (ModList.APPENG.isLoaded() && InterfaceCache.AEPATTERN.instanceOf(is.getItem())) {
 //            if (!AEPatternHandling.isCraftingRecipe(is, level))
@@ -498,8 +498,8 @@
 //
 //    private void craft(int slot, int size, ItemStack out, ItemHashMap<Integer> counts) {
 //        inv[slot] = ReikaItemHelper.getSizedItemStack(out, size + out.getCount());
-//        if (out.getTag() != null)
-//            inv[slot].getTag() = (CompoundTag) out.getTag().copy();
+//        if (out.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null)
+//            inv[slot].getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() = (CompoundTag) out.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy();
 //        for (ItemStack is : counts.keySet()) {
 //            int req = counts.get(is);
 //            if (is.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
@@ -590,7 +590,7 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        mode = CraftingMode.list[NBT.getInt("mode")];
+//        mode = CraftingMode.list[NBT.getIntOr("mode", 0)];
 //    }
 //
 //    @Override
@@ -609,7 +609,7 @@
 //    public void load(CompoundTag NBT) {
 //        super.load(NBT);
 //
-//        CompoundTag fil = NBT.getCompound("filter");
+//        CompoundTag fil = NBT.getCompoundOrEmpty("filter");
 //
 //        threshold = new int[threshold.length];
 //        for (int i = 0; i < threshold.length; i++) {
@@ -772,3 +772,5 @@
 //
 //    }
 //}
+
+

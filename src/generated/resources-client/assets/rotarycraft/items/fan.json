@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/fan",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "fan"
+    }
+  }
+}

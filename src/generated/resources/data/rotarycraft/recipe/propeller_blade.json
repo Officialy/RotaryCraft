@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "W": "minecraft:oak_planks"
+  },
+  "pattern": [
+    "  I",
+    " W ",
+    "I  "
+  ],
+  "result": {
+    "id": "rotarycraft:propeller_blade"
+  }
+}

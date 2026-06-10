@@ -50,14 +50,9 @@ public class BlockEntityPlayerDetector extends BlockEntityPowerReceiver implemen
         return isActive;
     }
 
-    @Override
-    public void updateBlockEntity() {
+    private void doDetectorTick() {
         super.updateBlockEntity();
-        //ModLoader.getMinecraftInstance().thePlayer.addChatMessage("Run");
-
-        //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d", this.selectedrange));
         this.getPowerBelow();
-        //ReikaWorldHelper.causeAdjacentUpdates(getLevel(), worldPosition);
         if (power < MINPOWER) {
             isActive = false;
             ticksdetected = 0;
@@ -96,9 +91,9 @@ public class BlockEntityPlayerDetector extends BlockEntityPowerReceiver implemen
 
     private int countPlayers(Level world, BlockPos pos) {
         int range = this.getRange();
-        AABB box = AABB.of(new BoundingBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).expandTowards(range, range, range);
+        AABB box = AABB.of(new BoundingBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).inflate(range, range, range);
         List inbox;
-        //if (world.isClientSide)
+        //if (world.isClientSide())
         //inbox = world.getEntities(Player.class, box);
         //else
         inbox = world.getEntitiesOfClass(Player.class, box);
@@ -110,9 +105,9 @@ public class BlockEntityPlayerDetector extends BlockEntityPowerReceiver implemen
 
     private boolean checkForPlayers(Level world, BlockPos pos) {
         int range = this.getRange();
-        AABB box = AABB.of(new BoundingBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).expandTowards(range, range, range);
+        AABB box = AABB.of(new BoundingBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).inflate(range, range, range);
         List inbox;
-        //if (world.isClientSide)
+        //if (world.isClientSide())
         //inbox = world.getEntities(Player.class, box);
         //else
         inbox = world.getEntitiesOfClass(Player.class, box);
@@ -144,7 +139,7 @@ public class BlockEntityPlayerDetector extends BlockEntityPowerReceiver implemen
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
-
+        this.doDetectorTick();
     }
 
     @Override
@@ -172,7 +167,7 @@ public class BlockEntityPlayerDetector extends BlockEntityPowerReceiver implemen
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        selectedrange = tag.getInt("range");
+        selectedrange = tag.getIntOr("range", 0);
     }
 
     @Override

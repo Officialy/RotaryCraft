@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hsla_steel_gear": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:hsla_steel_gear"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:bevel_gears"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hsla_steel_gear"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:bevel_gears"
+    ]
+  }
+}

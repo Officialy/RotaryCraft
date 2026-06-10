@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/grinder",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/grinder",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/grinder"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/grinder",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/grinder",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/grinder",
+      "y": 270
+    }
+  }
+}

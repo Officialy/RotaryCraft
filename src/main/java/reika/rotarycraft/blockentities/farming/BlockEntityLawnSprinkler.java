@@ -53,7 +53,7 @@
 //
 //    @Override
 //    protected void doAnimations() {
-//        if (level.isClientSide) {
+//        if (level.isClientSide()) {
 //            if (this.canPerformEffects()) {
 //                if (speed < 24)
 //                    speed += 1;
@@ -98,7 +98,7 @@
 //    @Override
 //    public void performEffects(Level world, BlockPos pos) {
 //        RotaryAdvancements.SPRINKLER.triggerAchievement(this.getPlacer());
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            for (int k = 0; k < 3; k++) {
 //                this.accelerateGrowth(world, pos);
 //                this.extinguishFire(world, pos);
@@ -254,7 +254,7 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        //speed = NBT.getInt("speed");
+//        //speed = NBT.getIntOr("speed", 0);
 //    }
 //
 //    @Override

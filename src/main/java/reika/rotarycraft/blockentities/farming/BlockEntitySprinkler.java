@@ -50,7 +50,7 @@
 //    @Override
 //    public void performEffects(Level world, BlockPos pos) {
 //        RotaryAdvancements.SPRINKLER.triggerAchievement(this.getPlacer());
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            this.hydrate(world, pos);
 //            if (ModList.REACTORCRAFT.isLoaded() && DragonAPI.rand.nextInt(2400) == 0)
 //                this.clearRadiation(world, pos);
@@ -126,7 +126,7 @@
 //    public void load(CompoundTag NBT) {
 //        super.load(NBT);
 //
-//        cache.load(NBT.getList("cache", NBTTypes.COMPOUND.ID));
+//        cache.load(NBT.getListOrEmpty("cache"));
 //    }
 //
 //
@@ -311,7 +311,7 @@
 //            for (Object o : li) {
 //                CompoundTag tag = (CompoundTag) o;
 //                BlockPos c = BlockPos.load("location", tag);
-//                FieldColumn f = FieldColumn.load(tag.getCompound("data"));
+//                FieldColumn f = FieldColumn.load(tag.getCompoundOrEmpty("data"));
 //                levels.put(c, f);
 //            }
 //        }
@@ -345,15 +345,15 @@
 //        }
 //
 //        private static FieldColumn load(CompoundTag tag) {
-//            int x = tag.getInt("x");
-//            int y = tag.getInt("y");
-//            int z = tag.getInt("z");
+//            int x = tag.getIntOr("x", 0);
+//            int y = tag.getIntOr("y", 0);
+//            int z = tag.getIntOr("z", 0);
 //
 //            FieldColumn ret = new FieldColumn(x, z, y);
 //            ListTag li = tag.getTagList("map", NBTTypes.COMPOUND.ID);
 //            for (Object o : li.tagList) {
 //                CompoundTag nbt = (CompoundTag) o;
-//                int dy = nbt.getInt("y");
+//                int dy = nbt.getIntOr("y", 0);
 //                Collection<ColumnAction> cc = new HashSet();
 //                ListTag li2 = nbt.getTagList("entries", NBTTypes.COMPOUND.ID);
 //                for (Object o2 : li2.tagList) {
@@ -541,7 +541,7 @@
 //        }
 //
 //        private static ColumnAction load(CompoundTag tag) {
-//            return new ColumnAction(Block.getBlockById(tag.getInt("block")), tag.getInt("x"), tag.getInt("y"), tag.getInt("z"), Effects.list[tag.getInt("effect")], tag.getBoolean("drip"), tag.getBoolean("drip2"), tag.getBoolean("splash"));
+//            return new ColumnAction(Block.getBlockById(tag.getIntOr("block", 0)), tag.getIntOr("x", 0), tag.getIntOr("y", 0), tag.getIntOr("z", 0), Effects.list[tag.getIntOr("effect", 0)], tag.getBooleanOr("drip", false), tag.getBooleanOr("drip2", false), tag.getBooleanOr("splash", false));
 //        }
 //
 //        private CompoundTag saveAdditional() {

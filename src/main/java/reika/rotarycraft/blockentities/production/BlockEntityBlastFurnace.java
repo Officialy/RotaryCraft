@@ -20,11 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.items.IItemHandler;
-import net.neoforged.items.ItemStackHandler;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.IBonusYield;
 import reika.dragonapi.interfaces.IHasXP;
@@ -91,14 +87,13 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     /* --------------------------------------------------------------------- */
 
     /** Separate handler for outputs; exposed only on DOWN side. */
-    private final ItemStackHandler outputInv = new ItemStackHandler(OUTPUT_SLOT_COUNT) {
+    private final ManagedItemHandler outputInv = new ManagedItemHandler(OUTPUT_SLOT_COUNT) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
 
-    private final LazyOptional<IItemHandler> outputCap   = LazyOptional.of(() -> outputInv);
 
     /* --------------------------------------------------------------------- */
     /*  Persistent / synced state                                            */
@@ -130,6 +125,11 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
         @Override public int getCount() { return 2; }
     };
 
+    /** Container syncs progress/temperature through this; see ContainerBlastFurnace. */
+    public ContainerData getContainerData() {
+        return containerData;
+    }
+
     /* --------------------------------------------------------------------- */
     /*  Construction                                                         */
     /* --------------------------------------------------------------------- */
@@ -140,38 +140,46 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     /* --------------------------------------------------------------------- */
     /*  Forge capability plumbing                                            */
     /* --------------------------------------------------------------------- */
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            if (side == Direction.DOWN)
-                return outputCap.cast();
-        }
-        return super.getCapability(cap, side);
-    }
 
     /* --------------------------------------------------------------------- */
     /*  Block-entity serialisation                                           */
     /* --------------------------------------------------------------------- */
+    // 1.21.5: use the ValueOutput / ValueInput overloads (the legacy load(CompoundTag) /
+    // saveAdditional(CompoundTag) ones still exist for backwards compat but are not called
+    // by the 26.1 chunk-load pipeline). The parent's loadAdditional handles `itemHandler`
+    // already; we just persist the extra outputInv + scalar state here.
+    //
+    // Important: do NOT dereference `level` here. During chunk load, BlockEntity.load is
+    // called BEFORE setLevel(), so level is null. We mirror the parent's null-guard:
+    //   level == null ? RegistryAccess.EMPTY : level.registryAccess()
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put("internal", itemHandler.serializeNBT());
-        tag.put("output",   outputInv.serializeNBT());
-        tag.putInt("temp",      temperature);
-        tag.putInt("progress",  progress);
-        tag.putFloat("xp",      storedXP);
-        tag.putBoolean("leaveLast", leaveLastItem);
+    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        var registries = this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess();
+        net.minecraft.world.level.storage.TagValueOutput outputOut =
+                net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING, registries);
+        outputInv.serialize(outputOut);
+        output.store("output", CompoundTag.CODEC, outputOut.buildResult());
+        output.putInt("temp",      temperature);
+        output.putInt("progress",  progress);
+        output.putFloat("xp",      storedXP);
+        output.putBoolean("leaveLast", leaveLastItem);
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        itemHandler.deserializeNBT(tag.getCompound("internal"));
-        outputInv.deserializeNBT(tag.getCompound("output"));
-        temperature    = tag.getInt("temp");
-        progress       = tag.getInt("progress");
-        storedXP       = tag.getFloat("xp");
-        leaveLastItem  = tag.getBoolean("leaveLast");
+    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        var registries = this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess();
+        java.util.Optional<CompoundTag> rawOut = input.read("output", CompoundTag.CODEC);
+        if (rawOut.isPresent()) {
+            net.minecraft.world.level.storage.ValueInput nested =
+                    net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, registries, rawOut.get());
+            outputInv.deserialize(nested);
+        }
+        temperature    = input.getIntOr("temp", 0);
+        progress       = input.getIntOr("progress", 0);
+        storedXP       = input.getFloatOr("xp", 0);
+        leaveLastItem  = input.getBooleanOr("leaveLast", false);
     }
 
     /* --------------------------------------------------------------------- */
@@ -196,7 +204,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         saveAdditional(tag);
         return tag;
@@ -207,7 +215,8 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     /* --------------------------------------------------------------------- */
 
     @Override public void updateEntity(Level world, BlockPos pos) {
-        if (level == null || level.isClientSide) return;
+        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
+        if (level == null || level.isClientSide()) return;
 
         ambientTimer.update();
         if (ambientTimer.checkCap()) {
@@ -236,20 +245,28 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
         /* ------------------------------------------------------------
          * Recipe lookup – shaped first, then shapeless
          * ---------------------------------------------------------- */
-        Recipe<SimpleContainer> matched;
-        Optional<? extends Recipe<SimpleContainer>> shaped =
-                level.getRecipeManager().getRecipeFor(
-                        RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get(), invView, level);
+        // 1.21.5: Recipe<T extends RecipeInput>; SimpleContainer isn't a RecipeInput, so wrap it.
+        final SimpleContainer invViewFinal = invView;
+        net.minecraft.world.item.crafting.RecipeInput recipeInput = new net.minecraft.world.item.crafting.RecipeInput() {
+            @Override public ItemStack getItem(int slot) { return invViewFinal.getItem(slot); }
+            @Override public int size() { return invViewFinal.getContainerSize(); }
+        };
+
+        // getRecipeFor returns Optional<RecipeHolder<T>>; unwrap with .value().
+        Recipe<net.minecraft.world.item.crafting.RecipeInput> matched;
+        Optional<? extends net.minecraft.world.item.crafting.RecipeHolder<? extends Recipe<net.minecraft.world.item.crafting.RecipeInput>>> shaped =
+                level.getServer().getRecipeManager().getRecipeFor(
+                        RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get(), recipeInput, level);
 
         if (shaped.isPresent()) {
-            matched = shaped.get();
+            matched = shaped.get().value();
         } else {
-            Optional<? extends Recipe<SimpleContainer>> shapeless =
-                    level.getRecipeManager().getRecipeFor(
-                            RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get(), invView, level);
+            Optional<? extends net.minecraft.world.item.crafting.RecipeHolder<? extends Recipe<net.minecraft.world.item.crafting.RecipeInput>>> shapeless =
+                    level.getServer().getRecipeManager().getRecipeFor(
+                            RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get(), recipeInput, level);
             if (shapeless.isEmpty())
                 return false;
-            matched = shapeless.get();
+            matched = shapeless.get().value();
         }
 
         float requiredTemp = matched instanceof IHeatRecipe ht ? ht.requiredTemperature() : SMELT_TEMP;
@@ -267,7 +284,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
         }
 
         // Get base result and scale by input count
-        ItemStack result = matched.getResultItem(RegistryAccess.EMPTY).copy();
+        ItemStack result = matched.assemble(recipeInput).copy();
         result.setCount(inputCount); // Scale base output to match input amount
 
         // Apply bonus yield if recipe supports it
@@ -304,7 +321,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
 
         // ---- consume the centre additive (slot 0) – at least one,
         //      but possibly more depending on recipe size
-        itemHandler.extractItem(0, matched.getIngredients().size(), false);
+        itemHandler.extractItem(0, matched.placementInfo().ingredients().size(), false);
 
         // ---- random chance to consume the *other* additives.
         //      Using the original RotaryCraft probabilities:
@@ -520,7 +537,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
         }
     }
 
-    public ItemStackHandler getOutputInventory() {
+    public ManagedItemHandler getOutputInventory() {
         return outputInv;
     }
 }

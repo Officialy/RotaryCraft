@@ -16,6 +16,6 @@ public class ItemSteelHoe extends HoeItem {
 
 
     public ItemSteelHoe() {
-        super(Tiers.IRON, -3, 0.0F, (new Item.Properties()).stacksTo(1).stacksTo(600));
+        super(ToolMaterial.IRON, -3, 0.0F, reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1).stacksTo(600));
     }
 }

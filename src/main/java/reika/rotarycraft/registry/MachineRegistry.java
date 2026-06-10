@@ -34,6 +34,7 @@ import reika.rotarycraft.base.RotaryModelBase;
 import reika.rotarycraft.base.blockentity.*;
 import reika.rotarycraft.blockentities.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityFurnaceHeater;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
@@ -72,7 +73,6 @@ import java.util.function.Function;
  */
 public enum MachineRegistry implements TileEnum {
 
-    //        BEDROCKBREAKER("machine.bedrock", BlockRotaryCraftMachine.class, BlockEntityBedrockBreaker.class),
     WIND_ENGINE("machine.wind_engine", RotaryBlocks.WIND_ENGINE.get(), BlockEntityWindEngine.class, EngineType.WIND, (modelSet) -> new WindModel(modelSet.bakeLayer(RotaryModelLayers.WIND_ENGINE))),
     STEAM_ENGINE(true, "machine.steam_engine", RotaryBlocks.STEAM_ENGINE.get(), BlockEntitySteamEngine.class, EngineType.STEAM, (modelSet) -> new SteamModel(modelSet.bakeLayer(RotaryModelLayers.STEAM_ENGINE))),
     PERFORMANCE_ENGINE(true, "machine.performance_engine", RotaryBlocks.PERFORMANCE_ENGINE.get(), BlockEntityPerformanceEngine.class, EngineType.SPORT, (modelSet) -> new PerformanceModel(modelSet.bakeLayer(RotaryModelLayers.PERFORMANCE_ENGINE))),
@@ -80,6 +80,7 @@ public enum MachineRegistry implements TileEnum {
     GAS_ENGINE(true, "machine.gas_engine", RotaryBlocks.GAS_ENGINE.get(), BlockEntityGasEngine.class, EngineType.GAS, (modelSet) -> new CombustionModel(modelSet.bakeLayer(RotaryModelLayers.COMBUSTION_ENGINE))),
     DC_ENGINE("machine.dc_engine", RotaryBlocks.DC_ENGINE.get(), BlockEntityDCEngine.class, EngineType.DC, (modelSet) -> new DCModel(modelSet.bakeLayer(RotaryModelLayers.DC_ENGINE))),
     AC_ENGINE("machine.ac_engine", RotaryBlocks.AC_ENGINE.get(), BlockEntityACEngine.class, EngineType.AC, (modelSet) -> new ACModel(modelSet.bakeLayer(RotaryModelLayers.AC_ENGINE))),
+    JET_ENGINE(true, "machine.jet_engine", RotaryBlocks.JET_ENGINE.get(), reika.rotarycraft.blockentities.engine.BlockEntityJetEngine.class, EngineType.JET, (modelSet) -> new reika.rotarycraft.models.engine.JetModel(modelSet.bakeLayer(RotaryModelLayers.JET_ENGINE))),
 
     FLYWHEEL(true, "machine.flywheel", RotaryBlocks.HSLA_FLYWHEEL.get(), BlockEntityFlywheel.class, (modelSet) -> new FlywheelModel(modelSet.bakeLayer(RotaryModelLayers.FLYWHEEL))),
     WOOD_SHAFT("machine.shaft", RotaryBlocks.WOOD_SHAFT.get(), BlockEntityShaft.class, (modelSet) -> new ShaftModel(modelSet.bakeLayer(RotaryModelLayers.SHAFT))),
@@ -120,7 +121,7 @@ public enum MachineRegistry implements TileEnum {
 //    PULSEJET(true, "machine.pulsejet", RotaryBlocks.PULSE_JET_FURNACE.get(), BlockEntityPulseFurnace.class),
 //    COMPACTOR(true, "machine.compactor", BlockRotaryCraftMachine.class, BlockEntityCompactor.class, "RenderCompactor"),
    FAN("machine.fan", RotaryBlocks.FAN.get(), BlockEntityFan.class, (modelSet) -> new FanModel(modelSet.bakeLayer(RotaryModelLayers.FAN))),
-    //    FRACTIONATOR(true, "machine.fractionator", BlockRotaryCraftMachine.class, BlockEntityFractionator.class, "RenderFraction"),
+    FRACTIONATOR(true, "machine.fractionator", RotaryBlocks.FRACTIONATOR.get(), reika.rotarycraft.blockentities.production.BlockEntityFractionator.class),
 //    GPR(true, "machine.gpr", BlockGPR.class, BlockEntityGPR.class),
     OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class/*, (modelSet) -> new ObsidianMakerModel(modelSet.bakeLayer(RotaryModelLayers.OBSIDIAN_MAKER))*/),
     //    PILEDRIVER("machine.piledriver", BlockRotaryCraftMachine.class, BlockEntityPileDriver.class, "RenderPileDriver"),
@@ -166,7 +167,7 @@ public enum MachineRegistry implements TileEnum {
 //    LASERGUN("machine.lasergun", BlockRotaryCraftMachine.class, BlockEntityLaserGun.class, "RenderLaserGun"),
     ITEMCANNON("machine.itemcannon", RotaryBlocks.ITEM_CANNON.get(), BlockEntityItemCannon.class, (modelSet) -> new ItemCannonModel(modelSet.bakeLayer(RotaryModelLayers.ITEM_CANNON))),
     LANDMINE("machine.landmine", RotaryBlocks.LANDMINE.get(), BlockEntityLandmine.class, (modelSet) -> new LandmineModel(modelSet.bakeLayer(RotaryModelLayers.LANDMINE))),
-    //    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class),
+    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class),
     BLOCKCANNON("machine.blockcannon", RotaryBlocks.BLOCK_CANNON.get(), BlockEntityBlockCannon.class/*, (modelSet) -> new BlockCannonModel(modelSet.bakeLayer(RotaryModelLayers.BLOCK_CANNON))*/),
     BUCKETFILLER("machine.bucketfiller", RotaryBlocks.BUCKET_FILLER.get(), BlockEntityBucketFiller.class),
     MIRROR("machine.mirror", RotaryBlocks.MIRROR.get(), BlockEntityMirror.class, (modelSet) -> new MirrorModel(modelSet.bakeLayer(RotaryModelLayers.MIRROR))),
@@ -174,7 +175,7 @@ public enum MachineRegistry implements TileEnum {
     //    SPYCAM("machine.spycam", BlockRotaryCraftMachine.class, BlockEntitySpyCam.class, "RenderSpyCam"),
     SELFDESTRUCT("machine.selfdestruct", RotaryBlocks.SELF_DESTRUCT.get(), BlockEntitySelfDestruct.class/*, (modelSet) -> new SelfDestructModel(modelSet.bakeLayer(RotaryModelLayers.SELF_DESTRUCT))*/),
     COOLINGFIN("machine.coolingfin", RotaryBlocks.COOLING_FIN.get(), BlockEntityCoolingFin.class, (modelSet) -> new FinModel(modelSet.bakeLayer(RotaryModelLayers.COOLING_FIN))),
-    WORKTABLE("machine.worktable", RotaryBlocks.WORKTABLE.get(), BlockEntityWorktable.class),
+    WORKTABLE(true, "machine.worktable", RotaryBlocks.WORKTABLE.get(), BlockEntityWorktable.class), // 26.1: hasGui=true so right-click opens GuiWorktable
     //    COMPRESSOR("machine.compressor", BlockModEngine.class, BlockEntityAirCompressor.class, "RenderCompressor", PowerTypes.PNEUMATIC),
     //PNEUENGINE("machine.pneuengine", BlockModEngine.class, BlockEntityPneumaticEngine.class, "RenderPneumatic", PowerTypes.PNEUMATIC),
 //    DISPLAY("machine.display", BlockRotaryCraftMachine.class, BlockEntityDisplay.class, "RenderDisplay"),
@@ -231,7 +232,8 @@ public enum MachineRegistry implements TileEnum {
     SPILLWAY("machine.spillway", RotaryBlocks.SPILLWAY.get(), BlockEntitySpillway.class, (modelSet) -> new SpillwayModel(modelSet.bakeLayer(RotaryModelLayers.SPILLWAY))),
     //    FLAMETURRET("machine.flameturret", BlockRotaryCraftMachine.class, BlockEntityFlameTurret.class, "RenderFlameTurret"),
 //    BUNDLEDBUS("machine.bundledbus", BlockRotaryCraftMachine.class, BlockEntityBundledBus.class, ModList.APPENG, ModList.PROJRED),
-    DISTRIBCLUTCH("machine.distribclutch", RotaryBlocks.DISTRIBUTION_CLUTCH.get(), BlockEntityDistributionClutch.class, (modelSet) -> new DistribClutchModel(modelSet.bakeLayer(RotaryModelLayers.DISTRIB_CLUTCH)));
+    DISTRIBCLUTCH("machine.distribclutch", RotaryBlocks.DISTRIBUTION_CLUTCH.get(), BlockEntityDistributionClutch.class, (modelSet) -> new DistribClutchModel(modelSet.bakeLayer(RotaryModelLayers.DISTRIB_CLUTCH))),
+    BEDROCKBREAKER("machine.bedrock", RotaryBlocks.BEDROCK_BREAKER.get(), reika.rotarycraft.blockentities.production.BlockEntityBedrockBreaker.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
@@ -381,12 +383,21 @@ public enum MachineRegistry implements TileEnum {
      * A convenience feature
      */
     public static MachineRegistry getMachine(Level level, BlockPos pos) {
-        return getMachine(level, pos.getX(), pos.getY(), pos.getZ());
+        // 26.1 PERF: take the {@link BlockPos} directly, avoiding the {@code new BlockPos(x,y,z)}
+        // allocation that the int-coord overload's getBlockState call would do otherwise. With
+        // ~30 pipes × 20 TPS × ~12 getMachine calls each (intake/dump/recompute) that's ~7200
+        // calls/sec — eliminating the inner allocation pulls a measurable allocation-rate
+        // reduction (GC pause frequency was tracking the same number in the user's PipeDbg log).
+        // The caller may pass a {@link BlockPos.MutableBlockPos}; vanilla's getBlockState only
+        // reads the pos's packed-long coordinates, so it's safe.
+        Block b = level.getBlockState(pos).getBlock();
+        if (b == Blocks.AIR)
+            return null;
+        return getMachineMapping(b);
     }
 
     public static MachineRegistry getMachine(BlockGetter world, int x, int y, int z) {
         Block b = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-//        RotaryCraft.LOGGER.info("Block at " + x + "," + y + "," + z + " is " + b);
         if (b == Blocks.AIR)
             return null;
         return getMachineMapping(b);

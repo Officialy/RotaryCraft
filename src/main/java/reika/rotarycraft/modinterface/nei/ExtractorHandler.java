@@ -295,8 +295,8 @@
 //	@Override
 //	public void drawExtras(int recipe) {
 //		int chance = this.getDupeChance(recipe);
-//		Minecraft.getMinecraft().fontRenderer.drawString(String.format("%d%s duplication chance per stage", chance, "%"), -2, 65, 0x333333, false);
-//		Minecraft.getMinecraft().fontRenderer.drawString(String.format("(Average %.2f units per ore)", Math.pow(1+0.01*this.getDupeChance(recipe), 4)), 9, 76, 0x333333, false);
+//		Minecraft.getMinecraft().fontRenderer.text(String.format("%d%s duplication chance per stage", chance, "%"), -2, 65, 0x333333, false);
+//		Minecraft.getMinecraft().fontRenderer.text(String.format("(Average %.2f units per ore)", Math.pow(1+0.01*this.getDupeChance(recipe), 4)), 9, 76, 0x333333, false);
 //
 //		ItemStack is = ((ExtractorRecipe)arecipes.get(recipe)).getSolution();
 //		ExtractorBonus bon = ExtractorBonus.getBonusForIngredient(is);

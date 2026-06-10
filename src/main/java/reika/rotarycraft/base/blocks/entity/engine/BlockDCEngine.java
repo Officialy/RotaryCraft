@@ -27,12 +27,10 @@ public class BlockDCEngine extends BlockBasicMachine {
         return Shapes.empty();
     }
 
-    @Override
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.MODEL;
-    }
-
-
+    // Note: previously had {@code getRenderShape -> RenderShape.MODEL} hard-coded here, which
+    // bypassed BlockBasicMachine's {@link #isCustomRendered}-driven override and forced the
+    // missing-texture cube_all model to render on top of the BER. Removed so the inherited
+    // {@code getRenderShape -> isCustomRendered ? INVISIBLE : MODEL} kicks in.
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityDCEngine(pPos, pState);
@@ -41,8 +39,18 @@ public class BlockDCEngine extends BlockBasicMachine {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
+        if (pLevel.isClientSide()) {
+            // 26.1: drive the spinning-shaft animation locally from the synced omega so the
+            // engine's BER sees a non-stale phi value (phi itself is not sync'd).
+            @SuppressWarnings("unchecked")
+            BlockEntityTicker<T> t = (BlockEntityTicker<T>) clientPhiTicker(BlockEntityDCEngine.class);
+            return t;
+        }
+        return (pLevel1, pPos, pState1, pBlockEntity) -> {
             ((BlockEntityDCEngine) pBlockEntity).updateEntity(pLevel1, pPos);
-        });
+        };
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

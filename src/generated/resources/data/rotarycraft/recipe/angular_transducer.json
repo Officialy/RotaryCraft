@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "W": "minecraft:oak_planks"
+  },
+  "pattern": [
+    " W ",
+    "WEW",
+    "SSS"
+  ],
+  "result": {
+    "id": "rotarycraft:angular_transducer"
+  }
+}

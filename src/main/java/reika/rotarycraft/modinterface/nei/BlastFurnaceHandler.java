@@ -253,25 +253,25 @@
 //			FlexibleIngredient in1 = br.primary;
 //			if (in1.exists()) {
 //				String sg = String.format("%s: x%d (%.1f%%)", in1.getItemForDisplay(true).getDisplayName(), in1.numberToUse, 100*in1.chanceToUse);
-//				f.drawString(sg, 21, 72, 0);
+//				f.text(sg, 21, 72, 0);
 //				dy += f.FONT_HEIGHT+2;
 //			}
 //
 //			FlexibleIngredient in2 = br.secondary;
 //			if (in2.exists()) {
 //				String sg = String.format("%s: x%d (%.1f%%)", in2.getItemForDisplay(true).getDisplayName(), in2.numberToUse, 100*in2.chanceToUse);
-//				f.drawString(sg, 21, 72+dy, 0);
+//				f.text(sg, 21, 72+dy, 0);
 //				dy += f.FONT_HEIGHT+2;
 //			}
 //
 //			FlexibleIngredient in3 = br.tertiary;
 //			if (in3.exists()) {
 //				String sg = String.format("%s: x%d (%.1f%%)", in3.getItemForDisplay(true).getDisplayName(), in3.numberToUse, 100*in3.chanceToUse);
-//				f.drawString(sg, 21, 72+dy, 0);
+//				f.text(sg, 21, 72+dy, 0);
 //				dy += f.FONT_HEIGHT+2;
 //			}
 //
-//			f.drawString("Bonus output: "+(br.bonusYield > 0 ? br.bonusYield+"x" : "None"), 21, 72+dy, 0);
+//			f.text("Bonus output: "+(br.bonusYield > 0 ? br.bonusYield+"x" : "None"), 21, 72+dy, 0);
 //		}
 //		else if (r instanceof BlastFurnCrafting) {
 //			BlastCrafting br = ((BlastFurnCrafting)r).recipe;

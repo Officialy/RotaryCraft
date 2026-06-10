@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/hsla_shaft",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "hsla_shaft"
+    }
+  }
+}

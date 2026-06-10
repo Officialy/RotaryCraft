@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:compressor",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:aluminum_alloy_ingot",
+    "T": "rotarycraft:turbine",
+    "c": "rotarycraft:high_temperature_combustor",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "CSS",
+    "cTs",
+    "PPP"
+  ],
+  "result": {
+    "id": "rotarycraft:microturbine"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "d": "minecraft:diamond",
+    "g": "minecraft:gold_ingot",
+    "l": "minecraft:purple_dye",
+    "n": "minecraft:nether_star",
+    "s": "rotarycraft:hsla_steel_plate"
+  },
+  "pattern": [
+    "lnl",
+    "ddd",
+    "sgs"
+  ],
+  "result": {
+    "id": "rotarycraft:containment"
+  }
+}

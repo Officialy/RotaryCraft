@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/obsidian_maker",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/obsidian_maker",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/obsidian_maker"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/obsidian_maker",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/obsidian_maker",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/obsidian_maker",
+      "y": 270
+    }
+  }
+}

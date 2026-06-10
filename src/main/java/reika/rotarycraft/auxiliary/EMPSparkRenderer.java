@@ -10,9 +10,7 @@
 package reika.rotarycraft.auxiliary;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
@@ -178,25 +176,11 @@ public class EMPSparkRenderer {
         }
 
         public void render(BufferBuilder v5, float ptick) {
-            double f = brightnessCurve.getValue(age);
-            for (LightningBolt bolt : bolts) {
-                float w = GL11.glGetFloat(GL11.GL_LINE_WIDTH);
-                GL11.glLineWidth(4);
-                this.drawBolt(bolt, v5, 0x7000ffff, f);
-                GL11.glLineWidth(w);
-                this.drawBolt(bolt, v5, 0xffffffff, f);
-                bolt.tick();
-            }
+            // TODO: Port to 26.1 rendering API (BufferBuilder.begin() + vertex() + end() all removed)
         }
 
         private void drawBolt(LightningBolt bolt, BufferBuilder v5, int color, double brightness) {
-            v5.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION);
-            v5.color(color & 0xffffff, color, color, (int) (brightness * ReikaColorAPI.getAlpha(color))); //todo fix color
-            for (int i = 0; i < bolt.getStepHeight(); i++) { //todo figure out wtf nsteps is
-                DecimalPosition p = new DecimalPosition(bolt.getPosition(i));
-                v5.vertex(p.xCoord, p.yCoord, p.zCoord);
-            }
-            v5.end();
+            // TODO: Port to 26.1 rendering API (BufferBuilder.begin() + vertex() + end() all removed)
         }
 
         private boolean tick() {

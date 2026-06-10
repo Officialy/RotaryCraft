@@ -112,8 +112,8 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        owner = NBT.getString("own");
-//        isJammed = NBT.getBoolean("jam");
+//        owner = NBT.getStringOr("own", "");
+//        isJammed = NBT.getBooleanOr("jam", false);
 //    }
 //
 //    @Override

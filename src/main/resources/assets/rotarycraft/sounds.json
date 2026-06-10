@@ -1,37 +1,65 @@
 {
   "electric": {
     "sounds": [
-      "rotarycraft:elecengine"
+      {
+        "name": "rotarycraft:elecengine",
+        "type": "file",
+        "attenuation_distance": 24
+      }
     ]
   },
   "wind": {
     "sounds": [
-      "rotarycraft:windengine"
+      {
+        "name": "rotarycraft:windengine",
+        "type": "file",
+        "attenuation_distance": 24
+      }
     ]
   },
   "steam": {
     "sounds": [
-      "rotarycraft:steamengine"
+      {
+        "name": "rotarycraft:steamengine",
+        "type": "file",
+        "attenuation_distance": 24
+      }
     ]
   },
   "car": {
     "sounds": [
-      "rotarycraft:gasengine"
+      {
+        "name": "rotarycraft:gasengine",
+        "type": "file",
+        "attenuation_distance": 24
+      }
     ]
   },
   "hydro": {
     "sounds": [
-      "rotarycraft:hydroengine"
+      {
+        "name": "rotarycraft:hydroengine",
+        "type": "file",
+        "attenuation_distance": 24
+      }
     ]
   },
   "micro": {
     "sounds": [
-      "rotarycraft:microengine"
+      {
+        "name": "rotarycraft:microengine",
+        "type": "file",
+        "attenuation_distance": 32
+      }
     ]
   },
   "jet": {
     "sounds": [
-      "rotarycraft:jetengine"
+      {
+        "name": "rotarycraft:jetengine",
+        "type": "file",
+        "attenuation_distance": 48
+      }
     ]
   },
   "pulsejet": {

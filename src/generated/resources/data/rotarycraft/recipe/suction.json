@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass",
+    "S": "minecraft:nether_bricks"
+  },
+  "pattern": [
+    "SGS",
+    "SGS",
+    "SGS"
+  ],
+  "result": {
+    "count": 4,
+    "id": "rotarycraft:suction"
+  }
+}

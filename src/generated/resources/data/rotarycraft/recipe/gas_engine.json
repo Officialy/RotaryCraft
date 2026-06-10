@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:cylinder",
+    "G": "rotarycraft:hsla_steel_gear_2x",
+    "I": "rotarycraft:impeller",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:ignition_unit",
+    "g": "minecraft:gold_ingot",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "CgC",
+    "SGs",
+    "PIP"
+  ],
+  "result": {
+    "id": "rotarycraft:gas_engine"
+  }
+}

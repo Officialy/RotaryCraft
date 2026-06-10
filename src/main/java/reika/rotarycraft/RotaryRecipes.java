@@ -1,13 +1,13 @@
 //package reika.rotarycraft;
 //
 //import net.minecraft.nbt.CompoundTag;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.world.item.Item;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.item.Items;
 //import net.minecraft.world.level.block.Blocks;
 //import net.neoforged.fml.loading.FMLLoader;
-//import net.neoforged.registries.ForgeRegistries;
+//import net.minecraft.core.registries.BuiltInRegistries;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.auxiliary.trackers.ItemMaterialController;
 //import reika.dragonapi.instantiable.ItemMaterial;
@@ -68,7 +68,7 @@
 //
 ////        MachineRegistry.PNEUENGINE.addCrafting("ppS", "sT ", "PPP", 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 's', RotaryItems.HSLA_SHAFT, 'p', RotaryItems.PIPE, 'P', RotaryItems.BASE_PANEL, 'T', RotaryItems.IMPELLER);
 //
-//        ItemStack plate = ModList.RAILCRAFT.isLoaded() ? new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(ModList.RAILCRAFT.modid, "part.plate")), 1) : null; //todo modern railcraft?
+//        ItemStack plate = ModList.RAILCRAFT.isLoaded() ? new ItemStack(BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(ModList.RAILCRAFT.modid, "part.plate")), 1) : null; //todo modern railcraft?
 //        MachineRegistry.STEAMTURBINE.addCrafting("sPs", "GTG", "ScS", 's', ConfigRegistry.HARDCONVERTERS.getState() && plate != null ? plate : RotaryItems.HSLA_STEEL_INGOT.get(), 'c', RotaryItems.DIAMOND_SHAFT_CORE, 'G', Blocks.GLASS, 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'T', RotaryItems.TURBINE, 'P', RotaryItems.BASEPANEL);
 //
 ////        MachineRegistry.BOILER.addCrafting("SPS", "G G", "sIs", 's', getConverterGatingItem(), 'S', RotaryItems.HSLA_STEEL_INGOT.get(), 'I', RotaryItems.IMPELLER, 'P', RotaryItems.PIPE, 'G', Blocks.GLASS);
@@ -758,7 +758,7 @@
 //    }
 //
 //    private static ItemStack addDamageNBT(ItemStack is) {
-//        if (is.getTag() == null)
+//        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
 //            is.setTagCompound(new NBTTagCompound());
 //        is.stackTagCompound.setInteger("damage", 0);
 //        return is;

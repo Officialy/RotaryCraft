@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import reika.dragonapi.auxiliary.trackers.PlayerHandler;
 import reika.dragonapi.instantiable.Alert;
 import reika.dragonapi.interfaces.configuration.ConfigList;
@@ -110,11 +110,11 @@ public class HandbookNotifications {
         @Override
         public void onPlayerLogin(Player ep) {
             CompoundTag eptag = ReikaPlayerAPI.getDeathPersistentNBT(ep);
-            CompoundTag nbt = eptag.contains(NBT_TAG) ? eptag.getCompound(NBT_TAG) : new CompoundTag();
+            CompoundTag nbt = eptag.contains(NBT_TAG) ? eptag.getCompoundOrEmpty(NBT_TAG) : new CompoundTag();
             boolean empty = true;
             for (ConfigRegistry cfg : data.keySet()) {
                 String tag = cfg.toString().toLowerCase(Locale.ENGLISH);
-                boolean mark = nbt.getBoolean(tag);
+                boolean mark = nbt.getBooleanOr(tag, false);
                 boolean chg = this.isChanged(cfg);
                 if (chg != mark)
                     empty = false;

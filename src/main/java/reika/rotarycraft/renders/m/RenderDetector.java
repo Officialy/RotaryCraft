@@ -12,7 +12,8 @@
 //import com.mojang.blaze3d.vertex.PoseStack;
 //import com.mojang.blaze3d.vertex.VertexConsumer;
 //import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.RenderType;
+//import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 //import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 //import net.minecraft.client.renderer.texture.OverlayTexture;
 //import reika.rotarycraft.auxiliary.IORenderer;
@@ -54,8 +55,8 @@
 //            var12 = 1.0F - var12 * var12 * var12;*/
 //        // if (tile.getBlockMetadata() < 4)
 //
-//        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ModelDetector.TEXTURE_LOCATION));
-//        DetectorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+//        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(ModelDetector.TEXTURE_LOCATION));
+//        DetectorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 //
 ////        if (tile.isInWorld())
 ////            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -73,3 +74,4 @@
 //    }
 //
 //}
+

@@ -12,7 +12,7 @@ package reika.rotarycraft.items.tools;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
@@ -28,11 +28,11 @@ import reika.rotarycraft.base.ItemRotaryTool;
 public class ItemTarget extends ItemRotaryTool {
 
     public ItemTarget() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         HitResult mov = ReikaPlayerAPI.getLookedAtBlock(player, 512, false);
         for (float i = 0; i <= 512; i += 0.5) {
             DecimalPosition xyz = ReikaVectorHelper.getPlayerLookCoords(player, i);

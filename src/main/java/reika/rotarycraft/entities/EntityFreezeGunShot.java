@@ -42,7 +42,7 @@
 //        motionX = vx;
 //        motionY = vy;
 //        motionZ = vz;
-//        if (!world.isClientSide)
+//        if (!world.isClientSide())
 //            velocityChanged = true;
 //    }
 //
@@ -100,10 +100,10 @@
 //            this.onHit(null);
 //            return;
 //        }
-//        if (!level.isClientSide && (shootingEntity != null && shootingEntity.isAlive() || !level.blockExists(pos)))
+//        if (!level.isClientSide() && (shootingEntity != null && shootingEntity.isAlive() || !level.blockExists(pos)))
 //            this.kill();
 //        else {
-//            if (tickCount > 80 && !level.isClientSide)
+//            if (tickCount > 80 && !level.isClientSide())
 //                this.onHit(null);
 //            this.tick();
 //            Vec3 var15 = Vec3.createVectorHelper(getY, getY(), posZ);

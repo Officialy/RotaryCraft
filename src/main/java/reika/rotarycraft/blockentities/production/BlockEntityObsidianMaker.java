@@ -22,8 +22,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -103,7 +103,7 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
         tickcount++;
         temptick++;
         this.getPowerBelow();
-        if (temptick >= 20 && !world.isClientSide) {
+        if (temptick >= 20 && !world.isClientSide()) {
             this.updateTemperature(world, pos);
             temptick = 0;
         }
@@ -111,7 +111,7 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
             return;
         this.testIdle();
 
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             int n = this.getNumberConsecutiveOperations();
             for (int i = 0; i < n; i++)
                 this.doOperation(n > 1);
@@ -261,13 +261,13 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
         water.readFromNBT(tag);
         lava.readFromNBT(tag);
 
-        mixTime = tag.getInt("mix");
+        mixTime = tag.getIntOr("mix", 0);
 
-        temperature = tag.getInt("temp");
+        temperature = tag.getIntOr("temp", 0);
 
-        overred = tag.getFloat("red");
-        overgreen = tag.getFloat("green");
-        overblue = tag.getFloat("blue");
+        overred = tag.getFloatOr("red", 0);
+        overgreen = tag.getFloatOr("green", 0);
+        overblue = tag.getFloatOr("blue", 0);
     }
 
     @Override
@@ -312,7 +312,7 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
     @Override

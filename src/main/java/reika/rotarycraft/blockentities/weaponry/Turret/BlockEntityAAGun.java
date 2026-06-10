@@ -19,7 +19,7 @@
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.phys.AABB;
-//import net.neoforged.items.IItemHandler;
+//import net.neoforged.neoforge.items.IItemHandler;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaEntityHelper;
@@ -140,7 +140,7 @@
 //        double dz = v[2] / dd;
 //
 //        //ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            double y = this.getFiringPositionY(dy);
 //            EntityFlakShot flak = new EntityFlakShot(world, worldPosition.getX() + 0.5 + dx, y, worldPosition.getZ() + 0.5 + dz, 3 * v[0], 3 * v[1], 3 * v[2], this);
 //            world.addFreshEntity(flak);

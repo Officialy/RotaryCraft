@@ -14,9 +14,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import reika.rotarycraft.auxiliary.IORenderer;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
@@ -36,27 +38,26 @@ public class RenderGrinder extends RotaryTERenderer<BlockEntityGrinder> {
      * Renders the BlockEntity for the position.
      */
     public void renderBlockEntityGrinderAt(BlockEntityGrinder tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
-        RenderSystem.disableCull();
         stack.pushPose();
         float f = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.mulPose(Axis.YP.rotationDegrees(f + 180));
         stack.mulPose(Axis.ZP.rotationDegrees(180));
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid(GrinderModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid(GrinderModel.TEXTURE_LOCATION));
         modelGrinder.renderAll(stack, vertexconsumer, light, tile, null, -tile.phi, 0); //
         stack.popPose();
-        RenderSystem.enableCull();
     }
 
     @Override
-    public void render(BlockEntityGrinder tile, float p_112308_, PoseStack stack, MultiBufferSource bufferSource, int p_112311_, int p_112312_) {
-        if (this.doRenderModel(stack, tile))
-            this.renderBlockEntityGrinderAt(tile, stack, bufferSource, p_112311_);
-        if (tile.isInWorld()) {// && MinecraftForgeClient.getRenderPass() == 1) {
-            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos());
-//            if (tile.getEnchantmentHandler().hasEnchantments())
-//                EnchantmentRenderer.renderGlint(tile, modelGrinder, null, par2, par4, par6);
-        }
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return GrinderModel.TEXTURE_LOCATION;
+    }
+
+    @Override
+    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+        if (be instanceof BlockEntityGrinder grinder)
+            renderBlockEntityGrinderAt(grinder, stack, mbs, light);
     }
 }
+

@@ -19,16 +19,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
-import net.neoforged.items.ItemStackHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 
 
 import reika.dragonapi.instantiable.data.collections.OneWayCollections.OneWaySet;
@@ -63,7 +61,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
 //        addGrindableSeed(RotaryItems.CANOLA.getStackOfMetadata(2), 0.65F);
     }
 
-    private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantments.MOB_LOOTING).addFilter(Enchantments.KNOCKBACK).addFilter(Enchantments.FLAMING_ARROWS /*flaming arrows or flame aspect?!*/).addFilter(Enchantments.BLOCK_FORTUNE);
+    private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantments.LOOTING).addFilter(Enchantments.KNOCKBACK).addFilter(Enchantments.FLAME /*flaming arrows or flame aspect?!*/).addFilter(Enchantments.FORTUNE);
     private final HybridTank tank = new HybridTank("grinder", MAXLUBE) {
         @Override
         protected void onContentsChanged() {
@@ -75,29 +73,13 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
             return stack.getFluid().isSame(RotaryFluids.LUBRICANT.get());
         }
     };
-    private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
 
     public int grinderCookTime;
     public boolean idle = false;
 
     @Override
-    
-    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
-        if (capability == ForgeCapabilities.FLUID_HANDLER)
-            return lazyFluidHandler.cast();
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
     public void onLoad() {
         super.onLoad();
-        lazyFluidHandler = LazyOptional.of(() -> tank);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyFluidHandler.invalidate();
     }
 
     public BlockEntityGrinder(BlockPos pos, BlockState state) {
@@ -160,7 +142,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        grinderCookTime = NBT.getShort("CookTime");
+        grinderCookTime = NBT.getShortOr("CookTime", (short)0);
 
         tank.readFromNBT(NBT);
     }
@@ -207,7 +189,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
 
         if (flag1)
             this.setChanged();
-        if (!itemHandler.getStackInSlot(2).isEmpty() && tank.getFluidLevel() >= 1000 && !world.isClientSide) {
+        if (!itemHandler.getStackInSlot(2).isEmpty() && tank.getFluidLevel() >= 1000 && !world.isClientSide()) {
             if (itemHandler.getStackInSlot(2).getItem() == Items.BUCKET && itemHandler.getStackInSlot(2).getCount() == 1) {
                 itemHandler.setStackInSlot(2, RotaryItems.LUBE_BUCKET.get().getDefaultInstance());
                 tank.removeLiquid(1000);
@@ -230,6 +212,16 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
         }
     }
 
+    private ItemStack getGrinderResult(ItemStack in) {
+        if (in.isEmpty() || level == null || level.getServer() == null)
+            return ItemStack.EMPTY;
+        SingleRecipeInput input = new SingleRecipeInput(in);
+        return level.getServer().getRecipeManager()
+                .getRecipeFor(RotaryRecipeTypes.GRINDER.get(), input, level)
+                .map(h -> h.value().assemble(input).copy())
+                .orElse(ItemStack.EMPTY);
+    }
+
     private boolean canGrind() {
         if (itemHandler.getStackInSlot(0).isEmpty())
             return false;
@@ -242,7 +234,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
             }
         }
 
-        ItemStack out = ItemStack.EMPTY;//RecipesGrinder.grinderRecipes.getGrindingResult(itemHandler.getStackInSlot(0));
+        ItemStack out = getGrinderResult(itemHandler.getStackInSlot(0));
 
         if (flag && out.isEmpty())
             return true;
@@ -252,7 +244,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
         if (itemHandler.getStackInSlot(1).isEmpty())
             return true;
 
-        if (!itemHandler.getStackInSlot(1).equals(out))
+        if (!itemHandler.getStackInSlot(1).getItem().equals(out.getItem()))
             return false;
 
         return itemHandler.getStackInSlot(1).getCount() + out.getCount() <= Math.min(this.getInventoryStackLimit(), out.getMaxStackSize());
@@ -270,22 +262,30 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
             tank.addLiquid((int) (DifficultyEffects.CANOLA.getInt() * this.getFortuneLubricantFactor() * num), RotaryFluids.LUBRICANT.get());
         }
 
-        ItemStack out = ItemStack.EMPTY;//todo RecipesGrinder.grinderRecipes.getGrindingResult(is);
+        ItemStack out = getGrinderResult(is);
         if (!out.isEmpty()) {
-            if (itemHandler.getStackInSlot(1).isEmpty())
+            ItemStack existing = itemHandler.getStackInSlot(1);
+            if (existing.isEmpty()) {
                 itemHandler.setStackInSlot(1, out.copy());
-            else if (itemHandler.getStackInSlot(1).getItem() == out.getItem())
-                itemHandler.getStackInSlot(1).setCount(out.getCount());
+            } else if (existing.getItem() == out.getItem()) {
+                // 26.1: getStackInSlot returns a COPY in the new resource-handler API, so
+                // mutating it doesn't write back. Build a fresh stack with the combined count
+                // and writeback via setStackInSlot.
+                ItemStack merged = existing.copy();
+                merged.setCount(existing.getCount() + out.getCount());
+                itemHandler.setStackInSlot(1, merged);
+            }
         }
 
-        is.setCount(is.getCount() - 1);
-
-        if (is.getCount() <= 0)
-            itemHandler.setStackInSlot(0, ItemStack.EMPTY);
+        // 26.1 fix: same copy-write-back bug as above. {@code is.setCount(...)} on the result
+        // of {@code getStackInSlot} silently dropped — root cause of "grinder doesn't consume
+        // input, stays at 64". Use the resource-handler {@code extractItem} which commits a
+        // real change through the transaction system.
+        itemHandler.extractItem(0, 1, false);
     }
 
     private float getFortuneLubricantFactor() {
-        return 1F + (float) (enchantments.getEnchantment(Enchantments.BLOCK_FORTUNE) * ReikaRandomHelper.getRandomBetween(0.1, 0.2));
+        return 1F + (float) (enchantments.getEnchantment(Enchantments.FORTUNE) * ReikaRandomHelper.getRandomBetween(0.1, 0.2));
     }
 
     @Override
@@ -325,7 +325,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
         if (slot == 2) {
             return is.getItem() == Items.BUCKET;
         }
-        return is.getItem() == Items.BUCKET;//todo || RecipesGrinder.grinderRecipes.isGrindable(is);
+        return !getGrinderResult(is).isEmpty() || isGrindableSeed(is);
     }
 
     @Override
@@ -358,7 +358,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (this.canDrain(from, null))
             return tank.drain(maxDrain, doDrain);
-        return null;
+        return FluidStack.EMPTY;
     }
 
     public boolean canDrain(Direction from, FluidStack fluid) {
@@ -413,7 +413,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
 
     @Override
     public DamageSource getDamageType() {
-        return RotaryCraft.grind;
+        return RotaryCraft.grind.get(level);
     }
 
     @Override

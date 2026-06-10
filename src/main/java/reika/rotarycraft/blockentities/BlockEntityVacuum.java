@@ -28,11 +28,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.common.NeoForge;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
-import net.neoforged.items.IItemHandler;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import reika.dragonapi.interfaces.blockentity.HasItemHandler;
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
@@ -81,7 +80,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
         this.getSummativeSidedPower();
-        if (world.isClientSide)
+        if (world.isClientSide())
             return;
         tickcount++;
         if (power < MINPOWER)
@@ -106,13 +105,16 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         for (int i = 2; i < 6; i++) {
             Direction dir = Direction.values()[i];
             BlockEntity te = getAdjacentBlockEntity(dir);
-            if (te.getCapability(ForgeCapabilities.ITEM_HANDLER, dir).isPresent() && !(te instanceof BlockEntityVacuum)) {
+            // 1.21.5: BlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER) replaced by
+            // Capabilities.ItemHandler.BLOCK lookup; treat any non-vacuum BE with adjacent
+            // access as eligible until the new capability lookup is wired through.
+            if (te != null && !(te instanceof BlockEntityVacuum)) {
                 int size = itemHandler.getSlots();
                 for (int k = 0; k < size; k++) {
                     ItemStack inslot = itemHandler.getStackInSlot(k);
-                    if (inslot != ItemStack.EMPTY) {
+                    if (!inslot.isEmpty()) {
                         boolean cansuck = true;
-                        if (te instanceof IItemHandler)
+                        if (te instanceof HasItemHandler)
                             cansuck = true;//todo ((IItemHandler) te).canExtractItem(k, inslot, dir.getOpposite().ordinal());
                         if (cansuck) {
                             if (this.canSuckStacks() && ReikaInventoryHelper.addToIInv(inslot.copy(), itemHandler)) {
@@ -158,8 +160,8 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
             if (ent.tickCount > 5) {
                 //Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.getY, ent.getY(), ent.posZ, x+0.5, y+0.5, z+0.5);
                 //if (ReikaWorldHelper.canBlockSee(world, pos, ent.getY, ent.getY(), ent.posZ, this.getRange()+2)) {
-                if (true || ReikaWorldHelper.canBlockSee(world, pos.getX(), pos.getY(), pos.getZ(), ent.getY(), ent.getY(), ent.getZ(), this.getRange() + 2)) {
-                    double dx = (worldPosition.getX() + 0.5 - ent.getY());
+                if (true || ReikaWorldHelper.canBlockSee(world, pos.getX(), pos.getY(), pos.getZ(), ent.getX(), ent.getY(), ent.getZ(), this.getRange() + 2)) {
+                    double dx = (worldPosition.getX() + 0.5 - ent.getX());
                     double dy = (worldPosition.getY() + 0.5 - ent.getY());
                     double dz = (worldPosition.getZ() + 0.5 - ent.getZ());
                     double ddt = ReikaMathLibrary.py3d(dx, dy, dz);
@@ -182,7 +184,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
                     var ee = ent.getDeltaMovement().y;
                     if (ent.getY() < worldPosition.getY())
                         ent.setDeltaMovement(ent.getDeltaMovement().x, ee += 0.125, ent.getDeltaMovement().z);
-//                    if (!world.isClientSide)
+//                    if (!world.isClientSide())
 //                        ent.velocityChanged = true;
                 }
             }
@@ -191,17 +193,17 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
     }
 
     private void absorb(Level world, BlockPos pos) {
-        if (world.isClientSide)
+        if (world.isClientSide())
             return;
         boolean suck = false;
-        AABB close = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).expandTowards(0.25D, 0.25D, 0.25D);
+        AABB close = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).inflate(0.25D, 0.25D, 0.25D);
         List<ItemEntity> closeitems = world.getEntitiesOfClass(ItemEntity.class, close);
         for (ItemEntity ent : closeitems) {
-            if (ent.hasPickUpDelay()) {
+            if (!ent.hasPickUpDelay()) {
                 ItemStack is = ent.getItem();
                 int targetslot = this.checkForStack(is);
                 if (targetslot != -1) {
-                    if (itemHandler.getStackInSlot(targetslot) == ItemStack.EMPTY)
+                    if (itemHandler.getStackInSlot(targetslot).isEmpty())
                         itemHandler.setStackInSlot(targetslot, is.copy());
                     else
                         itemHandler.getStackInSlot(targetslot).setCount(is.getCount());
@@ -209,7 +211,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
                 } else {
                     return;
                 }
-                ent.kill();
+                if (world instanceof net.minecraft.server.level.ServerLevel sl) ent.kill(sl);
                 world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.1F + 0.5F * DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat(), false);
                 NeoForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy() : null));
             } else {
@@ -221,7 +223,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         for (ExperienceOrb xp : closeorbs) {
             int val = xp.getValue();
             experience += val;
-            xp.kill();
+            if (world instanceof net.minecraft.server.level.ServerLevel sl) xp.kill(sl);
             world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.BLOCKS, 0.1F, 0.5F * ((DragonAPI.rand.nextFloat() - DragonAPI.rand.nextFloat()) * 0.7F + 1.8F), false);
             NeoForge.EVENT_BUS.post(new VacuumXPAbsorbEvent(this, val));
         }
@@ -235,15 +237,15 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         int firstempty = -1;
 
         for (int k = 0; k < itemHandler.getSlots(); k++) { //Find first empty slot
-            if (itemHandler.getStackInSlot(k) == ItemStack.EMPTY) {
+            if (itemHandler.getStackInSlot(k).isEmpty()) {
                 firstempty = k;
                 k = itemHandler.getSlots();
             }
         }
         for (int j = 0; j < itemHandler.getSlots(); j++) {
-            if (itemHandler.getStackInSlot(j) != ItemStack.EMPTY) {
+            if (!itemHandler.getStackInSlot(j).isEmpty()) {
                 if (ReikaItemHelper.areStacksCombinable(is, itemHandler.getStackInSlot(j), Integer.MAX_VALUE)) {
-                    if (ItemStack.isSameItemSameTags(is, itemHandler.getStackInSlot(j))) {
+                    if (ItemStack.isSameItemSameComponents(is, itemHandler.getStackInSlot(j))) {
                         if (itemHandler.getStackInSlot(j).getCount() + size <= this.getInventoryStackLimit()) {
                             target = j;
                             j = itemHandler.getSlots();
@@ -267,7 +269,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
     private AABB getBox(Level world, BlockPos pos) {
         int expand = this.getRange();
         AABB base = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
-        return equidistant ? base.expandTowards(expand, expand, expand) : base.expandTowards(expand, 2, expand);
+        return equidistant ? base.inflate(expand, expand, expand) : base.inflate(expand, 2, expand);
     }
 
     public int getRange() {
@@ -281,8 +283,8 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        experience = NBT.getInt("xp");
-        equidistant = NBT.getBoolean("equi");
+        experience = NBT.getIntOr("xp", 0);
+        equidistant = NBT.getBooleanOr("equi", false);
     }
 
     @Override

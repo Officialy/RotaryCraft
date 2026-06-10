@@ -44,7 +44,7 @@ public class CustomExtractLoader {
 
     private final File getFullSavePath() {
         //return new File(RotaryCraft.config.getConfigFolder(), this.getSaveFileName());
-        return new File(FMLLoader.getGamePath().toString(), this.getSaveFileName());
+        return new File(net.neoforged.fml.loading.FMLPaths.GAMEDIR.get().toString(), this.getSaveFileName());
     }
 
     public void loadFile() {

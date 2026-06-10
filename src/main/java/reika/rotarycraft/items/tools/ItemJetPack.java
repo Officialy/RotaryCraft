@@ -18,13 +18,13 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import reika.dragonapi.auxiliary.trackers.KeyWatcher;
 import reika.dragonapi.libraries.ReikaFluidHelper;
@@ -49,11 +49,11 @@ import static reika.dragonapi.DragonAPI.rand;
 public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
     public ItemJetPack(ArmorMaterial mat) {
-        super(mat, Type.CHESTPLATE, new Properties());
+        super(mat, net.minecraft.world.item.equipment.ArmorType.CHESTPLATE, reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     private static final boolean wingEnabled(ItemStack is) {
-        return PackUpgrades.WING.existsOn(is) && (is.getTag() == null || is.getTag().getBoolean("wingon"));
+        return PackUpgrades.WING.existsOn(is) && (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null || is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getBooleanOr("wingon", false));
     }
 
     public ArmorMaterial getMaterial() {
@@ -61,10 +61,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
     }
 
     public int getFuel(ItemStack is) {
-        CompoundTag nbt = is.getTag();
+        CompoundTag nbt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
         if (nbt == null)
             return 0;
-        return nbt.getInt("fuel");
+        return nbt.getIntOr("fuel", 0);
     }
 	/*
 	public Fluid getFuelType() {
@@ -76,8 +76,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
         if (newFuel < 0)
             newFuel = 0;
 
-        if (is.getTag() == null)
-            is.setTag(new CompoundTag());
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+            reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(is, new CompoundTag());
         this.setFuel(is, this.getCurrentFluid(is).defaultFluidState(), newFuel);
     }
 
@@ -85,11 +85,12 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
     protected final ItemStack onSneakClicked(ItemStack is, Player ep) {
         if (!PackUpgrades.WING.existsOn(is))
             return is;
-        is.getOrCreateTag().putBoolean("wingon", !is.getOrCreateTag().getBoolean("wingon"));
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean("wingon", !is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getBooleanOr("wingon", false)));
         return is;
     }
 
-    @Override
+    // 1.21.5: NeoForge IItemExtension.onArmorTick was removed; ticking is now handled via
+    // EquipmentSlot tick hooks. Method retained as a helper invoked from the new tick path.
     public void onArmorTick(ItemStack is, Level world, Player player) {
         boolean flying = this.useJetpack(player, is);
         boolean fuel = this.getCurrentFillLevel(is) > 0;
@@ -183,7 +184,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
                         this.use(is, this.getFuelUsageMultiplier());
                 }
 
-                if (!ep.level().isClientSide) {
+                if (!ep.level().isClientSide()) {
                     ep.fallDistance = -2;
                     if (ConfigRegistry.KICKFLYING.getState()) {
                         /*if (ep instanceof Player) {
@@ -192,7 +193,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
                     }
                 }
 
-                float pitch = 1 + 0.5F * (float) Math.sin((ep.level().getDayTime() * 2) % 360);
+                float pitch = 1 + 0.5F * (float) Math.sin((ep.level().getOverworldClockTime() * 2) % 360);
                 SoundRegistry.JETPACK.playSound(ep.level(), ep.getOnPos(), 0.75F, pitch);
                 if (propel) {
                     SoundRegistry.SHORTJET.playSound(ep.level(), ep.getOnPos(), 0.15F, 1F);
@@ -260,17 +261,17 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
     }
 
     @Override
-    public void appendHoverText(ItemStack is,  Level level, List<Component> li, TooltipFlag flag) {
+    public void appendHoverText(ItemStack is, net.minecraft.world.item.Item.TooltipContext ctx, net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> li, TooltipFlag flag) {
         for (int i = 0; i < PackUpgrades.list.length; i++) {
             PackUpgrades pack = PackUpgrades.list[i];
             if (pack.existsOn(is)) {
-                li.add(Component.literal(pack.label));
+                li.accept(Component.literal(pack.label));
                 if (pack == PackUpgrades.WING && !wingEnabled(is))
-                    li.add(Component.literal(ChatFormatting.RED + "[Wing Disabled]"));
+                    li.accept(Component.literal(ChatFormatting.RED + "[Wing Disabled]"));
             }
         }
-        int ch = is.getTag() != null ? is.getTag().getInt("fuel") : 0;
-        li.add(Component.literal(ch > 0 ? String.format("Fuel: %d mB of %s", ch, this.getCurrentFluid(is).toString()) : "No Fuel")); //todo fluid registry name?
+        int ch = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("fuel", 0) : 0;
+        li.accept(Component.literal(ch > 0 ? String.format("Fuel: %d mB of %s", ch, this.getCurrentFluid(is).toString()) : "No Fuel"));
     }
 
     @Override
@@ -308,11 +309,11 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
     }
 
     private void setFuel(ItemStack is, FluidState f, int amt) {
-        is.getOrCreateTag().putInt("fuel", amt);
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("fuel", amt));
         if (amt > 0) {
-            ReikaNBTHelper.writeFluidToNBT(is.getTag(), new FluidStack(f.getType(), 0));
+            ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), new FluidStack(f.getType(), 0));
         } else {
-            ReikaNBTHelper.writeFluidToNBT(is.getTag(), null);
+            ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), null);
         }
     }
 
@@ -325,14 +326,14 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
     public int addFluid(ItemStack is, FluidState f, int amt) { //todo add fluid for jetpack
         if (f == null || !this.isValidFluid(new FluidStack(f.getType(), 0), is))
             return 0;
-        CompoundTag nbt = is.getTag();
+        CompoundTag nbt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
         if (nbt == null) {
-            is.setTag(new CompoundTag());
+            reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(is, new CompoundTag());
             this.setFuel(is, f, amt);
             return amt;
         } else {
             int cap = this.getCapacity(is);
-            int cur = nbt.getInt("fuel");
+            int cur = nbt.getIntOr("fuel", 0);
             int sum = cur + amt;
             if (sum > cap) {
                 this.setFuel(is, f, cap);
@@ -383,10 +384,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
     @Override
     public Fluid getCurrentFluid(ItemStack is) {
-        if (is.getTag() == null)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
             return null;
         int lvl = this.getCurrentFillLevel(is);
-        Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getTag()).getFluid();
+        Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()).getFluid();
         if (lvl > 0 && f == null) {
             this.setFuel(is, null, 0);
             return null;
@@ -421,7 +422,7 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
         return ReikaArrayHelper.intListToArray(li);
     }
 
-    @Override
+    // 1.21.5: Item.isValidRepairItem replaced by Properties.repairable(...) opt-in; method no longer overridable.
     public boolean isValidRepairItem(ItemStack tool, ItemStack item) {
         return tool.getItem() == this && this.isSteel() && ReikaItemHelper.matchStacks(item, RotaryItems.HSLA_STEEL_INGOT);
     }
@@ -456,7 +457,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
         }
 
         public boolean existsOn(ItemStack is) {
-            return is.getTag() != null && is.getTag().getBoolean(this.getNBT());
+            net.minecraft.nbt.CompoundTag tag = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+            return tag != null && tag.getBooleanOr(this.getNBT(), false);
         }
 
         private String getNBT() {
@@ -464,10 +466,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
         }
 
         public void enable(ItemStack is, boolean set) {
-            is.getOrCreateTag();
-            is.getTag().putBoolean(this.getNBT(), set);
+            is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean(this.getNBT(), set));
             if (this == WING)
-                is.getTag().putBoolean("wingon", true);
+                reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean("wingon", true));
         }
     }
 }

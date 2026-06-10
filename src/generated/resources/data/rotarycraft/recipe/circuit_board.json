@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:gold_nugget",
+    "R": "minecraft:redstone",
+    "W": "minecraft:oak_planks"
+  },
+  "pattern": [
+    "RGR",
+    "GWG",
+    "RGR"
+  ],
+  "result": {
+    "id": "rotarycraft:circuit_board"
+  }
+}

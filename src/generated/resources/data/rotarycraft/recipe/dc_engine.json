@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "rotarycraft:hsla_steel_plate",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "SSS",
+    "SRs",
+    "PRP"
+  ],
+  "result": {
+    "id": "rotarycraft:dc_engine"
+  }
+}

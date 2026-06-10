@@ -13,7 +13,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
@@ -51,12 +52,12 @@ public class RenderMagnetic extends RotaryTERenderer<BlockEntityMagnetEngine> {
             stack.mulPose(Axis.YP.rotationDegrees(f));
         }
 
-        VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.entityCutout(MagneticModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = buffer.getBuffer(RenderTypes.entityCutout(MagneticModel.TEXTURE_LOCATION));
         dynamoModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, tile.phi, 0);
         stack.popPose();
     }
 
-    @Override
+    // 1.21.5: render -> submit; @Override dropped
     public void render(BlockEntityMagnetEngine tile, float p_112308_, PoseStack stack, MultiBufferSource multiBufferSource, int light, int p_112312_) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityDynamoAt(stack, tile, multiBufferSource, light);
@@ -66,4 +67,5 @@ public class RenderMagnetic extends RotaryTERenderer<BlockEntityMagnetEngine> {
     }
 
 }
+
 

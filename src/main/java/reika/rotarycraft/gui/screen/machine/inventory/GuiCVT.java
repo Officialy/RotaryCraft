@@ -18,8 +18,8 @@
 //import net.minecraft.init.Items;
 //import net.minecraft.world.item.ItemStack;
 //
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.Fluids;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.Fluids;
 //
 //import reika.dragonapi.libraries.io.ReikaPacketHelper;
 //import reika.dragonapi.libraries.java.ReikaJavaLibrary;
@@ -190,8 +190,8 @@
 //                api.drawItemStack(itemRender, font, new ItemStack(Blocks.redstone_torch), 129, 31);
 //                api.drawItemStack(itemRender, font, new ItemStack(Blocks.unlit_redstone_torch), 129, 54);
 //
-//                this.drawCenteredString(font, cvt.getCVTString(true), 188, 37, 0xffffff);
-//                this.drawCenteredString(font, cvt.getCVTString(false), 188, 60, 0xffffff);
+//                this.centeredText(font, cvt.getCVTString(true), 188, 37, 0xffffff);
+//                this.centeredText(font, cvt.getCVTString(false), 188, 60, 0xffffff);
 //
 //                int dy = 17;
 //                int dx = -14;
@@ -204,7 +204,7 @@
 //                    font.draw(String.format("%d", Math.abs(cvt.getRatio())), imageWidth / 2 + 36, 31, 0xffffffff);
 //                }
 //                font.draw("Belt Ratio:", imageWidth / 2 - 32, 31, 4210752);
-//                this.drawCenteredString(font, "M", imageWidth / 2 + 102, 12, 0xffffffff);
+//                this.centeredText(font, "M", imageWidth / 2 + 102, 12, 0xffffffff);
 //                break;
 //            case AUTO:
 //                if (!input.isFocused()) {
@@ -225,8 +225,8 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(PoseStack poseStack, par1, par2, par3);
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
+//        super.extractBackground(PoseStack poseStack, par1, par2, par3);
 //
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;

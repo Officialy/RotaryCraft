@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/hsla_gearbox_16x",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/hsla_gearbox_16x",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/hsla_gearbox_16x"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/hsla_gearbox_16x",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/hsla_gearbox_16x",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/hsla_gearbox_16x",
+      "y": 270
+    }
+  }
+}

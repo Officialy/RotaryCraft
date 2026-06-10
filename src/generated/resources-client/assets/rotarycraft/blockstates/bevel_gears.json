@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/bevel_gears",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/bevel_gears",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/bevel_gears"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/bevel_gears",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/bevel_gears",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/bevel_gears",
+      "y": 270
+    }
+  }
+}

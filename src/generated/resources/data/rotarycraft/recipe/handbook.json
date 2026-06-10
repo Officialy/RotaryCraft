@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": "minecraft:paper",
+    "R": "minecraft:redstone",
+    "S": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "RSR",
+    "PPP",
+    "PPP"
+  ],
+  "result": {
+    "id": "rotarycraft:handbook"
+  }
+}

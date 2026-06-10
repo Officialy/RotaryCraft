@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass_pane",
+    "I": "rotarycraft:impeller",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "p": "rotarycraft:fluid_pipe"
+  },
+  "pattern": [
+    "SGS",
+    "pIp",
+    "PpP"
+  ],
+  "result": {
+    "id": "rotarycraft:pump"
+  }
+}

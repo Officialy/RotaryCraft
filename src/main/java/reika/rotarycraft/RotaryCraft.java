@@ -13,12 +13,12 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.eventbus.api.IEventBus;
-import net.neoforged.fml.DistExecutor;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import reika.dragonapi.DragonAPI;
@@ -76,9 +76,8 @@ public class RotaryCraft extends DragonAPIMod {
         return config.getConfigFolder();
     }
 
-    public RotaryCraft() {
+    public RotaryCraft(final IEventBus modEventBus, final ModContainer modContainer) {
         this.startTiming(LoadProfiler.LoadPhase.PRELOAD);
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         instance = this;
 
         this.basicSetup();
@@ -87,11 +86,14 @@ public class RotaryCraft extends DragonAPIMod {
         config.initProps();
 
         modEventBus.addListener(this::commonSetup);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            // Client setup
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             modEventBus.addListener(this::clientSetup);
+            modEventBus.addListener(this::registerScreens);
             RotaryModelLayers.init(modEventBus);
-        });
+            // 26.1: register our no-depth-test pipeline used by IORenderer so input/output
+            // cubes stay visible even when they sit behind the host block.
+            reika.rotarycraft.renders.RotaryRenderPipelines.register(modEventBus);
+        }
         LOGGER.info("RotaryCraft:" + " Creating Blocks!");
         RotaryBlocks.BLOCKS.register(modEventBus);
 
@@ -177,24 +179,34 @@ public class RotaryCraft extends DragonAPIMod {
     public void clientSetup(final FMLClientSetupEvent event) {
         sounds.register();
         LOGGER.info(SoundRegistry.PULSEJET.getPath());
-        MenuScreens.register(RotaryMenus.STEAM_ENGINE.get(), SteamScreen::new);
-        MenuScreens.register(RotaryMenus.GEARBOX.get(), GearboxScreen::new);
-        MenuScreens.register(RotaryMenus.RESERVOIR.get(), ReservoirScreen::new);
-        MenuScreens.register(RotaryMenus.BEVEL.get(), GuiBevel::new);
-        MenuScreens.register(RotaryMenus.SORTER.get(), GuiSorter::new);
-        MenuScreens.register(RotaryMenus.BLOWER.get(), GuiBlower::new);
-        MenuScreens.register(RotaryMenus.LANDMINE.get(), GuiLandmine::new);
-        MenuScreens.register(RotaryMenus.PERFORMANCE_ENGINE.get(), GuiPerformance::new);
-        MenuScreens.register(RotaryMenus.WINDER.get(), WinderScreen::new);
-        MenuScreens.register(RotaryMenus.BIG_FURNACE.get(), GuiBigFurnace::new);
-        MenuScreens.register(RotaryMenus.HAND_CRAFT.get(), GuiHandCraft::new);
-        MenuScreens.register(RotaryMenus.MUSIC.get(), GuiMusic::new);
-        MenuScreens.register(RotaryMenus.GRINDER.get(), GuiGrinder::new);
-        MenuScreens.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
-        MenuScreens.register(RotaryMenus.BLAST_FURNACE.get(), GuiBlastFurnace::new);
 
         RotaryRenders.registerBlockColors();
         event.enqueueWork(RotaryRenders::registerRenderLayers);
+    }
+
+    // 1.21.5: MenuScreens.register is now private; screen registration moved to RegisterMenuScreensEvent.
+    public void registerScreens(final net.neoforged.neoforge.client.event.RegisterMenuScreensEvent event) {
+        event.register(RotaryMenus.STEAM_ENGINE.get(), SteamScreen::new);
+        event.register(RotaryMenus.GEARBOX.get(), GearboxScreen::new);
+        event.register(RotaryMenus.RESERVOIR.get(), ReservoirScreen::new);
+        event.register(RotaryMenus.BEVEL.get(), GuiBevel::new);
+        event.register(RotaryMenus.SORTER.get(), GuiSorter::new);
+        event.register(RotaryMenus.BLOWER.get(), GuiBlower::new);
+        event.register(RotaryMenus.LANDMINE.get(), GuiLandmine::new);
+        event.register(RotaryMenus.PERFORMANCE_ENGINE.get(), GuiPerformance::new);
+        event.register(RotaryMenus.WINDER.get(), WinderScreen::new);
+        event.register(RotaryMenus.BIG_FURNACE.get(), GuiBigFurnace::new);
+        event.register(RotaryMenus.HAND_CRAFT.get(), GuiHandCraft::new);
+        event.register(RotaryMenus.MUSIC.get(), GuiMusic::new);
+        event.register(RotaryMenus.GRINDER.get(), GuiGrinder::new);
+        event.register(RotaryMenus.FRACTIONATOR.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiFractionator::new);
+        event.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
+        event.register(RotaryMenus.MICRO_TURBINE.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiMicroTurbine::new);
+        event.register(RotaryMenus.BLAST_FURNACE.get(), GuiBlastFurnace::new);
+        event.register(RotaryMenus.WORKTABLE.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiWorktable::new);
+        // 26.1: jet engine had no screen registration — right-clicking did nothing. Wire it to
+        // the new GuiJetEngine which mirrors the microturbine fuel-bar layout.
+        event.register(RotaryMenus.JET.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiJetEngine::new);
     }
 
     @Override
@@ -209,3 +221,5 @@ public class RotaryCraft extends DragonAPIMod {
 
 
 }
+
+

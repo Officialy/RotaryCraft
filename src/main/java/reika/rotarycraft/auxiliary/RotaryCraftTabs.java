@@ -4,42 +4,57 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.eventbus.api.IEventBus;
-import net.neoforged.eventbus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.registries.DeferredRegister;
-import net.neoforged.registries.RegistryObject;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
-@Mod.EventBusSubscriber(modid = RotaryCraft.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+// 1.21.5: EventBusSubscriber no longer has a `bus` parameter — the mod bus is the only target.
+@EventBusSubscriber(modid = RotaryCraft.MODID)
 public class RotaryCraftTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, RotaryCraft.MODID);
 
-    public static final RegistryObject<CreativeModeTab> ROTARYCRAFT = CREATIVE_MODE_TABS.register("rotarycraft", () ->
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ROTARYCRAFT = CREATIVE_MODE_TABS.register("rotarycraft", () ->
             CreativeModeTab.builder()
                     .title(Component.translatable("tab.rotarycraft"))
                     .icon(() -> new ItemStack(RotaryItems.HSLA_STEEL_GEAR.get()))
                     .build());
 
-    public static final RegistryObject<CreativeModeTab> ROTARYCRAFT_TRANSMISSION = CREATIVE_MODE_TABS.register("transmission", () ->
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ROTARYCRAFT_TRANSMISSION = CREATIVE_MODE_TABS.register("transmission", () ->
             CreativeModeTab.builder()
                     .title(Component.translatable("tab.rotarycraft.transmission"))
                     .icon(() -> new ItemStack(RotaryItems.DIAMOND_SHAFT.get()))
                     .build());
 
-    public static final RegistryObject<CreativeModeTab> ROTARYCRAFT_TOOLS = CREATIVE_MODE_TABS.register("tools", () ->
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ROTARYCRAFT_TOOLS = CREATIVE_MODE_TABS.register("tools", () ->
             CreativeModeTab.builder()
                     .title(Component.translatable("tab.rotarycraft.tools"))
                     .icon(() -> new ItemStack(RotaryItems.BEDROCK_ALLOY_PICK.get()))
                     .build());
 
-    public static final RegistryObject<CreativeModeTab> ROTARY_ORES = CREATIVE_MODE_TABS.register("ores", () ->
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ROTARY_ORES = CREATIVE_MODE_TABS.register("ores", () ->
             CreativeModeTab.builder()
                     .title(Component.translatable("tab.rotarycraft.ores"))
                     .icon(() -> new ItemStack(RotaryItems.TUNGSTEN_FLAKES.get()))
+                    .build());
+
+    /**
+     * Catch-all tab: every block (machine, transmission part, deco) and every item registered
+     * by RotaryCraft. Populated by enumerating {@link RotaryBlocks#BLOCKS} and {@link RotaryItems#ITEMS}
+     * at content-build time, so future additions show up automatically without having to be
+     * remembered in the hand-curated tabs above. Useful for testing / creative play — saves
+     * having to {@code /give} every machine before placing it.
+     */
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ROTARYCRAFT_ALL = CREATIVE_MODE_TABS.register("all", () ->
+            CreativeModeTab.builder()
+                    .title(Component.translatable("tab.rotarycraft.all"))
+                    .icon(() -> new ItemStack(RotaryItems.HANDBOOK.get()))
                     .build());
 
     public static void register(IEventBus modEventBus) {
@@ -258,6 +273,31 @@ public class RotaryCraftTabs {
         if (event.getTab() == ROTARY_ORES.get()) {
             event.accept(RotaryItems.DIAMOND_FLAKES.get());
             event.accept(RotaryItems.TUNGSTEN_FLAKES.get());
+        }
+
+        if (event.getTab() == ROTARYCRAFT_ALL.get()) {
+            // Dedupe: some blocks (e.g. CANOLA registered via {@code registerBlockOnly}) have an
+            // explicit item declared in RotaryItems (CANOLA_SEEDS is the BlockItem for CANOLA),
+            // so the same Item is reachable through both registries. NeoForge throws
+            // "Itemstack already exists in the tab's list" on a duplicate accept, so we route
+            // every candidate through a single seen-set.
+            java.util.HashSet<net.minecraft.world.item.Item> seen = new java.util.HashSet<>();
+            // Every registered block that has a BlockItem. Skips blocks registered through
+            // registerBlockOnly that don't have an associated Item (BEDROCK, BEDROCKSLICE,
+            // fluid blocks) — asItem() returns Items.AIR for those.
+            for (var holder : RotaryBlocks.BLOCKS.getEntries()) {
+                var asItem = holder.get().asItem();
+                if (asItem != Items.AIR && seen.add(asItem)) {
+                    event.accept(asItem);
+                }
+            }
+            // Every registered item.
+            for (var holder : RotaryItems.ITEMS.getEntries()) {
+                var item = holder.get();
+                if (seen.add(item)) {
+                    event.accept(item);
+                }
+            }
         }
     }
 

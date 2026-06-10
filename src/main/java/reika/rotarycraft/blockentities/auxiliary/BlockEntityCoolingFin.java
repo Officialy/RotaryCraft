@@ -91,7 +91,7 @@ public class BlockEntityCoolingFin extends RotaryCraftBlockEntity implements Tem
             ticks -= 8;
         this.getTargetSide(world, pos, dir);
         BlockEntity te = world.getBlockEntity(new BlockPos(targetx, targety, targetz));
-        /*if (!world.isClientSide) {
+        /*if (!world.isClientSide()) {
             if (ModList.IC2.isLoaded() && (te instanceof IReactor || te instanceof IReactorChamber)) {
                 this.coolIC2Reactor(world, pos, te);
             }
@@ -188,7 +188,7 @@ public class BlockEntityCoolingFin extends RotaryCraftBlockEntity implements Tem
                 targetz = pos.getZ() - 1;
             }
             case EAST -> {
-                targetx = pos.getX() - 1;
+                targetx = pos.getX() + 1;
                 targety = pos.getY();
                 targetz = pos.getZ();
             }
@@ -198,7 +198,7 @@ public class BlockEntityCoolingFin extends RotaryCraftBlockEntity implements Tem
                 targetz = pos.getZ() + 1;
             }
             case WEST -> {
-                targetx = pos.getX() + 1;
+                targetx = pos.getX() - 1;
                 targety = pos.getY();
                 targetz = pos.getZ();
             }
@@ -236,7 +236,23 @@ public class BlockEntityCoolingFin extends RotaryCraftBlockEntity implements Tem
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
+        /* 26.1-lifecycle */ super.updateEntity(); // BlockEntityBase lifecycle: ticksExisted/sync/onFirstTick.
 
+        // 26.1 fix: previously this body was empty — the cooling logic lived only in the
+        // 3-arg {@code updateEntity(Level, BlockPos, Direction)}, but the ticker registered in
+        // {@link reika.rotarycraft.base.blocks.entity.BlockCoolingFin#getTicker} calls the
+        // 2-arg form. So the fin never cooled anything: user reported "doesn't cool things
+        // down". Route through to the 3-arg implementation here, using the block's FACING
+        // property to derive which adjacent BE to cool. FACING is the direction the cooling
+        // surface points AT (i.e. the target side), matching the legacy interpretation.
+        net.minecraft.world.level.block.state.BlockState state = this.getBlockState();
+        net.minecraft.core.Direction dir;
+        if (state != null && state.hasProperty(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
+            dir = state.getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING);
+        } else {
+            dir = net.minecraft.core.Direction.NORTH; // safe default
+        }
+        this.updateEntity(level, blockPos, dir);
     }
 
     @Override
@@ -260,9 +276,9 @@ public class BlockEntityCoolingFin extends RotaryCraftBlockEntity implements Tem
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        ticks = NBT.getInt("tick");
-        setting = FinSettings.list[NBT.getInt("setting")];
-        temperature = NBT.getInt("temp");
+        ticks = NBT.getIntOr("tick", 0);
+        setting = FinSettings.list[NBT.getIntOr("setting", 0)];
+        temperature = NBT.getIntOr("temp", 0);
     }
 
     @Override

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:aluminum_alloy_cylinder",
+    "G": "rotarycraft:hsla_steel_gear_2x",
+    "I": "rotarycraft:impeller",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:ignition_unit",
+    "r": "rotarycraft:radiator",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "CrC",
+    "SGs",
+    "PIP"
+  ],
+  "result": {
+    "id": "rotarycraft:performance_engine"
+  }
+}

@@ -86,7 +86,7 @@ public class RotaryAux {
     public static boolean canHarvestSteelMachine(Player ep) {
         if (ep.isCreative())
             return false;
-        ItemStack eitem = ep.getInventory().getSelected();
+        ItemStack eitem = ep.getInventory().getSelectedItem();
         return eitem != null;
 //        if (TinkerToolHandler.getInstance().isHammer(eitem))
 //            return false;
@@ -338,7 +338,7 @@ public class RotaryAux {
     //not needed anymore as theres a new registry for each type of shaft
     public static ItemStack getShaftCrossItem() {
         ItemStack is = new ItemStack(RotaryBlocks.SHAFT_CROSS.get());
-        //is.getOrCreateTag().putBoolean("cross", true);
+        //is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putBoolean("cross", true);
         return is;
     }
 

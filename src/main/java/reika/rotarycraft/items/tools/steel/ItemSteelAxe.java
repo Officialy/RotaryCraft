@@ -24,16 +24,13 @@ import reika.rotarycraft.registry.RotaryItems;
 public class ItemSteelAxe extends AxeItem {
 
     public ItemSteelAxe() {
-        super(Tiers.IRON, 5.0F, -3.0F, (new Item.Properties()).durability(600));
-        //this.setHarvestLevel("axe", Tiers.IRON.getHarvestLevel());
+        super(ToolMaterial.IRON, 5.0F, -3.0F, RotaryItems.itemProperties().durability(600));
+        //this.setHarvestLevel("axe", ToolMaterial.IRON.getHarvestLevel());
     }
 
-    @Override
+    // 1.21.5: Item.canAttackBlock was removed; harvestability is now block-side via Tool component.
     public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-        if (ConfigRegistry.HSLAHARVEST.getState() && state.getDestroySpeed(level, pos) < 20 && this.getDestroySpeed(this.getDefaultInstance(), state) > 1) {
-            return true;
-        } else
-            return Items.IRON_AXE.canAttackBlock(state, level, pos, player);
+        return ConfigRegistry.HSLAHARVEST.getState() && state.getDestroySpeed(level, pos) < 20 && this.getDestroySpeed(this.getDefaultInstance(), state) > 1;
     }
 
     @Override
@@ -44,7 +41,7 @@ public class ItemSteelAxe extends AxeItem {
         return amt > 1 ? amt * 1.2F : 1;
     }
 
-    @Override
+    // 1.21.5: Item.isValidRepairItem replaced by Properties.repairable(...); kept as a helper.
     public boolean isValidRepairItem(ItemStack tool, ItemStack item) {
         return tool.getItem() == this && ReikaItemHelper.matchStacks(item, RotaryItems.HSLA_STEEL_INGOT);
     }

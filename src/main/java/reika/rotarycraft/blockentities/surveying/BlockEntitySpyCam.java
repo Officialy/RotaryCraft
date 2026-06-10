@@ -113,7 +113,7 @@
 //                int topy = ReikaWorldHelper.findTopBlockBelowY(world, x + i, y, z + j);
 //                topY[i + range][j + range] = topy;
 //                Block b = world.getBlockState(new BlockPos(pos.getX() + i, topy, pos.getZ() + j)).getBlock();
-//                if (world.isClientSide)
+//                if (world.isClientSide())
 //                    topBlocks[(i + range)][j + range] = new BlockKey(b);
 //                if (world.getBlockState(new BlockPos(pos.getX() + i, pos.getY(), pos.getZ() + j)).getBlock() != Blocks.AIR) {
 //                    //topBlocks[(i+range)][j+range] = 0;

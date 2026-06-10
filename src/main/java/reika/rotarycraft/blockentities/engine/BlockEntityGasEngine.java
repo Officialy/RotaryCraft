@@ -20,9 +20,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.FluidType;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.auxiliary.interfaces.UpgradeableMachine;
@@ -51,7 +51,7 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
         te.load(NBT);
         this.syncAllData(true);
         te.syncAllData(true);
-        level.blockUpdated(worldPosition, getBlockState().getBlock());
+        level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
     }
 
     public boolean canUpgradeWith(ItemStack item) {
@@ -125,16 +125,6 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
     @Override
     public int getAmbientTemperature() {
         return 0;
-    }
-
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
-
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
     }
 
 

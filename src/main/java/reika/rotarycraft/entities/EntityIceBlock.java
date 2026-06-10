@@ -9,14 +9,19 @@
  ******************************************************************************/
 package reika.rotarycraft.entities;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class EntityIceBlock extends Entity {
 
@@ -30,11 +35,10 @@ public class EntityIceBlock extends Entity {
         super(EntityType.BAT, world);
     }
 
-
     public EntityIceBlock(Level world, LivingEntity t) {
         super(EntityType.BAT, world);
         if (t == null) {
-            this.kill();
+            if (world instanceof ServerLevel sl) this.kill(sl);
             return;
         }
         target = t;
@@ -44,8 +48,11 @@ public class EntityIceBlock extends Entity {
         xWidth = target.getBbWidth() + 0.15;
         zWidth = target.getBbWidth() + 0.15;
         yWidth = target.getBbHeight() + 0.375;
-        //rotationPitch = target.rotationPitch;
-        //rotationYaw = -target.rotationYawHead;
+    }
+
+    @Override
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, net.minecraft.world.damagesource.DamageSource source, float amount) {
+        return false;
     }
 
     @Override
@@ -54,7 +61,7 @@ public class EntityIceBlock extends Entity {
         if (target == null)
             return;
         if (!target.isAlive()) {
-            this.kill();
+            if (this.level() instanceof ServerLevel sl) this.kill(sl);
             return;
         }
         xo = target.getX();
@@ -63,46 +70,24 @@ public class EntityIceBlock extends Entity {
         xWidth = target.getBbWidth() + 0.15;
         zWidth = target.getBbWidth() + 0.15;
         yWidth = target.getBbHeight() + 0.375;
-        //height = (float) yWidth; todo fix width and height
-        //width = (float) xWidth;
-        //rotationPitch = target.rotationPitch;
-        //rotationYaw = -target.rotationYawHead;
     }
 
     @Override
-    protected void defineSynchedData() {
-
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        xWidth = nbt.getDouble("xw");
-        yWidth = nbt.getDouble("yw");
-        zWidth = nbt.getDouble("zw");
+    protected AABB makeBoundingBox(Vec3 pos) {
+        return new AABB(pos.x, pos.y, pos.z, pos.x + xWidth, pos.y + yWidth, pos.z + zWidth);
     }
 
-    @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag nbt = new CompoundTag();
-        nbt.putDouble("xw", xWidth);
-        nbt.putDouble("yw", yWidth);
-        nbt.putDouble("zw", zWidth);
-        return nbt;
-    }
-
-    @Override
-    protected AABB makeBoundingBox() {
-        return new AABB(getX(), getY(), getZ(), getX() + xWidth, getY() + yWidth, getZ() + zWidth);
-    }
-
-    @Override
     public boolean canBeCollidedWith() {
         return isAlive();
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return super.getAddEntityPacket();
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return super.getAddEntityPacket(serverEntity);
     }
 
     @Override
@@ -111,12 +96,16 @@ public class EntityIceBlock extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-
+    protected void readAdditionalSaveData(ValueInput input) {
+        xWidth = input.getDoubleOr("xw", 0);
+        yWidth = input.getDoubleOr("yw", 0);
+        zWidth = input.getDoubleOr("zw", 0);
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
-
+    protected void addAdditionalSaveData(ValueOutput output) {
+        output.putDouble("xw", xWidth);
+        output.putDouble("yw", yWidth);
+        output.putDouble("zw", zWidth);
     }
 }

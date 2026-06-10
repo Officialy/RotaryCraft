@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SGS",
+    "SGS",
+    "SGS"
+  ],
+  "result": {
+    "id": "rotarycraft:fluid_pipe"
+  }
+}

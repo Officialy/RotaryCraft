@@ -121,7 +121,7 @@
 //    public void updateEntity(Level world, BlockPos pos) {
 //        super.updateBlockEntity();
 //
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //
 //        this.getIOSidesDefault(world, pos);
@@ -188,7 +188,7 @@
 //
 //    private Collection<ItemStack> runHandler(DropProcessing dp, ItemStack in) {
 //        try {
-//            int fortune = enchantments.getEnchantment(Enchantments.BLOCK_FORTUNE);
+//            int fortune = enchantments.getEnchantment(Enchantments.FORTUNE);
 //            Player ep = this.getPlacer();
 //            return dp.generateItems(level, getPos(), fortune, ep, DragonAPI.rand, in);
 //        } catch (Exception e) {
@@ -254,9 +254,9 @@
 //    public void load(CompoundTag NBT) {
 //        super.load(NBT);
 //
-//        enchantments.load(NBT.getList("enchants", NBTTypes.COMPOUND.ID));
+//        enchantments.load(NBT.getListOrEmpty("enchants"));
 //
-//        ListTag li = NBT.getList("extra", NBTTypes.COMPOUND.ID);
+//        ListTag li = NBT.getListOrEmpty("extra");
 //        overflow.clear();
 //        for (Object o : li) {
 //            CompoundTag tag = (CompoundTag) o;
@@ -290,7 +290,7 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        dropProcessTime = NBT.getShort("CookTime");
+//        dropProcessTime = NBT.getShortOr("CookTime", (short)0);
 //    }
 //
 //    @Override
@@ -496,7 +496,7 @@
 //            ArrayList<ItemStack> c = new ArrayList<>();
 //            for (ItemStack is : map.keySet()) {
 //                ItemStack is2 = is.copy();
-//                is2.getOrCreateTag().putString("dropTooltip", map.get(is) * 100 + "%");
+//                is2.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putString("dropTooltip", map.get(is) * 100 + "%");
 //                c.add(is2);
 //            }
 //            return c;
@@ -592,7 +592,7 @@
 //                        throw new InstallationException(ModList.THAUMCRAFT.getDisplayName(), "You have specified a null item in the TC loot bags! Check your configs or MT scripts!");
 //                    }
 //                    ItemStack is = w.item.copy();
-//                    is.getOrCreateTag().putString("dropTooltip", String.valueOf(100F * w.itemWeight / totalWeight) + "%");
+//                    is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putString("dropTooltip", String.valueOf(100F * w.itemWeight / totalWeight) + "%");
 //                    li.add(is);
 //                }
 //            }
@@ -604,7 +604,7 @@
 //                            Item tool = (Item) getToolLoot.invoke(null, slot, quality);
 //                            float ch = toolc * 0.2F * (1 + 1F / quality);
 //                            ItemStack is = new ItemStack(tool);
-//                            is.getOrCreateTag().putString("dropTooltip", "~" + 100F * ch + "%");
+//                            is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putString("dropTooltip", "~" + 100F * ch + "%");
 //                            li.add(is);
 //                        }
 //                    }

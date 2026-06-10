@@ -24,7 +24,7 @@
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.phys.AABB;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.Interpolation;
@@ -115,8 +115,8 @@
 //
 //    @Override
 //    public void setDataFromPlacer(ItemStack is) {
-//        if (is.getTag() != null) {
-//            bedrock = is.getTag().getBoolean("bed");
+//        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
+//            bedrock = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getBooleanOr("bed", false);
 //        }
 //    }
 //
@@ -296,7 +296,7 @@
 //            }
 //        }
 //        if (!failed && !lubricant.isEmpty() && omega > 0) {
-//            if (world.getDayTime() % 10 == 0)
+//            if (world.getOverworldClockTime() % 10 == 0)
 //                lubricant.removeLiquid(1);
 //        }
 //    }
@@ -527,11 +527,11 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        failed = NBT.getBoolean("fail");
-//        bedrock = NBT.getBoolean("bedrock");
+//        failed = NBT.getBooleanOr("fail", false);
+//        bedrock = NBT.getBooleanOr("bedrock", false);
 //
 //        if (NBT.contains("stream"))
-//            streamData = StreamPowerData.load(NBT.getCompound("stream"));
+//            streamData = StreamPowerData.load(NBT.getCompoundOrEmpty("stream"));
 //    }
 //
 //    @Override
@@ -722,14 +722,14 @@
 //                return null;
 //            BlockPos eng = BlockPos.load("engine", tag);
 //            BlockPos water = BlockPos.load("water", tag);
-//            double vel = tag.getDouble("velocity");
+//            double vel = tag.getDoubleOr("velocity", 0);
 //            StreamPowerData ret = new StreamPowerData(eng, water, vel);
-//            ret.localDepth = tag.getInt("depth");
-//            ret.localWidth = tag.getInt("width");
-//            ret.powerFactor = tag.getDouble("power");
-//            ret.torque = tag.getInt("torque");
-//            ret.omega = tag.getInt("omega");
-//            ret.gameInstance = tag.getLong("time");
+//            ret.localDepth = tag.getIntOr("depth", 0);
+//            ret.localWidth = tag.getIntOr("width", 0);
+//            ret.powerFactor = tag.getDoubleOr("power", 0);
+//            ret.torque = tag.getIntOr("torque", 0);
+//            ret.omega = tag.getIntOr("omega", 0);
+//            ret.gameInstance = tag.getLongOr("time", 0L);
 //            return ret;
 //        }
 //

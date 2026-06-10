@@ -174,8 +174,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
         return true; // Assume default bevel gear behavior inverts rotation
     }
 
-    @Override
-    public void updateBlockEntity() {
+    private void doBevelGearTick() {
         super.updateBlockEntity();
 
         if (level.getGameTime() % 10 == 0) {
@@ -237,7 +236,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
 
     @Override
     protected void transferPower(Level world, BlockPos pos) {
-        if (world.isClientSide && !RotaryAux.getPowerOnClient)
+        if (world.isClientSide() && !RotaryAux.getPowerOnClient)
             return;
 
         this.getIOSides(); // Ensure I/O sides are set before power transfer
@@ -322,7 +321,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
 
-        direction = tag.getInt("posn");
+        direction = tag.getIntOr("posn", 0);
         //Try to preserve the directionality after the system was changed:
         if (!tag.contains("posn"))
             direction = directions.inverse().get(new ImmutablePair(read, write));
@@ -336,7 +335,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
     @Override
     public void load(CompoundTag NBT) {
         super.load(NBT);
-        direction = NBT.getInt("direction");
+        direction = NBT.getIntOr("direction", 0);
     }
     @Override
     protected String getTEName() {
@@ -355,8 +354,7 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
-        // This method is required by the abstract base class
-        // The actual update logic is handled in updateBlockEntity()
+        this.doBevelGearTick();
     }
 
     @Override

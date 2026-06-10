@@ -1,0 +1,6 @@
+{
+  "message_id": "machine",
+  "scaling": "always",
+  "exhaustion": 0.1,
+  "effects": "hurt"
+}

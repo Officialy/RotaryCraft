@@ -22,17 +22,17 @@ import java.util.List;
 public class ItemDisk extends ItemRotaryTool implements MusicDataItem {
 
     public ItemDisk() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
 
     public void addInformation(ItemStack is, Player ep, List li, boolean par4) {
-        if (is.getTag() == null)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
             return;
         li.add("Contains stored music:");
         for (int i = 0; i < 16; i++) {
-            if (is.getTag().contains("ch" + i)) {
-                ListTag track = is.getTag().getList("ch" + i, Tag.TAG_COMPOUND);
+            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("ch" + i)) {
+                ListTag track = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
                 if (track.size() > 0)
                     li.add("Track " + i + ": " + track.size() + " entries");
             }
@@ -44,10 +44,10 @@ public class ItemDisk extends ItemRotaryTool implements MusicDataItem {
         MusicScore mus = new MusicScore(16);
         int[] pos = new int[16];
         for (int i = 0; i < 16; i++) {
-            if (is.getTag().contains("ch" + i)) {
-                ListTag li = is.getTag().getList("ch" + i, Tag.TAG_COMPOUND);
+            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("ch" + i)) {
+                ListTag li = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
 //                for (int k = 0; k < li.size(); k++) {
-//                    CompoundTag nbt = li.getCompound(k);
+//                    CompoundTag nbt = li.getCompoundOrEmpty(k);
 //                    //ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Dist.DEDICATED_SERVER);
 //                    BlockEntityMusicBox.Note n = BlockEntityMusicBox.Note.load(nbt);
 //                    if (!n.isRest())

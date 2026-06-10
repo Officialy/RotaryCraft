@@ -15,12 +15,12 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.entity.ItemRenderer;
+// 1.21.5: client ItemRenderer was rewritten; pending rewrite against ItemStackRenderState.
 import net.minecraft.network.chat.Component;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.entity.vehicle.minecart.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
@@ -480,7 +480,6 @@ public class GuiHandbook extends Screen {
 //
 //        if (HandbookNotifications.instance.newAlerts() || PackModificationTracker.instance.modificationsExist(RotaryCraft.getInstance())) {
 //            ReikaTextureHelper.bindFinalTexture(DragonAPI.class, "resources/warning.png");
-//            RenderSystem.enableBlend();
 //            Tesselator tess = Tesselator.getInstance();
 //			BufferBuilder v5 = tess.getBuilder();
 //            int x = posX + 257;
@@ -493,7 +492,6 @@ public class GuiHandbook extends Screen {
 //            v5.addVertexWithUV(x + 24, y, 0, 1, 0);
 //            v5.addVertexWithUV(x, y, 0, 0, 0);
 //            v5.draw();
-//            RenderSystem.disableBlend();
 //
 //            int i = Mouse.getX() * width / mc.displayWidth;
 //            int j = height - Mouse.getY() * height / mc.displayHeight - 1;
@@ -520,7 +518,7 @@ public class GuiHandbook extends Screen {
 //            int dy = y - k;
 //            if (HandbookNotifications.instance.newAlerts() || PackModificationTracker.instance.modificationsExist(RotaryCraft.getInstance())) {
 //                if (ReikaMathLibrary.isValueInsideBoundsIncl(261, 377, dx) && ReikaMathLibrary.isValueInsideBoundsIncl(22, 36, dy)) {
-//                    minecraft.getSoundManager().play(PositionedSoundRecord.func_147674_a(ResourceLocation.parse("gui.button.press"), 1.0F));
+//                    minecraft.getSoundManager().play(PositionedSoundRecord.func_147674_a(Identifier.parse("gui.button.press"), 1.0F));
 //                    int screen = -1;
 //                    int page = -1;
 //
@@ -743,9 +741,7 @@ public class GuiHandbook extends Screen {
 //        y -= 8 * Math.sin(Math.abs(Math.toRadians(renderq)));
 //
 //        if (h.hasMachineRender()) {
-//            RenderSystem.enableBlend();
 //            this.doRenderMachine(x, y, h);
-//            RenderSystem.disableBlend();
 //        }
 //    }
 }

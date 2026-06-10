@@ -11,7 +11,7 @@ package reika.rotarycraft.items.tools.charged;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import reika.rotarycraft.base.ItemChargedTool;
 import net.minecraft.world.entity.player.Player;
@@ -25,9 +25,9 @@ public class ItemFlamethrower extends ItemChargedTool {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player ep, InteractionHand hand) {
+    public InteractionResult use(Level level, Player ep, InteractionHand hand) {
         //ep.setItemInUse(is, this.getMaxItemUseDuration(ep.getMainHandItem()));
-        return InteractionResultHolder.pass(this.getDefaultInstance());
+        return InteractionResult.PASS;
     }
 
     /**
@@ -49,8 +49,9 @@ public class ItemFlamethrower extends ItemChargedTool {
      *
      * @param pStack
      */
+    // 1.21.5: getUseDuration signature is now (ItemStack, LivingEntity).
     @Override
-    public int getUseDuration(ItemStack pStack) {
+    public int getUseDuration(ItemStack pStack, net.minecraft.world.entity.LivingEntity user) {
         return 7200;
     }
 

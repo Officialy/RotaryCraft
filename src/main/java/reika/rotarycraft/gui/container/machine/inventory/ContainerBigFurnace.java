@@ -12,8 +12,6 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.items.SlotItemHandler;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
@@ -34,14 +32,13 @@ public class ContainerBigFurnace extends IOMachineContainer<BlockEntityLavaSmelt
 
         int dx = 18;
         int dy = 21;
-        te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
-            for (int i = 0; i < te.getNumberInputSlots(); i++) {
-                int row = i % 9;
-                int col = i / 9;
-                Slot slot = new SlotItemHandler(itemHandler, i, 8 + row * dx, 18 + col * dy);
-                this.addSlot(slot);
-            }
-        });
+        // 1.21.5: wire slots directly against the BE's ManagedItemHandler (InventoriedPowerLiquidReceiver
+        // exposes `itemHandler` publicly). Replaces the old ForgeCapabilities.ITEM_HANDLER lookup.
+        for (int i = 0; i < te.getNumberInputSlots(); i++) {
+            int row = i % 9;
+            int col = i / 9;
+            this.addSlot(te.itemHandler.slot(i, 8 + row * dx, 18 + col * dy));
+        }
 
         for (int i = 0; i < te.getNumberInputSlots(); i++) {
             int row = i % 9;

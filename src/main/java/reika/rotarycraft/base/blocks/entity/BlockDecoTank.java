@@ -81,8 +81,8 @@
 //
 //            if (f != null) {
 //                is.put(new CompoundTag());
-//                ReikaNBTHelper.writeFluidToNBT(is.getTag(), f);
-//                is.getTag().putInt("level", BlockItemDecoTank.FILL);
+//                ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), f);
+//                is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("level", BlockItemDecoTank.FILL);
 //            }
 //
 //            int dropmeta = 0;

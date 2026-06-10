@@ -29,4 +29,7 @@ public class BlockPerformanceEngine extends BlockBasicMachine {
             ((BlockEntityPerformanceEngine) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

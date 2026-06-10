@@ -1,0 +1,7 @@
+{
+  "type": "rotarycraft:grinder",
+  "input": "minecraft:cobblestone",
+  "output": {
+    "id": "minecraft:gravel"
+  }
+}

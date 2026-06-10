@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -22,13 +22,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.fluids.ForgeFlowingFluid;
+import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.Random;
 
-public abstract class HslaFluid extends ForgeFlowingFluid {
+public abstract class HslaFluid extends BaseFlowingFluid {
 
     protected HslaFluid(Properties properties) {
         super(properties);
@@ -116,7 +116,7 @@ public abstract class HslaFluid extends ForgeFlowingFluid {
 
     @Override
     public boolean canBeReplacedWith(FluidState state, BlockGetter world, BlockPos pos, Fluid fluid, Direction direction) {
-        return direction == Direction.DOWN && !fluid.is(FluidTags.create(ResourceLocation.parse("molten_metal")));
+        return direction == Direction.DOWN && !fluid.is(FluidTags.create(Identifier.parse("molten_metal")));
     }
 
     @Override
@@ -149,7 +149,7 @@ public abstract class HslaFluid extends ForgeFlowingFluid {
 
     public static class Source extends HslaFluid {
 
-        public Source(ForgeFlowingFluid.Properties properties) {
+        public Source(BaseFlowingFluid.Properties properties) {
             super(properties);
         }
 

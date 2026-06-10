@@ -13,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -28,14 +27,14 @@ import reika.rotarycraft.base.ItemRotaryTool;
 public class ItemEthanolMinecart extends ItemRotaryTool {
 
     public ItemEthanolMinecart() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         //EntityGasMinecart cart = new EntityGasMinecart(level, player.blockPosition().getX() + 0.5, player.blockPosition().getY() + 0.5, player.blockPosition().getZ() + 0.5);
         //level.addFreshEntity(cart);
-        return InteractionResultHolder.pass(player.getItemInHand(hand));
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -47,15 +46,16 @@ public class ItemEthanolMinecart extends ItemRotaryTool {
             return InteractionResult.FAIL;
         } else {
             ItemStack itemstack = useOnContext.getItemInHand();
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 RailShape railshape = blockstate.getBlock() instanceof BaseRailBlock ? ((BaseRailBlock) blockstate.getBlock()).getRailDirection(blockstate, level, blockpos, null) : RailShape.NORTH_SOUTH;
                 double d0 = 0.0D;
-                if (railshape.isAscending()) {
+                // 1.21.5: RailShape.isAscending was renamed to isSlope().
+                if (railshape.isSlope()) {
                     d0 = 0.5D;
                 }
 
                 //EntityGasMinecart cart = new EntityGasMinecart(level, (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.0625D + d0, (double) blockpos.getZ() + 0.5D);
-                if (itemstack.hasCustomHoverName()) {
+                if (itemstack.has(net.minecraft.core.component.DataComponents.CUSTOM_NAME)) {
                     //    cart.setCustomName(itemstack.getHoverName());
                 }
 
@@ -64,7 +64,8 @@ public class ItemEthanolMinecart extends ItemRotaryTool {
             }
 
             itemstack.shrink(1);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            // 1.21.5: InteractionResult.sidedSuccess(boolean) was removed; return SUCCESS for both.
+            return InteractionResult.SUCCESS;
         }
     }
 }

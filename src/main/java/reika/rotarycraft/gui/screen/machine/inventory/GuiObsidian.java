@@ -11,7 +11,7 @@
 //
 //import com.mojang.blaze3d.vertex.PoseStack;
 //import net.minecraft.network.chat.Component;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.world.entity.player.Inventory;
 //import net.neoforged.client.gui.ScreenUtils;
 //import org.lwjgl.opengl.GL11;
@@ -49,8 +49,8 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack stack, float par1, int par2, int par3) {
-//        super.renderBg(stack, par1, par2, par3);
+//    public void extractBackground(PoseStack stack, float par1, int par2, int par3) {
+//        super.extractBackground(stack, par2, par3, par1);
 //
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;
@@ -90,7 +90,7 @@
 //    }
 //
 //    @Override
-//    protected ResourceLocation getGuiTexture() {
+//    protected Identifier getGuiTexture() {
 //        return "obsidiangui";
 //    }
 //}

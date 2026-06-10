@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "rotarycraft:hsla_steel_plate",
+    "G": "minecraft:glass",
+    "I": "minecraft:iron_ingot",
+    "O": "minecraft:obsidian",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "d": "minecraft:gold_ingot",
+    "g": "minecraft:glowstone"
+  },
+  "pattern": [
+    "ISO",
+    "Ggd",
+    "I#O"
+  ],
+  "result": {
+    "id": "rotarycraft:floodlight"
+  }
+}

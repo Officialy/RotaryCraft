@@ -24,9 +24,9 @@
 //import net.minecraft.world.level.material.Fluid;
 //import net.minecraft.world.level.material.Fluids;
 //import net.neoforged.client.MinecraftForgeClient;
-//import net.neoforged.common.util.Direction;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidRegistry;
+//import net.neoforged.neoforge.common.util.Direction;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidRegistry;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
@@ -126,9 +126,7 @@
 //        Tesselator tess = Tesselator.getInstance();
 //        BufferBuilder v5 = tess.getBuilder();
 //        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-//        RenderSystem.enableBlend();
 //        GL11.glDisable(GL11.GL_CULL_FACE);
-//        RenderSystem.defaultBlendFunc();
 //        boolean flip = false;
 //
 //        stack.pushPose();
@@ -212,8 +210,6 @@
 //        if (amt <= 0)
 //            return;
 //        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
 //        double h = 0.03125 + 11.5 / 16D * amt / te.CAPACITY;
 //        Fluid f = Fluids.WATER;
 //

@@ -26,8 +26,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.auxiliary.RotaryAux;
@@ -91,7 +91,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
             dryTicks++;
         } else {
             if (dryTicks > 900 && !water.isEmpty()) {
-                level.setBlock(worldPosition, Blocks.AIR.defaultBlockState(), 1);
+                level.setBlock(worldPosition, Blocks.AIR.defaultBlockState(), 3);
                 level.explode(null, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, 6, Level.ExplosionInteraction.BLOCK);
             }
             dryTicks = 0;
@@ -153,7 +153,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     @Override
     public void overheat(Level world, BlockPos pos) {
         if (water.isEmpty()) {
-            world.setBlock(pos, Fluids.FLOWING_LAVA.defaultFluidState().createLegacyBlock(), 1);
+            world.setBlock(pos, Fluids.FLOWING_LAVA.defaultFluidState().createLegacyBlock(), 3);
             world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS,2, 1, true);
             return;
         }
@@ -187,7 +187,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        dryTicks = tag.getInt("dry");
+        dryTicks = tag.getIntOr("dry", 0);
     }
 
     @Override
@@ -230,13 +230,4 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
         return new SteamContainer(p_39954_, p_39955_, this);
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
-
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
-    }
 }

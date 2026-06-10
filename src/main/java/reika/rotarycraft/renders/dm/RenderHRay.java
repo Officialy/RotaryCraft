@@ -13,7 +13,8 @@
 //import com.mojang.blaze3d.vertex.VertexConsumer;
 //import org.joml.Vector3f;
 //import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.RenderType;
+//import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 //import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 //import net.minecraft.client.renderer.texture.OverlayTexture;
 //import org.lwjgl.opengl.GL11;
@@ -56,8 +57,8 @@
 ////            GL11.glEnable(GL11.GL_LIGHTING);
 //        }
 //
-//        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ModelHRay.TEXTURE_LOCATION));
-//        HRayModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+//        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(ModelHRay.TEXTURE_LOCATION));
+//        HRayModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 //
 //        this.closeGL(stack, tile);
 //    }

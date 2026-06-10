@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "G": "rotarycraft:hsla_steel_gear",
+    "S": "rotarycraft:hsla_steel_spring",
+    "b": "rotarycraft:hsla_steel_boots",
+    "g": "rotarycraft:hsla_steel_gear_2x"
+  },
+  "pattern": [
+    "GbG",
+    "SgS",
+    "B B"
+  ],
+  "result": {
+    "id": "rotarycraft:jump_boots"
+  }
+}

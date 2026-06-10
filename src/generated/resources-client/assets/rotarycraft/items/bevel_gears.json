@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/bevel_gears",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "bevelgears"
+    }
+  }
+}

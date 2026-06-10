@@ -18,8 +18,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
@@ -63,6 +63,7 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
         Direction dir = this.getDrainSide();
         int dx = pos.getX() + dir.getStepX();
         int dy = pos.getY() + dir.getStepY();
@@ -189,7 +190,7 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return from == Direction.DOWN ? tank.drain(maxDrain, doDrain) : null;
+        return from == Direction.DOWN ? tank.drain(maxDrain, doDrain) : FluidStack.EMPTY;
     }
     //    @Override
     public boolean canDrain(Direction from, Fluid fluid) {
@@ -214,7 +215,7 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
         super.readSyncTag(NBT);
         tank.readFromNBT(NBT);
 
-        activeTick = NBT.getInt("active");
+        activeTick = NBT.getIntOr("active", 0);
     }
 
     @Override

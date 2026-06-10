@@ -147,7 +147,7 @@
 //        double dx = v[0];
 //        double dy = v[1];
 //        double dz = v[2];
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            double y = this.getFiringPositionY(dy);
 //            world.addFreshEntity(new EntityGatlingShot(world, xCoord + 0.5 + dx, y, zCoord + 0.5 + dz, v[0], v[1], v[2], this));
 //        }
@@ -193,7 +193,7 @@
 //            return;
 //        }
 //
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            if (feedTick > 0)
 //                feedTick--;
 //            else
@@ -222,7 +222,7 @@
 //            return;
 //
 //        tickcount = 0;
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            if (target[3] == 1) {
 //                if (spinSpeed < SPIN_RATE)
 //                    spinSpeed = Math.min(spinSpeed + SPIN_DELTA, SPIN_RATE);
@@ -277,9 +277,9 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        spinAngle = NBT.getDouble("spin");
-//        feedTick = NBT.getInt("feed");
-//        reloadTimer = NBT.getInt("reload");
+//        spinAngle = NBT.getDoubleOr("spin", 0);
+//        feedTick = NBT.getIntOr("feed", 0);
+//        reloadTimer = NBT.getIntOr("reload", 0);
 //    }
 //
 //    @Override

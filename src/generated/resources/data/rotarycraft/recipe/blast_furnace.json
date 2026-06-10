@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "F": "minecraft:furnace",
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:stone"
+  },
+  "pattern": [
+    "SIS",
+    "IFI",
+    "SIS"
+  ],
+  "result": {
+    "id": "rotarycraft:blast_furnace"
+  }
+}

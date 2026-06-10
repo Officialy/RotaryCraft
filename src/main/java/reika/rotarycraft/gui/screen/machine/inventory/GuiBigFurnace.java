@@ -9,11 +9,10 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine.inventory;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.client.gui.ScreenUtils;
 
 import reika.rotarycraft.base.GuiPowerOnlyMachine;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
@@ -23,43 +22,40 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, 
     private final BlockEntityLavaSmeltery te;
 
     public GuiBigFurnace(ContainerBigFurnace container, Inventory inv, Component title) {
-        super(container, inv, title);
+        super(container, inv, title, 190, 207);
         te = (BlockEntityLavaSmeltery) inventory.player.level().getBlockEntity(container.tile.getBlockPos());
         inventory = inv;
-        imageWidth = 190;
-        imageHeight = 207;
     }
 
     /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the items)
-     */
-    protected void drawGuiContainerForegroundLayer(PoseStack stack, int a, int b) {
-
-    }
-
-    /**
-     * Draw the background layer for the GuiContainer (everything behind the items)
+     * Draw the foreground layer (temperature read-out) in gui-relative space, matching the
+     * legacy drawGuiContainerForegroundLayer. 26.1 routes this through extractLabels which is
+     * already translated by (leftPos, topPos).
      */
     @Override
-    protected void renderBg(GuiGraphics poseStack, float pPartialTick, int pX, int pY) {
-        super.renderBg(poseStack, pPartialTick, pX, pY);
-
-        int j = (width - imageWidth) / 2;
-        int k = (height - imageHeight) / 2;
-
-        int i1 = te.getCookScaled(17);
-        ScreenUtils.drawTexturedModalRect(poseStack, j + 7, k + 55, 0, 208, 162, i1, 0);
-
-//drawGuiContainerForegroundLayer
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
+    protected void extractLabels(GuiGraphicsExtractor stack, int pMouseX, int pMouseY) {
+        super.extractLabels(stack, pMouseX, pMouseY);
 
         int c = 0;
         if (te.getTemperature() >= 1000)
             c = 4;
         else if (te.getTemperature() >= 100)
             c = 2;
-        api.drawCenteredStringNoShadow(poseStack, font, te.getTemperature() + "C", imageWidth - 13 - c, 6, 4210752);
+        api.drawCenteredStringNoShadow(stack, font, te.getTemperature() + "C", imageWidth - 13 - c, 6, 4210752);
+    }
+
+    /**
+     * Draw the background layer for the GuiContainer (everything behind the items)
+     */
+    @Override
+    public void extractBackground(GuiGraphicsExtractor poseStack, int pX, int pY, float pPartialTick) {
+        super.extractBackground(poseStack, pX, pY, pPartialTick);
+
+        int j = (width - imageWidth) / 2;
+        int k = (height - imageHeight) / 2;
+
+        int i1 = te.getCookScaled(17);
+        poseStack.blit(RenderPipelines.GUI_TEXTURED, getTextureIdentifier(), j + 7, k + 55, 0, 208, 162, i1, 256, 256);
 
         if (!te.isEmpty()) {
             int i2 = te.getLavaScaled(91);
@@ -75,8 +71,6 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, 
             int my = pY;
             api.drawTooltipAt(poseStack, font, String.format("%d/%d", te.getLevel(), te.getCapacity()), mx - j, my - k);
         }
-
-
     }
 
     @Override

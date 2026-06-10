@@ -22,7 +22,7 @@ import reika.rotarycraft.base.ItemRotaryTool;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,9 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
     private static final ArrayList<Fluid> creativeFluids = new ArrayList<>();
 
     public ItemFuelTank() {
-        super(new Properties().tab(RotaryCraft.ROTARY_TOOLS));
+        // 1.21.5: Item.Properties#tab(CreativeModeTab) was removed (creative tabs now register
+        // their contents via BuildCreativeModeTabContentsEvent). Drop the obsolete call.
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     private static void addCreativeFluid(String name) {
@@ -62,7 +64,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 
     @Override
     public boolean isValidFluid(Fluid f, ItemStack is) {
-        return is.getTag() == null || f.equals(ReikaNBTHelper.getFluidFromNBT(is.getTag()));
+        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null || f.equals(ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()));
     }
 
     @Override
@@ -72,7 +74,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 
     @Override
     public int getCurrentFillLevel(ItemStack is) {
-        return is.getTag() != null ? is.getTag().getInt("fuel") : 0;
+        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("fuel", 0) : 0;
     }
 
     @Override
@@ -81,17 +83,17 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
         if (!this.isValidFluid(fs)) {
             return 0;
         }
-        if (fs.getTag() == null) {
+        if (fs.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null) {
             fs.put(new CompoundTag());
-            ReikaNBTHelper.writeFluidToNBT(fs.getTag(), fs);
+            ReikaNBTHelper.writeFluidToNBT(fs.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), fs);
         } else {
-            fuel = fs.getTag().getInt("fuel");
-            if (!fs.equals(ReikaNBTHelper.getFluidFromNBT(fs.getTag()))) {
+            fuel = fs.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("fuel", 0);
+            if (!fs.equals(ReikaNBTHelper.getFluidFromNBT(fs.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()))) {
                 return 0;
             }
         }
         int toadd = Math.min(amt, this.getCapacity(is) - fuel);
-        is.getTag().putInt("fuel", fuel + toadd);
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("fuel", fuel + toadd));
         return toadd;
     }
 
@@ -113,15 +115,15 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
     private String getDisplayTag(CompoundTag nbt) {
         Fluid f = ReikaNBTHelper.getFluidFromNBT(nbt);
         String fluid = f != null ? f.getRegistryName().toString() : "Null Fluid";
-        int amt = nbt.getInt("fuel");
+        int amt = nbt.getIntOr("fuel", 0);
         String amount = String.format("%d", amt);
         return "Contents: " + amount + " mB of " + fluid;
     }
 
     @Override
     public ItemStack onItemRightClick(ItemStack is, Level world, Player ep) {
-        if (is.getTag() != null) {
-            Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getTag());
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
+            Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag());
             int amt = this.getCurrentFillLevel(is);
             int slot = ReikaInventoryHelper.locateIDInInventory(RotaryItems.JETPACK.get(), ep.inventory);
             if (slot == -1) {
@@ -136,7 +138,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
                 int fuel = this.getCurrentFillLevel(is);
                 int added = item.addFluid(jet, f, fuel);
                 int newfuel = fuel - added;
-                is.getTag().putInt("fuel", newfuel);
+                reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("fuel", newfuel));
                 if (newfuel <= 0)
                     is.put(null);
             }
@@ -147,13 +149,13 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
     private void removeFuel(ItemStack is, int amt) {
         int newfuel = this.getCurrentFillLevel(is) - amt;
         if (newfuel > 0)
-            is.getTag().putInt("fuel", newfuel);
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("fuel", newfuel));
         else
             is.put(null);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
         MachineRegistry m = MachineRegistry.getMachine(world, pos);
         BlockEntity tile = world.getBlockEntity(pos);
         if (m == MachineRegistry.ENGINE) {
@@ -271,7 +273,7 @@ public class ItemFuelTank extends ItemRotaryTool implements Fillable {
 
     @Override
     public Fluid getCurrentFluid(ItemStack is) {
-        return is.getTag() != null ? ReikaNBTHelper.getFluidFromNBT(is.getTag()) : null;
+        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()) : null;
     }
 
 }

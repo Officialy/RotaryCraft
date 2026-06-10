@@ -36,8 +36,8 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float pPartialTick, int pX, int pY) {
-//        super.renderBg(poseStack, pPartialTick, pX, pY);
+//    public void extractBackground(PoseStack poseStack, float pPartialTick, int pX, int pY) {
+//        super.extractBackground(poseStack, pX, pY, pPartialTick);
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;
 //

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "minecraft:cobblestone",
+    "S": "minecraft:stone"
+  },
+  "pattern": [
+    "BSB",
+    "BBB"
+  ],
+  "result": {
+    "count": 8,
+    "id": "rotarycraft:stone_shaft"
+  }
+}

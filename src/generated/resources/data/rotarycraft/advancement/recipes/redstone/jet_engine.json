@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_compound_turbine": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:compound_turbine"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:jet_engine"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_compound_turbine"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:jet_engine"
+    ]
+  }
+}

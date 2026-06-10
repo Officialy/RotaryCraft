@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "I": "rotarycraft:impeller",
+    "P": "rotarycraft:fluid_pipe"
+  },
+  "pattern": [
+    "BBB",
+    "PIP",
+    "BBB"
+  ],
+  "result": {
+    "id": "rotarycraft:blower"
+  }
+}

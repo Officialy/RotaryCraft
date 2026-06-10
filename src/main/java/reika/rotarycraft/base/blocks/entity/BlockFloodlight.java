@@ -33,16 +33,15 @@ public class BlockFloodlight extends BlockBasicMachine {
         return Shapes.empty();
     }
 
-    @Override
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.MODEL;
-    }
-
-
+    // Inherited BlockBasicMachine#getRenderShape consults isCustomRendered (true → INVISIBLE);
+    // the previous explicit MODEL override here masked it and double-drew the missing-texture cube.
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
             ((BlockEntityFloodlight) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

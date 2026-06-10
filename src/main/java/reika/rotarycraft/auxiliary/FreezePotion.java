@@ -1,7 +1,7 @@
 package reika.rotarycraft.auxiliary;
 
 import net.minecraft.network.chat.Component;
-
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -11,21 +11,26 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Slime;
 
+// 1.21.5: MobEffect#addAttributeModifier now takes a ResourceLocation id and an
+// AttributeModifier.Operation enum constant (the int form was removed). MobEffects.JUMP
+// was renamed to JUMP_BOOST.
 public class FreezePotion extends MobEffect {
 
+    private static final Identifier FREEZE_SLOWDOWN_ID = Identifier.fromNamespaceAndPath("rotarycraft", "effect.freeze.slowdown");
+
     public FreezePotion(MobEffectCategory category, int color) {
-        super(category, color); //this had true, 0x289EFF);
-        this.addAttributeModifier(Attributes.MOVEMENT_SPEED, "2532FA5D-7CC8-4440-140E-514A1A162299", -10, AttributeModifier.Operation.fromValue(2));
+        super(category, color);
+        this.addAttributeModifier(Attributes.MOVEMENT_SPEED, FREEZE_SLOWDOWN_ID, -10.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
     @Override
-    public void applyEffectTick(LivingEntity e, int pAmplifier) {
-        e.addEffect(new MobEffectInstance(MobEffects.JUMP, 20, -30));
+    public boolean applyEffectTick(net.minecraft.server.level.ServerLevel level, LivingEntity e, int pAmplifier) {
+        e.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 20, -30));
         e.fallDistance = 0;
         if (e instanceof Slime) {
-            e.setJumping(false);// = Integer.MAX_VALUE;
+            e.setJumping(false);
         }
-
+        return true;
     }
 
     @Override
@@ -37,5 +42,4 @@ public class FreezePotion extends MobEffect {
     public boolean isBeneficial() {
         return false;
     }
-
 }

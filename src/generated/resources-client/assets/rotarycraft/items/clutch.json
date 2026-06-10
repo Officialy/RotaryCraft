@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/clutch",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "clutch"
+    }
+  }
+}

@@ -30,8 +30,8 @@
 //import java.util.Locale;
 //
 //import net.neoforged.common.IPlantable;
-//import net.neoforged.common.NeoForge;
-//import net.neoforged.event.entity.player.EntityItemPickupEvent;
+//import net.neoforged.neoforge.common.NeoForge;
+//import net.neoforged.neoforge.event.entity.player.EntityItemPickupEvent;
 //import reika.dragonapi.interfaces.registry.TreeType;
 //import reika.dragonapi.libraries.ReikaAABBHelper;
 //import reika.dragonapi.libraries.ReikaEnchantmentHelper;

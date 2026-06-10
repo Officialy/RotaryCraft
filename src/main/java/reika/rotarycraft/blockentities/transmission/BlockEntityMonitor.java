@@ -51,12 +51,12 @@ public class BlockEntityMonitor extends BlockEntity1DTransmitter {
 
     @Override
     protected void transferPower(Level world, BlockPos pos) {
-        if (!RotaryAux.getPowerOnClient && world.isClientSide) {
+        if (!RotaryAux.getPowerOnClient && world.isClientSide()) {
             return;
         }
         omegain = torquein = 0;
         boolean isCentered = pos.getX() == worldPosition.getX() && pos.getY() == worldPosition.getY() && pos.getZ() == worldPosition.getZ();
-        int dx = pos.getZ() + read.getStepX();
+        int dx = pos.getX() + read.getStepX();
         int dy = pos.getY() + read.getStepY();
         int dz = pos.getZ() + read.getStepZ();
 

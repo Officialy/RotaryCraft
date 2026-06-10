@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/smoke_detector",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "smokedetector"
+    }
+  }
+}

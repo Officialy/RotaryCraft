@@ -17,7 +17,7 @@
 //import net.minecraft.world.item.enchantment.Enchantment;
 //import net.minecraft.world.item.enchantment.Enchantments;
 //import net.minecraft.world.level.Level;
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -43,7 +43,7 @@
 //        super.updateBlockEntity();
 //        tickcount++;
 //        this.getSummativeSidedPower();
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //
 //        if (power < MINPOWER)
@@ -401,7 +401,7 @@
 //                        ItemStack var26 = inputitems[var22];
 //
 //                        if (var26 != null && var26.getItem() == Items.FIREWORK_CHARGE && var26.hasTagCompound() && var26.getTagCompound().contains("Explosion")) {
-//                            var25.add(var26.getTagCompound().getCompound("Explosion"));
+//                            var25.add(var26.getTagCompound().getCompoundOrEmpty("Explosion"));
 //                        }
 //                    }
 //
@@ -475,7 +475,7 @@
 //                }
 //
 //                if (field_92102_a != null && field_92102_a.hasTagCompound()) {
-//                    CompoundTag var23 = field_92102_a.getTagCompound().getCompound("Explosion");
+//                    CompoundTag var23 = field_92102_a.getTagCompound().getCompoundOrEmpty("Explosion");
 //
 //                    if (var23 == null) {
 //                        return field_92102_a;

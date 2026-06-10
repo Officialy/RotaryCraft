@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/splitter",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/splitter",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/splitter"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/splitter",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/splitter",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/splitter",
+      "y": 270
+    }
+  }
+}

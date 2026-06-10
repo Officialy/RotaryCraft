@@ -19,13 +19,13 @@
 //import net.minecraft.world.entity.Entity;
 //import net.minecraft.world.entity.EntityType;
 //import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.entity.vehicle.Minecart;
+//import net.minecraft.world.entity.vehicle.minecart.Minecart;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.phys.Vec3;
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //
 //public class EntityGasMinecart extends Minecart {
 //
@@ -193,9 +193,9 @@
 //    @Override
 //    protected void readEntityFromNBT(CompoundTag par1CompoundTag) {
 //        super.readEntityFromNBT(par1CompoundTag);
-//        pushX = par1CompoundTag.getDouble("PushX");
-//        pushZ = par1CompoundTag.getDouble("PushZ");
-//        fuel = par1CompoundTag.getShort("Fuel");
+//        pushX = par1CompoundTag.getDoubleOr("PushX", 0);
+//        pushZ = par1CompoundTag.getDoubleOr("PushZ", 0);
+//        fuel = par1CompoundTag.getShortOr("Fuel", (short)0);
 //    }
 //
 //    protected boolean isMinecartPowered() {

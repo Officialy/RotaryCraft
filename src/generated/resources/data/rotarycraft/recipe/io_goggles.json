@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "c": "minecraft:ender_pearl",
+    "e": "minecraft:redstone",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "scs",
+    "ese"
+  ],
+  "result": {
+    "id": "rotarycraft:io_goggles"
+  }
+}

@@ -222,13 +222,13 @@
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        inputSide = dirs[NBT.getInt("in")];
+//        inputSide = dirs[NBT.getIntOr("in", 0)];
 //
-//        modes = ReikaArrayHelper.booleanFromByteBitflags(NBT.getByte("mode"), 4);
+//        modes = ReikaArrayHelper.booleanFromByteBitflags(NBT.getByteOr("mode", (byte)0), 4);
 //
-//        hubX = NBT.getInt("hx");
-//        hubY = NBT.getInt("hy");
-//        hubZ = NBT.getInt("hz");
+//        hubX = NBT.getIntOr("hx", 0);
+//        hubY = NBT.getIntOr("hy", 0);
+//        hubZ = NBT.getIntOr("hz", 0);
 //    }
 //
 //    @Override

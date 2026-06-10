@@ -14,11 +14,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import org.joml.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
@@ -57,34 +60,32 @@ public class RenderLamp extends RotaryTERenderer<BlockEntityFloodlight> {
             stack.mulPose(Axis.YP.rotationDegrees(-f));
         }
 
-        if (tile.isInWorld() && blockstate.getValue(BlockRotaryCraftMachine.FACING) == Direction.DOWN && blockstate.getValue(BlockRotaryCraftMachine.FACING) == Direction.UP) {// Direction.UP)
-
-//            var15.renderAll(stack, tile, ReikaJavaLibrary.makeListFrom(tile.beammode));
-//        else {
-            VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entitySolid((LampModel.TEXTURE_LOCATION)));
-            lampModelV.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        Direction facing = blockstate.getValue(BlockRotaryCraftMachine.FACING);
+        if (tile.isInWorld() && (facing == Direction.DOWN || facing == Direction.UP)) {
+            VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(LampModel.TEXTURE_LOCATION));
+            lampModelV.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        } else {
+            VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(LampModel.TEXTURE_LOCATION));
+            lampModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         }
-        // else
-        //var15.renderAll(stack, tile, );
-//        if (tile.isInWorld())
-//            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-
-//            boolean vertical = (Boolean) li.get(0);
-//            if (!vertical) {
-//                shape1.render(stack, vertexconsumer, pPackedLight, pPackedOverlay);
-//            }
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(LampModel.TEXTURE_LOCATION));
-        lampModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
 
         stack.popPose();
     }
 
     @Override
-    public void render(BlockEntityFloodlight tile, float pPartialTick, PoseStack stack, MultiBufferSource bufferSource, int pPackedLight, int pPackedOverlay) {
-        if (this.doRenderModel(stack, tile)) {
-            this.renderBlockEntityFloodlightAt(stack, tile, bufferSource, pPackedLight);
-        }
-        if ((tile).isInWorld())// && MinecraftForgeClient.getRenderPass() == 1)
-            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return LampModel.TEXTURE_LOCATION;
+    }
+
+    @Override
+    protected boolean useEntityCutout() {
+        return true;
+    }
+
+    @Override
+    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+        if (be instanceof BlockEntityFloodlight lamp)
+            renderBlockEntityFloodlightAt(stack, lamp, mbs, light);
     }
 }
+

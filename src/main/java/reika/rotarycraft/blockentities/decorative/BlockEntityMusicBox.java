@@ -26,8 +26,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.common.NeoForge;
-import net.neoforged.event.level.NoteBlockEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.NoteBlockEvent;
 
 import reika.dragonapi.instantiable.MusicScore;
 import reika.dragonapi.instantiable.MusicScore.NoteData;
@@ -118,8 +118,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
             this.read();
     }
 
-    @Override
-    public void updateBlockEntity() {
+    private void doMusicBoxTick() {
         Level world = this.getLevel();
         super.updateBlockEntity();
         this.getSummativeSidedPower();
@@ -244,7 +243,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
-
+        this.doMusicBoxTick();
     }
 
     @Override
@@ -268,7 +267,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        isOneTimePlaying = NBT.getBoolean("onetime");
+        isOneTimePlaying = NBT.getBooleanOr("onetime", false);
     }
 
     @Override
@@ -334,7 +333,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         if (getLevel().isClientSide())
             return;
         try {
-            File save = getLevel().getServer().getServerDirectory();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
+            File save = getLevel().getServer().getServerDirectory().toFile();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
             String name = "musicbox@" + String.format("%d,%d,%d", worldPosition) + ".rcmusic";
             File dir = new File(save.getPath() + "/RotaryCraft/");
             if (!dir.exists())
@@ -370,7 +369,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     public boolean hasSavedFile() {
         if (level.isClientSide())
             return false;
-        File save = getLevel().getServer().getServerDirectory();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
+        File save = getLevel().getServer().getServerDirectory().toFile();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
         String base = save.getPath();
         String name = "musicbox@" + String.format("%d,%d,%d", worldPosition) + ".rcmusic";
         File f = new File(base + "/RotaryCraft/" + name);
@@ -380,7 +379,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     public void read() {
         if (level.isClientSide())
             return;
-        File save = getLevel().getServer().getServerDirectory();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
+        File save = getLevel().getServer().getServerDirectory().toFile();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
         //ReikaJavaLibrary.pConsole(musicFile);
         String name = "musicbox@" + String.format("%d,%d,%d", worldPosition) + ".rcmusic";
         String path = save.getPath() + "/RotaryCraft/" + name;
@@ -430,15 +429,15 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
             return;
         if (is.getItem() != RotaryItems.DISK.get())
             return;
-        if (is.getTag() == null)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
             return;
         this.clearMusic();
         try {
             for (int i = 0; i < 16; i++) {
-                if (is.getTag().contains("ch" + i)) {
-                    ListTag li = is.getTag().getList("ch" + i, Tag.TAG_COMPOUND);
+                if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("ch" + i)) {
+                    ListTag li = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
                     for (int k = 0; k < li.size(); k++) {
-                        CompoundTag nbt = li.getCompound(k);
+                        CompoundTag nbt = li.getCompoundOrEmpty(k);
                         //ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Dist.DEDICATED_SERVER);
                         Note n = Note.load(nbt);
                         this.addNote(i, n);
@@ -455,7 +454,10 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
             return;
         if (is.getItem() != RotaryItems.DISK.get())
             return;
-        is.save(new CompoundTag());
+        // 26.1: per-channel notes go into the disk's CUSTOM_DATA via ReikaItemHelper.updateStackTag.
+        // The dead `new CompoundTag()` here was leftover from a pre-DataComponents code path that
+        // tried to copy is.save(...) — it's no longer needed because updateStackTag mutates the
+        // existing tag in place.
         for (int i = 0; i < 16; i++) {
             ListTag li = new ListTag();
             ArrayList<Note> channel = musicQueue[i];
@@ -464,7 +466,8 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
                 ReikaJavaLibrary.pConsole(i + ":" + channel + ":" + nbt, Dist.DEDICATED_SERVER);
                 li.add(nbt);
             }
-            is.getTag().put("ch" + i, li);
+            final int fi = i; final ListTag fli = li;
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("ch" + fi, fli));
         }
     }
 
@@ -631,9 +634,9 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         }
 
         public static Note load(CompoundTag NBT) {
-            int length = NBT.getInt("len");
-            int pitch = NBT.getInt("pch");
-            int voice = NBT.getInt("vc");
+            int length = NBT.getIntOr("len", 0);
+            int pitch = NBT.getIntOr("pch", 0);
+            int voice = NBT.getIntOr("vc", 0);
             return new Note(NoteLength.values()[length], pitch, Instrument.values()[voice]);
         }
 
@@ -692,9 +695,9 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
                 case GUITAR -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit).playSoundAtBlock(world, pos, volume, pitch);
                 case BASS -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit).playSoundAtBlock(world, pos, volume, pitch);
                 case PLING -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit).playSoundAtBlock(world, pos, volume, pitch);
-                case BASSDRUM -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_BASEDRUM.get(), SoundSource.BLOCKS, volume, pitch, false);
-                case SNARE -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_SNARE.get(), SoundSource.BLOCKS, volume, pitch, false);
-                case CLAVE -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_HAT.get(), SoundSource.BLOCKS, volume, pitch, false);
+                case BASSDRUM -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_BASEDRUM.value(), SoundSource.BLOCKS, volume, pitch, false);
+                case SNARE -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_SNARE.value(), SoundSource.BLOCKS, volume, pitch, false);
+                case CLAVE -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.BLOCKS, volume, pitch, false);
                 default -> {
                 }
             }

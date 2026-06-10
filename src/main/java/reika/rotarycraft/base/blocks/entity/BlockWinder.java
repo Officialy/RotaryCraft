@@ -38,4 +38,7 @@ public class BlockWinder extends BlockBasicMachine {
         });
     }
 
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

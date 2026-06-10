@@ -10,7 +10,7 @@
 //package reika.rotarycraft.blockentities.weaponry.Turret;
 //
 //import net.minecraft.world.item.ItemStack;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //
 //import reika.rotarycraft.api.Interfaces.TargetEntity;
 //import reika.rotarycraft.base.blockentity.BlockEntityFluidCannon;
@@ -97,7 +97,7 @@
 //        double dx = v[0];
 //        double dy = v[1];
 //        double dz = v[2];
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            double y = this.getFiringPositionY(dy);
 //            world.addFreshEntity(new EntityFlameTurretShot(world, xCoord + 0.5 + dx, y, zCoord + 0.5 + dz, v[0], v[1], v[2], this, damageMultipliers.get(tank.getActualFluid().getName())));
 //        }
@@ -148,7 +148,7 @@
 //            return;
 //
 //        tickcount = 0;
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            if (target[3] == 1 && this.hasAmmo()) {
 //                this.fire(world, target);
 //            }

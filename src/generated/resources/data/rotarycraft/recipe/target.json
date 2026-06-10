@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "L": "minecraft:lapis_lazuli",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " E ",
+    "SRS",
+    "SLS"
+  ],
+  "result": {
+    "id": "rotarycraft:target"
+  }
+}

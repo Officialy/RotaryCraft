@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/wind_engine",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "wind_engine"
+    }
+  }
+}

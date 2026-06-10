@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -69,7 +69,7 @@ public abstract class BlockEntityAimedCannon extends BlockEntityPowerReceiver im
                 player = "NULL PLAYER IN SLOT " + i;
             else if (player.isEmpty())
                 player = "EMPTY STRING PLAYER IN SLOT " + i;
-            RotaryCraft.LOGGER.info("Side " + FMLLoader.getDist() + ": Safe Player " + (i + 1) + " of " + safePlayers.size() + ": " + player);
+            RotaryCraft.LOGGER.info("Side " + FMLEnvironment.getDist() + ": Safe Player " + (i + 1) + " of " + safePlayers.size() + ": " + player);
         }
     }
 
@@ -89,7 +89,7 @@ public abstract class BlockEntityAimedCannon extends BlockEntityPowerReceiver im
         //this.printSafeList();
         super.updateBlockEntity();
         tickcount++;
-        if (level.isClientSide)
+        if (level.isClientSide())
             ;//return;
         if (power < MINPOWER)
             return;
@@ -198,45 +198,39 @@ public abstract class BlockEntityAimedCannon extends BlockEntityPowerReceiver im
         tag.putInt("direction", dir);
     }
 
-    @Override
+    // 1.21.5: BlockEntity#serializeNBT now takes a HolderLookup.Provider; we no longer override.
     public CompoundTag serializeNBT() {
-        //return super.serializeNBT();
-
         CompoundTag nbt = new CompoundTag();
-
         nbt.putInt("numsafe", numSafePlayers);
-
         nbt.putBoolean("aim", isCustomAim);
-
         for (int i = 0; i < safePlayers.size(); i++) {
             nbt.putString("Safe_Player_" + i, safePlayers.get(i));
         }
         return nbt;
     }
 
-    @Override
+    // 1.21.5: CompoundTag#getString now returns Optional<String>.
     public void load(CompoundTag nbt) {
-        super.load(nbt);
-        isCustomAim = nbt.getBoolean("aim");
-
+        isCustomAim = nbt.getBooleanOr("aim", false);
         safePlayers = new ArrayList<String>();
-        numSafePlayers = nbt.getInt("numsafe");
+        numSafePlayers = nbt.getIntOr("numsafe", 0);
         for (int i = 0; i < numSafePlayers; i++) {
-            safePlayers.add(nbt.getString("Safe_Player_" + i));
+            nbt.getString("Safe_Player_" + i).ifPresent(safePlayers::add);
         }
     }
 
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        theta = tag.getFloat("theta");
-        phi = tag.getFloat("phi");
-        dir = tag.getInt("direction");
+        theta = tag.getFloatOr("theta", 0);
+        phi = tag.getFloatOr("phi", 0);
+        dir = tag.getIntOr("direction", 0);
     }
 
-    @Override
+    // 1.21.5: BlockEntity.getRenderBoundingBox removed; renderers compute their own bounds.
+    // INFINITE_EXTENT_AABB constant is gone too — use AABB.INFINITE instead.
     public final AABB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
+        return AABB.INFINITE;
     }
 
     protected abstract boolean isValidTarget(Entity ent);
@@ -251,14 +245,14 @@ public abstract class BlockEntityAimedCannon extends BlockEntityPowerReceiver im
             ReikaChatHelper.write("Note: " + name + " is the owner;");
             ReikaChatHelper.write("They did not need to tell the " + this.getName() + " to not target them.");
         }
-        if (FMLLoader.getDist() != Dist.DEDICATED_SERVER)
+        if (FMLEnvironment.getDist() != Dist.DEDICATED_SERVER)
             return;
         safePlayers.add(name);
         numSafePlayers++;
     }
 
     public void removePlayerFromWhiteList(String name) {
-        if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) {
+        if (FMLEnvironment.getDist() == Dist.DEDICATED_SERVER) {
             safePlayers.remove(name);
             numSafePlayers--;
         }
@@ -300,3 +294,5 @@ public abstract class BlockEntityAimedCannon extends BlockEntityPowerReceiver im
     }
 
 }
+
+

@@ -6,9 +6,9 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.neoforged.network.IContainerFactory;
-import net.neoforged.registries.DeferredRegister;
-import net.neoforged.registries.ForgeRegistries;
+import net.neoforged.neoforge.network.IContainerFactory;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
 import reika.dragonapi.base.CoreContainer;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
@@ -43,6 +43,8 @@ public interface RotaryMenus {
 
     Supplier<MenuType<ContainerEthanol>> GAS_ENGINE = register("gas_engine", ContainerEthanol::new);
 
+    Supplier<MenuType<ContainerMicroTurbine>> MICRO_TURBINE = register("micro_turbine", ContainerMicroTurbine::new);
+
 //    Supplier<MenuType<ContainerHeater>> HEATER = register("heater",     () -> IForgeMenuType.create(new ContainerHeater.Factory()));
 
     Supplier<MenuType<ContainerHandCraft>> HAND_CRAFT = register("hand_craft", ContainerHandCraft::new);
@@ -56,6 +58,7 @@ public interface RotaryMenus {
     Supplier<MenuType<MusicContainer>> MUSIC = register("music", MusicContainer::new);
 
     Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", ContainerGrinder::new);
+    Supplier<MenuType<ContainerFractionator>> FRACTIONATOR = register("fractionator", ContainerFractionator::new);
     Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);
 
     Supplier<MenuType<ContainerBlastFurnace>> BLAST_FURNACE = register("blast_furnace", ContainerBlastFurnace::new);

@@ -4,7 +4,7 @@ import com.google.common.collect.TreeMultimap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
@@ -14,8 +14,8 @@ import reika.dragonapi.instantiable.data.maps.ArrayMap;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 import reika.dragonapi.modinteract.lua.LuaMethod;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.MachineRecipeRenderer;
+import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
 import reika.rotarycraft.registry.*;
 
@@ -95,7 +95,7 @@ public class HandbookAuxData {
         fermenter.add(args);
     }
 
-    public static void drawPage(PoseStack stack, Font f, GuiGraphics ri, int screen, int page, int subpage, int dx, int dy, int mouseX, int mouseY) {
+    public static void drawPage(PoseStack stack, Font f, GuiGraphicsExtractor ri, int screen, int page, int subpage, int dx, int dy, int mouseX, int mouseY) {
         HandbookRegistry h = HandbookRegistry.getEntry(screen, page);
         if (h.isMachine() || h.isTrans() || h.isEngine() || h.getParent() == HandbookRegistry.CONVERTERDESC) {
             List<ItemStack> out = h.getCrafting();
@@ -105,7 +105,7 @@ public class HandbookAuxData {
                 api.drawCustomRecipes(ri, f, out, (Collection<Recipe<?>>) getWorktable(), dx+72-18, dy+18, dx-1620, dy+32);
             }
             else {
-                api.drawCustomRecipes(ri, f, out, Minecraft.getInstance().level.getRecipeManager().getRecipes().stream().collect(Collectors.toList()), dx+72-18, dy+18, dx-1620, dy+32);
+                api.drawCustomRecipes(ri, f, out, java.util.Collections.<net.minecraft.world.item.crafting.Recipe<?>>emptyList(), dx+72-18, dy+18, dx-1620, dy+32);
             }
         }
         else if (h.isCrafting()) {
@@ -116,7 +116,7 @@ public class HandbookAuxData {
                 api.drawCustomRecipes(ri, f, out, (Collection<Recipe<?>>) getWorktable(), dx+72, dy+18, dx+162, dy+32);
             }
             else {
-                api.drawCustomRecipes(ri, f, out, Minecraft.getInstance().level.getRecipeManager().getRecipes().stream().collect(Collectors.toList()), dx+72, dy+18, dx+162, dy+32);
+                api.drawCustomRecipes(ri, f, out, java.util.Collections.<net.minecraft.world.item.crafting.Recipe<?>>emptyList(), dx+72, dy+18, dx+162, dy+32);
             }
         }
         else if (h.isSmelting()) {
@@ -144,9 +144,8 @@ public class HandbookAuxData {
             int k3 = (int)((System.nanoTime()/2000000000L)%3);
             if (k == 0) {
                 ItemStack out = RotaryItems.JETPACK.get().getDefaultInstance();
-                List<Recipe<?>> li = Minecraft.getInstance().level.getRecipeManager().getRecipes().stream()
-                        .filter(r -> r.getResultItem(Minecraft.getInstance().level.registryAccess()).getItem() == out.getItem())
-                        .collect(Collectors.toList());
+                // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
+                List<Recipe<?>> li = java.util.Collections.<Recipe<?>>emptyList();
                 api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
             }
             else if (k == 1) {
@@ -191,9 +190,8 @@ public class HandbookAuxData {
             int k = (int)((System.nanoTime()/2000000000)%2);
             if (k == 0) {
                 ItemStack out = RotaryItems.JUMP.get().getDefaultInstance();
-                List<Recipe<?>> li = Minecraft.getInstance().level.getRecipeManager().getRecipes().stream()
-                        .filter(r -> r.getResultItem(Minecraft.getInstance().level.registryAccess()).getItem() == out.getItem())
-                        .collect(Collectors.toList());
+                // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
+                List<Recipe<?>> li = java.util.Collections.<Recipe<?>>emptyList();
                 api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
             }
             else {
@@ -207,7 +205,12 @@ public class HandbookAuxData {
             ItemStack[] args = fermenter.get(k4);
             ItemStack[] in = new ItemStack[]{args[1], args[2]};
             ItemStack out = args[0];
-            MachineRecipeRenderer.instance.drawFermenter(ri, dx+102, dy+18, in, dx+159, dy+32, out);
+            // 26.1: fermenter takes a 2-input list (yeast + sugar) in the legacy GUI. The new
+            // MachineRecipeRenderer surface is single-in; draw both inputs side-by-side here so
+            // the player can see them, then route the output through the shared helper.
+            if (in[0] != null && !in[0].isEmpty()) api.drawItemStackWithTooltip(ri, f, in[0], dx+102, dy+18);
+            if (in[1] != null && !in[1].isEmpty()) api.drawItemStackWithTooltip(ri, f, in[1], dx+102+18, dy+18);
+            MachineRecipeRenderer.instance.drawFermenter(ri, dx+102, dy+18, in[0], dx+159, dy+32, out);
         }
         else if (h == HandbookRegistry.NETHERDUST) {
             if ((System.nanoTime()/2000000000)%2 == 0) {
@@ -275,17 +278,8 @@ public class HandbookAuxData {
             }
         }
         else if (h == HandbookRegistry.RAILGUNAMMO) {
-            List<Recipe<?>> li = Minecraft.getInstance().level.getRecipeManager().getRecipes().stream()
-                    .filter(r -> {
-                        // RotaryItems.RAILGUN is not a field, commenting out related code
-                        // for (int i = 0; i < RotaryItems.RAILGUN.get().getNumberMetadatas(); i++) {
-                        //     if (r.getResultItem(Minecraft.getInstance().level.registryAccess()).getItem() == RotaryItems.RAILGUN.get().getStackOfMetadata(i).getItem()) {
-                        //         return true;
-                        //     }
-                        // }
-                        return false; // Always return false for now
-                    })
-                    .collect(Collectors.toList());
+            // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
+            List<Recipe<?>> li = java.util.Collections.<Recipe<?>>emptyList();
             api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
         }
         else if (h == HandbookRegistry.BEDTOOLS) {
@@ -335,8 +329,8 @@ public class HandbookAuxData {
         else if (h == HandbookRegistry.ALLOYING) {
             // This section relies on outdated RecipesBlastFurnace and BlastFurnacePattern.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get());
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get());
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = java.util.Collections.<ShapedBlastFurnaceRecipe>emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = java.util.Collections.<ShapelessBlastFurnaceRecipe>emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);
@@ -346,9 +340,9 @@ public class HandbookAuxData {
                 int index = (int)((System.currentTimeMillis()/2000)%allRecipes.size());
                 Recipe<?> currentRecipe = allRecipes.get(index);
                 if (currentRecipe instanceof ShapedBlastFurnaceRecipe shapedRecipe) {
-                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapedRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapedRecipe.getOutput());
                 } else if (currentRecipe instanceof ShapelessBlastFurnaceRecipe shapelessRecipe) {
-                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapelessRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapelessRecipe.getOutput());
                 }
             } else {
                 RotaryCraft.LOGGER.warn("No alloying recipes found for display in HandbookAuxData.");
@@ -358,8 +352,8 @@ public class HandbookAuxData {
         else if (h == HandbookRegistry.COKE) {
             // This section relies on outdated RecipesBlastFurnace and BlastRecipe.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get());
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get());
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = java.util.Collections.<ShapedBlastFurnaceRecipe>emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = java.util.Collections.<ShapelessBlastFurnaceRecipe>emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);
@@ -369,9 +363,9 @@ public class HandbookAuxData {
                 int index = (int)((System.currentTimeMillis()/2000)%allRecipes.size());
                 Recipe<?> currentRecipe = allRecipes.get(index);
                 if (currentRecipe instanceof ShapedBlastFurnaceRecipe shapedRecipe) {
-                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapedRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapedRecipe.getOutput());
                 } else if (currentRecipe instanceof ShapelessBlastFurnaceRecipe shapelessRecipe) {
-                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapelessRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapelessRecipe.getOutput());
                 }
             } else {
                 RotaryCraft.LOGGER.warn("No coke recipes found for display in HandbookAuxData.");
@@ -382,8 +376,8 @@ public class HandbookAuxData {
             ItemStack is = RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance();
             // This section relies on outdated RecipesBlastFurnace and BlastRecipe.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get());
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get());
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = java.util.Collections.<ShapedBlastFurnaceRecipe>emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = java.util.Collections.<ShapelessBlastFurnaceRecipe>emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);
@@ -393,9 +387,9 @@ public class HandbookAuxData {
                 int index = (int)((System.currentTimeMillis()/2000)%allRecipes.size());
                 Recipe<?> currentRecipe = allRecipes.get(index);
                 if (currentRecipe instanceof ShapedBlastFurnaceRecipe shapedRecipe) {
-                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapedRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapedRecipe.getOutput());
                 } else if (currentRecipe instanceof ShapelessBlastFurnaceRecipe shapelessRecipe) {
-                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapelessRecipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+                    MachineRecipeRenderer.instance.drawBlastFurnaceRecipe(ri, dx+99, dy+18, dx+185, dy+36, Minecraft.getInstance().level, shapelessRecipe.getOutput());
                 }
             } else {
                 RotaryCraft.LOGGER.warn("No HSLA steel ingot recipes found for display in HandbookAuxData.");
@@ -403,7 +397,7 @@ public class HandbookAuxData {
         }
     }
 
-    public static void drawGraphics(PoseStack stack, Font f, GuiGraphics ri, int screen, int page, int subpage, int dx, int dy, int mouseX, int mouseY) {
+    public static void drawGraphics(PoseStack stack, Font f, GuiGraphicsExtractor ri, int screen, int page, int subpage, int dx, int dy, int mouseX, int mouseY) {
         try {
             HandbookRegistry h = HandbookRegistry.getEntry(screen, page); // Declared h here
             if (h == HandbookRegistry.TERMS) {
@@ -411,7 +405,7 @@ public class HandbookAuxData {
                 api.drawCircle(xc, yc, r, 0);
                 api.drawLine(stack, xc, yc, xc+r, yc, 0);
                 api.drawLine(stack, xc, yc, (int)(xc+r-0.459*r), (int)(yc-0.841*r), 0);
-                ri.drawString(f, "One radian", xc+r+10, yc-4, 0x000000); // Changed f.draw to ri.drawString
+                ri.text(f, "One radian", xc+r+10, yc-4, 0x000000); // Changed f.draw to ri.drawString
             }
             else if (h == HandbookRegistry.PHYSICS) {
                 int r = 5;
@@ -422,8 +416,8 @@ public class HandbookAuxData {
                 api.drawLine(stack, xc+45, yc, xc+45, yc+20, 0xff0000);
                 api.drawLine(stack, xc+45, yc, xc+50, yc+5, 0xff0000);
                 api.drawLine(stack, xc+45, yc, xc+40, yc+5, 0xff0000);
-                ri.drawString(f, "Distance", xc+4, yc-10, 0x0000ff); // Changed f.draw to ri.drawString
-                ri.drawString(f, "Force", xc+30, yc+20, 0xff0000); // Changed f.draw to ri.drawString
+                ri.text(f, "Distance", xc+4, yc-10, 0x0000ff); // Changed f.draw to ri.drawString
+                ri.text(f, "Force", xc+30, yc+20, 0xff0000); // Changed f.draw to ri.drawString
 
                 api.drawLine(stack, xc-2*r, (int)(yc-1.4*r), xc-r, yc-r*2-2, 0x8800ff);
                 api.drawLine(stack, xc-2*r, (int)(yc-1.4*r), xc-2*r-2, yc, 0x8800ff);
@@ -432,7 +426,7 @@ public class HandbookAuxData {
                 api.drawLine(stack, xc+2, yc+r*2+2, xc-r, yc+r*2+2, 0x8800ff);
                 api.drawLine(stack, xc+2, yc+r*2+2, xc-3, yc+r*2+7, 0x8800ff);
                 api.drawLine(stack, xc+2, yc+r*2+2, xc-3, yc+r*2-3, 0x8800ff);
-                ri.drawString(f, "Torque", xc-24, yc+18, 0x8800ff); // Changed f.draw to ri.drawString
+                ri.text(f, "Torque", xc-24, yc+18, 0x8800ff); // Changed f.draw to ri.drawString
 
                 r = 35;
                 xc = dx+125+r+r/2;
@@ -450,9 +444,9 @@ public class HandbookAuxData {
 
                 int xOffset = 2;
                 int yOffset = 6;
-                ri.drawString(f, "1 rad/s", xc+r-4+xOffset, yc+18-yOffset, 0xff0000); // Changed f.draw to ri.drawString
-                ri.drawString(f, n1+" rad/s", xc+r-4+xOffset, yc+18+10-yOffset, 0x0000ff); // Changed f.draw to ri.drawString
-                ri.drawString(f, n2+" rad/s", xc+r-4+xOffset, yc+18+20-yOffset, 0x00a000); // Changed f.draw to ri.drawString
+                ri.text(f, "1 rad/s", xc+r-4+xOffset, yc+18-yOffset, 0xff0000); // Changed f.draw to ri.drawString
+                ri.text(f, n1+" rad/s", xc+r-4+xOffset, yc+18+10-yOffset, 0x0000ff); // Changed f.draw to ri.drawString
+                ri.text(f, n2+" rad/s", xc+r-4+xOffset, yc+18+20-yOffset, 0x00a000); // Changed f.draw to ri.drawString
             }
             /*
             else if (h == HandbookRegistry.BAITBOX && subpage == 1) { // BAITBOX is not a field
@@ -471,7 +465,7 @@ public class HandbookAuxData {
                 for (long key : s) {
                     if (t == subpage) {
                         String sg = String.format("- %d W", key);
-                        ri.drawString(f, sg, dx+14, dy+6, 0); // Changed f.draw to ri.drawString, fixed getStringWidth argument
+                        ri.text(f, sg, dx+14, dy+6, 0); // Changed f.draw to ri.drawString, fixed getStringWidth argument
                         NavigableSet<MachineRegistry> c = powerData.get(key);
                         int k = 0;
                         int n = 0;
@@ -515,7 +509,7 @@ public class HandbookAuxData {
                             //api.drawTooltipAt(font, d.getDisplayTime(j), mx, my);
                             //ReikaRenderHelper.disableLighting();
                             int c = m.canDoMultiPerTick() ? 0x80ff80 : 0xffffff;
-                            ri.drawString(f, d.getDisplayTime(j), dx+10, dy+150+j*10, c); // Changed f.draw to ri.drawString
+                            ri.text(f, d.getDisplayTime(j), dx+10, dy+150+j*10, c); // Changed f.draw to ri.drawString
                         }
                     }
 
@@ -550,7 +544,7 @@ public class HandbookAuxData {
                                 if (cur.isDocumented()) { // Simplified condition
                                     //ReikaRenderHelper.disableLighting();
                                     String s = cur.getReturnType().displayName+" "+cur.displayName+"("+cur.getArgsAsString()+")";
-                                    ri.drawString(f, s, dx+11, dy+88+k*10, 0xffffff); // Changed f.draw to ri.drawString
+                                    ri.text(f, s, dx+11, dy+88+k*10, 0xffffff); // Changed f.draw to ri.drawString
                                     k++;
                                 }
                             }

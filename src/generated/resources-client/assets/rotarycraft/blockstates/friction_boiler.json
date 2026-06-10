@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/friction_boiler",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/friction_boiler",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/friction_boiler"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/friction_boiler",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/friction_boiler",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/friction_boiler",
+      "y": 270
+    }
+  }
+}

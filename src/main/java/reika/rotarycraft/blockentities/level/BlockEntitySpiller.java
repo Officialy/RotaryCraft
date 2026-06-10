@@ -8,8 +8,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
@@ -36,7 +36,7 @@ public class BlockEntitySpiller extends BlockEntityAreaFiller implements PipeCon
 //            return false;
         if (tank.isEmpty())
             return true;
-        return tank.getActualFluid().equals(f);
+        return tank.getActualFluid().getFluid().equals(f);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class BlockEntitySpiller extends BlockEntityAreaFiller implements PipeCon
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
 
     //@Override

@@ -9,31 +9,21 @@
  ******************************************************************************/
 package reika.rotarycraft.base;
 
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 import reika.dragonapi.interfaces.item.UnbreakableArmor;
 
-public abstract class ItemRotaryArmor extends ArmorItem implements UnbreakableArmor {
+// 1.21.5: ArmorItem was removed; armor is a plain Item with Properties.humanoidArmor(material, type).
+// Defense/toughness now come from the ArmorMaterial, so the old getDefense/getToughness overrides are gone.
+public abstract class ItemRotaryArmor extends Item implements UnbreakableArmor {
 
-    public ItemRotaryArmor(ArmorMaterial material, ArmorItem.Type slot, Properties properties) {
-        super(material, slot, properties);
+    public ItemRotaryArmor(ArmorMaterial material, ArmorType slot, Properties properties) {
+        super(properties.humanoidArmor(material, slot));
     }
 
     public abstract boolean providesProtection();
 
     public abstract boolean canBeDamaged();
-
-    @Override
-    public int getDefense() {
-        if (!providesProtection()) return 0;
-        return 5;
-    }
-
-    @Override
-    public float getToughness() {
-        if (!providesProtection()) return 0;
-        return 5;
-    }
 
 }

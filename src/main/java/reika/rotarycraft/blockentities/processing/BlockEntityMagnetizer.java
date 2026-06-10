@@ -86,16 +86,16 @@
 //        if (r.action != null) {
 //            r.action.step(hasLodestoneUpgrade() ? omega * 2 : omega, itemHandler.getStackInSlot(0));
 //        } else {
-//            if (is.getTag() == null) {
+//            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null) {
 //                is.put(new CompoundTag());
-//                is.getTag().putInt("magnet", 1);
-//            } else if (is.getTag().contains("magnet")) {
-//                int m = is.getTag().getInt("magnet");
+//                is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("magnet", 1);
+//            } else if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("magnet")) {
+//                int m = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0);
 //                if (m < this.getMaxCharge(r))
 //                    m++;
-//                is.getTag().putInt("magnet", m);
+//                is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("magnet", m);
 //            } else {
-//                is.getTag().putInt("magnet", 1);
+//                is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putInt("magnet", 1);
 //            }
 //        }
 //    }
@@ -140,7 +140,7 @@
 //
 //    @Override
 //    public int getCoreMagnetization() {
-//        return !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getTag() != null ? itemHandler.getStackInSlot(0).getTag().getInt("magnet") : 0;
+//        return !itemHandler.getStackInSlot(0).isEmpty() && itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0) : 0;
 //    }
 //
 //    @Override
@@ -201,9 +201,9 @@
 //        super.readSyncTag(NBT);
 //
 //        redstone.reset();
-//        if (NBT.getBoolean("redstoneUpgrade"))
+//        if (NBT.getBooleanOr("redstoneUpgrade", false))
 //            redstone.addIntegrated();
-//        hasLodestone = NBT.getBoolean("lodestoneUpgrade");
+//        hasLodestone = NBT.getBooleanOr("lodestoneUpgrade", false);
 //    }
 //
 //    @Override

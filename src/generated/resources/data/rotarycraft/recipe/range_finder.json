@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": "minecraft:glowstone",
+    "e": "minecraft:ender_pearl",
+    "r": "minecraft:redstone",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " e ",
+    "rGr",
+    "sss"
+  ],
+  "result": {
+    "id": "rotarycraft:range_finder"
+  }
+}

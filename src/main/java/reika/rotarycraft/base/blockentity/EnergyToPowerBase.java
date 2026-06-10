@@ -25,8 +25,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.StepTimer;
@@ -163,7 +163,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
 
     @Override
     public final void upgrade(ItemStack item) {
-        if (item.getTag().getInt("upgradeType") == ItemEngineUpgrade.UpgradeType.EFFICIENCY.ordinal()) {
+        if (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == ItemEngineUpgrade.UpgradeType.EFFICIENCY.ordinal()) {
             efficient = true;
         } else {
             tier++;
@@ -172,17 +172,17 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     }
 
     public final boolean canUpgradeWith(ItemStack item) {
-        if (!efficient && item.getTag().getInt("upgradeType") == ItemEngineUpgrade.UpgradeType.EFFICIENCY.ordinal())
+        if (!efficient && item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == ItemEngineUpgrade.UpgradeType.EFFICIENCY.ordinal())
             return true;
         if (tier >= 5)
             return false;
-        if (item.getTag().getInt("upgradeType") == 2) {
-            if (item.getTag() == null)
+        if (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == 2) {
+            if (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
                 return false;
-            if (item.getTag().getInt("magnet") < 720)
+            if (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0) < 720)
                 return false;
         }
-        return RotaryItems.UPGRADE.get() == item.getItem() && (item.getTag().getInt("upgradeType") == tier + 1);
+        return RotaryItems.UPGRADE.get() == item.getItem() && (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == tier + 1);
     }
 
     protected final boolean isMuffled() {
@@ -284,9 +284,9 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
         }
         torque = this.getActualTorque();
         power = (long) torque * (long) omega;
-        if (power > 0 && !level.isClientSide) {
+        if (power > 0 && !level.isClientSide()) {
             this.usePower(mult);
-            //if (level.getDayTime()%(21-4*tier) == 0) {
+            //if (level.getOverworldClockTime()%(21-4*tier) == 0) {
             //	tank.removeLiquid(1);
             //}
         }
@@ -315,10 +315,10 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
 
     public final void setDataFromItemStackTag(CompoundTag nbt) {
         if (nbt != null) {
-            tier = nbt.getInt("tier");
-            efficient = nbt.getBoolean("efficient");
-            storedEnergy = nbt.getInt("energy");
-            int c = nbt.getInt("coolant");
+            tier = nbt.getIntOr("tier", 0);
+            efficient = nbt.getBooleanOr("efficient", false);
+            storedEnergy = nbt.getIntOr("energy", 0);
+            int c = nbt.getIntOr("coolant", 0);
             if (c > 0)
                 tank.setContents(c, RotaryFluids.LIQUID_NITROGEN.get());
         }
@@ -341,7 +341,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
         li.add(String.format("Tier %d", tier));
         if (efficient)
             li.add(ChatFormatting.GOLD + "Efficiency Boost");
-        if (Screen.hasShiftDown()) {
+        if (com.mojang.blaze3d.platform.InputConstants.isKeyDown(net.minecraft.client.Minecraft.getInstance().getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT)) {
             int torque = this.getGenTorque();
             int speed = ReikaMathLibrary.intpow2(2, getMaxSpeedBase(tier));
             long power = (long) torque * (long) speed;
@@ -441,28 +441,28 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
 
-        storedEnergy = tag.getInt("storage");
+        storedEnergy = tag.getIntOr("storage", 0);
 
-        rsState = RedstoneState.list[tag.getInt("rs")];
+        rsState = RedstoneState.list[tag.getIntOr("rs", 0)];
 
-        tier = tag.getInt("level");
+        tier = tag.getIntOr("level", 0);
 
         if (baseomega > getMaxSpeedBase(tier)) {
             baseomega = MINBASE;
         }
 
-        baseomega = tag.getInt("tiero");
+        baseomega = tag.getIntOr("tiero", 0);
 
         tank.readFromNBT(tag);
 
-        temperature = tag.getInt("temp");
+        temperature = tag.getIntOr("temp", 0);
 
         if (tag.contains("t_enable"))
-            enabled = tag.getBoolean("t_enable");
+            enabled = tag.getBooleanOr("t_enable", false);
 
-        efficient = tag.getBoolean("efficient");
+        efficient = tag.getBooleanOr("efficient", false);
 
-        integratedGear = tag.getInt("gear");
+        integratedGear = tag.getIntOr("gear", 0);
     }
 
     @Override
@@ -575,7 +575,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
             temperature--;
         if (temperature > MAXTEMP) {
             temperature = MAXTEMP;
-            if (!world.isClientSide)
+            if (!world.isClientSide())
                 this.overheat(world, pos);
         }
         if (temperature < Tamb)

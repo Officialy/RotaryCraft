@@ -9,7 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -22,15 +22,14 @@ public class GuiSorter extends GuiPowerOnlyMachine<BlockEntitySorting, Container
     private final BlockEntitySorting sorter;
 
     public GuiSorter(ContainerSorter container, Inventory inv, Component title) {
-        super(container, inv, title);
+        super(container, inv, title, 176, 180);
         sorter = (BlockEntitySorting) inventory.player.level().getBlockEntity(container.tile.getBlockPos());
-        imageWidth = 176;
-        imageHeight = 180;
         inventory = inv;
     }
 
     @Override
-    public void renderBackground(GuiGraphics stack) {
+    public void extractBackground(GuiGraphicsExtractor stack, int pX, int pY, float pPartialTick) {
+        super.extractBackground(stack, pX, pY, pPartialTick);
         int dy = 22;
         int x = 8;
         int y = 18;

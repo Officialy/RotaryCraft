@@ -3,20 +3,25 @@ package reika.rotarycraft.base;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Unit;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.dragonapi.interfaces.TileModel;
 
 import java.util.ArrayList;
 import java.util.function.Function;
 
-public abstract class RotaryModelBase extends Model implements TileModel {
+// 1.21.5: Model became Model<S> with a (ModelPart root, Function<Identifier, RenderType>)
+// constructor; renderToBuffer is now final. We bind to Unit (no animation state) and
+// expose a phi/theta-aware renderAll for our existing call sites.
+public abstract class RotaryModelBase extends Model<Unit> implements TileModel {
 
     protected final float f5 = 0.0625F;
 
-    public RotaryModelBase(Function<ResourceLocation, RenderType> p_103110_) {
-        super(p_103110_);
+    public RotaryModelBase(ModelPart root, Function<Identifier, RenderType> renderType) {
+        super(root, renderType);
     }
 
     public abstract void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta);
@@ -29,11 +34,5 @@ public abstract class RotaryModelBase extends Model implements TileModel {
         this.renderAll(stack, tex, packedLightIn, te, conditions, phi, 0);
     }
 
-    // Not always used, but if it is, it's used to render the model in the inventory it gives 0 for phi and theta. The TE IS NULL WHEN USING THIS METHOD, MAKE SURE THE TE IS NOT NEEDED
-    @Override
-    public void renderToBuffer(PoseStack p_103111_, VertexConsumer p_103112_, int p_103113_, int p_103114_, float p_103115_, float p_103116_, float p_103117_, float p_103118_) {
-        this.renderAll(p_103111_, p_103112_, p_103113_, null, null, 0, 0);
-    }
-
-    public abstract ResourceLocation getTexture();
+    public abstract Identifier getTexture();
 }

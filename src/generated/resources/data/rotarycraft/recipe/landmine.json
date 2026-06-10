@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "I": "rotarycraft:ignition_unit",
+    "P": "minecraft:stone_pressure_plate",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " P ",
+    "RGR",
+    "SIS"
+  ],
+  "result": {
+    "id": "rotarycraft:landmine"
+  }
+}

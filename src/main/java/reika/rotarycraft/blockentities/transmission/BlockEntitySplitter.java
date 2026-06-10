@@ -56,6 +56,20 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
     private int overloadTick = 0;
     private int pow2;
 
+    /**
+     * 1.21.5 port fix: in 1.7 the splitter's I/O orientation (0-7 = merge, 8-15 = split) was
+     * stored in block metadata. The port previously tried to read it as
+     * {@code getUpdateTag(...).getIntOr("ioside", 0)}, but nothing ever wrote that key, so the
+     * splitter was permanently stuck at ioside 0 (merge, EAST+NORTH → WEST) and
+     * {@link #isSplitting} returned false forever. We now store {@code ioside} as a real
+     * field, persist it through {@link #writeSyncTag} / {@link #readSyncTag}, and derive the
+     * split-mode boolean from the high bit ({@code ioside >= 8}). On first tick we initialise
+     * {@code ioside} from the BlockState's FACING so a fresh placement at least faces a
+     * sensible direction.
+     */
+    private int ioside = 0;
+    private boolean iosideInitialised = false;
+
     public BlockEntitySplitter(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.SPLITTER.get(), pos, state);
     }
@@ -75,7 +89,11 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
 
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
-        this.getIOSides(world, pos, getUpdateTag().getInt("ioside"));
+        if (!iosideInitialised) {
+            initIosideFromFacing();
+            iosideInitialised = true;
+        }
+        this.getIOSides(world, pos, ioside);
 
         if (failed) {
             omega = torque = 0;
@@ -83,6 +101,63 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
             this.transferPower(world, pos, true, true);
         }
         power = (long) omega * (long) torque;
+    }
+
+    /**
+     * Derives an initial {@link #ioside} from the block's FACING so a freshly placed splitter
+     * has a usable orientation without the player having to set one. Legacy splitter has 8
+     * merge configurations and 8 split configurations encoded into the 0-15 range; we pick the
+     * merge case whose write-direction matches FACING:
+     * <ul>
+     *   <li>FACING WEST  → ioside 0 (read EAST + read2 NORTH → write WEST)</li>
+     *   <li>FACING NORTH → ioside 1 (read EAST + read2 SOUTH → write NORTH)</li>
+     *   <li>FACING EAST  → ioside 2 (read SOUTH + read2 WEST → write EAST)</li>
+     *   <li>FACING SOUTH → ioside 3 (read NORTH + read2 WEST → write SOUTH)</li>
+     *   <li>UP / DOWN    → fallback to 0 (splitter is a horizontal-only device legacy-wise)</li>
+     * </ul>
+     * Adding 8 to the chosen value flips it from merge → split with the same orientation.
+     * {@link #setSplitting(boolean)} adjusts that flag and re-derives {@link #ioside}.
+     */
+    /** 26.1: public wrapper for {@link BlockSplitter#setPlacedBy} to call right after placement,
+     *  so the first sync packet carries the FACING-derived ioside instead of the default 0. */
+    public void initIosideFromFacingPublic() {
+        initIosideFromFacing();
+        iosideInitialised = true;
+    }
+
+    private void initIosideFromFacing() {
+        // Defaults to merge orientation (cases 0-3); the player can flip to split (cases 8-11)
+        // via {@link #setSplitting} or {@link #setIoside}.
+        net.minecraft.world.level.block.state.BlockState state = this.getBlockState();
+        if (state == null || !state.hasProperty(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
+            return; // keep current ioside (0 by default).
+        }
+        ioside = switch (state.getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
+            case WEST  -> 0;
+            case NORTH -> 1;
+            case EAST  -> 2;
+            case SOUTH -> 3;
+            default    -> 0; // UP/DOWN: legacy splitter is horizontal-only.
+        };
+    }
+
+    public int getIoside() {
+        return ioside;
+    }
+
+    public void setIoside(int side) {
+        if (side < 0 || side >= 16) return;
+        ioside = side;
+        iosideInitialised = true;
+        setChanged();
+    }
+
+    /** Toggle between merge and split modes while preserving orientation. */
+    public void setSplitting(boolean split) {
+        // ioside layout: low 3 bits = orientation, bit 3 (value 8) = split-mode flag.
+        ioside = (ioside & 7) | (split ? 8 : 0);
+        iosideInitialised = true;
+        setChanged();
     }
 
     public void getIOSides(Level world, BlockPos pos, int dir) {
@@ -516,7 +591,8 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
     }
 
     public boolean isSplitting() {
-        return this.getUpdateTag().contains("splitting");
+        // ioside 0-7 = merge, 8-15 = split. No separate field needed.
+        return ioside >= 8;
     }
 
     public boolean isBedrock() {
@@ -635,14 +711,20 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
         tag.putInt("mode", splitmode);
         tag.putBoolean("fail", failed);
         tag.putBoolean("bedrock", bedrock);
+        // 1.21.5 port: persist ioside + split-mode so the splitter's read/write configuration
+        // survives chunk reload and is visible to the {@link LuaSetJunction}-style API.
+        tag.putInt("ioside", ioside);
+        tag.putBoolean("iosideInit", iosideInitialised);
     }
 
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        splitmode = tag.getInt("mode");
-        failed = tag.getBoolean("fail");
-        bedrock = tag.getBoolean("bedrock");
+        splitmode = tag.getIntOr("mode", 0);
+        failed = tag.getBooleanOr("fail", false);
+        bedrock = tag.getBooleanOr("bedrock", false);
+        ioside = tag.getIntOr("ioside", 0);
+        iosideInitialised = tag.getBooleanOr("iosideInit", false);
     }
 
     @Override
@@ -734,7 +816,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
 
     @Override
     public void setDataFromItemStackTag(CompoundTag NBT) {
-        bedrock = NBT != null && NBT.getBoolean("bedrock");
+        bedrock = NBT != null && NBT.getBooleanOr("bedrock", false);
     }
 
     @Override
@@ -750,7 +832,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
     @Override
     public ArrayList<String> getDisplayTags(CompoundTag NBT) {
         ArrayList<String> li = new ArrayList<>();
-        li.add(NBT != null && NBT.getBoolean("bedrock") ? "Bedrock" : "Steel");
+        li.add(NBT != null && NBT.getBooleanOr("bedrock", false) ? "Bedrock" : "Steel");
         return li;
     }
 

@@ -83,7 +83,7 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack,float par1, int par2, int par3) {
+//    public void extractBackground(PoseStack poseStack,float par1, int par2, int par3) {
 //        String var4 = "/Reika/RotaryCraft/Textures/GUI/patterngui.png";
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 //        ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);

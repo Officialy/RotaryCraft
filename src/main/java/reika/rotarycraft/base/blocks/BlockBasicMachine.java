@@ -36,10 +36,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
-import net.neoforged.network.NetworkHooks;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.lwjgl.glfw.GLFW;
+import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.redstone.Orientation;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.Item;
 
 
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
@@ -82,6 +85,62 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         super(properties.strength(4, 15));
     }
 
+    /**
+     * Opt-in for blocks that are drawn entirely by their {@link BlockEntity} renderer (TESR /
+     * BlockEntityRenderer). When this returns {@code true}, the block's static blockstate /
+     * model is suppressed via {@link #getRenderShape(BlockState)} returning {@code INVISIBLE},
+     * so the missing-texture purple/black cube no longer z-fights the animated TESR draw.
+     *
+     * <p>Defaults to {@code false} so blocks with a real static model (blast furnace chassis,
+     * worktable, etc.) keep rendering normally. Override and return {@code true} on each block
+     * whose entire visible body comes from a {@code BlockEntityRenderer} entry in
+     * {@code RotaryModelLayers#registerEntityRenderers}.
+     */
+    protected boolean isCustomRendered() {
+        return false;
+    }
+
+    @Override
+    protected net.minecraft.world.level.block.RenderShape getRenderShape(BlockState state) {
+        return isCustomRendered()
+                ? net.minecraft.world.level.block.RenderShape.INVISIBLE
+                : super.getRenderShape(state);
+    }
+
+    /**
+     * 26.1 helper: shared client-side ticker used by transmission/engine blocks to drive the
+     * rotation animation. {@code phi} (the shaft angle) is server-only and not part of the
+     * sync packet — too expensive to ship every tick — but {@code omega} IS synced via the
+     * IOMachine sync tag. This ticker mirrors the server's {@code animateWithTick} step so
+     * shafts visibly spin on the client whenever the BE has power.
+     *
+     * <p>Callers pass the BE's runtime class so the lambda's cast site is monomorphic.</p>
+     */
+    /** 26.1 DEBUG: temporary diagnostic for pump non-animation. Set to {@code true} to log the
+     *  observed client-side omega for each ticker invocation (gated to once/sec to keep the log
+     *  readable). Flip off once we've confirmed the sync path. */
+    private static final boolean DEBUG_CLIENT_PHI_TICKER = true;
+
+    protected static <E extends reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity>
+            net.minecraft.world.level.block.entity.BlockEntityTicker<E> clientPhiTicker(Class<E> beClass) {
+        return (lvl, pos, st, be) -> {
+            if (!beClass.isInstance(be)) return;
+            int omega = 0;
+            if (be instanceof reika.rotarycraft.base.blockentity.BlockEntityIOMachine io) omega = io.omega;
+            else if (be instanceof reika.rotarycraft.base.blockentity.BlockEntityEngine en) omega = en.omega;
+            if (DEBUG_CLIENT_PHI_TICKER && lvl.getGameTime() % 20 == 0) {
+                reika.rotarycraft.RotaryCraft.LOGGER.info(
+                        "[clientPhiTicker] " + beClass.getSimpleName() + " @ " + pos
+                                + " omega=" + omega
+                                + " phi=" + ((reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity) be).phi);
+            }
+            if (omega <= 0) return;
+            E typed = beClass.cast(be);
+            typed.phi += (float) reika.dragonapi.libraries.mathsci.ReikaMathLibrary
+                    .doubpow(reika.dragonapi.libraries.mathsci.ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
+        };
+    }
+
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState pState,  LivingEntity e, ItemStack pStack) {
         super.setPlacedBy(world, pos, pState, e, pStack);
@@ -112,28 +171,34 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
-        super.neighborChanged(state, world, pos, pBlock, pFromPos, pIsMoving);
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block pBlock, @Nullable Orientation pFromOrientation, boolean pIsMoving) {
+        long _ncT0 = System.nanoTime();
+        reika.rotarycraft.auxiliary.PipeDebugLog.event("BBM.neighborChanged.call");
+        super.neighborChanged(state, world, pos, pBlock, pFromOrientation, pIsMoving);
         MachineRegistry m = MachineRegistry.getMachine(world, pos);
         if (m != null) {
             BlockEntity te = world.getBlockEntity(pos);
             if (m.cachesConnections()) {
                 CachedConnection tc = (CachedConnection) te;
+                reika.rotarycraft.auxiliary.PipeDebugLog.event("BBM.neighborChanged.recompute_path");
                 tc.recomputeConnections(world, pos);
             }
             if (m == MachineRegistry.SMOKEDETECTOR) {
-                Block upid = world.getBlockState(pos.above()).getBlock();
-                if (upid == Blocks.AIR) {
+                // Smoke detector hangs from a ceiling — drop it as an item if the block above
+                // is no longer solid enough to support it. Legacy 1.7 used `isOpaqueCube`;
+                // 26.1 equivalent is `isCollisionShapeFullBlock`. Previously this branch had a
+                // commented-out `else if` with stray bracket-mismatched code that destroyed the
+                // smoke detector on EVERY neighborChanged regardless of the support state, so a
+                // placed smoke detector self-destructed the first time any neighbour changed.
+                BlockState above = world.getBlockState(pos.above());
+                boolean supported = !above.isAir() && above.isCollisionShapeFullBlock(world, pos.above());
+                if (!supported) {
                     world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                    ItemStack is = MachineRegistry.SMOKEDETECTOR.getBlockState().getBlock().asItem().getDefaultInstance();
-                    if (!world.isClientSide)
+                    if (!world.isClientSide()) {
+                        ItemStack is = MachineRegistry.SMOKEDETECTOR.getBlockState().getBlock().asItem().getDefaultInstance();
                         world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), is));
-                } //todo else if (!upid.isOpaqueCube()) {
-                world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                ItemStack is = MachineRegistry.SMOKEDETECTOR.getBlockState().getBlock().asItem().getDefaultInstance();
-                if (!world.isClientSide)
-                    world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), is));
-                // }
+                    }
+                }
             }
             if (te instanceof AdjacentUpdateWatcher) {
                 ((AdjacentUpdateWatcher) te).onAdjacentUpdate(world, pos, state.getBlock());
@@ -144,6 +209,14 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 //ReikaWorldHelper.temperatureEnvironment(world, x, y, z, temp);
             }*/
         }
+        long _ncDt = System.nanoTime() - _ncT0;
+        if (_ncDt > 5_000_000L) {
+            reika.rotarycraft.auxiliary.PipeDebugLog.event("BBM.neighborChanged.slow_ms_" + (_ncDt / 1_000_000L));
+        }
+        // 26.1: roll the stats dump from here — neighborChanged fires from genuine world
+        // events (place / break / connect) rather than every-tick, so the log-IO cost won't
+        // taint the per-tick measurements.
+        reika.rotarycraft.auxiliary.PipeDebugLog.maybeDumpStats();
     }
 
     /**
@@ -156,14 +229,65 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
      * @return
      */
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player ep, InteractionHand pHand, BlockHitResult pHit) {
-        super.use(state, level, pos, ep, pHand, pHit);
+    protected InteractionResult useItemOn(ItemStack pStack, BlockState state, Level level, BlockPos pos, Player ep, InteractionHand pHand, BlockHitResult pHit) {
+        super.useItemOn(pStack, state, level, pos, ep, pHand, pHit);
         RotaryCraftBlockEntity te = (RotaryCraftBlockEntity) level.getBlockEntity(pos);
-        ItemStack is = ep.getMainHandItem();
+        ItemStack is = pStack;
         MachineRegistry m = MachineRegistry.getMachine(level, pos);
 
         if (ep.isCrouching() && !(te instanceof BlockEntityCaveFinder))
             return InteractionResult.PASS;
+
+        // 26.1: generic bucket-fill for fuel-burning engines (microturbine, gas, jet, sport,
+        // steam). The original 1.7 pathway routed bucket → fuel-tank through
+        // FluidContainerRegistry; that API is gone. Vanilla {@link net.minecraft.world.item.BucketItem}
+        // now exposes its content fluid via the public {@code content} field. We map
+        // water/jet-fuel/ethanol/lubricant buckets to the matching engine sub-tank, swap the
+        // bucket back to an empty one (in survival), and sync. Without this branch a fresh
+        // microturbine had no way to receive jet fuel — the only intake was a fuel-line from
+        // below, which the user wouldn't have built that early.
+        if (te instanceof reika.rotarycraft.base.blockentity.BlockEntityEngine engine
+                && is != null && !is.isEmpty()
+                && is.getItem() instanceof net.minecraft.world.item.BucketItem bi) {
+            net.minecraft.world.level.material.Fluid f = bi.content;
+            if (f != null && f != net.minecraft.world.level.material.Fluids.EMPTY) {
+                int filled = engine.fillPipe(
+                        engine.getBlockState().getValue(BlockRotaryCraftMachine.FACING),
+                        new net.neoforged.neoforge.fluids.FluidStack(f, 1000),
+                        net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE);
+                // If that side rejects (canFill is direction-sensitive), retry through the
+                // engine's actual fuel input direction by going directly through addFuel for
+                // jet fuel / ethanol — they're the engine-fuels the user wants to bucket-load.
+                if (filled <= 0) {
+                    if (f == reika.rotarycraft.registry.RotaryFluids.JET_FUEL.get() && engine.getEngineType().isJetFueled()
+                            || f == reika.rotarycraft.registry.RotaryFluids.ETHANOL.get() && engine.getEngineType().isEthanolFueled()) {
+                        engine.addFuel(1000);
+                        if (!ep.isCreative())
+                            ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                        te.syncAllData(true);
+                        return InteractionResult.SUCCESS;
+                    }
+                    if (f == net.minecraft.world.level.material.Fluids.WATER && engine.getEngineType().isWaterPiped()) {
+                        engine.addWater(1000);
+                        if (!ep.isCreative())
+                            ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                        te.syncAllData(true);
+                        return InteractionResult.SUCCESS;
+                    }
+                } else {
+                    // The pipe-side path accepted it — commit the fill.
+                    engine.fillPipe(
+                            engine.getBlockState().getValue(BlockRotaryCraftMachine.FACING),
+                            new net.neoforged.neoforge.fluids.FluidStack(f, 1000),
+                            net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+                    if (!ep.isCreative())
+                        ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                    te.syncAllData(true);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+        }
+
         if (te instanceof BlockEntityAdvancedGear) {
             BlockEntityAdvancedGear tile = (BlockEntityAdvancedGear) te;
             if (tile.getGearType().isLubricated() && tile.canAcceptAnotherLubricantBucket()) {
@@ -202,7 +326,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         if (m == MachineRegistry.MUSICBOX) {
             if (is != null && is.getItem() == RotaryItems.DISK.get()) {
                 BlockEntityMusicBox tile = (BlockEntityMusicBox) te;
-                if (is.getTag() != null) {
+                if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
                     tile.setMusicFromDisc(is);
                 } else {
                     tile.saveMusicToDisk(is);
@@ -360,7 +484,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                                     ep.setItemSlot(EquipmentSlot.MAINHAND, null);
                             }
                             ((BlockEntityBase)te).syncAllData(true);
-                            if (!level.isClientSide)
+                            if (!level.isClientSide())
                                 ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
                             return InteractionResult.SUCCESS;
                         }
@@ -391,60 +515,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                         te.syncAllData(true);
                         return InteractionResult.SUCCESS;
                     }
-                } else if (is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-
-                    if (is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().getFluidInTank(0).getAmount() > 0) {
-                        FluidStack f = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().getFluidInTank(0);
-                        if (f != null) {
-                            Fluid fluid = f.getFluid();
-                            int size = is.getCount();
-                            if (tr.getFluidLevel() + (size - 1) * f.getAmount() <= BlockEntityReservoir.CAPACITY) {
-                                if (tr.isEmpty()) {
-                                    tr.addLiquid(size * f.getAmount(), fluid);
-                                    if (!ep.isCreative()) {
-                                         FluidStack ret = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().drain(f, IFluidHandler.FluidAction.EXECUTE);
-                                        ep.setItemSlot(EquipmentSlot.MAINHAND, ret.isEmpty() ? ReikaItemHelper.getSizedItemStack(is, size) : ItemStack.EMPTY);
-                                    }
-                                    te.syncAllData(true);
-                                    if (!level.isClientSide)
-                                        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
-                                    return InteractionResult.SUCCESS;
-                                } else if (f.getFluid().equals(tr.getFluid().getFluid())) {
-                                    tr.addLiquid(size * f.getAmount(), fluid);
-                                    if (!ep.isCreative()) {
-                                         FluidStack ret = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).resolve().get().drain(f, IFluidHandler.FluidAction.EXECUTE);
-                                        ep.setItemSlot(EquipmentSlot.MAINHAND, ret.isEmpty() ? ReikaItemHelper.getSizedItemStack(is, size) : ItemStack.EMPTY);
-                                    }
-                                    te.syncAllData(true);
-                                    if (!level.isClientSide)
-                                        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
-                                    return InteractionResult.SUCCESS;
-                                }
-                            }
-                        }
-                    }
-                } else if (is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent() && !tr.isEmpty()) {
-                    FluidStack stack = tr.getContents();
-                    boolean hasCapacityAvailable = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(e -> stack.getAmount() <= e.getTankCapacity(0) - e.getFluidInTank(0).getAmount()).orElse(false);
-                    if (hasCapacityAvailable) {
-                        int size = is.getCount();
-                        boolean actionSuccessful = is.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(e -> {
-                            e.fill(stack, IFluidHandler.FluidAction.EXECUTE);
-                            int amt = e.getFluidInTank(0).getAmount() * size;
-                            if (tr.getFluidLevel() >= amt) {
-                                tr.removeLiquid(amt);
-                                if (!ep.isCreative())
-                                    ep.setItemSlot(EquipmentSlot.MAINHAND, ReikaItemHelper.getSizedItemStack(is, size)); //todo check if this breaks lol
-                                te.syncAllData(true);
-                                if (!level.isClientSide)
-                                    ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tr, "tank");
-                                return true;
-                            }
-                            return false;
-                        }).orElse(false);
-                        if (actionSuccessful)
-                            return InteractionResult.SUCCESS;
-                    }
+                // 26.1: NeoForge's Capabilities.FluidHandler.ITEM still works, but the underlying
+                // wire format moved to ResourceHandler<FluidResource>. Generic bucket fill/drain
+                // via the item capability isn't wired yet; only the explicit single-item branches
+                // below are honoured (glass bottle → water bottle, jet-fuel bucket reject). Adding
+                // generic bucket support is a self-contained future improvement and doesn't gate
+                // anything else.
                 } else if (is.getItem() == Items.GLASS_BOTTLE) {
                     int size = is.getCount();
                     if (tr.getFluidLevel() > 0 && tr.getFluid().getFluid().equals(Fluids.WATER)) {
@@ -452,8 +528,25 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                         te.syncAllData(true);
                         return InteractionResult.SUCCESS;
                     }
-                } else if (is.getItem() == RotaryItems.JET_FUEL_BUCKET.get()) { //todo make sure this is meant to be jet fuel
-                    return InteractionResult.FAIL;
+                } else if (is.getItem() instanceof net.minecraft.world.item.BucketItem bi) {
+                    // 26.1 fix: previously special-cased only vanilla water/lava buckets AND
+                    // rejected the jet-fuel bucket outright — but the user wanted "jet fuel and
+                    // other mod fluids" to fill the reservoir too. Generic path: probe the bucket
+                    // item for its content fluid via {@code BucketItem.content}, which is set by
+                    // all standard {@code DispensibleContainerItem} buckets including vanilla
+                    // water/lava, the RotaryCraft fluid buckets, and modded fluid buckets.
+                    net.minecraft.world.level.material.Fluid f = bi.content;
+                    if (f != null && f != net.minecraft.world.level.material.Fluids.EMPTY && tr.canAcceptFluid(f)) {
+                        net.neoforged.neoforge.fluids.FluidStack stack = new net.neoforged.neoforge.fluids.FluidStack(f, 1000);
+                        int filled = tr.fillPipe(net.minecraft.core.Direction.NORTH, stack,
+                                net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+                        if (filled > 0) {
+                            if (!ep.isCreative())
+                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                            te.syncAllData(true);
+                            return InteractionResult.SUCCESS;
+                        }
+                    }
                 }
             }
         }
@@ -599,7 +692,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             if (is.getItem() == Items.written_book) {
                 try {
                     BlockEntityDisplay td = (BlockEntityDisplay)te;
-                    NBTTagCompound nbt = is.getTag();
+                    NBTTagCompound nbt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
                     NBTTagList li = nbt.getTagList("pages", NBTTypes.STRING.ID);
                     ArrayList<String> s = new ArrayList();
                     for (int i = 0; i < li.tagCount(); i++) {
@@ -782,21 +875,24 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             }
         }
         if (te != null && RotaryAux.hasGui(level, pos, ep) && te.isPlayerAccessible(ep)) {
-            if (!level.isClientSide()) {
+            if (!level.isClientSide() && ep instanceof ServerPlayer sp) {
                 // Use the block entity as the MenuProvider, which should now provide a BlankContainer-based menu
-                NetworkHooks.openScreen((ServerPlayer) ep, (MenuProvider) te, pos);
+                sp.openMenu((MenuProvider) te, pos);
             }
             ep.swing(InteractionHand.MAIN_HAND, true);
             return InteractionResult.SUCCESS;
         }
-        te.syncAllData(true);
-
+        // 26.1 fix: legacy fall-through used to {@code syncAllData(true)} here, which fires a
+        // full sync packet on EVERY right-click that didn't open a menu. For pipe-like blocks
+        // (no GUI) every right-click was triggering an expensive serialize+broadcast — causing
+        // the user's "right-click a pipe drops to 0 fps" lag. The relevant data changes already
+        // trigger syncs via {@code setChanged}/{@code recomputeConnections}; this fallback is
+        // redundant and harmful.
         return InteractionResult.FAIL;
     }
 
-    @Override
-    public void appendHoverText(ItemStack is,  BlockGetter p_49817_, List<Component> li, TooltipFlag p_49819_) {
-        super.appendHoverText(is, p_49817_, li, p_49819_);
+    // 1.21.5: Block.appendHoverText removed; tooltips are now on Item. Kept as a helper for BlockItem subclass wiring.
+    public void appendHoverText(ItemStack is, Item.TooltipContext ctx, List<Component> li, TooltipFlag flag) {
         MachineRegistry m = MachineRegistry.getMachineMapping(Block.byItem(is.getItem()));
         if (m == null) {
             return;
@@ -836,7 +932,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             boolean minp = !p.hasNoDirectMinPower();
             boolean mint = !p.hasNoDirectMinTorque();
             boolean mins = !p.hasNoDirectMinSpeed();
-            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_LSHIFT)) {
+            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
                 if (minp)
                     li.add(Component.literal(String.format("Minimum Power: %.3f %sW", ReikaMathLibrary.getThousandBase(pow), ReikaEngLibrary.getSIPrefix(pow))));
                 if (mint)
@@ -857,7 +953,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
         if (m.isEngine()) {
             EngineType type = m.getEngineType();
-            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_LSHIFT)) {
+            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
                 double power = type.getPower();
                 double speed = type.getSpeed();
                 double torque = type.getTorque();
@@ -872,18 +968,18 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                         " for power data";
                 li.add(Component.literal(sb));
             }
-            if (is.hasTag()) {
-                int dmg = is.getTag().getInt("damage");
+            if (is.has(DataComponents.CUSTOM_DATA)) {
+                int dmg = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("damage", 0);
                 li.add(Component.literal(String.format("Damage: %.1f%s", dmg * 12.5F, "%")));
             }
-            if (is.hasTag()) {
-                if (is.getTag().getBoolean("bed")) {
+            if (is.has(DataComponents.CUSTOM_DATA)) {
+                if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getBooleanOr("bed", false)) {
                     li.add(Component.literal("Bedrock Upgrade"));
                 }
             }
             // BlockEntityEngine te = (BlockEntityEngine) MachineRegistry.AC_ENGINE//.createTEInstanceForRender(i);
-            // if (te instanceof NBTMachine && is.hasTag()) {
-                // for (String s : ((NBTMachine)te).getDisplayTags(is.getTag())) {
+            // if (te instanceof NBTMachine && is.has(DataComponents.CUSTOM_DATA)) {
+                // for (String s : ((NBTMachine)te).getDisplayTags(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag())) {
                     // li.add(Component.literal(s));
                 //}
             //}

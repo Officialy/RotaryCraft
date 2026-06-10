@@ -10,7 +10,7 @@
 package reika.rotarycraft.items.tools.charged;
 
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import reika.rotarycraft.base.ItemChargedArmor;
@@ -23,7 +23,7 @@ public class ItemSpringBoots extends ItemChargedArmor //implements IArmorApiaris
     public final int SPEED_LEVEL = 2;
 
     public ItemSpringBoots(ArmorMaterial mat, Item.Properties properties) {
-        super(mat, Type.BOOTS, properties);
+        super(mat, net.minecraft.world.item.equipment.ArmorType.BOOTS, properties);
     }
 
 //    public static boolean isSpringBoots(ItemStack is) {

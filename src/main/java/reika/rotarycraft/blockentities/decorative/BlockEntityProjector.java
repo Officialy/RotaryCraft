@@ -89,10 +89,10 @@
 //    }
 //
 //    public String getCustomImagePath() {
-//        if (itemHandler.getStackInSlot(0).isEmpty() || itemHandler.getStackInSlot(0).getTag() == null)
+//        if (itemHandler.getStackInSlot(0).isEmpty() || itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
 //            return "";
-//        CompoundTag nbt = itemHandler.getStackInSlot(0).getTag();
-//        return nbt.getString("file");
+//        CompoundTag nbt = itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+//        return nbt.getStringOr("file", "");
 //    }
 //
 //    public void cycleInv() {
@@ -243,8 +243,8 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        channel = NBT.getInt("ch");
-//        emptySlide = NBT.getBoolean("empty");
+//        channel = NBT.getIntOr("ch", 0);
+//        emptySlide = NBT.getBooleanOr("empty", false);
 //    }
 //
 //    @Override

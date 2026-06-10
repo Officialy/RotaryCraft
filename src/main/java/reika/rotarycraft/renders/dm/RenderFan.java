@@ -13,10 +13,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import reika.dragonapi.libraries.ReikaAABBHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
@@ -48,22 +51,25 @@ public class RenderFan extends RotaryTERenderer<BlockEntityFan> {
         };
         stack.mulPose(Axis.YP.rotationDegrees(yRot));
         stack.mulPose(Axis.ZP.rotationDegrees(180));
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(FanModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(FanModel.TEXTURE_LOCATION));
         fanModel.renderAll(stack, vertexconsumer, packedLight, tile, null, -tile.phi);
         stack.popPose();
     }
 
     @Override
-    public void render(BlockEntityFan tile, float partialTicks, PoseStack stack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        if (this.doRenderModel(stack, tile))
-            this.renderBlockEntityFanAt(stack, tile, bufferSource, packedLight);
-        if (tile.isInWorld()) {
-            // Render IO overlays and AABB zones
-            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos());
-            AABB box = tile.getBlowZone(tile.getRange());
-            AABB wide = tile.getWideBlowZone(tile.getRange());
-            ReikaAABBHelper.renderAABB(stack, tile.wideAreaBlow ? wide : box, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), tile.iotick, 32, 192, 255, true);
-            ReikaAABBHelper.renderAABB(stack, tile.wideAreaHarvest ? wide.move(0, 1, 0) : box, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), tile.iotick, 255, 255, 255, true);
-        }
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return FanModel.TEXTURE_LOCATION;
+    }
+
+    @Override
+    protected boolean useEntityCutout() {
+        return true;
+    }
+
+    @Override
+    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+        if (be instanceof BlockEntityFan fan)
+            renderBlockEntityFanAt(stack, fan, mbs, light);
     }
 }
+

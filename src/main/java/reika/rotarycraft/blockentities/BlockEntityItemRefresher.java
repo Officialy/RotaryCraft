@@ -48,8 +48,8 @@ public class BlockEntityItemRefresher extends BlockEntityPowerReceiver implement
         for (ItemEntity item : items) {
             if (item.getAge() > item.lifespan - 20)
                 item.getPersistentData().putInt("Age", item.lifespan - 20);//todo check if this works
-            if (item.yo == 0)
-                item.yo = 0.4;
+            if (item.getDeltaMovement().y == 0)
+                item.setDeltaMovement(item.getDeltaMovement().add(0, 0.4, 0));
         }
 
     }

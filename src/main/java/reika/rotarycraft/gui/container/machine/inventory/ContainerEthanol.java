@@ -12,8 +12,6 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.items.SlotItemHandler;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
@@ -33,14 +31,10 @@ public class ContainerEthanol extends IOMachineContainer<BlockEntityGasEngine> {
     public ContainerEthanol(final int id, Inventory player, BlockEntityGasEngine engine) {
         super(RotaryMenus.GAS_ENGINE.get(), id, player, engine);
         this.engine = engine;
-        this.engine.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
-            this.addSlot(new SlotItemHandler(itemHandler, 0, 61, 36) {
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return stack.getItem() == RotaryItems.ETHANOL.get();
-                }
-            });
-        });
+        // 26.1: ethanol-canister input slot at (61, 36), matching the original 1.7 layout
+        // (port previously placed it at 80, 35 — off-centre relative to the {@code ethanolgui}
+        // background's slot recess).
+        this.addSlot(engine.itemHandler.slot(0, 61, 36));
         this.addPlayerInventory(player);
     }
 

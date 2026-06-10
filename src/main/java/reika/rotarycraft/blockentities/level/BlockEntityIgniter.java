@@ -91,7 +91,7 @@
 //            AABB box = new AABB(worldPosition).expandTowards(spread, yspread, spread);//ReikaAABBHelper.getBlockAABB(this).expand(spread, yspread, spread);
 //            List<LivingEntity> in = level.getEntitiesOfClass(LivingEntity.class, box);
 //            for (LivingEntity ent : in) {
-//                ent.setSecondsOnFire(1);
+//                ent.igniteForSeconds(1);
 //            }
 //        }
 //    }
@@ -101,7 +101,7 @@
 //        int d = this.getRange();
 //        //ReikaWorldHelper.spawnParticleLine(world, x+0.5, y+0.5, z+0.5, fx+0.5, fy+0.5, fz+0.5, "flame", 0, 0, 0, 20);
 //
-//        if (world.isClientSide) {
+//        if (world.isClientSide()) {
 //            this.fireFX(world, pos, pos1, d);
 //        } else
 //            ReikaWorldHelper.temperatureEnvironment(world, pos, this.getAffectiveTemperature());
@@ -165,7 +165,7 @@
 //            if (leftover > 0) {
 //                ItemEntity ei = new ItemEntity(level, worldPosition.getX() + DragonAPI.rand.nextFloat(), worldPosition.getY() + DragonAPI.rand.nextFloat(), worldPosition.getZ() + DragonAPI.rand.nextFloat(), is);
 //                ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
-//                if (!level.isClientSide)
+//                if (!level.isClientSide())
 //                    level.addFreshEntity(ei);
 //            }
 //        }
@@ -179,7 +179,7 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        temperature = NBT.getInt("temperature");
+//        temperature = NBT.getIntOr("temperature", 0);
 //    }
 //
 //    @Override

@@ -164,7 +164,7 @@ public class BlockEntityClutch extends BlockEntity1DTransmitter {
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
 
-        needsRedstone = tag.getBoolean("redstone");
+        needsRedstone = tag.getBooleanOr("redstone", false);
     }
 
     @Override

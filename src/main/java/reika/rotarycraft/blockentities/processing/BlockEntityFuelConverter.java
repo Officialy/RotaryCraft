@@ -12,7 +12,7 @@
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
-//import net.neoforged.common.util.EnumHelper;
+//import net.neoforged.neoforge.common.util.EnumHelper;
 //import reika.dragonapi.instantiable.ItemMatch;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.java.ReikaRandomHelper;
@@ -82,7 +82,7 @@
 //            return;
 //        if (omega < MINSPEED)
 //            return;
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //
 //        Conversions c = this.getConversion();

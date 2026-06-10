@@ -15,8 +15,8 @@
 //import net.minecraft.BlockEntity.BlockEntity;
 //import net.minecraft.util.Mth;
 //import net.neoforged.client.MinecraftForgeClient;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
@@ -86,8 +86,6 @@
 //            GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 //            GL11.glEnable(GL11.GL_CULL_FACE);
 //            GL11.glDisable(GL11.GL_LIGHTING);
-//            RenderSystem.enableBlend();
-//            RenderSystem.defaultBlendFunc();
 //
 //            ReikaLiquidRenderer.bindFluidTexture(f);
 //            ReikaLiquidRenderer.setFluidColor(liquid);

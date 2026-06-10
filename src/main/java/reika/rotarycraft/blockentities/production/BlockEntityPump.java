@@ -21,12 +21,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.fml.loading.FMLEnvironment;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
@@ -54,7 +51,6 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     public static final int FALLOFF = 256; //256W per 1 kPa
     private final BlockArray blocks = new BlockArray();
     private final HybridTank tank = new HybridTank("pump", CAPACITY);
-    private final LazyOptional<IFluidHandler> holder = LazyOptional.of(() -> tank);
 
     public int duplicationAmount;
     private int soundtick = 200;
@@ -89,13 +85,12 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         }
         if (damage > 400)
             power = 0;
-        //ReikaJavaLibrary.pConsole(FMLLoader.getDist()+" for "+blocks.getSize());
+        //ReikaJavaLibrary.pConsole(FMLEnvironment.getDist()+" for "+blocks.getSize());
         if (blocks.isEmpty())
             return;
         if (power >= MINPOWER && torque >= MINTORQUE && this.getFluidLevel() < CAPACITY && tickcount >= this.getOperationTime()) {
 //            int loc[] = this.findSourceBlock(world, pos);
             BlockPos loc = blocks.getNextAndMoveOn();
-            ReikaJavaLibrary.pConsole(loc.getX() + "  " + loc.getY() + "  " + loc.getZ() + "  for side " + FMLLoader.getDist());
             this.harvest(world, pos, loc);
             tickcount = 0;
             //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.liquidID));
@@ -110,14 +105,24 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     }
 
     public void getIOSides(Direction dir) {
+        // 26.1 fix: the port previously only handled EAST and NORTH facings. Pumps placed
+        // facing SOUTH or WEST left read/read2 unset (silent no-power), so the user could place
+        // a pump in any half of the compass rose and it would either work or do nothing
+        // depending on which way it pointed. Pumps accept power from either side of their
+        // facing axis (the shaft can come from front or back), so the SOUTH/WEST facings map
+        // to the same axis as their NORTH/EAST counterparts.
         switch (dir) {
-            case EAST -> {
+            case EAST, WEST -> {
                 read = Direction.EAST;
                 read2 = Direction.WEST;
             }
-            case NORTH -> {
+            case NORTH, SOUTH -> {
                 read = Direction.NORTH;
                 read2 = Direction.SOUTH;
+            }
+            default -> {
+                // UP/DOWN — pumps are horizontal-facing only. Falls through with no
+                // assignment, matching legacy 1.7 behaviour.
             }
         }
     }
@@ -145,11 +150,9 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     }
 
     public void harvest(Level world, BlockPos pos, BlockPos loc) {
-        if (world.isClientSide)
+        if (world.isClientSide())
             return;
         FluidStack fs = ReikaWorldHelper.getDrainableFluid(world, loc);
-        if (fs == null)
-            return;
         if (fs == null || !tank.canTakeIn(fs))
             return;
         Fluid f = fs.getFluid();
@@ -173,7 +176,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
 //            RotaryAdvancements.PUMP.triggerAchievement(this.getPlacer());
         duplicationAmount = (int) (mult * ConfigRegistry.FREEWATER.getFloat());
         tank.addLiquid(fs.getAmount() * mult, f);
-        world.blockUpdated(loc, world.getBlockState(loc).getBlock());
+        world.updateNeighborsAt(loc, world.getBlockState(loc).getBlock());
     }
 
     private boolean canMultiply(Fluid fluid) {
@@ -191,7 +194,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         FluidStack f = tank.getActualFluid();
         if (f2 == null)
             return false;
-        boolean liq = f2.equals(f) || f == null;
+        boolean liq = f == null || f2.equals(f.getFluid());
         //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.valueOf(liq)+"  "+String.valueOf(dmg0));
         return /*srcmeta &&*/ liq;
     }
@@ -219,7 +222,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     @Override
     protected void readSyncTag(CompoundTag tag) {
         tank.readFromNBT(tag);
-        damage = tag.getInt("dmg");
+        damage = tag.getIntOr("dmg", 0);
         super.readSyncTag(tag);
     }
 
@@ -314,16 +317,8 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (from.getStepY() != 0)
-            return null;
+            return FluidStack.EMPTY;
         return tank.drain(maxDrain, doDrain);
-    }
-
-    @Override
-    
-    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
-        if (capability == ForgeCapabilities.FLUID_HANDLER)
-            return holder.cast();
-        return super.getCapability(capability, facing);
     }
 
     @Override
@@ -341,3 +336,5 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         return true;
     }
 }
+
+

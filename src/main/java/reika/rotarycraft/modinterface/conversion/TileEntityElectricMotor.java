@@ -14,8 +14,8 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.entity.BlockEntity;import net.minecraft.util.Mth;
 //import net.minecraft.world.World;
-//import net.neoforged.common.NeoForge;
-//import net.neoforged.common.util.Direction;
+//import net.neoforged.neoforge.common.NeoForge;
+//import net.neoforged.neoforge.common.util.Direction;
 //
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.asm.APIStripper.Strippable;

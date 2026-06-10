@@ -26,7 +26,7 @@
 //import net.minecraft.world.entity.LivingEntity;
 //import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 //import net.minecraft.world.entity.decoration.ItemFrame;
-//import net.minecraft.world.entity.decoration.Painting;
+//import net.minecraft.world.entity.decoration.painting.Painting;
 //import net.minecraft.world.entity.monster.Slime;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Block;
@@ -51,7 +51,7 @@
 //        motionX = vx;
 //        motionY = vy;
 //        motionZ = vz;
-//        if (!world.isClientSide)
+//        if (!world.isClientSide())
 //            velocityChanged = true;
 //        gun = r;
 //    }
@@ -63,7 +63,7 @@
 //            return;
 //        }
 //
-//        if (level.isClientSide && this.getEntityId() % 10 == 0) { //tracer round
+//        if (level.isClientSide() && this.getEntityId() % 10 == 0) { //tracer round
 //            this.spawnTracerParticles();
 //        }
 //
@@ -103,7 +103,7 @@
 //            return;
 //        }
 //        //ReikaChatHelper.write(this.tickCount);
-//        if (!level.isClientSide && (shootingEntity != null && shootingEntity.isAlive() || !level.blockExists((int) getY, (int) getY(), (int) posZ)))
+//        if (!level.isClientSide() && (shootingEntity != null && shootingEntity.isAlive() || !level.blockExists((int) getY, (int) getY(), (int) posZ)))
 //            this.kill();
 //        else {
 //            this.onEntityUpdate();
@@ -192,7 +192,7 @@
 //                        }
 //                    }
 //
-//                    if (world.isClientSide && id.defaultBlockState().getMaterial() != Material.AIR && MachineRegistry.getMachine(level, x0 + i, y0 + j, z0 + k) != MachineRegistry.GATLING)
+//                    if (world.isClientSide() && id.defaultBlockState().getMaterial() != Material.AIR && MachineRegistry.getMachine(level, x0 + i, y0 + j, z0 + k) != MachineRegistry.GATLING)
 //                        ReikaRenderHelper.spawnDropParticles(world, x0 + i, y0 + j, z0 + k, id, world.getBlockMetadata(x0 + i, y0 + j, z0 + k));
 //                }
 //            }

@@ -15,8 +15,8 @@
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
-//import net.neoforged.fluids.FluidStack;
-//import net.neoforged.fluids.capability.IFluidHandler;
+//import net.neoforged.neoforge.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.instantiable.StepTimer;
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -95,7 +95,7 @@
 //    }
 //
 //    private boolean canMake(FluidStack liq) {
-//        if (level.isClientSide)
+//        if (level.isClientSide())
 //            return false;
 //        if (tank.isEmpty())
 //            return true;
@@ -171,8 +171,8 @@
 //
 //        tank.load(NBT);
 //
-//        energy = NBT.getLong("e");
-//        temperature = NBT.getInt("temp");
+//        energy = NBT.getLongOr("e", 0L);
+//        temperature = NBT.getIntOr("temp", 0);
 //    }
 //
 //    @Override

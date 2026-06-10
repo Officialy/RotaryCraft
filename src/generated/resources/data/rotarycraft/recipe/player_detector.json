@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "L": "minecraft:lapis_lazuli",
+    "O": "minecraft:obsidian",
+    "P": "rotarycraft:hsla_steel_plate",
+    "R": "rotarycraft:radar_unit"
+  },
+  "pattern": [
+    "LRL",
+    "OGO",
+    "OPO"
+  ],
+  "result": {
+    "id": "rotarycraft:player_detector"
+  }
+}

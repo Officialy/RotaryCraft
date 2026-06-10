@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "minecraft:oak_planks",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "BSB",
+    "BBB"
+  ],
+  "result": {
+    "count": 8,
+    "id": "rotarycraft:wood_shaft"
+  }
+}

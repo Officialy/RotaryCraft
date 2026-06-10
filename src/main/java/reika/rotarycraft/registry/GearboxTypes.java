@@ -3,11 +3,11 @@ package reika.rotarycraft.registry;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import reika.dragonapi.ModList;
 import reika.dragonapi.auxiliary.EnumDifficulty;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -39,12 +39,12 @@ public enum GearboxTypes {
     }
 
     public static GearboxTypes getMaterialFromGearboxItem(ItemStack is) {
-//        if (is.getTag() != null && is.getTag().contains("type"))
-        return GearboxTypes.valueOf(is.getTag().getString("type"));
+//        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null && is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("type"))
+        return GearboxTypes.valueOf(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getStringOr("type", ""));
     }
 
     public static GearboxTypes getMaterialFromCraftingItem(ItemStack is) {
-        Tag idx = is.getTag().get("material");
+        Tag idx = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().get("material");
 //        for (GearboxTypes g : typeList) {
 //            if (g == idx)
 //                return g;
@@ -137,9 +137,9 @@ public enum GearboxTypes {
             case WOOD -> "plankWood";
             case STONE -> new ItemStack(Blocks.STONE);
             case LIVINGWOOD ->
-                    new ItemStack(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ModList.BOTANIA.modid, "livingwood")));
+                    new ItemStack(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ModList.BOTANIA.modid, "livingwood")));
             case LIVINGROCK ->
-                    new ItemStack(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ModList.BOTANIA.modid, "livingrock")));
+                    new ItemStack(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ModList.BOTANIA.modid, "livingrock")));
             case STEEL -> RotaryItems.HSLA_STEEL_INGOT;
             case TUNGSTEN -> RotaryItems.TUNGSTEN_ALLOY_INGOT;
             case DIAMOND -> Items.DIAMOND;
@@ -153,9 +153,9 @@ public enum GearboxTypes {
             case WOOD -> "plankWood";
             case STONE -> Blocks.STONE_SLAB.asItem().getDefaultInstance();
             case LIVINGWOOD ->
-                    new ItemStack(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ModList.BOTANIA.modid, "livingwood0Slab")));
+                    new ItemStack(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ModList.BOTANIA.modid, "livingwood0Slab")));
             case LIVINGROCK ->
-                    new ItemStack(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(ModList.BOTANIA.modid, "livingrock0Slab")));
+                    new ItemStack(BuiltInRegistries.BLOCK.getValue(Identifier.fromNamespaceAndPath(ModList.BOTANIA.modid, "livingrock0Slab")));
             default -> RotaryItems.MOUNT;
         };
     }
@@ -189,7 +189,7 @@ public enum GearboxTypes {
         //return this.getGearboxItemByIndex(ReikaMathLibrary.logbase2(ratio) - 1);
 
         ItemStack is = MachineRegistry.GEARBOX.getBlockState().getBlock().asItem().getDefaultInstance();
-        is.getOrCreateTag().putString("type", this.name());
+        is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putString("type", this.name());
         return is;
     }
 

@@ -20,7 +20,7 @@
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.DragonOptions;
 //import reika.dragonapi.ModList;
@@ -165,7 +165,7 @@
 //        }
 //
 //        if (hitProtection && notifiedPlayer < 10) {
-//            if (world.getDayTime() % 100 == 0) {
+//            if (world.getOverworldClockTime() % 100 == 0) {
 //                Player ep = this.getPlacer();
 //                if (ep != null) {
 //                    notifiedPlayer++;
@@ -225,7 +225,7 @@
 //            this.calcReqPowerSafe(world, pos, meta);
 //            if (power >= reqpow && reqpow != -1) {
 //                this.setJammed(false);
-//                if (!world.isClientSide) {
+//                if (!world.isClientSide()) {
 //                    for (int i = 0; i <= anticipationDistance; i++) {
 //                        ReikaWorldHelper.forceGenAndPopulate(world, x + (step + 16 * i) * facing.getStepX(), z + (step + 16 * i) * facing.getStepZ(), genRange);
 //                    }
@@ -459,7 +459,7 @@
 //            RotaryAdvancements.CUTKNOT.triggerAchievement(this.getPlacer());
 //        if (id == Blocks.BEDROCK || id == Blocks.END_PORTAL_FRAME)
 //            return false;
-//        if (!world.isClientSide && !ReikaPlayerAPI.playerCanBreakAt((WorldServer) world, xread, yread, zread, id, meta, this.getServerPlacer())) {
+//        if (!world.isClientSide() && !ReikaPlayerAPI.playerCanBreakAt((WorldServer) world, xread, yread, zread, id, meta, this.getServerPlacer())) {
 //            hitProtection = true;
 //            return false;
 //        }
@@ -560,7 +560,7 @@
 //    private boolean chestCheck(Level world, BlockPos pos, ItemStack is) {
 //        if (is == null)
 //            return false;
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return false;
 //        for (int i = 0; i < 6; i++) {
 //            Direction dir = dirs[i];
@@ -632,12 +632,12 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        step = NBT.getInt("step");
-//        jammed = NBT.getBoolean("jam");
-//        durability = NBT.getInt("dura");
+//        step = NBT.getIntOr("step", 0);
+//        jammed = NBT.getBooleanOr("jam", false);
+//        durability = NBT.getIntOr("dura", 0);
 //
-//        mintorque = NBT.getInt("reqtrq");
-//        reqpow = NBT.getInt("reqpow");
+//        mintorque = NBT.getIntOr("reqtrq", 0);
+//        reqpow = NBT.getIntOr("reqpow", 0);
 //    }
 //
 //    @Override
@@ -656,7 +656,7 @@
 //    @Override
 //    public void load(CompoundTag NBT) {
 //        super.load(NBT);
-//        drops = NBT.getBoolean("drops");
+//        drops = NBT.getBooleanOr("drops", false);
 //
 //        enchantments.load(NBT.getTagList("enchants", NBTTypes.COMPOUND.ID));
 //

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_combustor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:combustor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:ethanol_jetpack"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_combustor"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:ethanol_jetpack"
+    ]
+  }
+}

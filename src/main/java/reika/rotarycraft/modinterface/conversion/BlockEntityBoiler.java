@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -80,6 +80,7 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        super.updateBlockEntity();
         this.getPowerBelow();
 
         timer.update();
@@ -194,8 +195,8 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        temperature = NBT.getInt("temp");
-        storedEnergy = NBT.getLong("energy");
+        temperature = NBT.getIntOr("temp", 0);
+        storedEnergy = NBT.getLongOr("energy", 0L);
     }
 
     @Override

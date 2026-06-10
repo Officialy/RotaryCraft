@@ -11,7 +11,7 @@
 //
 //import net.minecraft.ChatFormatting;
 //import net.minecraft.world.InteractionHand;
-//import net.minecraft.world.InteractionResultHolder;
+//import net.minecraft.world.InteractionResult;
 //import net.minecraft.world.entity.LivingEntity;
 //import net.minecraft.world.entity.Mob;
 //import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -51,7 +51,7 @@
 //
 //    //todo add noCharge();
 //    @Override
-//    public InteractionResultHolder<ItemStack> use(Level world, Player ep, InteractionHand hand) {
+//    public InteractionResult use(Level world, Player ep, InteractionHand hand) {
 //        this.warnCharge(this.getDefaultInstance());
 //        if (RotaryConfig.COMMON.CLEARCHAT.getState())
 //            ReikaChatHelper.clearChat(); //clr
@@ -126,7 +126,7 @@
 //                }
 //            }
 //        }
-//        return InteractionResultHolder.success(this.getDefaultInstance());
+//        return InteractionResult.SUCCESS;
 //    }
 //
 //}

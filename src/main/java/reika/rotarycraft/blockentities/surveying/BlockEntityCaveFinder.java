@@ -75,7 +75,7 @@ public class BlockEntityCaveFinder extends BlockEntityPowerReceiver implements R
         }
 
         int t = this.getUpdateFrequency();
-        if (needsCalc || (world.getDayTime() & t) == 0)
+        if (needsCalc || (world.getOverworldClockTime() & t) == 0)
             this.calculatePoints();
 
         //ReikaJavaLibrary.pConsole(Arrays.deepToString(points));
@@ -103,7 +103,7 @@ public class BlockEntityCaveFinder extends BlockEntityPowerReceiver implements R
         Thread t = new Thread(scanner);
         t.start();
         needsCalc = false;
-//        if (FMLLoader.getDist() == Dist.CLIENT) {
+//        if (FMLEnvironment.getDist() == Dist.CLIENT) {
 //            RenderCaveFinder rcf = (RenderCaveFinder) this.getRenderer();
 //            rcf.removeListFor(this);
 //        }
@@ -138,9 +138,9 @@ public class BlockEntityCaveFinder extends BlockEntityPowerReceiver implements R
 //        return 65536D;
 //    }
 
-    @Override
+    // 1.21.5: BlockEntity.getRenderBoundingBox removed; INFINITE_EXTENT_AABB → AABB.INFINITE.
     public AABB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
+        return AABB.INFINITE;
     }
 
     public int getRange() {
@@ -190,8 +190,8 @@ public class BlockEntityCaveFinder extends BlockEntityPowerReceiver implements R
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        src = tag.getIntArray("Source");
-        needsCalc = tag.getBoolean("calc");
+        src = tag.getIntArray("Source").orElse(src);
+        needsCalc = tag.getBooleanOr("calc", false);
     }
 
     @Override
@@ -251,3 +251,5 @@ public class BlockEntityCaveFinder extends BlockEntityPowerReceiver implements R
     }
 
 }
+
+

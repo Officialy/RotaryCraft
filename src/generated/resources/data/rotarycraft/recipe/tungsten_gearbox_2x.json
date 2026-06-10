@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:tungsten_alloy_gear_2x",
+    "M": "rotarycraft:mount"
+  },
+  "pattern": [
+    "G",
+    "M"
+  ],
+  "result": {
+    "id": "rotarycraft:tungsten_gearbox_2x"
+  }
+}

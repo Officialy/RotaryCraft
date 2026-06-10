@@ -7,8 +7,9 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -18,7 +19,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class JetModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/");
 
     private final ModelPart shape1;
     private final ModelPart shape3;
@@ -85,11 +86,10 @@ public class JetModel extends RotaryModelBase {
     private final ModelPart shape426;
     private final ModelPart shape2a;
     private final ModelPart shape2a2;
-    private final ModelPart root;
+    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
 
     public JetModel(ModelPart modelPart) {
-        super(RenderType::entityCutout);
-        this.root = modelPart;
+        super(modelPart, RenderTypes::entityCutout);
 
         this.shape1 = modelPart.getChild("shape1");
         this.shape3 = modelPart.getChild("shape3");
@@ -623,11 +623,100 @@ public class JetModel extends RotaryModelBase {
 
         @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        renderAllColored(stack, tex, packedLightIn, te, conditions, phi, theta, 0xFFFFFFFF);
+    }
+
+    public void renderAllColored(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta, int color) {
+        final int LM = packedLightIn;
+        final int OV = OverlayTexture.NO_OVERLAY;
+
+        shape1.render(stack, tex, LM, OV, color);
+        shape3.render(stack, tex, LM, OV, color);
+        shape3a.render(stack, tex, LM, OV, color);
+        shape3b.render(stack, tex, LM, OV, color);
+        shape3c.render(stack, tex, LM, OV, color);
+        shape3d.render(stack, tex, LM, OV, color);
+        shape3a1.render(stack, tex, LM, OV, color);
+        shape3a2.render(stack, tex, LM, OV, color);
+        shape3d3.render(stack, tex, LM, OV, color);
+        shape3c4.render(stack, tex, LM, OV, color);
+        shape3b5.render(stack, tex, LM, OV, color);
+        shape36.render(stack, tex, LM, OV, color);
+        shape3a7.render(stack, tex, LM, OV, color);
+        shape3a8.render(stack, tex, LM, OV, color);
+        shape3a9.render(stack, tex, LM, OV, color);
+        shape3a0.render(stack, tex, LM, OV, color);
+        shape3a20.render(stack, tex, LM, OV, color);
+        shape3a11.render(stack, tex, LM, OV, color);
+        shape5a.render(stack, tex, LM, OV, color);
+        shape5b.render(stack, tex, LM, OV, color);
+        shape5c.render(stack, tex, LM, OV, color);
+        shape5d.render(stack, tex, LM, OV, color);
+        shape6.render(stack, tex, LM, OV, color);
+        shape6a.render(stack, tex, LM, OV, color);
+        shape6b.render(stack, tex, LM, OV, color);
+        shape6c.render(stack, tex, LM, OV, color);
+        shape6d.render(stack, tex, LM, OV, color);
+
+        float factor = 1.95f;
+        double d = 1.0625;
+        stack.pushPose();
+        stack.translate(0, d, 0);
+        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi / factor));
+        stack.translate(0, -d, 0);
+
+        shape2.render(stack, tex, LM, OV, color);
+        shape2b.render(stack, tex, LM, OV, color);
+        shape2c.render(stack, tex, LM, OV, color);
+        shape2d.render(stack, tex, LM, OV, color);
+        shape2e.render(stack, tex, LM, OV, color);
+        shape2f.render(stack, tex, LM, OV, color);
+        shape2g.render(stack, tex, LM, OV, color);
+        shape2h.render(stack, tex, LM, OV, color);
+        shape2i.render(stack, tex, LM, OV, color);
+        shape4.render(stack, tex, LM, OV, color);
+        shape41.render(stack, tex, LM, OV, color);
+        shape42.render(stack, tex, LM, OV, color);
+        shape43.render(stack, tex, LM, OV, color);
+        shape44.render(stack, tex, LM, OV, color);
+        shape45.render(stack, tex, LM, OV, color);
+        shape46.render(stack, tex, LM, OV, color);
+        shape47.render(stack, tex, LM, OV, color);
+        shape48.render(stack, tex, LM, OV, color);
+        shape49.render(stack, tex, LM, OV, color);
+        shape410.render(stack, tex, LM, OV, color);
+        shape411.render(stack, tex, LM, OV, color);
+        shape412.render(stack, tex, LM, OV, color);
+        shape413.render(stack, tex, LM, OV, color);
+        shape414.render(stack, tex, LM, OV, color);
+        shape415.render(stack, tex, LM, OV, color);
+        shape416.render(stack, tex, LM, OV, color);
+        shape417.render(stack, tex, LM, OV, color);
+        shape418.render(stack, tex, LM, OV, color);
+        shape419.render(stack, tex, LM, OV, color);
+        shape420.render(stack, tex, LM, OV, color);
+        shape421.render(stack, tex, LM, OV, color);
+        shape422.render(stack, tex, LM, OV, color);
+        shape423.render(stack, tex, LM, OV, color);
+        shape424.render(stack, tex, LM, OV, color);
+        shape425.render(stack, tex, LM, OV, color);
+        shape426.render(stack, tex, LM, OV, color);
+        stack.popPose();
+
+        stack.pushPose();
+        stack.translate(0, d, 0);
+        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.translate(0, -d, 0);
+        shape2a2.render(stack, tex, LM, OV, color);
+        shape2a.render(stack, tex, LM, OV, color);
+        stack.popPose();
     }
 
     @Override
-    public ResourceLocation getTexture() {
-        return TEXTURE_LOCATION;
+    public Identifier getTexture() {
+        // Directory prefix here is used by the legacy animation logic; the item renderer needs
+        // a concrete .png — use the canonical jet engine texture.
+        return Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/jettex.png");
     }
 }
+

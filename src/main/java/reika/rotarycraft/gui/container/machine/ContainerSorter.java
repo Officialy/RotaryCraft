@@ -12,7 +12,7 @@ package reika.rotarycraft.gui.container.machine;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
 import reika.dragonapi.instantiable.gui.slot.GhostSlot;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -46,7 +46,7 @@ public class ContainerSorter extends IOMachineContainer<BlockEntitySorting> {
     }
 
     @Override
-    public void clicked(int slot, int button, ClickType type, Player ep) {
+    public void clicked(int slot, int button, ContainerInput type, Player ep) {
         boolean inGUI = slot < BlockEntitySorting.LENGTH * 3 && slot >= 0;
         if (inGUI) {
             ItemStack held = ep.getMainHandItem();
@@ -56,3 +56,4 @@ public class ContainerSorter extends IOMachineContainer<BlockEntitySorting> {
     }
 
 }
+

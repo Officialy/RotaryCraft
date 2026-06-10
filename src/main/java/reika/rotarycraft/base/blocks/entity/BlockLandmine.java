@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.network.NetworkHooks;
-
+// 1.21.5: NetworkHooks.openScreen → ServerPlayer.openMenu(MenuProvider, BlockPos).
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine;
 
@@ -46,12 +45,15 @@ public class BlockLandmine extends BlockBasicMachine {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult pHit) {
+    protected InteractionResult useItemOn(net.minecraft.world.item.ItemStack pStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult pHit) {
         BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof BlockEntityLandmine landmine && !level.isClientSide) {
-            NetworkHooks.openScreen((ServerPlayer) player, landmine, entity.getBlockPos());
+        if (entity instanceof BlockEntityLandmine landmine && !level.isClientSide() && player instanceof ServerPlayer sp) {
+            sp.openMenu(landmine, entity.getBlockPos());
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

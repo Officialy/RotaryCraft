@@ -9,13 +9,13 @@
  ******************************************************************************/
 package reika.rotarycraft.registry;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.neoforged.registries.DeferredRegister;
-import net.neoforged.registries.ForgeRegistries;
-import net.neoforged.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.entities.EntityDischarge;
 import reika.rotarycraft.entities.EntityIceBlock;
@@ -24,27 +24,27 @@ import java.util.function.Supplier;
 
 public class RotaryEntities {
 
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, RotaryCraft.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, RotaryCraft.MODID);
 
-//    public static final RegistryObject<EntityType<EntityRailGunShot>> RAILGUN = registerEntityType("railgun_shot", () -> EntityType.Builder.of((EntityRailGunShot::new), MobCategory.MISC));
+//    public static final DeferredHolder<EntityType<?>, EntityType<EntityRailGunShot>> RAILGUN = registerEntityType("railgun_shot", () -> EntityType.Builder.of((EntityRailGunShot::new), MobCategory.MISC));
 
-//    public static final RegistryObject<EntityType<EntityFreezeGunShot>> FREEZEGUN = registerEntityType("freezegun_shot", () -> EntityType.Builder.of((EntityFreezeGunShot::new), MobCategory.MISC));
+//    public static final DeferredHolder<EntityType<?>, EntityType<EntityFreezeGunShot>> FREEZEGUN = registerEntityType("freezegun_shot", () -> EntityType.Builder.of((EntityFreezeGunShot::new), MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<EntityIceBlock>> ICE = registerEntityType("ice_block", () -> EntityType.Builder.of((EntityIceBlock::new), MobCategory.MISC));
+    public static final DeferredHolder<EntityType<?>, EntityType<EntityIceBlock>> ICE = registerEntityType("ice_block", () -> EntityType.Builder.of((EntityIceBlock::new), MobCategory.MISC));
 
-//    public static final RegistryObject<EntityType<EntityGasMinecart>> GASCART = registerEntityType("gas_minecart", () -> EntityType.Builder.of((EntityGasMinecart::new), MobCategory.MISC));
+//    public static final DeferredHolder<EntityType<?>, EntityType<EntityGasMinecart>> GASCART = registerEntityType("gas_minecart", () -> EntityType.Builder.of((EntityGasMinecart::new), MobCategory.MISC));
 
     //LIQUIDBLOCK(EntityLiquidBlock, "Liquid Block");
-//    public static final RegistryObject<EntityType<EntitySonicShot>> SHOCKWAVE = registerEntityType("shock_wave", () -> EntityType.Builder.of((EntitySonicShot::new), MobCategory.MISC));
+//    public static final DeferredHolder<EntityType<?>, EntityType<EntitySonicShot>> SHOCKWAVE = registerEntityType("shock_wave", () -> EntityType.Builder.of((EntitySonicShot::new), MobCategory.MISC));
 
-    public static final RegistryObject<EntityType<EntityDischarge>> DISCHARGE = registerEntityType("discharge", () -> EntityType.Builder.of((EntityDischarge::new), MobCategory.MISC));
+    public static final DeferredHolder<EntityType<?>, EntityType<EntityDischarge>> DISCHARGE = registerEntityType("discharge", () -> EntityType.Builder.of((EntityDischarge::new), MobCategory.MISC));
 
     //FLAMETHROWER(EntityFlameThrowerFire, "Flamethrower Fire");
-//    public static final RegistryObject<EntityType<EntityFlakShot>> FLAKSHOT = registerEntityType("flak_shot", () -> EntityType.Builder.of((EntityFlakShot::new), MobCategory.MISC));
+//    public static final DeferredHolder<EntityType<?>, EntityType<EntityFlakShot>> FLAKSHOT = registerEntityType("flak_shot", () -> EntityType.Builder.of((EntityFlakShot::new), MobCategory.MISC));
 
-//    public static final RegistryObject<EntityType<EntityGatlingShot>> GATLING = registerEntityType("gatling_round", () -> EntityType.Builder.of((EntityGatlingShot::new), MobCategory.MISC));
+//    public static final DeferredHolder<EntityType<?>, EntityType<EntityGatlingShot>> GATLING = registerEntityType("gatling_round", () -> EntityType.Builder.of((EntityGatlingShot::new), MobCategory.MISC));
 
-//    public static final RegistryObject<EntityType<EntityFlameTurretShot>> FLAMESHOT = registerEntityType("burning_liquid", () -> EntityType.Builder.of((EntityFlameTurretShot::new), MobCategory.MISC));
+//    public static final DeferredHolder<EntityType<?>, EntityType<EntityFlameTurretShot>> FLAMESHOT = registerEntityType("burning_liquid", () -> EntityType.Builder.of((EntityFlameTurretShot::new), MobCategory.MISC));
 
     /**
      * Registers an entity type.
@@ -53,9 +53,12 @@ public class RotaryEntities {
      * @param factory The factory used to create the entity type builder
      * @return A RegistryObject reference to the entity type
      */
-    private static <T extends Entity> RegistryObject<EntityType<T>> registerEntityType(final String name, final Supplier<EntityType.Builder<T>> factory) {
-        return ENTITIES.register(name, () -> factory.get().build(new ResourceLocation(RotaryCraft.MODID, name).toString())
-        );
+    private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> registerEntityType(final String name, final Supplier<EntityType.Builder<T>> factory) {
+        // 1.21.5: EntityType.Builder.build now takes ResourceKey<EntityType<?>> instead of a String.
+        net.minecraft.resources.ResourceKey<EntityType<?>> key = net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.ENTITY_TYPE,
+                net.minecraft.resources.Identifier.fromNamespaceAndPath(RotaryCraft.MODID, name));
+        return ENTITIES.register(name, () -> factory.get().build(key));
     }
 
 /*

@@ -103,7 +103,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
             this.fire(world, pos, slot);
         //this.syncTNTData(world, pos);
         if (targetMode) {
-            AABB box = new AABB(pos, new BlockPos(pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).expandTowards(256, 256, 256);
+            AABB box = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).inflate(256, 256, 256);
             List<PrimedTnt> in = world.getEntitiesOfClass(PrimedTnt.class, box);
             for (PrimedTnt tnt : in) {
                 if (!tnt.onGround()) {
@@ -112,13 +112,13 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
 //                    tnt.motionZ /= 0.869800000190734863D;
                     tnt.setDeltaMovement(0.869800000190734863D, 0, 0.869800000190734863D);
 
-//      todo              if (!world.isClientSide)
+//      todo              if (!world.isClientSide())
 //                        tnt.velocityChanged = true;
                 } else {
 //                    tnt.motionX = 0;
 //                    tnt.motionZ = 0;
                     tnt.setDeltaMovement(0, 0, 0);
-//todo                    if (!world.isClientSide)
+//todo                    if (!world.isClientSide())
 //                        tnt.velocityChanged = true;
                 }
             }
@@ -131,7 +131,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
     }
 	/*
 	private void syncTNTData(Level world, BlockPos pos) {
-		if (!world.isClientSide)
+		if (!world.isClientSide())
 			return;
 		Iterator<PrimedTnt> it = fired.iterator();
 		while (it.hasNext()) {
@@ -175,7 +175,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
     protected int canFire() {
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             ItemStack is = itemHandler.getStackInSlot(i);
-            if (is != null) {
+            if (!is.isEmpty()) {
                 if (ReikaItemHelper.matchStackWithBlock(is, Blocks.TNT.defaultBlockState()))
                     return i;
                 if (is.getItem() instanceof CannonExplosive)
@@ -189,7 +189,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
     protected boolean fire(Level world, BlockPos pos, int slot) {
         ItemStack in = itemHandler.getStackInSlot(slot);
         ReikaInventoryHelper.decrStack(slot, itemHandler);
-        world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.7F + 0.3F * DragonAPI.rand.nextFloat() * 12, 0.1F * DragonAPI.rand.nextFloat(), false);
+        world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 0.7F + 0.3F * DragonAPI.rand.nextFloat() * 12, 0.1F * DragonAPI.rand.nextFloat(), false);
 //        world.addParticle("hugeexplosion", pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1.0D, 0.0D, 0.0D);
         double dx = pos.getX() + 0.5;
         double dy = pos.getY() + 1.5 - 0.0625;
@@ -211,7 +211,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
 
         double[] xyz = ReikaPhysicsHelper.polarToCartesian(velocity / 20D, theta, phi);
         tnt.setDeltaMovement(xyz[0], xyz[1], xyz[2]);
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
 //            todo tnt.velocityChanged = true;
             world.addFreshEntity(tnt);
         }
@@ -227,7 +227,7 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        selectedFuse = NBT.getInt("selfuse");
+        selectedFuse = NBT.getIntOr("selfuse", 0);
     }
 
     @Override
@@ -248,9 +248,9 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
     }
 
 
-    @Override
+    // 1.21.5: BlockEntity.getRenderBoundingBox removed; INFINITE_EXTENT_AABB → AABB.INFINITE.
     public AABB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
+        return AABB.INFINITE;
     }
 
     @Override

@@ -19,9 +19,9 @@
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.neoforged.api.distmarker.Dist;
-//import net.neoforged.common.util.Direction;
+//import net.neoforged.neoforge.common.util.Direction;
 //
-//import net.neoforged.fml.loading.FMLLoader;
+//import net.neoforged.fml.loading.FMLEnvironment;
 //import reika.dragonapi.ModList;
 //import reika.dragonapi.asm.APIStripper.Strippable;
 //import reika.dragonapi.asm.DependentMethodStripper.ModDependent;
@@ -57,7 +57,7 @@
 //	public BlockEntityBundledBus() {
 //		if (ModList.APPENG.isLoaded()) {
 //			aeGridBlock = new BasicAEInterface(this, this.getMachine().getCraftedProduct());
-//			aeGridNode = FMLLoader.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
+//			aeGridNode = FMLEnvironment.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
 //		}
 //	}
 //
@@ -143,7 +143,7 @@
 //		if (ModList.APPENG.isLoaded()) {
 //			Object oldNode = aeGridNode;
 //			if (aeGridNode == null) {
-//				aeGridNode = FMLLoader.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
+//				aeGridNode = FMLEnvironment.getDist() == Dist.DEDICATED_SERVER ? AEApi.instance().createGridNode((IGridBlock)aeGridBlock) : null;
 //			}
 //			if (aeGridNode != null)
 //				((IGridNode)aeGridNode).updateState();
@@ -209,11 +209,11 @@
 //		super.load(NBT);
 //
 //		filter = new ItemStack[filter.length];
-//		CompoundTag fil = NBT.getCompound("filter");
+//		CompoundTag fil = NBT.getCompoundOrEmpty("filter");
 //		for (int i = 0; i < filter.length; i++) {
 //			String name = "filter_"+i;
 //			if (fil.contains(name)) {
-//				CompoundTag tag = fil.getCompound(name);
+//				CompoundTag tag = fil.getCompoundOrEmpty(name);
 //				ItemStack is = ItemStack.of(tag);
 //				filter[i] = is;
 //			}
@@ -291,3 +291,5 @@
 //
 //}
 //
+
+

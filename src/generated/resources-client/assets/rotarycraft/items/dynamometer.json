@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/dynamometer",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "dynamometer"
+    }
+  }
+}

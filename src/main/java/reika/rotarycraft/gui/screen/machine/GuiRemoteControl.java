@@ -9,7 +9,7 @@
 // ******************************************************************************/
 //package reika.rotarycraft.gui.screen.machine;
 //
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.world.entity.player.Inventory;
 //import net.minecraft.world.entity.player.Player;
 //import reika.rotarycraft.base.GuiNonPoweredMachine;
@@ -25,7 +25,7 @@
 //    }
 //
 //    @Override
-//    protected ResourceLocation getGuiTexture() {
-//        return ResourceLocation.parse("cctvgui");
+//    protected Identifier getGuiTexture() {
+//        return Identifier.parse("cctvgui");
 //    }
 //}

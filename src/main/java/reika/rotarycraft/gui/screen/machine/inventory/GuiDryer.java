@@ -10,7 +10,7 @@
 //package reika.rotarycraft.guis.Machine.Inventory;
 //
 //import com.mojang.blaze3d.vertex.PoseStack;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.world.entity.player.Inventory;
 //import net.minecraft.world.level.material.Fluid;
 //import net.neoforged.client.gui.ScreenUtils;
@@ -54,8 +54,8 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(PoseStack poseStack, par1, par2, par3);
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
+//        super.extractBackground(PoseStack poseStack, par1, par2, par3);
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;
 //
@@ -64,7 +64,7 @@
 //    }
 //
 //    @Override
-//    protected ResourceLocation getGuiTexture() {
-//        return ResourceLocation.parse("drygui");
+//    protected Identifier getGuiTexture() {
+//        return Identifier.parse("drygui");
 //    }
 //}

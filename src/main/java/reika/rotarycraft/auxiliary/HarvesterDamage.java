@@ -31,11 +31,11 @@ public class HarvesterDamage extends /*Entity*/DamageSource {
     }
 
     public int getLootingLevel() {
-        return tile.getEnchantmentHandler().getEnchantment(Enchantments.MOB_LOOTING);
+        return tile.getEnchantmentHandler().getEnchantment(Enchantments.LOOTING);
     }
 
     public boolean hasInfinity() {
-        return tile.getEnchantmentHandler().hasEnchantment(Enchantments.INFINITY_ARROWS);
+        return tile.getEnchantmentHandler().hasEnchantment(Enchantments.INFINITY);
     }
 
 }

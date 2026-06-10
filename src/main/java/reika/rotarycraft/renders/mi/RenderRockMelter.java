@@ -15,7 +15,7 @@
 //import net.minecraft.client.renderer.Tesselator;
 //
 //import net.neoforged.client.MinecraftForgeClient;
-//import net.neoforged.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.Fluid;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
@@ -49,7 +49,6 @@
 //        stack.translate((float) par2, (float) par4 + 2.0F, (float) par6 + 1.0F);
 //        stack.scale(1.0F, -1.0F, -1.0F);
 //        if (tile.isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-//            RenderSystem.enableBlend();
 //        stack.translate(0.5F, 0.5F, 0.5F);
 //        int var11 = 0;     //used to rotate the model about metadata
 //
@@ -85,7 +84,6 @@
 //
 //        if (tile.isInWorld())
 //            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-//        RenderSystem.disableBlend();
 //        stack.popPose();
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 //    }

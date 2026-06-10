@@ -80,9 +80,10 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        super.updateBlockEntity();
         this.getIOSides(getBlockState().getValue(BlockRotaryCraftMachine.FACING));
         this.getPower(false);
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             if (power >= MINPOWER) {
                 List<ItemCallback> li = this.getItems(world, pos);
                 this.sortItems(world, pos, li);
@@ -97,7 +98,7 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
         if (te instanceof Container ii) {
             for (int i = 0; i < ii.getContainerSize(); i++) {
                 ItemStack in = ii.getItem(i);
-                if (in != null) {
+                if (!in.isEmpty()) {
                     li.add(new InventoryItemCallback(ii, i));
                 }
             }
@@ -105,7 +106,7 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
             AABB box = this.getBox();
             List<ItemEntity> items = world.getEntitiesOfClass(ItemEntity.class, box);
             for (ItemEntity ei : items) {
-                if (!ei.isAlive())
+                if (ei.isAlive())
                     li.add(new EntityItemCallback(ei));
             }
         }
@@ -259,15 +260,22 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
+        ListTag nbttaglist = NBT.getListOrEmpty("Items");
         mappings = new ItemStack[LENGTH * 3];
 
+        // 26.1: ItemStack.of removed; round-trip via ItemStack.CODEC + RegistryOps.
+        var regAcc = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
+        var ops = regAcc.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
         for (int i = 0; i < nbttaglist.size(); i++) {
-            CompoundTag CompoundTag = nbttaglist.getCompound(i);
-            byte byte0 = CompoundTag.getByte("Slot");
-
-            if (byte0 >= 0 && byte0 < mappings.length) {
-                mappings[byte0] = ItemStack.of(CompoundTag);
+            CompoundTag entry = nbttaglist.getCompoundOrEmpty(i);
+            byte slot = entry.getByteOr("Slot", (byte) 0);
+            if (slot >= 0 && slot < mappings.length) {
+                var stackTag = entry.get("Stack");
+                if (stackTag != null) {
+                    mappings[slot] = net.minecraft.world.item.ItemStack.CODEC.parse(ops, stackTag).result().orElse(ItemStack.EMPTY);
+                } else {
+                    mappings[slot] = ItemStack.EMPTY;
+                }
             }
         }
     }
@@ -282,18 +290,20 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
         super.writeSyncTag(NBT);
 
         ListTag nbttaglist = new ListTag();
-
+        // 26.1: ItemStack.save(CompoundTag) removed; round-trip via ItemStack.CODEC + RegistryOps.
+        var regAcc = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
+        var ops = regAcc.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
         for (int i = 0; i < mappings.length; i++) {
-            if (mappings[i] != null) {
-                CompoundTag CompoundTag = new CompoundTag();
-                CompoundTag.putByte("Slot", (byte) i);
-                mappings[i].save(CompoundTag);
-                nbttaglist.add(CompoundTag);
+            if (mappings[i] != null && !mappings[i].isEmpty()) {
+                CompoundTag entry = new CompoundTag();
+                entry.putByte("Slot", (byte) i);
+                net.minecraft.world.item.ItemStack.CODEC.encodeStart(ops, mappings[i]).result()
+                        .ifPresent(stackTag -> entry.put("Stack", stackTag));
+                nbttaglist.add(entry);
             }
         }
 
         NBT.put("Items", nbttaglist);
-
     }
 
     @Override
@@ -329,7 +339,8 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
 
         @Override
         public void destroy() {
-            item.kill();
+            // 1.21.5: Entity#kill() now requires a ServerLevel argument.
+            if (item.level() instanceof net.minecraft.server.level.ServerLevel sl) item.kill(sl);
         }
 		/*
 		@Override

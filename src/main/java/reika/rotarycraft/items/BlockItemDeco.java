@@ -15,7 +15,7 @@ import net.minecraft.world.item.BlockItem;
 public class BlockItemDeco extends BlockItem {
 
     public BlockItemDeco() {
-        super(RotaryBlocks.DECOTANK.get(), new Properties());
+        super(RotaryBlocks.DECOTANK.get(), reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
 }

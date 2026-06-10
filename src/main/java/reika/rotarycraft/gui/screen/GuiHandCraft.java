@@ -9,53 +9,38 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
-import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.client.gui.ScreenUtils;
 import reika.rotarycraft.gui.container.ContainerHandCraft;
 
-public class GuiHandCraft extends AbstractContainerScreen<ContainerHandCraft> implements RecipeUpdateListener {
-    private static final ResourceLocation textures = ResourceLocation.parse("textures/gui/container/crafting_table.png");
-    private final RecipeBookComponent recipeBookComponent = new RecipeBookComponent();
+// 1.21.5 NOTE: RecipeBookComponent became abstract and RecipeUpdateListener was rewritten
+// around the new RecipeDisplay system. The recipe book integration is dropped pending a
+// rewrite against the new RecipeUpdateListener/SlotDisplayContext APIs.
+public class GuiHandCraft extends AbstractContainerScreen<ContainerHandCraft> {
+    private static final Identifier textures = Identifier.parse("textures/gui/container/crafting_table.png");
 
     public GuiHandCraft(ContainerHandCraft container, Inventory inventory, Component title) {
         super(container, inventory, title);
     }
 
-    /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the items)
-     */
+    // Legacy drawGuiContainerForegroundLayer: the crafting + inventory titles, in gui-relative
+    // space (extractLabels is translated by leftPos/topPos under 26.1).
     @Override
-    public void render(GuiGraphics stack, int p_98419_, int p_98420_, float p_98421_) {
-        stack.drawString(font, I18n.get("container.crafting"), 28, 6, 4210752);
-        stack.drawString(font, I18n.get("container.inventory"), 8, imageHeight - 96 + 2, 4210752);
+    protected void extractLabels(GuiGraphicsExtractor stack, int pMouseX, int pMouseY) {
+        stack.text(font, I18n.get("container.crafting"), 28, 6, 4210752, false);
+        stack.text(font, I18n.get("container.inventory"), 8, imageHeight - 96 + 2, 4210752, false);
     }
 
-    /**
-     * Draw the background layer for the GuiContainer (everything behind the items)
-     */
     @Override
-    protected void renderBg(GuiGraphics poseStack, float par1, int par2, int par3) {
+    public void extractBackground(GuiGraphicsExtractor poseStack, int par2, int par3, float par1) {
+        super.extractBackground(poseStack, par2, par3, par1);
         int var5 = (width - imageWidth) / 2;
         int var6 = (height - imageHeight) / 2;
-        poseStack.blit(textures, var5, var6, 1, 2, imageWidth, imageHeight);
-    }
-
-    @Override
-    public void recipesUpdated() {
-        this.recipeBookComponent.recipesUpdated();
-    }
-
-    @Override
-    public RecipeBookComponent getRecipeBookComponent() {
-        return this.recipeBookComponent;
+        poseStack.blit(RenderPipelines.GUI_TEXTURED, textures, var5, var6, 0, 0, imageWidth, imageHeight, 256, 256);
     }
 }

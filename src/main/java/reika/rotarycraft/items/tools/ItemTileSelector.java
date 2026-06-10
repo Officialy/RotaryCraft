@@ -17,7 +17,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,33 +27,37 @@ import java.util.Arrays;
 public class ItemTileSelector extends ItemRotaryTool {
 
     public ItemTileSelector() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (!super.use(level, player, hand).getResult().consumesAction() && hand.equals(InteractionHand.MAIN_HAND)) //todo fix this its broke, "consumes action"??
-            return InteractionResultHolder.fail(this.asItem().getDefaultInstance());
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        // 1.21.5: InteractionResult.getResult().consumesAction() removed; success-check via SUCCESS instance.
+        InteractionResult parent = super.use(level, player, hand);
+        if (parent != InteractionResult.SUCCESS && hand.equals(InteractionHand.MAIN_HAND))
+            return InteractionResult.FAIL;
         BlockEntity te = level.getBlockEntity(player.blockPosition()); //todo might be broken, needs to be what the player is hovering over
         if (te instanceof SelectableTiles && !player.isShiftKeyDown()) {
             SelectableTiles sc = (SelectableTiles) te;
             this.setID(player.getMainHandItem(), sc.getUniqueID());
             ReikaChatHelper.sendChatToPlayer(player, "Linked to " + te);
-            return new InteractionResultHolder(InteractionResult.SUCCESS, true);
+            return InteractionResult.SUCCESS;
         }
         SelectableTiles sc = this.getController(level, player.getMainHandItem());
        /* if (sc != null) {
             sc.addTile(pos);
             ReikaChatHelper.sendChatToPlayer(player, "Added [" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "] to " + sc);
         }*/
-        return InteractionResultHolder.pass(this.asItem().getDefaultInstance());
+        return InteractionResult.PASS;
     }
 
     private SelectableTiles getController(Level world, ItemStack is) {
-        CompoundTag nbt = is.getTag();
+        CompoundTag nbt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
         if (nbt == null)
             return null;
-        int[] xyz = nbt.getIntArray("locID");
+        // 1.21.5: CompoundTag#getIntArray now returns Optional<int[]>.
+        int[] xyz = nbt.getIntArray("locID").orElse(null);
+        if (xyz == null || xyz.length < 3) return null;
         BlockEntity te = world.getBlockEntity(new BlockPos(xyz[0], xyz[1], xyz[2]));
         if (te instanceof SelectableTiles) {
             RotaryCraft.LOGGER.debug("Read tile " + te + " at " + Arrays.toString(xyz));
@@ -64,10 +67,8 @@ public class ItemTileSelector extends ItemRotaryTool {
     }
 
     private void setID(ItemStack is, int[] id) {
-        CompoundTag nbt = is.getTag();
-        if (nbt == null)
-            is.save(new CompoundTag());
-        is.getTag().putIntArray("locID", id);
+        // 1.21.5: ItemStack.save was removed; persist via the CUSTOM_DATA helper.
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putIntArray("locID", id));
         RotaryCraft.LOGGER.debug("Saved tile " + Arrays.toString(id));
     }
 

@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -32,12 +33,9 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 
 import net.minecraft.world.phys.AABB;
-import net.neoforged.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 
 import reika.dragonapi.instantiable.HybridTank;
@@ -81,10 +79,28 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
     private final StepTimer flowTimer = new StepTimer(BlockEntityPiping.getTickDelay());
     private final StepTimer tempTimer = new StepTimer(20).stagger();
+    /** 26.1 throttle: reservoirs fill 1 bucket per pipe tick with the new aggressive
+     *  pipe-transfer math, which means {@code onContentsChanged} fires every server tick during
+     *  a fill. The renderer doesn't need a per-mB sync — fluid surface visuals only need to
+     *  track ~16 distinct levels (one per pixel of the visible water surface). Throttle to
+     *  syncing once every ~5% of capacity (so a full fill ships ~20 packets, not 64,000). */
+    private int lastSyncedTankLevel = -1;
     private final HybridTank tank = new HybridTank("reservoir", CAPACITY) {
         @Override
         protected void onContentsChanged() {
             setChanged();
+            if (level != null && !level.isClientSide()) {
+                // 26.1: throttle the sync packet. Old code fired one syncAllData per content
+                // change; with BUCKET pipe transfers that's a packet per tick per filling
+                // reservoir. Now we sync only when the fluid-level bucket changes by >= 1/20
+                // of capacity OR when the fluid type itself changes (e.g. empty → water).
+                int curLevel = this.getFluidLevel();
+                int curBucket = curLevel * 20 / CAPACITY; // 0..20
+                if (curBucket != lastSyncedTankLevel || (curLevel == 0) != (lastSyncedTankLevel == 0)) {
+                    lastSyncedTankLevel = curBucket;
+                    syncAllData(false);
+                }
+            }
         }
 
         @Override
@@ -93,7 +109,6 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         }
     };
 
-    private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
     public boolean isCovered = false;
     public boolean isCreative;
     private boolean[] adjacent = new boolean[10];
@@ -103,23 +118,8 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     @Override
-    
-    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
-        if (capability == ForgeCapabilities.FLUID_HANDLER)
-            return lazyFluidHandler.cast();
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
     public void onLoad() {
         super.onLoad();
-        lazyFluidHandler = LazyOptional.of(() -> tank);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyFluidHandler.invalidate();
     }
 //    private CompoundReservoir network;
 
@@ -166,7 +166,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 	/*
 	@Override
 	protected void onFirstTick(Level world, BlockPos pos) {
-		if (!world.isClientSide)
+		if (!world.isClientSide())
 			this.recalculateCompound();
 	}
 
@@ -187,7 +187,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 	 */
 
     public static void addFluidEffect(FluidStack f, FluidEffect e) {
-        addFluidEffect(f.getDisplayName().getString(), e);
+        addFluidEffect(f.getHoverName().getString(), e);
     }
 
     public static void addFluidEffect(String f, FluidEffect e) {
@@ -206,6 +206,17 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     @Override
     protected void onFirstTick(Level world, BlockPos pos) {
         this.updateSides(world, pos);
+    }
+
+    /**
+     * 26.1: same opt-out as {@code BlockEntityPiping#shouldDoInitialFullSync}. Reservoirs
+     * already push runtime changes through {@code tank.onContentsChanged → syncAllData(false)}
+     * and the periodic {@code BE_NBT_SYNC} flow, and a reservoir farm has many instances per
+     * chunk where the legacy 5× burst would be expensive.
+     */
+    @Override
+    protected boolean shouldDoInitialFullSync() {
+        return false;
     }
 
     private void updateSides(Level world, BlockPos pos) {
@@ -263,6 +274,12 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        // 26.1 fix: drive the {@link BlockEntityBase} lifecycle (ticksExisted++, onFirstTick →
+        // updateSides + neighbour init, periodic sync, etc.). Without this the reservoir's
+        // {@code age_ticks} stayed at 0 and {@code onFirstTick} never ran, so {@code adjacent[]}
+        // was never populated and the reservoir never knew about its neighbours. Same bug as
+        // the pipe — engines do this correctly via {@code super.updateEntity()}.
+        super.updateEntity();
         for (ReservoirAPI.TankHandler th : tankHandlers) {
             int amt = th.onTick(this, tank.getFluid(), this.getPlacer());
             if (amt > 0)
@@ -273,7 +290,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         if (flowTimer.checkCap())
             this.transferBetween(world, pos);
         if (!isCovered) {
-            if (!world.isClientSide) {
+            if (!world.isClientSide()) {
                 Biome biome = world.getBiomeManager().getBiome(pos).value();
                 if (world.isRaining()/* && biome.canSpawnLightningBolt() && world.canLightningStrikeAt(pos.above())*/) {
                     if (this.isEmpty() || (this.getFluid().equals(Fluids.WATER) && this.getFluidLevel() < CAPACITY)) {
@@ -297,7 +314,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         tempTimer.setCap(isCovered ? 30 : 20);
 
         tempTimer.update();
-        if (!world.isClientSide && !this.isEmpty() && tempTimer.checkCap()) {
+        if (!world.isClientSide() && !this.isEmpty() && tempTimer.checkCap()) {
             if (!this.isSurrounded(false)) {
                 FluidStack f = tank.getActualFluid();
                 int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
@@ -382,9 +399,18 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     private boolean canMixWith(BlockEntityReservoir tile) {
-        if (tile.getFluid() == null)
-            return false;
-        return tank.isEmpty() || this.getFluid().equals(tile.getFluid());
+        // 26.1 fix: legacy compared {@code this.getFluid().equals(tile.getFluid())} — but
+        // {@code getFluid()} returns a {@link FluidStack}, and FluidStack equality includes the
+        // amount. Same neighbour-reservoir bug as {@link #isConnectedOnSide}: as soon as a fluid
+        // was added or drained the amounts diverged and {@code canMixWith} returned false, so
+        // equalization stopped. The empty-neighbour check also rejected valid "we have water,
+        // they have nothing" pushes — but the calling site only RECEIVES from neighbours, so
+        // the empty check was wrong: a fuller neighbour with nothing in it can't push, sure,
+        // but we should be allowed to PULL from a neighbour with more even if WE are empty.
+        // Compare fluid types only, allow either side to be empty.
+        if (tile.tank.isEmpty() && tank.isEmpty()) return false;
+        if (tank.isEmpty() || tile.tank.isEmpty()) return true;
+        return tank.getActualFluid().getFluid().equals(tile.tank.getActualFluid().getFluid());
     }
 
     @Override
@@ -404,10 +430,10 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
         tank.readFromNBT(NBT);
 
-        isCovered = NBT.getBoolean("cover");
-        isCreative = NBT.getBoolean("creative");
+        isCovered = NBT.getBooleanOr("cover", false);
+        isCreative = NBT.getBooleanOr("creative", false);
 
-        adjacent = ReikaArrayHelper.booleanFromBitflags(NBT.getInt("sides"), 10);
+        adjacent = ReikaArrayHelper.booleanFromBitflags(NBT.getIntOr("sides", 0), 10);
     }
 
     @Override
@@ -500,7 +526,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (from == Direction.UP)
-            return null;
+            return FluidStack.EMPTY;
         return tank.drain(maxDrain, doDrain);
     }
 
@@ -515,7 +541,12 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
     public boolean canAcceptFluid(Fluid f) {
-        return tank.isEmpty() || f.equals(tank.getActualFluid());
+        // 26.1 fix: legacy compared {@code f.equals(tank.getActualFluid())} — but the tank's
+        // {@code getActualFluid()} returns a {@link FluidStack}, not a {@link Fluid}, so the
+        // equality check was ALWAYS false once the tank held anything. That's why the user
+        // could only add one water bucket before further fills were rejected. Compare the
+        // underlying fluid types instead.
+        return tank.isEmpty() || f.equals(tank.getActualFluid().getFluid());
     }
 
     public int getFluidLevel() {
@@ -546,26 +577,41 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     public FluidStack getContents() {
         return tank.getFluid();
     }
+
+    public net.neoforged.neoforge.fluids.capability.IFluidHandler getFluidHandler() {
+        return tank;
+    }
 	/*
 	@Override
 	public void breakBlock() {
-		if (network != null && !level.isClientSide) {
+		if (network != null && !level.isClientSide()) {
 			network.removeReservoir(this);
 		}
 	}
 	 */
 
     public boolean isConnectedOnSide(Direction dir) {
-        int dx = worldPosition.getX() + dir.getStepX();
-        int dy = worldPosition.getY() + dir.getStepY();
-        int dz = worldPosition.getZ() + dir.getStepZ();
-        if (this.adjacentOnSide(dir)) {
-            BlockEntityReservoir te = (BlockEntityReservoir) level.getBlockEntity(new BlockPos(dx, dy, dz));
-            if (te == null)
-                return false;
-            return te.isEmpty() || this.isEmpty() || te.getFluid().equals(this.getFluid());
-        }
-        return false;
+        // 26.1 fix: derive connectivity from the LIVE neighbor lookup, not the cached
+        // {@link #adjacent} bitset. The cached array was set asymmetrically during
+        // place/break (B.onPlaced ran B's neighbours before B's own onFirstTick), which
+        // left one side of every pair persistently thinking it was unconnected — the user
+        // saw "always some connected, one not". A direct neighbour query on the renderer's
+        // tick is cheap enough (called only for the 4 horizontal sides per draw) and
+        // sidesteps the sync-ordering race entirely.
+        //
+        // FluidStack-vs-Fluid bug: previously compared {@code te.getFluid().equals(this.getFluid())}
+        // — but {@link #getFluid()} returns a {@link FluidStack}, and {@code FluidStack.equals}
+        // includes the AMOUNT. Two reservoirs of water with different fill levels compared as
+        // unequal, so the renderer drew walls between them the moment one started draining.
+        // The user reported "disconnecting them from other reservoirs" / "not equalizing" —
+        // this is the root cause. Compare on the underlying {@link Fluid} type only.
+        if (level == null)
+            return false;
+        BlockPos npos = worldPosition.relative(dir);
+        net.minecraft.world.level.block.entity.BlockEntity be = level.getBlockEntity(npos);
+        if (!(be instanceof BlockEntityReservoir te))
+            return false;
+        return te.isEmpty() || this.isEmpty() || te.getFluid().getFluid().equals(this.getFluid().getFluid());
     }
 
     public void setEmpty() {
@@ -580,26 +626,24 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
     public int getFluidRenderColor() {
         FluidStack fs = tank.getFluid();
-        IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fs.getFluid());
         if (fs.isEmpty())
             return 0xffffff;
-        int clr = fs.getTag() != null && fs.getTag().contains("renderColor") ? fs.getTag().getInt("renderColor") : props.getTintColor();
-//        if (this.isInWorld() && fs.getFluid().canBePlacedInWorld()) {
-//            clr = fs.getFluid().defaultFluidState().createLegacyBlock().colorMultiplier(level, xCoord, yCoord, zCoord);
-//        }
-        return clr;
+        // 1.21.5: IClientFluidTypeExtensions.getTintColor() removed; FluidStack no longer carries
+        // arbitrary CUSTOM_DATA the way ItemStack does. Return white until we wire up a
+        // proper component-based render-color override.
+        return 0xffffff;
     }
 
     public void applyFluidEffectsToEntity(LivingEntity e) {
         if (!tank.isEmpty() && !isCovered) {
             FluidStack f = tank.getActualFluid();
-            FluidEffect eff = fluidEffects.get(f.getDisplayName());
+            FluidEffect eff = fluidEffects.get(f.getHoverName().getString());
             if (eff != null) {
                 eff.applyEffect(e);
             }
             if (f.equals(Fluids.LAVA) || f.getFluid().getFluidType().getTemperature() > 500) {
                 e.hurt(e.damageSources().lava(), 4);
-                e.setSecondsOnFire(12);
+                e.igniteForSeconds(12);
             }
             if (f.getFluid().getFluidType().getTemperature() < 250)
                 e.hurt(e.damageSources().wither(), 1);
@@ -635,37 +679,37 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
             return;
         }
         FluidStack f = ReikaNBTHelper.getFluidFromNBT(NBT);
-        int level = NBT.getInt("lvl");
+        int level = NBT.getIntOr("lvl", 0);
         tank.setContents(level, f.getFluid());
 
-        isCovered = NBT.getBoolean("cover");
+        isCovered = NBT.getBooleanOr("cover", false);
     }
 
     public void combineDataFromItemStackTag(CompoundTag NBT) {
         if (NBT == null)
             return;
         FluidStack f = ReikaNBTHelper.getFluidFromNBT(NBT);
-        if (f != tank.getActualFluid())
+        if (!tank.isEmpty() && !f.getFluid().equals(tank.getActualFluid().getFluid()))
             return;
-        int level = NBT.getInt("lvl");
+        int level = NBT.getIntOr("lvl", 0);
         tank.setContents(level + tank.getFluidLevel(), f.getFluid());
 
-        isCovered = isCovered || NBT.getBoolean("cover");
+        isCovered = isCovered || NBT.getBooleanOr("cover", false);
     }
 
     public ArrayList<String> getDisplayTags(CompoundTag nbt) {
         ArrayList<String> li = new ArrayList<>();
         FluidStack f = ReikaNBTHelper.getFluidFromNBT(nbt);
         if (f != null) {
-            String fluid = f.getDisplayName().getString();
-            int amt = nbt.getInt("lvl");
+            String fluid = f.getHoverName().getString();
+            int amt = nbt.getIntOr("lvl", 0);
             if (amt > 0) {
                 String amount = String.format("%d", amt);
                 String contents = "Contents: " + amount + " mB of " + fluid;
                 li.add(contents);
             }
         }
-        if (nbt.getBoolean("cover"))
+        if (nbt.getBooleanOr("cover", false))
             li.add("Covered");
         return li;
     }
@@ -722,9 +766,9 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
         public final int duration;
         public final int level;
-        public final MobEffect potion;
+        public final Holder<MobEffect> potion;
 
-        public PotionFluidEffect(MobEffect p, int l, int d) {
+        public PotionFluidEffect(Holder<MobEffect> p, int l, int d) {
             potion = p;
             level = l;
             duration = d;
@@ -741,14 +785,15 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
         @Override
         public void applyEffect(LivingEntity e) {
-            MobEffectInstance eff = e.getEffect(MobEffects.CONFUSION);
+            // 1.21.5: MobEffects.CONFUSION → MobEffects.NAUSEA
+            MobEffectInstance eff = e.getEffect(MobEffects.NAUSEA);
             int dura = 1;
             if (eff != null) {
                 dura = eff.getDuration() + 1;
             }
             if (dura > 600)
                 dura = 600;
-            e.addEffect(new MobEffectInstance(MobEffects.CONFUSION, dura, 3));
+            e.addEffect(new MobEffectInstance(MobEffects.NAUSEA, dura, 3));
         }
 
     }

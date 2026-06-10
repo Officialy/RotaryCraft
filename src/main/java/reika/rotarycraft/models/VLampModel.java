@@ -28,9 +28,10 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
 
@@ -62,7 +63,7 @@ public class VLampModel extends RotaryModelBase {
     public final ModelPart shape19;
 
     public VLampModel(ModelPart root) {
-        super(RenderType::entitySolid);
+        super(root, RenderTypes::entitySolid);
 
         this.shape1 = root.getChild("shape1");
         this.shape2 = root.getChild("shape2");
@@ -229,7 +230,8 @@ public class VLampModel extends RotaryModelBase {
         }
     }
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return LampModel.TEXTURE_LOCATION;
     }
 }
+

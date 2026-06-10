@@ -15,8 +15,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.java.ReikaStringParser;
@@ -47,7 +47,7 @@ public abstract class PoweredLiquidIO extends PoweredLiquidBase implements PipeC
     public final FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
         if (this.canDrain(from, null))
             return output.drain(maxDrain, doDrain);
-        return null;
+        return FluidStack.EMPTY;
     }
 
 //        @Override

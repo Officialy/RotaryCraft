@@ -10,9 +10,6 @@
 package reika.rotarycraft.base.blocks.entity.transmission;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -28,18 +25,19 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-
 import reika.dragonapi.auxiliary.trackers.KeyWatcher;
+import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
+import reika.rotarycraft.blockentities.transmission.BlockEntityFlywheel;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
 import reika.rotarycraft.items.tools.ItemDebug;
 import reika.rotarycraft.items.tools.ItemMeter;
 import reika.rotarycraft.items.tools.ItemScrewdriver;
 import reika.rotarycraft.registry.GearboxTypes;
 import reika.rotarycraft.registry.MaterialRegistry;
+import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
-import reika.rotarycraft.registry.RotaryMenus;
 
 public class BlockGearbox extends BlockBasicMachine {
 
@@ -114,21 +112,48 @@ public class BlockGearbox extends BlockBasicMachine {
         if (gbx == null)
             return false;
         MaterialRegistry type = gbx.getGearboxType().material;
-        return type.isHarvestablePickaxe(player.getInventory().getSelected());
+        return type.isHarvestablePickaxe(player.getInventory().getSelectedItem());
     }
 
     
+    // 26.1: BlockGearbox backs both the gearbox blocks (BlockEntityGearbox) AND the flywheel
+    // blocks (BlockEntityFlywheel). BlockEntity validates state against its registered type, so
+    // we must return the matching BE for the placed block — otherwise validateBlockState throws.
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        if (isFlywheelBlock(pState)) {
+            return new BlockEntityFlywheel(pPos, pState);
+        }
         return new BlockEntityGearbox(type, pPos, pState);
     }
 
-    
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
-            ((BlockEntityGearbox) pBlockEntity).updateEntity(pLevel1, pPos);
-        });
+        if (pLevel.isClientSide()) {
+            // 26.1 fix: gear animation lived on the server's phi accumulator, which never
+            // synced — gears looked frozen on the client. Mirror server animateWithTick on
+            // the client by integrating the locally-synced omega so the gears actually spin.
+            return (lvl, pos, st, be) -> {
+                if (be instanceof BlockEntityGearbox) {
+                BlockEntityGearbox g = (BlockEntityGearbox) be;
+                if (g.omega > 0) {
+                    g.phi += (float) ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(g.omega + 1, 2), 1.05);
+                }}
+            };
+        }
+        if (isFlywheelBlock(pState)) {
+            return (lvl, pos, st, be) -> ((BlockEntityFlywheel) be).updateEntity(lvl, pos);
+        }
+        return (lvl, pos, st, be) -> ((BlockEntityGearbox) be).updateEntity(lvl, pos);
+    }
+
+    private static boolean isFlywheelBlock(BlockState state) {
+        var block = state.getBlock();
+        return block == reika.rotarycraft.registry.RotaryBlocks.WOOD_FLYWHEEL.get()
+                || block == RotaryBlocks.HSLA_FLYWHEEL.get()
+                || block == RotaryBlocks.TUNGSTEN_FLYWHEEL.get()
+                || block == RotaryBlocks.DIAMOND_FLYWHEEL.get()
+                || block == RotaryBlocks.BEDROCK_FLYWHEEL.get();
     }
 
     //    @Override
@@ -147,14 +172,10 @@ public class BlockGearbox extends BlockBasicMachine {
 //    }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof BlockEntityGearbox && !level.isClientSide) {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
-            serverPlayer.connection.send(new ClientboundOpenScreenPacket(0, RotaryMenus.GEARBOX.get(), Component.literal("Gearbox")));
-            return InteractionResult.SUCCESS;
+    protected InteractionResult useItemOn(ItemStack pStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (level.getBlockEntity(pos) instanceof BlockEntityFlywheel) {
+            return super.useItemOn(pStack, state, level, pos, player, hand, hit);
         }
-
         BlockEntityGearbox tile = (BlockEntityGearbox) level.getBlockEntity(pos);
         //if (ep.isShiftKeyDown()) {
         if (player.getMainHandItem() != null && KeyWatcher.instance.isKeyDown(player, KeyWatcher.Key.LCTRL) && player.getMainHandItem().getItem() == Items.BUCKET) {
@@ -175,9 +196,9 @@ public class BlockGearbox extends BlockBasicMachine {
                     if (flag && !player.isCreative()) {
                         int num = held.getCount();
                         if (num > 1)
-                            player.getInventory().setItem(player.getInventory().selected, ReikaItemHelper.getSizedItemStack(fix, num - 1));
+                            player.getInventory().setItem(player.getInventory().getSelectedSlot(), ReikaItemHelper.getSizedItemStack(fix, num - 1));
                         else
-                            player.getInventory().setItem(player.getInventory().selected, null);
+                            player.getInventory().setItem(player.getInventory().getSelectedSlot(), null);
                     }
                     return InteractionResult.SUCCESS;
                 } else if (ReikaItemHelper.matchStacks(held, RotaryItems.LUBE_BUCKET)) {
@@ -199,9 +220,9 @@ public class BlockGearbox extends BlockBasicMachine {
                         if (!player.isCreative()) {
                             int num = held.getCount();
                             if (num > 1)
-                                player.getInventory().setItem(player.getInventory().selected, ReikaItemHelper.getSizedItemStack(held, num - 1));
+                                player.getInventory().setItem(player.getInventory().getSelectedSlot(), ReikaItemHelper.getSizedItemStack(held, num - 1));
                             else
-                                player.getInventory().setItem(player.getInventory().selected, null);
+                                player.getInventory().setItem(player.getInventory().getSelectedSlot(), null);
                         }
                     }
                     return InteractionResult.SUCCESS;
@@ -209,7 +230,7 @@ public class BlockGearbox extends BlockBasicMachine {
             }
         }
 
-        return super.use(state, level, pos, player, hand, hit);
+        return super.useItemOn(pStack, state, level, pos, player, hand, hit);
     }
 
 //    @Override
@@ -227,4 +248,7 @@ public class BlockGearbox extends BlockBasicMachine {
         return ret;
     }*/
 
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

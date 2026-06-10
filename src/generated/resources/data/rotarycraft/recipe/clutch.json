@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "M": "rotarycraft:mount",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "S",
+    "M",
+    "R"
+  ],
+  "result": {
+    "id": "rotarycraft:clutch"
+  }
+}

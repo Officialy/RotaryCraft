@@ -28,6 +28,7 @@ import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryFluids;
 
 public class BlockEntityPipe extends BlockEntityPiping implements TemperatureTE, PumpablePipe {
 
@@ -158,32 +159,31 @@ public class BlockEntityPipe extends BlockEntityPiping implements TemperatureTE,
 
     @Override
     public boolean isValidFluid(Fluid f) {
-        return false;
+        if (f == null)
+            return false;
+        // These fluids require dedicated transport (fuel lines / hoses), so the standard pipe rejects them.
+        if (f == RotaryFluids.JET_FUEL.get())
+            return false;
+        if (f == RotaryFluids.LUBRICANT.get())
+            return false;
+        if (f == RotaryFluids.ETHANOL.get())
+            return false;
+        return true;
     }
 
     @Override
     public boolean canEmitToPipeOn(Direction side) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canReceiveFromPipeOn(Direction side) {
-        return false;
+        return true;
     }
 
     @Override
     public Block getPipeBlockType() {
         return RotaryBlocks.DECO.get();
-    }
-
-    @Override
-    public boolean isConnectionValidForSide(Direction dir) {
-        return false;
-    }
-
-    @Override
-    public boolean isConnectedToNonSelf(Direction dir) {
-        return false;
     }
 
     @Override
@@ -221,22 +221,20 @@ public class BlockEntityPipe extends BlockEntityPiping implements TemperatureTE,
 
     @Override
     public void overheat(Level world, BlockPos pos) {
-        BlockArray blocks = new BlockArray();
-        MachineRegistry m = this.getMachine();
-//        blocks.recursiveAddWithMetadata(world, pos, m.getBlockState(), m.getBlockMetadata());
-
-        for (int i = 0; i < blocks.getSize(); i++) {
-            BlockPos c = blocks.getNthBlock(i);
-//            ReikaSoundHelper.playSoundAtBlock(world, c.getX(), c.getY(), c.getZ(), "DragonAPI.rand.fizz", 0.4F, 1);
-            ReikaParticleHelper.LAVA.spawnAroundBlock(world, new BlockPos(c.getX(), c.getY(), c.getZ()), 36);
-            world.setBlock(c, Fluids.FLOWING_LAVA.defaultFluidState().createLegacyBlock(), 1);
-        }
+        // 26.1 simplified port: legacy 1.7 flood-filled the connected pipe network and turned
+        // every pipe in it to flowing lava. {@link BlockArray#recursiveAddWithMetadata} hasn't
+        // been ported yet, so we just blow up THIS block instead. The standard intake/dump
+        // cycle will still pull fluid OUT of an over-heating pipe before this fires for most
+        // realistic configurations.
+        if (world.isClientSide()) return;
+        ReikaParticleHelper.LAVA.spawnAroundBlock(world, pos, 36);
+        world.setBlock(pos, Fluids.FLOWING_LAVA.defaultFluidState().createLegacyBlock(), 1);
     }
 
     @Override
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
-        temperature = NBT.getInt("temp");
+        temperature = NBT.getIntOr("temp", 0);
     }
 
     @Override
@@ -275,26 +273,6 @@ public class BlockEntityPipe extends BlockEntityPiping implements TemperatureTE,
     @Override
     public boolean hasATank() {
         return false;
-    }
-
-    @Override
-    public void recomputeConnections(Level world, BlockPos pos) {
-
-    }
-
-    @Override
-    public boolean shouldTryToConnect(Direction dir) {
-        return false;
-    }
-
-    @Override
-    public void deleteFromAdjacentConnections(Level world, BlockPos pos) {
-
-    }
-
-    @Override
-    public void addToAdjacentConnections(Level world, BlockPos pos) {
-
     }
 
     @Override

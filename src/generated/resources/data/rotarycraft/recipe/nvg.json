@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "c": "rotarycraft:screen",
+    "e": "minecraft:ender_eye",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "scs",
+    "ese"
+  ],
+  "result": {
+    "id": "rotarycraft:nvg"
+  }
+}

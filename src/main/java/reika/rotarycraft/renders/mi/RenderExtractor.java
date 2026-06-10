@@ -44,7 +44,6 @@
 //        stack.pushPose();
 //        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 //        if (tile.isInWorld() && MinecraftForgeClient.getRenderPass() == 1)
-//            RenderSystem.enableBlend();
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 //        stack.translate((float) par2, (float) par4 + 2.0F, (float) par6 + 1.0F);
 //        stack.scale(1.0F, -1.0F, -1.0F);
@@ -83,7 +82,6 @@
 //
 //        if (tile.isInWorld())
 //            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-//        RenderSystem.disableBlend();
 //        stack.popPose();
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 //    }

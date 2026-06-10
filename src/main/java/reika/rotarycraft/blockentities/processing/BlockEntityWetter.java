@@ -16,7 +16,7 @@
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.material.Fluid;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //import reika.dragonapi.base.OneSlotMachine;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 //import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -182,7 +182,7 @@
 //    public void load(CompoundTag NBT) {
 //        super.load(NBT);
 //
-//        extractionCooldown = NBT.getInt("extract");
+//        extractionCooldown = NBT.getIntOr("extract", 0);
 //    }
 //
 //}

@@ -85,7 +85,7 @@
 //            this.emitPower(world, pos);
 //        }
 //
-//        if (!world.isClientSide && otherShaft != null) {
+//        if (!world.isClientSide() && otherShaft != null) {
 //            if (otherShaft.getBlockEntity() instanceof BlockEntityPortalShaft) {
 //
 //            } else {
@@ -337,13 +337,13 @@
 //    public void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
 //
-//        type = PortalType.values()[NBT.getInt("portal")];
+//        type = PortalType.values()[NBT.getIntOr("portal", 0)];
 //
 //        MaterialRegistry mat = MaterialRegistry.WOOD;
 //        if (NBT.contains("shafttype")) {
-//            mat = MaterialRegistry.valueOf(NBT.getString("shafttype"));
+//            mat = MaterialRegistry.valueOf(NBT.getStringOr("shafttype", ""));
 //        } else if (NBT.contains("type")) {
-//            mat = MaterialRegistry.matList[NBT.getInt("type")];
+//            mat = MaterialRegistry.matList[NBT.getIntOr("type", 0)];
 //        }
 //        material = mat;
 //    }

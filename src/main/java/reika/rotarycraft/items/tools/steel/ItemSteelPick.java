@@ -13,8 +13,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
@@ -27,13 +27,13 @@ import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.Locale;
 
-public class ItemSteelPick extends PickaxeItem {
+public class ItemSteelPick extends Item {
 
     public ItemSteelPick() {
-        super(Tiers.IRON, 2, 2, new Properties().durability(600));
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties().durability(600).pickaxe(ToolMaterial.IRON, 2, 2));
 
-        //this.setHarvestLevel("pickaxe", Tiers.IRON.getLevel());
-        //this.setHarvestLevel("pick", Tiers.IRON.getLevel());
+        //this.setHarvestLevel("pickaxe", ToolMaterial.IRON.getLevel());
+        //this.setHarvestLevel("pick", ToolMaterial.IRON.getLevel());
     }
 
     /*@Override
@@ -42,12 +42,9 @@ public class ItemSteelPick extends PickaxeItem {
         return amt > 1 ? amt * 1.2F : 1;
     }*/
 
-    @Override
+    // 1.21.5: Item.canAttackBlock was removed. Helper kept for legacy call sites.
     public boolean canAttackBlock(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {
-        //if (RotaryConfig.COMMON.HSLAHARVEST.get() && pState.blockHardness < 20 && this.getDestroySpeed(this.getDefaultInstance(), pState) > 1) {
-        //    return true;
-        //} else
-        return Items.IRON_PICKAXE.canAttackBlock(pState, pLevel, pPos, pPlayer);
+        return true;
     }
 
     public int getHarvestLevel(ItemStack stack, String toolClass) {
@@ -77,9 +74,8 @@ public class ItemSteelPick extends PickaxeItem {
      * @param tool the {@code ItemStack} tool
      * @param item the {@code ItemStack} being used to repair the item
      */
-    @Override
+    // 1.21.5: Item.isValidRepairItem replaced by Properties.repairable(...); kept as helper.
     public boolean isValidRepairItem(ItemStack tool, ItemStack item) {
         return tool.getItem() == this && ReikaItemHelper.matchStacks(item, RotaryItems.HSLA_STEEL_INGOT);
-
     }
 }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "minecraft:iron_bars",
+    "c": "rotarycraft:combustor",
+    "p": "rotarycraft:hsla_steel_plate",
+    "r": "rotarycraft:tungsten_ingot",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sBs",
+    "prp",
+    "scs"
+  ],
+  "result": {
+    "id": "rotarycraft:heater"
+  }
+}

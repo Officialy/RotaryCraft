@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.neoforged.common.property.Properties;
+// 1.21.5: net.neoforged.common.property.Properties removed; use vanilla BlockStateProperties instead.
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 
@@ -30,9 +30,14 @@ public class BlockCoil extends BlockBasicMachine {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
+        if (pLevel.isClientSide()) {
+            @SuppressWarnings("unchecked")
+            BlockEntityTicker<T> t = (BlockEntityTicker<T>) clientPhiTicker(BlockEntityAdvancedGear.class);
+            return t;
+        }
+        return (pLevel1, pPos, pState1, pBlockEntity) -> {
             ((BlockEntityAdvancedGear) pBlockEntity).updateEntity(pLevel1, pPos);
-        });
+        };
     }
 
     @Override
@@ -41,12 +46,15 @@ public class BlockCoil extends BlockBasicMachine {
         BlockEntityAdvancedGear adv = null;//todo (BlockEntityAdvancedGear) builder.getLevel().getBlockEntity(pos);
         ItemStack is = null;//todo RotaryItems.ADVGEAR.getStackOfMetadata(adv.getBlockMetadata() / 4);
         if (adv.getGearType().storesEnergy()) {
-            if (is.getTag() == null)
-                is.getOrCreateTag();
-            is.getTag().putLong("energy", adv.getEnergy());
-            is.getTag().putBoolean("bedrock", adv.isBedrockCoil());
+            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+                is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putLong("energy", adv.getEnergy()));
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean("bedrock", adv.isBedrockCoil()));
         }
         ret.add(is);
         return ret;
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

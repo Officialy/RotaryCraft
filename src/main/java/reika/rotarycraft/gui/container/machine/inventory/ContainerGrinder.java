@@ -12,10 +12,6 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.items.IItemHandlerModifiable;
-import net.neoforged.items.SlotItemHandler;
-
 import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
@@ -36,22 +32,12 @@ public class ContainerGrinder extends IOMachineContainer<BlockEntityGrinder> {
         super(RotaryMenus.GRINDER.get(), id, inv, te);
         lastGrinderCookTime = 0;
         grinder = te;
-        te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
-            this.addSlot(new SlotItemHandler(itemHandler, 0, 76, 35) {
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return grinder.isItemValidForSlot(0, stack);
-                }
-            });
-            this.addSlot(new ResultSlotItemHandler(itemHandler, 1, 136, 35));
-            this.addSlot(new SlotItemHandler(itemHandler, 2, 35, 60) {
-                @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return grinder.isItemValidForSlot(2, stack);
-                }
-            });
-        });
-
+        // 26.1: slot positions from the original 1.7 ContainerGrinder — input at (76, 35),
+        // output at (136, 35), lube-bucket at (35, 60). The port previously used (56, 17),
+        // (116, 35), (116, 53) which didn't match the {@code grindergui.png} background.
+        this.addSlot(grinder.itemHandler.slot(0, 76, 35));
+        this.addSlot(new ResultSlotItemHandler(grinder.itemHandler, 1, 136, 35));
+        this.addSlot(new ResultSlotItemHandler(grinder.itemHandler, 2, 35, 60));
         this.addPlayerInventory(inv);
     }
 

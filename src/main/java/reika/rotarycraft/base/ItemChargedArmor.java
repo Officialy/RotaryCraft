@@ -9,17 +9,17 @@
  ******************************************************************************/
 package reika.rotarycraft.base;
 
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.equipment.ArmorType;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import reika.rotarycraft.RotaryConfig;
 
 public abstract class ItemChargedArmor extends ItemRotaryArmor {
 
-    public ItemChargedArmor(ArmorMaterial par2, ArmorItem.Type slot, Properties properties) {
+    public ItemChargedArmor(ArmorMaterial par2, ArmorType slot, Properties properties) {
         super(par2, slot, properties);
-        //this.setNoRepair();
+        //this;
     }
 /*
 	protected final void warnCharge(ItemStack is) {

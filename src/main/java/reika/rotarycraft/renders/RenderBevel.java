@@ -2,18 +2,19 @@ package reika.rotarycraft.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.joml.Matrix4f;
+
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
@@ -77,25 +78,37 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
             stack.mulPose(Axis.ZP.rotationDegrees(rotationZ));
 
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(BevelModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(BevelModel.TEXTURE_LOCATION));
         bevelModel.renderAll(stack, vertexconsumer, light, tile, null, tile.phi * dir);
         stack.popPose();
     }
 
+    // 1.21.5: render -> submit. Bevel gears use exactly one RenderType (entityCutout with the
+    // bevel texture) regardless of which of the 24 mounting orientations is active, so one
+    // submitCustomGeometry call covers the model. Pose is snapshotted because the lambda runs
+    // after the outer PoseStack may have been popped.
     @Override
-    public void render(BlockEntityBevelGear tile, float partialTicks, PoseStack stack, MultiBufferSource bufferSource, int light, int overlay) {
-        if (this.doRenderModel(stack, tile))
-            this.renderBlockEntityBevelAt(stack, tile, bufferSource, light);
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return;
+        BlockEntity be = level.getBlockEntity(state.blockPos);
+        if (!(be instanceof BlockEntityBevelGear tile)) return;
+        if (!this.doRenderModel(poseStack, tile)) return;
 
+        PoseStack snapped = new PoseStack();
+        snapped.last().set(poseStack.last());
+
+        RenderType rt = RenderTypes.entityCutout(BevelModel.TEXTURE_LOCATION);
+        int light = state.lightCoords;
+        collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
+            MultiBufferSource oneRT = ignored -> vc;
+            renderBlockEntityBevelAt(snapped, tile, oneRT, light);
+        });
+        // IO arrows for the bevel's read/write directions (debugFilledBox quads).
         if (tile.isInWorld()) {
-            if (tile.iotick > 64 && ConfigRegistry.COLORBLIND.getState())
-                this.renderFaceNumbers(stack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), bufferSource);
-
-            stack.pushPose();
-            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
-            stack.popPose();
-            renderCompass(tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), bufferSource, stack);
+            IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
         }
+        // Face numbers / compass still TODO (need separate per-RT submissions).
     }
 
     private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double x, double y, double z, MultiBufferSource bufferSource) {
@@ -150,33 +163,12 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
     }
 
     private void renderCompass(BlockEntity tile, double x, double y, double z, MultiBufferSource bufferSource, PoseStack stack) {
-        BlockEntityIOMachine io = (BlockEntityIOMachine) tile;
-        int[] rgb = {255, 255, 0};
-        float alpha = Math.min(1F, io.iotick / 255F);
-        float vo = 1.05F;
-
-        Tesselator tess = Tesselator.getInstance();
-        BufferBuilder buffer = tess.getBuilder();
-
-        stack.pushPose();
-        stack.translate(x, y + vo, z);
-        Matrix4f pose = stack.last().pose();
-
-        buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR);
-
-        addLine(buffer, pose, -0.5f, 0, 0.5f, 1.5f, 0, 0.5f, rgb, alpha);
-        addLine(buffer, pose, 0.5f, 0, -0.5f, 0.5f, 0, 1.5f, rgb, alpha);
-        addLine(buffer, pose, 0.35f, 0, -0.75f, 0.35f, 0, -1.25f, rgb, alpha);
-        addLine(buffer, pose, 0.35f, 0, -1.25f, 0.65f, 0, -0.75f, rgb, alpha);
-        addLine(buffer, pose, 0.65f, 0, -0.75f, 0.65f, 0, -1.25f, rgb, alpha);
-
-        tess.end();
-        stack.popPose();
+        // TODO: Port to 26.1 rendering API (Tesselator.getBuilder() + begin() + vertex().color().endVertex() + end() all removed)
     }
 
-    private void addLine(BufferBuilder buffer, Matrix4f pose, float x1, float y1, float z1, float x2, float y2, float z2, int[] rgb, float alpha) {
-        buffer.vertex(pose, x1, y1, z1).color(rgb[0], rgb[1], rgb[2], (int)(alpha * 255)).endVertex();
-        buffer.vertex(pose, x2, y2, z2).color(rgb[0], rgb[1], rgb[2], (int)(alpha * 255)).endVertex();
+    private void addLine(Object buffer, Object pose, float x1, float y1, float z1, float x2, float y2, float z2, int[] rgb, float alpha) {
+        // TODO: Port to 26.1 rendering API
     }
 
 }
+

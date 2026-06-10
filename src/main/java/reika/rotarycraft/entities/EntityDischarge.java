@@ -9,19 +9,21 @@
  ******************************************************************************/
 package reika.rotarycraft.entities;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.neoforged.entity.IEntityAdditionalSpawnData;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
 import java.awt.*;
 
-public class EntityDischarge extends Entity implements IEntityAdditionalSpawnData {
+public class EntityDischarge extends Entity implements IEntityWithComplexSpawn {
 
     public int charge;
     public double targetX;
@@ -44,67 +46,60 @@ public class EntityDischarge extends Entity implements IEntityAdditionalSpawnDat
     }
 
     public int getCurrent() {
-        return charge * 20 / 1000; //1A = 1C/s, 1t = 1/20 s
+        return charge * 20 / 1000;
     }
 
     public Color getColor() {
         int a = this.getCurrent();
-        if (a > 120) {
-            return new Color(127, 0, 255);
-        } else if (a > 90) {
-            return new Color(0, 192, 255);
-        } else if (a > 70) {
-            return new Color(255, 255, 255);
-        } else if (a > 50) {
-            return new Color(255, 255, 0);
-        } else {
-            return new Color(0, 0, 0);
-        }
+        if (a > 120) return new Color(127, 0, 255);
+        else if (a > 90) return new Color(0, 192, 255);
+        else if (a > 70) return new Color(255, 255, 255);
+        else if (a > 50) return new Color(255, 255, 0);
+        else return new Color(0, 0, 0);
+    }
+
+    @Override
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, net.minecraft.world.damagesource.DamageSource source, float amount) {
+        return false;
     }
 
     @Override
     public void tick() {
         super.tick();
-
         if (tickCount > 1)
             this.setRemoved(RemovalReason.KILLED);
     }
 
     @Override
-    protected void defineSynchedData() {
-
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag p_20052_) {
-
+    protected void readAdditionalSaveData(ValueInput input) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag p_20139_) {
-
+    protected void addAdditionalSaveData(ValueOutput output) {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return super.getAddEntityPacket();
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return super.getAddEntityPacket(serverEntity);
     }
 
     @Override
-    public void writeSpawnData(FriendlyByteBuf buffer) {
+    public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
         buffer.writeDouble(targetX);
         buffer.writeDouble(targetY);
         buffer.writeDouble(targetZ);
-
         buffer.writeInt(charge);
     }
 
     @Override
-    public void readSpawnData(FriendlyByteBuf additionalData) {
+    public void readSpawnData(RegistryFriendlyByteBuf additionalData) {
         targetX = additionalData.readDouble();
         targetY = additionalData.readDouble();
         targetZ = additionalData.readDouble();
-
         charge = additionalData.readInt();
     }
 }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:compressor",
+    "c": "rotarycraft:circuit_board",
+    "p": "rotarycraft:hsla_steel_plate",
+    "r": "minecraft:chest",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "s c",
+    "pcp",
+    "pCr"
+  ],
+  "result": {
+    "id": "rotarycraft:block_cannon"
+  }
+}

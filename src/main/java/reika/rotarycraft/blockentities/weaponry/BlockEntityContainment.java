@@ -64,7 +64,7 @@ public class BlockEntityContainment extends BlockEntityProtectionDome {
         for (LivingEntity e : inbox) {
             if (this.isGeneralCapturable(e)) {
                 this.markNoDespawn(e);
-                double dx = e.getY() - pos.getX() - 0.5;
+                double dx = e.getX() - pos.getX() - 0.5;
                 double dy = e.getY() - pos.getY() - 0.5;
                 double dz = e.getZ() - pos.getZ() - 0.5;
                 double dd = ReikaMathLibrary.py3d(dx, dy, dz);
@@ -73,12 +73,12 @@ public class BlockEntityContainment extends BlockEntityProtectionDome {
                     double y = e.getDeltaMovement().y();
                     double z = e.getDeltaMovement().z();
                     e.setDeltaMovement(x - (dx / dd / 2), y - (dy / dd / 2), z - (dz / dd / 2));
-                    if (!world.isClientSide)
+                    if (!world.isClientSide())
                         e.hurtMarked = true;
                 }
             }
             if (e instanceof EnderDragon && power >= DRAGONPOWER) {
-                double dx = e.getY() - pos.getX() - 0.5;
+                double dx = e.getX() - pos.getX() - 0.5;
                 double dy = e.getY() - pos.getY() - 0.5;
                 double dz = e.getZ() - pos.getZ() - 0.5;
                 double dd = ReikaMathLibrary.py3d(dx, dy, dz);
@@ -91,7 +91,7 @@ public class BlockEntityContainment extends BlockEntityProtectionDome {
                 }
             }
             if (e instanceof WitherBoss && power >= WITHERPOWER) {
-                double dx = e.getY() - pos.getX() - 0.5;
+                double dx = e.getX() - pos.getX() - 0.5;
                 double dy = e.getY() - pos.getY() - 0.5;
                 double dz = e.getZ() - pos.getZ() - 0.5;
                 double dd = ReikaMathLibrary.py3d(dx, dy, dz);

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/cooling_fin",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/cooling_fin",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/cooling_fin"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/cooling_fin",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/cooling_fin",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/cooling_fin",
+      "y": 270
+    }
+  }
+}

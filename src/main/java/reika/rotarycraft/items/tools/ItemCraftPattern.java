@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -30,71 +30,59 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
     //right click to open programming gui
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (player.isCrouching()) {
-            this.getDefaultInstance().setTag(null);
+            reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(this.getDefaultInstance(), null);
         }
         else {
 //         todo   player.openMenu(RotaryCraft.getInstance(), GuiRegistry.PATTERN.ordinal(), level, 0, 0, 0);
         }
-        return InteractionResultHolder.pass(this.getDefaultInstance());
+        return InteractionResult.PASS;
     }
 
+    // 1.21.5: Item.appendHoverText now has 5 args including TooltipDisplay and Consumer<Component>.
     @Override
-    public void appendHoverText(ItemStack is,  Level p_41422_, List<Component> li, TooltipFlag p_41424_) {
-        //FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-        if (is.getTag() == null) {
-            li.add(Component.literal("No Crafting Pattern."));
+    public void appendHoverText(ItemStack is, net.minecraft.world.item.Item.TooltipContext ctx, net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> li, TooltipFlag flag) {
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null) {
+            li.accept(Component.literal("No Crafting Pattern."));
         }
         else {
             ItemStack item = this.getResult(is);
             if (item != null) {
-                li.add(Component.literal("Crafts "+item.getCount()+" "+item.getDisplayName()));//+" with:");
+                li.accept(Component.literal("Crafts "+item.getCount()+" "+item.getDisplayName()));
             }
             else {
-                li.add(Component.literal("Items, No Output."));
+                li.accept(Component.literal("Items, No Output."));
             }
         }
-        li.add(Component.literal("Recipe Mode: "+this.getMode(is).displayName));
+        li.accept(Component.literal("Recipe Mode: "+this.getMode(is).displayName));
     }
 
     public static ItemStack getResult(ItemStack is) {
-        ItemStack item = is.getTag() != null ? ItemStack.of(is.getTag().getCompound("output")) : null;
-        return item != null ? item.copy() : null;
+        // 1.21.5: ItemStack.of(CompoundTag) was removed; deserialisation now goes through
+        // ItemStack.parse(HolderLookup.Provider, Tag). Without ready access to the registry
+        // provider here, return empty until we plumb a provider through.
+        return ItemStack.EMPTY;
     }
 
     public static ItemStack[] getItems(ItemStack is) {
-        ItemStack[] items = new ItemStack[9];
-        if (is.getTag() != null) {
-            CompoundTag recipe = is.getTag().getCompound("recipe");
-            for (int i = 0; i < 9; i++) {
-                String s = "slot"+i;
-                if (recipe.contains(s)) {
-                    CompoundTag tag = recipe.getCompound(s);
-                    ItemStack in = ItemStack.of(tag);
-                    if (in == null && tag != null && !tag.isEmpty()) { //item no longer exists, clear the pattern
-                        is.setTag(null);
-                        return null;
-                    }
-                    items[i] = in;
-                }
-            }
-        }
-        return items;
+        // 1.21.5: ItemStack.of(CompoundTag) was removed; recipe-pattern decode stubbed
+        // until a HolderLookup.Provider is plumbed through to call ItemStack.parse.
+        return new ItemStack[9];
     }
 
     public static int getStackInputLimit(ItemStack is) {
-        if (is.getTag() != null) {
-            int amt = is.getTag().getInt("stacklimit");
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
+            int amt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("stacklimit", 0);
             return amt > 0 ? amt : 64;
         }
         return 64;
     }
 
     private static void resetNBT(ItemStack is) {
-        if (is.getTag() != null) {
-            is.getTag().remove("output");
-            is.getTag().remove("recipe");
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("output"));
+            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("recipe"));
         }
     }
 
@@ -104,27 +92,30 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
         RecipeMode mode = getMode(is);
         resetNBT(is);
         setMode(is, mode);
-        if (is.getTag() == null)
-            is.setTag(new CompoundTag());
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+            reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(is, new CompoundTag());
         ItemStack out = mode.getRecipe(ic, world);
         boolean valid = out != null;
         CompoundTag recipe = new CompoundTag();
+        // 1.21.5: ItemStack.save(CompoundTag) was removed; serialisation now goes through
+        // ItemStack.save(HolderLookup.Provider, Tag). Persist via ItemStack.CODEC encode
+        // until we plumb a provider end-to-end.
+        net.minecraft.core.HolderLookup.Provider provider = world.registryAccess();
         for (int i = 0; i < 9; i++) {
             ItemStack in = ic.getItem(i);
-            if (in != null) {
-                CompoundTag tag = new CompoundTag();
-                in.save(tag);
-                recipe.put("slot"+i, tag);
+            if (in != null && !in.isEmpty()) {
+                net.minecraft.nbt.Tag encoded = ItemStack.CODEC.encodeStart(provider.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), in).result().orElse(null);
+                if (encoded instanceof CompoundTag ct)
+                    recipe.put("slot"+i, ct);
             }
         }
-        is.getTag().put("recipe", recipe);
-        is.getTag().putBoolean("valid", valid);
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("recipe", recipe));
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean("valid", valid));
         if (valid) {
-            CompoundTag outt = new CompoundTag();
-            out.save(outt);
-            is.getTag().put("output", outt);
+            net.minecraft.nbt.Tag encoded = ItemStack.CODEC.encodeStart(provider.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), out).result().orElse(null);
+            if (encoded instanceof CompoundTag outt)
+                reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("output", outt));
         }
-        //ReikaJavaLibrary.pConsole(Arrays.toString(items)+" -> "+out);
     }
 
 /*    @Override
@@ -142,20 +133,20 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
     }*/
 
     public static RecipeMode getMode(ItemStack is) {
-        return is.getTag() != null ? RecipeMode.list[is.getOrCreateTag().getInt("mode")] : RecipeMode.CRAFTING;
+        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? RecipeMode.list[is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("mode", 0)] : RecipeMode.CRAFTING;
     }
 
     public static void setMode(ItemStack is, RecipeMode md) {
         if (!RotaryItems.CRAFT_PATTERN.get().equals(is)) //todo check equals
             return;
-        is.getOrCreateTag().putInt("mode", md.ordinal());
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("mode", md.ordinal()));
     }
 
     public static void changeStackLimit(ItemStack is, int change) {
         if (!RotaryItems.CRAFT_PATTERN.get().equals(is)) //todo check equals
             return;
         int limit = getStackInputLimit(is);
-        is.getOrCreateTag().putInt("stacklimit", Mth.clamp(limit+change, 1, 64));
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("stacklimit", Mth.clamp(limit+change, 1, 64)));
     }
 
     public static enum RecipeMode {
@@ -182,16 +173,21 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
         }
 
         public ItemStack getRecipe(CraftingContainer ic, Level world) {
+            // 1.21.5: Level.getRecipeManager() removed; recipe lookup now via the server's
+            // recipe manager (when available). Returns null on the client until we wire
+            // ItemCraftPattern through a server-side handler.
+            if (world.isClientSide() || world.getServer() == null) return null;
+            net.minecraft.world.item.crafting.RecipeManager rm = world.getServer().getRecipeManager();
+            net.minecraft.world.item.crafting.CraftingInput input = ic.asCraftInput();
             switch (this) {
                 case CRAFTING -> {
-                    return world.getRecipeManager().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING, ic, world)
-                            .map(r -> r.getResultItem(world.registryAccess()))
+                    return rm.getRecipeFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING, input, world)
+                            .map(holder -> holder.value().assemble(input))
                             .orElse(null);
                 }
                 case BLASTFURN -> {
-                    return world.getRecipeManager().getRecipeFor(RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get(), new SimpleContainer(ic.getItems().toArray(new ItemStack[0])), world)
-                            .map(r -> r.getResultItem(world.registryAccess()))
-                            .orElse(null);
+                    // BlastFurnaceRecipe uses our own RecipeInput; skip until that path is rewired.
+                    return null;
                 }
                 /*case WORKTABLE -> {
 //                    WorktableRecipes.WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(ic, null);

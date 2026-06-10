@@ -13,7 +13,7 @@
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.world.level.Level;
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //import reika.dragonapi.interfaces.blockentity.BreakAction;
 //import reika.dragonapi.libraries.level.ReikaWorldHelper;
 //import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
@@ -39,7 +39,7 @@
 //        power = (long) omega * (long) torque;
 //        this.getIOSides(world, pos, meta);
 //        this.getPower(false);
-//        if (!world.isClientSide)
+//        if (!world.isClientSide())
 //            this.makeBeam(world, pos, meta);
 //    }
 //
@@ -68,7 +68,7 @@
 //        int range = this.getRange();
 //        //ReikaJavaLibrary.pConsole(power+":"+distancelimit+":"+(PowerReceivers.LIGHTBRIDGE.getMinPower()/distancelimit)+":"+range, Dist.DEDICATED_SERVER);
 //        if (range > 0 && world.getBlockLightValue(x, y + 1, z) >= 13) { //1 kW - configured so light level 15 (sun) requires approx power of sun on Earth's surface
-//            if (!world.isClientSide) {
+//            if (!world.isClientSide()) {
 //                //if (!Blocks.opaqueCubeLookup[world.getBlock(x+facing.getStepX(), y+facing.getStepY(), z+facing.getStepZ())]) {
 //                for (int i = 1; (i <= range || range == -1) && i <= animtick && !blocked && (ReikaWorldHelper.softBlocks(world, x + facing.getStepX(), y + facing.getStepY(), z + facing.getStepZ()) || world.getBlock(x + facing.getStepX(), y + facing.getStepY(), z + facing.getStepZ()) == Blocks.AIR || world.getBlock(x + facing.getStepX(), y + facing.getStepY(), z + facing.getStepZ()) == RotaryBlocks.BRIDGE.get()); i++) {//&& world.getBlock(x+facing.getStepX(), y+facing.getStepY(), z+facing.getStepZ()) != RotaryBlocks.BRIDGE.get().blockID; i++) {
 //                    //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d %d %d", pos));
@@ -137,7 +137,7 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        animtick = NBT.getInt("tick");
+//        animtick = NBT.getIntOr("tick", 0);
 //    }
 //
 //    @Override

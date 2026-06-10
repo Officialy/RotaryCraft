@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForge;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
@@ -210,7 +210,7 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
                double motionZ = motion.z;
                
                if (motionX < AXISSPEEDCAP && facing.getStepX() != 0) {
-                   double d = caught.getY() - pos.getX();
+                   double d = caught.getX() - pos.getX();
                    if (d == 0)
                        d = 1;
                    double multiplier = 1 / (d - this.getMaxRange());
@@ -318,7 +318,7 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
            BlockEntityCoolingFin te = (BlockEntityCoolingFin) world.getBlockEntity(pos);
            int[] tg = te.getTarget();
            ReikaParticleHelper.CLOUD.spawnAroundBlock(world, pos, 1);
-           if (world.getDayTime() % 20 == 0) {
+           if (world.getOverworldClockTime() % 20 == 0) {
                int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
                if (te.getTemperature() > Tamb)
                    te.addTemperature(-(int) Math.min(10, 1 + power / 32768));
@@ -334,11 +334,11 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
            id != Blocks.OAK_LEAVES && id != Blocks.BIRCH_LEAVES && 
            id != Blocks.SPRUCE_LEAVES && id != Blocks.JUNGLE_LEAVES &&
            id != Blocks.ACACIA_LEAVES && id != Blocks.DARK_OAK_LEAVES &&
-                       id != Blocks.GRASS && id != Blocks.FIRE && !crop)
+                       id != Blocks.GRASS_BLOCK && id != Blocks.FIRE && !crop)
            return;
        
        int c = this.getHarvestingRand();
-               if (id == Blocks.GRASS)
+               if (id == Blocks.GRASS_BLOCK)
             c /= 3;
        c = Math.max(1, c);
        if (DragonAPI.rand.nextInt(c) > 0)
@@ -349,7 +349,7 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
             id == Blocks.SPRUCE_LEAVES || id == Blocks.JUNGLE_LEAVES ||
             id == Blocks.ACACIA_LEAVES || id == Blocks.DARK_OAK_LEAVES || id == Blocks.CHERRY_LEAVES || id == Blocks.AZALEA_LEAVES || id == Blocks.FLOWERING_AZALEA_LEAVES) && omega < LEAFSPEED)
            return;
-               if (id == Blocks.GRASS && omega < GRASSSPEED)
+               if (id == Blocks.GRASS_BLOCK && omega < GRASSSPEED)
            return;
        if (id == Blocks.FIRE && omega < FIRESPEED)
            return;
@@ -394,7 +394,7 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
        int ex = (facing.getAxis() == Direction.Axis.X) ? 0 : 1;
        int ey = (facing.getAxis() == Direction.Axis.Y) ? 0 : 1;
        int ez = (facing.getAxis() == Direction.Axis.Z) ? 0 : 1;
-       return box.expandTowards(ex, ey, ez);
+       return box.inflate(ex, ey, ez);
    }
 
    @Override
@@ -456,8 +456,8 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
    protected void readSyncTag(CompoundTag NBT) {
        super.readSyncTag(NBT);
 
-       wideAreaBlow = NBT.getBoolean("wideb");
-       wideAreaHarvest = NBT.getBoolean("wideh");
+       wideAreaBlow = NBT.getBooleanOr("wideb", false);
+       wideAreaHarvest = NBT.getBooleanOr("wideh", false);
    }
 
    @Override

@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/diamond_gearbox_16x",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "gearbox"
+    }
+  }
+}

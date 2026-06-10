@@ -21,7 +21,7 @@
 //import net.minecraft.world.entity.Mob;
 //import net.minecraft.world.entity.ambient.AmbientCreature;
 //import net.minecraft.world.entity.animal.Animal;
-//import net.minecraft.world.entity.monster.Silverfish;
+//import net.minecraft.world.entity.monster.silverfish.Silverfish;
 //import net.minecraft.world.entity.player.Player;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.item.alchemy.Potion;
@@ -290,8 +290,8 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        setpitch = NBT.getLong("setfrequency");
-//        setvolume = NBT.getLong("setvolume");
+//        setpitch = NBT.getLongOr("setfrequency", 0L);
+//        setvolume = NBT.getLongOr("setvolume", 0L);
 //    }
 //
 //    @Override

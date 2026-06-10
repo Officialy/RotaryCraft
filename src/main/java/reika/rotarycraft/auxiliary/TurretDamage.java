@@ -10,10 +10,9 @@
 package reika.rotarycraft.auxiliary;
 
 
-import net.minecraft.world.damagesource.DamageType;
 import reika.dragonapi.instantiable.CustomStringDamageSource;
 import reika.rotarycraft.base.blockentity.BlockEntityAimedCannon;
-import net.minecraft.world.damagesource.DamageSource;
+import reika.rotarycraft.registry.RotaryDamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -29,7 +28,7 @@ public class TurretDamage extends CustomStringDamageSource {
     }
 
     public TurretDamage(BlockEntityAimedCannon te, Player ep) {
-        super("found themselves in high-powered crosshairs");
+        super(CustomStringDamageSource.resolve(te.getLevel(), RotaryDamageTypes.MACHINE), "found themselves in high-powered crosshairs");
         player = ep;
         tile = te;
     }

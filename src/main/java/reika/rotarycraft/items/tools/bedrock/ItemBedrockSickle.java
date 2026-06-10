@@ -66,9 +66,9 @@
 //    }
 //
 //    private void forceFortune(ItemStack is, Level Level, Entity entity, int slot) {
-//        if (!ReikaEnchantmentHelper.hasEnchantment(Enchantments.BLOCK_FORTUNE, is)) {
+//        if (!ReikaEnchantmentHelper.hasEnchantment(Enchantments.FORTUNE, is)) {
 //            if (entity instanceof Player) {
-//                entity.playSound(SoundEvents.ITEM_BREAK, 1, 1);
+//                entity.playSound(SoundEvents.ITEM_BREAK.value(), 1, 1);
 //                Player ep = (Player) entity;
 //                ep.getInventory().canPlaceItem(slot, null);
 //                ep.hurt(DamageSource.GENERIC, 10);
@@ -81,8 +81,8 @@
 //    @Override
 //    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity itemEntity) {
 //        ItemStack is = itemEntity.getItem();
-//        if (!ReikaEnchantmentHelper.hasEnchantment(Enchantments.BLOCK_FORTUNE, is)) {
-//            itemEntity.playSound(SoundEvents.ITEM_BREAK, 1, 1);
+//        if (!ReikaEnchantmentHelper.hasEnchantment(Enchantments.FORTUNE, is)) {
+//            itemEntity.playSound(SoundEvents.ITEM_BREAK.value(), 1, 1);
 //            itemEntity.kill();
 //        }
 //        return false;

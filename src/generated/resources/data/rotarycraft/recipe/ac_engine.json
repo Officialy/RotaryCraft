@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:gold_coil",
+    "P": "rotarycraft:hsla_steel_plate",
+    "R": "minecraft:redstone",
+    "S": "minecraft:gold_ingot",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "SSS",
+    "SGs",
+    "PRP"
+  ],
+  "result": {
+    "id": "rotarycraft:ac_engine"
+  }
+}

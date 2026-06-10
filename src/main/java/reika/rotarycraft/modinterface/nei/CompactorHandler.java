@@ -150,8 +150,8 @@
 //
 //		int pressure = this.getPressure(recipe);
 //		int temperature = this.getTemperature(recipe);
-//		Minecraft.getMinecraft().fontRenderer.drawString(String.format("Required Pressure: %d kPa", pressure), 0, 85, 0x333333, false);
-//		Minecraft.getMinecraft().fontRenderer.drawString(String.format("Required Temperature: %dC", temperature), 0, 95, 0x333333, false);
+//		Minecraft.getMinecraft().fontRenderer.text(String.format("Required Pressure: %d kPa", pressure), 0, 85, 0x333333, false);
+//		Minecraft.getMinecraft().fontRenderer.text(String.format("Required Temperature: %dC", temperature), 0, 95, 0x333333, false);
 //	}
 //
 //	private int getPressure(int recipe) {

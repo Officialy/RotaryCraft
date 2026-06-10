@@ -10,46 +10,39 @@
 package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.items.IItemHandler;
-import net.neoforged.items.ItemStackHandler;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.items.IItemHandler;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 
+import java.util.Optional;
+
+// TODO(1.21.9): drop `implements IItemHandler` once the cannon path stops relying on the
+// legacy `te instanceof IItemHandler` resolution and migrates fully to ResourceHandler<ItemResource>.
+// The inner {@link ManagedItemHandler} already implements the new API; the class-level marker
+// is kept only so external code that still uses the legacy interface (auto-feeders etc.) finds it.
+@SuppressWarnings("removal")
 public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCannon implements IItemHandler, Container {
 
-    protected ItemStackHandler itemHandler = new ItemStackHandler(getContainerSize()) {
+    public ManagedItemHandler itemHandler = new ManagedItemHandler(getContainerSize()) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
-    private final LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public BlockEntityInventoriedCannon(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-        if (capability == ForgeCapabilities.ITEM_HANDLER)
-            return lazyItemHandler.cast();
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
     }
 
     //        @Override
@@ -73,36 +66,32 @@ public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCanno
     public void closeInventory() {
     }
 
-    public void saveAdditional(CompoundTag NBT) {
-        ListTag nbttaglist = new ListTag();
-
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
-                CompoundTag CompoundTag = new CompoundTag();
-                CompoundTag.putByte("Slot", (byte) i);
-                itemHandler.getStackInSlot(i).save(CompoundTag);
-                nbttaglist.add(CompoundTag);
-            }
-        }
-
-        NBT.put("Items", nbttaglist);
+    // 1.21.5: ValueOutput/ValueInput pattern. ManagedItemHandler#serialize/deserialize handles the
+    // per-slot stack codec; we just wrap a CompoundTag through TagValueOutput/TagValueInput so we
+    // can write it as a single "ItemsRaw" entry on the modern BE save API.
+    @Override
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        TagValueOutput nested = TagValueOutput.createWithContext(ProblemReporter.DISCARDING,
+                this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess());
+        itemHandler.serialize(nested);
+        output.store("ItemsRaw", CompoundTag.CODEC, nested.buildResult());
     }
 
-    public void load(CompoundTag NBT) {
-        ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
-        itemHandler = new ItemStackHandler(getContainerSize()) {
+    @Override
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        itemHandler = new ManagedItemHandler(getContainerSize()) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
             }
         };
-        for (int i = 0; i < nbttaglist.size(); i++) {
-            CompoundTag CompoundTag = nbttaglist.getCompound(i);
-            byte byte0 = CompoundTag.getByte("Slot");
-
-            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
-                itemHandler.setStackInSlot(byte0, ItemStack.of(CompoundTag));
-            }
+        Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
+        if (raw.isPresent()) {
+            ValueInput nested = TagValueInput.create(ProblemReporter.DISCARDING,
+                    this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
+            itemHandler.deserialize(nested);
         }
     }
 

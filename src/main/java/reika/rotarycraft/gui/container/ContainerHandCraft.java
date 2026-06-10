@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import reika.rotarycraft.registry.RotaryMenus;
@@ -66,17 +67,19 @@ public class ContainerHandCraft extends AbstractContainerMenu {
     }
 
     protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level level, Player p_150549_, CraftingContainer container, ResultContainer p_150551_) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             ServerPlayer serverplayer = (ServerPlayer) p_150549_;
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container, level);
+            // 1.21.5: getRecipeFor returns Optional<RecipeHolder<T>>, takes a RecipeInput (CraftingInput),
+            //         setRecipeUsed is void and accepts a RecipeHolder, and assemble drops the RegistryAccess arg.
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container.asCraftInput(), level);
             if (optional.isPresent()) {
-                CraftingRecipe craftingrecipe = optional.get();
-                if (p_150551_.setRecipeUsed(level, serverplayer, craftingrecipe)) {
-                    ItemStack itemstack1 = craftingrecipe.assemble(container, level.registryAccess());
-                    if (itemstack1.isItemEnabled(level.enabledFeatures())) {
-                        itemstack = itemstack1;
-                    }
+                RecipeHolder<CraftingRecipe> holder = optional.get();
+                CraftingRecipe craftingrecipe = holder.value();
+                p_150551_.setRecipeUsed(holder);
+                ItemStack itemstack1 = craftingrecipe.assemble(container.asCraftInput());
+                if (itemstack1.isItemEnabled(level.enabledFeatures())) {
+                    itemstack = itemstack1;
                 }
             }
 
@@ -95,7 +98,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
     @Override
     public void removed(Player player) {
         super.removed(player);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             for (int var2 = 0; var2 < 9; ++var2) {
                 ItemStack var3 = craftMatrix.getItem(var2);
                 if (var3 != null)

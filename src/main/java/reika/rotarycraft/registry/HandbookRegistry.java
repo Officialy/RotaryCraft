@@ -11,13 +11,13 @@ package reika.rotarycraft.registry;
 
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredItem;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.HandbookAuxData;
@@ -332,7 +332,7 @@ public enum HandbookRegistry implements HandbookEntry {
     private final int offset;
     private final boolean isParent;
     private MachineRegistry machine;
-    private RegistryObject<Item> item;
+    private DeferredItem<Item> item;
     private int parentindex;
     private int basescreen;
     private String title;
@@ -361,7 +361,7 @@ public enum HandbookRegistry implements HandbookEntry {
         item = null;
     }
 
-    HandbookRegistry(RegistryObject<Item> i) {
+    HandbookRegistry(DeferredItem<Item> i) {
         offset = -1;
         isParent = false;
         item = i;
@@ -390,7 +390,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
     }
 
-    HandbookRegistry(String s, RegistryObject<Item> m) {
+    HandbookRegistry(String s, DeferredItem<Item> m) {
         machine = null;
         offset = -1;
         isParent = false;
@@ -538,7 +538,9 @@ public enum HandbookRegistry implements HandbookEntry {
         int id = 0;
         for (HandbookRegistry handbookRegistry : tabList) {
             if (handbookRegistry.getScreen() == screen/* && !tabList[i].isDummiedOut()*/) {
-                li.add(new ImageButton(id, j - 20, k + handbookRegistry.getRelativeTabPosn() * 20, 20, 20, 0, 0, ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, handbookRegistry.getTabImageFile()), null)); //todo onpress
+                // 1.21.5: ImageButton requires a WidgetSprites bundle; use plain Button until sprites are wired up.
+                final int finalId = id;
+                li.add(net.minecraft.client.gui.components.Button.builder(net.minecraft.network.chat.Component.empty(), b -> {}).bounds(j - 20, k + handbookRegistry.getRelativeTabPosn() * 20, 20, 20).build());
                 //ReikaJavaLibrary.pConsole("Adding "+tabList[i]+" with ID "+id+" to screen "+screen);
                 id++;
             }
@@ -859,7 +861,7 @@ public enum HandbookRegistry implements HandbookEntry {
             li.add(is);
             is = is.copy();
             is.save(new CompoundTag());
-            is.getTag().putBoolean("bedrock", true);
+            is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putBoolean("bedrock", true);
             li.add(is);
             return li;
         }

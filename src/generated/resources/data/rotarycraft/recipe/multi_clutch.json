@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:hsla_steel_gear_2x",
+    "P": "rotarycraft:hsla_steel_plate",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "PSP",
+    "SGS",
+    "RSR"
+  ],
+  "result": {
+    "id": "rotarycraft:multi_clutch"
+  }
+}

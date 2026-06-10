@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "M": "rotarycraft:mount",
+    "S": "rotarycraft:hsla_steel_rod",
+    "s": "rotarycraft:screen"
+  },
+  "pattern": [
+    " S ",
+    " E ",
+    " Ms"
+  ],
+  "result": {
+    "count": 2,
+    "id": "rotarycraft:dynamometer"
+  }
+}

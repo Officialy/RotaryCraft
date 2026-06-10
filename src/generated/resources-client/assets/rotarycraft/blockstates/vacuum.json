@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/vacuum",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/vacuum",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/vacuum"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/vacuum",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/vacuum",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/vacuum",
+      "y": 270
+    }
+  }
+}

@@ -125,7 +125,7 @@
 //
 //    @Override
 //    protected void animateWithTick(Level world, BlockPos pos) {
-//        if (world.isClientSide) {
+//        if (world.isClientSide()) {
 //            if (effectRender != null) {
 //                if (effectRender.tick())
 //                    effectRender = null;
@@ -174,7 +174,7 @@
 //        //ReikaJavaLibrary.pConsoleOnlyIn(check.getSize(), Dist.DEDICATED_SERVER);
 //        //ReikaJavaLibrary.pConsole(blocks.size(), Dist.DEDICATED_SERVER);
 //
-//        if (!world.isClientSide)
+//        if (!world.isClientSide())
 //            this.createListing();
 //
 //        if (loading) {
@@ -188,7 +188,7 @@
 //        //power = (long)BLAST_ENERGY+800;
 //
 //        if (energy / 20L >= BLAST_ENERGY && !loading) {
-//            //if (world.isClientSide)
+//            //if (world.isClientSide())
 //            //	this.initEffect();
 //            //else
 //            this.fire(world, pos);
@@ -413,11 +413,11 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        loading = NBT.getBoolean("load");
-//        canLoad = NBT.getBoolean("cload");
-//        fired = NBT.getBoolean("fire");
+//        loading = NBT.getBooleanOr("load", false);
+//        canLoad = NBT.getBooleanOr("cload", false);
+//        fired = NBT.getBooleanOr("fire", false);
 //
-//        energy = NBT.getLong("e");
+//        energy = NBT.getLongOr("e", 0L);
 //    }
 //
 //    public void updateListing() {

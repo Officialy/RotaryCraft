@@ -11,13 +11,15 @@ package reika.rotarycraft.registry;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.gui.screens.advancements.AdvancementsScreen;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
 
@@ -38,17 +40,17 @@ public enum RotaryAdvancements {
 //    BORER(2, 6, MachineRegistry.BORER, PCB, false),
     JETFUEL(4, -4, RotaryItems.JET_FUEL_BUCKET.get(), MAKEYEAST, false), //make
     RECYCLE(4, -8, RotaryItems.HSLA_STEEL_SCRAP.get(), JETFUEL, false),
-    //    JETENGINE(6, -4, EngineType.JET.getCraftedProduct(), JETFUEL, true),
+    JETENGINE(6, -4, EngineType.JET.getCraftedProduct(), JETFUEL, true),
 //    MAKERAILGUN(0, 8, MachineRegistry.RAILGUN, PCB, true),
-//    SUCKEDINTOJET(6, -8, Items.ROTTEN_FLESH, JETENGINE, false),
+    SUCKEDINTOJET(6, -8, Items.ROTTEN_FLESH, JETENGINE, false),
     BEDROCKBREAKER(-4, 2, RotaryItems.BEDROCK_DUST.get(), MAKESTEEL, false), //break bedrock with
     STEAMENGINE(-8, 0, EngineType.STEAM.getCraftedProduct(), PUMP, false), //turn on
     STEELSHAFT(-2, -2, RotaryItems.HSLA_SHAFT.get(), MAKESTEEL, false), //make
     //    CVT(-2, -4, MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(1), STEELSHAFT, false), //make
     BEDROCKSHAFT(-4, 6, RotaryItems.BEDROCK_ALLOY_SHAFT.get(), BEDROCKBREAKER, false), //make
     //    BEDROCKTOOLS(-6, 2, RotaryItems.BEDPICK, BEDROCKBREAKER, false), //make
-//    JETCHICKEN(8, -4, Items.FEATHER, JETENGINE, false), //suck 50 chickens into jet engine
-//    JETFAIL(8, -2, Blocks.FIRE, JETENGINE, false), //cause violent failure
+    JETCHICKEN(8, -4, Items.FEATHER, JETENGINE, false), //suck 50 chickens into jet engine
+    JETFAIL(8, -2, Blocks.FIRE, JETENGINE, false), //cause violent failure
 //    LIGHTFALL(8, -6, MachineRegistry.LIGHTBRIDGE, JETENGINE, false), //light bridge turns off, drops you to death
 //    SPRINKLER(-6, -2, MachineRegistry.SPRINKLER, PUMP, false), //turn on
     FLOODLIGHT(-1, -1, MachineRegistry.FLOODLIGHT, MAKESTEEL, false), //turn on at Light 15
@@ -104,7 +106,7 @@ public enum RotaryAdvancements {
             RotaryAdvancements a = list[i];
             int id = RotaryCraft.config.getAchievementID(i);
             Advancement dep = a.hasDependency() ? a.dependency.get() : null;
-            Advancement ach = new Advancement(new ResourceLocation(a.name().toLowerCase(Locale.ENGLISH)), a.name().toLowerCase(Locale.ENGLISH), a.xPosition, a.yPosition, a.iconItem, dep);
+            Advancement ach = new Advancement(Identifier.parse(a.name().toLowerCase(Locale.ENGLISH)), a.name().toLowerCase(Locale.ENGLISH), a.xPosition, a.yPosition, a.iconItem, dep);
             //ReikaJavaLibrary.pConsole(a+":"+id+":"+StatList.getOneShotStat(id));
             //if (StatList.getOneShotStat(id) != null)
             //	throw new IDConflictException(RotaryCraft.getInstance(), "The mod's achievement IDs are conflicting with another at ID "+id+" ("+a+" is trying to overwrite "+StatList.getOneShotStat(id).statName+").\nCheck the config file and change them.");
@@ -125,7 +127,7 @@ public enum RotaryAdvancements {
         if (!ConfigRegistry.ACHIEVEMENTS.getState())
             return;
         if (ep == null) {
-            if (FMLLoader.getDist() == Dist.DEDICATED_SERVER) {
+            if (FMLEnvironment.getDist() == Dist.DEDICATED_SERVER) {
                 //ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
                 //ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
                 RotaryCraft.LOGGER.debug("Player does not exist to receive their achievement \"" + this + "\"!");
@@ -140,3 +142,5 @@ public enum RotaryAdvancements {
     }
 
 }
+
+

@@ -16,7 +16,8 @@ import net.minecraft.world.item.ShearsItem;
 public abstract class ItemRotaryShears extends ShearsItem {
 
     protected ItemRotaryShears(Item.Properties properties) {
-        super(new Item.Properties());
+        // Use the caller-supplied Properties so the registration lambda's setId() is preserved.
+        super(properties);
     }
 
 }

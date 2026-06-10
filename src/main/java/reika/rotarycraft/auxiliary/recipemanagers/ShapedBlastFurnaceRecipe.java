@@ -1,16 +1,19 @@
 package reika.rotarycraft.auxiliary.recipemanagers;
 
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.SimpleContainer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import reika.dragonapi.interfaces.IBonusYield;
 import reika.dragonapi.interfaces.IHasXP;
@@ -18,25 +21,21 @@ import reika.dragonapi.interfaces.IHeatRecipe;
 import reika.rotarycraft.registry.RotaryRecipeSerializers;
 import reika.rotarycraft.registry.RotaryRecipeTypes;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ShapedBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBonusYield, IHasXP, IHeatRecipe {
-    private final ResourceLocation id;
-    private final NonNullList<Ingredient> ingredients;
+public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYield, IHasXP, IHeatRecipe {
+    private final List<Ingredient> ingredients;
     private final ItemStack output;
-    //The temperature required to craft
     private final float operatingTemperature;
-    //The experience points you get from crafting
     private final float experience;
-    //The higher the tier, the longer it takes to craft
     private final float timeMultiplier;
-    private boolean needsAdditives = false;
+    private final boolean needsAdditives;
     private final int bonusChance;
     private final int bonusMin;
     private final int bonusMax;
 
-    public ShapedBlastFurnaceRecipe(ResourceLocation id, NonNullList<Ingredient> ingredients, ItemStack output, float temperature, float experience, float timeMultiplier, boolean needsAdditives, int chance, int min, int max) {
-        this.id = id;
+    public ShapedBlastFurnaceRecipe(List<Ingredient> ingredients, ItemStack output, float temperature, float experience, float timeMultiplier, boolean needsAdditives, int chance, int min, int max) {
         this.ingredients = ingredients;
         this.output = output;
         this.operatingTemperature = temperature;
@@ -44,8 +43,8 @@ public class ShapedBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBonus
         this.timeMultiplier = timeMultiplier;
         this.needsAdditives = needsAdditives;
         this.bonusChance = chance;
-        this.bonusMin    = min;
-        this.bonusMax    = max;
+        this.bonusMin = min;
+        this.bonusMax = max;
     }
 
     public float getOperatingTemperature() {
@@ -53,21 +52,21 @@ public class ShapedBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBonus
     }
 
     @Override
-    public boolean matches(SimpleContainer inv, Level world) {
-        // Check if all additives match - Ignores if needsAdditives is false
+    public boolean matches(RecipeInput input, Level world) {
         boolean satisfied = !needsAdditives;
 
         for (int i = 0; i < 3; i++) {
-            ItemStack additiveStack = inv.getItem(8 + i); // last three slots
+            if (8 + i >= input.size()) break;
+            ItemStack additiveStack = input.getItem(8 + i);
             if (!additiveStack.isEmpty() && i < this.ingredients.size() && this.ingredients.get(i).test(additiveStack)) {
                 satisfied = true;
             }
         }
 
-        // Check if all recipe items match
         if (satisfied) {
             for (int i = 0; i < 9; i++) {
-                ItemStack recipeStack = inv.getItem(i); // first nine slots
+                if (i >= input.size()) return false;
+                ItemStack recipeStack = input.getItem(i);
                 if (!recipeStack.isEmpty() && i < this.ingredients.size() && this.ingredients.get(i).test(recipeStack)) {
                     continue;
                 }
@@ -79,38 +78,19 @@ public class ShapedBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBonus
         return false;
     }
 
-    /* IBonusYield */
-    @Override public int bonusChance() { return bonusChance; }
-    @Override public int bonusMin()    { return bonusMin; }
-    @Override public int bonusMax()    { return bonusMax; }
-    /* IHasXP */
-    @Override public float xpPerItem() { return experience; }
-
-    @Override public float requiredTemperature() { return operatingTemperature; }
-
     @Override
-    public ItemStack assemble(SimpleContainer p_44001_, RegistryAccess p_267165_) {
-        return output;
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int p_43999_, int p_44000_) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(RegistryAccess p_267052_) {
+    public ItemStack assemble(RecipeInput input) {
         return output.copy();
     }
 
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
+    public ItemStack getOutput() {
+        return output.copy();
+    }
+
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
-   @Override
-    public ResourceLocation getId() {
-        return id;
-    }
+
     public float getExperience() {
         return experience;
     }
@@ -124,80 +104,81 @@ public class ShapedBlastFurnaceRecipe implements Recipe<SimpleContainer>, IBonus
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public boolean showNotification() {
+        return true;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.create(ingredients);
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.BLAST_FURNACE_MISC;
+    }
+
+    @Override
+    public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
         return RotaryRecipeSerializers.BLAST_FURNACE_SHAPED.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<RecipeInput>> getType() {
         return RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get();
     }
 
-    public static class Serializer implements RecipeSerializer<ShapedBlastFurnaceRecipe> {
+    /* IBonusYield */
+    @Override public int bonusChance() { return bonusChance; }
+    @Override public int bonusMin()    { return bonusMin; }
+    @Override public int bonusMax()    { return bonusMax; }
+    /* IHasXP */
+    @Override public float xpPerItem() { return experience; }
+    @Override public float requiredTemperature() { return operatingTemperature; }
 
-        @Override
-        public ShapedBlastFurnaceRecipe fromJson(ResourceLocation id, JsonObject json) {
-            Map<String, Ingredient> map = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
+    public static final MapCodec<ShapedBlastFurnaceRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(r -> r.ingredients),
+            ItemStack.CODEC.fieldOf("output").forGetter(r -> r.output),
+            Codec.FLOAT.fieldOf("temperature").forGetter(r -> r.operatingTemperature),
+            Codec.FLOAT.fieldOf("experience").forGetter(r -> r.experience),
+            Codec.FLOAT.fieldOf("timeMultiplier").forGetter(r -> r.timeMultiplier),
+            Codec.BOOL.optionalFieldOf("needsAdditives", false).forGetter(r -> r.needsAdditives),
+            Codec.INT.optionalFieldOf("bonusChance", 0).forGetter(r -> r.bonusChance),
+            Codec.INT.optionalFieldOf("bonusMin", 0).forGetter(r -> r.bonusMin),
+            Codec.INT.optionalFieldOf("bonusMax", 0).forGetter(r -> r.bonusMax)
+    ).apply(inst, ShapedBlastFurnaceRecipe::new));
 
-            String[] pattern = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
-            int i = pattern[0].length();
-            int j = pattern.length;
-            NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i * j, Ingredient.EMPTY);
-            for (int k = 0; k < i * j; ++k) {
-                char c = pattern[k / i].charAt(k % i);
-                Ingredient ingredient = map.get(c);
-                if (ingredient == null) {
-                    throw new JsonSyntaxException("Pattern references undefined symbol '" + c + "'");
-                }
-                nonnulllist.set(k, ingredient);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ShapedBlastFurnaceRecipe> STREAM_CODEC = StreamCodec.of(
+            (buf, r) -> {
+                buf.writeVarInt(r.ingredients.size());
+                for (Ingredient ing : r.ingredients) Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ing);
+                ItemStack.STREAM_CODEC.encode(buf, r.output);
+                buf.writeFloat(r.operatingTemperature);
+                buf.writeFloat(r.experience);
+                buf.writeFloat(r.timeMultiplier);
+                buf.writeBoolean(r.needsAdditives);
+                buf.writeVarInt(r.bonusChance);
+                buf.writeVarInt(r.bonusMin);
+                buf.writeVarInt(r.bonusMax);
+            },
+            buf -> {
+                int ic = buf.readVarInt();
+                List<Ingredient> ings = new ArrayList<>();
+                for (int i = 0; i < ic; i++) ings.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
+                ItemStack out = ItemStack.STREAM_CODEC.decode(buf);
+                float temp = buf.readFloat();
+                float xp = buf.readFloat();
+                float tm = buf.readFloat();
+                boolean na = buf.readBoolean();
+                int bc = buf.readVarInt();
+                int bmin = buf.readVarInt();
+                int bmax = buf.readVarInt();
+                return new ShapedBlastFurnaceRecipe(ings, out, temp, xp, tm, na, bc, bmin, bmax);
             }
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
-
-            float temperature = GsonHelper.getAsFloat(json, "temperature");
-            float experience = GsonHelper.getAsFloat(json, "experience");
-            float timeMultiplier = GsonHelper.getAsFloat(json, "timeMultiplier");
-            boolean needsAdditives = GsonHelper.getAsBoolean(json, "needsAdditives");
-            int bonusChance = GsonHelper.getAsInt(json, "bonusChance", 0);
-            int bonusMin = GsonHelper.getAsInt(json, "bonusMin", 0);
-            int bonusMax = GsonHelper.getAsInt(json, "bonusMax", 0);
-
-            return new ShapedBlastFurnaceRecipe(id, nonnulllist, output, temperature, experience, timeMultiplier, needsAdditives, bonusChance, bonusMin, bonusMax);
-        }
-
-        @Override
-        public ShapedBlastFurnaceRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf byteBuf) {
-            int ingredientCount = byteBuf.readVarInt();
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(ingredientCount, Ingredient.EMPTY);
-            for (int i = 0; i < ingredientCount; ++i) {
-                ingredients.set(i, Ingredient.fromNetwork(byteBuf));
-            }
-
-            ItemStack output = byteBuf.readItem();
-            float temperature = byteBuf.readFloat();
-            float experience = byteBuf.readFloat();
-            float timeMultiplier = byteBuf.readFloat();
-            boolean needsAdditives = byteBuf.readBoolean();
-            int bonusChance = byteBuf.readVarInt();
-            int bonusMin = byteBuf.readVarInt();
-            int bonusMax = byteBuf.readVarInt();
-
-            return new ShapedBlastFurnaceRecipe(id, ingredients, output, temperature, experience, timeMultiplier, needsAdditives, bonusChance, bonusMin, bonusMax);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, ShapedBlastFurnaceRecipe recipe) {
-            buffer.writeVarInt(recipe.ingredients.size());
-            for (Ingredient ingredient : recipe.ingredients) {
-                ingredient.toNetwork(buffer);
-            }
-            buffer.writeItemStack(recipe.output, true);
-            buffer.writeFloat(recipe.operatingTemperature);
-            buffer.writeFloat(recipe.experience);
-            buffer.writeFloat(recipe.timeMultiplier);
-            buffer.writeBoolean(recipe.needsAdditives());
-            buffer.writeVarInt(recipe.bonusChance);
-            buffer.writeVarInt(recipe.bonusMin);
-            buffer.writeVarInt(recipe.bonusMax);
-        }
-    }
+    );
 }

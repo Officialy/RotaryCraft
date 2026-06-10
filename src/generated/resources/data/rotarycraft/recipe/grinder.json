@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_ingot",
+    "G": "rotarycraft:hsla_steel_gear",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:saw"
+  },
+  "pattern": [
+    "B B",
+    "SGS",
+    "PPP"
+  ],
+  "result": {
+    "id": "rotarycraft:grinder"
+  }
+}

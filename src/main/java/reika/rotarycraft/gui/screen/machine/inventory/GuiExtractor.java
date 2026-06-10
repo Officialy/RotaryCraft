@@ -48,10 +48,8 @@
 //            ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
 //            stack.pushPose();
 //            stack.translate(0, 0, 200);
-//            RenderSystem.enableBlend();
 //            GL11.glColor4f(1, 1, 1, 0.5F);
 //            ScreenUtils.drawTexturedModalRect(25, 33, 25, 33, 18, 18);
-//            RenderSystem.disableBlend();
 //
 //            int i1 = Math.min(32, ext.getCookProgressScaled(32, 0));
 //            ScreenUtils.drawTexturedModalRect(29, 34, 176, 48, 10, i1);
@@ -72,8 +70,8 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(PoseStack poseStack, par1, par2, par3);
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
+//        super.extractBackground(PoseStack poseStack, par1, par2, par3);
 //
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;

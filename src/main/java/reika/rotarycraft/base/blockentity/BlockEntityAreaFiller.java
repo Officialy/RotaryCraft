@@ -30,6 +30,7 @@ public abstract class BlockEntityAreaFiller extends BlockEntityPowerReceiver imp
 
     //@Override
     public void updateEntity(Level world, BlockPos pos) {
+        super.updateBlockEntity();
         if (world.isClientSide())
             return;
 

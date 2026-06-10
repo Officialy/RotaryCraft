@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 public abstract class AutoOreItem extends ItemBasic {
 
     public AutoOreItem() {
-        super(new Properties(), 64);
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties(), 64);
     }
 
     @Override

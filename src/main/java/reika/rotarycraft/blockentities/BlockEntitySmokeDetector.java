@@ -37,11 +37,11 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     /* --------------------------------------------------------------------- */
     public boolean isAlarming()        { return isAlarm; }
     public boolean lowBattery()        {
-        return hasCoil() && itemHandler.getStackInSlot(0).getTag().getInt("power") <= 8;
+        return hasCoil() && itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("power", 0) <= 8;
     }
     public int     getRange()          {
         if (!hasCoil()) return 0;
-        int dmg = itemHandler.getStackInSlot(0).getTag().getInt("power");
+        int dmg = itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("power", 0);
         int val = (int) ReikaMathLibrary.logbase(dmg * dmg, 2);
         return Math.min(val, 8);
     }
@@ -51,6 +51,7 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     /* --------------------------------------------------------------------- */
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
         tickcount++;
         unwindTick++;
 

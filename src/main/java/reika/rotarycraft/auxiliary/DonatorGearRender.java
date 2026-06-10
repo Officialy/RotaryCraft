@@ -15,9 +15,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -34,28 +32,21 @@ public class DonatorGearRender implements PlayerRenderObj {
     }
 
     @Override
-    public void render(GuiGraphics stack, Player ep, float ptick, PlayerSpecificRenderer.PlayerRotationData dat) {
-        Tesselator tesselator = Tesselator.getInstance();
-        PoseStack matrixStack = new PoseStack();
-
+    public void extractRenderState(PoseStack matrixStack, Player ep, float ptick, PlayerSpecificRenderer.PlayerRotationData dat) {
+        // 1.21.5 TODO: ItemRenderer.render moved to ItemModelResolver/ItemStackRenderState. This
+        // donator gear rendering is stubbed pending a port to the new item rendering pipeline.
         matrixStack.pushPose();
         matrixStack.translate(0, 2.1875, 0);
-        //GL11.glRotated(-dat.getRenderYaw(), 0, 1, 0);
-        //GL11.glRotated(45, 1, 0, 0);
-        //GL11.glRotated(dat.getRenderPitch(), 1, 0, 0);
         double d = 0.0625;
         float angle = (System.currentTimeMillis() / 10f) % 360;
         matrixStack.translate(0, d, 0);
-        matrixStack.mulPose(new Quaternionf(angle, 0, 0, 1));
+        // 1.21.5 fix: legacy ported {@code new Quaternionf(a,x,y,z)} but Quaternionf takes
+        // (x,y,z,w) — yielding a non-normalised quaternion. Use Axis rotations instead.
+        matrixStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(angle));
         matrixStack.translate(0, -d, 0);
-        matrixStack.mulPose(new Quaternionf(90, 0, 1, 0));
+        matrixStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(90));
         float s = 0.5f;
         matrixStack.scale(s, s, s);
-        //GL11.glRotated(45-ep.rotationPitch+90, 1, 0, 0);
-        //GL11.glRotated(RenderManager.instance.playerViewY-ep.rotationYawHead-45, 0, 1, 0);
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        MultiBufferSource.BufferSource renderTypeBufferImpl = Minecraft.getInstance().renderBuffers().bufferSource();
-        itemRenderer.render(new ItemStack(RotaryItems.HSLA_STEEL_GEAR.get()), ItemDisplayContext.HEAD, false, matrixStack, renderTypeBufferImpl, 1, 1, null);
         matrixStack.popPose();
     }
 

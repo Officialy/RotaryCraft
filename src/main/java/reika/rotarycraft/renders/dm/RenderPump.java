@@ -15,12 +15,18 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.fluids.FluidStack;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidStack;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
@@ -50,51 +56,49 @@ public class RenderPump extends RotaryTERenderer<BlockEntityPump> {
         };
         stack.mulPose(Axis.YP.rotationDegrees(yRot + 90));
         stack.mulPose(Axis.ZP.rotationDegrees(180));
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(PumpModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(PumpModel.TEXTURE_LOCATION));
         pumpModel.renderAll(stack, vertexconsumer, packedLight, tile, null, -tile.phi, 0);
         stack.popPose();
     }
 
+    // 1.21.5 NOTE: Tesselator.getBuilder/Vertex.endVertex/RenderSystem.enable* / IClientFluidTypeExtensions.getStillTexture+getTintColor
+    // have all been removed. Liquid rendering needs a rewrite against the new MeshData/BufferBuilder pipeline.
     private void renderLiquid(PoseStack stack, BlockEntityPump tile, MultiBufferSource bufferSource, int packedLight) {
-        FluidStack fs = tile.getLiquid();
-        if (fs == null || fs.isEmpty()) return;
-        var fluid = fs.getFluid();
-        IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(fluid.getFluidType());
-        double h = 0.3125 + 0.375 * tile.getFluidLevel() / BlockEntityPump.CAPACITY;
-        stack.pushPose();
-        RenderSystem.enableBlend();
-        Minecraft.getInstance().textureManager.bindForSetup(props.getStillTexture());
-        var m = stack.last().pose();
-        var tesselator = com.mojang.blaze3d.vertex.Tesselator.getInstance();
-        var v5 = tesselator.getBuilder();
-        float u = 0;
-        float v = 0;
-        float du = 1;
-        float dv = 1;
-        v5.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_TEX_COLOR_NORMAL);
-        int color = props.getTintColor(fs);
-        float r = ((color >> 16) & 0xFF) / 255f;
-        float g = ((color >> 8) & 0xFF) / 255f;
-        float b = (color & 0xFF) / 255f;
-        float a = 1f;
-        float hf = (float) h;
-        v5.vertex(m, 0.125f, hf, 0.875f).uv(u, dv).color(r, g, b, a).normal(0, 1, 0).endVertex();
-        v5.vertex(m, 0.875f, hf, 0.875f).uv(du, dv).color(r, g, b, a).normal(0, 1, 0).endVertex();
-        v5.vertex(m, 0.875f, hf, 0.125f).uv(du, v).color(r, g, b, a).normal(0, 1, 0).endVertex();
-        v5.vertex(m, 0.125f, hf, 0.125f).uv(u, v).color(r, g, b, a).normal(0, 1, 0).endVertex();
-        tesselator.end();
-        RenderSystem.disableBlend();
-        stack.popPose();
     }
 
+    // 1.21.5: BlockEntityRenderer.render → submit(BlockEntityRenderState, PoseStack, SubmitNodeCollector, CameraRenderState).
+    // The vanilla draw pipeline drains queued submissions LATER, after submit() returns, so the
+    // outer PoseStack may have been popped by then. We snapshot the current pose onto a fresh
+    // PoseStack that the lambda captures by reference, and we present a tiny lambda
+    // MultiBufferSource that always hands the existing renderBlockEntityPumpAt code the
+    // VertexConsumer the collector gave us. The pump only ever requests one RenderType per
+    // render call, so the single-RT MultiBufferSource is faithful.
     @Override
-    public void render(BlockEntityPump tile, float partialTicks, PoseStack stack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        if (this.doRenderModel(stack, tile)) {
-            this.renderBlockEntityPumpAt(stack, tile, bufferSource, packedLight);
-        }
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return;
+        BlockEntity be = level.getBlockEntity(state.blockPos);
+        if (!(be instanceof BlockEntityPump tile)) return;
+        if (!this.doRenderModel(poseStack, tile)) return;
+
+        // Snapshot the pose: the lambda runs deferred, the original poseStack would be gone.
+        PoseStack snapped = new PoseStack();
+        snapped.last().set(poseStack.last());
+
+        RenderType rt = RenderTypes.entityCutout(PumpModel.TEXTURE_LOCATION);
+        int light = state.lightCoords;
+        collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
+            MultiBufferSource oneRT = ignored -> vc;
+            renderBlockEntityPumpAt(snapped, tile, oneRT, light);
+        });
+        // IO arrows (red/green direction overlays). IORenderer routes its own submitCustomGeometry
+        // calls for the debugFilledBox quads, so we pass the same outer poseStack — the block's
+        // origin is already applied by the dispatcher, and the box helper places each face cube
+        // at the per-Direction stepX/Y/Z offset.
         if (tile.isInWorld()) {
-            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos());
-            this.renderLiquid(stack, tile, bufferSource, packedLight);
+            IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
         }
+        // renderLiquid still TODO until the fluid quad helper is ported.
     }
 }
+

@@ -18,7 +18,7 @@
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.level.block.Block;
 //import net.minecraft.world.storage.WorldInfo;
-//import net.neoforged.common.NeoForge;
+//import net.neoforged.neoforge.common.NeoForge;
 //import net.neoforged.oredict.OreDictionary;
 //import reika.dragonapi.DragonAPI;
 //import reika.dragonapi.libraries.ReikaEntityHelper;
@@ -117,7 +117,7 @@
 //            ei.delayBeforeCanPickup = 5000;
 //            ei.getAge() = 5900;
 //            ei.motionY = 3;
-//            if (!level.isClientSide)
+//            if (!level.isClientSide())
 //                level.addFreshEntity(ei);
 //        }
 //        if (is2 != null) {
@@ -126,7 +126,7 @@
 //            ei.delayBeforeCanPickup = 5000;
 //            ei.getAge() = 5900;
 //            ei.motionY = 3;
-//            if (!level.isClientSide)
+//            if (!level.isClientSide())
 //                level.addFreshEntity(ei);
 //        }
 //    }

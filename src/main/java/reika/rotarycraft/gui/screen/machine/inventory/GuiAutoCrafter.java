@@ -134,7 +134,6 @@
 //    protected void drawGuiContainerForegroundLayer(int a, int b) {
 //        super.drawGuiContainerForegroundLayer(a, b);
 //
-//        RenderSystem.enableBlend();
 //        ReikaTextureHelper.bindTexture(RotaryCraft.class, this.getGuiTexture());
 //        int x = 7;
 //        int y = 36;
@@ -152,11 +151,10 @@
 //                this.drawRect(dx + 1, dy - 17, dx + 17, dy - 1, 0x663388ff);
 //            }
 //        }
-//        RenderSystem.disableBlend();
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
 //        String var4 = "/gui/container.png";
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 //        //mc.renderEngine.bindTexture(GuiContainer.field_110408_a);

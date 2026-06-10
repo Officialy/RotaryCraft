@@ -15,6 +15,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +39,7 @@ import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.registry.SoundRegistry;
 
 public class BlockEntityWorktable extends InventoriedRCBlockEntity implements TriggerableAction, AlternatingRedstoneUser {
 
@@ -45,6 +50,18 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
         super(RotaryBlockEntities.WORKTABLE.get(), pos, state);
     }
 
+    /**
+     * 26.1: previously RotaryCraftBlockEntity's default {@code createMenu} returned null for
+     * the worktable because we never overrode it. Right-clicking the block produced no GUI —
+     * user complaint: "no gui for worktable". Wire it to {@link reika.rotarycraft.gui.container.machine.inventory.ContainerWorktable}.
+     */
+    @Override
+    public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id,
+            net.minecraft.world.entity.player.Inventory inv,
+            net.minecraft.world.entity.player.Player player) {
+        return new reika.rotarycraft.gui.container.machine.inventory.ContainerWorktable(id, inv, this, level, true);
+    }
+
     @Override
     public Block getBlockEntityBlockID() {
         return RotaryBlocks.WORKTABLE.get();
@@ -52,7 +69,8 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
-        if (!world.isClientSide) {
+        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
+        if (!world.isClientSide()) {
 //            matrix.update();
 //            if (matrix.isEmpty())
 //                return;
@@ -83,7 +101,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
 
     @Override
     protected void onPositiveRedstoneEdge() {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (!this.craft()) {
                 if (this.canUncraft())
                     this.uncraft();
@@ -139,7 +157,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
 
     private void coolJetpacks() {
         ItemStack is = itemHandler.getStackInSlot(4);
-        if (is != null) {
+        if (!is.isEmpty()) {
             Item item = is.getItem();
             if (item instanceof ItemJetPack pack) {
                 if (!PackUpgrades.COOLING.existsOn(is)) {
@@ -159,7 +177,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
 
     private void makeJetPropel() {
         ItemStack is = itemHandler.getStackInSlot(4);
-        if (is != null) {
+        if (!is.isEmpty()) {
             Item item = is.getItem();
             if (item instanceof ItemJetPack pack) {
                 if (!PackUpgrades.JET.existsOn(is)) {
@@ -178,7 +196,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
 
     private void wingJetpacks() {
         ItemStack is = itemHandler.getStackInSlot(4);
-        if (is != null) {
+        if (!is.isEmpty()) {
             Item item = is.getItem();
             if (item instanceof ItemJetPack pack) {
                 if (!PackUpgrades.WING.existsOn(is)) {
@@ -199,11 +217,40 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
     }
 
     private boolean craft() {
-//        WorktableRecipes.WorktableRecipe wr = WorktableRecipes.getInstance().findMatchingRecipe(matrix, level);
-//        if (wr != null) {
-//            return this.handleCrafting(wr, this.getPlacer(), false);
-//        }
-        return false;
+        if (level == null || level.isClientSide() || level.getServer() == null)
+            return false;
+
+        java.util.List<ItemStack> items = new java.util.ArrayList<>(9);
+        for (int i = 0; i < 9; i++) {
+            items.add(itemHandler.getStackInSlot(i));
+        }
+        CraftingInput input = CraftingInput.of(3, 3, items);
+        java.util.Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager()
+                .getRecipeFor(RecipeType.CRAFTING, input, level);
+        if (optional.isEmpty())
+            return false;
+
+        CraftingRecipe recipe = optional.get().value();
+        ItemStack result = recipe.assemble(input);
+        if (result.isEmpty())
+            return false;
+
+        ItemStack existing = itemHandler.getStackInSlot(13);
+        if (!existing.isEmpty()) {
+            if (!ItemStack.isSameItemSameComponents(existing, result))
+                return false;
+            if (existing.getCount() + result.getCount() > Math.min(this.getMaxStackSize(), result.getMaxStackSize()))
+                return false;
+        }
+
+        ReikaInventoryHelper.addOrSetStack(result, itemHandler, 13);
+
+        for (int i = 0; i < 9; i++) {
+            ReikaInventoryHelper.decrStack(i, itemHandler);
+        }
+
+        SoundRegistry.CRAFT.playSoundAtBlock(level, worldPosition, 0.3F, 1.5F);
+        return true;
     }
 
     public boolean isReadyToCraft() {
@@ -230,7 +277,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
         } else {
             for (int i = 0; i < maxCrafts; i++) {
                 ItemStack is = wr.getOutput();
-                if (itemHandler.getStackInSlot(13) != null && itemHandler.getStackInSlot(13).getCount() + is.getCount() > Math.min(this.getMaxStackSize(), is.getMaxStackSize()))
+                if (!itemHandler.getStackInSlot(13).isEmpty() && itemHandler.getStackInSlot(13).getCount() + is.getCount() > Math.min(this.getMaxStackSize(), is.getMaxStackSize()))
                     break;
                 is.onCraftedBy(level, ep, is.getCount());
                 ReikaInventoryHelper.addOrSetStack(is, itemHandler, 13);
@@ -271,11 +318,11 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
         int armorslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JUMP.get(), itemHandler);
         int jumpslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JUMP.get(), itemHandler);
         if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
-            CompoundTag tag = itemHandler.getStackInSlot(armorslot).getTag().copy();
+            CompoundTag tag = itemHandler.getStackInSlot(armorslot).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy();
             itemHandler.setStackInSlot(jumpslot, ItemStack.EMPTY);
             itemHandler.setStackInSlot(armorslot, ItemStack.EMPTY);
             ItemStack is = RotaryItems.BEDROCK_ALLOY_JUMP_BOOTS.get().getDefaultInstance();//todo .getEnchantedStack();
-            ReikaNBTHelper.combineNBT(is.getTag(), tag);
+            ReikaNBTHelper.combineNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), tag);
             itemHandler.setStackInSlot(9, is);
         }
     }
@@ -324,17 +371,17 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
 //            return is.getItemDamage() > 0;
 //        }
 
-        if (is.getTag() == null)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
             return false;
-        if (is.getTag().getInt("dmg") > 0)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("dmg", 0) > 0)
             return true;
-        if (is.getTag().getInt("damage") > 0)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("damage", 0) > 0)
             return true;
-        if (is.getTag().getInt("lube") > 0)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lube", 0) > 0)
             return true;
-        if (is.getTag().getInt("lvl") > 0)
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0) > 0)
             return true;
-        if (is.getTag().contains("ench"))
+        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("ench"))
             return true;
 //        if (ir == RotaryItems.MACHINE) {
 //            MachineRegistry r = MachineRegistry.machineList.get(is.getItemDamage());
@@ -405,8 +452,8 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
                 itemHandler.setStackInSlot(10, newcoil);
             } else {
                 ItemStack newtool = new ItemStack(toolid, 1);
-                CompoundTag tag = tool.getTag() != null ? tool.getTag().copy() : null;
-                newtool.setTag(tag);
+                CompoundTag tag = tool.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? tool.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy() : null;
+                reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(newtool, tag);
                 ItemStack newcoil = new ItemStack(coilid, 1); //todo add coil charge tag
                 itemHandler.setStackInSlot(toolslot, ItemStack.EMPTY);
                 itemHandler.setStackInSlot(coilslot, ItemStack.EMPTY);
@@ -419,9 +466,9 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
     private Item getTool() {
         for (int i = 0; i < 9; i++) {
             ItemStack is = itemHandler.getStackInSlot(i);
-            if (is != null) {
+            if (!is.isEmpty()) {
                 if (is.getItem() instanceof ItemChargedTool || is.getItem() instanceof ItemChargedArmor || is.getItem() instanceof ChargeableTool)
-                    return itemHandler.getStackInSlot(i).getItem();
+                    return is.getItem();
             }
         }
         return null;
@@ -439,17 +486,17 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
         if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
             ItemStack jet = itemHandler.getStackInSlot(jetslot);
             ItemStack plate = itemHandler.getStackInSlot(plateslot);
-            CompoundTag tag1 = plate.getTag() != null ? (CompoundTag) plate.getTag().copy() : null;
-            CompoundTag tag2 = jet.getTag() != null ? (CompoundTag) jet.getTag().copy() : null;
+            CompoundTag tag1 = plate.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? (CompoundTag) plate.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy() : null;
+            CompoundTag tag2 = jet.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? (CompoundTag) jet.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy() : null;
             itemHandler.setStackInSlot(jetslot, ItemStack.EMPTY);
             itemHandler.setStackInSlot(plateslot, ItemStack.EMPTY);
             ItemStack is = (bed ? RotaryItems.BEDROCK_ALLOY_PACK.get().getDefaultInstance() : RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance());
             /*todo get the enchanted version max*/
 
-            if (is.getTag() == null)
-                is.setTag(new CompoundTag());
-            ReikaNBTHelper.combineNBT(is.getTag(), tag1);
-            ReikaNBTHelper.combineNBT(is.getTag(), tag2);
+            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+                reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(is, new CompoundTag());
+            ReikaNBTHelper.combineNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), tag1);
+            ReikaNBTHelper.combineNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), tag2);
             itemHandler.setStackInSlot(9, is);
             for (PackUpgrades u : PackUpgrades.values()) {
                 if (u.existsOn(jet)) {
@@ -461,8 +508,8 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
 
     private void uncraftJetplate() {
         ItemStack combine = itemHandler.getStackInSlot(4);
-        boolean bed = RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance() == combine;
-        if (combine != null && (RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance() == combine || RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance() == combine)) {
+        boolean bed = ItemStack.isSameItem(RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance(), combine);
+        if (!combine.isEmpty() && (ItemStack.isSameItem(RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance(), combine) || ItemStack.isSameItem(RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance(), combine))) {
             ItemJetPack pack = (ItemJetPack) combine.getItem();
             //ReikaJavaLibrary.pConsole(plateslot, Dist.DEDICATED_SERVER);
             if (ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 18)) {
@@ -555,7 +602,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        hasUpgrade = NBT.getBoolean("redstoneUpgrade");
+        hasUpgrade = NBT.getBooleanOr("redstoneUpgrade", false);
     }
 
     @Override

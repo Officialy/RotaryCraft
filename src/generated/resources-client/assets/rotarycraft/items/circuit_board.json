@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "rotarycraft:item/circuit_board"
+  }
+}

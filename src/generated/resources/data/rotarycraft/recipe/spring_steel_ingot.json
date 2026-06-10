@@ -1,0 +1,16 @@
+{
+  "type": "rotarycraft:blast_furnace_shapeless",
+  "additives": [
+    "rotarycraft:coke",
+    "minecraft:redstone"
+  ],
+  "experience": 0.0,
+  "ingredients": [
+    "rotarycraft:hsla_steel_ingot"
+  ],
+  "output": {
+    "id": "rotarycraft:spring_steel_ingot"
+  },
+  "temperature": 1000.0,
+  "timeMultiplier": 1.0
+}

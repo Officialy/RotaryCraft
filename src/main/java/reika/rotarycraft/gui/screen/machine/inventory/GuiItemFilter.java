@@ -204,8 +204,8 @@
 //    }
 //
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(PoseStack poseStack, par1, par2, par3);
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
+//        super.extractBackground(PoseStack poseStack, par1, par2, par3);
 //
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;

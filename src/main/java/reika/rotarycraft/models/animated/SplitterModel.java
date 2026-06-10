@@ -12,14 +12,18 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class SplitterModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/crosstex.png");
+    // 1.21.5 port fix: legacy splitter texture lives at {@code transmission/splittertex.png}
+    // (the renderer used to pick the file via {@code bindTextureByName}); the port had stubbed
+    // it to the cross-shaft texture which obviously looked nothing like a splitter.
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/splittertex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape3;
@@ -47,11 +51,10 @@ public class SplitterModel extends RotaryModelBase {
     private final ModelPart shape4a;
     private final ModelPart shape5;
     private final ModelPart shape12a;
-    private final ModelPart root;
+    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
 
     public SplitterModel(ModelPart modelPart) {
-        super(RenderType::entityCutout);
-        this.root = modelPart;
+        super(modelPart, RenderTypes::entityCutout);
 
         this.shape1 = modelPart.getChild("shape1");
         this.shape3 = modelPart.getChild("shape3");
@@ -270,13 +273,73 @@ public class SplitterModel extends RotaryModelBase {
         return LayerDefinition.create(definition, 128, 32);
     }
 
-        @Override
+    @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        // 26.1 port mirrors the legacy ModelSplitter#renderAll layout (upstream/master):
+        //   static housing → 3 rotating shaft groups (right X+phi, left X-phi, top Z+phi).
+        // If the splitter failed the conditions list (li.get(0) == true), all three shaft
+        // groups stay static so the user can see the "broken" frame.
+        boolean fail = conditions != null && !conditions.isEmpty()
+                && conditions.get(0) instanceof Boolean b && b;
+
+        // --- Static frame parts ------------------------------------------------------------
+        shape3a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape5.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape6.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        if (fail) return;
+
+        com.mojang.math.Axis xp = com.mojang.math.Axis.XP;
+        com.mojang.math.Axis zp = com.mojang.math.Axis.ZP;
+
+        // --- Right shaft: rotate +phi around X axis (pivot at y=1, model coord) ------------
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.mulPose(xp.rotationDegrees(phi));
+        stack.translate(0, -1, 0);
+        shape17.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape20.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape13.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape12.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape21.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape16.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.popPose();
+
+        // --- Left shaft: rotate -phi around X axis -----------------------------------------
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.mulPose(xp.rotationDegrees(-phi));
+        stack.translate(0, -1, 0);
+        shape12a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape20a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape16a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape17a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape21a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape13a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.popPose();
+
+        // --- Top shaft: rotate +phi around Z axis ------------------------------------------
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.mulPose(zp.rotationDegrees(phi));
+        stack.translate(0, -1, 0);
+        shape15.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape18.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape19.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape14.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape23.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape22.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.popPose();
     }
 
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return TEXTURE_LOCATION;
     }
 }
+

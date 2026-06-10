@@ -63,16 +63,15 @@ public class PowerSourceList implements PowerTracker {
         }
 
         try {
-            if (tile instanceof BlockEntity) { //todo fix this shit lol
-                //BlockEntityIOMachine te = (BlockEntityIOMachine) tile;
-                //if (!te.isWritingTo(io) && !te.isWritingTo2(io)) {
-                //    return pwr;
-                //}
-                //if (te.isReadingFrom(io) || te.isReadingFrom2(io) || te.isReadingFrom3(io) || te.isReadingFrom4(io)) {
-                //    return pwr;
-                //}
-                //pwr.addAll(te.getPowerSources(io, caller));
-            } else if (tile instanceof PowerSourceTracker) {
+            // 1.21.5 fix: previous port wrapped the source-walker in {@code if (tile instanceof
+            // BlockEntity)} (an empty branch with the legacy isWritingTo / isReadingFrom checks
+            // commented out), which silently shadowed the PowerSourceTracker and PowerGenerator
+            // branches below — every tile is a BlockEntity, so the walker always fell into the
+            // empty branch and never recursed or registered a source. That's why the angular
+            // transducer reported "Power is being received from: [None]" even when a DC engine
+            // was wired one shaft away. Drop the dead wrapper so the dispatch order is just
+            // PowerSourceTracker (transmitter — recurse) → PowerGenerator (real source — add).
+            if (tile instanceof PowerSourceTracker) {
                 pwr.addAll(((PowerSourceTracker) tile).getPowerSources(io, caller));
             } else if (tile instanceof PowerGenerator) {
                 pwr.addSource((PowerGenerator) tile);

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:diamond_gear_2x",
+    "M": "rotarycraft:mount"
+  },
+  "pattern": [
+    "G",
+    "M"
+  ],
+  "result": {
+    "id": "rotarycraft:diamond_gearbox_2x"
+  }
+}

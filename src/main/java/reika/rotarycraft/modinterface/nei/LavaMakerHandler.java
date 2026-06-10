@@ -21,9 +21,9 @@
 //import net.minecraft.client.renderer.Tessellator;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.util.IIcon;
-//import net.neoforged.fluids.Fluid;
-//import net.neoforged.fluids.FluidContainerRegistry;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.Fluid;
+//import net.neoforged.neoforge.fluids.FluidContainerRegistry;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
@@ -170,10 +170,10 @@
 //			int melt = RecipesLavaMaker.getRecipes().getMeltTemperature(is);
 //			Font f = Minecraft.getMinecraft().fontRenderer;
 //			String s = String.format("%dmB @ %dC", fs.amount, melt);
-//			f.drawString(s, 165-f.width(s), 73, 0);
+//			f.text(s, 165-f.width(s), 73, 0);
 //
 //			s = String.format("%s", fs.getLocalizedName());
-//			f.drawString(s, 165-f.width(s), 83, 0);
+//			f.text(s, 165-f.width(s), 83, 0);
 //		}
 //	}
 //

@@ -92,10 +92,10 @@
 //			this.drawRect(SHIFT+getXSize()/2-w+inset-dx, getYSize()-30-48+inset+i*dy, SHIFT+getXSize()/2+w-inset-dx, getYSize()-30-48+h-inset+i*dy, 0xff000000);
 //		}
 //
-//		this.drawCenteredString(font, String.format("Torque: %d Nm", torque), SHIFT+getXSize()/2-dx, getYSize()-30-48+6, 0xffffff);
+//		this.centeredText(font, String.format("Torque: %d Nm", torque), SHIFT+getXSize()/2-dx, getYSize()-30-48+6, 0xffffff);
 //
-//		this.drawCenteredString(font, String.format("Speed: %d rad/s", omega), SHIFT+getXSize()/2-dx, getYSize()-30-48+6+dy, 0xffffff);
-//		this.drawCenteredString(font, String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power)), SHIFT+getXSize()/2-dx, getYSize()-30-48+6+dy*2, 0xffffff);
+//		this.centeredText(font, String.format("Speed: %d rad/s", omega), SHIFT+getXSize()/2-dx, getYSize()-30-48+6+dy, 0xffffff);
+//		this.centeredText(font, String.format("Power: %.3f %sW", ReikaMathLibrary.getThousandBase(power), ReikaEngLibrary.getSIPrefix(power)), SHIFT+getXSize()/2-dx, getYSize()-30-48+6+dy*2, 0xffffff);
 //
 //		if (ReikaGuiAPI.instance.isMouseInBox(j+171, j+188, k+21, k+90)) {
 //			int e = engine.getStoredPower();

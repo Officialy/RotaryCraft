@@ -316,7 +316,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
     }
 
     private void getOffsetPower4Sided(Level world, BlockPos pos, int stepx, int stepy, int stepz, boolean vertical) {
-        if (level.isClientSide && !RotaryAux.getPowerOnClient)
+        if (level.isClientSide() && !RotaryAux.getPowerOnClient)
             return;
         this.setPointingOffset(new BlockPos(stepx, stepy, stepz));
 
@@ -411,7 +411,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
 
     protected final void getSummativeSidedPower() {
         isOmniSided = true;
-        if (level.isClientSide && !RotaryAux.getPowerOnClient)
+        if (level.isClientSide() && !RotaryAux.getPowerOnClient)
             return;
         int x = worldPosition.getX();
         int y = worldPosition.getY();

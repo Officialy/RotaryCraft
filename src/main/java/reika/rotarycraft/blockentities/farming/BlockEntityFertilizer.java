@@ -96,7 +96,7 @@
 //            itemHandler.getStackInSlot(0) = new ItemStack(Items.dye, 64, 15);
 //        }
 //
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            this.checkFertilizer();
 //            int n = this.getUpdatesPerTick();
 //            for (int i = 0; i < n && this.hasFertilizer(); i++)
@@ -129,7 +129,7 @@
 //        int ddz = dz - z;
 //        double dd = ReikaMathLibrary.py3d(ddx, ddy, ddz);
 //        if (id != Blocks.AIR && dd <= this.getRange() && this.canTick(world, dx, dy, dz)) {
-//            int n = this.getConsecutiveUpdates() + enchantments.getEnchantment(Enchantments.BLOCK_FORTUNE);
+//            int n = this.getConsecutiveUpdates() + enchantments.getEnchantment(Enchantments.FORTUNE);
 //            for (int i = 0; i < n; i++) {
 //                id.updateTick(world, dx, dy, dz, DragonAPI.rand);
 //                BlockTickEvent.fire(world, dx, dy, dz, id, UpdateFlags.FORCED.flag);
@@ -272,7 +272,7 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        enchantments.load(NBT.getList("enchants", Tag.TAG_COMPOUND));
+//        enchantments.load(NBT.getListOrEmpty("enchants"));
 //    }
 //
 //    @Override

@@ -30,4 +30,7 @@ public class BlockBeamMirror extends BlockBasicMachine {
             ((BlockEntityBeamMirror) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

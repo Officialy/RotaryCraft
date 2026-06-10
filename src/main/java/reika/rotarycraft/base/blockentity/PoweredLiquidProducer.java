@@ -15,8 +15,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.java.ReikaStringParser;
@@ -37,7 +37,7 @@ public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements
 
     @Override
     public  FluidStack drain(FluidStack resource, FluidAction action) {
-        return this.canDrain(resource.getFluid()) ? tank.drain(resource.getAmount(), action) : null;
+        return this.canDrain(resource.getFluid()) ? tank.drain(resource.getAmount(), action) : FluidStack.EMPTY;
     }
 
     public final boolean canDrain(Fluid fluid) {

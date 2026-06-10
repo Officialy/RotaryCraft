@@ -157,8 +157,8 @@
 //    @Override
 //    protected void readSyncTag(CompoundTag NBT) {
 //        super.readSyncTag(NBT);
-//        temperature = NBT.getInt("temperature");
-//        cookTime = NBT.getInt("time");
+//        temperature = NBT.getIntOr("temperature", 0);
+//        cookTime = NBT.getIntOr("time", 0);
 //    }
 //
 //    @Override

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/wormgear",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/wormgear",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/wormgear"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/wormgear",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/wormgear",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/wormgear",
+      "y": 270
+    }
+  }
+}

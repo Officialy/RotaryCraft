@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "rotarycraft:fluid_pipe",
+    "i": "minecraft:black_dye",
+    "p": "rotarycraft:hsla_steel_plate"
+  },
+  "pattern": [
+    "pPp",
+    "iPi",
+    "pPp"
+  ],
+  "result": {
+    "id": "rotarycraft:solar_tower"
+  }
+}

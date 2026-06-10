@@ -13,7 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class BlockEntityMobHarvester extends BlockEntityPowerReceiver implements EnchantableMachine {
 
-    private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantments.INFINITY_ARROWS).addFilter(Enchantments.SHARPNESS).addFilter(Enchantments.FIRE_ASPECT).addFilter(Enchantments.SILK_TOUCH).addFilter(Enchantments.MOB_LOOTING);
+    private final MachineEnchantmentHandler enchantments = new MachineEnchantmentHandler().addFilter(Enchantments.INFINITY).addFilter(Enchantments.SHARPNESS).addFilter(Enchantments.FIRE_ASPECT).addFilter(Enchantments.SILK_TOUCH).addFilter(Enchantments.LOOTING);
 
     public String owner;
     public boolean laser;
@@ -74,7 +74,7 @@ public class BlockEntityMobHarvester extends BlockEntityPowerReceiver implements
                             ReikaEntityHelper.dropHead(ent);
                         //Looting is handled with the LivingDropsEvent
                         if (enchantments.hasEnchantment(Enchantments.FIRE_ASPECT))
-                            ent.setSecondsOnFire(enchantments.getEnchantment(Enchantments.FIRE_ASPECT) * 2);
+                            ent.igniteForSeconds(enchantments.getEnchantment(Enchantments.FIRE_ASPECT) * 2);
                     }
                 }
                 ent.setDeltaMovement(ent.getDeltaMovement().x(), 0, ent.getDeltaMovement().z());
@@ -123,9 +123,9 @@ public class BlockEntityMobHarvester extends BlockEntityPowerReceiver implements
     @Override
     protected void readSyncTag(CompoundTag tag) {
         super.readSyncTag(tag);
-        owner = tag.getString("sowner");
+        owner = tag.getStringOr("sowner", "");
 
-        enchantments.load(tag.getList("enchants", Tag.TAG_COMPOUND));
+        enchantments.load(tag.getListOrEmpty("enchants"));
     }
 
     @Override

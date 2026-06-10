@@ -80,7 +80,6 @@
 //                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 //                stack.pushPose();
 //                GL11.glDisable(GL11.GL_LIGHTING);
-//                RenderSystem.enableBlend();
 //                ReikaRenderHelper.disableEntityLighting();
 //                GL11.glDisable(GL11.GL_ALPHA_TEST);
 //                GL11.glDepthMask(false);

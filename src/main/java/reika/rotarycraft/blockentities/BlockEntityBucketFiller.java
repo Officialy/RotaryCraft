@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
@@ -176,10 +176,10 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
 
     @Override
     public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return null;
+        return FluidStack.EMPTY;
     }
     public boolean canAccept(Fluid f) {
-        return tank.isEmpty() || f.equals(tank.getActualFluid());
+        return tank.isEmpty() || f.equals(tank.getActualFluid().getFluid());
     }
 
     //    @Override

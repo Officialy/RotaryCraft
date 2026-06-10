@@ -56,7 +56,7 @@
 //                ent.motionZ += dz / ddt / ddt / 2;
 //                if (ent.getY() < ep.getY())
 //                    ent.motionY += 0.1;
-//                if (!world.isClientSide)
+//                if (!world.isClientSide())
 //                    ent.velocityChanged = true;
 //            }
 //        }
@@ -72,7 +72,7 @@
 //            ent.motionZ += dz / ddt / ddt / 2;
 //            if (ent.getY() < ep.getY())
 //                ent.motionY += 0.1;
-//            if (!world.isClientSide)
+//            if (!world.isClientSide())
 //                ent.velocityChanged = true;
 //        }
 //        return new ItemStack(is.getItem(), is.getCount(), is.getItemDamage() - 1);

@@ -9,11 +9,10 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine.inventory;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.client.gui.ScreenUtils;
 import reika.rotarycraft.base.EngineScreen;
 import reika.rotarycraft.blockentities.engine.BlockEntityGasEngine;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerEthanol;
@@ -24,18 +23,16 @@ public class GuiEthanol extends EngineScreen<BlockEntityGasEngine, ContainerEtha
     public GuiEthanol(ContainerEthanol container, Inventory inv, Component component) {
         super(container, inv, component);
         engine = (BlockEntityGasEngine) inv.player.level().getBlockEntity(container.tile.getBlockPos());
-        imageWidth = 176;
-        imageHeight = 166;
     }
 
     @Override
-    protected void renderBg(GuiGraphics poseStack, float par1, int par2, int par3) {
-        super.renderBg(poseStack, par1, par2, par3);
+    public void extractBackground(GuiGraphicsExtractor poseStack, int par2, int par3, float par1) {
+        super.extractBackground(poseStack, par2, par3, par1);
 
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
         int i1 = engine.getFuelScaled(54);
-        ScreenUtils.drawTexturedModalRect(poseStack, j + 85, k + 71 - i1, 200, 55 - i1, 5, i1, 0);
+        poseStack.blit(RenderPipelines.GUI_TEXTURED, getTextureIdentifier(), j + 85, k + 71 - i1, 200, 55 - i1, 5, i1, 256, 256);
 
     }
 

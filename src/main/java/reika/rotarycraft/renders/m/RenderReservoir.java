@@ -12,17 +12,17 @@ package reika.rotarycraft.renders.m;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.joml.Matrix4f;
 import reika.dragonapi.instantiable.data.DynamicAverage;
 import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
@@ -35,9 +35,14 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
 
     private static final DynamicAverage average = new DynamicAverage();
     private final ReservoirModel reservoirModel;
+    /** Block-atlas sprite lookup, needed to draw the fluid surface with its actual still texture
+     *  instead of a flat colour quad. Captured at construction because {@link BlockEntityRendererProvider.Context#sprites()}
+     *  is the only way to get a {@link net.minecraft.client.resources.model.sprite.SpriteGetter}. */
+    private final net.minecraft.client.resources.model.sprite.SpriteGetter sprites;
 
     public RenderReservoir(BlockEntityRendererProvider.Context context) {
         reservoirModel = new ReservoirModel(context.bakeLayer(RotaryModelLayers.RESERVOIR));
+        this.sprites = context.sprites();
     }
 
     public void renderBlockEntityReservoirAt(PoseStack stack, BlockEntityReservoir tile, MultiBufferSource bufferSource, int pPackedLight) {
@@ -45,7 +50,7 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         stack.mulPose(Axis.YN.rotationDegrees(90.0F));
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(ReservoirModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(ReservoirModel.TEXTURE_LOCATION));
         if (tile.isInWorld()) {
             for (int i = 2; i < 6; i++) {
                 if (!tile.isConnectedOnSide(dirs[i])) {
@@ -63,47 +68,151 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    @Override
+    // Legacy 1.7 signature retained as dead code; vanilla calls {@link #submit} instead.
     public void render(BlockEntityReservoir tile, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
-//        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         if (this.doRenderModel(pPoseStack, tile)) {
             this.renderBlockEntityReservoirAt(pPoseStack, tile, pBufferSource, pPackedLight);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            if (tile.isCovered) {
-                this.renderCover(pPoseStack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
-            }
+            if (tile.isCovered) this.renderCover(pPoseStack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
         }
-
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-//        if (MinecraftForgeClient.getRenderPass() == 1 || !(tile).isInWorld()) {
         this.renderLiquid(pPoseStack, tile, pBufferSource, pPackedLight);
-//        }
-        //GL11.glPopAttrib();
+    }
+
+    @Override
+    public void submit(net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState state,
+                       PoseStack poseStack,
+                       net.minecraft.client.renderer.SubmitNodeCollector collector,
+                       net.minecraft.client.renderer.state.level.CameraRenderState camera) {
+        net.minecraft.world.level.Level level = net.minecraft.client.Minecraft.getInstance().level;
+        if (level == null) return;
+        BlockEntity be = level.getBlockEntity(state.blockPos);
+        if (!(be instanceof BlockEntityReservoir tile)) return;
+        if (!this.doRenderModel(poseStack, tile)) return;
+
+        PoseStack snapped = new PoseStack();
+        snapped.last().set(poseStack.last());
+        RenderType rt = RenderTypes.entityCutout(ReservoirModel.TEXTURE_LOCATION);
+        int light = state.lightCoords;
+        collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
+            MultiBufferSource oneRT = ignored -> vc;
+            renderBlockEntityReservoirAt(snapped, tile, oneRT, light);
+        });
+
+        // 26.1: proper fluid surface using the block-atlas still sprite.
+        // Switched from a flat-colour quad to a UV-textured quad with sprite UVs from
+        // {@link net.minecraft.client.resources.model.sprite.SpriteGetter#get}, matching the
+        // {@link reika.rotarycraft.renders.PipeRenderer} pattern. The colour tint stays
+        // because some fluids (water, custom mod fluids) need the texture multiplied by a
+        // colour to look right — the tint goes to {@code 0xFFRRGGBB} (full alpha) so vanilla
+        // sprites render at full opacity; the translucent RenderType handles blending.
+        net.neoforged.neoforge.fluids.FluidStack fs = tile.getFluid();
+        if (!fs.isEmpty()) {
+            net.minecraft.world.level.material.Fluid fluid = fs.getFluid();
+            int rgba = fluidTint(fluid) | 0xFF000000; // force full alpha; RT does the blend
+            // Fill height: 1/16 (bottom inset) + 14/16 * (level / capacity). Matches the
+            // visible interior dimensions of the reservoir model (~0.0625 .. ~0.9375 in Y).
+            double fillFrac = tile.getFluidLevel() / (double) BlockEntityReservoir.CAPACITY;
+            final float y = (float) (0.0625 + (14.0 / 16.0) * fillFrac);
+
+            // Resolve the fluid's still sprite from the block atlas. Vanilla water/lava have
+            // well-known atlas IDs; for RotaryCraft fluids we map to the project's PNGs.
+            net.minecraft.client.renderer.texture.TextureAtlasSprite sprite = stillSpriteFor(fluid);
+            final float u  = sprite.getU0();
+            final float v  = sprite.getV0();
+            final float u2 = sprite.getU1();
+            final float v2 = sprite.getV1();
+
+            PoseStack snappedLiq = new PoseStack();
+            snappedLiq.last().set(poseStack.last());
+            final int lightCoords = light;
+            net.minecraft.client.renderer.rendertype.RenderType fluidRT =
+                    net.minecraft.client.renderer.rendertype.RenderTypes.entityTranslucent(
+                            net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS);
+            collector.submitCustomGeometry(poseStack, fluidRT, (pose, vc2) -> {
+                var p = snappedLiq.last();
+                // Top face (+Y), counter-clockwise from below = clockwise from above so the
+                // visible normal points up. Tile UVs roughly 1:1 with the world quad — atlas
+                // sprite is 16x16 px, and the quad is 14/16 wide, so UVs span ~87.5 % of the
+                // sprite which is acceptable for a continuous fluid surface.
+                vc2.addVertex(p, 0.0625F, y, 0.0625F).setColor(rgba).setUv(u,  v ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
+                vc2.addVertex(p, 0.0625F, y, 0.9375F).setColor(rgba).setUv(u,  v2).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
+                vc2.addVertex(p, 0.9375F, y, 0.9375F).setColor(rgba).setUv(u2, v2).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
+                vc2.addVertex(p, 0.9375F, y, 0.0625F).setColor(rgba).setUv(u2, v ).setOverlay(net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
+            });
+        }
+        // Cover overlay still TODO.
+    }
+
+    /**
+     * Maps a {@link Fluid} to its still-texture sprite on the {@code minecraft:blocks} atlas.
+     * Vanilla water and lava have well-known atlas IDs; RotaryCraft fluids ship their own PNGs
+     * under {@code assets/rotarycraft/textures/block/}. Unknown fluids fall back to {@code water_still}
+     * or {@code lava_still} based on the fluid type's temperature.
+     */
+    private net.minecraft.client.renderer.texture.TextureAtlasSprite stillSpriteFor(net.minecraft.world.level.material.Fluid fluid) {
+        Identifier id = stillTextureId(fluid);
+        return sprites.get(new net.minecraft.client.resources.model.sprite.SpriteId(
+                net.minecraft.client.renderer.texture.TextureAtlas.LOCATION_BLOCKS, id));
+    }
+
+    private static Identifier stillTextureId(net.minecraft.world.level.material.Fluid fluid) {
+        if (fluid == Fluids.WATER || fluid == Fluids.FLOWING_WATER)
+            return Identifier.withDefaultNamespace("block/water_still");
+        if (fluid == Fluids.LAVA || fluid == Fluids.FLOWING_LAVA)
+            return Identifier.withDefaultNamespace("block/lava_still");
+        if (fluid == reika.rotarycraft.registry.RotaryFluids.JET_FUEL.get())
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/jet_fuel_still");
+        if (fluid == reika.rotarycraft.registry.RotaryFluids.ETHANOL.get())
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/ethanol_still");
+        if (fluid == reika.rotarycraft.registry.RotaryFluids.LUBRICANT.get())
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/lubricant_still");
+        if (fluid == reika.rotarycraft.registry.RotaryFluids.HSLA_FLUID.get())
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/molten_hsla_still");
+        return fluid.getFluidType().getTemperature() > 500
+                ? Identifier.withDefaultNamespace("block/lava_still")
+                : Identifier.withDefaultNamespace("block/water_still");
+    }
+
+    /**
+     * Approximate ARGB tint per fluid. Covers vanilla water/lava plus the RotaryCraft fluid set
+     * (jet fuel, ethanol, lubricant, molten HSLA, etc.) with hand-picked colours that visually
+     * match the legacy 1.7 still-textures. Unknown fluids fall back to a neutral cyan so the
+     * surface is still visible.
+     */
+    private static int fluidTint(net.minecraft.world.level.material.Fluid f) {
+        if (f == net.minecraft.world.level.material.Fluids.WATER || f == net.minecraft.world.level.material.Fluids.FLOWING_WATER)
+            return 0xC03050E0; // translucent blue
+        if (f == net.minecraft.world.level.material.Fluids.LAVA || f == net.minecraft.world.level.material.Fluids.FLOWING_LAVA)
+            return 0xE0E04010; // translucent orange-red
+        if (f == reika.rotarycraft.registry.RotaryFluids.JET_FUEL.get())
+            return 0xE060A000; // dark amber
+        if (f == reika.rotarycraft.registry.RotaryFluids.ETHANOL.get())
+            return 0xC0F0F050; // translucent yellow
+        if (f == reika.rotarycraft.registry.RotaryFluids.LUBRICANT.get())
+            return 0xD0C08020; // viscous brown-orange
+        if (f == reika.rotarycraft.registry.RotaryFluids.HSLA_FLUID.get())
+            return 0xF0E04010; // molten steel — closer to lava but darker
+        if (f == reika.rotarycraft.registry.RotaryFluids.LIQUID_NITROGEN.get())
+            return 0xC0A0E0F0; // pale blue
+        if (f == reika.rotarycraft.registry.RotaryFluids.POISON.get())
+            return 0xC0A030F0; // sickly purple
+        if (f == reika.rotarycraft.registry.RotaryFluids.STEAM.get())
+            return 0x80E0E0E0; // misty white
+        if (f == reika.rotarycraft.registry.RotaryFluids.SODIUM.get())
+            return 0xD0D0D050; // metallic yellow
+        if (f == reika.rotarycraft.registry.RotaryFluids.CHLORINE.get())
+            return 0xC0C0E060; // chlorine green
+        if (f == reika.rotarycraft.registry.RotaryFluids.OXYGEN.get())
+            return 0xA0E0F0FF; // pale icy blue
+        if (f == reika.rotarycraft.registry.RotaryFluids.LIQUID_AMMONIA.get()
+         || f == reika.rotarycraft.registry.RotaryFluids.AMMONIA.get())
+            return 0xC0E0E0F0; // washed-out blue-white
+        if (f == reika.rotarycraft.registry.RotaryFluids.HEAVY_WATER.get())
+            return 0xC02060B0; // darker blue than water
+        return 0xC020A0C0;     // generic cyan fallback
     }
 
     private void renderCover(PoseStack stack, BlockEntityReservoir tr, double par2, double par4, double par6) {
-        Matrix4f m = stack.last().pose();
-        float u = 0;//todo ico.getMinU();
-        float v = 0;//todo ico.getMinV();
-        float du = 1;//todo  ico.getMaxU();
-        float dv = 1;//todo  ico.getMaxV();
-        float h = 0.99F;
-        float dd = 0;//.03125F;
-        RenderSystem.enableDepthTest();
-        RenderSystem.defaultBlendFunc();
-        Tesselator tess = Tesselator.getInstance();
-        BufferBuilder v5 = tess.getBuilder();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, ResourceLocation.parse("textures/block/glass.png"));
-        v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR_NORMAL);
-        v5.vertex(m, dd, h, 1 - dd).uv(u, dv).color(255).normal(0, 1, 0).endVertex();
-        v5.vertex(m, 1 - dd, h, 1 - dd).uv(du, dv).color(255).normal(0, 1, 0).endVertex();
-        v5.vertex(m, 1 - dd, h, dd).uv(du, v).color(255).normal(0, 1, 0).endVertex();
-        v5.vertex(m, dd, h, dd).uv(u, v).color(255).normal(0, 1, 0).endVertex();
-        tess.end();
-        RenderSystem.disableDepthTest();
+        // TODO: Port to 26.1 rendering API (setShader + Tesselator.getBuilder() + begin() + vertex().endVertex() + end() all removed)
     }
 
     private void renderLiquid(PoseStack stack, BlockEntity tile, MultiBufferSource bufferSource, int pPackedLight) {
@@ -111,10 +220,7 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
         BlockEntityReservoir tr = (BlockEntityReservoir) tile;
         Fluid f = tr.getFluid().getFluid();
         if (f != null) {
-            RenderSystem.enableDepthTest();
-            RenderSystem.defaultBlendFunc();
             if (!f.equals(Fluids.LAVA)) {
-                RenderSystem.enableBlend();
             }
 //            ReikaLiquidRenderer.bindFluidTexture(f);
 //            IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
@@ -241,31 +347,21 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
             float hmm = (float) average.getAverage();
             IClientFluidTypeExtensions props = IClientFluidTypeExtensions.of(f.getFluidType());
 
-            if (props.getStillTexture() != null) {
+            if (false) { // TODO 1.21.5: IClientFluidTypeExtensions.getStillTexture() removed
                 float u = 0;
                 float v = 0;
                 float du = 1f;
                 float dv = 0.05f;
 
-                Tesselator tess = Tesselator.getInstance();
-                BufferBuilder v5 = tess.getBuilder();
-                RenderSystem.setShader(GameRenderer::getPositionTexColorNormalShader);
-                RenderSystem.setShaderTexture(0, ResourceLocation.fromNamespaceAndPath(props.getStillTexture().getNamespace(), "textures/" + props.getStillTexture().getPath() + ".png"));
-                v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR_NORMAL);
-                v5.vertex(m,0, hmp, 1).uv(u, dv).color(tr.getFluidRenderColor()).normal(0, 1, 0).endVertex();
-                v5.vertex(m,1, hpp, 1).uv(du, dv).color(tr.getFluidRenderColor()).normal(0, 1, 0).endVertex();
-                v5.vertex(m,1, hpm, 0).uv(du, v).color(tr.getFluidRenderColor()).normal(0, 1, 0).endVertex();
-                v5.vertex(m,0, hmm, 0).uv(u, v).color(tr.getFluidRenderColor()).normal(0, 1, 0).endVertex();
-                tess.end();
+                // TODO: Port fluid surface rendering to 26.1 API (setShader + Tesselator.getBuilder() + begin() + vertex().endVertex() + end() all removed)
                 if (tile.hasLevel())
                     ReikaRenderHelper.enableLighting();
             }
         }
-        RenderSystem.disableBlend();
-        RenderSystem.disableDepthTest();
     }
 
     private double getFillAmount(BlockEntityReservoir tr) {
         return 0.0625 + 14D / 16D * tr.getFluidLevel() / BlockEntityReservoir.CAPACITY;
     }
 }
+

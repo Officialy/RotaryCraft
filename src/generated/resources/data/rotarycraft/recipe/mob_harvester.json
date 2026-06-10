@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "h": "rotarycraft:ignition_unit",
+    "p": "minecraft:ender_pearl",
+    "s": "rotarycraft:hsla_steel_plate"
+  },
+  "pattern": [
+    "shs",
+    "sps"
+  ],
+  "result": {
+    "id": "rotarycraft:mob_harvester"
+  }
+}

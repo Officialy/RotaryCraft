@@ -9,8 +9,9 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
 
@@ -20,7 +21,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class WindModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/windtex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/windtex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;
@@ -46,11 +47,10 @@ public class WindModel extends RotaryModelBase {
     private final ModelPart shape9c;
     private final ModelPart shape9b;
     private final ModelPart shape9a;
-    private final ModelPart root;
+    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
 
     public WindModel(ModelPart modelPart) {
-        super(RenderType::entityCutout);
-        this.root = modelPart;
+        super(modelPart, RenderTypes::entityCutout);
 
         this.shape1 = modelPart.getChild("shape1");
         this.shape2 = modelPart.getChild("shape2");
@@ -256,11 +256,45 @@ public class WindModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
+        final int LM = packedLightIn;
+        final int OV = net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
+        final int COL = 0xFFFFFFFF;
 
+        shape1.render(stack, tex, LM, OV, COL);
+        shape2.render(stack, tex, LM, OV, COL);
+        shape3.render(stack, tex, LM, OV, COL);
+        shape3a.render(stack, tex, LM, OV, COL);
+        shape4.render(stack, tex, LM, OV, COL);
+        shape4a.render(stack, tex, LM, OV, COL);
+        shape5.render(stack, tex, LM, OV, COL);
+        shape1a.render(stack, tex, LM, OV, COL);
+        shape6.render(stack, tex, LM, OV, COL);
+        shape6a.render(stack, tex, LM, OV, COL);
+        shape7.render(stack, tex, LM, OV, COL);
+        shape7a.render(stack, tex, LM, OV, COL);
+
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.translate(0, -1, 0);
+        shape8.render(stack, tex, LM, OV, COL);
+        shape8a.render(stack, tex, LM, OV, COL);
+        shape8b.render(stack, tex, LM, OV, COL);
+        shape8c.render(stack, tex, LM, OV, COL);
+        shape9a.render(stack, tex, LM, OV, COL);
+        shape9b.render(stack, tex, LM, OV, COL);
+        shape9c.render(stack, tex, LM, OV, COL);
+        shape9d.render(stack, tex, LM, OV, COL);
+        shape9e.render(stack, tex, LM, OV, COL);
+        shape9f.render(stack, tex, LM, OV, COL);
+        shape9g.render(stack, tex, LM, OV, COL);
+        shape9h.render(stack, tex, LM, OV, COL);
+        stack.popPose();
     }
 
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return TEXTURE_LOCATION;
     }
 }
+

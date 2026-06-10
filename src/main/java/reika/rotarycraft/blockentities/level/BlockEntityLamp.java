@@ -48,7 +48,7 @@
 //        if (!red)
 //            this.updateCoil();
 //
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //
 //        if (red)

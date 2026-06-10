@@ -12,7 +12,7 @@
 //import org.lwjgl.opengl.GL11;
 //
 //import net.minecraft.entity.player.Player;
-//import net.neoforged.fluids.Fluids;
+//import net.neoforged.neoforge.fluids.Fluids;
 //
 //import reika.dragonapi.libraries.io.ReikaTextureHelper;
 //import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
@@ -71,8 +71,8 @@
 //     * Draw the background layer for the GuiContainer (everything behind the items)
 //     */
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.renderBg(PoseStack poseStack, par1, par2, par3);
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
+//        super.extractBackground(PoseStack poseStack, par1, par2, par3);
 //
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;

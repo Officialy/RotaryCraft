@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/floodlight",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "floodlight"
+    }
+  }
+}

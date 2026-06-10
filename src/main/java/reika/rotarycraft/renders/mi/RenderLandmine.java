@@ -13,9 +13,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine;
@@ -45,8 +48,8 @@ public class RenderLandmine extends RotaryTERenderer<BlockEntityLandmine> {
             stack.translate(0, -0.6, 0);
         }
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(LandmineModel.TEXTURE_LOCATION));
-        landmineModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(LandmineModel.TEXTURE_LOCATION));
+        landmineModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
 //        if (tile.isInWorld())
 //            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -55,12 +58,19 @@ public class RenderLandmine extends RotaryTERenderer<BlockEntityLandmine> {
     }
 
     @Override
-    public void render(BlockEntityLandmine tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
-        if (this.doRenderModel(stack, tile)) {
-            this.renderBlockEntityLandmineAt(stack, tile, multiBufferSource, i);
-        }
-        if ((tile).isInWorld())// && MinecraftForgeClient.getRenderPass() == 1)
-            IORenderer.renderIO(stack, multiBufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return LandmineModel.TEXTURE_LOCATION;
     }
 
+    @Override
+    protected boolean useEntityCutout() {
+        return true;
+    }
+
+    @Override
+    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+        if (be instanceof BlockEntityLandmine landmine)
+            renderBlockEntityLandmineAt(stack, landmine, mbs, light);
+    }
 }
+

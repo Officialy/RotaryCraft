@@ -74,7 +74,7 @@ public class BlockEntitySelfDestruct extends BlockEntityPowerReceiver {
     }
 
     public void destroy(Level world, BlockPos pos) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             tickcount++;
             int n = 6;
             int count = 32;

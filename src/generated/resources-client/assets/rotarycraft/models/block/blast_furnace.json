@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "rotarycraft:block/blastfurn_front",
+    "side": "rotarycraft:block/blastfurn_side",
+    "top": "rotarycraft:block/blastfurn_side"
+  }
+}

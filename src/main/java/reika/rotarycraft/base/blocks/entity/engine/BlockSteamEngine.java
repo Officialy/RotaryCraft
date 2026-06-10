@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.network.NetworkHooks;
+// 1.21.5: net.neoforged.network.NetworkHooks removed; use ServerPlayer.openMenu(MenuProvider, BlockPos)
 
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.engine.BlockEntitySteamEngine;
@@ -32,9 +32,14 @@ public class BlockSteamEngine extends BlockBasicMachine {
     
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {
+        if (pLevel.isClientSide()) {
+            @SuppressWarnings("unchecked")
+            BlockEntityTicker<T> t = (BlockEntityTicker<T>) clientPhiTicker(BlockEntitySteamEngine.class);
+            return t;
+        }
+        return (pLevel1, pPos, pState1, pBlockEntity) -> {
             ((BlockEntitySteamEngine) pBlockEntity).updateEntity(pLevel1, pPos);
-        });
+        };
     }
 
     @Override
@@ -42,4 +47,7 @@ public class BlockSteamEngine extends BlockBasicMachine {
         return super.getInteractionShape(p_60547_, p_60548_, p_60549_);
     }
 
+
+    @Override
+    protected boolean isCustomRendered() { return true; }
 }

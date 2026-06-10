@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "rotarycraft:item/turret_aiming_unit"
+  }
+}

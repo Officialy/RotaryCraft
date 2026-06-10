@@ -66,9 +66,9 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
         if (tickcount < this.getOperationTime())
             return;
         ItemStack is = this.getFirstStack();
-        if (is == null)
+        if (is.isEmpty())
             return;
-        if (world.isClientSide)
+        if (world.isClientSide())
             return;
         BlockEntityItemCannon te = this.getTargetTE();
         if (te == null) {
@@ -92,19 +92,17 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
     private void fire(Level world, BlockPos pos, BlockEntityItemCannon te) {
         double v = 4;
         ItemStack is = this.getFirstStack();
-        if (is == null)
+        if (is.isEmpty())
             return;
         ItemEntity ei = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.125, pos.getZ() + 0.5, is);
         double dx = target.pos.getX() - pos.getX();
         double dy = target.pos.getY() - pos.getY();
         double dz = target.pos.getZ() - pos.getZ();
         double dd = ReikaMathLibrary.py3d(dx, dy, dz);
-        ei.xo = dx / dd * v;
-        ei.yo = dy / dd * v;
-        ei.zo = dz / dd * v;
+        ei.setDeltaMovement(dx / dd * v, dy / dd * v, dz / dd * v);
         ei.setPickUpDelay(10);
         ei.lifespan = 5;
-        if (!world.isClientSide)
+        if (!world.isClientSide())
             world.addFreshEntity(ei);
         //world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, "DragonAPI.rand.explode", 1, 1);
         int num = power >= STACKPOWER ? is.getCount() : 1;
@@ -122,11 +120,11 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
 
     private ItemStack getFirstStack() {
         for (int i = 0; i < itemHandler.getSlots(); i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
+            if (!itemHandler.getStackInSlot(i).isEmpty()) {
                 return itemHandler.getStackInSlot(i).copy();
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

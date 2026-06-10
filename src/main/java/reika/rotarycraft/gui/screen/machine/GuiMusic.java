@@ -9,18 +9,16 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.client.gui.ScreenUtils;
 import reika.dragonapi.instantiable.gui.ColorButton;
+import reika.dragonapi.instantiable.gui.ImagedGuiButton;
 import reika.dragonapi.instantiable.gui.PianoKeyboard;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
@@ -45,10 +43,8 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
     private PianoKeyboard input;
 
     public GuiMusic(MusicContainer container, Inventory inv, Component title) {
-        super(container, inv, title);
+        super(container, inv, title, 256, 217);
         music = (BlockEntityMusicBox) inv.player.level().getBlockEntity(container.tile.getBlockPos());
-        imageHeight = 217;
-        imageWidth = 256;
     }
 
     @Override
@@ -56,8 +52,8 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
         super.init();
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
-        ResourceLocation note = ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID,"textures/screen/musicbuttons.png");
-        ResourceLocation put =  ResourceLocation.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/buttons.png");
+        Identifier note = Identifier.fromNamespaceAndPath(RotaryCraft.MODID,"textures/screen/musicbuttons.png");
+        Identifier put =  Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/buttons.png");
         addRenderableWidget(new Button.Builder(Component.nullToEmpty("Save"), (button) -> actionPerformed(button, 100)).pos(j + 10, k + 6).size(40, 20).build());// j + 10, k + 6, 40, 20,
         addRenderableWidget(new Button.Builder(Component.nullToEmpty("Load"), (button) -> actionPerformed(button, 101)).pos(j + 50, k + 6).size( 40, 20).build());
         addRenderableWidget(new Button.Builder(Component.nullToEmpty("Load Demo"), (button) -> actionPerformed(button, 102)).pos(j + imageWidth / 2 + 40, k + 6).size( 80, 20).build());
@@ -81,11 +77,11 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
         offset[activeType.ordinal()] = 80;
         for (int i = 0; i < 5; i++) {
             int finalI = i;
-            addRenderableWidget(new ImageButton(j + 10 + 16 * i, k + 53, 16, 16, i * 16 + offset[i], 32, note, (button) -> actionPerformed(button, 300 + finalI)));
+            addRenderableWidget(new ImagedGuiButton(300 + i, j + 10 + 16 * i, k + 53, 16, 16, i * 16 + offset[i], 32, note, b -> actionPerformed(b, 300 + finalI)));
         }
 
         ItemStack[] items = {
-                new ItemStack(Blocks.GRASS),
+                new ItemStack(Blocks.GRASS_BLOCK),
 //          todo      new ItemStack(Blocks.planks),
                 new ItemStack(Blocks.NETHER_PORTAL),
                 new ItemStack(Blocks.STONE),
@@ -97,22 +93,10 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
     }
 
     @Override
-    public boolean mouseClicked(double i, double j, int k) { //delete note on right-click
-		/*
-		if (k == 0) {
-			for (int l = 0; l < renderables.size(); l++) {
-				Button guibutton = (Button)renderables.get(l);
-				if (guibutton.mousePressed(mc, i, j)) {
-					this.actionPerformed(guibutton);
-					if (guibutton.id >= 100)
-						mc.sndManager.playSoundFX("DragonAPI.rand.click", 1.0F, 1.0F);
-					return; //to avoid double presses
-				}
-			}
-		}*/
-        super.mouseClicked(i, j, k);
-        input.mouseClicked(i, j, k);
-        return super.mouseClicked(i, j, k);
+    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+        super.mouseClicked(event, doubleClick);
+        input.mouseClicked(event.x(), event.y(), event.button());
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
@@ -156,28 +140,27 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
     /**
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
+    // 1.21.5: Screen.extractBackground is public; GuiGraphicsExtractor.pose() returns
+    // Matrix3x2fStack rather than PoseStack so the line-drawing helpers need a port.
     @Override
-    protected void renderBg(GuiGraphics stack, float par1, int par2, int par3) {
-        super.renderBg(stack, par1, par2, par3);
+    public void extractBackground(GuiGraphicsExtractor stack, int par2, int par3, float par1) {
+        super.extractBackground(stack, par2, par3, par1);
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
 
-        RenderSystem.setShaderTexture(0, new ResourceLocation(RotaryCraft.MODID,"textures/screen/musicbuttons.png"));
-        ScreenUtils.drawTexturedModalRect(stack, j+imageWidth/2-232/2, k+150, 0, 64, 232, 37, 0);
+        stack.blit(RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/musicbuttons.png"), j+imageWidth/2-232/2, k+150, 0, 64, 232, 37, 256, 256);
 
         input.drawKeys(stack);
 
-        //this was in foreground
         ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Note Length", 51, 42, 0);
         ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Instrument", 200, 42, 0);
         ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Channel Select", imageWidth / 2, 85, 0);
 
-        int dx = (activeVoice.ordinal() - 1) * 16;
-        int color = BlockEntityMusicBox.getColorForChannel(activeChannel);
-        ReikaGuiAPI.instance.drawLine(stack.pose(), 152 + dx, 53, 152 + dx, 69, 0xff000000);
-        ReikaGuiAPI.instance.drawLine(stack.pose(), 152 + dx, 53, 168 + dx, 53, 0xff000000);
-        ReikaGuiAPI.instance.drawLine(stack.pose(), 168 + dx, 53, 168 + dx, 69, 0xff000000);
-        ReikaGuiAPI.instance.drawLine(stack.pose(), 152 + dx, 69, 168 + dx, 69, 0xff000000);
+        // 26.1: divider line under the "Channel Select" label. Original 1.7 used Tesselator
+        // primitives via stack.pose(); the new pipeline gives us a clean rectangle-fill API
+        // (GuiGraphicsExtractor.fill) which is the standard way to draw 1-px rules in 1.21+.
+        int dividerY = 85 + font.lineHeight + 1;
+        stack.fill(imageWidth / 2 - 60, dividerY, imageWidth / 2 + 60, dividerY + 1, 0xFF202020);
     }
 
     @Override
@@ -201,8 +184,8 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
     }
 
     @Override
-    public ResourceLocation bindKeyboardTexture() {
-        return new ResourceLocation(RotaryCraft.MODID, "textures/screen/musicbuttons.png");
+    public Identifier bindKeyboardTexture() {
+        return Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/musicbuttons.png");
     }
 
 }

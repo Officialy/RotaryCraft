@@ -61,8 +61,7 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
         return false;
     }
 
-    //@Override
-    public void updateBlockEntity(Level world, BlockPos pos) {
+    private void doBeamLogic(Level world, BlockPos pos) {
         this.getDirection(getBlockState().getValue(BlockRotaryCraftMachine.FACING));
 
         this.adjustAim(world, pos);
@@ -86,14 +85,14 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
         List<LivingEntity> inbox = world.getEntitiesOfClass(LivingEntity.class, box);
         for (LivingEntity e : inbox) {
             if (ReikaEntityHelper.burnsInSun(e)) {
-                e.setSecondsOnFire(10);
+                e.igniteForSeconds(10);
             }
         }
     }
 
     private AABB getBurningBox(Level world, BlockPos pos) {
         int r = this.getRange();
-        AABB box = new AABB(pos, new BlockPos(pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
+        AABB box = new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
         return switch (facingDir) {
             case EAST -> new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1 + r, pos.getY() + 1, pos.getZ() + 1);
             case NORTH -> new AABB(pos.getX(), pos.getY(), pos.getZ() - r, pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
@@ -114,7 +113,7 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
                 if (b == Blocks.LIGHT) {
                     //ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
                     world.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
-                    world.blockUpdated(c, this.getBlockState().getBlock());
+                    world.updateNeighborsAt(c, this.getBlockState().getBlock());
                 }
             }
             light.clear();
@@ -127,7 +126,7 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
             BlockPos c = light.getNthBlock(i);
             if (world.getBlockState(c).getBlock() == Blocks.AIR)
                 world.setBlock(c, Blocks.LIGHT.defaultBlockState(), 0);
-            world.blockUpdated(c, this.getBlockState().getBlock());
+            world.updateNeighborsAt(c, this.getBlockState().getBlock());
         }
     }
 
@@ -145,7 +144,7 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
     public int getRange() {
         if (!level.canSeeSky(worldPosition.above()))
             return 0;
-        int time = (int) (level.dayTime() % 24000);
+        int time = (int) (level.getDefaultClockTime() % 24000);
         if (time > 13500 && time < 22500)
             return 0;
         double r = ReikaMathLibrary.doubpow(2, 7 * ReikaWorldHelper.getSunIntensity(level, true, 0));
@@ -181,7 +180,7 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
             Block b = world.getBlockState(c).getBlock();
             if (b == Blocks.LIGHT) {
                 world.setBlock(c, Blocks.AIR.defaultBlockState(), 0);
-                world.blockUpdated(c, this.getBlockState().getBlock());
+                world.updateNeighborsAt(c, this.getBlockState().getBlock());
             }
         }
     }
@@ -198,7 +197,8 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
 
     @Override
     public void updateEntity(Level level, BlockPos blockPos) {
-
+        super.updateEntity();
+        this.doBeamLogic(level, blockPos);
     }
 
     @Override

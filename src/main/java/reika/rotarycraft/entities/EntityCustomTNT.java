@@ -1,14 +1,14 @@
 package reika.rotarycraft.entities;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.Level;
-import net.neoforged.entity.IEntityAdditionalSpawnData;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
-public class EntityCustomTNT extends PrimedTnt implements IEntityAdditionalSpawnData {
+// 1.21.5: IEntityAdditionalSpawnData → IEntityWithComplexSpawn, and the buffer is now a
+// RegistryFriendlyByteBuf so the spawn payload can carry registry-tracked data.
+public class EntityCustomTNT extends PrimedTnt implements IEntityWithComplexSpawn {
 
     private int extraTime;
 
@@ -18,12 +18,12 @@ public class EntityCustomTNT extends PrimedTnt implements IEntityAdditionalSpawn
     }
 
     @Override
-    public void writeSpawnData(FriendlyByteBuf data) {
+    public void writeSpawnData(RegistryFriendlyByteBuf data) {
         data.writeInt(getFuse());
     }
 
     @Override
-    public void readSpawnData(FriendlyByteBuf data) {
+    public void readSpawnData(RegistryFriendlyByteBuf data) {
         setFuse(data.readInt());
     }
 }

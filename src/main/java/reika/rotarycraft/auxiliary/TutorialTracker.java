@@ -9,7 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
-import net.neoforged.common.NeoForge;
+import net.neoforged.neoforge.common.NeoForge;
 import reika.dragonapi.instantiable.data.maps.PlayerMap;
 
 import java.util.ArrayList;

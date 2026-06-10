@@ -89,7 +89,7 @@
 //
 //    @Override
 //    public void fire(Level world, double[] xyz) {
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //        for (float i = 0; i <= this.getMaxRange(); i += 0.5F) {
 //            double dx = i * Math.cos(Math.toRadians(theta)) * Math.cos(Math.toRadians(-phi + 90));
@@ -104,7 +104,7 @@
 //                }
 //                if (e instanceof LivingEntity) {
 //                    e.hurt(new TurretDamage(this).setIsFire(), 4);
-//                    e.setSecondsOnFire(7);
+//                    e.igniteForSeconds(7);
 //                    ((LivingEntity) e).removeEffect(RotaryCraft.freeze);
 //                }
 //            }

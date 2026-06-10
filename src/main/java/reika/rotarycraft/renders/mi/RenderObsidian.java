@@ -16,7 +16,7 @@
 //import net.minecraft.client.renderer.Tesselator;
 //
 //import net.neoforged.client.MinecraftForgeClient;
-//import net.neoforged.fluids.FluidRegistry;
+//import net.neoforged.neoforge.fluids.FluidRegistry;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
@@ -61,7 +61,6 @@
 //
 //        if (tile.isInWorld() || MinecraftForgeClient.getRenderPass() == 1)
 //            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-//        RenderSystem.disableBlend();
 //        stack.popPose();
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 //    }
@@ -132,8 +131,6 @@
 //            ReikaRenderHelper.disableEntityLighting();
 //        }
 //        GL11.glColor4f(1, 1, 1, 1);
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
 //
 //        Tesselator tess = Tesselator.getInstance();
 //BufferBuilder v5 = tess.getBuilder();

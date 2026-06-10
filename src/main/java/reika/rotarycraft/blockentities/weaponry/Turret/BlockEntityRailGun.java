@@ -73,7 +73,7 @@
 //            return;
 //        tickcount = 0;
 //        if (target[3] == 1) {
-//            if (!world.isClientSide)
+//            if (!world.isClientSide())
 //                this.fire(world, target);
 //        }
 //    }
@@ -131,7 +131,7 @@
 //        double dy = v[1] / dd;
 //        double dz = v[2] / dd;
 //        //ReikaJavaLibrary.pConsole(dx+"  "+dy+"  "+dz);
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            double y = this.getFiringPositionY(dy);
 //            Entity e = ammoType.getProjecBlockEntity(world, new BlockPos(worldPosition.getX() + 0.5 + dx, y, worldPosition.getZ() + 0.5 + dz), new BlockPos(v[0], v[1], v[2]), this);
 //            if (e != null) {

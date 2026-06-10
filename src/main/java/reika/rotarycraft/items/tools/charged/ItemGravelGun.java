@@ -44,7 +44,7 @@
 //        }
 //        this.warnCharge(is);
 //        if (!ReikaPlayerAPI.playerHasOrIsCreative(ep, Blocks.GRAVEL, -1)) {
-//            if (!world.isClientSide)
+//            if (!world.isClientSide())
 //                world.playAuxSFX(1001, (int) ep.getY, (int) ep.getY(), (int) ep.posZ, 1);
 //            return is;
 //        }
@@ -69,7 +69,7 @@
 //                double dx = ent.getY - ep.getY;
 //                double dy = ent.getY() - ep.getY();
 //                double dz = ent.posZ - ep.posZ;
-//                if (!world.isClientSide) {
+//                if (!world.isClientSide()) {
 //                    ItemStack fl = new ItemStack(Items.flint);
 //                    ItemEntity ei = new ItemEntity(world, look.xCoord / look.lengthVector() + ep.getY, look.yCoord / look.lengthVector() + ep.getY(), look.zCoord / look.lengthVector() + ep.posZ, fl);
 //                    ei.delayBeforeCanPickup = 100;

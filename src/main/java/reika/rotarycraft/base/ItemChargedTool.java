@@ -11,7 +11,7 @@ package reika.rotarycraft.base;
 
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -22,11 +22,11 @@ import reika.rotarycraft.registry.ConfigRegistry;
 public abstract class ItemChargedTool extends ItemRotaryTool {
 
     public ItemChargedTool() {
-        super(new Properties());
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         return super.use(level, player, hand);
     }
 

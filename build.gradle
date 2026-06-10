@@ -7,4 +7,30 @@ ext {
 
 dependencies {
     implementation project(":DragonAPI")
+
+    localRuntime "maven.modrinth:spark:1.10.172-neoforge"
+
+    // 26.1 JEI + Jade compat. The plugin classes (modinterface/jei, modinterface/jade)
+    // reference the public APIs at COMPILE TIME, so a localRuntime-only entry isn't enough —
+    // the compiler can't resolve `mezz.jei.api.IModPlugin` or `snownee.jade.api.IWailaPlugin`
+    // without the jar on the compile classpath. We add the API jars (or in Jade's case the
+    // main jar, since its API ships embedded) as `compileOnly` so they're available during
+    // javac but not bundled into our output jar. The runtime jar is still added separately
+    // via `localRuntime` so the plugin actually runs in dev.
+    //
+    // JEI: API is split into common + loader-specific artifacts on maven.blamejared.com.
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    // Jade: the API classes live inside the main jar (no separate -api artifact published).
+    // Adding the same coordinate to both compileOnly and localRuntime works because Gradle
+    // resolves them to the same file; the compile-only entry just gives javac visibility.
+    compileOnly "maven.modrinth:jade:26.1.1+neoforge"
+    localRuntime "maven.modrinth:jade:26.1.1+neoforge"
+
+    if (file('libs').isDirectory()) {
+        compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+        localRuntime fileTree(dir: 'libs', include: ['*.jar'])
+    }
 }

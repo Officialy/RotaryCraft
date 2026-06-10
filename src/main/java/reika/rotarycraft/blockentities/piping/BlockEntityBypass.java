@@ -174,7 +174,7 @@ public class BlockEntityBypass extends BlockEntityPiping {
         boolean update = false;
         boolean[] old = new boolean[forcedConnection.length];
         System.arraycopy(forcedConnection, 0, old, 0, old.length);
-        forcedConnection = ReikaArrayHelper.booleanFromByteBitflags(NBT.getByte("fconn"), 6);
+        forcedConnection = ReikaArrayHelper.booleanFromByteBitflags(NBT.getByteOr("fconn", (byte)0), 6);
         update = !Arrays.equals(old, forcedConnection);
 
 //        if (fluidLevel != null && update)
@@ -198,7 +198,7 @@ public class BlockEntityBypass extends BlockEntityPiping {
         boolean update = false;
         boolean[] old = new boolean[tryForcedConnection.length];
         System.arraycopy(tryForcedConnection, 0, old, 0, old.length);
-        tryForcedConnection = ReikaArrayHelper.booleanFromByteBitflags(NBT.getByte("tfconn"), 6);
+        tryForcedConnection = ReikaArrayHelper.booleanFromByteBitflags(NBT.getByteOr("tfconn", (byte)0), 6);
         update = !Arrays.equals(old, tryForcedConnection);
     }
 

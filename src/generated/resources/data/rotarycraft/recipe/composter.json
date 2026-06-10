@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " S ",
+    "S S",
+    "BBB"
+  ],
+  "result": {
+    "id": "rotarycraft:composter"
+  }
+}

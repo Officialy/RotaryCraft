@@ -18,7 +18,7 @@
 //import net.minecraft.world.entity.Entity;
 //import net.minecraft.world.entity.EntityType;
 //import net.minecraft.world.entity.LivingEntity;
-//import net.minecraft.world.entity.projectile.Fireball;
+//import net.minecraft.world.entity.projectile.hurtingprojectile.Fireball;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.Level;
 //import net.minecraft.world.phys.AABB;
@@ -49,7 +49,7 @@
 //        accelerationY = motionY;
 //        accelerationZ = motionZ;
 //
-//        if (!world.isClientSide)
+//        if (!world.isClientSide())
 //            velocityChanged = true;
 //    }
 //
@@ -148,7 +148,7 @@
 //
 //    private void breakBlocks(Level world, BlockPos pos) {
 //        int k = BlockEntitySonicBorer.FOV;
-//        if (!world.isClientSide) {
+//        if (!world.isClientSide()) {
 //            if (te.xstep != 0) {
 //                for (int i = z - k; i <= z + k; i++) {
 //                    for (int j = y - k; j <= y + k; j++) {
@@ -180,7 +180,7 @@
 //        if (b == Blocks.AIR)
 //            return;
 //         =world.getBlockMetadata(pos);
-//        if (!world.isClientSide && !ReikaPlayerAPI.playerCanBreakAt((WorldServer) world, pos, b, meta, te.getServerPlacer()))
+//        if (!world.isClientSide() && !ReikaPlayerAPI.playerCanBreakAt((WorldServer) world, pos, b, meta, te.getServerPlacer()))
 //            return;
 //        if (!BlockEntitySonicBorer.canDrop(world, pos) && !(b instanceof BlockLiquid))
 //            return;

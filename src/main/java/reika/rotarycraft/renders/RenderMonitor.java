@@ -9,26 +9,32 @@
  ******************************************************************************/
 package reika.rotarycraft.renders;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.gui.Font;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
-import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityMonitor;
 import reika.rotarycraft.models.MonitorModel;
-import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
+/**
+ * 1.21.5 port of the dynamometer renderer. Same pattern as the engine / shaft renderers —
+ * single render type per submit, snapshot pose into a fresh PoseStack so the legacy in-lambda
+ * code stays valid after the dispatcher has popped the outer stack.
+ */
 public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
 
     private final MonitorModel monitorModel;
@@ -37,85 +43,99 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         monitorModel = new MonitorModel(context.bakeLayer(RotaryModelLayers.DYNOMONITOR));
     }
 
-    public void renderBlockEntityMonitorAt(PoseStack stack, BlockEntityMonitor tile, MultiBufferSource bufferSource, int pPackedLight) {
+    private void renderBlockEntityMonitorAt(PoseStack stack, BlockEntityMonitor tile, MultiBufferSource bufferSource, int light) {
         stack.pushPose();
+        BlockState state = tile.getBlockState();
+        float yaw = state.getValue(BlockRotaryCraftMachine.FACING).toYRot();
+        stack.translate(0.5F, 1.5F, 0.5F);
+        stack.mulPose(Axis.YP.rotationDegrees(-yaw - 90));
+        stack.mulPose(Axis.ZP.rotationDegrees(180));
 
-        BlockState blockstate = tile.getLevel() != null ? tile.getBlockState() : RotaryBlocks.DYNAMOMETER.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
-
-        // Match 1.7.10 translation and rotation order
-        stack.translate(0.0F, 2.0F, 1.0F);
-        stack.scale(1.0F, -1.0F, -1.0F);
-        stack.translate(0.5F, 0.5F, 0.5F);
-
-        if (tile.isInWorld()) {
-            Direction dir = blockstate.getValue(BlockRotaryCraftMachine.FACING);
-            int yRot = switch (dir) {
-                case SOUTH -> 0;
-                case NORTH -> 180;
-                case EAST -> 90;
-                case WEST -> 270;
-                default -> 0;
-            };
-            stack.mulPose(Axis.YP.rotationDegrees(yRot + 90));
-        }
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityCutout(MonitorModel.TEXTURE_LOCATION));
-        monitorModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, tile.phi, 0);
-        stack.popPose();
-
-        if (tile.isInWorld())
-            this.renderText(tile, stack, bufferSource, blockstate);
-    }
-
-    private void renderText(BlockEntityMonitor tile, PoseStack stack, MultiBufferSource bufferSource, BlockState blockstate) {
-        Direction dir = blockstate.getValue(BlockRotaryCraftMachine.FACING);
-        ReikaRenderHelper.disableEntityLighting();
-        stack.pushPose();
-        stack.translate(0.5F, -0.5F, 0.5F);
-        // Adjust translation for EAST and NORTH
-        Font fontRenderer = this.getFontRenderer();
-        float var10 = 0.8f;
-        stack.scale(var10, var10, var10);
-        float var112 = 0.016666668F * var10;
-        stack.translate(0.0F, 3.65F * var10, 0.07F * var10);
-        stack.scale(var112, -var112, var112);
-        if (dir == Direction.EAST || dir == Direction.WEST) {
-            stack.translate(0.5F, 0, 0.65F);
-        }
-        if (dir == Direction.NORTH || dir == Direction.SOUTH) {
-            stack.mulPose(Axis.YP.rotationDegrees(90));
-            stack.translate(2.5F, 0, 4.1F);
-        }
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-//        RenderSystem.depthMask(false);
-        stack.translate(5, -48, 37);
-        String displayText;
-
-        for (int i = 0; i < 2; i++) {
-            stack.translate(-10 * i, 0, -37 * 2 * i - 9 * i);
-            if (i == 1)
-                stack.scale(-1, 1, 1);
-            fontRenderer.drawInBatch("Power:", -37, 140, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-            displayText = RotaryAux.formatPower(tile.power);
-            fontRenderer.drawInBatch(displayText, -28, 148, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-
-            fontRenderer.drawInBatch("Torque:", -37, 164, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-            displayText = RotaryAux.formatTorque(tile.torque);
-            fontRenderer.drawInBatch(displayText, -28, 172, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-
-            fontRenderer.drawInBatch("Speed:", -37, 188, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-            displayText = RotaryAux.formatSpeed(tile.omega);
-            fontRenderer.drawInBatch(displayText, -28, 196, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-        }
-//        RenderSystem.depthMask(true);
+        VertexConsumer vc = bufferSource.getBuffer(RenderTypes.entityCutout(MonitorModel.TEXTURE_LOCATION));
+        monitorModel.renderAll(stack, vc, light, tile, null, -tile.phi);
         stack.popPose();
     }
 
     @Override
-    public void render(BlockEntityMonitor tile, float v, PoseStack stack, MultiBufferSource bufferSource, int pPackedLight, int i1) {
-        if (this.doRenderModel(stack, tile)) {
-            this.renderBlockEntityMonitorAt(stack, tile, bufferSource, pPackedLight);
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return;
+        BlockEntity be = level.getBlockEntity(state.blockPos);
+        if (!(be instanceof BlockEntityMonitor tile)) return;
+        if (!this.doRenderModel(poseStack, tile)) return;
+
+        PoseStack snapped = new PoseStack();
+        snapped.last().set(poseStack.last());
+        int light = state.lightCoords;
+
+        RenderType rt = RenderTypes.entityCutout(MonitorModel.TEXTURE_LOCATION);
+        collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
+            MultiBufferSource oneRT = ignored -> vc;
+            renderBlockEntityMonitorAt(snapped, tile, oneRT, light);
+        });
+
+        if (tile.isInWorld()) {
+            renderReadout(poseStack, tile, collector, state.blockPos);
+            // IO arrows for the dynamometer's read direction.
+            IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
         }
-        if ((tile).isInWorld())// && MinecraftForgeClient.getRenderPass() == 1)
-            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+    }
+
+    /**
+     * Draws three lines of text (Power / Torque / Speed) on each of the two faces parallel to
+     * the dynamometer's FACING axis. The legacy 1.7 renderer drew the labels on both sides so
+     * the user could read the power-test result without having to circle the block; we mirror
+     * that here. Uses {@link SubmitNodeCollector#submitText} (the same path vanilla signs use)
+     * so the text batches through the standard GUI text pipeline with proper lighting.
+     */
+    private void renderReadout(PoseStack poseStack, BlockEntityMonitor tile,
+                                SubmitNodeCollector collector, net.minecraft.core.BlockPos blockPos) {
+        net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
+        String powerStr  = "Power: "  + reika.rotarycraft.auxiliary.RotaryAux.formatPower(tile.power);
+        String torqueStr = "Torque: " + reika.rotarycraft.auxiliary.RotaryAux.formatTorque(tile.torque);
+        String speedStr  = "Speed: "  + reika.rotarycraft.auxiliary.RotaryAux.formatSpeed(tile.omega);
+
+        net.minecraft.core.Direction facing = tile.getBlockState()
+                .getValue(BlockRotaryCraftMachine.FACING);
+        float facingYaw = facing.toYRot();
+
+        net.minecraft.util.FormattedCharSequence powerLine  =
+                net.minecraft.network.chat.Component.literal(powerStr).getVisualOrderText();
+        net.minecraft.util.FormattedCharSequence torqueLine =
+                net.minecraft.network.chat.Component.literal(torqueStr).getVisualOrderText();
+        net.minecraft.util.FormattedCharSequence speedLine  =
+                net.minecraft.network.chat.Component.literal(speedStr).getVisualOrderText();
+
+        int colour    = 0xFFFFFFFF;
+        int light     = 15728880;
+        var mode      = net.minecraft.client.gui.Font.DisplayMode.NORMAL;
+        float scale   = 0.0125F;
+
+        for (int side = 0; side < 2; side++) {
+            PoseStack textStack = new PoseStack();
+            textStack.last().set(poseStack.last());
+
+            textStack.pushPose();
+            textStack.translate(0.5F, 0.7F, 0.5F);
+            float yaw = (side == 0) ? facingYaw : (facingYaw + 180F);
+            textStack.mulPose(Axis.YP.rotationDegrees(-yaw));
+            // Push the text just off the block face along the local Z axis so it doesn't
+            // z-fight the model. The Z 180° flip orients the text right-side-up (Font
+            // draws in screen-space conventions where +Y is downward).
+            textStack.translate(0F, 0F, -0.51F);
+            textStack.mulPose(Axis.ZP.rotationDegrees(180F));
+            textStack.scale(scale, scale, scale);
+
+            int lineSpacing = font.lineHeight + 2;
+            float xPow  = -font.width(powerLine)  / 2F;
+            float xTrq  = -font.width(torqueLine) / 2F;
+            float xSpd  = -font.width(speedLine)  / 2F;
+
+            collector.submitText(textStack, xPow, -lineSpacing,     powerLine,  false, mode, light, colour, 0, 0);
+            collector.submitText(textStack, xTrq,  0,               torqueLine, false, mode, light, colour, 0, 0);
+            collector.submitText(textStack, xSpd,  lineSpacing,     speedLine,  false, mode, light, colour, 0, 0);
+
+            textStack.popPose();
+        }
     }
 }

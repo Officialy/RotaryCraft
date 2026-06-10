@@ -9,54 +9,49 @@
  ******************************************************************************/
 package reika.rotarycraft.items;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
-import net.neoforged.common.capabilities.ICapabilityProvider;
-
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.TensionStorage;
 import reika.rotarycraft.base.ItemBasic;
 import reika.rotarycraft.registry.RotaryItems;
 
-import java.util.List;
+import java.util.function.Consumer;
 
+// 1.21.5 NOTE: Item.initCapabilities(ItemStack, CompoundTag) returning ICapabilityProvider was
+// removed in favour of the RegisterCapabilitiesEvent registry. We keep the per-stack default
+// tension write in onCraftedBy, and have appendHoverText migrated to the 5-arg signature.
 public class ItemCoil extends ItemBasic implements TensionStorage {
 
     private int tension;
 
     public ItemCoil() {
-        super(new Properties().stacksTo(1), 1);
-    }
-
-    
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack,  CompoundTag nbt) {
-        if (!stack.getOrCreateTag().contains("energy")) {
-            stack.getOrCreateTag().putDouble("energy", tension);
-        }
-        return null;
+        super(reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1), 1);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack,  Level pLevel, List<Component> lore, TooltipFlag pIsAdvanced) {
-        lore.add(Component.literal("Tension: " + tension));
+    public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, TooltipDisplay display, Consumer<Component> lore, TooltipFlag flag) {
+        lore.accept(Component.literal("Tension: " + tension));
     }
 
+    // 1.21.5: Item#onCraftedBy signature is now (ItemStack, Player).
     @Override
-    public void onCraftedBy(ItemStack stack, Level pLevel, Player pPlayer) {
-        stack.getOrCreateTag().putInt("stiffness", stack == RotaryItems.BEDROCK_ALLOY_SPRING.get().getDefaultInstance() ? 4 : 1);
+    public void onCraftedBy(ItemStack stack, Player pPlayer) {
+        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(stack, __T__ -> __T__.putInt("stiffness", stack == RotaryItems.BEDROCK_ALLOY_SPRING.get().getDefaultInstance() ? 4 : 1));
     }
 
     @Override
     public int getStiffness(ItemStack is) {
-        if (is.hasTag()) {
-            return is.getTag().getInt("stiffness");
+        if (is.has(DataComponents.CUSTOM_DATA)) {
+            CompoundTag tag = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+            return tag.getIntOr("stiffness", 1);
         }
         return 1;
     }
@@ -78,6 +73,4 @@ public class ItemCoil extends ItemBasic implements TensionStorage {
     public int setTension(int i) {
         return tension = i;
     }
-
-
 }

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/bypass",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/bypass",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/bypass"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/bypass",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/bypass",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/bypass",
+      "y": 270
+    }
+  }
+}

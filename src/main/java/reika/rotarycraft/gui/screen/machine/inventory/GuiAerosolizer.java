@@ -29,11 +29,11 @@
 //     * Draw the background layer for the GuiContainer (everything behind the items)
 //     */
 //    @Override
-//    protected void renderBg(PoseStack poseStack, float par1, int par2, int par3) {
+//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
 //        int var5 = (width - imageWidth) / 2;
 //        int var6 = (height - imageHeight) / 2;
 //
-//        super.renderBg(poseStack, par1, par2, par3);
+//        super.extractBackground(poseStack, par2, par3, par1);
 //
 //        for (int i = 0; i < 3; i++) {
 //            for (int j = 0; j < 3; j++) {

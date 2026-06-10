@@ -20,39 +20,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ForgeCapabilities;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.items.IItemHandler;
-import net.neoforged.items.ItemStackHandler;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 
 public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut implements Container {
 
-    protected ItemStackHandler itemHandler = new ItemStackHandler(getContainerSize()) {
+    protected ManagedItemHandler itemHandler = new ManagedItemHandler(getContainerSize()) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
         }
     };
-    private final LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.of(() -> itemHandler);
 
     public InventoriedPowerLiquidInOut(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-    }
-
-    @Override
-    
-    public <T> LazyOptional<T> getCapability( Capability<T> capability,  Direction facing) {
-        if (capability == ForgeCapabilities.ITEM_HANDLER)
-            return lazyItemHandler.cast();
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
     }
     public final ItemStack getStackInSlot(int slot) {
         return itemHandler.getStackInSlot(slot);
@@ -102,38 +83,28 @@ public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut imp
         return false;
     }
 
+    // 1.21.5: serializeNBT/load were replaced by saveAdditional/loadAdditional (ValueOutput/ValueInput).
     @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag tag = new CompoundTag();
-        ListTag nbttaglist = new ListTag();
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) {
-                CompoundTag compoundTag = new CompoundTag();
-                compoundTag.putByte("Slot", (byte) i);
-                itemHandler.getStackInSlot(i).save(compoundTag);
-                nbttaglist.add(compoundTag);
-            }
-        }
-        tag.put("Items", nbttaglist);
-        return tag;
+    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        net.minecraft.world.level.storage.TagValueOutput nested = net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING, this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess());
+        itemHandler.serialize(nested);
+        output.store("ItemsRaw", CompoundTag.CODEC, nested.buildResult());
     }
 
     @Override
-    public void load(CompoundTag NBT) {
-        ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
-        itemHandler = new ItemStackHandler(getContainerSize()) {
+    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        itemHandler = new ManagedItemHandler(getContainerSize()) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
             }
         };
-        for (int i = 0; i < nbttaglist.size(); i++) {
-            CompoundTag tag = nbttaglist.getCompound(i);
-            byte byte0 = tag.getByte("Slot");
-
-            if (byte0 >= 0 && byte0 < itemHandler.getSlots()) {
-                itemHandler.setStackInSlot(byte0, ItemStack.of(tag));
-            }
+        java.util.Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
+        if (raw.isPresent()) {
+            net.minecraft.world.level.storage.ValueInput nested = net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
+            itemHandler.deserialize(nested);
         }
     }
 

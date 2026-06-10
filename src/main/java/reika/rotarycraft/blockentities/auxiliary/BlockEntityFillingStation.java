@@ -21,7 +21,7 @@
 //import net.minecraft.world.level.block.state.BlockState;
 //import net.minecraft.world.level.material.Fluid;
 //import net.neoforged.common.capabilities.ForgeCapabilities;
-//import net.neoforged.fluids.FluidStack;
+//import net.neoforged.neoforge.fluids.FluidStack;
 //
 //import reika.dragonapi.libraries.ReikaInventoryHelper;
 //import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -64,7 +64,7 @@
 //        if (power < MINPOWER)
 //            return;
 //
-//        if (world.isClientSide)
+//        if (world.isClientSide())
 //            return;
 //
 //        if (this.canMakeFuel()) {

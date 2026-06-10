@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import reika.dragonapi.base.BlockTEBase;
 import reika.dragonapi.interfaces.block.MachineRegistryBlock;
 import reika.dragonapi.interfaces.registry.TileEnum;
@@ -33,7 +33,7 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements Mac
     * however they are not enabled unless {@link #hasVerticalPlacement} is set to true.
      * Setting a block that does not have vertical placement to face up or down will cause a crash. This may be fixed in the future.
     */
-    public static DirectionProperty FACING = BlockStateProperties.FACING;
+    public static EnumProperty<net.minecraft.core.Direction> FACING = BlockStateProperties.FACING;
 
     public BlockRotaryCraftMachine(BlockBehaviour.Properties properties) {
         super(properties.strength(4, 15));

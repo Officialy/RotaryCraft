@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:hsla_steel_gear_4x",
+    "M": "rotarycraft:mount"
+  },
+  "pattern": [
+    "G",
+    "M"
+  ],
+  "result": {
+    "id": "rotarycraft:hsla_gearbox_4x"
+  }
+}

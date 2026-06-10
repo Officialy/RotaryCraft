@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/van_de_graff",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/van_de_graff",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/van_de_graff"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/van_de_graff",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/van_de_graff",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/van_de_graff",
+      "y": 270
+    }
+  }
+}

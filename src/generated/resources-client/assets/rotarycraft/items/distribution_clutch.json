@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/distribution_clutch",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "distribclutch"
+    }
+  }
+}

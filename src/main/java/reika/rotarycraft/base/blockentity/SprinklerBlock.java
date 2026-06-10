@@ -17,8 +17,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.fluids.FluidStack;
-import net.neoforged.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
@@ -113,8 +113,8 @@ public abstract class SprinklerBlock extends RotaryCraftBlockEntity implements P
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        pressure = NBT.getInt("press");
-        liquid = NBT.getInt("lvl");
+        pressure = NBT.getIntOr("press", 0);
+        liquid = NBT.getIntOr("lvl", 0);
 
         if (liquid < 0)
             liquid = 0;

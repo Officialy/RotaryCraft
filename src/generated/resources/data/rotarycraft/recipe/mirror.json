@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "m": "rotarycraft:mirror_panel",
+    "p": "rotarycraft:hsla_steel_plate",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " m ",
+    " s ",
+    " p "
+  ],
+  "result": {
+    "id": "rotarycraft:mirror"
+  }
+}

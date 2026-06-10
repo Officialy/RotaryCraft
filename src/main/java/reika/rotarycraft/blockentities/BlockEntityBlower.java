@@ -22,9 +22,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.items.IItemHandler;
-import net.neoforged.items.ItemStackHandler;
+import reika.dragonapi.interfaces.blockentity.HasItemHandler;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.data.immutable.WorldLocation;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
@@ -99,12 +100,13 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
     //    @Override
     public void updateEntity(Level world, BlockPos pos) {
-        this.getIOSides(world, pos, null);
+        super.updateBlockEntity();
+        this.getIOSides(world, pos, getBlockState().getValue(BlockRotaryCraftMachine.FACING));
         this.getSummativeSidedPower();
 
         if (MINPOWER > power || MINSPEED > omega)
             return;
-        if (world.isClientSide)
+        if (world.isClientSide())
             return;
 
         Direction dir = this.getFacingDir();
@@ -112,7 +114,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         BlockEntity source = getAdjacentBlockEntity(from);
 
-        if (source instanceof IItemHandler) {
+        if (source instanceof HasItemHandler) {
             BlockEntity target = getAdjacentBlockEntity(dir);
 //            if (target instanceof WorldRift)
 //                target = this.getRelayedTarget(target, dir);
@@ -146,9 +148,9 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
                 InventoryType src = this.getTypeForInventory(source);
 
-                if (target instanceof IItemHandler) {
+                if (target instanceof HasItemHandler) {
                     InventoryType tgt = this.getTypeForInventory(target);
-                    if (this.tryPatternInsertion((IItemHandler) source, target)) {
+                    if (this.tryPatternInsertion((HasItemHandler) source, target)) {
 
                     } else {
                         //ReikaJavaLibrary.pConsole(map);
@@ -178,7 +180,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 //        return te2 != null ? te2 : te;
 //    }
 
-    private boolean tryPatternInsertion(IItemHandler source, BlockEntity target) {
+    private boolean tryPatternInsertion(HasItemHandler source, BlockEntity target) {
 //        if (InterfaceCache.MEINTERFACE.instanceOf(target)) {
 //            for (int i = 0; i < source.getContainerSize(); i++) {
 //                ItemStack is = source.getItem(i);
@@ -278,7 +280,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
     }
 
     public boolean isIntake() {
-        return getAdjacentBlockEntity(this.getFacingDir().getOpposite()) instanceof IItemHandler;
+        return getAdjacentBlockEntity(this.getFacingDir().getOpposite()) instanceof HasItemHandler;
     }
 
     private void getIOSides(Level world, BlockPos pos, Direction dir) {
@@ -309,11 +311,16 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         ListTag nbttaglist = new ListTag();
 
+        // 26.1: ItemStack.save(CompoundTag) was removed in favour of ItemStack.CODEC against a
+        // RegistryOps. Wrap each non-empty stack as `{Slot: i, Stack: <codec-output>}`.
+        var regAcc = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
+        var ops = regAcc.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
         for (int i = 0; i < matchingItems.length; i++) {
-            if (matchingItems[i] != null) {
+            if (matchingItems[i] != null && !matchingItems[i].isEmpty()) {
                 CompoundTag tag = new CompoundTag();
                 tag.putByte("Slot", (byte) i);
-                matchingItems[i].save(tag);
+                net.minecraft.world.item.ItemStack.CODEC.encodeStart(ops, matchingItems[i]).result()
+                        .ifPresent(stackTag -> tag.put("Stack", stackTag));
                 nbttaglist.add(tag);
             }
         }
@@ -325,19 +332,25 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
     protected void readSyncTag(CompoundTag NBT) {
         super.readSyncTag(NBT);
 
-        isWhitelist = NBT.getBoolean("white");
-        checkNBT = NBT.getBoolean("cnbt");
-        useOreDict = NBT.getBoolean("ore");
+        isWhitelist = NBT.getBooleanOr("white", false);
+        checkNBT = NBT.getBooleanOr("cnbt", false);
+        useOreDict = NBT.getBooleanOr("ore", false);
 
-        ListTag nbttaglist = NBT.getList("Items", Tag.TAG_COMPOUND);
+        ListTag nbttaglist = NBT.getListOrEmpty("Items");
         matchingItems = new ItemStack[18];
 
+        var regAcc = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
+        var ops = regAcc.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
         for (int i = 0; i < nbttaglist.size(); i++) {
-            CompoundTag tag = nbttaglist.getCompound(i);
-            byte byte0 = tag.getByte("Slot");
-
-            if (byte0 >= 0 && byte0 < matchingItems.length) {
-                matchingItems[byte0] = ItemStack.of(tag);
+            CompoundTag tag = nbttaglist.getCompoundOrEmpty(i);
+            byte slot = tag.getByteOr("Slot", (byte) 0);
+            if (slot >= 0 && slot < matchingItems.length) {
+                var stackTag = tag.get("Stack");
+                if (stackTag != null) {
+                    matchingItems[slot] = net.minecraft.world.item.ItemStack.CODEC.parse(ops, stackTag).result().orElse(ItemStack.EMPTY);
+                } else {
+                    matchingItems[slot] = ItemStack.EMPTY;
+                }
             }
         }
     }
@@ -366,7 +379,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
     private boolean doStacksMatch(ItemStack is, ItemStack is1) {
 //        if (checkMeta && is.getItemDamage() != is1.getItemDamage())
 //            return false;
-        if (checkNBT && !ItemStack.isSameItemSameTags(is, is1))
+        if (checkNBT && !ItemStack.isSameItemSameComponents(is, is1))
             return false;
         if (ReikaItemHelper.matchStacks(is, is1))
             return true;
@@ -396,7 +409,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         public boolean isValid(BlockEntity te) {
             if (this == InventoryType.CHEST) {
-                return te instanceof IItemHandler && !DSU.isValid(te);
+                return te instanceof HasItemHandler && !DSU.isValid(te);
 //                case DSU:
 //                    return InterfaceCache.DSU.instanceOf(te);
             }
@@ -405,7 +418,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         public HashMap<Integer, ItemStack> getMovableSlots(BlockEntity te) {
             return switch (this) {
-                case CHEST -> ReikaInventoryHelper.getLocatedTransferrables((IItemHandler) te);
+                case CHEST -> ReikaInventoryHelper.getLocatedTransferrables(((HasItemHandler) te).getItemHandler());
                 case DSU -> null;//ReikaJavaLibrary.makeMapOf(-1, ((IDeepStorageUnit)te).getStoredItemType());
             };
         }

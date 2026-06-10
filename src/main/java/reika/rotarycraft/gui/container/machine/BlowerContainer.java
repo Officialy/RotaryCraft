@@ -12,7 +12,7 @@ package reika.rotarycraft.gui.container.machine;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
 import reika.dragonapi.instantiable.gui.slot.GhostSlot;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -41,7 +41,7 @@ public class BlowerContainer extends IOMachineContainer<BlockEntityBlower> {
     }
 
     @Override
-    public void clicked(int id, int button, ClickType type, Player ep) {
+    public void clicked(int id, int button, ContainerInput type, Player ep) {
         boolean inGUI = id < blower.matchingItems.length && id >= 0;
         if (inGUI) {
             ItemStack held = ep.getMainHandItem();
@@ -53,3 +53,4 @@ public class BlowerContainer extends IOMachineContainer<BlockEntityBlower> {
     }
 
 }
+

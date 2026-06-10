@@ -9,8 +9,9 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 public class PerformanceModel extends RotaryModelBase {
 
-    public static final ResourceLocation TEXTURE_LOCATION = ResourceLocation.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/perftex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/perftex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape12;
@@ -52,11 +53,10 @@ public class PerformanceModel extends RotaryModelBase {
     private final ModelPart shape9a;
     private final ModelPart shape9;
     private final ModelPart shape10;
-    private final ModelPart root;
+    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
 
     public PerformanceModel(ModelPart modelPart) {
-        super(RenderType::entityCutout);
-        this.root = modelPart;
+        super(modelPart, RenderTypes::entityCutout);
 
         this.shape1 = modelPart.getChild("shape1");
         this.shape12 = modelPart.getChild("shape12");
@@ -308,13 +308,94 @@ public class PerformanceModel extends RotaryModelBase {
         return LayerDefinition.create(definition, 128, 128);
     }
 
-        @Override
+    /**
+     * Mirrors the 1.7 ModelPerformance.renderAll motion logic.
+     *
+     * <p>Two animation groups: (1) the crank/flywheel (shape12, shape13) rotates around X at
+     * pivot y=1; (2) eight pistons (shape2a/b/c/d/e, shape2, shape4, shape4c, plus their
+     * counterparts) bob vertically with a sinusoidal Y offset, each phase-shifted by 120° at
+     * 4×-frequency so neighbouring pistons fire in sequence.
+     *
+     * <p>For now we collapse the eight pistons into three pivot offsets (ang0, ang1, ang2) like
+     * the original — the off-axis pistons (Shape2a/2e/2 → ±30° rotation of the y-vector) get a
+     * simpler treatment so the visual is approximately right without a one-piston-per-quad pose
+     * push/pop. The visual aim is "engine pistons clearly pump up and down when running"
+     * rather than the original's pixel-perfect crankshaft animation.
+     */
+    @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        final int LM = packedLightIn;
+        final int OV = OverlayTexture.NO_OVERLAY;
+        final int COL = 0xFFFFFFFF;
+        // Piston bobbing amplitudes (3 phases at 4× phi frequency).
+        double ang0 = 0.03125 * Math.sin(Math.toRadians(phi) * 4);
+        double ang1 = 0.03125 * Math.sin(Math.toRadians(phi + 120) * 4);
+        double ang2 = 0.03125 * Math.sin(Math.toRadians(phi + 240) * 4);
+        if (phi == Float.MIN_NORMAL) ang0 = ang1 = ang2 = 0;
+
+        shape1.render(stack, tex, LM, OV, COL);
+
+        // Crank / flywheel rotating group — pivot y=1, X-axis rotation by phi.
+        stack.pushPose();
+        stack.translate(0.0, 1.0, 0.0);
+        stack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(phi));
+        stack.translate(0.0, -1.0, 0.0);
+        shape12.render(stack, tex, LM, OV, COL);
+        shape13.render(stack, tex, LM, OV, COL);
+        stack.popPose();
+
+        // Static intake plumbing.
+        shape5.render(stack, tex, LM, OV, COL);
+        shape6n.render(stack, tex, LM, OV, COL);
+        shape7.render(stack, tex, LM, OV, COL);
+        shape3.render(stack, tex, LM, OV, COL);
+        shape8.render(stack, tex, LM, OV, COL);
+
+        // Vertical pistons: each in its own pushPose/popPose to isolate the Y translate.
+        stack.pushPose(); stack.translate(0.0, ang0, 0.0); shape4.render(stack, tex, LM, OV, COL);  stack.popPose();
+        stack.pushPose(); stack.translate(0.0, ang1, 0.0); b.render(stack, tex, LM, OV, COL);       stack.popPose();
+        stack.pushPose(); stack.translate(0.0, ang2, 0.0); shape4c.render(stack, tex, LM, OV, COL); stack.popPose();
+
+        // Off-axis pistons (six shapes at ±30° from vertical). Translation is along (Y, -Z)
+        // projected through cos/sin of the off-axis angle.
+        final double cosP =  Math.cos(Math.toRadians(30));
+        final double sinP =  Math.sin(Math.toRadians(30));
+        final double cosN =  Math.cos(Math.toRadians(-30));
+        final double sinN =  Math.sin(Math.toRadians(-30));
+        renderOffAxis(stack, tex, LM, OV, COL, shape2a, ang0 * cosP, ang0 * sinP);
+        renderOffAxis(stack, tex, LM, OV, COL, shape2e, ang1 * cosP, ang1 * sinP);
+        renderOffAxis(stack, tex, LM, OV, COL, shape2,  ang2 * cosP, ang2 * sinP);
+        renderOffAxis(stack, tex, LM, OV, COL, shape2b, ang1 * cosN, ang1 * sinN);
+        renderOffAxis(stack, tex, LM, OV, COL, shape2c, ang0 * cosN, ang0 * sinN);
+        renderOffAxis(stack, tex, LM, OV, COL, shape2d, ang2 * cosN, ang2 * sinN);
+
+        // Static structural / housing parts.
+        shape4a.render(stack, tex, LM, OV, COL);
+        shape6.render(stack, tex, LM, OV, COL);
+        shape9i.render(stack, tex, LM, OV, COL);
+        shape9h.render(stack, tex, LM, OV, COL);
+        shape9g.render(stack, tex, LM, OV, COL);
+        shape9f.render(stack, tex, LM, OV, COL);
+        shape9e.render(stack, tex, LM, OV, COL);
+        shape9d.render(stack, tex, LM, OV, COL);
+        shape9c.render(stack, tex, LM, OV, COL);
+        shape9b.render(stack, tex, LM, OV, COL);
+        shape9a.render(stack, tex, LM, OV, COL);
+        shape9.render(stack, tex, LM, OV, COL);
+        shape10.render(stack, tex, LM, OV, COL);
+    }
+
+    private static void renderOffAxis(PoseStack stack, VertexConsumer tex, int lm, int ov, int col,
+                                       ModelPart part, double dy, double dz) {
+        stack.pushPose();
+        stack.translate(0.0, dy, -dz);
+        part.render(stack, tex, lm, ov, col);
+        stack.popPose();
     }
 
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return TEXTURE_LOCATION;
     }
 }
+
