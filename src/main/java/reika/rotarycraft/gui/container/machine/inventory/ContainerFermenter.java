@@ -1,83 +1,57 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.gui.container.machine.inventory;
-//
-//import net.minecraft.entity.player.Player;
-//import net.minecraft.inventory.ICrafting;
-//import net.minecraft.inventory.Slot;
-//import net.minecraft.inventory.SlotFurnace;
-//import net.minecraft.world.item.ItemStack;
-//
-//import reika.dragonapi.libraries.registry.ReikaItemHelper;
-//import reika.rotarycraft.base.IOMachineMenu;
-//
-//import reika.rotarycraft.registry.RotaryAchievements;
-//import reika.rotarycraft.blockentities.production.BlockEntityFermenter;
-//
-//public class ContainerFermenter extends IOMachineMenu {
-//    private final BlockEntityFermenter fermenter;
-//    private final int lastFermenterBurnTime;
-//    private final int lastFermenterItemBurnTime;
-//    private int lastFermenterCookTime;
-//
-//    public ContainerFermenter(Player player, BlockEntityFermenter par2BlockEntityFermenter) {
-//        super(player, par2BlockEntityFermenter);
-//        lastFermenterCookTime = 0;
-//        lastFermenterBurnTime = 0;
-//        lastFermenterItemBurnTime = 0;
-//        fermenter = par2BlockEntityFermenter;
-//        this.addSlot(new Slot(par2BlockEntityFermenter, 0, 55, 17));
-//        //this.addSlot(new Slot(par2BlockEntityFermenter, 1, 55, 35));
-//        //if (tile.level.isBlockIndirectlyGettingPowered(tile.xCoord, tile.yCoord, tile.zCoord))
-//        //this.addSlot(new Slot(par2BlockEntityFermenter, 1, 55, 35));
-//        //else
-//        this.addSlot(new Slot(par2BlockEntityFermenter, 1, 55, 53));
-//        this.addSlot(new SlotFurnace(player, par2BlockEntityFermenter, 2, 116, 35));
-//
-//        this.addPlayerInventory(player);
-//    }
-//
-//    /**
-//     * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
-//     */
-//    @Override
-//    public void broadcastChanges() {
-//        super.broadcastChanges();
-//
-//        for (int i = 0; i < crafters.size(); i++) {
-//            ICrafting icrafting = (ICrafting) crafters.get(i);
-//
-//            if (lastFermenterCookTime != fermenter.fermenterCookTime) {
-//                icrafting.sendProgressBarUpdate(this, 0, fermenter.fermenterCookTime);
-//                icrafting.sendProgressBarUpdate(this, 1, fermenter.getLevel());
-//            }
-//        }
-//
-//        lastFermenterCookTime = fermenter.fermenterCookTime;
-//    }
-//
-//    @Override
-//    public void setData(int par1, int par2) {
-//        if (par1 == 0) {
-//            fermenter.fermenterCookTime = par2;
-//        }
-//        if (par1 == 1) {
-//            fermenter.setLiquid(par2);
-//        }
-//    }
-//
-//    @Override
-//    public ItemStack slotClick(int par1, int par2, int par3, Player ep) {
-//        ItemStack is = super.slotClick(par1, par2, par3, ep);
-//        if (ReikaItemHelper.matchStacks(RotaryItems.YEAST.get(), is))
-//            RotaryAchievements.MAKEYEAST.triggerAchievement(ep);
-//        return is;
-//    }
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.container.machine.inventory;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+
+import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
+import reika.dragonapi.libraries.io.ReikaPacketHelper;
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.base.IOMachineContainer;
+import reika.rotarycraft.blockentities.production.BlockEntityFermenter;
+import reika.rotarycraft.registry.RotaryMenus;
+
+public class ContainerFermenter extends IOMachineContainer<BlockEntityFermenter> {
+
+    private final BlockEntityFermenter fermenter;
+
+    //Client
+    public ContainerFermenter(int id, Inventory inv, FriendlyByteBuf data) {
+        this(id, inv, (BlockEntityFermenter) inv.player.level().getBlockEntity(data.readBlockPos()));
+    }
+
+    public ContainerFermenter(int id, Inventory inv, BlockEntityFermenter te) {
+        super(RotaryMenus.FERMENTER.get(), id, inv, te);
+        fermenter = te;
+
+        // catalyst over feedstock on the left, product on the right — coordinates from the
+        // original 1.7 ContainerFermenter / fermentergui.png.
+        this.addSlot(te.itemHandler.slot(0, 55, 17));
+        this.addSlot(te.itemHandler.slot(1, 55, 53));
+        this.addSlot(new ResultSlotItemHandler(te.itemHandler, 2, 116, 35));
+
+        this.addPlayerInventory(inv);
+    }
+
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, fermenter, "tank");
+    }
+
+    @Override
+    public void setData(int par1, int par2) {
+        switch (par1) {
+            case 0 -> fermenter.fermenterCookTime = par2;
+            case 1 -> fermenter.temperature = par2;
+        }
+    }
+}

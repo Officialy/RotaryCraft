@@ -12,7 +12,6 @@ package reika.rotarycraft.renders.dmi;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -36,8 +35,8 @@ public class RenderWinder extends RotaryTERenderer<BlockEntityWinder> {
         winderModel = new WinderModel(pContext.bakeLayer(RotaryModelLayers.WINDER));
     }
 
-    public void renderBlockEntityWinderAt(PoseStack stack, BlockEntityWinder tile, MultiBufferSource bufferSource, int light) {
-        VertexConsumer tex = bufferSource.getBuffer(RenderTypes.entitySolid(WinderModel.TEXTURE_LOCATION));
+    public void renderBlockEntityWinderAt(PoseStack stack, BlockEntityWinder tile, VertexConsumer bufferSource, int light) {
+        VertexConsumer tex = bufferSource;
         boolean hasSpring = !tile.getStackInSlot(0).isEmpty() && tile.getStackInSlot(0).getItem() instanceof ItemCoil;
         winderModel.renderAll(stack, tex, light, tile, ReikaJavaLibrary.makeListFrom(hasSpring), -tile.phi, 0);
     }
@@ -48,7 +47,7 @@ public class RenderWinder extends RotaryTERenderer<BlockEntityWinder> {
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntityWinder winder)
             renderBlockEntityWinderAt(stack, winder, mbs, light);
     }

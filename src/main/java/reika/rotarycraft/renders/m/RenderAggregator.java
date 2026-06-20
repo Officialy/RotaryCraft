@@ -30,7 +30,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityAggregatorAt(BlockEntityAggregator tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAggregatorAt(BlockEntityAggregator tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        ModelAggregator var14;
 //        var14 = AggregatorModel;
 //
@@ -55,7 +55,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityAggregatorAt((BlockEntityAggregator) tile, par2, par4, par6, par8);
 //        if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {

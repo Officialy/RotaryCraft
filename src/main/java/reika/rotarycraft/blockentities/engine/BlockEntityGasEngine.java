@@ -27,6 +27,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.auxiliary.interfaces.UpgradeableMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
+import reika.rotarycraft.items.tools.ItemEngineUpgrade;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerEthanol;
 import reika.rotarycraft.registry.*;
 
@@ -42,20 +43,28 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
     }
     @Override
     public void upgrade(ItemStack is) {
-        CompoundTag NBT = new CompoundTag();
+        // Gas -> Sport is a distinct block in the port (engines were split from one metadata block
+        // into a block per type), so the upgrade replaces GAS_ENGINE with PERFORMANCE_ENGINE and
+        // carries the engine state across via NBT. Orientation lives in NBT (read directions),
+        // so it survives the swap; no FACING blockstate to preserve (engine blocks are plain Blocks).
         type = EngineType.SPORT;
+        CompoundTag NBT = new CompoundTag();
         this.saveAdditional(NBT);
+        // Clear our inventory first so removing the gas block does not drop the carried items;
+        // they are restored from NBT into the performance engine below.
+        for (int i = 0; i < itemHandler.getSlots(); i++)
+            itemHandler.setStackInSlot(i, ItemStack.EMPTY);
         level.setBlock(worldPosition, Blocks.AIR.defaultBlockState(), 1);
-        level.setBlock(worldPosition, this.getBlockEntityBlockID().defaultBlockState(), type.ordinal(), 3);
-        BlockEntityEngine te = (BlockEntityEngine) level.getBlockEntity(worldPosition);
-        te.load(NBT);
-        this.syncAllData(true);
-        te.syncAllData(true);
+        level.setBlock(worldPosition, RotaryBlocks.PERFORMANCE_ENGINE.get().defaultBlockState(), 3);
+        if (level.getBlockEntity(worldPosition) instanceof BlockEntityEngine te) {
+            te.load(NBT);
+            te.syncAllData(true);
+        }
         level.updateNeighborsAt(worldPosition, getBlockState().getBlock());
     }
 
     public boolean canUpgradeWith(ItemStack item) {
-        return item.getItem() == RotaryItems.UPGRADE.get();
+        return ItemEngineUpgrade.getUpgrade(item) == ItemEngineUpgrade.UpgradeType.PERFORMANCE;
     }
 
     @Override
@@ -76,19 +85,6 @@ public class BlockEntityGasEngine extends BlockEntityEngine implements Upgradeab
     @Override
     protected boolean getRequirements(Level world, BlockPos pos) {
         return !fuel.isEmpty();
-    }
-
-    @Override
-    protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundTick++;
-        if (this.isMuffled(world, pos)) {
-            volume *= 0.3125F;
-        }
-        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
-            return;
-        soundTick = 0;
-
-        SoundRegistry.CAR.playSoundAtBlock(world, pos, 0.33F * volume, 0.9F * pitchMultiplier);
     }
 
     @Override

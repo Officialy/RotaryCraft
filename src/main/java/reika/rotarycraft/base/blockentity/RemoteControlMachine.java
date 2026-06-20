@@ -37,7 +37,7 @@ public abstract class RemoteControlMachine extends BlockEntitySpringPowered {
         for (int i = 0; i < 3; i++) {
             if (itemHandler.getStackInSlot(i + 1).isEmpty())
                 colors[i] = -1;
-            else if (itemHandler.getStackInSlot(i + 1).getItem() != Items.BLACK_DYE)
+            else if (itemHandler.getStackInSlot(i + 1).getItem() != Items.DYE.black())
                 colors[i] = -1;
             else
                 colors[i] = itemHandler.getStackInSlot(i + 1).getDamageValue();
@@ -62,7 +62,7 @@ public abstract class RemoteControlMachine extends BlockEntitySpringPowered {
     public boolean isItemValidForSlot(int i, ItemStack is) {
         if (i == 0)
             return super.isItemValidForSlot(i, is);
-        return is.getItem() == Items.BLACK_DYE;
+        return is.getItem() == Items.DYE.black();
     }
 
     /*@Override

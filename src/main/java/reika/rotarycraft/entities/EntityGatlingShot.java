@@ -17,6 +17,7 @@
 //import reika.dragonapi.libraries.registry.ReikaParticleHelper;
 //import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
 //import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.network.FriendlyByteBuf;
 //import net.minecraft.util.Mth;

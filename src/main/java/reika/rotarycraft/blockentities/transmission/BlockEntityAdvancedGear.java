@@ -18,7 +18,9 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -28,10 +30,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.ManagedItemHandler;
+import reika.dragonapi.interfaces.blockentity.HasItemHandler;
 import reika.dragonapi.interfaces.blockentity.PartialInventory;
 import reika.dragonapi.interfaces.blockentity.PartialTank;
 import reika.dragonapi.interfaces.blockentity.ToggleTile;
@@ -54,16 +57,16 @@ import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
 import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 import reika.rotarycraft.base.blockentity.BlockEntity1DTransmitter;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
+import reika.rotarycraft.gui.container.machine.BlankContainer;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerCVT;
 
 import reika.rotarycraft.registry.*;
 
-// TODO(1.21.9): the {@code IItemHandler} and {@code IFluidHandler} interfaces here are both
-// the deprecated NeoForge ones. The class has hand-written {@code getSlots/getStackInSlot/
-// insertItem/extractItem/getSlotLimit/isItemValid} implementations rather than holding an
-// internal ManagedItemHandler, so a clean migration needs an actual storage refactor. Kept
-// implementing the legacy interfaces for now; suppression is documented technical debt.
+// The belt inventory is a 32-slot {@link ManagedItemHandler} (slots 0-30 raise the gear ratio,
+// slot 31 is the belt required for the CVT to run at all). {@code IFluidHandler} is still the
+// deprecated NeoForge interface (the lubricant tank hasn't been migrated yet) hence the suppression.
 @SuppressWarnings("removal")
-public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements IItemHandler, PowerGenerator, PartialInventory, PartialTank, PipeConnector, IFluidHandler, ToggleTile, CVTController {
+public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements HasItemHandler, PowerGenerator, PartialInventory, PartialTank, PipeConnector, IFluidHandler, ToggleTile, CVTController {
 
     public static final int WORMRATIO = 64;
     private final HybridTank lubricant = new HybridTank("advgear", 20000);
@@ -80,7 +83,26 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     private boolean isCreative;
     private CVTMode cvtMode = CVTMode.MANUAL;
     private CVTController controller;
-    private ItemStack[] belts = new ItemStack[31];
+    /**
+     * Belt inventory: slots 0-30 are the ratio belts counted by {@link #getMaxRatio()}, slot 31
+     * is the belt {@link #hasRequiredBelt() required} for the CVT to transmit power at all.
+     */
+    public final ManagedItemHandler beltHandler = new ManagedItemHandler(32) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return getGearType() == GearType.CVT && ReikaItemHelper.matchStacks(stack, RotaryItems.BELT);
+        }
+    };
     private int targetTorque = 1;
     private final GearType gearType;
     private boolean enabled = true;
@@ -500,35 +522,20 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     }
 
     public int getMaxRatio() {
-        if (belts[0] == null)
-            return 1;
-         if (belts[0].getItem() != RotaryItems.BELT.get() || belts[0] != RotaryItems.BELT.get().getDefaultInstance())
-            return 1;
-        for (int i = 1; i <= 2; i++) {
-            if (belts[i] == null)
-                return 2;
-            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i] != RotaryItems.BELT.get().getDefaultInstance())
-                return 2;
+        int beltCount = 0;
+        for (int i = 0; i < 31; i++) {
+            ItemStack is = beltHandler.getStackInSlot(i);
+            if (is == null || is.isEmpty() || !ReikaItemHelper.matchStacks(is, RotaryItems.BELT))
+                break;
+            beltCount++;
         }
-        for (int i = 3; i <= 6; i++) {
-            if (belts[i] == null)
-                return 4;
-            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i] != RotaryItems.BELT.get().getDefaultInstance())
-                return 4;
-        }
-        for (int i = 7; i <= 14; i++) {
-            if (belts[i] == null)
-                return 8;
-            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i] != RotaryItems.BELT.get().getDefaultInstance())
-                return 8;
-        }
-        for (int i = 15; i <= 30; i++) {
-            if (belts[i] == null)
-                return 16;
-            if (belts[i].getItem() != RotaryItems.BELT.get() || belts[i] != RotaryItems.BELT.get().getDefaultInstance())
-                return 16;
-        }
-        return 32;
+        int f = beltCount + 1;
+        return ReikaMathLibrary.isPowerOfTwo(f) ? f : ReikaMathLibrary.ceil2exp(f) / 2;
+    }
+
+    private boolean hasRequiredBelt() {
+        ItemStack is = beltHandler.getStackInSlot(31);
+        return is != null && !is.isEmpty() && ReikaItemHelper.matchStacks(is, RotaryItems.BELT);
     }
 
     @Override
@@ -640,7 +647,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
                         ratio = this.updateAutoRatio();
                     }
                     int ratio = this.getCVTRatio();
-                    if (this.hasLubricant()) {
+                    if (this.hasLubricant() && this.hasRequiredBelt()) {
                         boolean speed = true;
                         if (ratio > 0) {
                             if (omegain <= RotaryConfig.omegalimit / ratio)
@@ -778,11 +785,12 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
         // 26.1: ItemStack.save(CompoundTag) removed; round-trip via ItemStack.CODEC + RegistryOps.
         var regAccSave = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
         var opsSave = regAccSave.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
-        for (int i = 0; i < belts.length; i++) {
-            if (belts[i] != null && !belts[i].isEmpty()) {
+        for (int i = 0; i < beltHandler.getSlots(); i++) {
+            ItemStack belt = beltHandler.getStackInSlot(i);
+            if (belt != null && !belt.isEmpty()) {
                 CompoundTag entry = new CompoundTag();
                 entry.putByte("Slot", (byte) i);
-                net.minecraft.world.item.ItemStack.CODEC.encodeStart(opsSave, belts[i]).result()
+                net.minecraft.world.item.ItemStack.CODEC.encodeStart(opsSave, belt).result()
                         .ifPresent(stackTag -> entry.put("Stack", stackTag));
                 nbttaglist.add(entry);
             }
@@ -799,73 +807,36 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     public void load(CompoundTag NBT) {
         super.load(NBT);
         ListTag nbttaglist = NBT.getListOrEmpty("Items");
-        belts = new ItemStack[this.getSlots()];
 
         var regAccLoad = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
         var opsLoad = regAccLoad.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        for (int i = 0; i < beltHandler.getSlots(); i++)
+            beltHandler.setStackInSlot(i, ItemStack.EMPTY);
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag entry = nbttaglist.getCompoundOrEmpty(i);
             byte slot = entry.getByteOr("Slot", (byte) 0);
-            if (slot >= 0 && slot < belts.length) {
+            if (slot >= 0 && slot < beltHandler.getSlots()) {
                 var stackTag = entry.get("Stack");
-                if (stackTag != null) {
-                    belts[slot] = net.minecraft.world.item.ItemStack.CODEC.parse(opsLoad, stackTag).result().orElse(ItemStack.EMPTY);
-                } else {
-                    belts[slot] = ItemStack.EMPTY;
-                }
+                if (stackTag != null)
+                    beltHandler.setStackInSlot(slot, net.minecraft.world.item.ItemStack.CODEC.parse(opsLoad, stackTag).result().orElse(ItemStack.EMPTY));
             }
         }
     }
 
     @Override
-    public int getSlots() {
-        return belts.length;
+    public ManagedItemHandler getItemHandler() {
+        return beltHandler;
     }
 
+    // Server-side menu construction. The CVT exposes its belt inventory through ContainerCVT; the
+    // COIL (same BE class) has no inventory and uses a BlankContainer. WORM/HIGH have no GUI.
     @Override
-    public ItemStack getStackInSlot(int var1) {
-        return belts[var1];
-    }
-
-    @Override
-    public  ItemStack insertItem(int slot,  ItemStack stack, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public  ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return null;
-    }
-
-    @Override
-    public int getSlotLimit(int slot) {
-        return 1;
-    }
-
-    @Override
-    public boolean isItemValid(int slot,  ItemStack stack) {
-        return this.getGearType() == GearType.CVT && ReikaItemHelper.matchStacks(stack, RotaryItems.BELT);
-    }
-
-/*    @Override
-todo    public ItemStack decrStackSize(int var1, int var2) {
-        return ReikaInventoryHelper.decrStackSize(this, var1, var2);
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int var1) {
-        return ReikaInventoryHelper.getStackInSlotOnClosing(this, var1);
-    }*/
-
-// todo   @Override
-    public void setInventorySlotContents(int var1, ItemStack var2) {
-        belts[var1] = var2;
-    }
-
-    public void openInventory() {
-    }
-
-    public void closeInventory() {
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return switch (this.getGearType()) {
+            case CVT -> new ContainerCVT(id, inv, this);
+            case COIL -> new BlankContainer<>(RotaryMenus.COIL.get(), id, inv, this);
+            default -> null;
+        };
     }
 
     @Override

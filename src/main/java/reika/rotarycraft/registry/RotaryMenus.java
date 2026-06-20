@@ -82,12 +82,15 @@ public interface RotaryMenus {
 
     Supplier<MenuType<ContainerSorter>> SORTER = register("sorter", ContainerSorter::new);
     Supplier<MenuType<ContainerBigFurnace>> BIG_FURNACE = register("big_furnace", ContainerBigFurnace::new);
+    Supplier<MenuType<ContainerFermenter>> FERMENTER = register("fermenter", ContainerFermenter::new);
+    Supplier<MenuType<ContainerExtractor>> EXTRACTOR = register("extractor", ContainerExtractor::new);
+    Supplier<MenuType<ContainerPulseFurnace>> PULSE_FURNACE = register("pulse_furnace", ContainerPulseFurnace::new);
     Supplier<MenuType<ContainerCVT>> CVT = register("cvt", ContainerCVT::new);
     Supplier<MenuType<BlankContainer<BlockEntityAdvancedGear>>> COIL = register("coil", (id, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         BlockEntity te = inv.player.level().getBlockEntity(pos);
         return new BlankContainer<>(RotaryMenus.COIL.get(), id, inv, (BlockEntityAdvancedGear) te);
     });
-//    Supplier<MenuType<ContainerFillingStation>> FILLING_STATION = register("filling_station", ContainerFillingStation::new);
+    Supplier<MenuType<ContainerFillingStation>> FILLING_STATION = register("filling_station", ContainerFillingStation::new);
 
 }

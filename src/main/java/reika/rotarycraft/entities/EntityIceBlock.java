@@ -10,6 +10,7 @@
 package reika.rotarycraft.entities;
 
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
@@ -32,11 +33,11 @@ public class EntityIceBlock extends Entity {
     private LivingEntity target;
 
     public EntityIceBlock(final EntityType<? extends Entity> entityType, Level world) {
-        super(EntityType.BAT, world);
+        super(EntityTypes.BAT, world);
     }
 
     public EntityIceBlock(Level world, LivingEntity t) {
-        super(EntityType.BAT, world);
+        super(EntityTypes.BAT, world);
         if (t == null) {
             if (world instanceof ServerLevel sl) this.kill(sl);
             return;

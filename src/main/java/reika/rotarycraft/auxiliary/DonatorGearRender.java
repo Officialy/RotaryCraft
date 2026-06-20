@@ -12,10 +12,9 @@ package reika.rotarycraft.auxiliary;
 import org.joml.Quaternionf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +31,7 @@ public class DonatorGearRender implements PlayerRenderObj {
     }
 
     @Override
-    public void extractRenderState(PoseStack matrixStack, Player ep, float ptick, PlayerSpecificRenderer.PlayerRotationData dat) {
+    public void extractRenderState(PoseStack matrixStack, Player ep, float ptick, PlayerSpecificRenderer.PlayerRotationData dat, SubmitNodeCollector collector) {
         // 1.21.5 TODO: ItemRenderer.render moved to ItemModelResolver/ItemStackRenderState. This
         // donator gear rendering is stubbed pending a port to the new item rendering pipeline.
         matrixStack.pushPose();

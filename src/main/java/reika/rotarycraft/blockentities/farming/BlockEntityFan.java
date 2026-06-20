@@ -41,6 +41,7 @@ import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
 import reika.rotarycraft.auxiliary.interfaces.UpgradeableMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityBeamMachine;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.base.blocks.entity.BlockFan;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
 import reika.rotarycraft.registry.ConfigRegistry;
@@ -86,6 +87,10 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
    @Override
    public void updateEntity(Level world, BlockPos pos) {
        super.updateBlockEntity();
+       // Establish read/facing from the block's FACING state before reading power; without this
+       // `read` stays null (getPower returns immediately) and `facing` stays NORTH, so the fan
+       // neither receives power nor blows in the correct direction.
+       this.getIOSides(world, pos, getBlockState().getValue(BlockRotaryCraftMachine.FACING));
        this.getPower(false);
        power = (long) omega * (long) torque;
                this.makeBeam(world, pos);

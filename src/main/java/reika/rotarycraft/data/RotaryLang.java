@@ -41,6 +41,37 @@ public class RotaryLang extends LanguageProvider {
         // them again would emit a duplicate-key warning, so they're skipped here).
         RotaryItems.ITEMS.getEntries().forEach(holder ->
                 addItem(holder, prettify(holder.getId().getPath())));
+
+        addAdvancements();
+    }
+
+    // Titles + descriptions for the RotaryCraft advancements (see RotaryAdvancements /
+    // RoCAdvancementProvider). Keys: advancements.rotarycraft.<enum_lowercase>.{title,description}.
+    private void addAdvancements() {
+        adv("rcusebook", "The Handbook", "Obtain the RotaryCraft Handbook");
+        adv("dumbextractor", "Brute Force", "Build a DC Electric Engine");
+        adv("makesteel", "Forging Ahead", "Smelt HSLA Steel in a Blast Furnace");
+        adv("failsteel", "Solid Investment", "Compress HSLA Steel into a block");
+        adv("makeyeast", "Rise Up", "Produce Yeast");
+        adv("pump", "Pumping Iron", "Build a Pump");
+        adv("jetfuel", "Jet Set", "Refine a bucket of Jet Fuel");
+        adv("recycle", "Scrap Heap", "Recycle metal gear into HSLA Steel Scrap");
+        adv("jetengine", "Now We're Flying", "Build a Jet Engine");
+        adv("suckedintojet", "Spaghettification", "Get sucked into a running Jet Engine");
+        adv("bedrockbreaker", "Breaking Bedrock", "Break bedrock and collect Bedrock Dust");
+        adv("steamengine", "Full Steam Ahead", "Run a Steam Engine");
+        adv("steelshaft", "Drive Shaft", "Craft an HSLA Steel Shaft");
+        adv("bedrockshaft", "Unbreakable", "Craft a Bedrock Alloy Shaft");
+        adv("jetchicken", "Chicken Jet-er", "Feed fifty chickens to a Jet Engine");
+        adv("jetfail", "Catastrophic Failure", "Cause a violent Jet Engine failure");
+        adv("floodlight", "Let There Be Light", "Power a Floodlight to full brightness");
+        adv("landmine", "Watch Your Step", "Step on an armed Landmine");
+        adv("overpressure", "Keeping Cool", "Cool a Steam Engine with a Cooling Fin");
+    }
+
+    private void adv(String name, String title, String description) {
+        add("advancements.rotarycraft." + name + ".title", title);
+        add("advancements.rotarycraft." + name + ".description", description);
     }
 
     /**

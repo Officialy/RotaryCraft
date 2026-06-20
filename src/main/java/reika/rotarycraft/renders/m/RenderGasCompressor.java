@@ -27,7 +27,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityGasCompressorAt(BlockEntityFluidCompressor tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityGasCompressorAt(BlockEntityFluidCompressor tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -59,7 +59,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityGasCompressorAt((BlockEntityFluidCompressor) tile, par2, par4, par6, par8);
 //    }

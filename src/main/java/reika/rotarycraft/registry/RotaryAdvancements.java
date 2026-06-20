@@ -9,18 +9,16 @@
  ******************************************************************************/
 package reika.rotarycraft.registry;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.client.gui.screens.advancements.AdvancementsScreen;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.loading.FMLEnvironment;
-import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
 
 import java.util.Locale;
@@ -28,7 +26,7 @@ import java.util.Locale;
 public enum RotaryAdvancements {
 
     RCUSEBOOK(1, 1, RotaryItems.HANDBOOK.get(), null, false),
-    DUMBEXTRACTOR(1, -1, EngineType.DC.getCraftedProduct(), null, false),
+    DUMBEXTRACTOR(1, -1, RotaryBlocks.DC_ENGINE.get(), null, false),
     MAKESTEEL(0, 0, RotaryItems.HSLA_STEEL_INGOT.get(), null, false),
     FAILSTEEL(1, 2, RotaryBlocks.HSLA_STEEL_BLOCK.get(), MAKESTEEL, false),
     //    WORKTABLE(-2, 1, MachineRegistry.WORKTABLE, MAKESTEEL, false),
@@ -40,11 +38,11 @@ public enum RotaryAdvancements {
 //    BORER(2, 6, MachineRegistry.BORER, PCB, false),
     JETFUEL(4, -4, RotaryItems.JET_FUEL_BUCKET.get(), MAKEYEAST, false), //make
     RECYCLE(4, -8, RotaryItems.HSLA_STEEL_SCRAP.get(), JETFUEL, false),
-    JETENGINE(6, -4, EngineType.JET.getCraftedProduct(), JETFUEL, true),
+    JETENGINE(6, -4, RotaryBlocks.JET_ENGINE.get(), JETFUEL, true),
 //    MAKERAILGUN(0, 8, MachineRegistry.RAILGUN, PCB, true),
     SUCKEDINTOJET(6, -8, Items.ROTTEN_FLESH, JETENGINE, false),
     BEDROCKBREAKER(-4, 2, RotaryItems.BEDROCK_DUST.get(), MAKESTEEL, false), //break bedrock with
-    STEAMENGINE(-8, 0, EngineType.STEAM.getCraftedProduct(), PUMP, false), //turn on
+    STEAMENGINE(-8, 0, RotaryBlocks.STEAM_ENGINE.get(), PUMP, false), //turn on
     STEELSHAFT(-2, -2, RotaryItems.HSLA_SHAFT.get(), MAKESTEEL, false), //make
     //    CVT(-2, -4, MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(1), STEELSHAFT, false), //make
     BEDROCKSHAFT(-4, 6, RotaryItems.BEDROCK_ALLOY_SHAFT.get(), BEDROCKBREAKER, false), //make
@@ -78,63 +76,61 @@ public enum RotaryAdvancements {
     public final int xPosition;
     public final int yPosition;
     public final boolean isSpecial;
-    private final ItemStack iconItem;
+    // Deferred so the enum can be class-loaded during datagen before item components are bound
+    // (a {@code new ItemStack(...)} at static-init time throws "Components not bound yet").
+    private final java.util.function.Supplier<Item> iconSupplier;
 
     RotaryAdvancements(int x, int y, Item icon, RotaryAdvancements preReq, boolean special) {
-        this(x, y, new ItemStack(icon), preReq, special);
+        this(x, y, () -> icon, preReq, special);
     }
 
     RotaryAdvancements(int x, int y, Block icon, RotaryAdvancements preReq, boolean special) {
-        this(x, y, new ItemStack(icon), preReq, special);
+        this(x, y, () -> icon.asItem(), preReq, special);
     }
 
     RotaryAdvancements(int x, int y, MachineRegistry icon, RotaryAdvancements preReq, boolean special) {
-        this(x, y, icon.getBlockState().getBlock(), preReq, special);
+        this(x, y, () -> icon.getBlockState().getBlock().asItem(), preReq, special);
     }
 
-    RotaryAdvancements(int x, int y, ItemStack icon, RotaryAdvancements preReq, boolean special) {
+    RotaryAdvancements(int x, int y, java.util.function.Supplier<Item> icon, RotaryAdvancements preReq, boolean special) {
         xPosition = x;
         yPosition = y;
         dependency = preReq;
-        iconItem = icon;
+        iconSupplier = icon;
         isSpecial = special;
     }
 
-    public static void registerAchievements() {
-        //ReikaJavaLibrary.pConsole(Arrays.toString(RotaryCraft.config.achievementIDs));
-      /*todo  for (int i = 0; i < list.length; i++) {
-            RotaryAdvancements a = list[i];
-            int id = RotaryCraft.config.getAchievementID(i);
-            Advancement dep = a.hasDependency() ? a.dependency.get() : null;
-            Advancement ach = new Advancement(Identifier.parse(a.name().toLowerCase(Locale.ENGLISH)), a.name().toLowerCase(Locale.ENGLISH), a.xPosition, a.yPosition, a.iconItem, dep);
-            //ReikaJavaLibrary.pConsole(a+":"+id+":"+StatList.getOneShotStat(id));
-            //if (StatList.getOneShotStat(id) != null)
-            //	throw new IDConflictException(RotaryCraft.getInstance(), "The mod's achievement IDs are conflicting with another at ID "+id+" ("+a+" is trying to overwrite "+StatList.getOneShotStat(id).statName+").\nCheck the config file and change them.");
-            if (a.isSpecial)
-                ach.setSpecial();
-            RotaryCraft.achievements[i] = ach;
-            ach.registerStat();
-            RotaryCraft.LOGGER.info("Registering achievement " + a + " with ID " + id + " and ingame name \"" + a + "\" (slot " + i + ").");
-        }
-                AdvancementsScreen.registerAchievementPage(new RCAchievementPage("RotaryCraft", RotaryCraft.achievements));*/
+    /** The advancement id this enum maps to (datagen emits {@code data/rotarycraft/advancement/<id>}). */
+    public Identifier getId() {
+        return Identifier.fromNamespaceAndPath(RotaryCraft.MODID, this.name().toLowerCase(Locale.ENGLISH));
     }
 
-    public Advancement get() {
-        return RotaryCraft.achievements[this.ordinal()];
+    /** Icon item, used by the datagen advancement provider for the display + has-item criterion. */
+    public Item getIconItem() {
+        return iconSupplier.get();
     }
 
+    /**
+     * 26.1: achievements are data-driven advancements (StatList / AchievementPage are gone). Code
+     * "do X" advancements are emitted with an impossible criterion, so this grants them by awarding
+     * every remaining criterion of the matching advancement to the player on the server.
+     */
     public void triggerAchievement(Player ep) {
         if (!ConfigRegistry.ACHIEVEMENTS.getState())
             return;
-        if (ep == null) {
-            if (FMLEnvironment.getDist() == Dist.DEDICATED_SERVER) {
-                //ReikaChatHelper.write("Player does not exist to receive their achievement \""+this+"\"!");
-                //ReikaJavaLibrary.pConsole("Player does not exist to receive their achievement \""+this+"\"!");
-                RotaryCraft.LOGGER.debug("Player does not exist to receive their achievement \"" + this + "\"!");
-            }
-        } //else {
-//         todo   ep.triggerAchievement(this.get());
-//        }
+        if (!(ep instanceof ServerPlayer sp))
+            return;
+        MinecraftServer server = sp.level().getServer();
+        if (server == null)
+            return;
+        AdvancementHolder adv = server.getAdvancements().get(this.getId());
+        if (adv == null)
+            return;
+        AdvancementProgress progress = sp.getAdvancements().getOrStartProgress(adv);
+        if (progress.isDone())
+            return;
+        for (String criterion : progress.getRemainingCriteria())
+            sp.getAdvancements().award(adv, criterion);
     }
 
     public boolean hasDependency() {

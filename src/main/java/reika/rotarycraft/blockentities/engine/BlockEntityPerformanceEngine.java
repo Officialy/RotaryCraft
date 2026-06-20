@@ -97,20 +97,6 @@ public class BlockEntityPerformanceEngine extends BlockEntityEngine {
     }
 
     @Override
-    protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundTick++;
-        if (this.isMuffled(world, pos)) {
-            volume *= 0.3125F;
-        }
-
-        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
-            return;
-        soundTick = 0;
-
-        SoundRegistry.CAR.playSoundAtBlock(world, pos, 0.33F * volume, 0.9F * pitchMultiplier);
-    }
-
-    @Override
     protected void offlineCooldown(Level world, BlockPos pos, int Tamb) {
         if (temperature > Tamb + 300)
             temperature -= (temperature - Tamb) / 100;

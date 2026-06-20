@@ -249,9 +249,13 @@ public class PacketHandlerCore implements PacketHandler {
                     }
                     break;
                 }*/
-                case BEVEL:
-                    ((BlockEntityBevelGear) te).direction = data[0];
+                case BEVEL: {
+                    BlockEntityBevelGear bevelTe = (BlockEntityBevelGear) te;
+                    bevelTe.direction = data[0];
+                    bevelTe.iotick = 512;
+                    bevelTe.setChanged();
                     break;
+                }
                 case SPLITTERMODE:
                     ((BlockEntitySplitter) te).setMode(data[0]);
                     break;

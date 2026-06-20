@@ -12,7 +12,6 @@ package reika.rotarycraft.renders.mi;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
@@ -40,12 +39,12 @@ public class RenderBigFurnace extends RotaryTERenderer<BlockEntityLavaSmeltery> 
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntityBigFurnaceAt(BlockEntityLavaSmeltery tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+    public void renderBlockEntityBigFurnaceAt(BlockEntityLavaSmeltery tile, PoseStack stack, VertexConsumer bufferSource, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
 
-        modelBigFurnace.renderToBuffer(stack, bufferSource.getBuffer(modelBigFurnace.renderType(BigFurnaceModel.TEXTURE_LOCATION)), light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        modelBigFurnace.renderToBuffer(stack, bufferSource, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.popPose();
     }
 
@@ -55,7 +54,7 @@ public class RenderBigFurnace extends RotaryTERenderer<BlockEntityLavaSmeltery> 
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntityLavaSmeltery smeltery)
             renderBlockEntityBigFurnaceAt(smeltery, stack, mbs, light);
     }

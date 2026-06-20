@@ -27,4 +27,10 @@ public class BlockFrictionHeater extends BlockBasicMachine {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return (pLevel1, pPos, pState1, pBlockEntity) -> ((BlockEntityFurnaceHeater) pBlockEntity).updateEntity(pLevel1, pPos);
     }
+
+    // rendered in-world by RenderFriction (BER); the block model itself is invisible
+    @Override
+    protected boolean isCustomRendered() {
+        return true;
+    }
 }

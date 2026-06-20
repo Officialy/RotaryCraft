@@ -9,39 +9,32 @@
  ******************************************************************************/
 package reika.rotarycraft.renders;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaPhysicsHelper;
 import reika.dragonapi.libraries.rendering.ReikaColorAPI;
-import reika.rotarycraft.registry.EngineType;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.IORenderer;
-import reika.rotarycraft.auxiliary.interfaces.AlternatingRedstoneUser;
 import reika.rotarycraft.auxiliary.interfaces.RedstoneUpgradeable;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.blockentities.engine.BlockEntityHydroEngine;
 import reika.rotarycraft.blockentities.engine.BlockEntityJetEngine;
 import reika.rotarycraft.models.engine.*;
-import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.EngineType;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
 //@SideOnly(Dist.CLIENT)
@@ -77,7 +70,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntityEngineAt(PoseStack stack, BlockEntityEngine tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntityEngineAt(PoseStack stack, BlockEntityEngine tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
 
 //        this.setupGL(stack, tile, par2, par4, par6);
@@ -95,52 +88,42 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
 
         switch (tile.getEngineType()) {
             case DC -> {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid((DCModel.TEXTURE_LOCATION)));
+                VertexConsumer vertexconsumer = bufferSource;
                 dcModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi);
             }
             case WIND -> {
-//                stack.mulPose(new Quaternion(90, 0.0F, 1.0F, 0.0F));
-                var s = 0.7;
-                var d = 0.375;
-//                stack.scale((float) s, (float) s, (float) s);
-                double d2 = 0.2;
-//                stack.translate(0, d, 0);
-//                stack.translate(d2, 0, 0);
-//                stack.translate(0, -d, 0);
-//                stack.translate(-d2, 0, 0);
-//                stack.scale((float) (1D / s), (float) (1D / s), (float) (1D / s));
-                stack.mulPose(Axis.YP.rotationDegrees(90));
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid((WindModel.TEXTURE_LOCATION)));
+                VertexConsumer vertexconsumer = bufferSource;
+                stack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(270));
                 windModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
             }
             case STEAM -> {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid((SteamModel.TEXTURE_LOCATION)));
-//                RotaryCraft.LOGGER.info(tile.phi);
+                VertexConsumer vertexconsumer = bufferSource;
                 steamModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi);
             }
             case GAS -> {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid((CombustionModel.TEXTURE_LOCATION)));
+                VertexConsumer vertexconsumer = bufferSource;
                 combModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
             }
             case AC -> {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid((ACModel.TEXTURE_LOCATION)));
+                VertexConsumer vertexconsumer = bufferSource;
                 acModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
             }
             case SPORT -> {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid((PerformanceModel.TEXTURE_LOCATION)));
+                VertexConsumer vertexconsumer = bufferSource;
                 perfModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
             }
-//            case HYDRO:
-//                BlockEntityHydroEngine eng = (BlockEntityHydroEngine) tile;
-//                var21.renderAll(stack, tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), eng.isReversed() ? tile.phi : -tile.phi, 0);
-//                break;
+            case HYDRO -> {
+                BlockEntityHydroEngine eng = (BlockEntityHydroEngine) tile;
+                Identifier hydroTex = eng.isBedrock() ? HydroModel.BEDROCK_TEXTURE_LOCATION : HydroModel.TEXTURE_LOCATION;
+                VertexConsumer vertexconsumer = bufferSource;
+                hydroModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(eng.failed, eng.isBedrock()), -tile.phi, 0);
+            }
             case MICRO -> {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid((MicroTurbineModel.TEXTURE_LOCATION)));
+                VertexConsumer vertexconsumer = bufferSource;
                 microModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
-                stack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(90));
             }
             case JET -> {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid(textureWithSuffix(JetModel.TEXTURE_LOCATION, "jettex.png")));
+                VertexConsumer vertexconsumer = bufferSource;
                 jetModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
             }
 //            case JET -> {
@@ -236,7 +219,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
     }
 
     /**
-     * 1.21.5 submit hook. submitCustomGeometry takes a single RenderType, so we pre-compute the
+     * submit hook. submitCustomGeometry takes a single RenderType, so we pre-compute the
      * one the legacy switch would have requested (engine-type → texture → entitySolid RT) before
      * queueing. Snapshotting the pose into a fresh PoseStack lets renderBlockEntityEngineAt's
      * unchanged transform code run inside the deferred lambda after the outer poseStack has been
@@ -250,7 +233,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
         if (!(be instanceof BlockEntityEngine engine)) return;
         if (!this.doRenderModel(poseStack, engine)) return;
 
-        Identifier tex = textureForEngine(engine.getEngineType());
+        Identifier tex = textureForEngine(engine);
         if (tex == null) return;
 
         PoseStack snapped = new PoseStack();
@@ -259,8 +242,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
         RenderType rt = RenderTypes.entitySolid(tex);
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntityEngineAt(snapped, engine, oneRT, light);
+            renderBlockEntityEngineAt(snapped, engine, vc, light);
         });
 
         if (engine instanceof BlockEntityJetEngine jet && jet.getTemperature() > 600) {
@@ -305,18 +287,15 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
             stack.mulPose(Axis.ZP.rotationDegrees(180));
         }
 
-        double s = 1.005;
-        stack.pushPose();
+        // Single additive shell, scaled about the model centre. The legacy code's
+        // translate(0, 1-s, (1-s)/4) is exactly "scale about centre (0, 1, 0.25)" — dropping it
+        // (and scaling about the transform origin up at y=1.5) shifted the glow down so the top
+        // faces fell outside it. Keep the centre-compensating translate; a single 2%-larger shell
+        // sits cleanly outside every face, so no corner z-fighting and no vertical shift.
+        double s = 1.02;
         stack.translate(0, 1 - s, (1 - s) / 4);
         stack.scale((float) s, (float) s, (float) s);
         jetModel.renderAllColored(stack, vc, 15728880, engine, null, phi, 0, color);
-        stack.popPose();
-
-        stack.pushPose();
-        stack.translate(0, s - 1, -(1 - s) / 4);
-        stack.scale((float) (1 / s), (float) (1 / s), (float) (1 / s));
-        jetModel.renderAllColored(stack, vc, 15728880, engine, null, phi, 0, color);
-        stack.popPose();
 
         stack.popPose();
     }
@@ -328,8 +307,8 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
      * legacy switch's JET case is commented out anyway. HYDRO isn't in the current EngineType
      * enum.
      */
-    private static Identifier textureForEngine(EngineType type) {
-        return switch (type) {
+    private static Identifier textureForEngine(BlockEntityEngine engine) {
+        return switch (engine.getEngineType()) {
             case DC -> DCModel.TEXTURE_LOCATION;
             case STEAM -> SteamModel.TEXTURE_LOCATION;
             case GAS -> CombustionModel.TEXTURE_LOCATION;
@@ -337,16 +316,16 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
             case SPORT -> PerformanceModel.TEXTURE_LOCATION;
             case MICRO -> MicroTurbineModel.TEXTURE_LOCATION;
             case WIND -> WindModel.TEXTURE_LOCATION;
-            case JET -> // JetModel's TEXTURE_LOCATION is a directory prefix the legacy animation
-                    // logic appended a suffix to. Until that's ported, point straight at the
-                    // existing {@code jettex.png} so the jet engine actually renders in-world.
-                    textureWithSuffix(JetModel.TEXTURE_LOCATION, "jettex.png");
+            case JET -> textureWithSuffix(JetModel.TEXTURE_LOCATION, "jettex.png");
+            case HYDRO -> ((BlockEntityHydroEngine) engine).isBedrock()
+                    ? HydroModel.BEDROCK_TEXTURE_LOCATION
+                    : HydroModel.TEXTURE_LOCATION;
         };
     }
 
     // Legacy 1.7.10 signature retained for reference / item-stack rendering callers; vanilla no
     // longer invokes this — submit() above is the live path.
-    public void render(BlockEntityEngine tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
+    public void render(BlockEntityEngine tile, float v, PoseStack stack, VertexConsumer multiBufferSource, int i, int i1) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityEngineAt(stack, tile, multiBufferSource, i);
         if (tile instanceof RedstoneUpgradeable) {
@@ -370,7 +349,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
         }
     }
 
-    private void renderRedstoneFrame(PoseStack stack, BlockEntityEngine tile, int x, int y, int z, MultiBufferSource bufferSource, float par2) {
+    private void renderRedstoneFrame(PoseStack stack, BlockEntityEngine tile, int x, int y, int z, VertexConsumer bufferSource, float par2) {
         // TODO: Port to 26.1 rendering API (Tesselator.getBuilder() + vertex().uv().endVertex() + end() all removed)
     }
 }

@@ -16,6 +16,7 @@
 //import reika.rotarycraft.blockentities.BlockEntityGrindstone;
 //import com.mojang.blaze3d.vertex.BufferBuilder;
 //import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 //import com.mojang.blaze3d.vertex.Tesselator;
 //import com.mojang.math.Quaternion;
 //import net.minecraft.BlockEntity.BlockEntity;
@@ -46,7 +47,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityGrindstoneAt(PoseStack stack, BlockEntityGrindstone tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityGrindstoneAt(PoseStack stack, BlockEntityGrindstone tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -90,7 +91,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityGrindstoneAt((BlockEntityGrindstone) tile, par2, par4, par6, par8);
 //        this.renderTool((BlockEntityGrindstone) tile, par2, par4, par6);

@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.fml.loading.FMLEnvironment;
 import reika.dragonapi.instantiable.data.maps.PluralMap;
@@ -53,20 +52,18 @@ public final class RotaryDescriptions {
     private static final HashMap<HandbookRegistry, Integer> lengths = new HashMap<>();
     private static final ArrayList<HandbookRegistry> categories = new ArrayList<>();
     private static String PARENT = getParent(true);
-    private static final XMLInterface parents = loadData("categories");
-    private static final XMLInterface machines = loadData("machines");
-    private static final XMLInterface trans = loadData("trans");
-    private static final XMLInterface converter = loadData("converter");
-    private static final XMLInterface engines = loadData("engines");
-    private static final XMLInterface tools = loadData("tools");
-    private static final XMLInterface resources = loadData("resource");
-    private static final XMLInterface miscs = loadData("misc");
-    private static final XMLInterface infos = loadData("info");
+    private static XMLInterface parents = loadData("categories");
+    private static XMLInterface machines = loadData("machines");
+    private static XMLInterface trans = loadData("trans");
+    private static XMLInterface converter = loadData("converter");
+    private static XMLInterface engines = loadData("engines");
+    private static XMLInterface tools = loadData("tools");
+    private static XMLInterface resources = loadData("resource");
+    private static XMLInterface miscs = loadData("misc");
+    private static XMLInterface infos = loadData("info");
 
     static {
         loadNumericalData();
-
-        NeoForge.EVENT_BUS.register(new ReloadListener());
     }
 
     private static XMLInterface loadData(String name) {
@@ -80,21 +77,38 @@ public final class RotaryDescriptions {
         categories.add(h);
     }
 
+    // The handbook XML files live at assets/rotarycraft/resources/ (with per-language
+    // subfolders), so the jar path must be absolute — a relative path would resolve
+    // against the reika.rotarycraft package.
+    private static final String RESOURCE_ROOT = "/assets/rotarycraft/resources/";
+
     private static String getParent(boolean locale) {
-        return locale && FMLEnvironment.getDist() == Dist.CLIENT ? getLocalizedParent() : "resources/";
+        return locale && FMLEnvironment.getDist() == Dist.CLIENT ? getLocalizedParent() : RESOURCE_ROOT;
     }
 
     private static String getLocalizedParent() {
         String language = Minecraft.getInstance().getLanguageManager().getSelected();
-//        String lang = language.getCode();
-        if (hasLocalizedFor(language) && !"en_us".equals(language))
-            return "resources/" + language + "/";
-        return "resources/";
+        if ("en_us".equals(language))
+            return RESOURCE_ROOT;
+        if (hasLocalizedFor(language))
+            return RESOURCE_ROOT + language + "/";
+        // the bundled translation folders use legacy-style codes ("pt_BR"), while
+        // getSelected() reports lowercase ("pt_br")
+        String legacy = toLegacyCode(language);
+        if (hasLocalizedFor(legacy))
+            return RESOURCE_ROOT + legacy + "/";
+        return RESOURCE_ROOT;
+    }
+
+    private static String toLegacyCode(String language) {
+        int idx = language.indexOf('_');
+        if (idx < 0)
+            return language;
+        return language.substring(0, idx) + "_" + language.substring(idx + 1).toUpperCase(Locale.ENGLISH);
     }
 
     private static boolean hasLocalizedFor(String language) {
-//        String lang = language.getCode();
-        try (InputStream o = RotaryCraft.class.getResourceAsStream("resources/" + language + "/categories.xml")) {
+        try (InputStream o = RotaryCraft.class.getResourceAsStream(RESOURCE_ROOT + language + "/categories.xml")) {
             return o != null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,29 +158,46 @@ public final class RotaryDescriptions {
         machineNotes.put(data, m, subpage);
     }
 
-    /**
-     * Call this from the SERVER side!
-     */
     public static void reload() {
+        // rebuild rather than reread: the localized parent path can change when the
+        // selected language changes, and the path is baked in at construction
         PARENT = getParent(true);
 
         loadNumericalData();
 
-        machines.reread();
-        trans.reread();
-        engines.reread();
-        tools.reread();
-        resources.reread();
-        miscs.reread();
-        infos.reread();
-
-        parents.reread();
+        parents = loadData("categories");
+        machines = loadData("machines");
+        trans = loadData("trans");
+        converter = loadData("converter");
+        engines = loadData("engines");
+        tools = loadData("tools");
+        resources = loadData("resource");
+        miscs = loadData("misc");
+        infos = loadData("info");
 
         loadData();
     }
 
     private static void addEntry(HandbookRegistry h, String sg) {
         data.put(h, sg);
+    }
+
+    /**
+     * The XML page texts carry %-format specifiers filled from the registered data
+     * arrays. Several data registrations depend on machines not yet ported (e.g.
+     * the Extractor rates for MODINTERFACE, the friction-heater temperature for
+     * TUNGSTEN), so a mismatch must not kill the resource reload — log it and show
+     * the raw text instead.
+     */
+    private static String safeFormat(HandbookRegistry h, String text, Object... args) {
+        if (text == null)
+            return null;
+        try {
+            return String.format(text, args);
+        } catch (RuntimeException e) {
+            RotaryCraft.LOGGER.error("Handbook text for " + h + " has format specifiers with missing or mismatched data: " + e);
+            return text;
+        }
     }
 
     public static void loadData() {
@@ -204,11 +235,11 @@ public final class RotaryDescriptions {
                 for (String s : sub) {
                     String val = trans.getValueAtNode(s);
                     if (k == 0) {
-                        val = String.format(val, machineData.get(m));
-                        val = String.format(val, miscData.get(h));
+                        val = safeFormat(h, val, machineData.get(m));
+                        val = safeFormat(h, val, miscData.get(h));
                         addEntry(h, val);
                     } else {
-                        val = String.format(val, machineNotes.get(m, k));
+                        val = safeFormat(h, val, machineNotes.get(m, k));
                         notes.put(val, h, k - 1);
                     }
                     k++;
@@ -222,9 +253,9 @@ public final class RotaryDescriptions {
             //ReikaJavaLibrary.pConsole(h.name().toLowerCase()+":"+desc);
 
             if (machineData.containsKey(m))
-                desc = String.format(desc, machineData.get(m));
+                desc = safeFormat(h, desc, machineData.get(m));
             if (miscData.containsKey(h))
-                desc = String.format(desc, miscData.get(h));
+                desc = safeFormat(h, desc, miscData.get(h));
             addEntry(h, desc);
         }
 
@@ -237,7 +268,7 @@ public final class RotaryDescriptions {
                 for (String s : sub) {
                     String val = tools.getValueAtNode(s);
                     if (k == 0) {
-                        val = String.format(val, miscData.get(h));
+                        val = safeFormat(h, val, miscData.get(h));
                         addEntry(h, val);
                     } else {
                         notes.put(val, h, k - 1);
@@ -253,20 +284,19 @@ public final class RotaryDescriptions {
 
         for (HandbookRegistry h : resourcetabs) {
             String desc = resources.getValueAtNode("resource:" + h.name().toLowerCase(Locale.ENGLISH));
-            desc = String.format(desc, miscData.get(h));
+            desc = safeFormat(h, desc, miscData.get(h));
             addEntry(h, desc);
         }
 
         for (HandbookRegistry h : misctabs) {
             String desc = miscs.getValueAtNode("misc:" + h.name().toLowerCase(Locale.ENGLISH));
-            //ReikaJavaLibrary.pConsole(desc);
-            desc = String.format(desc, miscData.get(h));
+            desc = safeFormat(h, desc, miscData.get(h));
             addEntry(h, desc);
         }
 
         for (HandbookRegistry h : infotabs) {
             String desc = infos.getValueAtNode("info:" + h.name().toLowerCase(Locale.ENGLISH));
-            desc = String.format(desc, miscData.get(h));
+            desc = safeFormat(h, desc, miscData.get(h));
             addEntry(h, desc);
         }
 
@@ -286,8 +316,8 @@ public final class RotaryDescriptions {
                 desc = engines.getValueAtNode("engines:" + "solar".toLowerCase(Locale.ENGLISH) + DESC_SUFFIX);
                 aux = engines.getValueAtNode("engines:" + "solar".toLowerCase(Locale.ENGLISH) + NOTE_SUFFIX);
 
-                desc = String.format(desc, BlockEntitySolarTower.GENOMEGA);
-                aux = String.format(aux, BlockEntitySolarTower.GENOMEGA);
+                desc = safeFormat(h, desc, BlockEntitySolarTower.GENOMEGA);
+                aux = safeFormat(h, aux, BlockEntitySolarTower.GENOMEGA);
             }
 
             data.put(h, desc);
@@ -568,15 +598,9 @@ public final class RotaryDescriptions {
 
     public static class ReloadListener implements ResourceManagerReloadListener {
         @Override
-        public void onResourceManagerReload(ResourceManager p_10758_) {
+        public void onResourceManagerReload(ResourceManager manager) {
             RotaryDescriptions.reload();
         }
-
-        //@SubscribeEvent
-        //
-        //public void reload(ResourceReloadEvent evt) {
-        //}
-
     }
 }
 

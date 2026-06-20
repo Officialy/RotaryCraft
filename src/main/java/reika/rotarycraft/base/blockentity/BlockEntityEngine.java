@@ -66,16 +66,12 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public static final int FUELCAP = 240 * 1000;
     public static final int LUBECAP = 24 * 1000;
     public int temperature;
-    protected final ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("sound").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
+    protected final ParallelTicker timer = new ParallelTicker().addTicker("fuel").addTicker("temperature", ReikaTimeHelper.SECOND.getDuration());
     protected final HybridTank water = new HybridTank("enginewater", CAPACITY);
     protected final HybridTank lubricant = new HybridTank("enginelube", LUBECAP);
     protected final HybridTank fuel = new HybridTank("enginefuel", FUELCAP);
     protected final HybridTank air = new HybridTank("engineoxygen", 1000);
     protected final HybridTank[] tanks = {water, lubricant, fuel, air};
-    /**
-     * For timing control
-     */
-    public int soundTick = 2000;
     protected EngineType type = EngineType.DC;
     protected int backx;
     protected int backz;
@@ -188,6 +184,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             type = EngineType.SPORT;
         } else if (RotaryBlocks.MICRO_TURBINE.get() == block) {
             type = EngineType.MICRO;
+        } else if (RotaryBlocks.HYDRO_ENGINE.get() == block) {
+            type = EngineType.HYDRO;
         }
     }
 
@@ -283,25 +281,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 
     protected abstract void affectSurroundings(Level world, BlockPos pos);
 
-    protected final int getSoundLength() {
-        return this.getSoundLength(1);
-    }
-
-    protected int getSoundLength(float factor) {
-        if (factor == 2.5F && type.carNoise())
-            factor = 1.81F;
-        if (factor == 2.5F && type.turbineNoise()) {
-            factor = 2F;
-        }
-//        if (type.jetNoise()) {
-//            factor += 0.0125F;
-//        }
-        return (int) (type.getSoundLength() * factor);
-    }
-
     private void initialize(Level world, BlockPos pos) {
         setType(world.getBlockState(pos).getBlock());
-        timer.setCap("sound", this.getSoundLength());
 
         if (timer.checkCap("temperature")) {
             this.updateTemperature(world, pos);
@@ -318,8 +299,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             this.updateSpeed(0, false);
             if (omega == 0)
                 torque = 0;
-            if (soundTick == 0 && omega == 0)
-                soundTick = 2000;
         }
     }
 
@@ -338,7 +317,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 //        }
         if (revup) {
             if (omega < maxspeed) {
-                ReikaJavaLibrary.pConsole(omega + "->" + (omega + 2 * (int) (ReikaMathLibrary.logbase(maxspeed, 2))), Dist.DEDICATED_SERVER);
                 omega += 4 * ReikaMathLibrary.logbase(maxspeed + 1, 2);
                 timer.setCap("fuel", Math.max(type.getFuelUnitDuration() / 4, 1)); //4x fuel burn while spinning up
                 if (omega > maxspeed)
@@ -346,7 +324,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
             }
         } else {
             if (omega > 0) {
-                ReikaJavaLibrary.pConsole(omega + "->" + (omega - omega / 128 - 1), Dist.DEDICATED_SERVER);
                 omega -= omega / 256 + 1;
             }
         }
@@ -357,9 +334,65 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         return false;
     }
 
-    protected abstract void playSounds(Level world, BlockPos pos, float pitchMultiplier, float vol);
+    /**
+     * Server-side hook for one-shot effects while running (the jet's FOD rattle and
+     * afterburner). The looping engine drone itself is a client-side
+     * {@code EngineSoundInstance} driven by {@link #getEngineSound()},
+     * {@link #getEngineSoundVolume()}, {@link #getEngineSoundPitch()} and
+     * {@link #shouldPlayEngineSound()} — a looping sound has no re-trigger seam and is
+     * audible immediately when the player comes into range, unlike the legacy
+     * periodic one-shot re-fire.
+     */
+    protected void playServerSounds(Level world, BlockPos pos, float pitchMultiplier, float vol) {
+    }
 
-    protected final boolean isMuffled(Level world, BlockPos pos) {
+    public SoundRegistry getEngineSound() {
+        if (type.electricNoise())
+            return SoundRegistry.ELECTRIC;
+        if (type.carNoise())
+            return SoundRegistry.CAR;
+        if (type.steamNoise())
+            return SoundRegistry.STEAM;
+        if (type.windNoise())
+            return SoundRegistry.WIND;
+        if (type.jetNoise())
+            return SoundRegistry.JET;
+        if (type.turbineNoise())
+            return SoundRegistry.MICRO;
+        if (type.waterNoise())
+            return SoundRegistry.HYDRO;
+        return null;
+    }
+
+    public float getEngineSoundVolume() {
+        if (type.electricNoise())
+            return 0.125F;
+        if (type.carNoise())
+            return 0.33F;
+        if (type.steamNoise())
+            return 0.7F;
+        if (type.windNoise())
+            return 1.1F;
+        if (type.jetNoise())
+            return 1F;
+        if (type.turbineNoise())
+            return 0.125F;
+        return 1F;
+    }
+
+    public float getEngineSoundPitch() {
+        if (type.carNoise())
+            return 0.9F;
+        if (type.waterNoise())
+            return 0.9F;
+        return 1F;
+    }
+
+    public boolean shouldPlayEngineSound() {
+        return power > 0;
+    }
+
+    public final boolean isMuffled(Level world, BlockPos pos) {
         if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getMapColor(world, pos) == MapColor.WOOL) {// || this.getMachine(Direction.UP) == MachineRegistry.ECU) {
             if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getMapColor(world, pos) == MapColor.WOOL)// || this.getMachine(Direction.DOWN) == MachineRegistry.ECU)
                 return true;
@@ -382,7 +415,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
 
     @Override
     public final void updateEntity(Level world, BlockPos pos) {
-        super.updateEntity();
         super.updateBlockEntity();
 //        RotaryCraft.LOGGER.debug("power = " + power);
         this.getIOSides(world, pos.getX(), pos.getY(), pos.getZ(), getBlockState().getValue(BlockRotaryCraftMachine.FACING));
@@ -402,7 +434,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
                 this.affectSurroundings(world, pos);
         }
         float pitch = 1F;
-        float soundfactor = 1F;
         if (type.isECUControllable() && this.hasECU()) {
 //            BlockEntityEngineController te = this.getECU();
 //            if (te != null) {
@@ -447,9 +478,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         }
 
         if (power > 0) {
-            this.playSounds(world, pos, pitch, 1);
-        } else if (soundTick < this.getSoundLength(soundfactor))
-            soundTick = 2000;
+            this.playServerSounds(world, pos, pitch, 1);
+        }
 
         lastpower = power;
     }
@@ -458,7 +488,6 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         if (omega == 0)
             torque = 0;
         power = (long) omega * (long) torque;
-        soundTick = 2000;
         lastpower = power;
     }
 
@@ -547,6 +576,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         timer.saveAdditional(nbt, "engine");
+        nbt.putLong("lastpower", lastpower);
     }
 
     @Override
@@ -554,6 +584,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         super.load(tag);
         timer.load(tag, "engine");
         phi = tag.getFloatOr("phi", 0);
+        lastpower = tag.getLongOr("lastpower", 0);
 
         if (omega > type.getSpeed())
             omega = type.getSpeed();
@@ -636,8 +667,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
                 return 15 * fuel.getFluidLevel() / FUELCAP;
             if (type.isJetFueled())
                 return 15 * fuel.getFluidLevel() / FUELCAP;
-            else
-                return 15 * water.getFluidLevel() / FUELCAP;
+            if (type == EngineType.STEAM)
+                return 15 * water.getFluidLevel() / CAPACITY;
         }
         return 0;
     }

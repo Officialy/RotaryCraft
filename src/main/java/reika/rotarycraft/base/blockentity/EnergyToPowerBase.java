@@ -191,7 +191,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
         int y = worldPosition.getY();
         int z = worldPosition.getZ();
 
-        if (world.getBlockState(new BlockPos(x, y + 1, z)).getBlock() == Blocks.BLACK_WOOL && world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.BLACK_WOOL) {
+        if (world.getBlockState(new BlockPos(x, y + 1, z)).getBlock() == Blocks.WOOL.black() && world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.WOOL.black()) {
             return true;
         }
         for (int i = 0; i < 6; i++) {
@@ -202,7 +202,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
                 int dz = z + dir.getStepZ();
                 if ((dir != write.getOpposite() && dir != write) || dir == Direction.UP) {
                     Block b = world.getBlockState(new BlockPos(dx, dy, dz)).getBlock();
-                    if (b != Blocks.WHITE_WOOL)
+                    if (b != Blocks.WOOL.white())
                         return false;
                 }
             }

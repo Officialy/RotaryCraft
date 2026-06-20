@@ -9,8 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.registry;
 
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -82,9 +80,9 @@ public enum HandbookRegistry implements HandbookEntry {
     GASENGINE(MachineRegistry.GAS_ENGINE, EngineType.GAS),
     ACENGINE(MachineRegistry.AC_ENGINE, EngineType.AC),
     PERFENGINE(MachineRegistry.PERFORMANCE_ENGINE, EngineType.SPORT),
-    //        HYDROENGINE(MachineRegistry.ENGINE, EngineType.HYDRO),
+    HYDROENGINE(MachineRegistry.HYDRO_ENGINE, EngineType.HYDRO),
     MICROTURB(MachineRegistry.MICRO_TURBINE, EngineType.MICRO),
-    //    JETENGINE(MachineRegistry.ENGINE, EngineType.JET),
+    JETENGINE(MachineRegistry.JET_ENGINE, EngineType.JET),
     SOLAR(MachineRegistry.SOLARTOWER),
 
     //---------------------TRANSMISSION--------------------//
@@ -123,9 +121,9 @@ public enum HandbookRegistry implements HandbookEntry {
     PRODMACHINEDESC("Production Machines", "Production"),
     //    BLAST(MachineRegistry.BLASTFURNACE),
 //    WORKTABLE(MachineRegistry.WORKTABLE),
-//    FERMENTER(MachineRegistry.FERMENTER),
+    FERMENTER(MachineRegistry.FERMENTER),
 //    FRACTION(MachineRegistry.FRACTIONATOR),
-//    BEDROCK(MachineRegistry.BEDROCKBREAKER),
+    BEDROCK(MachineRegistry.BEDROCKBREAKER),
 //    BORER(MachineRegistry.BORER),
     PUMP(MachineRegistry.PUMP),
     OBSIDIAN(MachineRegistry.OBSIDIAN),
@@ -135,7 +133,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
     PROCMACHINEDESC("Processing Machines", "Processing"),
     //    GRINDER(MachineRegistry.GRINDER),
-//    EXTRACTOR(MachineRegistry.EXTRACTOR),
+    EXTRACTOR(MachineRegistry.EXTRACTOR),
 //    PULSEJET(MachineRegistry.PULSEJET),
 //    COMPACTOR(MachineRegistry.COMPACTOR),
 //    PURIFIER(MachineRegistry.PURIFIER),
@@ -417,7 +415,7 @@ public enum HandbookRegistry implements HandbookEntry {
     }
 
     public static int getScreen(MachineRegistry m, BlockEntity te) {
-        if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE)
+        if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE || m == MachineRegistry.HYDRO_ENGINE || m == MachineRegistry.JET_ENGINE)
             return getEngineScreen(te);
         if (m == MachineRegistry.WORMGEAR || m == MachineRegistry.HIGHGEAR || m == MachineRegistry.CVT || m == MachineRegistry.COIL)
             return TRANSDESC.getBaseScreen() + 1;
@@ -507,7 +505,7 @@ public enum HandbookRegistry implements HandbookEntry {
     }
 
     public static int getPage(MachineRegistry m, BlockEntity te) {
-        if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE)
+        if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE || m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE || m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE || m == MachineRegistry.HYDRO_ENGINE || m == MachineRegistry.JET_ENGINE)
             return getEnginePage(te);
         if (m == MachineRegistry.HIGHGEAR || m == MachineRegistry.WORMGEAR || m == MachineRegistry.CVT || m == MachineRegistry.COIL)
             return getAdvGearPage(te);
@@ -523,28 +521,24 @@ public enum HandbookRegistry implements HandbookEntry {
 //  todo      return ((RotaryCraftBlockEntity) te).getBlockMetadata() / 4;
     }
 
+    // EngineType ordinals no longer match the handbook entry order (HYDRO was appended
+    // at the end of EngineType for NBT stability), so look the entry up directly.
+    private static HandbookRegistry getEngineEntry(EngineType e) {
+        for (HandbookRegistry h : tabList) {
+            if (h.engine == e)
+                return h;
+        }
+        return ENGINEDESC;
+    }
+
     private static int getEnginePage(BlockEntity te) {
-        EngineType e = ((BlockEntityEngine) te).getEngineType();
-        return 1 + e.ordinal() - (getEngineScreen(te) - ENGINEDESC.getBaseScreen()) * GuiHandbook.PAGES_PER_SCREEN;
+        if (!(te instanceof BlockEntityEngine engine))
+            return -1;
+        return getEngineEntry(engine.getEngineType()).getPage();
     }
 
     private static int getEngineScreen(BlockEntity te) {
-        EngineType e = ((BlockEntityEngine) te).getEngineType();
-        int ei = (1 + e.ordinal()) / GuiHandbook.PAGES_PER_SCREEN;
-        return ENGINEDESC.getBaseScreen() + ei;
-    }
-
-    public static void addRelevantButtons(int j, int k, int screen, List<AbstractWidget> li) {
-        int id = 0;
-        for (HandbookRegistry handbookRegistry : tabList) {
-            if (handbookRegistry.getScreen() == screen/* && !tabList[i].isDummiedOut()*/) {
-                // 1.21.5: ImageButton requires a WidgetSprites bundle; use plain Button until sprites are wired up.
-                final int finalId = id;
-                li.add(net.minecraft.client.gui.components.Button.builder(net.minecraft.network.chat.Component.empty(), b -> {}).bounds(j - 20, k + handbookRegistry.getRelativeTabPosn() * 20, 20, 20).build());
-                //ReikaJavaLibrary.pConsole("Adding "+tabList[i]+" with ID "+id+" to screen "+screen);
-                id++;
-            }
-        }
+        return getEngineEntry(((BlockEntityEngine) te).getEngineType()).getScreen();
     }
 
     public static HandbookRegistry getEntry(int screen, int page) {
@@ -610,7 +604,7 @@ public enum HandbookRegistry implements HandbookEntry {
     }
 
     public Item getItem() {
-        return item.get();
+        return item != null ? item.get() : null;
     }
 
     public int getBaseScreen() {
@@ -657,11 +651,6 @@ public enum HandbookRegistry implements HandbookEntry {
 
     public int getShiftedOrdinal() {
         return this.getParent().getBaseScreen() + this.ordinal() - this.getParent().ordinal();
-    }
-
-    public String getTabImageFile() {
-        //return "/Reika/RotaryCraft/Textures/GUI/Handbook/tabs_"+this.getParent().name().toLowerCase()+".png";
-        return "/screen/handbook/tabs_" + TOC.getParent().name().toLowerCase(Locale.ENGLISH) + ".png";
     }
 
     public int getTabRow() {
@@ -743,17 +732,15 @@ public enum HandbookRegistry implements HandbookEntry {
         if (this.getParent() == ENGINEDESC) {
             if (this == SOLAR)
                 return MachineRegistry.SOLARTOWER.getName();
-//            todo else
-//                return RotaryNames.getEngineName(offset);
+            if (machine != null)
+                return machine.getName();
         }
         if (this.isMachine() || this.getParent() == CONVERTERDESC)
             return machine.getName();
-//     todo   if (machine == MachineRegistry.ADVANCEDGEARS)
-//            return RotaryNames.getAdvGearName(offset);
         if (this.getParent() == TRANSDESC)
             return machine.getName();
-        if (this.getParent() == TOOLDESC && item != null)
-            return item.toString(); //todo itemname
+        if (item != null && title == null)
+            return item.get().getDefaultInstance().getHoverName().getString();
         return title;
     }
 
@@ -918,13 +905,10 @@ public enum HandbookRegistry implements HandbookEntry {
             return ReikaJavaLibrary.makeListFrom(MachineRegistry.SOLARTOWER.getBlockState().getBlock().asItem().getDefaultInstance());
         if (this.getParent() == ENGINEDESC)
             return ReikaJavaLibrary.makeListFrom(EngineType.engineList[offset].getCraftedProduct());
-/*  todo    if (machine == MachineRegistry.ADVANCEDGEARS)
-            return ReikaJavaLibrary.makeListFrom(MachineRegistry.ADVANCEDGEARS.getCraftedMetadataProduct(offset));
         if (this.getParent() == TRANSDESC || this.isMachine()) {
-            if (machine.hasCustomPlacerItem())
-                return ReikaJavaLibrary.makeListFrom(machine.getCraftedMetadataProduct(0));
-            return ReikaJavaLibrary.makeListFrom(machine.getCraftedProduct());
-        }*/
+            if (machine != null)
+                return ReikaJavaLibrary.makeListFrom(machine.getCraftedProduct());
+        }
         if (this == DECOBLOCKS) {
             List<ItemStack> li = new ArrayList<>();
             li.add(RotaryBlocks.HSLA_STEEL_BLOCK.get().asItem().getDefaultInstance());
@@ -1046,26 +1030,26 @@ public enum HandbookRegistry implements HandbookEntry {
             return GearboxTypes.STEEL.getGearboxItem(8);
         if (this == CONVERTER)
             return MachineRegistry.MAGNETIC.getBlockState().getBlock().asItem().getDefaultInstance();
-//        if (this == PRODMACHINES)
-//            return MachineRegistry.BEDROCKBREAKER.getCraftedProduct();
-//        if (this == PROCMACHINES)
-//            return MachineRegistry.EXTRACTOR.getCraftedProduct();
-//        if (this == FARMMACHINES)
-//            return MachineRegistry.FAN.getCraftedProduct();
+        if (this == PRODMACHINES)
+            return MachineRegistry.BEDROCKBREAKER.getCraftedProduct();
+        if (this == PROCMACHINES)
+            return MachineRegistry.EXTRACTOR.getCraftedProduct();
+        if (this == FARMMACHINES)
+            return MachineRegistry.FAN.getCraftedProduct();
         if (this == PIPEMACHINES)
             return MachineRegistry.FUELLINE.getBlockState().getBlock().asItem().getDefaultInstance();
-//        if (this == ACCMACHINES)
-//            return MachineRegistry.FRICTION.getCraftedProduct();
-//        if (this == WEPMACHINES)
-//            return MachineRegistry.RAILGUN.getCraftedProduct();
+        if (this == ACCMACHINES)
+            return MachineRegistry.FRICTION.getCraftedProduct();
+        if (this == WEPMACHINES)
+            return MachineRegistry.TNTCANNON.getCraftedProduct();
         if (this == COSMACHINES)
             return MachineRegistry.MUSICBOX.getBlockState().getBlock().asItem().getDefaultInstance();
-//        if (this == SURVMACHINES)
-//            return MachineRegistry.GPR.getCraftedProduct();
+        if (this == SURVMACHINES)
+            return MachineRegistry.CAVESCANNER.getCraftedProduct();
         if (this == UTILMACHINES)
             return MachineRegistry.FLOODLIGHT.getBlockState().getBlock().asItem().getDefaultInstance();
-//        if (this == TOOLS)
-//            return RotaryItems.MOTION.get().getDefaultInstance();
+        if (this == TOOLS)
+            return RotaryItems.SCREWDRIVER.get().getDefaultInstance();
         if (this == RESOURCE)
             return RotaryItems.BEDROCK_DUST.get().getDefaultInstance();
 //        if (this == FLAKES)
@@ -1082,8 +1066,23 @@ public enum HandbookRegistry implements HandbookEntry {
             return RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get().getDefaultInstance();
         if (this == JUMPBOOTS)
             return RotaryItems.JUMP.get().getDefaultInstance();
-        if (this.isCrafting())
-            return this.getCrafting().get(this.getTabIconIndex());
+        // Machines / transmission / converters: show the real block. getCrafting() returns an
+        // HSLA-plate placeholder for these (their crafted-product lookup isn't ported yet), which
+        // otherwise made every machine page's tab icon a steel plate.
+        if ((this.isMachine() || this.isTrans() || this.getParent() == CONVERTERDESC) && machine != null) {
+            ItemStack is = machine.getBlockState().getBlock().asItem().getDefaultInstance();
+            if (!is.isEmpty())
+                return is;
+        }
+        if (this.isCrafting()) {
+            // Several crafting lists are currently shorter than their legacy tab-icon index
+            // (anthra/lons deco blocks, flywheel variants, etc. aren't ported yet), so clamp
+            // rather than index blindly — an out-of-range get() crashed the whole handbook.
+            List<ItemStack> li = this.getCrafting();
+            if (li == null || li.isEmpty())
+                return RotaryItems.HSLA_PLATE.get().getDefaultInstance();
+            return li.get(Math.min(this.getTabIconIndex(), li.size() - 1));
+        }
         if (this.isSmelting())
             return this.getSmelting();
         if (this == STEELINGOT)

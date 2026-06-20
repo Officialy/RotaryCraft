@@ -12,7 +12,6 @@ package reika.rotarycraft.renders.m;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -45,12 +44,12 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
         this.sprites = context.sprites();
     }
 
-    public void renderBlockEntityReservoirAt(PoseStack stack, BlockEntityReservoir tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntityReservoirAt(PoseStack stack, BlockEntityReservoir tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         stack.mulPose(Axis.YN.rotationDegrees(90.0F));
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(ReservoirModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         if (tile.isInWorld()) {
             for (int i = 2; i < 6; i++) {
                 if (!tile.isConnectedOnSide(dirs[i])) {
@@ -69,7 +68,7 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
     }
 
     // Legacy 1.7 signature retained as dead code; vanilla calls {@link #submit} instead.
-    public void render(BlockEntityReservoir tile, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
+    public void render(BlockEntityReservoir tile, float pPartialTick, PoseStack pPoseStack, VertexConsumer pBufferSource, int pPackedLight, int pPackedOverlay) {
         if (this.doRenderModel(pPoseStack, tile)) {
             this.renderBlockEntityReservoirAt(pPoseStack, tile, pBufferSource, pPackedLight);
             if (tile.isCovered) this.renderCover(pPoseStack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
@@ -93,8 +92,7 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
         RenderType rt = RenderTypes.entityCutout(ReservoirModel.TEXTURE_LOCATION);
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntityReservoirAt(snapped, tile, oneRT, light);
+            renderBlockEntityReservoirAt(snapped, tile, vc, light);
         });
 
         // 26.1: proper fluid surface using the block-atlas still sprite.
@@ -215,7 +213,7 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
         // TODO: Port to 26.1 rendering API (setShader + Tesselator.getBuilder() + begin() + vertex().endVertex() + end() all removed)
     }
 
-    private void renderLiquid(PoseStack stack, BlockEntity tile, MultiBufferSource bufferSource, int pPackedLight) {
+    private void renderLiquid(PoseStack stack, BlockEntity tile, VertexConsumer bufferSource, int pPackedLight) {
         Matrix4f m = stack.last().pose();
         BlockEntityReservoir tr = (BlockEntityReservoir) tile;
         Fluid f = tr.getFluid().getFluid();

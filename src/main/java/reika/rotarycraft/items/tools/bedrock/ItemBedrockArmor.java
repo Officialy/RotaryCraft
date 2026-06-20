@@ -146,9 +146,9 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
             return switch (this) {
                 case NIGHTVISION -> new ItemStack[]{RotaryItems.NVG.get().getDefaultInstance()};
                 case VISOR ->
-                        new ItemStack[]{new ItemStack(Blocks.GREEN_STAINED_GLASS, 1), new ItemStack(Items.DIAMOND), new ItemStack(Blocks.GREEN_STAINED_GLASS, 1)};
+                        new ItemStack[]{new ItemStack(Blocks.STAINED_GLASS.green(), 1), new ItemStack(Items.DIAMOND), new ItemStack(Blocks.STAINED_GLASS.green(), 1)};
                 case APIARIST ->
-                        ReikaArrayHelper.getArrayOf(new ItemStack(Items.PINK_CARPET), 8);
+                        ReikaArrayHelper.getArrayOf(new ItemStack(Items.CARPET.pink()), 8);
             };
         }
     }

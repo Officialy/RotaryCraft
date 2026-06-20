@@ -32,7 +32,7 @@
 //
 //    private ModelReservoir ReservoirModel = new ModelReservoir();
 //
-//    public void renderBlockEntityGroundHydratorAt(BlockEntityGroundHydrator tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityGroundHydratorAt(BlockEntityGroundHydrator tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -98,7 +98,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 //        BlockEntityGroundHydrator tr = (BlockEntityGroundHydrator) tile;
 //        if (this.doRenderModel(tr)) {

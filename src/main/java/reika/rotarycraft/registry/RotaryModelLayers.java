@@ -12,12 +12,16 @@ import reika.rotarycraft.models.animated.shaftonly.ClutchModel;
 import reika.rotarycraft.models.animated.shaftonly.CrossModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftModel;
 import reika.rotarycraft.models.animated.shaftonly.ShaftVModel;
+import reika.rotarycraft.models.ExtractorModel;
+import reika.rotarycraft.models.animated.BedrockBreakerModel;
 import reika.rotarycraft.models.engine.*;
 import reika.rotarycraft.modinterface.conversion.RenderMagnetic;
 import reika.rotarycraft.modinterface.model.BoilerModel;
 import reika.rotarycraft.modinterface.model.MagneticModel;
 import reika.rotarycraft.modinterface.model.SteamTurbineModel;
 import reika.rotarycraft.renders.*;
+import reika.rotarycraft.renders.dm.RenderBeamMirror;
+import reika.rotarycraft.renders.dm.RenderBedrockBreaker;
 import reika.rotarycraft.renders.dm.RenderFan;
 import reika.rotarycraft.renders.dm.RenderFin;
 import reika.rotarycraft.renders.dm.RenderPump;
@@ -26,6 +30,7 @@ import reika.rotarycraft.renders.dmi.RenderWinder;
 import reika.rotarycraft.renders.m.RenderReservoir;
 import reika.rotarycraft.renders.m.RenderVanDeGraff;
 import reika.rotarycraft.renders.mi.RenderBigFurnace;
+import reika.rotarycraft.renders.mi.RenderExtractor;
 import reika.rotarycraft.renders.mi.RenderLandmine;
 import reika.rotarycraft.renders.mi.RenderSmokeDetector;
 
@@ -88,10 +93,22 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation ITEM_CANNON = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "item_cannon"), "main");
     public static final ModelLayerLocation GRINDSTONE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "grindstone"), "main");
     public static final ModelLayerLocation FAN = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "fan"), "main");
+    public static final ModelLayerLocation EXTRACTOR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "extractor"), "main");
+    public static final ModelLayerLocation PULSEJET = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "pulse_jet_furnace"), "main");
+    public static final ModelLayerLocation FILLING_STATION = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "filling_station"), "main");
+    public static final ModelLayerLocation FRICTION_HEATER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "friction_heater"), "main");
+    public static final ModelLayerLocation BEDROCK_BREAKER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "bedrock_breaker"), "main");
+    public static final ModelLayerLocation FRACTIONATOR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "fractionator"), "main");
+    public static final ModelLayerLocation MAGNETIZER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "magnetizer"), "main");
 
     public static void init(IEventBus bus) {
         bus.addListener(RotaryModelLayers::registerEntityRenderers);
         bus.addListener(RotaryModelLayers::registerLayerDefinitions);
+        bus.addListener(RotaryModelLayers::registerPictureInPictureRenderers);
+    }
+
+    public static void registerPictureInPictureRenderers(net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent event) {
+        event.register(reika.rotarycraft.renders.GuiMachineRenderState.class, reika.rotarycraft.renders.GuiMachineRenderer::new);
     }
 
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -104,6 +121,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.SPLITTER.get(), RenderSplitter::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.BEVEL_GEARS.get(), RenderBevel::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.MIRROR.get(), RenderMirror::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.BEAM_MIRROR.get(), RenderBeamMirror::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.GAS_ENGINE.get(), RenderSEngine::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.MICROTURBINE.get(), RenderSEngine::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.PERFORMANCE_ENGINE.get(), RenderSEngine::new);
@@ -124,7 +142,15 @@ public class RotaryModelLayers {
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.PLAYER_DETECTOR.get(), RenderDetector::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.DYNAMOMETER.get(), RenderMonitor::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.JET_ENGINE.get(), RenderSEngine::new);
-//        event.registerBlockEntityRenderer(RotaryBlockEntities.HYDRO_ENGINE.get(), RenderSEngine::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.HYDRO_ENGINE.get(), RenderSEngine::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.EXTRACTOR.get(), RenderExtractor::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.PULSE_JET_FURNACE.get(), reika.rotarycraft.renders.mi.RenderPulseFurnace::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.FILLING_STATION.get(), reika.rotarycraft.renders.dmi.RenderFillingStation::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.FRICTION_HEATER.get(), reika.rotarycraft.renders.dm.RenderFriction::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.SPILLWAY.get(), reika.rotarycraft.renders.dm.RenderSpillway::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.BEDROCK_BREAKER.get(), RenderBedrockBreaker::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.FRACTIONATOR.get(), reika.rotarycraft.renders.mi.RenderFraction::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.MAGNETIZER.get(), reika.rotarycraft.renders.dmi.RenderMagnetizer::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.GEARBOX.get(), RenderGearbox::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.BIG_FURNACE.get(), RenderBigFurnace::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.GRINDER.get(), RenderGrinder::new);
@@ -179,6 +205,11 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(SOLAR_TOWER, SolarTowerModel::createLayer);
         event.registerLayerDefinition(BIG_FURNACE, BigFurnaceModel::createLayer);
         event.registerLayerDefinition(GRINDER, GrinderModel::createLayer);
+        event.registerLayerDefinition(EXTRACTOR, ExtractorModel::createLayer);
+        event.registerLayerDefinition(PULSEJET, PulseFurnaceModel::createLayer);
+        event.registerLayerDefinition(FILLING_STATION, FillingStationModel::createLayer);
+        event.registerLayerDefinition(FRICTION_HEATER, reika.rotarycraft.models.animated.FrictionModel::createLayer);
+        event.registerLayerDefinition(BEDROCK_BREAKER, BedrockBreakerModel::createLayer);
         event.registerLayerDefinition(WORM, WormModel::createLayer);
         event.registerLayerDefinition(CVT, CVTModel::createLayer);
         event.registerLayerDefinition(COIL, CoilModel::createLayer);
@@ -198,5 +229,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(GRINDSTONE, GrindstoneModel::createLayer);
         event.registerLayerDefinition(SPILLWAY, SpillwayModel::createLayer);
         event.registerLayerDefinition(FAN, FanModel::createLayer);
+        event.registerLayerDefinition(FRACTIONATOR, reika.rotarycraft.models.FractionModel::createLayer);
+        event.registerLayerDefinition(MAGNETIZER, reika.rotarycraft.models.animated.MagnetizerModel::createLayer);
     }
 }

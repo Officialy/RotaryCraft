@@ -12,7 +12,6 @@ package reika.rotarycraft.renders.dm;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -33,7 +32,7 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
         finModel = new FinModel(context.bakeLayer(RotaryModelLayers.COOLING_FIN));
     }
 
-    public void renderBlockEntityCoolingFinAt(PoseStack stack, BlockEntityCoolingFin tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntityCoolingFinAt(PoseStack stack, BlockEntityCoolingFin tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
         // Original: glTranslatef(par2, par4 + 2.0, par6 + 1.0); — BER PoseStack is at block origin
         stack.translate(0.0, 2.0, 1.0);
@@ -76,13 +75,13 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
             }
         }
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(FinModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         finModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.popPose();
     }
 
     // Legacy 1.7 signature kept as dead code; vanilla calls {@link #submit} instead.
-    public void render(BlockEntityCoolingFin tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
+    public void render(BlockEntityCoolingFin tile, float v, PoseStack stack, VertexConsumer multiBufferSource, int i, int i1) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityCoolingFinAt(stack, tile, multiBufferSource, i);
         if ((tile).isInWorld()) {
@@ -106,8 +105,7 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
         RenderType rt = RenderTypes.entityCutout(FinModel.TEXTURE_LOCATION);
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntityCoolingFinAt(snapped, tile, oneRT, light);
+            renderBlockEntityCoolingFinAt(snapped, tile, vc, light);
         });
         if (tile.isInWorld()) {
             reika.rotarycraft.auxiliary.IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());

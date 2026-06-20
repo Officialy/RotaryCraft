@@ -118,10 +118,10 @@ public enum MachineRegistry implements TileEnum {
     RESERVOIR(true, "machine.reservoir", RotaryBlocks.RESERVOIR.get(), BlockEntityReservoir.class, (modelSet) -> new ReservoirModel(modelSet.bakeLayer(RotaryModelLayers.RESERVOIR))),
     AEROSOLIZER(true, "machine.aerosolizer", RotaryBlocks.AEROSOLIZER.get(), BlockEntityAerosolizer.class, (modelSet) -> new AerosolizerModel(modelSet.bakeLayer(RotaryModelLayers.AEROSOLIZER))),
     //    EXTRACTOR(true, "machine.extractor", BlockRotaryCraftMachine.class, BlockEntityExtractor.class, "RenderExtractor"),
-//    PULSEJET(true, "machine.pulsejet", RotaryBlocks.PULSE_JET_FURNACE.get(), BlockEntityPulseFurnace.class),
+    PULSEJET(true, "machine.pulsejet", RotaryBlocks.PULSE_JET_FURNACE.get(), reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace.class, (modelSet) -> new reika.rotarycraft.models.PulseFurnaceModel(modelSet.bakeLayer(RotaryModelLayers.PULSEJET))),
 //    COMPACTOR(true, "machine.compactor", BlockRotaryCraftMachine.class, BlockEntityCompactor.class, "RenderCompactor"),
    FAN("machine.fan", RotaryBlocks.FAN.get(), BlockEntityFan.class, (modelSet) -> new FanModel(modelSet.bakeLayer(RotaryModelLayers.FAN))),
-    FRACTIONATOR(true, "machine.fractionator", RotaryBlocks.FRACTIONATOR.get(), reika.rotarycraft.blockentities.production.BlockEntityFractionator.class),
+    FRACTIONATOR(true, "machine.fractionator", RotaryBlocks.FRACTIONATOR.get(), reika.rotarycraft.blockentities.production.BlockEntityFractionator.class, (modelSet) -> new reika.rotarycraft.models.FractionModel(modelSet.bakeLayer(RotaryModelLayers.FRACTIONATOR))),
 //    GPR(true, "machine.gpr", BlockGPR.class, BlockEntityGPR.class),
     OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class/*, (modelSet) -> new ObsidianMakerModel(modelSet.bakeLayer(RotaryModelLayers.OBSIDIAN_MAKER))*/),
     //    PILEDRIVER("machine.piledriver", BlockRotaryCraftMachine.class, BlockEntityPileDriver.class, "RenderPileDriver"),
@@ -160,14 +160,14 @@ public enum MachineRegistry implements TileEnum {
     CAVESCANNER("machine.cavescanner", RotaryBlocks.CAVE_SCANNER.get(), BlockEntityCaveFinder.class/*, (modelSet) -> new CaveScannerModel(modelSet.bakeLayer(RotaryModelLayers.CAVE_SCANNER))*/),
     //    SCALECHEST("machine.chest", BlockRotaryCraftMachine.class, BlockEntityScaleableChest.class, "RenderScaleChest"),
 //    IGNITER("machine.firestarter", BlockRotaryCraftMachine.class, BlockEntityIgniter.class),
-//    MAGNETIZER("machine.magnetizer", BlockRotaryCraftMachine.class, BlockEntityMagnetizer.class, "RenderMagnetizer"),
+    MAGNETIZER("machine.magnetizer", RotaryBlocks.MAGNETIZER.get(), reika.rotarycraft.blockentities.processing.BlockEntityMagnetizer.class, (modelSet) -> new reika.rotarycraft.models.animated.MagnetizerModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIZER))),
     CONTAINMENT("machine.containment", RotaryBlocks.CONTAINMENT.get(), BlockEntityContainment.class/*, (modelSet) -> new ContainmentModel(modelSet.bakeLayer(RotaryModelLayers.CONTAINMENT))*/),
     //    SCREEN("machine.screen", BlockRotaryCraftMachine.class, BlockEntityScreen.class, "RenderCCTVScreen"),
 //    PURIFIER("machine.purifier", BlockRotaryCraftMachine.class, BlockEntityPurifier.class),
 //    LASERGUN("machine.lasergun", BlockRotaryCraftMachine.class, BlockEntityLaserGun.class, "RenderLaserGun"),
     ITEMCANNON("machine.itemcannon", RotaryBlocks.ITEM_CANNON.get(), BlockEntityItemCannon.class, (modelSet) -> new ItemCannonModel(modelSet.bakeLayer(RotaryModelLayers.ITEM_CANNON))),
     LANDMINE("machine.landmine", RotaryBlocks.LANDMINE.get(), BlockEntityLandmine.class, (modelSet) -> new LandmineModel(modelSet.bakeLayer(RotaryModelLayers.LANDMINE))),
-    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class),
+    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class, (modelSet) -> new reika.rotarycraft.models.animated.FrictionModel(modelSet.bakeLayer(RotaryModelLayers.FRICTION_HEATER))),
     BLOCKCANNON("machine.blockcannon", RotaryBlocks.BLOCK_CANNON.get(), BlockEntityBlockCannon.class/*, (modelSet) -> new BlockCannonModel(modelSet.bakeLayer(RotaryModelLayers.BLOCK_CANNON))*/),
     BUCKETFILLER("machine.bucketfiller", RotaryBlocks.BUCKET_FILLER.get(), BlockEntityBucketFiller.class),
     MIRROR("machine.mirror", RotaryBlocks.MIRROR.get(), BlockEntityMirror.class, (modelSet) -> new MirrorModel(modelSet.bakeLayer(RotaryModelLayers.MIRROR))),
@@ -198,7 +198,7 @@ public enum MachineRegistry implements TileEnum {
 //    AIRGUN("machine.airgun", BlockRotaryCraftMachine.class, BlockEntityAirGun.class, "RenderAirGun"),
 //    SONICBORER("machine.sonicborer", BlockRotaryCraftMachine.class, BlockEntitySonicBorer.class, "RenderSonicBorer"),
 //    FUELENGINE("machine.fuelengine", BlockModEngine.class, BlockEntityFuelEngine.class, "RenderFuelEngine", ModList.BCENERGY),
-//    FILLINGSTATION(true, "machine.fillingstation", RotaryBlocks.FILLING_STATION.get(), BlockEntityFillingStation.class),
+    FILLINGSTATION(true, "machine.fillingstation", RotaryBlocks.FILLING_STATION.get(), reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation.class, (modelSet) -> new reika.rotarycraft.models.FillingStationModel(modelSet.bakeLayer(RotaryModelLayers.FILLING_STATION))),
 //    BELT("machine.belt", BlockRotaryCraftMachine.class, BlockEntityBeltHub.class, "RenderBelt"),
     VANDEGRAFF("machine.vandegraff", RotaryBlocks.VAN_DE_GRAFF.get(), BlockEntityVanDeGraff.class, (modelSet) -> new VanDeGraffModel(modelSet.bakeLayer(RotaryModelLayers.VAN_DE_GRAFF))),
     //    DEFOLIATOR("machine.defoliator", BlockRotaryCraftMachine.class, BlockEntityDefoliator.class, "RenderDefoliator"),
@@ -212,7 +212,7 @@ public enum MachineRegistry implements TileEnum {
     PARTICLE(true, "machine.particle", RotaryBlocks.PARTICLE.get(), BlockEntityParticleEmitter.class/*, (modelSet) -> new ParticleModel(modelSet.bakeLayer(RotaryModelLayers.PARTICLE))*/),
     //    LAWNSPRINKLER("machine.lawnsprinkler", BlockRotaryCraftMachine.class, BlockEntityLawnSprinkler.class, "RenderLawnSprinkler"),
     GRINDSTONE(true, "machine.grindstone", RotaryBlocks.GRINDSTONE.get(), BlockEntityGrindstone.class, (modelSet) -> new GrindstoneModel(modelSet.bakeLayer(RotaryModelLayers.GRINDSTONE))),
-    BLOWER("machine.blower", RotaryBlocks.BLOWER.get(), BlockEntityBlower.class/*, (modelSet) -> new BlowerModel(modelSet.bakeLayer(RotaryModelLayers.BLOWER))*/),
+    BLOWER("machine.blower", RotaryBlocks.BLOWER.get(), BlockEntityBlower.class), // no custom model in original
     //    PORTALSHAFT("machine.portalshaft", BlockRotaryCraftMachine.class, BlockEntityPortalShaft.class, "RenderPortalShaft"),
     REFRIGERATOR(true, "machine.refrigerator", RotaryBlocks.REFRIGERATOR.get(), BlockEntityRefrigerator.class/*, (modelSet) -> new RefrigeratorModel(modelSet.bakeLayer(RotaryModelLayers.REFRIGERATOR))*/),
     //    GASTANK("machine.gastank", BlockRotaryCraftMachine.class, BlockEntityFluidCompressor.class, "RenderGasCompressor"),
@@ -233,7 +233,10 @@ public enum MachineRegistry implements TileEnum {
     //    FLAMETURRET("machine.flameturret", BlockRotaryCraftMachine.class, BlockEntityFlameTurret.class, "RenderFlameTurret"),
 //    BUNDLEDBUS("machine.bundledbus", BlockRotaryCraftMachine.class, BlockEntityBundledBus.class, ModList.APPENG, ModList.PROJRED),
     DISTRIBCLUTCH("machine.distribclutch", RotaryBlocks.DISTRIBUTION_CLUTCH.get(), BlockEntityDistributionClutch.class, (modelSet) -> new DistribClutchModel(modelSet.bakeLayer(RotaryModelLayers.DISTRIB_CLUTCH))),
-    BEDROCKBREAKER("machine.bedrock", RotaryBlocks.BEDROCK_BREAKER.get(), reika.rotarycraft.blockentities.production.BlockEntityBedrockBreaker.class);
+    BEDROCKBREAKER("machine.bedrock", RotaryBlocks.BEDROCK_BREAKER.get(), reika.rotarycraft.blockentities.production.BlockEntityBedrockBreaker.class, (modelSet) -> new reika.rotarycraft.models.animated.BedrockBreakerModel(modelSet.bakeLayer(RotaryModelLayers.BEDROCK_BREAKER))),
+    HYDRO_ENGINE("machine.hydro_engine", RotaryBlocks.HYDRO_ENGINE.get(), BlockEntityHydroEngine.class, EngineType.HYDRO, (modelSet) -> new HydroModel(modelSet.bakeLayer(RotaryModelLayers.HYDRO_ENGINE))),
+    FERMENTER(true, "machine.fermenter", RotaryBlocks.FERMENTER.get(), reika.rotarycraft.blockentities.production.BlockEntityFermenter.class),
+    EXTRACTOR(true, "machine.extractor", RotaryBlocks.EXTRACTOR.get(), reika.rotarycraft.blockentities.processing.BlockEntityExtractor.class, (modelSet) -> new reika.rotarycraft.models.ExtractorModel(modelSet.bakeLayer(RotaryModelLayers.EXTRACTOR)));
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
@@ -1034,6 +1037,10 @@ public enum MachineRegistry implements TileEnum {
         if (powertype != null && !powertype.isLoaded())
             return false;
         return !this.isDummiedOut() && !this.isTechnical() && !this.isConfigDisabled();
+    }
+
+    public net.minecraft.world.item.ItemStack getCraftedProduct() {
+        return new net.minecraft.world.item.ItemStack(block);
     }
 
 

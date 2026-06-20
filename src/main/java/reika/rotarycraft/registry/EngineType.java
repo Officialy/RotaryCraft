@@ -32,9 +32,10 @@ public enum EngineType {
     GAS(512, 128, EngineClass.PISTON, BlockEntityGasEngine.class),
     AC(256, 512, EngineClass.ELECTRIC, BlockEntityACEngine.class),
     SPORT(1024, 256, EngineClass.PISTON, BlockEntityPerformanceEngine.class),
-    //HYDRO(32, 16384, EngineClass.KINETIC, BlockEntityHydroEngine.class), //double speed, add new lava engine as 524kW? no
     MICRO(131072, 16, EngineClass.TURBINE, BlockEntityMicroturbine.class),
     JET(65536, 1024, EngineClass.TURBINE, BlockEntityJetEngine.class),
+    // added at the end so existing engine ordinals (saved as NBT "type") stay stable
+    HYDRO(32, 16384, EngineClass.KINETIC, BlockEntityHydroEngine.class),
     ;
 
     public static final EngineType[] engineList = values();
@@ -120,37 +121,6 @@ public enum EngineType {
         return this == STEAM || this == GAS || this == SPORT || this == MICRO || this == JET;
     }
 
-    public int getSoundLength() {
-        // 26.1 fix: re-tuned re-trigger intervals to match the actual {@code .ogg} file durations
-        // so the loops play without audible gaps (legacy values were inherited from 1.7 wav
-        // sources). Approximate durations from the bundled assets at ~20 kB/s Vorbis encode:
-        //   elecengine  ≈ 3.9 s → 78  ticks
-        //   gasengine   ≈ 4.2 s → 84  ticks  (was 88, ~0.2 s gap)
-        //   steamengine ≈ 2.6 s → 53  ticks  (was 49, sample re-fired before tail; user reported)
-        //   windengine  ≈ 4.9 s → 98  ticks  (was 105 → 0.35 s gap)
-        //   jetengine   ≈ 1.5 s → 30  ticks  (was 79, ~2.5 s of silence between loops — bad)
-        //   microengine ≈ 0.9 s → 18  ticks  (was 20, close enough but tightened)
-        if (this.carNoise()) {
-            return 84;
-        }
-        if (this.electricNoise()) {
-            return 78;
-        }
-        if (this.steamNoise()) {
-            return 53;
-        }
-        if (this.windNoise()) {
-            return 98;
-        }
-        if (this.jetNoise()) {
-            return 30;
-        }
-        if (this.turbineNoise()) {
-            return 18;
-        }
-        return 0;
-    }
-
     public boolean isCooled() {
         return this == STEAM || this == SPORT;
     }
@@ -167,9 +137,9 @@ public enum EngineType {
         return this == GAS || this == SPORT;
     }
 
-//    public boolean waterNoise() {
-//        return this == HYDRO;
-//    }
+    public boolean waterNoise() {
+        return this == HYDRO;
+    }
 
     public boolean steamNoise() {
         return this == STEAM;
@@ -192,7 +162,7 @@ public enum EngineType {
             return true;
         if (this == SPORT)
             return true;
-        return this == WIND;// this == HYDRO;
+        return this == WIND || this == HYDRO;
     }
 
     public boolean isValidFuel(ItemStack is) {
@@ -238,7 +208,7 @@ public enum EngineType {
             case GAS -> RotaryBlocks.GAS_ENGINE.get().asItem();
             case AC -> RotaryBlocks.AC_ENGINE.get().asItem();
             case SPORT -> RotaryBlocks.PERFORMANCE_ENGINE.get().asItem();
-//          case HYDRO -> RotaryBlocks.HYDROKINETIC_ENGINE.get().asItem();
+            case HYDRO -> RotaryBlocks.HYDRO_ENGINE.get().asItem();
             case MICRO -> RotaryBlocks.MICRO_TURBINE.get().asItem();
             case JET -> RotaryBlocks.JET_ENGINE.get().asItem();
         };
@@ -246,7 +216,7 @@ public enum EngineType {
     }
 
     public boolean isEMPImmune() {
-        return /*this == HYDRO ||*/ this == WIND;
+        return this == HYDRO || this == WIND;
     }
 
     public boolean isECUControllable() {
@@ -270,10 +240,10 @@ public enum EngineType {
                 if (fluid.equals(RotaryFluids.ETHANOL.get()))
                     return true;
             }
-               /* case HYDRO -> {
+            case HYDRO -> {
                 if (fluid.equals(RotaryFluids.LUBRICANT.get()))
                     return true;
-                }*/
+            }
             case MICRO, JET -> {
                 if (fluid.equals(RotaryFluids.JET_FUEL.get()))
                     return true;

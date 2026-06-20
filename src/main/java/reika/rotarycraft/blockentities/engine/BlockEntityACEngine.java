@@ -32,6 +32,9 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
 
     public BlockEntityACEngine(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.AC_ENGINE.get(), pos, state, false, false, false, false);
+        // Without this the engine inherits the base default (EngineType.DC) until setType() runs,
+        // so a freshly-placed AC engine renders the DC model for a frame before correcting itself.
+        type = EngineType.AC;
     }
     @Override
     public MachineRegistry getMachine() {
@@ -85,20 +88,6 @@ public class BlockEntityACEngine extends BlockEntityEngine implements Magnetizat
                 is.remove(net.minecraft.core.component.DataComponents.CUSTOM_DATA);
             }
         }
-    }
-
-    @Override
-    protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundTick++;
-        if (this.isMuffled(world, pos)) {
-            volume *= 0.3125F;
-        }
-
-        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
-            return;
-        soundTick = 0;
-
-        SoundRegistry.ELECTRIC.playSoundAtBlock(world, pos, 0.125F * volume, pitchMultiplier);
     }
 
     public void magneticInterference(int mag, double dd) {

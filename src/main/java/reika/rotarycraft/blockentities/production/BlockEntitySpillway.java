@@ -23,9 +23,12 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
+import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
 import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
@@ -63,34 +66,32 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
-        /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
+        super.updateEntity(); // drive BlockEntityBase lifecycle
         Direction dir = this.getDrainSide();
-        int dx = pos.getX() + dir.getStepX();
-        int dy = pos.getY() + dir.getStepY();
-        int dz = pos.getZ() + dir.getStepZ();
-        Block b = world.getBlockState(new BlockPos(dx, dy, dz)).getBlock();
+        BlockPos frontPos = pos.relative(dir);
+        BlockState frontState = world.getBlockState(frontPos);
+        Fluid f = ReikaFluidHelper.lookupFluidForBlock(frontState);
 
-        Block b2 = world.getBlockState(new BlockPos(dx, dy, dz).above()).getBlock();
-//        Fluid f = ReikaFluidHelper.lookupFluidForBlock(b);
-//        if ((InterfaceCache.STREAM.instanceOf(b)) || InterfaceCache.STREAM.instanceOf(b2)) {
-//            liquidPool = null;
-//            this.handleStream(world, pos, dx, dy + 1, dz);
-//        } else if (f == Fluids.WATER) {
-//            if (ReikaWorldHelper.isLiquidAColumn(world, dx, dy + 1, dz)) {
-//                liquidPool = null;
-//                tank.addLiquid((int) (50 * RotaryConfig.COMMON.getFreeWaterProduction()), Fluids.WATER);
-//                this.setActive();
-//            } else
-//                this.formAndDrainPool(world, pos, dx, dy, dz, b);
-//        } else {
-//            liquidPool = null;
-//        }
+        if (f == Fluids.WATER) {
+            // "Column" = source water above means we have a continual waterfall/stream feeding us
+            boolean isColumn = ReikaFluidHelper.lookupFluidForBlock(world.getBlockState(frontPos.above())) == Fluids.WATER;
+            if (isColumn) {
+                liquidPool = null;
+                tank.addLiquid((int)(50 * ConfigRegistry.getFreeWaterProduction()), Fluids.WATER);
+                this.setActive();
+            } else {
+                this.formAndDrainPool(world, pos, frontPos, frontState.getBlock());
+            }
+        } else {
+            liquidPool = null;
+        }
+
         if (activeTick > 0)
             activeTick--;
 
-        Block ab = world.getBlockState(pos.above()).getBlock();
-//        if (ReikaFluidHelper.lookupFluidForBlock(ab) == Fluids.WATER)
-//            world.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), 1);
+        // Clear any stray water that accumulated above us
+        if (ReikaFluidHelper.lookupFluidForBlock(world.getBlockState(pos.above())) == Fluids.WATER)
+            world.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), 1);
     }
 
     @Override
@@ -98,11 +99,14 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
 
     }
 
-    private void formAndDrainPool(Level world, BlockPos pos, int dx, int dy, int dz, Block id) {
+    private void formAndDrainPool(Level world, BlockPos pos, BlockPos frontPos, Block id) {
         if (liquidPool == null || liquidPool.isEmpty()) {
             liquidPool = new BlockArray();
             liquidPool.maxDepth = 240;
-//            liquidPool.recursiveAddWithBoundsMetadata(world, dx, dy, dz, id, 0, pos.getX() - 64, pos.getY(), pos.getZ() - 64, pos.getX() + 64, pos.getY() + 24, pos.getZ() + 64);
+            liquidPool.clampToChunkLoad = true;
+            int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+            liquidPool.recursiveAddWithBounds(world, frontPos.getX(), frontPos.getY(), frontPos.getZ(), id,
+                    x - 64, y, z - 64, x + 64, y + 24, z + 64);
             liquidPool.sortBlocksByDistance(worldPosition);
             liquidPool.sortBlocksByHeight(true);
             forcedEmpty.clear();
@@ -118,7 +122,7 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
             this.setActive();
         }
         for (BlockPos c2 : forcedEmpty) {
-            world.setBlock(c2, Blocks.AIR.defaultBlockState(), 0, 2);
+            world.setBlock(c2, Blocks.AIR.defaultBlockState(), 2);
         }
     }
 
@@ -146,18 +150,10 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
         return activeTick > 0;
     }
 
-    private Direction getDrainSide(Direction dir) {
-        return switch (dir) {
-            case EAST -> Direction.EAST;
-            case WEST -> Direction.WEST;
-            case NORTH -> Direction.NORTH;
-            case SOUTH -> Direction.SOUTH;
-            default -> Direction.NORTH;
-        };
-    }
-
     public Direction getDrainSide() {
-        return this.getDrainSide(dirs[1]); //todo s
+        Direction d = getBlockState().getValue(BlockRotaryCraftMachine.FACING);
+        // Spillway drains horizontally in the direction it faces
+        return d.getAxis().isHorizontal() ? d : Direction.NORTH;
     }
 
     @Override
@@ -225,41 +221,38 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
 
     @Override
     public int getTanks() {
-        return 0;
-    }
-
-    
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
+        return 1;
     }
 
     @Override
-    public int getTankCapacity(int tank) {
-        return 0;
+    public FluidStack getFluidInTank(int slot) {
+        return tank.getFluid();
     }
 
     @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
+    public int getTankCapacity(int slot) {
+        return CAPACITY;
+    }
+
+    @Override
+    public boolean isFluidValid(int slot, FluidStack stack) {
+        return false; // no external fill; water only comes from the environment
     }
 
     @Override
     public int fill(FluidStack resource, FluidAction action) {
-        return 0;
+        return 0; // not fillable externally
     }
 
-    
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
-        return /*from == Direction.DOWN && */resource.getFluid() == Fluids.WATER ? tank.drain(resource.getAmount(), FluidAction.EXECUTE) : null;
-
+        if (resource.getFluid() != Fluids.WATER) return FluidStack.EMPTY;
+        return tank.drain(resource.getAmount(), action);
     }
 
-    
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
+        return tank.drain(maxDrain, action);
     }
 
     @Override

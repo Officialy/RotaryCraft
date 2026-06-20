@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
@@ -26,7 +27,9 @@ import java.util.List;
 
 public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYield, IHasXP, IHeatRecipe {
     private final List<Ingredient> ingredients;
-    private final ItemStack output;
+    // 1.21.5: stored as ItemStackTemplate (deferred Holder<Item>) so the recipe can be built during
+    // datagen before Item components are bound; materialized via output.create() at runtime.
+    private final ItemStackTemplate output;
     private final float operatingTemperature;
     private final float experience;
     private final float timeMultiplier;
@@ -35,7 +38,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
     private final int bonusMin;
     private final int bonusMax;
 
-    public ShapedBlastFurnaceRecipe(List<Ingredient> ingredients, ItemStack output, float temperature, float experience, float timeMultiplier, boolean needsAdditives, int chance, int min, int max) {
+    public ShapedBlastFurnaceRecipe(List<Ingredient> ingredients, ItemStackTemplate output, float temperature, float experience, float timeMultiplier, boolean needsAdditives, int chance, int min, int max) {
         this.ingredients = ingredients;
         this.output = output;
         this.operatingTemperature = temperature;
@@ -80,11 +83,11 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
 
     @Override
     public ItemStack assemble(RecipeInput input) {
-        return output.copy();
+        return output.create();
     }
 
     public ItemStack getOutput() {
-        return output.copy();
+        return output.create();
     }
 
     public List<Ingredient> getIngredients() {
@@ -143,7 +146,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
 
     public static final MapCodec<ShapedBlastFurnaceRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(r -> r.ingredients),
-            ItemStack.CODEC.fieldOf("output").forGetter(r -> r.output),
+            ItemStackTemplate.CODEC.fieldOf("output").forGetter(r -> r.output),
             Codec.FLOAT.fieldOf("temperature").forGetter(r -> r.operatingTemperature),
             Codec.FLOAT.fieldOf("experience").forGetter(r -> r.experience),
             Codec.FLOAT.fieldOf("timeMultiplier").forGetter(r -> r.timeMultiplier),
@@ -157,7 +160,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
             (buf, r) -> {
                 buf.writeVarInt(r.ingredients.size());
                 for (Ingredient ing : r.ingredients) Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ing);
-                ItemStack.STREAM_CODEC.encode(buf, r.output);
+                ItemStackTemplate.STREAM_CODEC.encode(buf, r.output);
                 buf.writeFloat(r.operatingTemperature);
                 buf.writeFloat(r.experience);
                 buf.writeFloat(r.timeMultiplier);
@@ -170,7 +173,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
                 int ic = buf.readVarInt();
                 List<Ingredient> ings = new ArrayList<>();
                 for (int i = 0; i < ic; i++) ings.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
-                ItemStack out = ItemStack.STREAM_CODEC.decode(buf);
+                ItemStackTemplate out = ItemStackTemplate.STREAM_CODEC.decode(buf);
                 float temp = buf.readFloat();
                 float xp = buf.readFloat();
                 float tm = buf.readFloat();

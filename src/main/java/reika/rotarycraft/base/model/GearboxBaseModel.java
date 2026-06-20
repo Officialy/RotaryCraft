@@ -21,7 +21,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public abstract class GearboxBaseModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/gear/geartex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/gear/geartex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;
@@ -142,7 +142,7 @@ public abstract class GearboxBaseModel extends RotaryModelBase {
                         .addBox(0, 0, 0, 1, 3, 10),
                 PartPose.ZERO);
 
-        return LayerDefinition.create(definition, 128, 128);
+        return LayerDefinition.create(definition, 128, 32);
     }
 
     protected final void addSupport(ModelPart p) {
@@ -151,8 +151,10 @@ public abstract class GearboxBaseModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int light,  BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        // 1.21.5: ModelPart#render now takes (PoseStack, VertexConsumer, int packedLight, int packedOverlay, int color).
-        root.render(stack, tex, 0, 0, 0xFFFFFFFF);
+        // 1.21.5: ModelPart#render takes (PoseStack, VertexConsumer, int packedLight, int packedOverlay, int color).
+        // Must forward the real packed light (was hardcoded 0 → gearbox rendered unlit/black, discarding
+        // the neighbour-light sampled in RotaryTERenderer.extractRenderState) and NO_OVERLAY (not 0).
+        root.render(stack, tex, light, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
 /*    protected final void renderSupports(PoseStack stack, BlockEntity te, ArrayList li) {

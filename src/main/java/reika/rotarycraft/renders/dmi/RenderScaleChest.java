@@ -32,7 +32,7 @@
 //    /**
 //     * Renders the BlockEntity for the chest at a position.
 //     */
-//    public void renderBlockEntityScaleableChestAt(BlockEntityScaleableChest te, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityScaleableChestAt(BlockEntityScaleableChest te, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int i;
 //
 //        if (!te.isInWorld())
@@ -94,7 +94,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        this.renderBlockEntityScaleableChestAt((BlockEntityScaleableChest) tile, par2, par4, par6, par8);
 //        if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
 //            IORenderer.renderIO(tile, par2, par4, par6);

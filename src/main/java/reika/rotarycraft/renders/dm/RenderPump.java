@@ -14,7 +14,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -41,7 +40,7 @@ public class RenderPump extends RotaryTERenderer<BlockEntityPump> {
         pumpModel = new PumpModel(context.bakeLayer(RotaryModelLayers.PUMP));
     }
 
-    public void renderBlockEntityPumpAt(PoseStack stack, BlockEntityPump tile, MultiBufferSource bufferSource, int packedLight) {
+    public void renderBlockEntityPumpAt(PoseStack stack, BlockEntityPump tile, VertexConsumer bufferSource, int packedLight) {
         stack.pushPose();
         stack.translate(0.5, 1.5, 0.5);
         // Orientation based on FACING property
@@ -56,23 +55,23 @@ public class RenderPump extends RotaryTERenderer<BlockEntityPump> {
         };
         stack.mulPose(Axis.YP.rotationDegrees(yRot + 90));
         stack.mulPose(Axis.ZP.rotationDegrees(180));
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(PumpModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         pumpModel.renderAll(stack, vertexconsumer, packedLight, tile, null, -tile.phi, 0);
         stack.popPose();
     }
 
     // 1.21.5 NOTE: Tesselator.getBuilder/Vertex.endVertex/RenderSystem.enable* / IClientFluidTypeExtensions.getStillTexture+getTintColor
     // have all been removed. Liquid rendering needs a rewrite against the new MeshData/BufferBuilder pipeline.
-    private void renderLiquid(PoseStack stack, BlockEntityPump tile, MultiBufferSource bufferSource, int packedLight) {
+    private void renderLiquid(PoseStack stack, BlockEntityPump tile, VertexConsumer bufferSource, int packedLight) {
     }
 
     // 1.21.5: BlockEntityRenderer.render → submit(BlockEntityRenderState, PoseStack, SubmitNodeCollector, CameraRenderState).
     // The vanilla draw pipeline drains queued submissions LATER, after submit() returns, so the
     // outer PoseStack may have been popped by then. We snapshot the current pose onto a fresh
     // PoseStack that the lambda captures by reference, and we present a tiny lambda
-    // MultiBufferSource that always hands the existing renderBlockEntityPumpAt code the
+    // VertexConsumer that always hands the existing renderBlockEntityPumpAt code the
     // VertexConsumer the collector gave us. The pump only ever requests one RenderType per
-    // render call, so the single-RT MultiBufferSource is faithful.
+    // render call, so the single-RT VertexConsumer is faithful.
     @Override
     public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
         Level level = Minecraft.getInstance().level;
@@ -88,8 +87,7 @@ public class RenderPump extends RotaryTERenderer<BlockEntityPump> {
         RenderType rt = RenderTypes.entityCutout(PumpModel.TEXTURE_LOCATION);
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntityPumpAt(snapped, tile, oneRT, light);
+            renderBlockEntityPumpAt(snapped, tile, vc, light);
         });
         // IO arrows (red/green direction overlays). IORenderer routes its own submitCustomGeometry
         // calls for the debugFilledBox quads, so we pass the same outer poseStack — the block's

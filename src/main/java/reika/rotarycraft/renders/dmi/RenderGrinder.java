@@ -13,7 +13,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -37,14 +36,14 @@ public class RenderGrinder extends RotaryTERenderer<BlockEntityGrinder> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntityGrinderAt(BlockEntityGrinder tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+    public void renderBlockEntityGrinderAt(BlockEntityGrinder tile, PoseStack stack, VertexConsumer bufferSource, int light) {
         stack.pushPose();
         float f = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.mulPose(Axis.YP.rotationDegrees(f + 180));
         stack.mulPose(Axis.ZP.rotationDegrees(180));
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid(GrinderModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         modelGrinder.renderAll(stack, vertexconsumer, light, tile, null, -tile.phi, 0); //
         stack.popPose();
     }
@@ -55,7 +54,7 @@ public class RenderGrinder extends RotaryTERenderer<BlockEntityGrinder> {
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntityGrinder grinder)
             renderBlockEntityGrinderAt(grinder, stack, mbs, light);
     }

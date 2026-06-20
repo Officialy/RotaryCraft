@@ -1,18 +1,18 @@
 package reika.rotarycraft.data;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.data.recipes.*;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -20,7 +20,9 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
+import reika.rotarycraft.items.tools.ItemEngineUpgrade.UpgradeType;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 
@@ -128,8 +130,15 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             blastFurnace();
             grinder();
             frictionHeater();
+            extractor();
+            extractorSmelting();
+            fermenter();
             transmissionBlocks();
+            gearCrafting();
+            utilityMachines();
+            pulseFurnace();
             engines();
+            engineUpgrades();
             machines();
             toolItems();
             armor();
@@ -160,6 +169,65 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
         private void frictionHeater() {
             friction("hsla_steel_from_scrap", RotaryItems.HSLA_STEEL_SCRAP.get(),
                     new ItemStackTemplate(RotaryItems.HSLA_STEEL_INGOT.get()), 1000F, 200);
+        }
+
+        // Extractor four-stage ore chain (RotaryRecipeTypes.EXTRACTOR). For each ore: stage 0 grinds
+        // the ore block (matched by tag) to dust, then dust→slurry→solution→flakes. The flakes feed
+        // the vanilla/blast-furnace smelts below.
+        private void extractor() {
+            for (reika.rotarycraft.registry.ExtractOres ore : reika.rotarycraft.registry.ExtractOres.oreList) {
+                String n = ore.name().toLowerCase(java.util.Locale.ROOT);
+                extract(n + "_ore_to_dust", 0, tag(ore.getOreTag()), ore.getDust());
+                extract(n + "_dust_to_slurry", 1, Ingredient.of(ore.getDust()), ore.getSlurry());
+                extract(n + "_slurry_to_solution", 2, Ingredient.of(ore.getSlurry()), ore.getSolution());
+                extract(n + "_solution_to_flakes", 3, Ingredient.of(ore.getSolution()), ore.getFlakes());
+            }
+        }
+
+        private void extract(String name, int stage, Ingredient input, Item output) {
+            reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe recipe =
+                    new reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe(stage, input, new ItemStackTemplate(output));
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "extractor/" + name));
+            out.accept(key, recipe, null);
+        }
+
+        // Flake → ingot smelts (matching the legacy RotaryRecipes furnace outputs).
+        private void extractorSmelting() {
+            cookFlakes("coal_flakes", RotaryItems.COAL_FLAKES.get(), Items.COAL, 0.1F);
+            cookFlakes("iron_flakes", RotaryItems.IRON_FLAKES.get(), Items.IRON_INGOT, 0.7F);
+            cookFlakes("gold_flakes", RotaryItems.GOLD_FLAKES.get(), Items.GOLD_INGOT, 1F);
+            cookFlakes("copper_flakes", RotaryItems.COPPER_FLAKES.get(), Items.COPPER_INGOT, 0.7F);
+            cookFlakes("diamond_flakes", RotaryItems.DIAMOND_FLAKES.get(), Items.DIAMOND, 1F);
+            cookFlakes("emerald_flakes", RotaryItems.EMERALD_FLAKES.get(), Items.EMERALD, 1F);
+            cookFlakes("quartz_flakes", RotaryItems.QUARTZ_FLAKES.get(), Items.QUARTZ, 1F);
+            cookFlakes("silver_flakes", RotaryItems.SILVER_FLAKES.get(), RotaryItems.SILVER_INGOT.get(), 1F);
+        }
+
+        private void cookFlakes(String name, Item flake, Item ingot, float xp) {
+            SimpleCookingRecipeBuilder.smelting(Ingredient.of(flake), RecipeCategory.MISC, CookingBookCategory.MISC, ingot, xp, 200)
+                    .unlockedBy("has_" + name, has(flake))
+                    .save(out, "rotarycraft:" + name + "_to_ingot");
+        }
+
+        // Fermenter (RotaryRecipeTypes.FERMENTER): sugar+dirt → yeast, yeast+plant matter → sludge.
+        private void fermenter() {
+            ferment("yeast", Ingredient.of(Items.SUGAR), Ingredient.of(Items.DIRT), new ItemStackTemplate(RotaryItems.YEAST.get()));
+            Ingredient plants = Ingredient.of(
+                    Items.OAK_SAPLING, Items.SPRUCE_SAPLING, Items.BIRCH_SAPLING, Items.JUNGLE_SAPLING,
+                    Items.ACACIA_SAPLING, Items.DARK_OAK_SAPLING, Items.OAK_LEAVES, Items.SPRUCE_LEAVES,
+                    Items.BIRCH_LEAVES, Items.JUNGLE_LEAVES, Items.ACACIA_LEAVES, Items.DARK_OAK_LEAVES,
+                    Items.SHORT_GRASS, Items.TALL_GRASS, Items.FERN, Items.LARGE_FERN, Items.VINE,
+                    Items.LILY_PAD, Items.SUGAR_CANE, Items.POTATO, Items.DANDELION, Items.POPPY);
+            ferment("sludge", Ingredient.of(RotaryItems.YEAST.get()), plants, new ItemStackTemplate(RotaryItems.SLUDGE.get()));
+        }
+
+        private void ferment(String name, Ingredient catalyst, Ingredient input, ItemStackTemplate output) {
+            reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe recipe =
+                    new reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe(catalyst, input, output);
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "fermenter/" + name));
+            out.accept(key, recipe, null);
         }
 
         private void friction(String name, ItemLike input, ItemStackTemplate output, float temperature, int duration) {
@@ -266,16 +334,27 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     new ItemStackTemplate(RotaryItems.BEDROCK_ALLOY_INGOT.get()),
                     BEDROCKTEMP, 0F, 1.0F, 0, 0, 0);
 
-            // 26.1: missing aluminum alloy blast recipe. The performance engine + jet engine +
-            // micro turbine all need ALUMINUM_ALLOY_INGOT (legacy "silumin") but it had no
-            // production path in the port. Substitute composition: copper + redstone + sand
-            // (RotaryCraft 1.7 used aluminum + magnesium + silica; 1.21+ has copper but no
-            // aluminum so we approximate). Temperature matches HSLA — same iron-age tier.
-            blast("aluminum_alloy_ingot_from_copper",
-                    List.of(Items.COPPER_INGOT),
-                    List.of(Items.REDSTONE, Items.SAND),
+            // Bedrock bearing (RecipesBlastFurnace add3x3Crafting): the faithful shaped recipe —
+            // a ring of bedrock dust around a steel bearing, smelted in the blast furnace @ 1000°.
+            Ingredient dust = Ingredient.of(RotaryItems.BEDROCK_DUST.get());
+            Ingredient brng = Ingredient.of(RotaryItems.HSLA_STEEL_BEARING.get());
+            blastShaped("bedrock_alloy_bearing",
+                    List.of(dust, dust, dust, dust, brng, dust, dust, dust, dust),
+                    RotaryItems.BEDROCK_ALLOY_BEARING.get(),
+                    1000F, 0F, 1.0F, 0, 0, 0);
+
+            // Aluminum alloy / silumin (RecipesBlastFurnace line 120): the real recipe alloys
+            // aluminum with silicon dust @ 900°. The earlier copper+redstone+sand substitute was a
+            // made-up stand-in and is removed. The port has no separate raw-aluminum ingot, so its
+            // aluminum powder is the aluminum source (the "ingotAluminum" analogue). NOTE: aluminum
+            // powder itself has no vanilla source yet (upstream got it from aluminum-ore
+            // decomposition), so this chain is mod-ore-gated just like 1.7.10; it does not affect
+            // the steam-engine progression, which is well below the aluminum tier.
+            blast("aluminum_alloy_ingot",
+                    List.of(RotaryItems.ALUMINUM_ALLOY_POWDER.get()),
+                    List.of(RotaryItems.SILICON_DUST.get()),
                     new ItemStackTemplate(RotaryItems.ALUMINUM_ALLOY_INGOT.get()),
-                    SMELTTEMP, SMELT_XP, 1.0F, 0, 0, 0);
+                    900F, 0F, 1.0F, 0, 0, 0);
 
             // --- Coke: coal → coke (no additives, temp 400) --------------------------------
             blast("coke",
@@ -332,6 +411,21 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             List<Ingredient> adds = additives.stream().map(Ingredient::of).toList();
             ShapelessBlastFurnaceRecipe recipe = new ShapelessBlastFurnaceRecipe(
                     ings, adds, output, temperature, experience, timeMultiplier,
+                    bonusChance, bonusMin, bonusMax);
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", name));
+            out.accept(key, recipe, null);
+        }
+
+        // Shaped blast-furnace recipe: a 3×3 grid (9 ingredients, row-major) consumed by the blast
+        // furnace, matching the legacy {@code RecipesBlastFurnace.add3x3Crafting}. Pass exactly 9
+        // ingredients (use Ingredient.EMPTY for blanks).
+        private void blastShaped(String name, List<Ingredient> grid, ItemLike output,
+                                 float temperature, float experience, float timeMultiplier,
+                                 int bonusChance, int bonusMin, int bonusMax) {
+            ShapedBlastFurnaceRecipe recipe = new ShapedBlastFurnaceRecipe(
+                    grid, new ItemStackTemplate(output.asItem()),
+                    temperature, experience, timeMultiplier, false,
                     bonusChance, bonusMin, bonusMax);
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
                     Identifier.fromNamespaceAndPath("rotarycraft", name));
@@ -399,9 +493,10 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             flywheel(RotaryBlocks.WOOD_FLYWHEEL.get(), RotaryItems.WOOD_FLYWHEEL_CORE.get());
             flywheel(RotaryBlocks.HSLA_FLYWHEEL.get(), RotaryItems.IRON_FLYWHEEL_CORE.get());
             flywheel(RotaryBlocks.TUNGSTEN_FLYWHEEL.get(), RotaryItems.TUNGSTEN_ALLOY_FLYWHEEL_CORE.get());
-            // DIAMOND_FLYWHEEL block: no legacy Flywheels.DIAMOND enum entry — skip.
-            // BEDROCK_FLYWHEEL block: needs BEDROCK_ALLOY_FLYWHEEL_CORE item which is commented
-            // out of RotaryItems (line 54) — skip until that item is restored.
+            flywheel(RotaryBlocks.BEDROCK_FLYWHEEL.get(), RotaryItems.BEDROCK_ALLOY_FLYWHEEL_CORE.get());
+            // DIAMOND_FLYWHEEL: there is no diamond flywheel tier upstream (the 7th Flywheels enum
+            // value is DEPLETEDU, gated on mod-provided depleted uranium); the port's misnamed
+            // "diamond" flywheel block has no canonical core item/recipe — left for a later pass.
 
             // --- Gearbox blocks (legacy: 1 gear + 1 MOUNT → 1 gearbox block, per ratio) ---
             gearbox(RotaryBlocks.HSLA_GEARBOX_2x.get(), RotaryItems.HSLA_STEEL_GEAR_2x.get());
@@ -423,6 +518,287 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             // Wood / stone gearboxes: the legacy `GearboxTypes.WOOD.getPart(GearPart.UNIT*)` gear
             // items aren't ported (wood / stone don't have their own gear items in the current
             // RotaryItems). Skipped until those items are restored.
+        }
+
+        // =====================================================================================
+        // GEAR-CRAFTING PARTS + ADVANCED GEARS — direct port of the RotaryRecipes ball-bearing /
+        // bearing / gear recipes and the ADVANCEDGEARS metadata crafting (worm gear, CVT, 256x
+        // high-power gear). The COIL gear (legacy meta 2) needs the brake + tension-coil parts,
+        // which themselves depend on gear-unit / spring sub-parts not yet ported, so it is left
+        // for a follow-up. The bedrock bearing is a shaped *blast-furnace* recipe (bedrock dust
+        // ringed around a steel bearing); the blast helper here is smelting-style, so it is also
+        // deferred — the item is registered and creative-tab accessible in the meantime.
+        // =====================================================================================
+        private void gearCrafting() {
+            // Ball bearings — the universal bearing core. Shapeless 1 steel ingot → 4; 2×2 → 16.
+            shapeless(RecipeCategory.MISC, RotaryItems.BALL_BEARING.get(), 4)
+                    .requires(RotaryItems.HSLA_STEEL_INGOT.get())
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out, "rotarycraft:ball_bearing_from_ingot");
+            shaped(RecipeCategory.MISC, RotaryItems.BALL_BEARING.get(), 16)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("SS").pattern("SS")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out, "rotarycraft:ball_bearing_block");
+
+            // Stone gear — plus-pattern of stone → 2 (legacy ItemStacks.stonegear).
+            shaped(RecipeCategory.MISC, RotaryItems.STONE_GEAR.get(), 2)
+                    .define('W', Items.STONE)
+                    .pattern(" W ").pattern("WWW").pattern(" W ")
+                    .unlockedBy("has_stone", has(Items.STONE))
+                    .save(out);
+
+            // Worm gear item — diagonal shaft units around a central steel gear.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.WORM_GEAR.get())
+                    .define('S', RotaryItems.HSLA_SHAFT.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern("S  ").pattern(" G ").pattern("  S")
+                    .unlockedBy("has_hsla_gear", has(RotaryItems.HSLA_STEEL_GEAR.get()))
+                    .save(out);
+
+            // Per-material bearings — 8 ball bearings ringed around the tier's core item.
+            bearing(RotaryItems.STONE_BEARING.get(), RotaryItems.STONE_GEAR.get());
+            bearing(RotaryItems.HSLA_STEEL_BEARING.get(), RotaryItems.HSLA_STEEL_INGOT.get());
+            bearing(RotaryItems.TUNGSTEN_ALLOY_BEARING.get(), RotaryItems.TUNGSTEN_ALLOY_SPRING.get());
+            bearing(RotaryItems.DIAMOND_BEARING.get(), RotaryItems.DIAMOND_GEAR.get());
+
+            // --- Advanced gears (results are the placed blocks) -----------------------------
+            // Worm gear block (legacy ADVANCEDGEARS meta 0): "SW ", " GS", " M ".
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.WORMGEAR.get())
+                    .define('M', RotaryItems.MOUNT.get())
+                    .define('S', RotaryItems.HSLA_SHAFT.get())
+                    .define('W', RotaryItems.WORM_GEAR.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern("SW ").pattern(" GS").pattern(" M ")
+                    .unlockedBy("has_worm_gear", has(RotaryItems.WORM_GEAR.get()))
+                    .save(out);
+
+            // CVT block (meta 1): "BSB", "BSB", "sMc" — diamond bearings + bedrock-shaft frame.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.CVT.get())
+                    .define('B', RotaryItems.DIAMOND_BEARING.get())
+                    .define('S', RotaryBlocks.BEDROCK_SHAFT.get())
+                    .define('s', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('M', RotaryItems.MOUNT.get())
+                    .define('c', RotaryItems.SCREEN.get())
+                    .pattern("BSB").pattern("BSB").pattern("sMc")
+                    .unlockedBy("has_diamond_bearing", has(RotaryItems.DIAMOND_BEARING.get()))
+                    .save(out);
+
+            // 256x high-power gear block (meta 3): "SGS", "SGS", "BMB".
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.HIGHGEAR.get())
+                    .define('S', RotaryBlocks.BEDROCK_SHAFT.get())
+                    .define('B', RotaryItems.TUNGSTEN_ALLOY_BEARING.get())
+                    .define('M', RotaryItems.MOUNT.get())
+                    .define('G', RotaryItems.BEDROCK_ALLOY_GEAR_16x.get())
+                    .pattern("SGS").pattern("SGS").pattern("BMB")
+                    .unlockedBy("has_tungsten_bearing", has(RotaryItems.TUNGSTEN_ALLOY_BEARING.get()))
+                    .save(out);
+
+            // Brake disc (RotaryRecipes 1043): " g ","SBS"," G " — gear-unit (2x) over a steel
+            // bearing flanked by shafts, steel gear below.
+            shaped(RecipeCategory.MISC, RotaryItems.BRAKE_DISC.get())
+                    .define('g', RotaryItems.HSLA_STEEL_GEAR_2x.get())
+                    .define('S', RotaryItems.HSLA_SHAFT.get())
+                    .define('B', RotaryItems.HSLA_STEEL_BEARING.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern(" g ").pattern("SBS").pattern(" G ")
+                    .unlockedBy("has_hsla_steel_bearing", has(RotaryItems.HSLA_STEEL_BEARING.get()))
+                    .save(out);
+
+            // Tension coil (RotaryRecipes 1045): "WWW","WSW","WWW" — steel springs around a shaft.
+            shaped(RecipeCategory.MISC, RotaryItems.TENSION_COIL.get())
+                    .define('W', RotaryItems.HSLA_STEEL_SPRING.get())
+                    .define('S', RotaryItems.HSLA_SHAFT.get())
+                    .pattern("WWW").pattern("WSW").pattern("WWW")
+                    .unlockedBy("has_hsla_steel_spring", has(RotaryItems.HSLA_STEEL_SPRING.get()))
+                    .save(out);
+
+            // Bedrock flywheel core (RotaryRecipes 243, per-tier "WWW","WGW","WWW"): a ring of the
+            // tier's raw material (bedrock alloy ingot) around a steel gear.
+            shaped(RecipeCategory.MISC, RotaryItems.BEDROCK_ALLOY_FLYWHEEL_CORE.get())
+                    .define('W', RotaryItems.BEDROCK_ALLOY_INGOT.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern("WWW").pattern("WGW").pattern("WWW")
+                    .unlockedBy("has_bedrock_alloy_ingot", has(RotaryItems.BEDROCK_ALLOY_INGOT.get()))
+                    .save(out);
+
+            // Coil block / energy storage gear (meta 2): "BCS"," M " — brake + tension coil +
+            // shaft core over a mount.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.COIL.get())
+                    .define('B', RotaryItems.BRAKE_DISC.get())
+                    .define('C', RotaryItems.TENSION_COIL.get())
+                    .define('S', RotaryItems.HSLA_SHAFT_CORE.get())
+                    .define('M', RotaryItems.MOUNT.get())
+                    .pattern("BCS").pattern(" M ")
+                    .unlockedBy("has_tension_coil", has(RotaryItems.TENSION_COIL.get()))
+                    .save(out);
+        }
+
+        // =====================================================================================
+        // PULSE-JET FURNACE — the machine crafting recipe plus its smelt/recycle recipe set
+        // (RotaryRecipeTypes.PULSE_FURNACE). Each smelt needs the furnace to reach the listed
+        // temperature. Ported from RecipesPulseFurnace; recycle temps are simplified per metal
+        // (the legacy derived them from per-material melting points).
+        // =====================================================================================
+        private void pulseFurnace() {
+            // Machine (RotaryRecipes 754): "OCD","PcO","BBB" — compressor/diffuser/combustor +
+            // obsidian shell + fluid-pipe + base panels.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.PULSE_JET_FURNACE.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .define('O', Items.OBSIDIAN)
+                    .define('C', RotaryItems.COMPRESSOR.get())
+                    .define('D', RotaryItems.DIFFUSER.get())
+                    .define('c', RotaryItems.COMBUSTOR.get())
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .pattern("OCD").pattern("PcO").pattern("BBB")
+                    .unlockedBy("has_combustor", has(RotaryItems.COMBUSTOR.get()))
+                    .save(out);
+
+            // Signature smelts.
+            pulse("iron_to_steel", Items.IRON_INGOT, RotaryItems.HSLA_STEEL_INGOT.get(), 2, 900);
+            pulse("obsidian_to_blast_glass", Items.OBSIDIAN, RotaryBlocks.BLASTGLASS.get().asItem(), 1, 850);
+
+            // Metal recycling (counts from RecipesPulseFurnace). Iron/chainmail @700, gold @600,
+            // diamond @500 — usable once the furnace warms up.
+            pulse("recycle_iron_helmet", Items.IRON_HELMET, Items.IRON_INGOT, 5, 700);
+            pulse("recycle_iron_chestplate", Items.IRON_CHESTPLATE, Items.IRON_INGOT, 8, 700);
+            pulse("recycle_iron_leggings", Items.IRON_LEGGINGS, Items.IRON_INGOT, 7, 700);
+            pulse("recycle_iron_boots", Items.IRON_BOOTS, Items.IRON_INGOT, 4, 700);
+            pulse("recycle_iron_pickaxe", Items.IRON_PICKAXE, Items.IRON_INGOT, 3, 700);
+            pulse("recycle_iron_axe", Items.IRON_AXE, Items.IRON_INGOT, 3, 700);
+            pulse("recycle_iron_sword", Items.IRON_SWORD, Items.IRON_INGOT, 2, 700);
+            pulse("recycle_iron_shovel", Items.IRON_SHOVEL, Items.IRON_INGOT, 1, 700);
+            pulse("recycle_iron_hoe", Items.IRON_HOE, Items.IRON_INGOT, 2, 700);
+            pulse("recycle_chainmail_helmet", Items.CHAINMAIL_HELMET, Items.IRON_INGOT, 3, 700);
+            pulse("recycle_chainmail_chestplate", Items.CHAINMAIL_CHESTPLATE, Items.IRON_INGOT, 5, 700);
+            pulse("recycle_chainmail_leggings", Items.CHAINMAIL_LEGGINGS, Items.IRON_INGOT, 4, 700);
+            pulse("recycle_chainmail_boots", Items.CHAINMAIL_BOOTS, Items.IRON_INGOT, 2, 700);
+            pulse("recycle_golden_helmet", Items.GOLDEN_HELMET, Items.GOLD_INGOT, 5, 600);
+            pulse("recycle_golden_chestplate", Items.GOLDEN_CHESTPLATE, Items.GOLD_INGOT, 8, 600);
+            pulse("recycle_golden_leggings", Items.GOLDEN_LEGGINGS, Items.GOLD_INGOT, 7, 600);
+            pulse("recycle_golden_boots", Items.GOLDEN_BOOTS, Items.GOLD_INGOT, 4, 600);
+            pulse("recycle_golden_pickaxe", Items.GOLDEN_PICKAXE, Items.GOLD_INGOT, 3, 600);
+            pulse("recycle_golden_axe", Items.GOLDEN_AXE, Items.GOLD_INGOT, 3, 600);
+            pulse("recycle_golden_sword", Items.GOLDEN_SWORD, Items.GOLD_INGOT, 2, 600);
+            pulse("recycle_golden_shovel", Items.GOLDEN_SHOVEL, Items.GOLD_INGOT, 1, 600);
+            pulse("recycle_golden_hoe", Items.GOLDEN_HOE, Items.GOLD_INGOT, 2, 600);
+            pulse("recycle_diamond_helmet", Items.DIAMOND_HELMET, Items.DIAMOND, 5, 500);
+            pulse("recycle_diamond_chestplate", Items.DIAMOND_CHESTPLATE, Items.DIAMOND, 8, 500);
+            pulse("recycle_diamond_leggings", Items.DIAMOND_LEGGINGS, Items.DIAMOND, 7, 500);
+            pulse("recycle_diamond_boots", Items.DIAMOND_BOOTS, Items.DIAMOND, 4, 500);
+            pulse("recycle_diamond_pickaxe", Items.DIAMOND_PICKAXE, Items.DIAMOND, 3, 500);
+            pulse("recycle_diamond_axe", Items.DIAMOND_AXE, Items.DIAMOND, 3, 500);
+            pulse("recycle_diamond_sword", Items.DIAMOND_SWORD, Items.DIAMOND, 2, 500);
+            pulse("recycle_diamond_shovel", Items.DIAMOND_SHOVEL, Items.DIAMOND, 1, 500);
+            pulse("recycle_diamond_hoe", Items.DIAMOND_HOE, Items.DIAMOND, 2, 500);
+        }
+
+        private void pulse(String name, ItemLike input, ItemLike output, int count, float temperature) {
+            reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe recipe =
+                    new reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe(
+                            Ingredient.of(input),
+                            new ItemStackTemplate(output.asItem(), count),
+                            temperature);
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "pulse_furnace/" + name));
+            out.accept(key, recipe, null);
+        }
+
+        // Shared 8-ball-bearings-around-a-core bearing recipe (legacy "LLL","LSL","LLL").
+        private void bearing(ItemLike result, ItemLike core) {
+            shaped(RecipeCategory.MISC, result)
+                    .define('L', RotaryItems.BALL_BEARING.get())
+                    .define('S', core)
+                    .pattern("LLL").pattern("LSL").pattern("LLL")
+                    .unlockedBy("has_ball_bearing", has(RotaryItems.BALL_BEARING.get()))
+                    .save(out);
+        }
+
+        // =====================================================================================
+        // UTILITY MACHINES — machine blocks whose 1.7.10 recipes had no port yet but whose
+        // ingredients are all present in the current item set. Patterns are exact ports of the
+        // RotaryRecipes lines noted on each.
+        // =====================================================================================
+        private void utilityMachines() {
+            // FAN (RotaryRecipes 675): "WWW","WIW","#s#" — planks frame, impeller, base panel, shaft.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FAN.get())
+                    .define('W', Items.OAK_PLANKS)
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('#', RotaryItems.HSLA_PLATE.get())
+                    .define('s', RotaryItems.HSLA_SHAFT.get())
+                    .pattern("WWW").pattern("WIW").pattern("#s#")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
+            // GPR / ground radar (RotaryRecipes 752): "SsS","PCP","SRS" — steel, screen, base
+            // panel, radar unit, circuit board.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.GPR.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('s', RotaryItems.SCREEN.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('R', RotaryItems.RADAR_UNIT.get())
+                    .define('C', RotaryItems.CIRCUIT_BOARD.get())
+                    .pattern("SsS").pattern("PCP").pattern("SRS")
+                    .unlockedBy("has_radar_unit", has(RotaryItems.RADAR_UNIT.get()))
+                    .save(out);
+
+            // STEAM_TURBINE (RotaryRecipes 269): "sPs","GTG","ScS" — steel + base panel frame,
+            // glass walls, turbine rotor, diamond shaft core. (Non-hard-converter ingredient path.)
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.STEAM_TURBINE.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('G', Items.GLASS)
+                    .define('T', RotaryItems.TURBINE.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('c', RotaryItems.DIAMOND_SHAFT_CORE.get())
+                    .pattern("sPs").pattern("GTG").pattern("ScS")
+                    .unlockedBy("has_turbine", has(RotaryItems.TURBINE.get()))
+                    .save(out);
+
+            // BUCKET_FILLER (RotaryRecipes 823): "SPS","PCP","SPS" — steel + fluid-pipe frame
+            // around a chest.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BUCKET_FILLER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .define('C', Items.CHEST)
+                    .pattern("SPS").pattern("PCP").pattern("SPS")
+                    .unlockedBy("has_fluid_pipe", has(RotaryBlocks.FLUID_PIPE.get()))
+                    .save(out);
+
+            // FRICTION_BOILER (RotaryRecipes 271, MachineRegistry.BOILER): "SPS","G G","sIs" —
+            // steel + pipe + glass shell around an impeller. (Non-hard-converter gating = steel.)
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FRICTION_BOILER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .define('G', Items.GLASS)
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .pattern("SPS").pattern("G G").pattern("sIs")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
+            // VACUUM (RotaryRecipes 735): "SwS","wIw","SCS" — steel + black wool muffling around
+            // an impeller, over a chest.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.VACUUM.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('w', Items.WOOL.black())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('C', Items.CHEST)
+                    .pattern("SwS").pattern("wIw").pattern("SCS")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
+            // FILLING_STATION (RotaryRecipes 869): "ppS"," iR","ppB" — fluid-pipe frame + steel,
+            // an impeller, a reservoir, on a base panel. Fills fuel-using items (e.g. the jetpack).
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FILLING_STATION.get())
+                    .define('p', RotaryBlocks.FLUID_PIPE.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('i', RotaryItems.IMPELLER.get())
+                    .define('R', RotaryBlocks.RESERVOIR.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .pattern("ppS").pattern(" iR").pattern("ppB")
+                    .unlockedBy("has_reservoir", has(RotaryBlocks.RESERVOIR.get()))
+                    .save(out);
         }
 
         // =====================================================================================
@@ -595,13 +971,8 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_glass", has(net.minecraft.world.item.Items.GLASS))
                     .save(out);
 
-            // BRAKE_DISC: clutch friction surface. HSLA plate with iron pattern.
-            shaped(RecipeCategory.REDSTONE, RotaryItems.BRAKE_DISC.get())
-                    .define('H', RotaryItems.HSLA_PLATE.get())
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
-                    .pattern(" I ").pattern("IHI").pattern(" I ")
-                    .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get()))
-                    .save(out);
+            // BRAKE_DISC now has its faithful original recipe in gearCrafting() (gear-unit + steel
+            // bearing + steel gear), so the earlier HSLA-plate placeholder is removed.
 
             // WORKTABLE: RotaryCraft's primary early-game crafting station. 4 wood planks
             // around a vanilla crafting table + iron tool bits. Without this recipe the
@@ -697,6 +1068,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
         // lines 300-565, skipping recipes whose blocks or ingredients aren't ported.
         // =====================================================================================
         private void machines() {
+            // BEDROCKBREAKER: "BDt","BSO","BDt" — 4×BASEPANEL + 2×DIAMOND + 2×TUNGSTEN + 1×STEEL + 1×OBSIDIAN.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BEDROCK_BREAKER.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .define('D', Items.DIAMOND)
+                    .define('t', RotaryItems.TUNGSTEN_INGOT.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('O', Items.OBSIDIAN)
+                    .pattern("BDt").pattern("BSO").pattern("BDt")
+                    .unlockedBy("has_tungsten_ingot", has(RotaryItems.TUNGSTEN_INGOT.get()))
+                    .save(out);
             // AEROSOLIZER: "BRB","RIR","BRB" — 4×BASEPANEL + 4×RESERVOIR + 1×IMPELLER.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.AEROSOLIZER.get())
                     .define('B', RotaryItems.HSLA_PLATE.get())
@@ -926,7 +1307,7 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('s', RotaryItems.HSLA_PLATE.get())
                     .define('n', Items.NETHER_STAR)
                     .define('g', Items.GOLD_INGOT)
-                    .define('l', Items.PURPLE_DYE)
+                    .define('l', Items.DYE.purple())
                     .pattern("lnl").pattern("ddd").pattern("sgs")
                     .unlockedBy("has_nether_star", has(Items.NETHER_STAR))
                     .save(out);
@@ -1144,9 +1525,9 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.SOLAR_TOWER.get())
                     .define('p', RotaryItems.HSLA_PLATE.get())
                     .define('P', RotaryBlocks.FLUID_PIPE.get())
-                    .define('i', Items.BLACK_DYE)
+                    .define('i', Items.DYE.black())
                     .pattern("pPp").pattern("iPi").pattern("pPp")
-                    .unlockedBy("has_black_dye", has(Items.BLACK_DYE))
+                    .unlockedBy("has_black_dye", has(Items.DYE.black()))
                     .save(out);
 
             // --- Pipe / hose / fuel-line / bedpipe ---
@@ -1413,11 +1794,11 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .save(out);
             // DISK: addSizedRecipe(4, "wRw","RSR","wRw") — 4×BLACK_WOOL + 4×REDSTONE + 1×HSLA → 4 discs.
             shaped(RecipeCategory.MISC, RotaryItems.DISK.get(), 4)
-                    .define('w', Items.BLACK_WOOL)
+                    .define('w', Items.WOOL.black())
                     .define('R', Items.REDSTONE)
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
                     .pattern("wRw").pattern("RSR").pattern("wRw")
-                    .unlockedBy("has_black_wool", has(Items.BLACK_WOOL))
+                    .unlockedBy("has_black_wool", has(Items.WOOL.black()))
                     .save(out);
             // CRAFTPATTERN: addSizedRecipe(4, " S "," B "," S ") — 2×HSLA + 1×BASEPANEL → 4 patterns in
             // legacy 1.7. In modern Minecraft the craft pattern item has max stack size 1 (component
@@ -1430,6 +1811,79 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern(" S ").pattern(" B ").pattern(" S ")
                     .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get()))
                     .save(out);
+        }
+
+        // =====================================================================================
+        // ENGINE UPGRADES — ItemEngineUpgrade items with upgradeType in CUSTOM_DATA.
+        // Applied by right-clicking a compatible machine (ItemBasic.useOn → canUpgradeWith).
+        // Recipes ported from RotaryRecipes.addMetaRecipe() calls; blast-furnace-only upgrades
+        // (MAGNETOSTATIC tiers 3-5, EFFICIENCY) are deferred until the blast-furnace recipe
+        // handler is fully ported. Red-gold-ingot-gated upgrades (FLUX, tiers 1-2) are also
+        // deferred since that item isn't ported yet.
+        // =====================================================================================
+        private void engineUpgrades() {
+            // REDSTONE (upgrade.redstone, original meta=9): integrated redstone clock.
+            // Recipe: "rQr","qsq","rEr" — r=redstone, Q=clock, q=quartz, s=steel, E=ender_pearl.
+            engineUpgrade(UpgradeType.REDSTONE)
+                    .define('r', Items.REDSTONE)
+                    .define('Q', Items.CLOCK)
+                    .define('q', Items.QUARTZ)
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('E', Items.ENDER_PEARL)
+                    .pattern("rQr").pattern("qsq").pattern("rEr")
+                    .unlockedBy("has_ender_pearl", has(Items.ENDER_PEARL))
+                    .save(out, "rotarycraft:engine_upgrade_redstone");
+
+            // LODESTONE (upgrade.lodestone, original meta=10): increases magnetizer effectivity.
+            // No canonical vanilla recipe — using MC lodestone block + steel + coil + redstone.
+            engineUpgrade(UpgradeType.LODESTONE)
+                    .define('L', Items.LODESTONE)
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('r', Items.REDSTONE)
+                    .define('C', RotaryItems.GOLD_COIL.get())
+                    .pattern("srs").pattern("rLr").pattern("sCs")
+                    .unlockedBy("has_lodestone", has(Items.LODESTONE))
+                    .save(out, "rotarycraft:engine_upgrade_lodestone");
+
+            // PERFORMANCE (upgrade.gasperf, original meta=0): upgrades gas engine to sports engine.
+            // Recipe: "sRs","gGg"," b " — s=silumin(alu_alloy), R=radiator, G=gear_unit(2x),
+            // g=gold, b=basepanel. Approximation: silumin ↔ aluminum_alloy_ingot,
+            // gearunit ↔ impeller (closest available item in current port).
+            engineUpgrade(UpgradeType.PERFORMANCE)
+                    .define('s', RotaryItems.ALUMINUM_ALLOY_INGOT.get())
+                    .define('R', RotaryItems.RADIATOR.get())
+                    .define('G', RotaryItems.IMPELLER.get())
+                    .define('g', Items.GOLD_INGOT)
+                    .define('b', RotaryItems.HSLA_PLATE.get())
+                    .pattern("sRs").pattern("gGg").pattern(" b ")
+                    .unlockedBy("has_radiator", has(RotaryItems.RADIATOR.get()))
+                    .save(out, "rotarycraft:engine_upgrade_performance");
+
+            // AFTERBURNER (upgrade.afterburn, original meta=6): adds afterburner to the jet engine.
+            // Recipe: "SEI","ERE","SEI" — S=high-combustor, E=bedrock-dust, I=igniter, R=compound-turbine.
+            engineUpgrade(UpgradeType.AFTERBURNER)
+                    .define('S', RotaryItems.HIGH_TEMPERATURE_COMBUSTOR.get())
+                    .define('E', RotaryItems.BEDROCK_DUST.get())
+                    .define('I', RotaryItems.IGNITION_UNIT.get())
+                    .define('R', RotaryItems.COMPOUND_TURBINE.get())
+                    .pattern("SEI").pattern("ERE").pattern("SEI")
+                    .unlockedBy("has_compound_turbine", has(RotaryItems.COMPOUND_TURBINE.get()))
+                    .save(out, "rotarycraft:engine_upgrade_afterburner");
+        }
+
+        /** Returns a ShapedRecipeBuilder whose result is engine_upgrade with the given upgradeType in CUSTOM_DATA. */
+        private ShapedRecipeBuilder engineUpgrade(UpgradeType type) {
+            // 1.21.5 datagen: item components are not bound during data generation, so building a
+            // full ItemStack would NPE ("Components not bound yet"). Instead build an
+            // ItemStackTemplate directly from a DataComponentPatch and pass it to the inherited
+            // shaped(RecipeCategory, ItemStackTemplate) helper.
+            CompoundTag nbt = new CompoundTag();
+            nbt.putString("upgradeType", type.desc);
+            DataComponentPatch patch = DataComponentPatch.builder()
+                    .set(DataComponents.CUSTOM_DATA, CustomData.of(nbt))
+                    .build();
+            ItemStackTemplate result = new ItemStackTemplate(RotaryItems.UPGRADE.get(), 1, patch);
+            return shaped(RecipeCategory.MISC, result);
         }
 
         // =====================================================================================

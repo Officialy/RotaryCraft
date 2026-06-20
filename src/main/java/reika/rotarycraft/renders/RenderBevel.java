@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -32,7 +31,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         bevelModel = new BevelModel(context.bakeLayer(RotaryModelLayers.BEVEL));
     }
 
-    public void renderBlockEntityBevelAt(PoseStack stack, BlockEntityBevelGear tile, MultiBufferSource bufferSource, int light) {
+    public void renderBlockEntityBevelAt(PoseStack stack, BlockEntityBevelGear tile, VertexConsumer bufferSource, int light) {
         stack.pushPose();
 
         stack.translate(0.5, 1.5, 0.5);
@@ -78,7 +77,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
             stack.mulPose(Axis.ZP.rotationDegrees(rotationZ));
 
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(BevelModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         bevelModel.renderAll(stack, vertexconsumer, light, tile, null, tile.phi * dir);
         stack.popPose();
     }
@@ -101,8 +100,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         RenderType rt = RenderTypes.entityCutout(BevelModel.TEXTURE_LOCATION);
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntityBevelAt(snapped, tile, oneRT, light);
+            renderBlockEntityBevelAt(snapped, tile, vc, light);
         });
         // IO arrows for the bevel's read/write directions (debugFilledBox quads).
         if (tile.isInWorld()) {
@@ -111,7 +109,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         // Face numbers / compass still TODO (need separate per-RT submissions).
     }
 
-    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double x, double y, double z, MultiBufferSource bufferSource) {
+    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double x, double y, double z, net.minecraft.client.renderer.SubmitNodeCollector collector) {
         stack.pushPose();
         stack.translate(x, y, z);
         ReikaRenderHelper.disableLighting();
@@ -142,18 +140,10 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
             stack.translate(d, 0.28, l);
             stack.scale(scale, scale, scale);
 
-            Minecraft.getInstance().font.drawInBatch(
-                    String.valueOf(i),
-                    0,
-                    0,
-                    0xFFFFFF,
-                    false,
-                    stack.last().pose(),
-                    bufferSource,
-                    Font.DisplayMode.NORMAL,
-                    0,
-                    15728880
-            );
+            // 26.2: Font.drawInBatch removed; in-world text is submitted via the feature pipeline.
+            collector.submitText(stack, 0, 0,
+                    net.minecraft.util.FormattedCharSequence.forward(String.valueOf(i), net.minecraft.network.chat.Style.EMPTY),
+                    false, Font.DisplayMode.NORMAL, 15728880, 0xFFFFFF, 0, 0);
 
             stack.popPose();
         }
@@ -162,7 +152,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         stack.popPose();
     }
 
-    private void renderCompass(BlockEntity tile, double x, double y, double z, MultiBufferSource bufferSource, PoseStack stack) {
+    private void renderCompass(BlockEntity tile, double x, double y, double z, VertexConsumer bufferSource, PoseStack stack) {
         // TODO: Port to 26.1 rendering API (Tesselator.getBuilder() + begin() + vertex().color().endVertex() + end() all removed)
     }
 

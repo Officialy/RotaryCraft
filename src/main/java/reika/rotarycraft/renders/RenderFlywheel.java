@@ -10,9 +10,9 @@
 //package reika.rotarycraft.renders;
 //
 //import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 //import com.mojang.math.Quaternion;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+////import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
 //import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 //import reika.rotarycraft.auxiliary.IORenderer;
@@ -41,7 +41,7 @@
 //        return "Transmission/Flywheel/";
 //    }
 //
-//    public void renderBlockEntityFlywheelAt(PoseStack stack, BlockEntityFlywheel tile, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityFlywheelAt(PoseStack stack, BlockEntityFlywheel tile, VertexConsumer bufferSource, int light) {
 //
 //        FlywheelModel var14;
 //        var14 = flywheelModel;
@@ -85,7 +85,7 @@
 //    }
 //
 //    @Override
-//    public void render(BlockEntityFlywheel tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
+//    public void render(BlockEntityFlywheel tile, float v, PoseStack stack, VertexConsumer multiBufferSource, int i, int i1) {
 //        if (this.doRenderModel(stack, tile))
 //            this.renderBlockEntityFlywheelAt(stack, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), i);
 //        if ((tile).isInWorld())// && MinecraftForgeClient.getRenderPass() == 1)

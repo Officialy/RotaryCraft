@@ -61,7 +61,7 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         INGREDIENTS.put(Items.BLAZE_POWDER, 1.5F);
         INGREDIENTS.put(RotaryItems.COAL_DUST.get(), 1F);
         INGREDIENTS.put(Items.MAGMA_CREAM, 0.75F);
-        INGREDIENTS.put(Items.PINK_DYE, 0.5F);
+        INGREDIENTS.put(Items.DYE.pink(), 0.5F);
         INGREDIENTS.put(RotaryItems.NETHERRACK_DUST.get(), 2F);
         INGREDIENTS.put(RotaryItems.TAR.get(), 1.5F);
     }

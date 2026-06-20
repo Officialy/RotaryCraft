@@ -496,9 +496,55 @@ public class BedrockBreakerModel extends RotaryModelBase {
         return LayerDefinition.create(definition, 128, 128);
     }
 
-        @Override
+    @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        int ovl = OverlayTexture.NO_OVERLAY;
+        // Static body parts
+        shape1.render(stack, tex, packedLightIn, ovl);
+        shape2.render(stack, tex, packedLightIn, ovl);
+        shape2a.render(stack, tex, packedLightIn, ovl);
+        shape4.render(stack, tex, packedLightIn, ovl);
+        shape4a.render(stack, tex, packedLightIn, ovl);
+        shape5.render(stack, tex, packedLightIn, ovl);
+        shape5a.render(stack, tex, packedLightIn, ovl);
+        shape6.render(stack, tex, packedLightIn, ovl);
+        shape6a.render(stack, tex, packedLightIn, ovl);
+        shape6b.render(stack, tex, packedLightIn, ovl);
+        shape6c.render(stack, tex, packedLightIn, ovl);
+
+        // Spinning drill-head spokes (shape3*) — add phi to each part's xRot so they rotate around
+        // their shared pivot at model-space (7, 16, 0), matching the original glRotatef(phi, 1,0,0).
+        ModelPart[] spokes = {
+            shape3, shape3a, shape3b, shape3c, shape3d, shape3e, shape3f, shape3g,
+            shape3h, shape3i, shape3j, shape3k, shape3cc, shape3l, shape3m, shape3n,
+            shape3o, shape3p, shape3q, shape3r, shape3s, shape3t, shape3u, shape3v,
+            shape3w, shape3x, shape3y, shape3z, shape3aa, shape3bb, shape3cca, shape3dd
+        };
+        for (ModelPart p : spokes) p.xRot += phi;
+        for (ModelPart p : spokes) p.render(stack, tex, packedLightIn, ovl);
+        for (ModelPart p : spokes) p.xRot -= phi;
+
+        // Cutting-shaft segments (shape7*) — one set per step, translated along the drill axis.
+        // Step 0 means the drill hasn't started; i runs from 1 to min(step,360)-1.
+        if (conditions != null && !conditions.isEmpty()) {
+            int step = (Integer) conditions.get(0);
+            float grind = conditions.size() > 1 ? (Float) conditions.get(1) : 0f;
+            ModelPart[] teeth = { shape7, shape7a, shape7b, shape7c, shape7d, shape7e, shape7f, shape7g };
+            for (ModelPart p : teeth) p.xRot += phi;
+            for (int i = 1; i < Math.min(step, 360); i++) {
+                int a = i - 1;
+                stack.pushPose();
+                // Each tooth-set is offset by 'a' model-units (1 unit = 1/16 block) along +X.
+                stack.translate(a / 16f, 0f, 0f);
+                if (i == step - 1 && grind > 0f) {
+                    stack.translate(-grind / 32f, 0f, 0f);
+                    stack.scale(1f + grind / 16f, 1f, 1f);
+                }
+                for (ModelPart p : teeth) p.render(stack, tex, packedLightIn, ovl);
+                stack.popPose();
+            }
+            for (ModelPart p : teeth) p.xRot -= phi;
+        }
     }
 
     @Override

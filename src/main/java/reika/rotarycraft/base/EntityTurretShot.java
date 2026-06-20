@@ -10,6 +10,7 @@
 package reika.rotarycraft.base;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
@@ -36,7 +37,7 @@ public abstract class EntityTurretShot extends Fireball implements IEntityWithCo
     }
 
     public EntityTurretShot(Level world, BlockPos pos, BlockPos vpos, BlockEntityAimedCannon te) {
-        super(EntityType.FIREBALL, world);
+        super(EntityTypes.FIREBALL, world);
         this.setPos(pos.getX(), pos.getY(), pos.getZ());
         net.minecraft.world.phys.Vec3 direction = new net.minecraft.world.phys.Vec3(vpos.getX() - pos.getX(), vpos.getY() - pos.getY(), vpos.getZ() - pos.getZ()).normalize().scale(0.1);
         this.setDeltaMovement(direction);

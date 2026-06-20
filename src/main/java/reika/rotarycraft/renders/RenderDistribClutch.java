@@ -10,9 +10,9 @@
 //package reika.rotarycraft.renders;
 //
 //import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 //import com.mojang.math.Quaternion;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.world.level.block.entity.BlockEntity;
+////import net.minecraft.world.level.block.entity.BlockEntity;
 //import org.lwjgl.opengl.GL11;
 //import org.lwjgl.opengl.GL12;
 //import reika.dragonapi.interfaces.blockentity.RenderFetcher;
@@ -28,7 +28,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityDistributionClutchAt(PoseStack stack, BlockEntityDistributionClutch tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityDistributionClutchAt(PoseStack stack, BlockEntityDistributionClutch tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        ModelDistribClutch var14;
 //        var14 = DistributionClutchModel;
 //
@@ -74,7 +74,7 @@
 //    }
 //
 //    @Override
-//    public void render(BlockEntity tile, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int i1) {
+//    public void render(BlockEntity tile, float v, PoseStack poseStack, VertexConsumer multiBufferSource, int i, int i1) {
 //        /*todo if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityDistributionClutchAt(poseStack,(BlockEntityDistributionClutch) tile, par2, par4, par6, par8);
 //        if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {

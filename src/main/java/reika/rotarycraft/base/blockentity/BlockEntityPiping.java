@@ -81,20 +81,14 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         Fluid f = this.getAttributes();
         int amt = this.getFluidLevel();
         if (f == null || amt <= 0)
-            return 101300;
-        //p = rho*R*T approximation
+            return 0;
+        // p = rho*R*T approximation (gauge pressure, base = 0 when empty)
         long ret;
-    if (f.getFluidType().isLighterThanAir())
-      ret =
-          101300
-              + (128
-                  * (int)
-                      (amt
-                          / 1000D
-                          * f.getFluidType().getTemperature()
-                          * Math.abs(f.getFluidType().getDensity())
-                          / 1000D));
-    else ret = 101300 + amt * 24L;
+        if (f.getFluidType().isLighterThanAir())
+            ret = (long)(128 * (amt / 1000D * f.getFluidType().getTemperature()
+                    * Math.abs(f.getFluidType().getDensity()) / 1000D));
+        else
+            ret = amt * 24L;
         return (int) Math.min(Integer.MAX_VALUE, ret);
     }
 

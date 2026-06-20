@@ -26,7 +26,7 @@ public class BlankContainer<T extends BlockEntityBase> extends CoreContainer<T> 
 
     @Override
     public boolean stillValid(Player player) {
-        return player.distanceToSqr(tile.getBlockPos().getCenter()) <= 16;
+        return player.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(tile.getBlockPos())) <= 16;
     }
 
     @Override

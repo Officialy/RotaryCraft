@@ -26,7 +26,7 @@
 //
 //    private ModelMultiCannon MultiCannonModel = new ModelMultiCannon();
 //
-//    public void renderBlockEntityMultiCannonAt(BlockEntityMultiCannon tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityMultiCannonAt(BlockEntityMultiCannon tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -68,7 +68,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (tile == null)
 //            return;
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))

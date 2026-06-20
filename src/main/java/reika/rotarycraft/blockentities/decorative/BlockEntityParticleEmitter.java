@@ -90,7 +90,7 @@ public class BlockEntityParticleEmitter extends BlockEntitySpringPowered
     @Override public ItemStack removeItemNoUpdate(int i){ if(i!=0) return ItemStack.EMPTY; ItemStack s=inv.getStackInSlot(0); inv.setStackInSlot(0, ItemStack.EMPTY); return s; }
     @Override public void setItem(int i, ItemStack s){ if(i==0) inv.setStackInSlot(0,s); }
     @Override public void clearContent()            { inv.setStackInSlot(0, ItemStack.EMPTY); }
-    @Override public boolean stillValid(Player p)   { return !isRemoved() && p.distanceToSqr(worldPosition.getCenter())<=64; }
+    @Override public boolean stillValid(Player p)   { return !isRemoved() && p.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(worldPosition))<=64; }
 
     /* Capability exposure */
 

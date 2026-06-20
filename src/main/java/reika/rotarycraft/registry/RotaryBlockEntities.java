@@ -1,9 +1,13 @@
 package reika.rotarycraft.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import reika.dragonapi.interfaces.blockentity.HasItemHandler;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.entity.transmission.BlockGearbox;
 import reika.rotarycraft.blockentities.*;
@@ -19,8 +23,10 @@ import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
+import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
 import reika.rotarycraft.blockentities.production.*;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
@@ -80,6 +86,9 @@ public class RotaryBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityWindEngine>> WIND_ENGINE = BLOCK_ENTITIES.register("wind_engine", () ->
             new BlockEntityType<>(BlockEntityWindEngine::new, RotaryBlocks.WIND_ENGINE.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityHydroEngine>> HYDRO_ENGINE = BLOCK_ENTITIES.register("hydro_engine", () ->
+            new BlockEntityType<>(BlockEntityHydroEngine::new, RotaryBlocks.HYDRO_ENGINE.get()));
 
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityMobHarvester>> MOB_HARVESTER = BLOCK_ENTITIES.register("mob_harvester", () ->
@@ -280,11 +289,11 @@ public class RotaryBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFurnaceHeater>> FRICTION_HEATER = BLOCK_ENTITIES.register("friction_heater", () ->
             new BlockEntityType<>(BlockEntityFurnaceHeater::new, RotaryBlocks.FRICTION_HEATER.get()));
 
-//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityPulseFurnace>> PULSE_JET_FURNACE = BLOCK_ENTITIES.register("pulse_jet_furnace", () ->
-//            new BlockEntityType<>(BlockEntityPulseFurnace::new, RotaryBlocks.PULSE_JET_FURNACE.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityPulseFurnace>> PULSE_JET_FURNACE = BLOCK_ENTITIES.register("pulse_jet_furnace", () ->
+            new BlockEntityType<>(BlockEntityPulseFurnace::new, RotaryBlocks.PULSE_JET_FURNACE.get()));
 
-//    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFillingStation>> FILLING_STATION = BLOCK_ENTITIES.register("filling_station", () ->
-//            new BlockEntityType<>(BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFillingStation>> FILLING_STATION = BLOCK_ENTITIES.register("filling_station", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFan>> FAN = BLOCK_ENTITIES.register("fan", () ->
             new BlockEntityType<>(BlockEntityFan::new, RotaryBlocks.FAN.get()));
@@ -293,8 +302,16 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityGrinder::new, RotaryBlocks.GRINDER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.production.BlockEntityFractionator>> FRACTIONATOR = BLOCK_ENTITIES.register("fractionator", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityFractionator::new, RotaryBlocks.FRACTIONATOR.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityMagnetizer>> MAGNETIZER = BLOCK_ENTITIES.register("magnetizer", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityMagnetizer::new, RotaryBlocks.MAGNETIZER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityBlastFurnace>> BLAST_FURNACE = BLOCK_ENTITIES.register("blast_furnace", () ->
             new BlockEntityType<>(BlockEntityBlastFurnace::new, RotaryBlocks.BLAST_FURNACE.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.production.BlockEntityFermenter>> FERMENTER = BLOCK_ENTITIES.register("fermenter", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityFermenter::new, RotaryBlocks.FERMENTER.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityExtractor>> EXTRACTOR = BLOCK_ENTITIES.register("extractor", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityExtractor::new, RotaryBlocks.EXTRACTOR.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.production.BlockEntityBedrockBreaker>> BEDROCK_BREAKER = BLOCK_ENTITIES.register("bedrock_breaker", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityBedrockBreaker::new, RotaryBlocks.BEDROCK_BREAKER.get()));
@@ -303,5 +320,24 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityBedrockSlice::new, RotaryBlocks.BEDROCKSLICE.get()));
 
 
+    /**
+     * Expose machine inventories as the standard NeoForge item capability. Reika BEs carry their
+     * inventory as a {@link reika.dragonapi.instantiable.resources.ManagedItemHandler} (already a
+     * {@code ResourceHandler<ItemResource>}) reachable via {@link HasItemHandler#getItemHandler()},
+     * but that wasn't registered as {@code Capabilities.Item.BLOCK} — so hoppers/pipes and
+     * code-driven testing couldn't reach it. Registered for every RotaryCraft BE type; the
+     * provider returns the handler only for those that actually carry one.
+     */
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        for (DeferredHolder<BlockEntityType<?>, ? extends BlockEntityType<?>> holder : BLOCK_ENTITIES.getEntries()) {
+            registerItemCap(event, holder.get());
+        }
+    }
 
+    private static <T extends BlockEntity> void registerItemCap(
+            RegisterCapabilitiesEvent event, BlockEntityType<T> type) {
+        event.registerBlockEntity(
+                Capabilities.Item.BLOCK, type,
+                (be, ctx) -> be instanceof HasItemHandler h ? h.getItemHandler() : null);
+    }
 }

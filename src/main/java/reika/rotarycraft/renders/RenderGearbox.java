@@ -13,7 +13,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.MultiBufferSource;
+// 26.2: VertexConsumer removed from BER submission path.
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -82,7 +82,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntityGearboxAt(PoseStack stack, BlockEntityGearbox tile, MultiBufferSource bufferSource, int light, int overlay) {
+    public void renderBlockEntityGearboxAt(PoseStack stack, BlockEntityGearbox tile, VertexConsumer bufferSource, int light, int overlay) {
 //        this.setupGL(stack, tile, par2, par4, par6);
 
         if (tile.isInWorld()) {
@@ -100,19 +100,19 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
 
             switch (tile.getRatio()) {
                 case 2 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(GearboxModel.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource;
                     gearboxModel.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
                 }
                 case 4 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox4Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource;
                     gearboxModel4.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
                 }
                 case 8 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox8Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource;
                     gearboxModel8.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
                 }
                 case 16 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox16Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource;
                     gearboxModel16.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
                 }
             }
@@ -122,19 +122,19 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
             stack.mulPose(Axis.YP.rotationDegrees(-90));
             switch (tile.getRatio()) {
                 case 2 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(GearboxModel.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource;
                     gearboxModel.renderAll(stack, vertexconsumer, light, tile, null);
                 }
                 case 4 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox4Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource;
                     gearboxModel4.renderAll(stack, vertexconsumer, light, tile, null);
                 }
                 case 8 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox8Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource;
                     gearboxModel8.renderAll(stack, vertexconsumer, light, tile, null);
                 }
                 case 16 -> {
-                    VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.tryParse(Gearbox16Model.TEXTURE_LOCATION + tile.getGearboxType().getBaseGearboxTexture())));
+                    VertexConsumer vertexconsumer = bufferSource;
                     gearboxModel16.renderAll(stack, vertexconsumer, light, tile, null);
                 }
             }
@@ -225,7 +225,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
     }*/
 
     // 1.21.5: render -> submit; @Override dropped
-    public void render(BlockEntityGearbox tile, float p_112308_, PoseStack stack, MultiBufferSource bufferSource, int packetLight, int overlay) {
+    public void render(BlockEntityGearbox tile, float p_112308_, PoseStack stack, VertexConsumer bufferSource, int packetLight, int overlay) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityGearboxAt(stack, tile, bufferSource, packetLight, overlay);
         if ((tile).isInWorld()) {//todo && MinecraftForgeClient.getRenderPass() == 1) {
@@ -239,10 +239,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
     }
 
     /**
-     * 1.21.5 submit hook. Mirrors the engine/shaft pattern: snapshot the outer pose so the
-     * deferred lambda doesn't see a popped stack, pre-compute the RenderType (one per gearbox
-     * ratio × material combination), and use a single-RT MultiBufferSource adapter so the
-     * existing {@code renderBlockEntityGearboxAt} code keeps working unchanged.
+     * 26.2 submit hook. Snapshot pose + pass VertexConsumer directly (via tiny adapter for legacy renderBlock...At).
      */
     @Override
     public void submit(net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState state,
@@ -263,12 +260,12 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
         snapped.last().set(poseStack.last());
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntityGearboxAt(snapped, tile, oneRT, light, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY);
+            renderBlockEntityGearboxAt(snapped, tile, vc, light, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY);
         });
         if (tile.isInWorld()) {
             IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
         }
     }
+
 }
 

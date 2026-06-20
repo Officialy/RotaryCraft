@@ -13,10 +13,10 @@ import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.platform.CompareOp;
+import com.mojang.blaze3d.PrimitiveTopology;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -43,13 +43,17 @@ public final class RotaryRenderPipelines {
      * quads pipeline, depth WRITE disabled), but with depth TEST set to {@link CompareOp#ALWAYS}
      * so the cube draws regardless of what's already in the depth buffer.
      */
-    public static final RenderPipeline NO_DEPTH_FILLED_BOX = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
+    public static final RenderPipeline NO_DEPTH_FILLED_BOX = RenderPipeline.builder()
             .withLocation("pipeline/rotarycraft_no_depth_filled_box")
+            .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+            .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
             .withVertexShader("core/position_color")
             .withFragmentShader("core/position_color")
             .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
-            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
             .withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false))
+            .withCull(false)
             .build();
 
     /** RenderType wrapping {@link #NO_DEPTH_FILLED_BOX}; matches the {@code debugFilledBox} setup. */
@@ -68,13 +72,17 @@ public final class RotaryRenderPipelines {
      * no-depth filled box. Mirrors vanilla {@code LINES_SNIPPET} (POSITION_COLOR_NORMAL_LINE_WIDTH
      * vertex format, translucent blend, cull off) with depth test {@code ALWAYS_PASS}.
      */
-    public static final RenderPipeline NO_DEPTH_LINES = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
+    public static final RenderPipeline NO_DEPTH_LINES = RenderPipeline.builder()
             .withLocation("pipeline/rotarycraft_no_depth_lines")
+            .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+            .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.FOG)
             .withVertexShader("core/rendertype_lines")
             .withFragmentShader("core/rendertype_lines")
             .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
             .withCull(false)
-            .withVertexFormat(DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH, VertexFormat.Mode.LINES)
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH)
+            .withPrimitiveTopology(PrimitiveTopology.LINES)
             .withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false))
             .build();
 

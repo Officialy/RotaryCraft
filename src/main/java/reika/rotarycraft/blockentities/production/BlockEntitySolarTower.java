@@ -427,7 +427,9 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
 
     @Override
     public void breakBlock() {
-        plant.invalidate(level);
+        if (plant != null) {
+            plant.invalidate(level);
+        }
     }
 
     //@Override

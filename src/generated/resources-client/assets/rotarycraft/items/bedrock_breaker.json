@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "rotarycraft:block/bedrock_breaker"
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/bedrock_breaker",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "bedrockbreaker"
+    }
   }
 }

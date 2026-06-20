@@ -134,13 +134,17 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
         if (m != null) {
             if (m == MachineRegistry.WIND_ENGINE || m == MachineRegistry.STEAM_ENGINE ||
                     m == MachineRegistry.PERFORMANCE_ENGINE || m == MachineRegistry.MICRO_TURBINE ||
-                    m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE) {
+                    m == MachineRegistry.GAS_ENGINE || m == MachineRegistry.DC_ENGINE || m == MachineRegistry.AC_ENGINE ||
+                    m == MachineRegistry.HYDRO_ENGINE) {
 
                 BlockEntityEngine clicked = (BlockEntityEngine) te;
                 level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise()), 3);
 
-
                 clicked.onRotate();
+                return InteractionResult.SUCCESS;
+            }
+            if (m == MachineRegistry.FERMENTER || m == MachineRegistry.BEDROCKBREAKER) {
+                level.setBlock(pos, te.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise()), 3);
                 return InteractionResult.SUCCESS;
             }
             if (m == MachineRegistry.FLYWHEEL) {

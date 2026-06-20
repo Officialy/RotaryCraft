@@ -13,7 +13,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
@@ -43,7 +43,7 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         monitorModel = new MonitorModel(context.bakeLayer(RotaryModelLayers.DYNOMONITOR));
     }
 
-    private void renderBlockEntityMonitorAt(PoseStack stack, BlockEntityMonitor tile, MultiBufferSource bufferSource, int light) {
+    private void renderBlockEntityMonitorAt(PoseStack stack, BlockEntityMonitor tile, VertexConsumer bufferSource, int light) {
         stack.pushPose();
         BlockState state = tile.getBlockState();
         float yaw = state.getValue(BlockRotaryCraftMachine.FACING).toYRot();
@@ -51,7 +51,7 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         stack.mulPose(Axis.YP.rotationDegrees(-yaw - 90));
         stack.mulPose(Axis.ZP.rotationDegrees(180));
 
-        VertexConsumer vc = bufferSource.getBuffer(RenderTypes.entityCutout(MonitorModel.TEXTURE_LOCATION));
+        VertexConsumer vc = bufferSource;
         monitorModel.renderAll(stack, vc, light, tile, null, -tile.phi);
         stack.popPose();
     }
@@ -70,8 +70,7 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
 
         RenderType rt = RenderTypes.entityCutout(MonitorModel.TEXTURE_LOCATION);
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntityMonitorAt(snapped, tile, oneRT, light);
+            renderBlockEntityMonitorAt(snapped, tile, vc, light);
         });
 
         if (tile.isInWorld()) {
@@ -81,16 +80,8 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         }
     }
 
-    /**
-     * Draws three lines of text (Power / Torque / Speed) on each of the two faces parallel to
-     * the dynamometer's FACING axis. The legacy 1.7 renderer drew the labels on both sides so
-     * the user could read the power-test result without having to circle the block; we mirror
-     * that here. Uses {@link SubmitNodeCollector#submitText} (the same path vanilla signs use)
-     * so the text batches through the standard GUI text pipeline with proper lighting.
-     */
-    private void renderReadout(PoseStack poseStack, BlockEntityMonitor tile,
-                                SubmitNodeCollector collector, net.minecraft.core.BlockPos blockPos) {
-        net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
+    private void renderReadout(PoseStack poseStack, BlockEntityMonitor tile, SubmitNodeCollector collector, net.minecraft.core.BlockPos blockPos) {
+        Font font = Minecraft.getInstance().font;
         String powerStr  = "Power: "  + reika.rotarycraft.auxiliary.RotaryAux.formatPower(tile.power);
         String torqueStr = "Torque: " + reika.rotarycraft.auxiliary.RotaryAux.formatTorque(tile.torque);
         String speedStr  = "Speed: "  + reika.rotarycraft.auxiliary.RotaryAux.formatSpeed(tile.omega);
@@ -111,17 +102,18 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         var mode      = net.minecraft.client.gui.Font.DisplayMode.NORMAL;
         float scale   = 0.0125F;
 
+
         for (int side = 0; side < 2; side++) {
             PoseStack textStack = new PoseStack();
             textStack.last().set(poseStack.last());
 
             textStack.pushPose();
+
             textStack.translate(0.5F, 0.7F, 0.5F);
             float yaw = (side == 0) ? facingYaw : (facingYaw + 180F);
-            textStack.mulPose(Axis.YP.rotationDegrees(-yaw));
-            // Push the text just off the block face along the local Z axis so it doesn't
-            // z-fight the model. The Z 180° flip orients the text right-side-up (Font
-            // draws in screen-space conventions where +Y is downward).
+            textStack.mulPose(Axis.YP.rotationDegrees(yaw - 90F));
+//            poseStack.mulPose(Axis.YP.rotationDegrees(-facingYaw - 90F));
+
             textStack.translate(0F, 0F, -0.51F);
             textStack.mulPose(Axis.ZP.rotationDegrees(180F));
             textStack.scale(scale, scale, scale);

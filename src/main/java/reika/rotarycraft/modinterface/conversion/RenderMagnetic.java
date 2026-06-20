@@ -12,7 +12,6 @@ package reika.rotarycraft.modinterface.conversion;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -37,7 +36,7 @@ public class RenderMagnetic extends RotaryTERenderer<BlockEntityMagnetEngine> {
         dynamoModel = new MagneticModel(context.bakeLayer(RotaryModelLayers.MAGNETIC));
     }
 
-    public void renderBlockEntityDynamoAt(PoseStack stack, BlockEntityMagnetEngine tile, MultiBufferSource buffer, int pPackedLight) {
+    public void renderBlockEntityDynamoAt(PoseStack stack, BlockEntityMagnetEngine tile, VertexConsumer buffer, int pPackedLight) {
         stack.pushPose();
         Level level = tile.getLevel();
         boolean flag = level != null;
@@ -52,13 +51,13 @@ public class RenderMagnetic extends RotaryTERenderer<BlockEntityMagnetEngine> {
             stack.mulPose(Axis.YP.rotationDegrees(f));
         }
 
-        VertexConsumer vertexconsumer = buffer.getBuffer(RenderTypes.entityCutout(MagneticModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = buffer;
         dynamoModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, tile.phi, 0);
         stack.popPose();
     }
 
     // 1.21.5: render -> submit; @Override dropped
-    public void render(BlockEntityMagnetEngine tile, float p_112308_, PoseStack stack, MultiBufferSource multiBufferSource, int light, int p_112312_) {
+    public void render(BlockEntityMagnetEngine tile, float p_112308_, PoseStack stack, VertexConsumer multiBufferSource, int light, int p_112312_) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntityDynamoAt(stack, tile, multiBufferSource, light);
         if (tile.isInWorld()) {// && MinecraftForgeClient.getRenderPass() == 1) {

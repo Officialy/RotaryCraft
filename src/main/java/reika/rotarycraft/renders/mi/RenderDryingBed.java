@@ -43,7 +43,7 @@
 //        return "dryingbedtex.png";
 //    }
 //
-//    public void renderBlockEntityDryingBedAt(BlockEntityDryingBed tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityDryingBedAt(BlockEntityDryingBed tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        ModelDryingBed var14;
 //        var14 = model;
 //
@@ -68,7 +68,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        BlockEntityDryingBed te = (BlockEntityDryingBed) tile;
 //        if (this.doRenderModel(te))
 //            this.renderBlockEntityDryingBedAt(te, par2, par4, par6, par8);

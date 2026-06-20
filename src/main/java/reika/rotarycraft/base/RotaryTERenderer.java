@@ -3,15 +3,20 @@ package reika.rotarycraft.base;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.util.LightCoordsUtil;
+import net.minecraft.client.renderer.SubmitNodeCollector; // SubmitNodeCollector + VertexConsumer replace MultiBufferSource in 26.2 feature pipeline.
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import reika.dragonapi.auxiliary.trackers.SpecialDayTracker;
 import reika.dragonapi.base.BlockEntityBase;
 import reika.dragonapi.base.BlockEntityRenderBase;
@@ -180,8 +185,31 @@ public abstract class RotaryTERenderer<TE extends BlockEntity> extends BlockEnti
         return false;
     }
 
+    /**
+     * 26.2 port: renderModel now receives a VertexConsumer directly (from submitCustomGeometry lambda),
+     * not a MultiBufferSource. Implementations should obtain a buffer via the consumer or just draw.
+     */
     @SuppressWarnings("unchecked")
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer vc, int light) {
+    }
+
+    // The machine blocks are full/opaque, so the light at their own position (what extractBase
+    // samples) is 0 and the BER model renders pure black. Sample the brightest neighbour instead
+    // so the model is lit like its surroundings.
+    @Override
+    public void extractRenderState(TE be, BlockEntityRenderState state, float partialTicks, Vec3 cameraPosition, ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+        super.extractRenderState(be, state, partialTicks, cameraPosition, breakProgress);
+        Level level = be.getLevel();
+        if (level == null)
+            return;
+        BlockPos pos = be.getBlockPos();
+        int best = state.lightCoords;
+        for (Direction d : Direction.values()) {
+            int l = LightCoordsUtil.getLightCoords(level, pos.relative(d));
+            if (l > best)
+                best = l;
+        }
+        state.lightCoords = best;
     }
 
     @Override
@@ -201,8 +229,8 @@ public abstract class RotaryTERenderer<TE extends BlockEntity> extends BlockEnti
         snapped.last().set(poseStack.last());
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            this.renderModel(snapped, be, oneRT, light);
+            // 26.2: pass the VertexConsumer straight through; no MultiBufferSource adapter.
+            this.renderModel(snapped, be, vc, light);
         });
         if (be instanceof BlockEntityIOMachine ioMachine && ioMachine.isInWorld()) {
             IORenderer.renderIO(poseStack, collector, ioMachine, ioMachine.getBlockPos());

@@ -28,7 +28,7 @@ public class ItemCalculator extends ItemRotaryTool {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (hand.equals(InteractionHand.MAIN_HAND)) {
-            Minecraft.getInstance().setScreen(new GuiCalculator(player, level));
+            Minecraft.getInstance().gui.setScreen(new GuiCalculator(player, level));
         }
         return super.use(level, player, hand);
     }

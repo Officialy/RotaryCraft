@@ -24,7 +24,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityLawnSprinklerAt(BlockEntityLawnSprinkler tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityLawnSprinklerAt(BlockEntityLawnSprinkler tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        ModelLawnSprinkler var14;
 //        var14 = LawnSprinklerModel;
 //
@@ -49,7 +49,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityLawnSprinklerAt((BlockEntityLawnSprinkler) tile, par2, par4, par6, par8);
 //    }

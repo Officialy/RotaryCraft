@@ -11,7 +11,6 @@ package reika.rotarycraft.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -36,11 +35,14 @@ public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntityMirrorAt(PoseStack stack, BlockEntityMirror tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntityMirrorAt(PoseStack stack, BlockEntityMirror tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
-//        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-//        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//        stack.translate((float) par2, (float) par4 + 2.0F, (float) par6 + 1.0F);
+        // The legacy line translated to (renderPos + 0, +2, +1). In 1.21.5 the PoseStack is already
+        // at the block origin, so only the (0, +2, +1) pivot offset must be re-applied here — it was
+        // commented out during the port, which left the net transform at block+(0.5,-0.5,-0.5)
+        // (below/behind the block, underground) so the mirror was invisible. With it restored the
+        // net origin is block+(0.5,1.5,0.5) — the top-centre, matching every other machine renderer.
+        stack.translate(0.0F, 2.0F, 1.0F);
         stack.scale(1.0F, -1.0F, -1.0F);
         stack.translate(0.5F, 0.5F, 0.5F);
         int var11 = 1;     //used to rotate the model about metadata
@@ -50,7 +52,7 @@ public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
         }
         stack.translate(0, var12, 0);
         stack.scale(1, var11, 1);
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entitySolid(MirrorModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         mirrorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.scale(1, var11, 1);
         stack.translate(0, -var12, 0);
@@ -68,7 +70,7 @@ public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntityMirror mirror)
             renderBlockEntityMirrorAt(stack, mirror, mbs, light);
     }

@@ -64,10 +64,11 @@ public abstract class IORenderer {
     /*  is the live one; these overloads short-circuit so the legacy code is   */
     /*  harmless until each renderer's {@code submit(...)} hook is rewritten.  */
     /* ----------------------------------------------------------------------- */
+    // 26.2: MultiBufferSource no longer exists. Legacy overloads retained as no-ops but must not mention the removed type.
     @SuppressWarnings("unused")
-    public static void renderIO(PoseStack matrixStack, net.minecraft.client.renderer.MultiBufferSource bufferSource, BlockEntity teb, BlockPos pos) { /* no-op; legacy path */ }
+    public static void renderIO(PoseStack matrixStack, Object legacyBufferSource, BlockEntity teb, BlockPos pos) { /* no-op; legacy path */ }
     @SuppressWarnings("unused")
-    public static void renderIO(PoseStack matrixStack, net.minecraft.client.renderer.MultiBufferSource bufferSource, BlockEntity teb, double x, double y, double z) { /* no-op; legacy path */ }
+    public static void renderIO(PoseStack matrixStack, Object legacyBufferSource, BlockEntity teb, double x, double y, double z) { /* no-op; legacy path */ }
 
     public static void renderIO(PoseStack matrixStack, SubmitNodeCollector collector, BlockEntity teb, double x, double y, double z) {
         ItemStack is = Minecraft.getInstance().player.getItemBySlot(EquipmentSlot.HEAD);

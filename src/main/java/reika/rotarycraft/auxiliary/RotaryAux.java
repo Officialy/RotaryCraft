@@ -294,12 +294,20 @@ public class RotaryAux {
         text = text.replace("$SPEED_UNIT$", speedunit);
         text = text.replace("$POWER_UNIT$", powerunit);
         text = text.replace("$TORQUE_UNIT$", torqueunit);
-        String ret = String.format(text, (int) torque, (int) speed, power);
-        return ret;
+        return formatValuesForBook(text, new Object[]{(int) torque, (int) speed, power});
     }
 
     public static String formatValuesForBook(String text, Object[] vals) {
-        return String.format(text, vals);
+        if (text == null)
+            return null;
+        try {
+            return String.format(text, vals);
+        } catch (RuntimeException e) {
+            // page texts come from the handbook XML; specifiers without matching data
+            // (machines not yet ported) must not crash the load — show the raw text
+            RotaryCraft.LOGGER.error("Handbook text has format specifiers with missing or mismatched data: " + e);
+            return text;
+        }
     }
 
     public static String formatDistance(double dist) {

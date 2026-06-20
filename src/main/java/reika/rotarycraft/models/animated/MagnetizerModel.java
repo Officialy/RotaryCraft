@@ -266,7 +266,39 @@ public class MagnetizerModel extends RotaryModelBase {
 
         @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        int ovl = OverlayTexture.NO_OVERLAY;
+        // Static base parts
+        shape1.render(stack, tex, packedLightIn, ovl);
+        shape2.render(stack, tex, packedLightIn, ovl);
+        shape2a.render(stack, tex, packedLightIn, ovl);
+        shape2c.render(stack, tex, packedLightIn, ovl);
+        shape2b.render(stack, tex, packedLightIn, ovl);
+        shape2d.render(stack, tex, packedLightIn, ovl);
+        shape2e.render(stack, tex, packedLightIn, ovl);
+        shape2f.render(stack, tex, packedLightIn, ovl);
+        shape2g.render(stack, tex, packedLightIn, ovl);
+        shape2j.render(stack, tex, packedLightIn, ovl);
+        shape2h.render(stack, tex, packedLightIn, ovl);
+        shape4.render(stack, tex, packedLightIn, ovl);
+        shape4a.render(stack, tex, packedLightIn, ovl);
+        shape2k.render(stack, tex, packedLightIn, ovl);
+        shape2l.render(stack, tex, packedLightIn, ovl);
+        shape2m.render(stack, tex, packedLightIn, ovl);
+        shape2n.render(stack, tex, packedLightIn, ovl);
+        shape2o.render(stack, tex, packedLightIn, ovl);
+        shape2p.render(stack, tex, packedLightIn, ovl);
+
+        // Animated core parts — only rendered when a magnetization core is present
+        boolean has = conditions != null && !conditions.isEmpty() && Boolean.TRUE.equals(conditions.get(0));
+        if (!has) return;
+
+        // Pivot for core rotation is at model-space y=15 (= 0.9375 blocks).
+        // We shift phi into the part poses by temporarily modifying zRot.
+        // Shape3/3a rotate around the shaft axis (Z), shape5* are the endcaps.
+        ModelPart[] rotating = { shape3, shape3a, shape5, shape5a, shape5b, shape5c };
+        for (ModelPart p : rotating) p.zRot += phi;
+        for (ModelPart p : rotating) p.render(stack, tex, packedLightIn, ovl);
+        for (ModelPart p : rotating) p.zRot -= phi;
     }
 
     @Override

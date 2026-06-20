@@ -10,6 +10,7 @@
 //package reika.rotarycraft.blockentities.weaponry;
 //
 //import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 //import net.minecraft.nbt.CompoundTag;
 //import net.minecraft.world.entity.Entity;
 //import net.minecraft.world.entity.player.Player;

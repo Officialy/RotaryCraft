@@ -23,12 +23,13 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
+import reika.dragonapi.interfaces.blockentity.HasItemHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.registry.MachineRegistry;
 
 import java.util.Optional;
 
-public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiver {
+public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiver implements HasItemHandler {
 
     public ManagedItemHandler itemHandler = new ManagedItemHandler(getContainerSize()) {
         @Override
@@ -36,6 +37,11 @@ public abstract class InventoriedPowerLiquidReceiver extends PoweredLiquidReceiv
             setChanged();
         }
     };
+
+    @Override
+    public final ManagedItemHandler getItemHandler() {
+        return itemHandler;
+    }
 
     public InventoriedPowerLiquidReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

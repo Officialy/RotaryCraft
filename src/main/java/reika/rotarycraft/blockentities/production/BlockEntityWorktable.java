@@ -22,6 +22,10 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
+import reika.dragonapi.interfaces.blockentity.CraftingTile;
 import reika.dragonapi.interfaces.blockentity.TriggerableAction;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.ReikaNBTHelper;
@@ -41,7 +45,7 @@ import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.SoundRegistry;
 
-public class BlockEntityWorktable extends InventoriedRCBlockEntity implements TriggerableAction, AlternatingRedstoneUser {
+public class BlockEntityWorktable extends InventoriedRCBlockEntity implements CraftingTile<BlockEntityWorktable>, TriggerableAction, AlternatingRedstoneUser {
 
     private boolean hasUpgrade;
 //    private WorktableRecipes.WorktableRecipe toCraft;
@@ -254,8 +258,9 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
     }
 
     public boolean isReadyToCraft() {
+        // Ready when all output slots (9–17) are empty — can receive new crafting results.
         for (int i = 9; i < 18; i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty())
+            if (!itemHandler.getStackInSlot(i).isEmpty())
                 return false;
         }
         return true;
@@ -684,6 +689,39 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Tr
     @Override
     public void clearContent() {
 
+    }
+
+    // --- CraftingTile<BlockEntityWorktable> ---
+
+    @Override
+    public CraftingContainer constructContainer() {
+        AbstractContainerMenu dummy = new AbstractContainerMenu(null, -1) {
+            @Override public net.minecraft.world.item.ItemStack quickMoveStack(Player p, int s) { return net.minecraft.world.item.ItemStack.EMPTY; }
+            @Override public boolean stillValid(Player p) { return false; }
+        };
+        TransientCraftingContainer c = new TransientCraftingContainer(dummy, 3, 3);
+        for (int i = 0; i < 9; i++) c.setItem(i, itemHandler.getStackInSlot(i).copy());
+        return c;
+    }
+
+    @Override
+    public boolean handleCrafting(BlockEntityWorktable wr, Player ep, boolean keyDown) {
+        return craft();
+    }
+
+    @Override
+    public int getOutputSlot() {
+        return 13;
+    }
+
+    @Override
+    public BlockEntityWorktable getToCraft() {
+        return this;
+    }
+
+    @Override
+    public void setToCraft(BlockEntityWorktable recipe) {
+        // Worktable resolves vanilla recipes at craft time; no discrete recipe object to store.
     }
 }
 

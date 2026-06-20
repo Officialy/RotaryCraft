@@ -12,6 +12,7 @@
 //import forestry.api.lepidopterology.IEntityButterfly;
 //
 //import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 //import net.minecraft.entity.LivingEntity;
 //import net.minecraft.entity.monster.EntityBlaze;
 //import net.minecraft.entity.monster.EntityGhast;

@@ -36,14 +36,14 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> HSLA_GEARBOX_4x = registerMachineBlock("hsla_gearbox_4x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
     public static final DeferredBlock<Block> HSLA_GEARBOX_8x = registerMachineBlock("hsla_gearbox_8x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
     public static final DeferredBlock<Block> HSLA_GEARBOX_16x = registerMachineBlock("hsla_gearbox_16x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> WOOD_GEARBOX_2x = registerMachineBlock("wood_gearbox_2x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> WOOD_GEARBOX_4x = registerMachineBlock("wood_gearbox_4x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> WOOD_GEARBOX_8x = registerMachineBlock("wood_gearbox_8x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> WOOD_GEARBOX_16x = registerMachineBlock("wood_gearbox_16x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> STONE_GEARBOX_2x = registerMachineBlock("stone_gearbox_2x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> STONE_GEARBOX_4x = registerMachineBlock("stone_gearbox_4x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> STONE_GEARBOX_8x = registerMachineBlock("stone_gearbox_8x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> STONE_GEARBOX_16x = registerMachineBlock("stone_gearbox_16x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> WOOD_GEARBOX_2x = registerMachineBlock("wood_gearbox_2x", () -> new BlockGearbox(GearboxTypes.WOOD, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> WOOD_GEARBOX_4x = registerMachineBlock("wood_gearbox_4x", () -> new BlockGearbox(GearboxTypes.WOOD, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> WOOD_GEARBOX_8x = registerMachineBlock("wood_gearbox_8x", () -> new BlockGearbox(GearboxTypes.WOOD, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> WOOD_GEARBOX_16x = registerMachineBlock("wood_gearbox_16x", () -> new BlockGearbox(GearboxTypes.WOOD, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> STONE_GEARBOX_2x = registerMachineBlock("stone_gearbox_2x", () -> new BlockGearbox(GearboxTypes.STONE, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> STONE_GEARBOX_4x = registerMachineBlock("stone_gearbox_4x", () -> new BlockGearbox(GearboxTypes.STONE, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> STONE_GEARBOX_8x = registerMachineBlock("stone_gearbox_8x", () -> new BlockGearbox(GearboxTypes.STONE, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> STONE_GEARBOX_16x = registerMachineBlock("stone_gearbox_16x", () -> new BlockGearbox(GearboxTypes.STONE, blockProperties().strength(20)));
     public static final DeferredBlock<Block> TUNGSTEN_GEARBOX_2x = registerMachineBlock("tungsten_gearbox_2x", () -> new BlockGearbox(GearboxTypes.TUNGSTEN, blockProperties().strength(20)));
     public static final DeferredBlock<Block> TUNGSTEN_GEARBOX_4x = registerMachineBlock("tungsten_gearbox_4x", () -> new BlockGearbox(GearboxTypes.TUNGSTEN, blockProperties().strength(20)));
     public static final DeferredBlock<Block> TUNGSTEN_GEARBOX_8x = registerMachineBlock("tungsten_gearbox_8x", () -> new BlockGearbox(GearboxTypes.TUNGSTEN, blockProperties().strength(20)));
@@ -56,7 +56,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> BEDROCK_GEARBOX_4x = registerMachineBlock("bedrock_gearbox_4x", () -> new BlockGearbox(GearboxTypes.BEDROCK, blockProperties().strength(20)));
     public static final DeferredBlock<Block> BEDROCK_GEARBOX_8x = registerMachineBlock("bedrock_gearbox_8x", () -> new BlockGearbox(GearboxTypes.BEDROCK, blockProperties().strength(20)));
     public static final DeferredBlock<Block> BEDROCK_GEARBOX_16x = registerMachineBlock("bedrock_gearbox_16x", () -> new BlockGearbox(GearboxTypes.BEDROCK, blockProperties().strength(20)));
-    //    public static final DeferredBlock<Block> FILLING_STATION = register("filling_station", () -> new BlockFillingStation(blockProperties().strength(20)));
+    public static final DeferredBlock<Block> FILLING_STATION = registerMachineBlock("filling_station", () -> new reika.rotarycraft.base.blocks.entity.BlockFillingStation(blockProperties().strength(20)));
     public static final DeferredBlock<Block> WOOD_SHAFT = registerMachineBlock("wood_shaft", () -> new BlockShaft(MaterialRegistry.WOOD, blockProperties().strength(20)));
     public static final DeferredBlock<Block> STONE_SHAFT = registerMachineBlock("stone_shaft", () -> new BlockShaft(MaterialRegistry.STONE, blockProperties().strength(20)));
     public static final DeferredBlock<Block> HSLA_SHAFT = registerMachineBlock("hsla_shaft", () -> new BlockShaft(MaterialRegistry.STEEL, blockProperties().strength(20)));
@@ -73,7 +73,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> BEAM = register("beam", () -> new Block(blockProperties().strength(20)));
     public static final DeferredBlock<Block> BRIDGE = register("bridge", () -> new Block(blockProperties().strength(20)));
     public static final DeferredBlock<Block> MININGPIPE = register("miningpipe", () -> new Block(blockProperties().strength(20)));
-    public static final DeferredBlock<Block> BLASTGLASS = register("blastglass", () -> new HalfTransparentBlock(blockProperties().strength(20)));
+    public static final DeferredBlock<Block> BLASTGLASS = register("blastglass", () -> new HalfTransparentBlock(blockProperties().strength(20).noOcclusion()));
     public static final DeferredBlock<Block> BLASTPANE = register("blastpane", () -> new StainedGlassPaneBlock(DyeColor.BLACK, blockProperties().strength(20)));
     public static final DeferredBlock<Block> BEDROCKSLICE = registerBlockOnly("bedrockslice", () -> new reika.rotarycraft.base.blocks.entity.BlockBedrockSlice(blockProperties().strength(-1, 3600000)));
     public static final DeferredBlock<Block> BEDROCK_BREAKER = registerMachineBlock("bedrock_breaker", () -> new reika.rotarycraft.base.blocks.entity.BlockBedrockBreaker(blockProperties().strength(20)));
@@ -103,6 +103,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> MAGNETOSTATIC_ENGINE = registerMachineBlock("magnetostatic_engine", () -> new BlockMagnetEngine(blockProperties().strength(5)));
     public static final DeferredBlock<Block> AC_ENGINE = registerMachineBlock("ac_engine", () -> new BlockAcEngine(blockProperties().strength(5)));
     public static final DeferredBlock<Block> JET_ENGINE = registerMachineBlock("jet_engine", () -> new reika.rotarycraft.base.blocks.entity.engine.BlockJetEngine(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> HYDRO_ENGINE = registerMachineBlock("hydro_engine", () -> new reika.rotarycraft.base.blocks.entity.engine.BlockHydroEngine(blockProperties().strength(5)));
 
 
     public static final DeferredBlock<Block> PUMP = registerMachineBlock("pump", () -> new BlockPump(blockProperties().strength(5)));
@@ -146,7 +147,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> SORTER = registerMachineBlock("sorter", () -> new BlockSorter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FRICTION_HEATER = registerMachineBlock("friction_heater", () -> new BlockFrictionHeater(blockProperties().strength(5)));
 
-//    public static final DeferredBlock<Block> PULSE_JET_FURNACE = registerMachineBlock("pulse_jet_furnace", () -> new BlockPulseJetFurnace(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> PULSE_JET_FURNACE = registerMachineBlock("pulse_jet_furnace", () -> new reika.rotarycraft.base.blocks.entity.BlockPulseJetFurnace(blockProperties().strength(5)));
 
     public static final DeferredBlock<Block> COIL = registerMachineBlock("coil", () -> new BlockCoil(blockProperties().strength(5))); //todo blocks for these 4
     public static final DeferredBlock<Block> CVT = registerMachineBlock("cvt", () -> new BlockCVT(blockProperties().strength(5)));
@@ -154,6 +155,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> HIGHGEAR = registerMachineBlock("highgear", () -> new BlockHighGear(blockProperties().strength(5)));
     public static final DeferredBlock<Block> GRINDER = registerMachineBlock("grinder", () -> new BlockGrinder(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FRACTIONATOR = registerMachineBlock("fractionator", () -> new reika.rotarycraft.base.blocks.entity.BlockFractionator(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> MAGNETIZER = registerMachineBlock("magnetizer", () -> new reika.rotarycraft.base.blocks.entity.BlockMagnetizer(blockProperties().strength(5)));
 
 
     public static final DeferredBlock<Block> HOSE = registerMachineBlock("hose", () -> new BlockHose(blockProperties().strength(5)));
@@ -167,6 +169,8 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> WORKTABLE = registerMachineBlock("worktable", () -> new BlockWorktable(blockProperties().strength(5)));
     public static final DeferredBlock<Block> VACUUM = registerMachineBlock("vacuum", () -> new BlockVacuum(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> FERMENTER = registerMachineBlock("fermenter", () -> new reika.rotarycraft.base.blocks.entity.BlockFermenter(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> EXTRACTOR = registerMachineBlock("extractor", () -> new reika.rotarycraft.base.blocks.entity.BlockExtractor(blockProperties().strength(5)));
 
     // 1.21.5: Block.Properties / Item.Properties must have setId() called before the Block/Item
     // constructor runs (BlockBehaviour.<init> dereferences props.id in effectiveDrops()). To avoid

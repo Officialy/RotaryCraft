@@ -12,7 +12,7 @@ package reika.rotarycraft.renders.dm;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
+// 26.2: VertexConsumer removed from BER path; using VertexConsumer via submitCustomGeometry.
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -36,7 +36,7 @@ public class RenderFan extends RotaryTERenderer<BlockEntityFan> {
         fanModel = new FanModel(context.bakeLayer(RotaryModelLayers.FAN));
     }
 
-    public void renderBlockEntityFanAt(PoseStack stack, BlockEntityFan tile, MultiBufferSource bufferSource, int packedLight) {
+    public void renderBlockEntityFanAt(PoseStack stack, BlockEntityFan tile, VertexConsumer bufferSource, int packedLight) {
         stack.pushPose();
         stack.translate(0.5, 1.5, 0.5);
         // Orientation based on FACING property
@@ -51,7 +51,7 @@ public class RenderFan extends RotaryTERenderer<BlockEntityFan> {
         };
         stack.mulPose(Axis.YP.rotationDegrees(yRot));
         stack.mulPose(Axis.ZP.rotationDegrees(180));
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(FanModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         fanModel.renderAll(stack, vertexconsumer, packedLight, tile, null, -tile.phi);
         stack.popPose();
     }
@@ -67,9 +67,10 @@ public class RenderFan extends RotaryTERenderer<BlockEntityFan> {
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer vc, int light) {
         if (be instanceof BlockEntityFan fan)
-            renderBlockEntityFanAt(stack, fan, mbs, light);
+            renderBlockEntityFanAt(stack, fan, vc, light);
     }
+
 }
 

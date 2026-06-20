@@ -31,7 +31,20 @@ public class HandbookAuxData {
     private static final ReikaGuiAPI api = ReikaGuiAPI.instance;
 
     public static List<Recipe<?>> getWorktable() {
-        return new ArrayList<>();
+        try {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.level == null) return new ArrayList<>();
+            net.minecraft.server.MinecraftServer server = mc.level.getServer();
+            if (server == null) return new ArrayList<>(); // dedicated client – recipes not iterable
+            List<Recipe<?>> result = new ArrayList<>();
+            for (net.minecraft.world.item.crafting.RecipeHolder<?> rh :
+                    server.getRecipeManager().recipeMap().byType(net.minecraft.world.item.crafting.RecipeType.CRAFTING)) {
+                result.add(rh.value());
+            }
+            return result;
+        } catch (Throwable t) {
+            return new ArrayList<>();
+        }
     }
 
     private static final ArrayList<Object[][]> extracts = new ArrayList();
@@ -101,23 +114,13 @@ public class HandbookAuxData {
             List<ItemStack> out = h.getCrafting();
             if (out == null || out.size() <= 0)
                 return;
-            if (h.isCustomRecipe()) {
-                api.drawCustomRecipes(ri, f, out, (Collection<Recipe<?>>) getWorktable(), dx+72-18, dy+18, dx-1620, dy+32);
-            }
-            else {
-                api.drawCustomRecipes(ri, f, out, java.util.Collections.<net.minecraft.world.item.crafting.Recipe<?>>emptyList(), dx+72-18, dy+18, dx-1620, dy+32);
-            }
+            api.drawCustomRecipes(ri, f, out, (Collection<Recipe<?>>) getWorktable(), dx+72-18, dy+18, dx-1620, dy+32);
         }
         else if (h.isCrafting()) {
             List<ItemStack> out = h.getCrafting();
             if (out == null || out.size() <= 0)
                 return;
-            if (h.isCustomRecipe()) {
-                api.drawCustomRecipes(ri, f, out, (Collection<Recipe<?>>) getWorktable(), dx+72, dy+18, dx+162, dy+32);
-            }
-            else {
-                api.drawCustomRecipes(ri, f, out, java.util.Collections.<net.minecraft.world.item.crafting.Recipe<?>>emptyList(), dx+72, dy+18, dx+162, dy+32);
-            }
+            api.drawCustomRecipes(ri, f, out, (Collection<Recipe<?>>) getWorktable(), dx+72, dy+18, dx+162, dy+32);
         }
         else if (h.isSmelting()) {
             ItemStack out = h.getSmelting();
@@ -252,7 +255,7 @@ public class HandbookAuxData {
                     api.drawItemStackWithTooltip(ri, f, Items.OAK_WOOD.getDefaultInstance(), dx + 166, dy + 28);
                 }
                 case 2 -> {
-                    api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.BLACK_DYE), dx + 72 + 36, dy + 10);
+                    api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.DYE.black()), dx + 72 + 36, dy + 10);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72, dy + 10);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72, dy + 28);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72 + 18, dy + 10);
@@ -260,7 +263,7 @@ public class HandbookAuxData {
                     api.drawItemStackWithTooltip(ri, f, Items.SPRUCE_WOOD.getDefaultInstance(), dx + 166, dy + 28);
                 }
                 case 3 -> {
-                    api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.WHITE_DYE), dx + 72 + 36, dy + 10);
+                    api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.DYE.white()), dx + 72 + 36, dy + 10);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72, dy + 10);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72, dy + 28);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72 + 18, dy + 10);
@@ -268,7 +271,7 @@ public class HandbookAuxData {
                     api.drawItemStackWithTooltip(ri, f, Items.BIRCH_WOOD.getDefaultInstance(), dx + 166, dy + 28);
                 }
                 case 4 -> {
-                    api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.RED_DYE), dx + 72 + 36, dy + 10);
+                    api.drawItemStackWithTooltip(ri, f, new ItemStack(Items.DYE.red()), dx + 72 + 36, dy + 10);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72, dy + 10);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72, dy + 28);
                     api.drawItemStackWithTooltip(ri, f, RotaryItems.SAWDUST.get().getDefaultInstance(), dx + 72 + 18, dy + 10);
@@ -402,45 +405,45 @@ public class HandbookAuxData {
             HandbookRegistry h = HandbookRegistry.getEntry(screen, page); // Declared h here
             if (h == HandbookRegistry.TERMS) {
                 int xc = dx+125; int yc = dy+43; int r = 35;
-                api.drawCircle(xc, yc, r, 0);
-                api.drawLine(stack, xc, yc, xc+r, yc, 0);
-                api.drawLine(stack, xc, yc, (int)(xc+r-0.459*r), (int)(yc-0.841*r), 0);
+                api.drawCircle(ri, xc, yc, r, 0);
+                api.drawLine(ri, xc, yc, xc+r, yc, 0);
+                api.drawLine(ri, xc, yc, (int)(xc+r-0.459*r), (int)(yc-0.841*r), 0);
                 ri.text(f, "One radian", xc+r+10, yc-4, 0x000000); // Changed f.draw to ri.drawString
             }
             else if (h == HandbookRegistry.PHYSICS) {
                 int r = 5;
                 int xc = dx+25;
                 int yc = dy+45;
-                api.drawCircle(xc, yc, r, 0);
-                api.drawLine(stack, xc, yc, xc+45, yc, 0x0000ff);
-                api.drawLine(stack, xc+45, yc, xc+45, yc+20, 0xff0000);
-                api.drawLine(stack, xc+45, yc, xc+50, yc+5, 0xff0000);
-                api.drawLine(stack, xc+45, yc, xc+40, yc+5, 0xff0000);
+                api.drawCircle(ri, xc, yc, r, 0);
+                api.drawLine(ri, xc, yc, xc+45, yc, 0x0000ff);
+                api.drawLine(ri, xc+45, yc, xc+45, yc+20, 0xff0000);
+                api.drawLine(ri, xc+45, yc, xc+50, yc+5, 0xff0000);
+                api.drawLine(ri, xc+45, yc, xc+40, yc+5, 0xff0000);
                 ri.text(f, "Distance", xc+4, yc-10, 0x0000ff); // Changed f.draw to ri.drawString
                 ri.text(f, "Force", xc+30, yc+20, 0xff0000); // Changed f.draw to ri.drawString
 
-                api.drawLine(stack, xc-2*r, (int)(yc-1.4*r), xc-r, yc-r*2-2, 0x8800ff);
-                api.drawLine(stack, xc-2*r, (int)(yc-1.4*r), xc-2*r-2, yc, 0x8800ff);
-                api.drawLine(stack, xc-2*r, (int)(yc+1.4*r), xc-2*r-2, yc, 0x8800ff);
-                api.drawLine(stack, xc-2*r, (int)(yc+1.4*r), xc-r, yc+r*2+2, 0x8800ff);
-                api.drawLine(stack, xc+2, yc+r*2+2, xc-r, yc+r*2+2, 0x8800ff);
-                api.drawLine(stack, xc+2, yc+r*2+2, xc-3, yc+r*2+7, 0x8800ff);
-                api.drawLine(stack, xc+2, yc+r*2+2, xc-3, yc+r*2-3, 0x8800ff);
+                api.drawLine(ri, xc-2*r, (int)(yc-1.4*r), xc-r, yc-r*2-2, 0x8800ff);
+                api.drawLine(ri, xc-2*r, (int)(yc-1.4*r), xc-2*r-2, yc, 0x8800ff);
+                api.drawLine(ri, xc-2*r, (int)(yc+1.4*r), xc-2*r-2, yc, 0x8800ff);
+                api.drawLine(ri, xc-2*r, (int)(yc+1.4*r), xc-r, yc+r*2+2, 0x8800ff);
+                api.drawLine(ri, xc+2, yc+r*2+2, xc-r, yc+r*2+2, 0x8800ff);
+                api.drawLine(ri, xc+2, yc+r*2+2, xc-3, yc+r*2+7, 0x8800ff);
+                api.drawLine(ri, xc+2, yc+r*2+2, xc-3, yc+r*2-3, 0x8800ff);
                 ri.text(f, "Torque", xc-24, yc+18, 0x8800ff); // Changed f.draw to ri.drawString
 
                 r = 35;
                 xc = dx+125+r+r/2;
                 yc = dy+43;
-                api.drawCircle(xc, yc, r, 0);
+                api.drawCircle(ri, xc, yc, r, 0);
 
                 int n1 = 2;
                 int n2 = 4;
                 double a = 57.3*System.nanoTime()/1000000000%360;
                 double b = n1*57.3*System.nanoTime()/1000000000%360;
                 double c = n2*57.3*System.nanoTime()/1000000000%360;
-                api.drawLine(stack, xc, yc, (int)(xc+Math.cos(Math.toRadians(a))*r), (int)(yc+Math.sin(Math.toRadians(a))*r), 0xff0000);
-                api.drawLine(stack, xc, yc, (int)(xc+Math.cos(Math.toRadians(b))*r), (int)(yc+Math.sin(Math.toRadians(b))*r), 0x0000ff);
-                api.drawLine(stack, xc, yc, (int)(xc+Math.cos(Math.toRadians(c))*r), (int)(yc+Math.sin(Math.toRadians(c))*r), 0x00a000);
+                api.drawLine(ri, xc, yc, (int)(xc+Math.cos(Math.toRadians(a))*r), (int)(yc+Math.sin(Math.toRadians(a))*r), 0xff0000);
+                api.drawLine(ri, xc, yc, (int)(xc+Math.cos(Math.toRadians(b))*r), (int)(yc+Math.sin(Math.toRadians(b))*r), 0x0000ff);
+                api.drawLine(ri, xc, yc, (int)(xc+Math.cos(Math.toRadians(c))*r), (int)(yc+Math.sin(Math.toRadians(c))*r), 0x00a000);
 
                 int xOffset = 2;
                 int yOffset = 6;
@@ -552,16 +555,27 @@ public class HandbookAuxData {
                     }
                 }
             }
-            /*
-            else if (h == HandbookRegistry.ALERTS) { // ALERTS is not a field
-                // This section relies on HandbookNotifications and Alert.
-                // It will be skipped for now.
+            else if (h == HandbookRegistry.ALERTS) {
+                String title = "These are the config settings that have been changed from the defaults, and may have significant " +
+                        "changes to the gameplay. If you have further questions, or you wish for these changes to be undone, contact " +
+                        "your server admin or modpack creator.";
+                ri.textWithWordWrap(f, net.minecraft.network.chat.FormattedText.of(title), dx + 8, dy + 20, 220, 0xFF333333, false);
+                List<reika.dragonapi.instantiable.Alert> li = HandbookNotifications.instance.getNewAlerts();
+                if (li.isEmpty()) {
+                    ri.textWithWordWrap(f, net.minecraft.network.chat.FormattedText.of("All config settings are identical to defaults."), dx + 10, dy + 88, 245, 0xFFFFFFFF, false);
+                    ri.textWithWordWrap(f, net.minecraft.network.chat.FormattedText.of("Your gameplay is in line with what has been intended."), dx + 10, dy + 98, 245, 0xFFFFFFFF, false);
+                }
+                else {
+                    int row = 0;
+                    int base = subpage * 3;
+                    int max = Math.min(base + 3, li.size());
+                    for (int i = base; i < max; i++) {
+                        reika.dragonapi.instantiable.Alert a = li.get(i);
+                        ri.textWithWordWrap(f, net.minecraft.network.chat.FormattedText.of(a.getMessage()), dx + 10, dy + 88 + row * 44, 245, 0xFFFFFFFF, false);
+                        row++;
+                    }
+                }
             }
-            else if (h == HandbookRegistry.PACKMODS) { // PACKMODS is not a field
-                // This section relies on PackModificationTracker and PackModification.
-                // It will be skipped for now.
-            }
-            */
         }
         catch (Exception e) {
             e.printStackTrace();

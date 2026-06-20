@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "rotarycraft:block/fractionator"
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/fractionator",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "fractionator"
+    }
   }
 }

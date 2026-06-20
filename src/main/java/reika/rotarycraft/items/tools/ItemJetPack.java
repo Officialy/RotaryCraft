@@ -319,7 +319,15 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
     @Override
     public int addFluid(ItemStack is) {
-        return 0;
+        // Called by the filling station to top the pack up; adds jet fuel up to capacity and
+        // returns how much was actually added (the station drains that from its tank).
+        int cap = this.getCapacity(is);
+        int cur = this.getCurrentFillLevel(is);
+        if (cur >= cap)
+            return 0;
+        int add = Math.min(cap - cur, 1000);
+        this.setFuel(is, RotaryFluids.JET_FUEL.get().defaultFluidState(), cur + add);
+        return add;
     }
 
 //    @Override
@@ -384,15 +392,10 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 
     @Override
     public Fluid getCurrentFluid(ItemStack is) {
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
-            return null;
-        int lvl = this.getCurrentFillLevel(is);
-        Fluid f = ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag()).getFluid();
-        if (lvl > 0 && f == null) {
-            this.setFuel(is, null, 0);
-            return null;
-        }
-        return lvl > 0 ? f : null;
+        // The pack only ever runs on jet fuel; the NBT just tracks the amount ("fuel"), so the
+        // fluid is implied rather than serialized (the previous NBT round-trip never wrote it,
+        // which reset the pack to empty every tick).
+        return this.getCurrentFillLevel(is) > 0 ? RotaryFluids.JET_FUEL.get() : null;
     }
 
     public boolean isJetFueled(ItemStack is) {

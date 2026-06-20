@@ -252,7 +252,7 @@ public class GearboxModel extends GearboxBaseModel {
                         .addBox(0, 0, 0, 2, 10, 3),
                 PartPose.offsetAndRotation(0, 13, 2.4F, 0, 0, 0));
 
-        return LayerDefinition.create(definition, 128, 128);
+        return LayerDefinition.create(definition, 128, 32);
     }
     @Override
     public Identifier getTexture() {

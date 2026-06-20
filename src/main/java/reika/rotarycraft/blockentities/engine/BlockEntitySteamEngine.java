@@ -107,19 +107,6 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
     }
 
     @Override
-    protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundTick++;
-        if (this.isMuffled(world, pos)) {
-            volume *= 0.3125F;
-        }
-        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
-            return;
-        soundTick = 0;
-
-        SoundRegistry.STEAM.playSoundAtBlock(world, pos, 0.7F * volume, pitchMultiplier);
-    }
-
-    @Override
     public void updateTemperature(Level world, BlockPos pos) {
         super.updateTemperature(world, pos);
 
@@ -160,7 +147,7 @@ public class BlockEntitySteamEngine extends BlockEntityEngine {
         temperature = this.getMaxTemperature();
         ReikaWorldHelper.overheat(world, pos.getX(), pos.getY(), pos.getZ(), RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance(), 0, 17, false, 1F, false, true, 2F);
         RotaryAdvancements.OVERPRESSURE.triggerAchievement(this.getPlacer());
-        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 1);
+        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
     }
 
     @Override

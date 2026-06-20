@@ -85,12 +85,17 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
     protected void actionPerformed(Button b, int id) {
         if (id == 24000 || id == 24001) {
             inventory.player.closeContainer();
-            // Handbook navigation depends on the not-yet-ported GuiRegistry / menu-provider
-            // network path; closing the container preserves the legacy click behaviour for now.
-            // todoif (ReikaInventoryHelper.checkForItem(RotaryItems.HANDBOOK.get(), inventory))
-            // todo    inventory.player.openMenu(RotaryCraft.getInstance(), GuiRegistry.LOADEDHANDBOOK.ordinal(), tile.getLevel(), tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
-            // todoelse
-            // todo    inventory.player.openMenu(RotaryCraft.getInstance(), GuiRegistry.HANDBOOKPAGE.ordinal(), tile.getLevel(), tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
+            reika.rotarycraft.registry.MachineRegistry m = tile.getMachine();
+            int hscreen = reika.rotarycraft.registry.HandbookRegistry.getScreen(m, tile);
+            int hpage = reika.rotarycraft.registry.HandbookRegistry.getPage(m, tile);
+            if (hscreen < 0 || hpage < 0) {
+                hscreen = 0;
+                hpage = 0;
+            }
+            if (reika.dragonapi.libraries.ReikaInventoryHelper.checkForItem(reika.rotarycraft.registry.RotaryItems.HANDBOOK.get(), inventory))
+                Minecraft.getInstance().gui.setScreen(new reika.rotarycraft.gui.screen.GuiHandbook(inventory.player, tile.getLevel(), hscreen, hpage));
+            else
+                Minecraft.getInstance().gui.setScreen(new reika.rotarycraft.gui.screen.GuiHandbookPage(inventory.player, tile.getLevel(), hscreen, hpage));
         }
     }
 
@@ -153,13 +158,6 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
 
         if (inventory == null && !(this instanceof GuiOneSlotScreen))
             RotaryCraft.LOGGER.error("The Gui" + tile.getName() + "'s Player Inventory is null!");
-
-        // 1.21.5: do NOT call extractLabels here. AbstractContainerScreen#extractContents
-        // already calls extractLabels INSIDE a pose stack translated by (leftPos, topPos),
-        // so subclass tooltip code (e.g. EngineScreen's fluid-bar tooltip drawn at
-        // mouseX-j, mouseY-k) lands at the cursor. Calling it again from extractBackground
-        // — which runs BEFORE that translate — would draw a second, untranslated copy of
-        // every label/tooltip at the screen's top-left.
     }
 
     protected abstract void drawPowerTab(GuiGraphicsExtractor stack, int j, int k);

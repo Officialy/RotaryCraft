@@ -12,8 +12,7 @@
 //import com.mojang.blaze3d.vertex.PoseStack;
 //import com.mojang.blaze3d.vertex.VertexConsumer;
 //import org.joml.Vector3f;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.rendertype.RenderType;
+////import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 //import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -36,7 +35,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityHeatRayAt(PoseStack stack, BlockEntityHeatRay tile, MultiBufferSource bufferSource, int pPackedLight) {
+//    public void renderBlockEntityHeatRayAt(PoseStack stack, BlockEntityHeatRay tile, VertexConsumer bufferSource, int pPackedLight) {
 //        ModelHRay var14 = HRayModel;
 //
 //        this.setupGL(stack, tile, (float) tile.getBlockPos().getX(), (float) tile.getBlockPos().getY(), (float) tile.getBlockPos().getZ());
@@ -57,14 +56,14 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 ////            GL11.glEnable(GL11.GL_LIGHTING);
 //        }
 //
-//        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(ModelHRay.TEXTURE_LOCATION));
+//        VertexConsumer vertexconsumer = bufferSource;
 //        HRayModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 //
 //        this.closeGL(stack, tile);
 //    }
 //
 //    @Override
-//    public void render(BlockEntityHeatRay tile, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int i1) {
+//    public void render(BlockEntityHeatRay tile, float v, PoseStack poseStack, VertexConsumer multiBufferSource, int i, int i1) {
 //        if (this.doRenderModel(poseStack, tile))
 //            this.renderBlockEntityHeatRayAt(poseStack, tile, multiBufferSource, i);
 //        if ((tile).isInWorld()) {// && MinecraftForgeClient.getRenderPass() == 1)

@@ -50,6 +50,23 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
         }
     }
 
+    /**
+     * Reads the upgrade type stored on a stack's CUSTOM_DATA under key "upgradeType"
+     * (the value matches {@link UpgradeType#desc}). Returns null if the stack is not an
+     * engine upgrade or carries no recognised type. This is the single source of truth used by
+     * every consumer (magnetizer, gas engine, jet engine) so crafted upgrades dispatch correctly.
+     */
+    public static UpgradeType getUpgrade(ItemStack is) {
+        if (is == null || is.isEmpty() || !(is.getItem() instanceof ItemEngineUpgrade))
+            return null;
+        String s = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
+                net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getStringOr("upgradeType", "");
+        for (UpgradeType t : UpgradeType.list)
+            if (t.desc.equals(s))
+                return t;
+        return null;
+    }
+
     public enum UpgradeType {
         PERFORMANCE("upgrade.gasperf"),
         MAGNETOSTATIC1("upgrade.tier1"), //Made with ethanol
@@ -65,7 +82,7 @@ public class ItemEngineUpgrade extends ItemRotaryTool {
 
         public static final UpgradeType[] list = values();
 
-        private final String desc;
+        public final String desc;
 
         UpgradeType(String d) {
             desc = d;

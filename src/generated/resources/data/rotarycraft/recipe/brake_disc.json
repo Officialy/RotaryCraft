@@ -1,14 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "redstone",
+  "category": "misc",
   "key": {
-    "H": "rotarycraft:hsla_steel_plate",
-    "I": "minecraft:iron_ingot"
+    "B": "rotarycraft:hsla_steel_bearing",
+    "G": "rotarycraft:hsla_steel_gear",
+    "S": "rotarycraft:hsla_steel_rod",
+    "g": "rotarycraft:hsla_steel_gear_2x"
   },
   "pattern": [
-    " I ",
-    "IHI",
-    " I "
+    " g ",
+    "SBS",
+    " G "
   ],
   "result": {
     "id": "rotarycraft:brake_disc"

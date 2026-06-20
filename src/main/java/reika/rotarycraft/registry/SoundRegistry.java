@@ -95,10 +95,15 @@ public enum SoundRegistry implements CustomDistanceSound {
     private static final HashMap<String, SoundRegistry> soundNames = new HashMap<>();
 
     static {
-        // Register all sound events
+        // Register all sound events. Sounds with a custom audible distance (e.g. the jet at 40
+        // blocks) need a fixed-range event — createVariableRangeEvent caps the range at 16 for
+        // any volume <= 1, which silently swallowed the long-range engines.
         for (SoundRegistry sound : values()) {
-            SOUND_EVENT_MAP.put(sound, SOUND_EVENTS.register(sound.eventName, 
-                () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, sound.eventName))));
+            SOUND_EVENT_MAP.put(sound, SOUND_EVENTS.register(sound.eventName, () -> {
+                Identifier id = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, sound.eventName);
+                float d = sound.getAudibleDistance();
+                return d > 0 ? SoundEvent.createFixedRangeEvent(id, d) : SoundEvent.createVariableRangeEvent(id);
+            }));
         }
         
         // Create name lookup map
@@ -176,28 +181,30 @@ public enum SoundRegistry implements CustomDistanceSound {
     }
 
     public void playSound(Level world, BlockPos pos, float vol, float pitch) {
+        // Server sends packets; client only plays on packet receipt to avoid double-playback.
+        // getModulatedVolume() is applied once, at the play point (ReikaSoundHelper.playClientSound).
         if (world.isClientSide())
             return;
-        ReikaSoundHelper.playSound(this, world, pos.getX(), pos.getY(), pos.getZ(), vol * this.getModulatedVolume(), pitch);
+        ReikaSoundHelper.playSound(this, world, pos.getX(), pos.getY(), pos.getZ(), vol, pitch);
     }
 
     public void playSound(Level world, double x, double y, double z, float vol, float pitch) {
         if (world.isClientSide())
             return;
-        ReikaSoundHelper.playSound(this, world, x, y, z, vol * this.getModulatedVolume(), pitch);
+        ReikaSoundHelper.playSound(this, world, x, y, z, vol, pitch);
     }
 
     public void playSound(Level world, BlockPos pos, float vol, float pitch, boolean attenuate) {
         if (world.isClientSide())
             return;
-        ReikaSoundHelper.playSound(this, world, pos.getX(), pos.getY(), pos.getZ(), vol * this.getModulatedVolume(), pitch, attenuate);
+        ReikaSoundHelper.playSound(this, world, pos.getX(), pos.getY(), pos.getZ(), vol, pitch, attenuate);
     }
 
     public void playSoundAtBlock(Level world, BlockPos pos, float vol, float pitch) {
         this.playSound(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, vol, pitch);
     }
     public void playSoundAtBlock(Level world, double x, double y, double z, float vol, float pitch) {
-        this.playSound(world, x + 0.5, y + 0.5, x + 0.5, vol, pitch);
+        this.playSound(world, x + 0.5, y + 0.5, z + 0.5, vol, pitch);
     }
     public void playSoundAtBlock(Level world, BlockPos pos) {
         this.playSound(world, pos, 1, 1);
@@ -212,8 +219,6 @@ public enum SoundRegistry implements CustomDistanceSound {
     }
 
     public void playSoundNoAttenuation(Level world, BlockPos pos, float vol, float pitch, int broadcast) {
-        if (world.isClientSide())
-            return;
         ReikaPacketHelper.sendSoundPacket(this, world, pos.getX(), pos.getY(), pos.getZ(), vol, pitch, false, broadcast);
     }
 

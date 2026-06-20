@@ -72,6 +72,7 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.IRON_FLYWHEEL_CORE.get());
             event.accept(RotaryItems.GOLD_FLYWHEEL_CORE.get());
             event.accept(RotaryItems.TUNGSTEN_ALLOY_FLYWHEEL_CORE.get());
+            event.accept(RotaryItems.BEDROCK_ALLOY_FLYWHEEL_CORE.get());
             event.accept(RotaryItems.NETHERRACK_DUST.get());
             event.accept(RotaryItems.MOUNT.get());
             event.accept(RotaryItems.HUB.get());
@@ -162,6 +163,14 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.BEDROCK_ALLOY_SHAFT.get());
             event.accept(RotaryItems.BEDROCK_ALLOY_SHAFT_CORE.get());
             event.accept(RotaryItems.BEDROCK_ALLOY_INGOT.get());
+            event.accept(RotaryItems.BALL_BEARING.get());
+            event.accept(RotaryItems.STONE_GEAR.get());
+            event.accept(RotaryItems.STONE_BEARING.get());
+            event.accept(RotaryItems.HSLA_STEEL_BEARING.get());
+            event.accept(RotaryItems.TUNGSTEN_ALLOY_BEARING.get());
+            event.accept(RotaryItems.DIAMOND_BEARING.get());
+            event.accept(RotaryItems.BEDROCK_ALLOY_BEARING.get());
+            event.accept(RotaryItems.TENSION_COIL.get());
             event.accept(RotaryItems.TUNGSTEN_FLAKES.get());
             event.accept(RotaryItems.DIAMOND_FLAKES.get());
             event.accept(RotaryItems.COMPOST.get());

@@ -11,6 +11,7 @@
 //
 //import reika.rotarycraft.blockentities.Weaponry.Turret.BlockEntityAAGun;
 //import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 //import net.minecraft.BlockEntity.BlockEntity;
 //import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.neoforged.client.MinecraftForgeClient;
@@ -27,7 +28,7 @@
 //
 //    private ModelAAGun aagunModel = new ModelAAGun();
 //
-//    public void renderBlockEntityAAGunAt(PoseStack stack, BlockEntityAAGun tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAAGunAt(PoseStack stack, BlockEntityAAGun tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -69,7 +70,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (tile == null)
 //            return;
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))

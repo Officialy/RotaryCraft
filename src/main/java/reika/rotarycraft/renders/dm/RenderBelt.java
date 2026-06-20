@@ -42,7 +42,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityBeltAt(BlockEntityBeltHub tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityBeltAt(BlockEntityBeltHub tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -106,7 +106,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityBeltAt((BlockEntityBeltHub) tile, par2, par4, par6, par8);
 //        if (((BlockEntityBeltHub) tile).hasValidConnection()) {
@@ -120,7 +120,7 @@
 //        //ReikaAABBHelper.renderAABB(tile.getRenderBoundingBox(), par2, par4, par6, 0, 0, 0, 127, 255, 255, 0, true);
 //    }
 //
-//    private void drawBelt2(BlockEntityBeltHub tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    private void drawBelt2(BlockEntityBeltHub tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int meta = tile.getBlockMetadata();
 //        boolean vertical = meta == 4 || meta == 5 || meta == 10 || meta == 11;
 //        Direction dir = tile.getBeltDirection();
@@ -234,7 +234,7 @@
 //        stack.translate(-par2, -par4, -par6);
 //    }
 //
-//    private void drawBelt3(BlockEntityBeltHub tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    private void drawBelt3(BlockEntityBeltHub tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int meta = tile.getBlockMetadata();
 //        boolean vertical = meta == 4 || meta == 5;
 //        Direction dir = tile.getBeltDirection();
@@ -416,7 +416,7 @@
 //        stack.translate(-par2, -par4, -par6);
 //    }
 //
-//    private void drawBelt(BlockEntityBeltHub tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    private void drawBelt(BlockEntityBeltHub tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int meta = tile.getBlockMetadata();
 //        boolean side = meta % 2 == 0;
 //        Direction dir = tile.getBeltDirection();

@@ -120,6 +120,10 @@ public class RoCModelProvider extends ModelProvider {
             if (block instanceof BlockBlastFurnace) {
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
                         block, orientableMapping("blastfurn_front", "blastfurn_side", "blastfurn_side"), modelOut);
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockFermenter) {
+                // legacy static-face fermenter: steel sides, ferm_front / ferm_back, ferm_side top
+                blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
+                        block, orientableMapping("ferm_front", "ferm_side", "ferm_side"), modelOut);
             } else if (block instanceof BlockWorktable) {
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
                         block, bottomTopMapping("worktable_top", "worktable_bottom", "worktable"), modelOut);

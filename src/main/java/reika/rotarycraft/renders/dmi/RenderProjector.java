@@ -17,6 +17,7 @@
 //import reika.rotarycraft.blockentities.decorative.BlockEntityProjector;
 //import com.mojang.blaze3d.vertex.BufferBuilder;
 //import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 //import com.mojang.blaze3d.vertex.Tesselator;
 //import net.minecraft.BlockEntity.BlockEntity;
 //import net.minecraft.client.renderer.Tesselator;
@@ -49,7 +50,7 @@
 //        }
 //    }
 //
-//    public void renderBlockEntityProjectorAt(PoseStack stack, BlockEntityProjector tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityProjectorAt(PoseStack stack, BlockEntityProjector tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -110,7 +111,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(PoseStack stack, BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(PoseStack stack, BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityProjectorAt((BlockEntityProjector) tile, par2, par4, par6, par8);
 //        if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {

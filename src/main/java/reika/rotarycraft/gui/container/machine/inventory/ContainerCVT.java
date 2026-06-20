@@ -10,7 +10,6 @@
 package reika.rotarycraft.gui.container.machine.inventory;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -31,6 +30,9 @@ public class ContainerCVT extends IOMachineContainer<BlockEntityAdvancedGear> {
         super(RotaryMenus.CVT.get(), id, playerInv, par2BlockEntityAdvancedGear);
         cvt = par2BlockEntityAdvancedGear;
 
+        // Belt slots 0-30: a pyramid of rows (1,2,4,8,16) raising the gear ratio; the bottom two
+        // rows shift left/down (a/b) so they fit the cvtgui.png layout. Slot 31 (top-right) is the
+        // belt required for the CVT to run at all. Backed by the BE's belt ManagedItemHandler.
         int x = 8;
         int y = 11;
         int k = 0;
@@ -42,10 +44,11 @@ public class ContainerCVT extends IOMachineContainer<BlockEntityAdvancedGear> {
                     a = -144;
                     b = 18;
                 }
-                this.addSlot(new Slot((Container) cvt, k, x + j * 18 + a, y + i * 26 + b)); //todo check casting
+                this.addSlot(cvt.getItemHandler().slot(k, x + j * 18 + a, y + i * 26 + b));
                 k++;
             }
         }
+        this.addSlot(cvt.getItemHandler().slot(31, 184, 7));
         int dx = 31;
         int dy = 77;
         for (int i = 0; i < 3; i++) {

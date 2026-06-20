@@ -13,7 +13,7 @@ import reika.rotarycraft.blockentities.production.BlockEntityFractionator;
 public class BlockFractionator extends BlockBasicMachine {
 
     public BlockFractionator(Properties properties) {
-        super(properties);
+        super(properties.noOcclusion());
     }
 
     @Override

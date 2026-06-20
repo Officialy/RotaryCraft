@@ -35,6 +35,10 @@ public final class RoCDataProviders {
         event.createProvider(RoCRecipeProvider::new);
         // Block loot tables: every machine block drops itself; canola uses crop drops.
         event.createProvider(RoCLootProvider::new);
+        // Advancements — the modern (data-driven) form of RotaryCraft's achievements.
+        event.createProvider(RoCAdvancementProvider::new);
+        // Empty arena structure template that the in-world game tests run on.
+        event.createProvider(RoCTestStructureProvider::new);
         // Tag providers will plug in here too as they're built.
     }
 }

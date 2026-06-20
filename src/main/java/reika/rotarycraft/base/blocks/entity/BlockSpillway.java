@@ -31,4 +31,10 @@ public class BlockSpillway extends BlockBasicMachine {
             ((BlockEntitySpillway) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
+    // rendered in-world by RenderSpillway (BER); the block model itself is invisible
+    @Override
+    protected boolean isCustomRendered() {
+        return true;
+    }
 }

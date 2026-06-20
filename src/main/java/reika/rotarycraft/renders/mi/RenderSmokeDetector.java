@@ -12,7 +12,6 @@ package reika.rotarycraft.renders.mi;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -42,7 +41,7 @@ public class RenderSmokeDetector extends RotaryTERenderer<BlockEntitySmokeDetect
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntitySmokeDetectorAt(PoseStack stack, BlockEntitySmokeDetector tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntitySmokeDetectorAt(PoseStack stack, BlockEntitySmokeDetector tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
 
 //        todo GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -63,7 +62,7 @@ public class RenderSmokeDetector extends RotaryTERenderer<BlockEntitySmokeDetect
             stack.mulPose(Axis.YP.rotationDegrees(-f));
         }
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(SmokeDetectorModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         smokeDetectorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
 //     todo       if (tile.isInWorld())
@@ -83,7 +82,7 @@ public class RenderSmokeDetector extends RotaryTERenderer<BlockEntitySmokeDetect
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntitySmokeDetector detector)
             renderBlockEntitySmokeDetectorAt(stack, detector, mbs, light);
     }

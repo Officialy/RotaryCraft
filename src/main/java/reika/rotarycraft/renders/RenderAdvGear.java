@@ -13,7 +13,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
@@ -26,9 +25,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.rotarycraft.auxiliary.IORenderer;
+import reika.rotarycraft.base.RotaryModelBase;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
+import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear.GearType;
+import reika.rotarycraft.models.CVTModel;
 import reika.rotarycraft.models.animated.WormModel;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
@@ -43,17 +45,32 @@ import reika.rotarycraft.registry.RotaryModelLayers;
 public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
 
     private final WormModel wormModel;
+    private final CVTModel cvtModel;
 
     public RenderAdvGear(BlockEntityRendererProvider.Context context) {
         wormModel = new WormModel(context.bakeLayer(RotaryModelLayers.WORM));
+        cvtModel = new CVTModel(context.bakeLayer(RotaryModelLayers.CVT));
     }
 
-    private void renderAt(PoseStack stack, BlockEntityAdvancedGear tile, MultiBufferSource bufferSource, int packedLight) {
+    /**
+     * The advanced-gear family (worm / CVT / high / coil) shares one BER and one BE class; the
+     * drawn model is chosen per {@link GearType}. Previously every type drew the worm model, so a
+     * CVT in-world showed worm-gear geometry. HIGH/COIL still fall back to the worm model until
+     * their models are wired through here.
+     */
+    private RotaryModelBase selectModel(BlockEntityAdvancedGear tile) {
+        if (tile.getGearType() == GearType.CVT)
+            return cvtModel;
+        return wormModel;
+    }
+
+    private void renderAt(PoseStack stack, BlockEntityAdvancedGear tile, VertexConsumer bufferSource, int packedLight, RotaryModelBase model) {
         stack.pushPose();
         stack.translate(0.5, 1.5, 0.5);
         stack.mulPose(Axis.ZP.rotationDegrees(180));
-        // Rotate around Y so the worm's screw-axis aligns with the block's FACING. Matches
-        // RenderShaft's facing→yRot mapping.
+        // Rotate around Y so the gear's axis aligns with the block's FACING. Matches
+        // RenderShaft's facing→yRot mapping. Shared by all advanced-gear types (the legacy
+        // renderer applied the same facing transform regardless of model).
         if (tile.isInWorld()) {
             net.minecraft.world.level.block.state.BlockState st = tile.getBlockState();
             if (st != null && st.hasProperty(BlockRotaryCraftMachine.FACING)) {
@@ -64,8 +81,8 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
                 }
             }
         }
-        VertexConsumer vc = bufferSource.getBuffer(RenderTypes.entityCutout(WormModel.TEXTURE_LOCATION));
-        wormModel.renderAll(stack, vc, packedLight, tile, ReikaJavaLibrary.makeListFrom(false), -tile.phi, 0);
+        VertexConsumer vc = bufferSource;
+        model.renderAll(stack, vc, packedLight, tile, ReikaJavaLibrary.makeListFrom(false), -tile.phi, 0);
         stack.popPose();
     }
 
@@ -77,13 +94,15 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
         if (!(be instanceof BlockEntityAdvancedGear tile)) return;
         if (!this.doRenderModel(poseStack, tile)) return;
 
+        RotaryModelBase model = this.selectModel(tile);
         PoseStack snapped = new PoseStack();
         snapped.last().set(poseStack.last());
-        RenderType rt = RenderTypes.entityCutout(WormModel.TEXTURE_LOCATION);
+        // The render type must be bound to the same texture the model draws with, or the CVT would
+        // be drawn into the worm's shaft-texture layer.
+        RenderType rt = RenderTypes.entityCutout(model.getTexture());
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderAt(snapped, tile, oneRT, light);
+            renderAt(snapped, tile, vc, light, model);
         });
         if (tile.isInWorld()) {
             IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());

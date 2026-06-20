@@ -11,8 +11,7 @@
 //
 //import com.mojang.blaze3d.vertex.PoseStack;
 //import com.mojang.blaze3d.vertex.VertexConsumer;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.rendertype.RenderType;
+////import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //import net.minecraft.client.renderer.texture.OverlayTexture;
 //import org.lwjgl.opengl.GL11;
@@ -29,7 +28,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityFloodlightAt(PoseStack stack, BlockEntityComposter tile, MultiBufferSource bufferSource, int pPackedLight) {
+//    public void renderBlockEntityFloodlightAt(PoseStack stack, BlockEntityComposter tile, VertexConsumer bufferSource, int pPackedLight) {
 //        ModelComposter var14;
 //        var14 = ComposterModel;
 //
@@ -45,7 +44,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //
 //        float var13;
 //
-//        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(ModelMonitor.TEXTURE_LOCATION));
+//        VertexConsumer vertexconsumer = bufferSource;
 //        ComposterModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 //
 //        if (tile.isInWorld())
@@ -55,7 +54,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //    }
 //
 //    @Override
-//    public void render(BlockEntityComposter tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
+//    public void render(BlockEntityComposter tile, float v, PoseStack stack, VertexConsumer multiBufferSource, int i, int i1) {
 //       /* todo if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //           this.renderBlockEntityComposterAt(stack, (BlockEntityComposter) tile, par2, par4, par6, par8); */
 //

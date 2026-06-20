@@ -29,7 +29,7 @@
 //        return "wettertex.png";
 //    }
 //
-//    public void renderBlockEntityWetterAt(BlockEntityWetter tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityWetterAt(BlockEntityWetter tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -57,7 +57,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile)) {
 //            this.renderBlockEntityWetterAt((BlockEntityWetter) tile, par2, par4, par6, par8);
 //            this.renderItem((BlockEntityWetter) tile, par2, par4, par6, par8);
@@ -68,7 +68,7 @@
 //        }
 //    }
 //
-//    private void renderItem(BlockEntityWetter te, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    private void renderItem(BlockEntityWetter te, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        EntityItem ei = te.getItem();
 //        if (ei != null) {
 //            ei.age = 0;
@@ -91,7 +91,7 @@
 //        }
 //    }
 //
-//    private void renderLiquid(BlockEntityWetter te, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    private void renderLiquid(BlockEntityWetter te, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (te.getContainedFluid() != null) {
 //
 //            FluidStack liquid = new FluidStack(te.getContainedFluid(), 1);

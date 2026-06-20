@@ -24,7 +24,7 @@
 //
 //    private ModelRailGun railgunModel = new ModelRailGun();
 //
-//    public void renderBlockEntityRailGunAt(BlockEntityRailGun tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityRailGunAt(BlockEntityRailGun tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -66,7 +66,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (tile == null)
 //            return;
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))

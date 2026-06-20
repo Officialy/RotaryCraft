@@ -11,8 +11,7 @@
 //
 //import com.mojang.blaze3d.vertex.*;
 //import com.mojang.math.Quaternion;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.world.level.block.entity.BlockEntity;
+////import net.minecraft.world.level.block.entity.BlockEntity;
 //import net.neoforged.client.MinecraftForgeClient;
 //import org.lwjgl.opengl.GL11;
 //import reika.dragonapi.instantiable.rendering.TessellatorVertexList;
@@ -35,7 +34,7 @@
 //        return "Transmission/shaft";
 //    }
 //
-//    public void renderBlockEntityClutchAt(PoseStack stack, BlockEntityClutch tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityClutchAt(PoseStack stack, BlockEntityClutch tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        ModelClutch var14;
 //        ModelVClutch var15;
 //
@@ -81,7 +80,7 @@
 //    }
 //
 //    @Override
-//    public void render(BlockEntity tile, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int i1) {
+//    public void render(BlockEntity tile, float v, PoseStack poseStack, VertexConsumer multiBufferSource, int i, int i1) {
 //       /*todo if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityClutchAt(poseStack, (BlockEntityClutch) tile, par2, par4, par6, par8);
 //        if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
@@ -90,7 +89,7 @@
 //        }*/
 //    }
 //
-//    private void renderConnection(PoseStack stack, BlockEntityClutch tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    private void renderConnection(PoseStack stack, BlockEntityClutch tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int c = tile.isOutputEnabled() ? 0xff0000 : 0x900000;
 //        int c2 = tile.isOutputEnabled() ? 0xffa7a7 : 0xda0000;
 //        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);

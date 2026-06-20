@@ -51,7 +51,7 @@ public class RotaryItems {
     public static final DeferredItem<Item> IRON_FLYWHEEL_CORE = reg("iron_flywheel_core", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> GOLD_FLYWHEEL_CORE = reg("gold_flywheel_core", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> TUNGSTEN_ALLOY_FLYWHEEL_CORE = reg("tungsten_alloy_flywheel_core", () -> new Item(itemProperties()));
-//    public static final DeferredItem<Item> BEDROCK_ALLOY_FLYWHEEL_CORE = reg("bedrock_alloy_flywheel_core", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> BEDROCK_ALLOY_FLYWHEEL_CORE = reg("bedrock_alloy_flywheel_core", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> NETHERRACK_DUST = reg("netherrack_dust", () -> new Item(itemProperties()));
 
     public static final DeferredItem<BucketItem> MOLTEN_HSLA_BUCKET = reg("molten_hsla_bucket", () -> new BucketItem(RotaryFluids.HSLA_FLUID.get(), itemProperties()));
@@ -88,6 +88,7 @@ public class RotaryItems {
     public static final DeferredItem<Item> HEAT_RAY_CORE = reg("heat_ray_core", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> BELT = reg("belt", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> BRAKE_DISC = reg("brake_disc", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> TENSION_COIL = reg("tension_coil", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> CHAIN_LINK = reg("chain_link", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> CIRCUIT_BOARD = reg("circuit_board", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> COMBUSTOR = reg("combustor", () -> new Item(itemProperties()));
@@ -216,6 +217,17 @@ public class RotaryItems {
     public static final DeferredItem<Item> BEDROCK_DUST = reg("bedrock_dust", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> BEDROCK_ALLOY_SHAFT = reg("bedrock_alloy_rod", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> BEDROCK_ALLOY_SHAFT_CORE = reg("bedrock_alloy_shaft_core", () -> new Item(itemProperties()));
+
+    // Gear-crafting parts: ball bearings, the per-material bearings (used by the advanced gears
+    // and gearboxes), and the stone gear. The textures already shipped in resources; the items
+    // were simply never registered, which left e.g. the CVT/256x-gear recipes uncraftable.
+    public static final DeferredItem<Item> BALL_BEARING = reg("ball_bearing", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> STONE_GEAR = reg("stone_gear", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> STONE_BEARING = reg("stone_bearing", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> HSLA_STEEL_BEARING = reg("hsla_steel_bearing", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> TUNGSTEN_ALLOY_BEARING = reg("tungsten_alloy_bearing", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> DIAMOND_BEARING = reg("diamond_bearing", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> BEDROCK_ALLOY_BEARING = reg("bedrock_alloy_bearing", () -> new Item(itemProperties()));
 //    public static final DeferredItem<Item> BEDROCK_ALLOY_SICKLE = reg("bedsickle", ItemBedrockSickle::new);
     //public static final DeferredItem<Item> BEDROCK_ALLOY_GRAFTER = reg("bedgrafter", ItemBedrockGrafter::new, ModList.FORESTRY);
     //public static final DeferredItem<Item> BEDROCK_ALLOY_SAW = reg("bedsaw", ItemBedrockSaw::new, ModList.MULTIPART);
@@ -239,6 +251,48 @@ public class RotaryItems {
     //Flakes
     public static final DeferredItem<Item> TUNGSTEN_FLAKES = reg("tungsten_flakes", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> DIAMOND_FLAKES = reg("diamond_flakes", () -> new Item(itemProperties()));
+
+    //Extractor ore-processing chain (dust -> slurry -> solution -> flakes per ore; see ExtractOres)
+    public static final DeferredItem<Item> IRON_DUST = reg("iron_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> GOLD_DUST = reg("gold_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> REDSTONE_DUST = reg("redstone_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> LAPIS_DUST = reg("lapis_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> DIAMOND_DUST = reg("diamond_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> EMERALD_DUST = reg("emerald_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> QUARTZ_DUST = reg("quartz_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> COPPER_DUST = reg("copper_dust", () -> new Item(itemProperties()));
+
+    public static final DeferredItem<Item> COAL_SLURRY = reg("coal_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> IRON_SLURRY = reg("iron_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> GOLD_SLURRY = reg("gold_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> REDSTONE_SLURRY = reg("redstone_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> LAPIS_SLURRY = reg("lapis_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> DIAMOND_SLURRY = reg("diamond_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> EMERALD_SLURRY = reg("emerald_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> QUARTZ_SLURRY = reg("quartz_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> COPPER_SLURRY = reg("copper_slurry", () -> new Item(itemProperties()));
+
+    public static final DeferredItem<Item> COAL_SOLUTION = reg("coal_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> IRON_SOLUTION = reg("iron_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> GOLD_SOLUTION = reg("gold_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> REDSTONE_SOLUTION = reg("redstone_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> LAPIS_SOLUTION = reg("lapis_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> DIAMOND_SOLUTION = reg("diamond_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> EMERALD_SOLUTION = reg("emerald_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> QUARTZ_SOLUTION = reg("quartz_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> COPPER_SOLUTION = reg("copper_solution", () -> new Item(itemProperties()));
+
+    public static final DeferredItem<Item> COAL_FLAKES = reg("coal_flakes", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> IRON_FLAKES = reg("iron_flakes", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> GOLD_FLAKES = reg("gold_flakes", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> REDSTONE_FLAKES = reg("redstone_flakes", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> LAPIS_FLAKES = reg("lapis_flakes", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> EMERALD_FLAKES = reg("emerald_flakes", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> QUARTZ_FLAKES = reg("quartz_flakes", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> COPPER_FLAKES = reg("copper_flakes", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> SILVER_FLAKES = reg("silver_flakes", () -> new Item(itemProperties()));
+
+    public static final DeferredItem<Item> SILVER_INGOT = reg("silver_ingot", () -> new Item(itemProperties()));
 
     public static final DeferredItem<Item> COMPOST = reg("compost", () -> new Item(itemProperties()));
 

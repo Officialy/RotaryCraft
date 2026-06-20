@@ -20,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import net.neoforged.api.distmarker.Dist;
@@ -409,17 +408,28 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         public boolean isValid(BlockEntity te) {
             if (this == InventoryType.CHEST) {
-                return te instanceof HasItemHandler && !DSU.isValid(te);
-//                case DSU:
-//                    return InterfaceCache.DSU.instanceOf(te);
+                // Accept any vanilla Container (e.g. ChestBlockEntity) or RotaryCraft
+                // HasItemHandler (InventoriedRCBlockEntity implements both).
+                return (te instanceof net.minecraft.world.Container || te instanceof HasItemHandler) && !DSU.isValid(te);
             }
             return false;
         }
 
         public HashMap<Integer, ItemStack> getMovableSlots(BlockEntity te) {
             return switch (this) {
-                case CHEST -> ReikaInventoryHelper.getLocatedTransferrables(((HasItemHandler) te).getItemHandler());
-                case DSU -> null;//ReikaJavaLibrary.makeMapOf(-1, ((IDeepStorageUnit)te).getStoredItemType());
+                case CHEST -> {
+                    if (te instanceof HasItemHandler h)
+                        yield ReikaInventoryHelper.getLocatedTransferrables(h.getItemHandler());
+                    // Vanilla Container fallback — iterate all slots for non-empty stacks
+                    net.minecraft.world.Container inv = (net.minecraft.world.Container) te;
+                    HashMap<Integer, ItemStack> map = new HashMap<>();
+                    for (int i = 0; i < inv.getContainerSize(); i++) {
+                        ItemStack s = inv.getItem(i);
+                        if (!s.isEmpty()) map.put(i, s);
+                    }
+                    yield map;
+                }
+                case DSU -> null;
             };
         }
 
@@ -452,7 +462,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         public int insertItem(BlockEntity te, ItemStack is, int amt) {
             if (this == InventoryType.CHEST) {
-                ChestBlockEntity ii = (ChestBlockEntity) te;
+                net.minecraft.world.Container ii = (net.minecraft.world.Container) te;
                 int items = 0;
                 boolean flag = true;
                 is = ReikaItemHelper.getSizedItemStack(is, 1);

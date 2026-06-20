@@ -10,6 +10,7 @@
 package reika.rotarycraft.blockentities.weaponry;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -180,7 +181,7 @@ public class BlockEntityVanDeGraff extends BlockEntityPowerReceiver implements R
         //LightningBolt b = new LightningBolt(world, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
         // 1.21.5: EntityType.create now requires (ServerLevel, Consumer<T>, BlockPos, EntitySpawnReason, boolean, boolean).
         if (level instanceof net.minecraft.server.level.ServerLevel sl) {
-            LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(sl, null, pos, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED, false, false);
+            LightningBolt bolt = EntityTypes.LIGHTNING_BOLT.create(sl, null, pos, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED, false, false);
             if (bolt != null) world.addFreshEntity(bolt);
         }
         charge = 0;

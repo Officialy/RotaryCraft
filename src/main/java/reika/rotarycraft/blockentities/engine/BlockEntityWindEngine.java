@@ -11,19 +11,19 @@ package reika.rotarycraft.blockentities.engine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.libraries.ReikaDirectionHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
-import reika.rotarycraft.registry.*;
+import reika.rotarycraft.registry.EngineType;
+import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 
 import java.util.List;
 
@@ -40,21 +40,25 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
     public MachineRegistry getMachine() {
         return MachineRegistry.WIND_ENGINE;
     }
+
+    // The blades sit on the side opposite the power output (getWriteDirection), which is also the
+    // side WindClearanceCheck scans for open air. The legacy metadata encoded this same blade
+    // direction; deriving it from writeDirection keeps the clearance/damage scan in front of the
+    // blades instead of the output, so a shaft on the output side no longer fails the check.
+    private Direction getBladeDirection() {
+        return this.getWriteDirection().getOpposite();
+    }
+
     private void dealBladeDamage(Level world, BlockPos pos) {
-        int c = 0;
-        int d = 0;
+        Direction blade = this.getBladeDirection();
+        int c = blade.getStepX();
+        int d = blade.getStepZ();
         int a = 0;
         int b = 0;
-        if (getBlockState().getValue(DAMAGE) < 2) //todo might not work
+        if (blade.getAxis() == Direction.Axis.X)
             b = 1;
         else
             a = 1;
-        switch (DAMAGE.getPossibleValues().size()) {
-            case 0 -> c = 1;
-            case 1 -> c = -1;
-            case 2 -> d = 1;
-            case 3 -> d = -1;
-        }
         AABB box = new AABB(pos.getX() + c, pos.getY(), pos.getZ() + d, pos.getX() + 1 + c, pos.getY() + 1, pos.getZ() + 1 + d).inflate(a, 1, b);
         List<LivingEntity> in = world.getEntitiesOfClass(LivingEntity.class, box);
         for (LivingEntity ent : in) {
@@ -88,20 +92,15 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
 
     @Override
     protected boolean getRequirements(Level world, BlockPos pos) {
-        int c = 0;
-        int d = 0;
+        Direction blade = this.getBladeDirection();
+        int c = blade.getStepX();
+        int d = blade.getStepZ();
         int a = 0;
         int b = 0;
-        if (getBlockState().getValue(DAMAGE) < 2) //todo might not work
+        if (blade.getAxis() == Direction.Axis.X)
             b = 1;
         else
             a = 1;
-        switch (DAMAGE.getPossibleValues().size()) {
-            case 0 -> c = 1;
-            case 1 -> c = -1;
-            case 2 -> d = 1;
-            case 3 -> d = -1;
-        }
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (!ReikaWorldHelper.softBlocks(world, new BlockPos(pos.getX() + a * i + c, pos.getY() + j, pos.getZ() + b * i + d))) {
@@ -111,20 +110,6 @@ public class BlockEntityWindEngine extends BlockEntityEngine {
             }
         }
         return true;
-    }
-
-    @Override
-    protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundTick++;
-        if (this.isMuffled(world, pos)) {
-            volume *= 0.3125F;
-        }
-
-        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
-            return;
-        soundTick = 0;
-
-        SoundRegistry.WIND.playSoundAtBlock(world, pos, 1.1F * volume, pitchMultiplier);
     }
 
     @Override

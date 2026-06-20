@@ -89,9 +89,19 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
             return;
         this.recomputeStep(world, facing);
         BlockPos head = worldPosition.relative(facing, step);
-        if (world.isOutsideBuildHeight(head))
+        if (!this.canBreakAt(world, head))
             return;
         this.grind(world, head, facing);
+    }
+
+    private boolean canBreakAt(Level world, BlockPos head) {
+        if (world.isOutsideBuildHeight(head))
+            return false;
+        // never punch through the lowest bedrock layer (the void floor) unless the pack
+        // owner has explicitly enabled it — legacy guarded y==0, which is getMinY() now
+        if (head.getY() <= world.getMinY() && !reika.rotarycraft.registry.ConfigRegistry.VOIDHOLE.getState())
+            return false;
+        return true;
     }
 
     private void grind(Level world, BlockPos head, Direction facing) {
@@ -241,6 +251,14 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
 
     public int getStep() {
         return step;
+    }
+
+    /** 0..1 progress through the current grind cycle, for the renderer's head extension. */
+    public float getGrindFraction() {
+        int time = this.getOperationTime();
+        if (time <= 0)
+            return 0;
+        return Math.min(1F, tickcount / (float) time);
     }
 
     /* Container — single internal bedrock-dust slot, not exposed to automation (InertIInv). */

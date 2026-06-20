@@ -31,7 +31,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityDistilleryAt(BlockEntityDistillery tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityDistilleryAt(BlockEntityDistillery tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        ModelDistillery var14;
 //        var14 = DistilleryModel;
 //
@@ -57,7 +57,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityDistilleryAt((BlockEntityDistillery) tile, par2, par4, par6, par8);
 //        if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {

@@ -11,6 +11,7 @@
 //
 //import reika.rotarycraft.blockentities.Farming.BlockEntitySprinkler;
 //import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 //import com.mojang.math.Quaternion;
 //import net.minecraft.BlockEntity.BlockEntity;
 //import org.lwjgl.opengl.GL11;
@@ -28,7 +29,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntitySprinklerAt(PoseStack stack, BlockEntitySprinkler tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntitySprinklerAt(PoseStack stack, BlockEntitySprinkler tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!tile.isInWorld())
@@ -95,7 +96,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntitySprinklerAt((BlockEntitySprinkler) tile, par2, par4, par6, par8);
 //    }

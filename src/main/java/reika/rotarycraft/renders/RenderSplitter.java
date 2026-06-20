@@ -14,7 +14,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -43,7 +42,7 @@ public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntitySplitterAt(PoseStack stack, BlockEntitySplitter tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntitySplitterAt(PoseStack stack, BlockEntitySplitter tile, VertexConsumer bufferSource, int pPackedLight) {
 
         String s = tile.isBedrock() ? "bedsplittertex" : "splittertex";
 //        this.bindTextureByName("/reika/rotarycraft/textures/blockentitytex/transmission/shaft/" + s + ".png");
@@ -80,7 +79,7 @@ public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
 //        else
 //            var15.renderToBuffer(stack, tile, ReikaJavaLibrary.makeListFrom(tile.failed), -tile.phi * dir, 0);
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(SplitterModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         // 26.1 fix: legacy port called {@code renderToBuffer} (root-only static draw) — so the
         // splitter's cross-shafts never spun. Route through {@link SplitterModel#renderAll}
         // which applies the {@code phi} rotation to the rotating sub-parts. Pass {@code -tile.phi}
@@ -95,7 +94,7 @@ public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
     }
 
     // Legacy 1.7 signature retained as dead code; vanilla calls {@link #submit} instead.
-    public void render(BlockEntitySplitter tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int pPackedLight, int i1) {
+    public void render(BlockEntitySplitter tile, float v, PoseStack stack, VertexConsumer multiBufferSource, int pPackedLight, int i1) {
         if (this.doRenderModel(stack, tile))
             this.renderBlockEntitySplitterAt(stack, tile, multiBufferSource, pPackedLight);
         if ((tile).isInWorld())
@@ -118,8 +117,7 @@ public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
         RenderType rt = RenderTypes.entityCutout(SplitterModel.TEXTURE_LOCATION);
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntitySplitterAt(snapped, tile, oneRT, light);
+            renderBlockEntitySplitterAt(snapped, tile, vc, light);
         });
         if (tile.isInWorld()) {
             IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());

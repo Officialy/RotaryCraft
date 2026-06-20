@@ -117,11 +117,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
 
     public static final int BASE_CONSUMPTION = 10;
     public static final int AFTERBURNER_CONSUMPTION = 25;
-    private static final RayTracer tracer;
-
-    static {
-        tracer = new RayTracer(0, 0, 0, 0, 0, 0);
-    }
+    private final RayTracer tracer = new RayTracer(0, 0, 0, 0, 0, 0);
 
     private final StepTimer jetstarttimer = new StepTimer(479);
     /** Used in jet engines — Foreign Object Damage counter, 0..8 (8 = engine destroyed). */
@@ -201,8 +197,11 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
      * since legacy {@code getBlockBoundsMin/MaxXYZ} is gone.
      */
     public float getChokedFraction(Level world, BlockPos blockPos) {
-        // Intake is opposite of the engine's output direction.
-        Direction intake = write != null ? write.getOpposite() : Direction.NORTH;
+        // Intake is opposite the engine's output (FACING). Derive it straight from FACING rather than
+        // the `write` field: write is set by getIOSides, which only maps the 4 horizontal facings, so a
+        // null/stale write would default to NORTH and check the wrong block → a spurious full choke
+        // (engine reads 0 speed and never spins/consumes fuel).
+        Direction intake = this.getBlockState().getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING).getOpposite();
         BlockPos checkPos = blockPos.relative(intake);
         BlockState st = world.getBlockState(checkPos);
         Block b = st.getBlock();
@@ -717,6 +716,10 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         tag.putBoolean("jetfail", isJetFailing);
         tag.putBoolean("burn", canAfterBurn);
         tag.putBoolean("burning", burnerActive);
+        // the client drives the looping jet drone: it needs the FOD level (pitch)
+        // and spool-up progress (sound gate)
+        tag.putInt("FOD", FOD);
+        tag.putInt("jetstart", jetstarttimer.getTick());
     }
 
     @Override
@@ -726,6 +729,8 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         isJetFailing = tag.getBooleanOr("jetfail", false);
         canAfterBurn = tag.getBooleanOr("burn", false);
         burnerActive = tag.getBooleanOr("burning", false);
+        FOD = tag.getIntOr("FOD", 0);
+        jetstarttimer.setTick(tag.getIntOr("jetstart", 0));
     }
 
     @Override
@@ -738,6 +743,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         super.saveAdditional(tag);
         tag.putInt("FOD", FOD);
         tag.putInt("chickens", chickenCount);
+        tag.putInt("jetstart", jetstarttimer.getTick());
     }
 
     @Override
@@ -745,46 +751,65 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         super.load(tag);
         FOD = tag.getIntOr("FOD", 0);
         chickenCount = tag.getIntOr("chickens", 0);
+        jetstarttimer.setTick(tag.getIntOr("jetstart", 0));
     }
 
     @Override
-    protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundTick++;
+    protected void playServerSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
         afterburnTick++;
         if (FOD > 0 && DragonAPI.rand.nextInt(2 * (9 - FOD)) == 0) {
-            world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    SoundEvents.BLAZE_HURT, SoundSource.BLOCKS,
-                    1F + DragonAPI.rand.nextFloat(), 1F, false);
-            world.addParticle(ParticleTypes.CRIT,
-                    pos.getX() + DragonAPI.rand.nextFloat(),
-                    pos.getY() + DragonAPI.rand.nextFloat(),
-                    pos.getZ() + DragonAPI.rand.nextFloat(),
-                    -0.5 + DragonAPI.rand.nextFloat(),
-                    DragonAPI.rand.nextFloat(),
-                    -0.5 + DragonAPI.rand.nextFloat());
+            // playLocalSound/addParticle are client-only no-ops; this runs on the server,
+            // so broadcast the rattle and debris properly
+            ReikaSoundHelper.playSoundAtBlock(world, pos, SoundEvents.BLAZE_HURT, 1F + DragonAPI.rand.nextFloat(), 1F);
+            if (world instanceof net.minecraft.server.level.ServerLevel sl) {
+                sl.sendParticles(ParticleTypes.CRIT,
+                        pos.getX() + DragonAPI.rand.nextFloat(),
+                        pos.getY() + DragonAPI.rand.nextFloat(),
+                        pos.getZ() + DragonAPI.rand.nextFloat(),
+                        0,
+                        -0.5 + DragonAPI.rand.nextFloat(),
+                        DragonAPI.rand.nextFloat(),
+                        -0.5 + DragonAPI.rand.nextFloat(),
+                        1);
+            }
         }
         if (this.isMuffled(world, pos)) {
             volume *= 0.3125F;
         }
         if (this.isAfterburning() && afterburnTick >= 50) {
             afterburnTick = 0;
-            float vol = 0.9F;
+            float vol = 0.9F * volume;
             if (omega < type.getSpeed()) {
                 vol *= (float) Math.pow(0.75, type.getSpeed() / (double) omega);
             }
             SoundRegistry.AFTERBURN.playSoundAtBlock(world, pos, vol, 1);
-            SoundRegistry.AFTERBURN.playSoundAtBlock(world, pos, vol, 1);
         }
+    }
 
-        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
-            return;
-        soundTick = 0;
+    @Override
+    public boolean shouldPlayEngineSound() {
+        // no jet drone until the spool-up (jetstart sound) has finished
+        return super.shouldPlayEngineSound() && jetstarttimer.getTick() >= jetstarttimer.getCap();
+    }
 
-        float pitch = 1F / (0.125F * FOD + 1);
-        if (jetstarttimer.getTick() >= jetstarttimer.getCap())
-            SoundRegistry.JET.playSoundAtBlock(world, pos, volume, pitch * pitchMultiplier);
-        else
-            soundTick = 2000;
+    /**
+     * Client-visible spool state: true while the engine is running but the jetstart spool-up sound
+     * has not yet finished. The client {@code EngineSoundManager} uses this to drive the spool sound
+     * as a tickable instance so it stops the moment the block is removed (previously the spool was a
+     * fire-and-forget server packet that kept playing after the engine was broken).
+     */
+    public boolean isSpoolingUp() {
+        return omega > 0 && jetstarttimer.getTick() < jetstarttimer.getCap();
+    }
+
+    /** Current spool-up progress in ticks (synced); used to avoid restarting the spool sound late. */
+    public int getSpoolTick() {
+        return jetstarttimer.getTick();
+    }
+
+    @Override
+    public float getEngineSoundPitch() {
+        return 1F / (0.125F * FOD + 1);
     }
 
     public boolean isAfterburning() {
@@ -798,7 +823,9 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
 
     @Override
     protected int getMaxSpeed(Level world, BlockPos pos) {
-        return (int) (EngineType.JET.getSpeed() * this.getChokedFraction(world, pos));
+        float choke = this.getChokedFraction(world, pos);
+        isChoking = choke < 0.5F;
+        return (int) (EngineType.JET.getSpeed() * choke);
     }
 
     @Override
@@ -820,9 +847,10 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         this.ingest(world, pos);
         this.fluidIngest(world, pos);
         this.heatJet(world, pos);
-        if (lastpower == 0) {
-            SoundRegistry.JETSTART.playSoundAtBlock(world, pos);
-        }
+        // The spool-up (jetstart) sound is now a client-managed tickable instance driven by
+        // isSpoolingUp() in EngineSoundManager, so it stops immediately when the engine is broken.
+        // It is no longer fired as a fire-and-forget server packet here (which kept playing after
+        // the block was removed).
         if (world.isClientSide())
             this.spawnSmokeParticles(world, pos);
         jetstarttimer.update();
@@ -970,11 +998,6 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         jetstarttimer.reset();
     }
 
-    @Override
-    protected int getSoundLength(float factor) {
-        return super.getSoundLength(factor) + (int) (Math.min(FOD, 7) * 11 * factor);
-    }
-
     /**
      * Reads engine-instance state from the BlockItem the player used to place the engine.
      * Legacy used a custom {@code setDataFromPlacer} on a parent class that no longer exists in
@@ -1031,12 +1054,10 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
 
     @Override
     public boolean canUpgradeWith(ItemStack item) {
-        if (canAfterBurn) return false;
-        if (!(item.getItem() instanceof ItemEngineUpgrade)) return false;
-        var data = item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
-                net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
-        if (data == null) return false;
-        return data.getIntOr("upgrade", -1) == UpgradeType.AFTERBURNER.ordinal();
+        // The crafted upgrade stores its type as a string ("upgradeType" = UpgradeType.desc),
+        // not the legacy int ordinal — read it through the shared helper so afterburner upgrades
+        // actually apply.
+        return !canAfterBurn && ItemEngineUpgrade.getUpgrade(item) == UpgradeType.AFTERBURNER;
     }
 
     public boolean canAfterBurn() {

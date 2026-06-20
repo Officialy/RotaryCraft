@@ -11,6 +11,7 @@ package reika.rotarycraft.blockentities.transmission;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -75,6 +76,23 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
             type = GearboxTypes.WOOD;
         this.type = type;
         bearingTier = type;
+        this.ratio = ratioFromState(state);
+    }
+
+    /**
+     * The gear ratio is encoded by the block variant (…_gearbox_2x/4x/8x/16x) and is NOT persisted
+     * in NBT, so it must be derived from the block whenever the BE is created — at placement and on
+     * every chunk load. Without it {@code ratio} stays 0, which (a) makes the in-world renderer's
+     * {@code switch(getRatio())} match no case so the gearbox draws nothing, and (b) divides by zero
+     * in the power math ({@code omega / ratio}).
+     */
+    private static int ratioFromState(BlockState state) {
+        String path = BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath();
+        if (path.endsWith("_16x")) return 16;
+        if (path.endsWith("_8x")) return 8;
+        if (path.endsWith("_4x")) return 4;
+        if (path.endsWith("_2x")) return 2;
+        return 2;
     }
 
     public static int getDamagePercent(int val) {
@@ -82,6 +100,12 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
     }
 
     public GearboxTypes getGearboxType() {
+        // The material is determined entirely by the block (one block per material), so derive it
+        // authoritatively rather than trusting the cached `type` field — which the BlockEntityType
+        // supplier or stale NBT could leave as WOOD (wrong texture AND wrong power limits → a bedrock
+        // gearbox exploding into wood dust under jet power).
+        if (this.getBlockState().getBlock() instanceof reika.rotarycraft.base.blocks.entity.transmission.BlockGearbox bg && bg.type != null)
+            return bg.type;
         return type != null ? type : GearboxTypes.WOOD;
     }
 
@@ -478,6 +502,10 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         tag.putBoolean("fail", failed);
         tag.putInt("temp", temperature);
         tag.putString("bearing", bearingTier.name());
+        // Sync the gearbox material so the client renders the right texture immediately on placement
+        // (the BER reads getGearboxType()). Without this the client fell back to WOOD until a chunk
+        // reload re-derived the type from the block.
+        tag.putString("geartype", type.name());
 
         tank.writeToNBT(tag);
     }
@@ -491,6 +519,8 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         temperature = tag.getIntOr("temp", 0);
         if (tag.contains("bearing"))
             bearingTier = GearboxTypes.valueOf(tag.getStringOr("bearing", ""));
+        if (tag.contains("geartype"))
+            type = GearboxTypes.valueOf(tag.getStringOr("geartype", type.name()));
 
         tank.readFromNBT(tag);
     }
@@ -509,7 +539,9 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
 
     @Override
     public void load(CompoundTag nbt) {
-        GearboxTypes gear = GearboxTypes.WOOD;
+        // Default to the constructor-set type (derived from the block) rather than WOOD, so an NBT
+        // that lacks the material (e.g. an update packet) doesn't clobber a diamond gearbox to wood.
+        GearboxTypes gear = type != null ? type : GearboxTypes.WOOD;
         if (nbt.contains("geartype")) {
             gear = GearboxTypes.valueOf(nbt.getStringOr("geartype", ""));
         } else if (nbt.contains("type")) {

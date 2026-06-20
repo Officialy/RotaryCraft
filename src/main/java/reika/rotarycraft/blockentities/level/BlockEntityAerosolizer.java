@@ -16,7 +16,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerAerosolizer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -166,7 +169,7 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
             List<MobEffectInstance> li = new ArrayList<>();
             pc.getAllEffects().forEach(li::add);
             for (MobEffectInstance p : li) {
-                if (!p.getEffect().value().isInstantenous()) {
+                if (!p.getEffect().value().isInstantaneous()) {
                     boolean extended = false;//todo PotionHelper.checkFlag(dmg, 6); //Bit 6 is enhanced
                     boolean level2 = p.getAmplifier() > 0;
                     return new PotionApplication(ReikaJavaLibrary.makeListFrom(new MobEffectInstance(p.getEffect(), 0)), extended ? 3 : 1, level2 ? 1 : 0);
@@ -329,6 +332,11 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
     @Override
     public MachineRegistry getMachine() {
         return MachineRegistry.AEROSOLIZER;
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerAerosolizer(id, inv, this);
     }
 
     @Override

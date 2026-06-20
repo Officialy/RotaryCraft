@@ -368,7 +368,7 @@ public class Gearbox8Model extends GearboxBaseModel {
                         .addBox(0, 0, 0, 8, 2, 2),
                 PartPose.offsetAndRotation(-6, 12, -2, 0, 0, 0));
 
-        return LayerDefinition.create(definition, 128, 128);
+        return LayerDefinition.create(definition, 128, 32);
     }
 
         @Override

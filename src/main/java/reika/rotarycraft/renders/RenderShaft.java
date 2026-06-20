@@ -13,7 +13,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+// 26.2: removed VertexConsumer from live BER path.
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -48,7 +48,7 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
         crossModel = new CrossModel(context.bakeLayer(RotaryModelLayers.SHAFT_CROSS));
     }
 
-    public void renderBlockEntityShaftAt(PoseStack stack, BlockEntityShaft tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntityShaftAt(PoseStack stack, BlockEntityShaft tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
         if (tile.isInWorld()) {
             var failed = tile.failed();
@@ -66,13 +66,13 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
             }
 
             if (tile.isCross()) {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.parse(ShaftVModel.TEXTURE_LOCATION + getImageFileName(tile))));
+                VertexConsumer vertexconsumer = bufferSource;
                 crossModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), tile.crossphi1, 0);
             } else if (tile.isVertical()) {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.parse(ShaftVModel.TEXTURE_LOCATION + getImageFileName(tile))));
+                VertexConsumer vertexconsumer = bufferSource;
                 VShaftModelt.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), -tile.phi, 0);
             } else {
-                VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(Identifier.parse(ShaftModel.TEXTURE_LOCATION + getImageFileName(tile))));
+                VertexConsumer vertexconsumer = bufferSource;
                 shaftModel.renderAll(stack, vertexconsumer, pPackedLight, tile, ReikaJavaLibrary.makeListFrom(failed), -tile.phi, 0);
 //                RotaryCraft.LOGGER.info("phi" + tile.phi);
             }
@@ -102,14 +102,15 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
         RenderType rt = RenderTypes.entityCutout(textureWithSuffix(ShaftModel.TEXTURE_LOCATION, getImageFileName(tile)));
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            MultiBufferSource oneRT = ignored -> vc;
-            renderBlockEntityShaftAt(snapped, tile, oneRT, light);
+            // 26.2: pass VertexConsumer directly.
+            renderBlockEntityShaftAt(snapped, tile, vc, light);
         });
         // IO arrows for the shaft's read/write directions (debugFilledBox quads).
         if (tile.isInWorld()) {
             IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
         }
     }
+
 
     public static String getImageFileName(BlockEntity te) {
         BlockEntityShaft tile = (BlockEntityShaft) te;

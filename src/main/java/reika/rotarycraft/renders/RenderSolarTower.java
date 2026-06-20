@@ -12,7 +12,6 @@ package reika.rotarycraft.renders;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -39,13 +38,13 @@ public class RenderSolarTower extends RotaryTERenderer<BlockEntitySolarTower> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntitySolarAt(BlockEntitySolarTower tile, PoseStack stack, MultiBufferSource bufferSource, int packetLight) {
+    public void renderBlockEntitySolarAt(BlockEntitySolarTower tile, PoseStack stack, VertexConsumer bufferSource, int packetLight) {
         BlockState blockstate = tile.getLevel() != null ? tile.getBlockState() : RotaryBlocks.SOLAR_TOWER.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
         float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.pushPose();
         stack.translate(0.5F, -0.5F, 0.5F);
         stack.mulPose(Axis.YP.rotationDegrees(f));
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(SolarTowerModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         modelSolar.renderToBuffer(stack, vertexconsumer, packetLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.popPose();
     }
@@ -61,7 +60,7 @@ public class RenderSolarTower extends RotaryTERenderer<BlockEntitySolarTower> {
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntitySolarTower solar)
             renderBlockEntitySolarAt(solar, stack, mbs, light);
     }

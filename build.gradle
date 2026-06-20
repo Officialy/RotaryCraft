@@ -5,8 +5,34 @@ ext {
     mod_description = "RotaryCraft adds rotational energy machinery and complex automation solutions."
 }
 
+// Headless JUnit harness: NeoForge moddev loads the mod (and its registries) into the test
+// JVM via the FML JUnit launcher, so registry/recipe/serializer integrity can be asserted
+// without launching a client. Run with `gradlew :RotaryCraft:test`.
+neoForge {
+    unitTest {
+        enable()
+        testedMod = mods.named(project.mod_id).get()
+    }
+    // Headless in-world game tests: `gradlew :RotaryCraft:runGameTest` launches a GameTestServer
+    // that runs every test in the rotarycraft namespace and exits non-zero on failure.
+    runs {
+        gameTest {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation project(":DragonAPI")
+
+    testImplementation platform("org.junit:junit-bom:5.11.4")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
     localRuntime "maven.modrinth:spark:1.10.172-neoforge"
 
@@ -19,18 +45,27 @@ dependencies {
     // via `localRuntime` so the plugin actually runs in dev.
     //
     // JEI: API is split into common + loader-specific artifacts on maven.blamejared.com.
-    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-    localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    // 26.2 GATE: JEI has not published a 26.2 build yet (maven 404 for jei-26.2-*; latest is 26.1.2).
+    // The single consumer (modinterface/jei/RotaryJEIPlugin) is excluded from compilation below until
+    // a 26.2 JEI ships — re-enable these + remove the sourceSet exclude then. (compat-only; tasks 23/24)
+//    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+//    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+//    localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     // Jade: the API classes live inside the main jar (no separate -api artifact published).
     // Adding the same coordinate to both compileOnly and localRuntime works because Gradle
     // resolves them to the same file; the compile-only entry just gives javac visibility.
-    compileOnly "maven.modrinth:jade:26.1.1+neoforge"
-    localRuntime "maven.modrinth:jade:26.1.1+neoforge"
+    compileOnly "maven.modrinth:jade:26.2.2+neoforge"
+    localRuntime "maven.modrinth:jade:26.2.2+neoforge"
 
     if (file('libs').isDirectory()) {
         compileOnly fileTree(dir: 'libs', include: ['*.jar'])
         localRuntime fileTree(dir: 'libs', include: ['*.jar'])
     }
+}
+
+// 26.2 GATE: no JEI 26.2 build exists yet, so the JEI plugin can't compile. Exclude it until JEI ships
+// for 26.2 (then remove this and re-enable the mezz.jei dependencies above).
+sourceSets.main.java {
+    exclude 'reika/rotarycraft/modinterface/jei/**'
 }

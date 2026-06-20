@@ -28,11 +28,10 @@ public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorkta
     //Client
     public ContainerWorktable(int id, Inventory inv, FriendlyByteBuf data) {
         this(id, inv, (BlockEntityWorktable) inv.player.level().getBlockEntity(data.readBlockPos()), inv.player.level(), true);
-        table = (BlockEntityWorktable) inv.player.level().getBlockEntity(data.readBlockPos());
     }
 
     public ContainerWorktable(int id, Inventory inv, BlockEntityWorktable te, Level world, boolean gui) {
-        super(RotaryMenus.WORKTABLE.get(), id, inv, null/*todo null for now*/, world, gui);
+        super(RotaryMenus.WORKTABLE.get(), id, inv, te, world, gui);
         int dx = 0;
         table = te;
 

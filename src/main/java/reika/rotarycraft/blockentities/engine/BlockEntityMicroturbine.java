@@ -48,22 +48,6 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
     }
 
     @Override
-    protected void playSounds(Level world, BlockPos pos, float pitchMultiplier, float volume) {
-        soundTick++;
-        if (this.isMuffled(world, pos)) {
-            volume *= 0.3125F;
-        }
-
-        if (soundTick < this.getSoundLength(1F / pitchMultiplier) && soundTick < 2000)
-            return;
-        soundTick = 0;
-
-        float pitch = 1F;
-        volume *= 0.125F;
-        SoundRegistry.MICRO.playSoundAtBlock(world, pos, volume, pitch * pitchMultiplier);
-    }
-
-    @Override
     protected void affectSurroundings(Level world, BlockPos pos) {
 
     }

@@ -13,7 +13,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import org.joml.Vector3f;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -45,7 +44,7 @@ public class RenderLamp extends RotaryTERenderer<BlockEntityFloodlight> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntityFloodlightAt(PoseStack stack, BlockEntityFloodlight tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntityFloodlightAt(PoseStack stack, BlockEntityFloodlight tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
 //        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         stack.translate(0.5F, 1.5F, 0.5F);
@@ -62,10 +61,10 @@ public class RenderLamp extends RotaryTERenderer<BlockEntityFloodlight> {
 
         Direction facing = blockstate.getValue(BlockRotaryCraftMachine.FACING);
         if (tile.isInWorld() && (facing == Direction.DOWN || facing == Direction.UP)) {
-            VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(LampModel.TEXTURE_LOCATION));
+            VertexConsumer vertexconsumer = bufferSource;
             lampModelV.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         } else {
-            VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(LampModel.TEXTURE_LOCATION));
+            VertexConsumer vertexconsumer = bufferSource;
             lampModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         }
 
@@ -83,7 +82,7 @@ public class RenderLamp extends RotaryTERenderer<BlockEntityFloodlight> {
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntityFloodlight lamp)
             renderBlockEntityFloodlightAt(stack, lamp, mbs, light);
     }

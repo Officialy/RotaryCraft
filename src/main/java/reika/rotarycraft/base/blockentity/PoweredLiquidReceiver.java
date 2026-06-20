@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
@@ -25,7 +26,7 @@ import reika.rotarycraft.registry.MachineRegistry;
 import java.util.Locale;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements PipeConnector {//, IPipeConnection {
+public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements PipeConnector, IFluidHandler {//, IPipeConnection {
 
     protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH)), this.getCapacity());
 
@@ -58,6 +59,45 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
 
     public boolean isValidFluid(Fluid f) {
         return f != null && f.equals(this.getInputFluid());
+    }
+
+    // NeoForge IFluidHandler — exposes the input tank so pipes/hoppers and code-driven testing
+    // can fill it. Delegates to the HybridTank; only the machine's input fluid is accepted.
+    @Override
+    public int getTanks() {
+        return 1;
+    }
+
+    @Override
+    public FluidStack getFluidInTank(int tank) {
+        return this.tank.getFluid();
+    }
+
+    @Override
+    public int getTankCapacity(int tank) {
+        return this.tank.getCapacity();
+    }
+
+    @Override
+    public boolean isFluidValid(int tank, FluidStack stack) {
+        return this.isValidFluid(stack.getFluid());
+    }
+
+    @Override
+    public int fill(FluidStack resource, FluidAction action) {
+        if (!this.isValidFluid(resource.getFluid()))
+            return 0;
+        return this.tank.fill(resource, action);
+    }
+
+    @Override
+    public FluidStack drain(FluidStack resource, FluidAction action) {
+        return this.tank.drain(resource, action);
+    }
+
+    @Override
+    public FluidStack drain(int maxDrain, FluidAction action) {
+        return this.tank.drain(maxDrain, action);
     }
 
 

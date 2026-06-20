@@ -119,7 +119,7 @@ public class HandbookNotifications {
                 if (chg != mark)
                     empty = false;
                 if (chg) {
-//    todo                HandbookNotifications.instance.addAlert(ep, cfg, levels.get(cfg), data.get(cfg));
+                    HandbookNotifications.instance.addAlert(ep, cfg, levels.get(cfg), data.get(cfg));
                 }
                 nbt.putBoolean(tag, chg);
             }

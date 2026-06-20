@@ -11,8 +11,7 @@
 //
 //import com.mojang.blaze3d.vertex.PoseStack;
 //import com.mojang.blaze3d.vertex.VertexConsumer;
-//import net.minecraft.client.renderer.MultiBufferSource;
-//import net.minecraft.client.renderer.rendertype.RenderType;
+////import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 //import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 //import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -34,7 +33,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockPlayerDetectorAt(PoseStack stack, BlockPlayerDetector tile, MultiBufferSource bufferSource, int pPackedLight) {
+//    public void renderBlockPlayerDetectorAt(PoseStack stack, BlockPlayerDetector tile, VertexConsumer bufferSource, int pPackedLight) {
 //        ModelDetector var14;
 //        var14 = DetectorModel;
 //        //ModelDetectorV var15;
@@ -55,7 +54,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //            var12 = 1.0F - var12 * var12 * var12;*/
 //        // if (tile.getBlockMetadata() < 4)
 //
-//        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(ModelDetector.TEXTURE_LOCATION));
+//        VertexConsumer vertexconsumer = bufferSource;
 //        DetectorModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 //
 ////        if (tile.isInWorld())
@@ -65,7 +64,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 //    }
 //
 //    @Override
-//    public void render(BlockPlayerDetector tile, float v, PoseStack stack, MultiBufferSource multiBufferSource, int i, int i1) {
+//    public void render(BlockPlayerDetector tile, float v, PoseStack stack, VertexConsumer multiBufferSource, int i, int i1) {
 //        if (this.doRenderModel(stack, tile)) {
 //            this.renderBlockPlayerDetectorAt(stack, tile, multiBufferSource, i);
 //        }

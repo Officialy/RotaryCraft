@@ -12,7 +12,6 @@ package reika.rotarycraft.renders.mi;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -37,7 +36,7 @@ public class RenderLandmine extends RotaryTERenderer<BlockEntityLandmine> {
     /**
      * Renders the BlockEntity for the position.
      */
-    public void renderBlockEntityLandmineAt(PoseStack stack, BlockEntityLandmine tile, MultiBufferSource bufferSource, int pPackedLight) {
+    public void renderBlockEntityLandmineAt(PoseStack stack, BlockEntityLandmine tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
 //        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -48,7 +47,7 @@ public class RenderLandmine extends RotaryTERenderer<BlockEntityLandmine> {
             stack.translate(0, -0.6, 0);
         }
 
-        VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderTypes.entityCutout(LandmineModel.TEXTURE_LOCATION));
+        VertexConsumer vertexconsumer = bufferSource;
         landmineModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
 //        if (tile.isInWorld())
@@ -68,7 +67,7 @@ public class RenderLandmine extends RotaryTERenderer<BlockEntityLandmine> {
     }
 
     @Override
-    protected void renderModel(PoseStack stack, BlockEntity be, MultiBufferSource mbs, int light) {
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntityLandmine landmine)
             renderBlockEntityLandmineAt(stack, landmine, mbs, light);
     }

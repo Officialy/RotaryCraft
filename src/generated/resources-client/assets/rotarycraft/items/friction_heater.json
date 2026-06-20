@@ -1,6 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "rotarycraft:block/friction_heater"
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/friction_heater",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "friction"
+    }
   }
 }

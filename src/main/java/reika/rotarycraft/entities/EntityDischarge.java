@@ -10,6 +10,7 @@
 package reika.rotarycraft.entities;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -31,13 +32,13 @@ public class EntityDischarge extends Entity implements IEntityWithComplexSpawn {
     public double targetZ;
 
     public EntityDischarge(final EntityType<? extends Entity> entityType, Level world) {
-        super(EntityType.AREA_EFFECT_CLOUD, world);
+        super(EntityTypes.AREA_EFFECT_CLOUD, world);
         targetX = targetY = targetZ = 0;
         charge = 0;
     }
 
     public EntityDischarge(Level world, double x, double y, double z, int charge, double tx, double ty, double tz) {
-        super(EntityType.AREA_EFFECT_CLOUD, world);
+        super(EntityTypes.AREA_EFFECT_CLOUD, world);
         this.setPos(x, y, z);
         this.charge = charge;
         targetX = tx;

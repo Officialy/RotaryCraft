@@ -19,10 +19,18 @@
 package reika.rotarycraft.modinterface.jade;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
+
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.Set;
 
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -194,7 +202,7 @@ public class RotaryJadePlugin implements IWailaPlugin {
     }
 
     // ------------------------------------------------------------------------------------
-    // Reservoir tank fill state.
+    // Reservoir tank fill state — individual block + total network volume.
 
     private static final class ReservoirTooltip implements IBlockComponentProvider {
         @Override public Identifier getUid() { return TANK_UID; }
@@ -213,10 +221,50 @@ public class RotaryJadePlugin implements IWailaPlugin {
             Component fluidName = Component.translatable(f.getFluidType().getDescriptionId());
             tooltip.add(Component.literal("Fluid: ").withStyle(ChatFormatting.GRAY)
                     .append(fluidName.copy().withStyle(ChatFormatting.AQUA)));
-            tooltip.add(Component.literal("Level: ").withStyle(ChatFormatting.GRAY)
+
+            // Individual block volume
+            tooltip.add(Component.literal("This block: ").withStyle(ChatFormatting.GRAY)
                     .append(Component.literal(level + " / " + BlockEntityReservoir.CAPACITY + " mB").withStyle(ChatFormatting.WHITE)));
-            tooltip.add(Component.literal(String.format("%.0f%% full", 100.0 * level / BlockEntityReservoir.CAPACITY))
-                    .withStyle(ChatFormatting.DARK_GRAY));
+
+            // Network total — BFS over cardinal horizontal neighbours
+            int[] net = networkTotal(accessor.getLevel(), accessor.getPosition());
+            int netFluid = net[0], netCap = net[1];
+            if (netCap > BlockEntityReservoir.CAPACITY) {
+                // Only show the network line when there are multiple connected blocks
+                tooltip.add(Component.literal("Network: ").withStyle(ChatFormatting.GRAY)
+                        .append(Component.literal(netFluid + " / " + netCap + " mB")
+                                .withStyle(ChatFormatting.WHITE)));
+                tooltip.add(Component.literal(String.format("%.0f%% full", 100.0 * netFluid / netCap))
+                        .withStyle(ChatFormatting.DARK_GRAY));
+            } else {
+                tooltip.add(Component.literal(String.format("%.0f%% full", 100.0 * level / BlockEntityReservoir.CAPACITY))
+                        .withStyle(ChatFormatting.DARK_GRAY));
+            }
+        }
+
+        /** BFS limited to 256 blocks. Returns {totalFluid, totalCapacity}. */
+        private static int[] networkTotal(Level world, BlockPos start) {
+            if (world == null) return new int[]{0, BlockEntityReservoir.CAPACITY};
+            Set<BlockPos> visited = new HashSet<>();
+            Queue<BlockPos> queue = new ArrayDeque<>();
+            queue.add(start);
+            visited.add(start);
+            int totalFluid = 0, totalCap = 0;
+            while (!queue.isEmpty() && visited.size() <= 256) {
+                BlockPos pos = queue.poll();
+                BlockEntity be = world.getBlockEntity(pos);
+                if (!(be instanceof BlockEntityReservoir res)) continue;
+                totalFluid += res.getFluidLevel();
+                totalCap   += BlockEntityReservoir.CAPACITY;
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    BlockPos nb = pos.relative(dir);
+                    if (!visited.contains(nb) && world.getBlockEntity(nb) instanceof BlockEntityReservoir) {
+                        visited.add(nb);
+                        queue.add(nb);
+                    }
+                }
+            }
+            return new int[]{totalFluid, totalCap};
         }
     }
 }

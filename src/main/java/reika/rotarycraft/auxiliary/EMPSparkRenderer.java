@@ -12,6 +12,7 @@ package reika.rotarycraft.auxiliary;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
@@ -168,7 +169,7 @@ public class EMPSparkRenderer {
             z2 += location.pos.getZ();
 
             //LightningBolt bolt = new LightningBolt(x1, y1, z1, x2, y2, z2, 6);
-            LightningBolt bolt = new LightningBolt(EntityType.LIGHTNING_BOLT, location.getWorld());
+            LightningBolt bolt = new LightningBolt(EntityTypes.LIGHTNING_BOLT, location.getWorld());
             //bolt.scaleVelocity(1 / 64D);
             //bolt.scaleVariance(1 / 12D);
 

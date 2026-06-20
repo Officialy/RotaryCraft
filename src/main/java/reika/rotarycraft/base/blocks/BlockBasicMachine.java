@@ -14,53 +14,46 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import org.lwjgl.glfw.GLFW;
 import org.jetbrains.annotations.Nullable;
-import net.minecraft.world.level.redstone.Orientation;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.Item;
-
-
+import org.lwjgl.glfw.GLFW;
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
 import reika.dragonapi.interfaces.blockentity.PlaceNotification;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.io.ReikaSoundHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.dragonapi.modinteract.ReikaXPFluidHelper;
-import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.CachedConnection;
 import reika.rotarycraft.auxiliary.interfaces.EnchantableMachine;
-import reika.rotarycraft.auxiliary.interfaces.NBTMachine;
 import reika.rotarycraft.auxiliary.interfaces.PressureTE;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -77,7 +70,6 @@ import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.registry.*;
 
 import java.util.List;
-import net.minecraft.world.MenuProvider;
 
 public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
@@ -119,15 +111,25 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
     /** 26.1 DEBUG: temporary diagnostic for pump non-animation. Set to {@code true} to log the
      *  observed client-side omega for each ticker invocation (gated to once/sec to keep the log
      *  readable). Flip off once we've confirmed the sync path. */
-    private static final boolean DEBUG_CLIENT_PHI_TICKER = true;
+    private static final boolean DEBUG_CLIENT_PHI_TICKER = false;
 
     protected static <E extends reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity>
             net.minecraft.world.level.block.entity.BlockEntityTicker<E> clientPhiTicker(Class<E> beClass) {
         return (lvl, pos, st, be) -> {
             if (!beClass.isInstance(be)) return;
             int omega = 0;
-            if (be instanceof reika.rotarycraft.base.blockentity.BlockEntityIOMachine io) omega = io.omega;
+            if (be instanceof reika.rotarycraft.base.blockentity.BlockEntityIOMachine io) {
+                omega = io.omega;
+                // Decay the IO-indicator timer client-side. This client ticker doesn't run the
+                // IOMachine lifecycle (which is what decrements iotick server-side), so without
+                // this the IO overlay relies on throttled server sync — and a BE reloaded from a
+                // chunk re-entering render distance reads a stale-high iotick and stays lit forever.
+                if (io.iotick > 0)
+                    io.iotick -= 8;
+            }
             else if (be instanceof reika.rotarycraft.base.blockentity.BlockEntityEngine en) omega = en.omega;
+            if (be instanceof reika.rotarycraft.base.blockentity.BlockEntityEngine en)
+                reika.rotarycraft.sound.EngineSoundManager.tick(en);
             if (DEBUG_CLIENT_PHI_TICKER && lvl.getGameTime() % 20 == 0) {
                 reika.rotarycraft.RotaryCraft.LOGGER.info(
                         "[clientPhiTicker] " + beClass.getSimpleName() + " @ " + pos
@@ -626,6 +628,28 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 if (!ep.isCreative()) {
                     ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                 }
+                te.syncAllData(true);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        if (m == MachineRegistry.FERMENTER) {
+            reika.rotarycraft.blockentities.production.BlockEntityFermenter fm = (reika.rotarycraft.blockentities.production.BlockEntityFermenter) te;
+            if (fm.getLiquidLevel() + 1000 <= reika.rotarycraft.blockentities.production.BlockEntityFermenter.CAPACITY
+                    && is != null && is.getItem() == Items.WATER_BUCKET) {
+                fm.addLiquid(1000);
+                if (!ep.isCreative())
+                    ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
+                te.syncAllData(true);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        if (m == MachineRegistry.PULSEJET) {
+            reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace pf = (reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace) te;
+            if (pf.getFuel() + 1000 <= reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace.MAXFUEL
+                    && is != null && is.getItem() == RotaryItems.JET_FUEL_BUCKET.get()) {
+                pf.addFuel(1000);
+                if (!ep.isCreative())
+                    ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
                 te.syncAllData(true);
                 return InteractionResult.SUCCESS;
             }

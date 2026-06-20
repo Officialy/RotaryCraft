@@ -10,6 +10,7 @@
 //package reika.rotarycraft.items.tools.charged;
 //
 //import net.minecraft.ChatFormatting;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 //import net.minecraft.world.InteractionHand;
 //import net.minecraft.world.InteractionResult;
 //import net.minecraft.world.entity.LivingEntity;

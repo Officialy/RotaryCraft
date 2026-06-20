@@ -291,18 +291,18 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
     public final boolean isWritingToCoordinate(BlockPos pos) {
         if (write == null)
             return false;
-        boolean wx = pos.getX() + write.getStepX() == pos.getX();
-        boolean wy = pos.getY() + write.getStepY() == pos.getY();
-        boolean wz = pos.getZ() + write.getStepZ() == pos.getZ();
+        boolean wx = worldPosition.getX() + write.getStepX() == pos.getX();
+        boolean wy = worldPosition.getY() + write.getStepY() == pos.getY();
+        boolean wz = worldPosition.getZ() + write.getStepZ() == pos.getZ();
         return wx && wy && wz;
     }
 
     public final boolean isWritingToCoordinate2(BlockPos pos) {
         if (write2 == null)
             return false;
-        boolean wx = pos.getX() + write.getStepX() == pos.getX();
-        boolean wy = pos.getY() + write.getStepY() == pos.getY();
-        boolean wz = pos.getZ() + write.getStepZ() == pos.getZ();
+        boolean wx = worldPosition.getX() + write2.getStepX() == pos.getX();
+        boolean wy = worldPosition.getY() + write2.getStepY() == pos.getY();
+        boolean wz = worldPosition.getZ() + write2.getStepZ() == pos.getZ();
         return wx && wy && wz;
     }
 

@@ -23,7 +23,7 @@
 //public class RenderDefoliator extends RotaryTERenderer {
 //    private ModelDefoliator DefoliatorModel = new ModelDefoliator();
 //
-//    public void renderBlockEntityDefoliatorAt(BlockEntityDefoliator tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityDefoliatorAt(BlockEntityDefoliator tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        ModelDefoliator var14;
 //        var14 = DefoliatorModel;
 //
@@ -48,7 +48,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityDefoliatorAt((BlockEntityDefoliator) tile, par2, par4, par6, par8);
 //        if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {

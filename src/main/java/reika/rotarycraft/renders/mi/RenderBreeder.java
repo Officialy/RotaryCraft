@@ -37,7 +37,7 @@
 //    /**
 //     * Renders the BlockEntity for the position.
 //     */
-//    public void renderBlockEntityAutoBreederAt(BlockEntityAutoBreeder te, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAutoBreederAt(BlockEntityAutoBreeder te, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        int var9;
 //
 //        if (!te.isInWorld())
@@ -78,7 +78,7 @@
 //    }
 //
 //    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light) {
+//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
 //        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
 //            this.renderBlockEntityAutoBreederAt((BlockEntityAutoBreeder) tile, par2, par4, par6, par8);
 //        if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1)

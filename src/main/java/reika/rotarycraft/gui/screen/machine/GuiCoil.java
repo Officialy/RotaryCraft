@@ -56,30 +56,6 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
     }
 
     @Override
-    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
-        boolean handled = super.keyPressed(event);
-        handled |= inputOmega.keyPressed(event);
-        handled |= inputTorque.keyPressed(event);
-        return handled;
-    }
-
-    @Override
-    public boolean charTyped(net.minecraft.client.input.CharacterEvent event) {
-        boolean handled = super.charTyped(event);
-        handled |= inputOmega.charTyped(event);
-        handled |= inputTorque.charTyped(event);
-        return handled;
-    }
-
-    @Override
-    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
-        boolean handled = super.mouseClicked(event, doubleClick);
-        handled |= inputOmega.mouseClicked(event, doubleClick);
-        handled |= inputTorque.mouseClicked(event, doubleClick);
-        return handled;
-    }
-
-    @Override
     protected void containerTick() {
         super.containerTick();
         boolean valid1 = true;
