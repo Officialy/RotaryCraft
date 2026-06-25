@@ -19,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -96,6 +97,15 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
                 }
             }
         }
+    }
+
+    public static boolean isValidBedrockArmorItem(ItemStack is) {
+        if (is == null || is.isEmpty())
+            return false;
+        // CHROMA-PORT: ChromatiCraft floatstone-boots wrapper check omitted (ChromatiCraft not in build).
+        Item i = is.getItem();
+        return i == RotaryItems.BEDROCK_ALLOY_HELMET.get() || i == RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get()
+                || i == RotaryItems.BEDROCK_ALLOY_LEGGINGS.get() || i == RotaryItems.BEDROCK_ALLOY_BOOTS.get();
     }
 
     @Override
