@@ -148,7 +148,7 @@ public class RotaryItems {
     //public static final DeferredItem<Item> CHARGED_GRAFTER = reg("chargedgrafter", ItemChargedGrafter::new, ModList.FORESTRY);
     public static final DeferredItem<Item> CRAFT_PATTERN = reg("craft_pattern", () -> new ItemCraftPattern(itemProperties().stacksTo(16)));
     //public static final DeferredItem<Item> METER = reg("meter", ItemMeter::new);
-    // public static final DeferredItem<Item> DEBUG = reg("debug", ItemDebug::new);
+    public static final DeferredItem<Item> DEBUG = reg("debug", ItemDebug::new);
     //public static final DeferredItem<Item> PUMP = reg("hand_pump", ItemPump::new);
 
     public static final DeferredItem<Item> INTEGRATED_GEARBOX = reg("integrated_gearbox", () -> new ItemIntegratedGearbox(itemProperties().stacksTo(16)));

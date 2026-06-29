@@ -40,7 +40,7 @@ public class RotaryLang extends LanguageProvider {
         // auto-generated BlockItems, which inherit their block's translation key — registering
         // them again would emit a duplicate-key warning, so they're skipped here).
         RotaryItems.ITEMS.getEntries().forEach(holder ->
-                addItem(holder, prettify(holder.getId().getPath())));
+                addItem(holder, "debug".equals(holder.getId().getPath()) ? "Magic Wand" : prettify(holder.getId().getPath())));
 
         addAdvancements();
     }
