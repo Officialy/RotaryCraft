@@ -9,11 +9,12 @@
  ******************************************************************************/
 package reika.rotarycraft.items.tools;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -42,25 +43,32 @@ public class ItemDebug extends ItemRotaryTool {
         super(reika.rotarycraft.registry.RotaryItems.itemProperties());
     }
 
+    // 26.2 fix: was use(Level,Player,Hand) acting on pos (the player's own feet), so it
+    // never targeted the block being looked at — the reservoir creative toggle etc. silently did nothing.
+    // useOn gives the clicked block via ctx.getClickedPos().
     @Override
-    public InteractionResult use(Level world, Player ep, InteractionHand hand) {
-        //ReikaChatHelper.clearChat();
-        if (hand.equals(InteractionHand.MAIN_HAND)) {
+    public InteractionResult useOn(UseOnContext ctx) {
+        Level world = ctx.getLevel();
+        Player ep = ctx.getPlayer();
+        if (ep == null)
+            return InteractionResult.PASS;
+        BlockPos pos = ctx.getClickedPos();
+        {
             if (!ep.isShiftKeyDown()) {
-                ReikaChatHelper.writeBlockAtCoords(world, ep.blockPosition());
-                BlockEntity te = world.getBlockEntity(ep.blockPosition());
+                ReikaChatHelper.writeBlockAtCoords(world, pos);
+                BlockEntity te = world.getBlockEntity(pos);
                 if (te instanceof RotaryCraftBlockEntity)
-                    ReikaChatHelper.write("Tile Entity Direction Data: " + te + " of " + ((RotaryCraftBlockEntity) te).getMachine(world, ep.blockPosition()));//.getNumberDirections());
+                    ReikaChatHelper.write("Tile Entity Direction Data: " + te + " of " + ((RotaryCraftBlockEntity) te).getMachine(world, pos));//.getNumberDirections());
                 else if (te instanceof BlockEntity)
                     ReikaChatHelper.write("Tile Entity Direction Data: " + te);
                 ReikaChatHelper.write("Additional Data (Meaning differs per machine):");
             }
-            BlockEntity te = world.getBlockEntity(ep.blockPosition());
+            BlockEntity te = world.getBlockEntity(pos);
             if (ep.isCrouching() && te instanceof BlockEntitySpringPowered sp) {
                 sp.isCreative = !sp.isCreative;
                 return InteractionResult.PASS; //todo check if this works
             }
-            MachineRegistry m = MachineRegistry.getMachine(world, ep.blockPosition());
+            MachineRegistry m = MachineRegistry.getMachine(world, pos);
             if (m == MachineRegistry.BEVELGEARS) {
                 BlockEntityBevelGear tile = (BlockEntityBevelGear) te;
                 if (tile != null) {
@@ -88,7 +96,7 @@ public class ItemDebug extends ItemRotaryTool {
                     ReikaChatHelper.write(String.format("%d", tile.getFluidLevel()));
                 }
             }
-            if (world.getBlockState(ep.blockPosition()).getBlock() == Blocks.SPAWNER && te instanceof SpawnerBlockEntity tile) {
+            if (world.getBlockState(pos).getBlock() == Blocks.SPAWNER && te instanceof SpawnerBlockEntity tile) {
                 CompoundTag spawnData = tile.saveCustomOnly(world.registryAccess()).getCompoundOrEmpty("SpawnData");
                 String id = spawnData.getCompoundOrEmpty("entity").getString("id").orElse("unknown");
                 ReikaChatHelper.write("Spawner spawns: " + id);

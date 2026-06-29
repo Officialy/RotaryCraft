@@ -291,9 +291,13 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
             this.transferBetween(world, pos);
         if (!isCovered) {
             if (!world.isClientSide()) {
-                Biome biome = world.getBiomeManager().getBiome(pos).value();
-                if (world.isRaining()/* && biome.canSpawnLightningBolt() && world.canLightningStrikeAt(pos.above())*/) {
-                    if (this.isEmpty() || (this.getFluid().equals(Fluids.WATER) && this.getFluidLevel() < CAPACITY)) {
+                // isRainingAt already checks world.isRaining() + can-see-sky (heightmap) + biome
+                // precipitation, so a reservoir covered by blocks or underground does NOT collect rain.
+                if (world.isRainingAt(pos.above())) {
+                    // Bug fix: compare the tank's Fluid, not the FluidStack — getFluid() returns a
+                    // FluidStack so the old `.equals(Fluids.WATER)` was always false, which let rain
+                    // top up the tank only once (via isEmpty) and then stick. Now it keeps filling.
+                    if (this.isEmpty() || (this.getFluid().getFluid() == Fluids.WATER && this.getFluidLevel() < CAPACITY)) {
                         this.addLiquid(25, Fluids.WATER);
                     }
                 }
