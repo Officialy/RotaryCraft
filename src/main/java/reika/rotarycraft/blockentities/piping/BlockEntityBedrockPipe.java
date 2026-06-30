@@ -11,13 +11,21 @@ package reika.rotarycraft.blockentities.piping;
 
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
 
 public class BlockEntityBedrockPipe extends BlockEntityPipe {
 
     public BlockEntityBedrockPipe(BlockPos pos, BlockState state) {
-        super(pos, state);
+        super(RotaryBlockEntities.BEDROCK_PIPE.get(), pos, state);
+    }
+
+    @Override
+    public Block getBlockEntityBlockID() {
+        return RotaryBlocks.BEDROCK_PIPE.get();
     }
 
     @Override

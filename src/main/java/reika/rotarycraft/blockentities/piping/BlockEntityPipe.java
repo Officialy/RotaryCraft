@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -40,7 +41,15 @@ public class BlockEntityPipe extends BlockEntityPiping implements TemperatureTE,
     private int temperature;
 
     public BlockEntityPipe(BlockPos pos, BlockState state) {
-        super(RotaryBlockEntities.FLUID_PIPE.get(), pos, state);
+        this(RotaryBlockEntities.FLUID_PIPE.get(), pos, state);
+    }
+
+    // Subclasses (e.g. BlockEntityBedrockPipe) must pass their OWN registered BlockEntityType --
+    // hardcoding FLUID_PIPE here unconditionally made every subclass crash on placement with
+    // "Invalid block entity rotarycraft:fluid_pipe ... got Block{rotarycraft:bedrock_pipe}",
+    // since vanilla validates the constructed BlockEntity's type against the actual placed block.
+    protected BlockEntityPipe(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     @Override
