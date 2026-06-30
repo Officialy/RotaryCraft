@@ -7,27 +7,25 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.piping.BlockEntitySeparatorPipe;
+import reika.rotarycraft.registry.MachineRegistry;
 
-public class BlockSeperation extends BlockBasicMachine {
+public class BlockSeperation extends BlockPipeShell {
 
     public BlockSeperation(Properties properties) {
-        super(properties.noOcclusion());
+        super(properties);
     }
 
     @Override
-    protected boolean isCustomRendered() {
-        return true; // drawn entirely by PipeRenderer (BER) — suppress the static in-world model
+    protected MachineRegistry self() {
+        return MachineRegistry.SEPARATION;
     }
 
-    
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntitySeparatorPipe(pPos, pState);
     }
 
-    
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {

@@ -7,28 +7,25 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import reika.rotarycraft.base.blocks.BlockBasicMachine;
-import reika.rotarycraft.blockentities.level.BlockEntityBeamMirror;
 import reika.rotarycraft.blockentities.piping.BlockEntitySuctionPipe;
+import reika.rotarycraft.registry.MachineRegistry;
 
-public class BlockSuction extends BlockBasicMachine {
+public class BlockSuction extends BlockPipeShell {
 
     public BlockSuction(Properties properties) {
-        super(properties.noOcclusion());
+        super(properties);
     }
 
     @Override
-    protected boolean isCustomRendered() {
-        return true; // drawn entirely by PipeRenderer (BER) — suppress the static in-world model
+    protected MachineRegistry self() {
+        return MachineRegistry.SUCTION;
     }
 
-    
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntitySuctionPipe(pPos, pState);
     }
 
-    
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : ((pLevel1, pPos, pState1, pBlockEntity) -> {

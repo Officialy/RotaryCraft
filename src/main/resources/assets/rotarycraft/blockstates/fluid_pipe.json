@@ -1,0 +1,57 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "rotarycraft:block/pipe/fluid_pipe/core"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fluid_pipe/arm_down"
+      }
+    },
+    {
+      "when": {
+        "conn_up": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fluid_pipe/arm_up"
+      }
+    },
+    {
+      "when": {
+        "conn_north": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fluid_pipe/arm_north"
+      }
+    },
+    {
+      "when": {
+        "conn_south": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fluid_pipe/arm_south"
+      }
+    },
+    {
+      "when": {
+        "conn_west": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fluid_pipe/arm_west"
+      }
+    },
+    {
+      "when": {
+        "conn_east": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fluid_pipe/arm_east"
+      }
+    }
+  ]
+}

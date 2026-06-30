@@ -1,0 +1,69 @@
+{
+  "credit": "RotaryCraft 1.7.10 fuel_line shell \u2014 DOWN connection arm",
+  "textures": {
+    "particle": "minecraft:block/obsidian",
+    "pipe": "minecraft:block/obsidian"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        2,
+        14
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#pipe",
+          "cullface": "down"
+        },
+        "north": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#pipe"
+        },
+        "south": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#pipe"
+        }
+      }
+    }
+  ]
+}

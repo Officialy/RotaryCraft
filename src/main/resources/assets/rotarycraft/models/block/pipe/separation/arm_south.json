@@ -1,0 +1,69 @@
+{
+  "credit": "RotaryCraft 1.7.10 separation shell \u2014 SOUTH connection arm",
+  "textures": {
+    "particle": "minecraft:block/lapis_block",
+    "pipe": "minecraft:block/lapis_block"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        2,
+        14
+      ],
+      "to": [
+        14,
+        14,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            2,
+            2,
+            14,
+            14
+          ],
+          "texture": "#pipe",
+          "cullface": "south"
+        },
+        "down": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#pipe"
+        },
+        "up": {
+          "uv": [
+            2,
+            0,
+            14,
+            2
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            16,
+            14
+          ],
+          "texture": "#pipe"
+        }
+      }
+    }
+  ]
+}

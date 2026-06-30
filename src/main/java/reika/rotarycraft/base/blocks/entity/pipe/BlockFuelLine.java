@@ -7,27 +7,24 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import reika.rotarycraft.base.blocks.BlockBasicMachine;
-import reika.rotarycraft.blockentities.level.BlockEntityBeamMirror;
 import reika.rotarycraft.blockentities.piping.BlockEntityFuelLine;
+import reika.rotarycraft.registry.MachineRegistry;
 
-public class BlockFuelLine extends BlockBasicMachine {
+public class BlockFuelLine extends BlockPipeShell {
 
     public BlockFuelLine(Properties properties) {
-        super(properties.noOcclusion());
+        super(properties);
     }
 
     @Override
-    protected boolean isCustomRendered() {
-        return true; // drawn entirely by PipeRenderer (BER) — suppress the static in-world model
+    protected MachineRegistry self() {
+        return MachineRegistry.FUELLINE;
     }
-
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityFuelLine(pPos, pState);
     }
-
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {

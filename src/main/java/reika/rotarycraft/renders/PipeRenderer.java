@@ -74,14 +74,16 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
         if (!(be instanceof BlockEntityPiping tile)) return;
 
         Fluid fluid = tile.getAttributes();
-        boolean hasFluid = fluid != null && fluid != Fluids.EMPTY && tile.getFluidLevel() > 0;
+        if (fluid == null || fluid == Fluids.EMPTY || tile.getFluidLevel() <= 0) return;
 
-        // Full pipe → translucent fluid tube; empty pipe → neutral grey shell tube so every pipe
-        // (hose, fuel line, separation, suction, bedrock, fluid) stays visible when placed before
-        // fluid flows. This is what makes the BER the sole renderer for all pipe types (the blocks
-        // are isCustomRendered, so there's no static shell model underneath).
-        TextureAtlasSprite sprite = hasFluid ? stillSpriteFor(fluid) : shellSprite();
-        int tint = hasFluid ? fluidTint(fluid) : 0xFFB0B0B0;
+        // Each pipe type now has its own static multipart shell (BlockPipeShell + the hand-authored
+        // blockstate/models under assets/rotarycraft/blockstates/<type>.json) drawing the visible frame
+        // (steel / planks / obsidian / lapis / nether-brick / bedrock, matching 1.7.10's per-material
+        // pipe icons). The BER only needs to draw the fluid through the open core when there is any —
+        // an empty pipe shows just the frame, exactly like 1.7.10's icon[1] glass window with nothing
+        // behind it.
+        TextureAtlasSprite sprite = stillSpriteFor(fluid);
+        int tint = fluidTint(fluid);
 
         Matrix4f pose = poseStack.last().pose();
         int light = state.lightCoords;
@@ -219,11 +221,6 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
     private TextureAtlasSprite stillSpriteFor(Fluid fluid) {
         Identifier id = stillTextureId(fluid);
         return sprites.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, id));
-    }
-
-    /** Neutral metal sprite for an empty pipe's shell. */
-    private TextureAtlasSprite shellSprite() {
-        return sprites.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, Identifier.withDefaultNamespace("block/iron_block")));
     }
 
     private static Identifier stillTextureId(Fluid fluid) {
