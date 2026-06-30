@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 suction shell \u2014 DOWN connection arm",
+  "credit": "RotaryCraft 1.7.10 suction shell \u2014 hollow DOWN connection arm (4 corner bars)",
   "textures": {
     "particle": "minecraft:block/nether_bricks",
     "pipe": "minecraft:block/nether_bricks"
@@ -12,6 +12,186 @@
         2
       ],
       "to": [
+        4,
+        2,
+        4
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe",
+          "cullface": "down"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        0,
+        12
+      ],
+      "to": [
+        4,
+        2,
+        14
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe",
+          "cullface": "down"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        2,
+        4
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe",
+          "cullface": "down"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        0,
+        12
+      ],
+      "to": [
         14,
         2,
         14
@@ -19,47 +199,47 @@
       "faces": {
         "down": {
           "uv": [
-            2,
-            2,
-            14,
-            14
+            0,
+            0,
+            16,
+            16
           ],
           "texture": "#pipe",
           "cullface": "down"
         },
         "north": {
           "uv": [
-            2,
             0,
-            14,
-            2
+            0,
+            16,
+            16
           ],
           "texture": "#pipe"
         },
         "south": {
           "uv": [
-            2,
             0,
-            14,
-            2
+            0,
+            16,
+            16
           ],
           "texture": "#pipe"
         },
         "west": {
           "uv": [
-            2,
             0,
-            14,
-            2
+            0,
+            16,
+            16
           ],
           "texture": "#pipe"
         },
         "east": {
           "uv": [
-            2,
             0,
-            14,
-            2
+            0,
+            16,
+            16
           ],
           "texture": "#pipe"
         }

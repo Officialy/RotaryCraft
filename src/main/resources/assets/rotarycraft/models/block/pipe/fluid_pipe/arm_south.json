@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 fluid_pipe shell \u2014 SOUTH connection arm",
+  "credit": "RotaryCraft 1.7.10 fluid_pipe shell \u2014 hollow SOUTH connection arm (4 corner bars)",
   "textures": {
     "particle": "rotarycraft:block/steel",
     "pipe": "rotarycraft:block/steel"
@@ -12,6 +12,186 @@
         14
       ],
       "to": [
+        4,
+        4,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe",
+          "cullface": "south"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        12,
+        14
+      ],
+      "to": [
+        4,
+        14,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe",
+          "cullface": "south"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        2,
+        14
+      ],
+      "to": [
+        14,
+        4,
+        16
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe",
+          "cullface": "south"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        12,
+        14
+      ],
+      "to": [
         14,
         14,
         16
@@ -19,47 +199,47 @@
       "faces": {
         "south": {
           "uv": [
-            2,
-            2,
-            14,
-            14
+            0,
+            0,
+            16,
+            16
           ],
           "texture": "#pipe",
           "cullface": "south"
         },
         "down": {
           "uv": [
-            2,
             0,
-            14,
-            2
+            0,
+            16,
+            16
           ],
           "texture": "#pipe"
         },
         "up": {
           "uv": [
-            2,
             0,
-            14,
-            2
+            0,
+            16,
+            16
           ],
           "texture": "#pipe"
         },
         "west": {
           "uv": [
-            14,
-            2,
+            0,
+            0,
             16,
-            14
+            16
           ],
           "texture": "#pipe"
         },
         "east": {
           "uv": [
-            14,
-            2,
+            0,
+            0,
             16,
-            14
+            16
           ],
           "texture": "#pipe"
         }
