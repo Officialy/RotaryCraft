@@ -17,6 +17,11 @@ public class BlockFuelLine extends BlockBasicMachine {
         super(properties.noOcclusion());
     }
 
+    @Override
+    protected boolean isCustomRendered() {
+        return true; // drawn entirely by PipeRenderer (BER) — suppress the static in-world model
+    }
+
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {

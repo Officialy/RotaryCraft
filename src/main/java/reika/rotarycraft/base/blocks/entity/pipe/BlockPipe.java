@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
@@ -14,6 +15,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import reika.rotarycraft.auxiliary.PipeDebugLog;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
@@ -47,15 +53,15 @@ public class BlockPipe extends BlockBasicMachine {
     // BlockBasicMachine collision was a full cube, which made placement aim feel wrong
     // and tools like the screwdriver hit a 16-px target where they should hit the visible
     // 12-px cross.
-    private static final net.minecraft.world.phys.shapes.VoxelShape CORE_SHAPE  = net.minecraft.world.level.block.Block.box(2, 2, 2, 14, 14, 14);
-    private static final net.minecraft.world.phys.shapes.VoxelShape ARM_DOWN_S  = net.minecraft.world.level.block.Block.box(2, 0,  2, 14, 2,  14);
-    private static final net.minecraft.world.phys.shapes.VoxelShape ARM_UP_S    = net.minecraft.world.level.block.Block.box(2, 14, 2, 14, 16, 14);
-    private static final net.minecraft.world.phys.shapes.VoxelShape ARM_NORTH_S = net.minecraft.world.level.block.Block.box(2, 2,  0, 14, 14, 2);
-    private static final net.minecraft.world.phys.shapes.VoxelShape ARM_SOUTH_S = net.minecraft.world.level.block.Block.box(2, 2, 14, 14, 14, 16);
-    private static final net.minecraft.world.phys.shapes.VoxelShape ARM_WEST_S  = net.minecraft.world.level.block.Block.box(0, 2,  2, 2,  14, 14);
-    private static final net.minecraft.world.phys.shapes.VoxelShape ARM_EAST_S  = net.minecraft.world.level.block.Block.box(14, 2, 2, 16, 14, 14);
+    private static final VoxelShape CORE_SHAPE  = Block.box(2, 2, 2, 14, 14, 14);
+    private static final VoxelShape ARM_DOWN_S  = Block.box(2, 0,  2, 14, 2,  14);
+    private static final VoxelShape ARM_UP_S    = Block.box(2, 14, 2, 14, 16, 14);
+    private static final VoxelShape ARM_NORTH_S = Block.box(2, 2,  0, 14, 14, 2);
+    private static final VoxelShape ARM_SOUTH_S = Block.box(2, 2, 14, 14, 14, 16);
+    private static final VoxelShape ARM_WEST_S  = Block.box(0, 2,  2, 2,  14, 14);
+    private static final VoxelShape ARM_EAST_S  = Block.box(14, 2, 2, 16, 14, 14);
 
-    private static final net.minecraft.world.phys.shapes.VoxelShape[] ARM_SHAPES = {
+    private static final VoxelShape[] ARM_SHAPES = {
             ARM_DOWN_S, ARM_UP_S, ARM_NORTH_S, ARM_SOUTH_S, ARM_WEST_S, ARM_EAST_S
     };
 
@@ -72,10 +78,18 @@ public class BlockPipe extends BlockBasicMachine {
         builder.add(CONN);
     }
 
+    // Render the whole pipe via PipeRenderer (shell + fluid) like every other pipe type, so all pipes
+    // look consistent and the BER's empty-shell doesn't double up with the multipart model. The CONN
+    // properties are still used for the per-state VoxelShape hitbox below.
+    @Override
+    protected boolean isCustomRendered() {
+        return true;
+    }
+
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         long _t0 = System.nanoTime();
-        reika.rotarycraft.auxiliary.PipeDebugLog.event("BlockPipe.getStateForPlacement");
+        PipeDebugLog.event("BlockPipe.getStateForPlacement");
         BlockState base = super.getStateForPlacement(ctx);
         if (base == null) base = this.defaultBlockState();
         Level level = ctx.getLevel();
@@ -84,14 +98,14 @@ public class BlockPipe extends BlockBasicMachine {
             base = base.setValue(CONN[d.ordinal()], canConnect(level, pos, d));
         }
         long _dt = System.nanoTime() - _t0;
-        if (_dt > 5_000_000L) reika.rotarycraft.auxiliary.PipeDebugLog.event("BlockPipe.getStateForPlacement.slow_ms_" + (_dt / 1_000_000L));
+        if (_dt > 5_000_000L) PipeDebugLog.event("BlockPipe.getStateForPlacement.slow_ms_" + (_dt / 1_000_000L));
         return base;
     }
 
     @Override
     protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos,
                                      Direction dir, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
-        reika.rotarycraft.auxiliary.PipeDebugLog.event("BlockPipe.updateShape");
+        PipeDebugLog.event("BlockPipe.updateShape");
         return state.setValue(CONN[dir.ordinal()], canConnect(level, pos, dir));
     }
 
@@ -114,22 +128,22 @@ public class BlockPipe extends BlockBasicMachine {
     }
 
     @Override
-    protected net.minecraft.world.phys.shapes.VoxelShape getShape(BlockState state, net.minecraft.world.level.BlockGetter level, BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext ctx) {
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         return shapeForState(state);
     }
 
     @Override
-    protected net.minecraft.world.phys.shapes.VoxelShape getCollisionShape(BlockState state, net.minecraft.world.level.BlockGetter level, BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext ctx) {
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
         return shapeForState(state);
     }
 
-    private static net.minecraft.world.phys.shapes.VoxelShape shapeForState(BlockState state) {
-        net.minecraft.world.phys.shapes.VoxelShape s = CORE_SHAPE;
+    private static VoxelShape shapeForState(BlockState state) {
+        VoxelShape s = CORE_SHAPE;
         for (int i = 0; i < CONN.length; i++) {
             if (state.getValue(CONN[i])) {
-                s = net.minecraft.world.phys.shapes.Shapes.joinUnoptimized(
+                s = Shapes.joinUnoptimized(
                         s, ARM_SHAPES[i],
-                        net.minecraft.world.phys.shapes.BooleanOp.OR);
+                        BooleanOp.OR);
             }
         }
         return s.optimize();

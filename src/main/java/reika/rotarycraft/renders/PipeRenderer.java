@@ -21,6 +21,8 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
@@ -58,7 +60,7 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
     private static final double IN2   = 0.5 - SIZE + 0.01;   // 0.135 — inner-near edge
     private static final double DD2   = IN - IN2;            // 0.730 — inner span
 
-    private final net.minecraft.client.resources.model.sprite.SpriteGetter sprites;
+    private final SpriteGetter sprites;
 
     public PipeRenderer(BlockEntityRendererProvider.Context context) {
         this.sprites = context.sprites();
@@ -72,12 +74,14 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
         if (!(be instanceof BlockEntityPiping tile)) return;
 
         Fluid fluid = tile.getAttributes();
-        if (fluid == null || tile.getFluidLevel() <= 0) return;
+        boolean hasFluid = fluid != null && fluid != Fluids.EMPTY && tile.getFluidLevel() > 0;
 
-        // Resolve the fluid's still sprite off the block atlas. For non-on-atlas fluids the
-        // result is the missing-texture sprite; the caller falls back to colour-only rendering.
-        TextureAtlasSprite sprite = stillSpriteFor(fluid);
-        int tint = fluidTint(fluid);
+        // Full pipe → translucent fluid tube; empty pipe → neutral grey shell tube so every pipe
+        // (hose, fuel line, separation, suction, bedrock, fluid) stays visible when placed before
+        // fluid flows. This is what makes the BER the sole renderer for all pipe types (the blocks
+        // are isCustomRendered, so there's no static shell model underneath).
+        TextureAtlasSprite sprite = hasFluid ? stillSpriteFor(fluid) : shellSprite();
+        int tint = hasFluid ? fluidTint(fluid) : 0xFFB0B0B0;
 
         Matrix4f pose = poseStack.last().pose();
         int light = state.lightCoords;
@@ -214,7 +218,12 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
      */
     private TextureAtlasSprite stillSpriteFor(Fluid fluid) {
         Identifier id = stillTextureId(fluid);
-        return sprites.get(new net.minecraft.client.resources.model.sprite.SpriteId(TextureAtlas.LOCATION_BLOCKS, id));
+        return sprites.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, id));
+    }
+
+    /** Neutral metal sprite for an empty pipe's shell. */
+    private TextureAtlasSprite shellSprite() {
+        return sprites.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, Identifier.withDefaultNamespace("block/iron_block")));
     }
 
     private static Identifier stillTextureId(Fluid fluid) {
