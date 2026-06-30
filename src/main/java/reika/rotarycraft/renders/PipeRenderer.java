@@ -60,13 +60,20 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
     private static final double IN2   = 0.5 - SIZE + 0.01;   // 0.135 — inner-near edge
     private static final double DD2   = IN - IN2;            // 0.730 — inner span
 
-    // Legacy "glass window" pane — see PipeBodyRenderer.doRenderFace. Sits on the same face
-    // plane as the fluid cap (IN/IN2) but spans only the central window, not the full pipe
-    // cross-section, leaving the surrounding shell frame (drawn by the static blockstate model)
-    // visible as a border.
+    // Legacy "glass window" pane — see PipeBodyRenderer.doRenderFace. Spans only the central
+    // window, not the full pipe cross-section, leaving the surrounding shell frame (drawn by the
+    // static blockstate model) visible as a border.
     private static final float  WINDOW = 0.5F / 2F;           // 0.25 — half-width of the window pane
     private static final double INW    = 0.5 + WINDOW - 0.01; // 0.74
     private static final double INW2   = 0.5 - WINDOW + 0.01; // 0.26
+
+    // The static core.json model's solid faces sit at the SIZE-based box boundary (2px..14px,
+    // i.e. 0.125/0.875) — NOT at IN/IN2 (which are inset further toward the centre, for the fluid
+    // cap). A glass quad drawn at IN/IN2 would sit INSIDE that opaque box and never be visible;
+    // the window must be flush with (or just outside) the core's true outer face.
+    private static final double DD     = 0.5 - SIZE;       // 0.125 — core box inset
+    private static final double GOUT   = 1.0 - DD + 0.001; // 0.876 — just outside the +face
+    private static final double GOUT2  = DD - 0.001;       // 0.124 — just outside the -face
 
     private final SpriteGetter sprites;
 
@@ -148,30 +155,31 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
 
     /**
      * Translucent glass "window" pane on a face with no neighbour pipe / connector — the legacy
-     * {@code iconBlocks[meta][1] = Blocks.glass} overlay. Sits on the same face plane as
-     * {@link #emitCap} (the IN/IN2 depth) but spans only the central {@link #WINDOW} extent,
-     * leaving the static blockstate model's solid frame visible as a border around it.
+     * {@code iconBlocks[meta][1] = Blocks.glass} overlay. Sits just OUTSIDE the static blockstate
+     * model's solid core box ({@link #GOUT}/{@link #GOUT2}, NOT the inset {@link #IN}/{@link #IN2}
+     * fluid-cap depth — that plane is hidden inside the opaque core and never visible), spanning
+     * only the central {@link #WINDOW} extent so the core's own face shows through as a border.
      */
     private static void emitGlassWindow(Matrix4f m, VertexConsumer vc, Direction dir,
                                          float u, float v, float u2, float v2, int light, int overlay) {
         switch (dir) {
             case UP -> {
-                quad(m, vc, INW2, IN, INW,  u,  v2, INW,  IN, INW,  u2, v2, INW,  IN, INW2, u2, v,  INW2, IN, INW2, u,  v,  GLASS_TINT, light, overlay, 0, 1, 0);
+                quad(m, vc, INW2, GOUT, INW,  u,  v2, INW,  GOUT, INW,  u2, v2, INW,  GOUT, INW2, u2, v,  INW2, GOUT, INW2, u,  v,  GLASS_TINT, light, overlay, 0, 1, 0);
             }
             case DOWN -> {
-                quad(m, vc, INW2, IN2, INW2, u,  v,  INW,  IN2, INW2, u2, v,  INW,  IN2, INW,  u2, v2, INW2, IN2, INW,  u,  v2, GLASS_TINT, light, overlay, 0, -1, 0);
+                quad(m, vc, INW2, GOUT2, INW2, u,  v,  INW,  GOUT2, INW2, u2, v,  INW,  GOUT2, INW,  u2, v2, INW2, GOUT2, INW,  u,  v2, GLASS_TINT, light, overlay, 0, -1, 0);
             }
             case SOUTH -> {
-                quad(m, vc, INW, INW, IN,  u,  v,  INW2, INW, IN,  u2, v,  INW2, INW2, IN,  u2, v2, INW, INW2, IN,  u,  v2, GLASS_TINT, light, overlay, 0, 0, 1);
+                quad(m, vc, INW, INW, GOUT,  u,  v,  INW2, INW, GOUT,  u2, v,  INW2, INW2, GOUT,  u2, v2, INW, INW2, GOUT,  u,  v2, GLASS_TINT, light, overlay, 0, 0, 1);
             }
             case NORTH -> {
-                quad(m, vc, INW,  INW2, IN2, u,  v2, INW2, INW2, IN2, u2, v2, INW2, INW, IN2, u2, v,  INW,  INW, IN2, u,  v,  GLASS_TINT, light, overlay, 0, 0, -1);
+                quad(m, vc, INW,  INW2, GOUT2, u,  v2, INW2, INW2, GOUT2, u2, v2, INW2, INW, GOUT2, u2, v,  INW,  INW, GOUT2, u,  v,  GLASS_TINT, light, overlay, 0, 0, -1);
             }
             case EAST -> {
-                quad(m, vc, IN, INW2, INW,  u,  v2, IN, INW2, INW2, u2, v2, IN, INW, INW2, u2, v,  IN, INW, INW,  u,  v,  GLASS_TINT, light, overlay, 1, 0, 0);
+                quad(m, vc, GOUT, INW2, INW,  u,  v2, GOUT, INW2, INW2, u2, v2, GOUT, INW, INW2, u2, v,  GOUT, INW, INW,  u,  v,  GLASS_TINT, light, overlay, 1, 0, 0);
             }
             case WEST -> {
-                quad(m, vc, IN2, INW, INW,  u,  v,  IN2, INW, INW2, u2, v,  IN2, INW2, INW2, u2, v2, IN2, INW2, INW,  u,  v2, GLASS_TINT, light, overlay, -1, 0, 0);
+                quad(m, vc, GOUT2, INW, INW,  u,  v,  GOUT2, INW, INW2, u2, v,  GOUT2, INW2, INW2, u2, v2, GOUT2, INW2, INW,  u,  v2, GLASS_TINT, light, overlay, -1, 0, 0);
             }
         }
     }
