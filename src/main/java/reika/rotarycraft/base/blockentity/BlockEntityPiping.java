@@ -11,7 +11,9 @@ package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -180,7 +183,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
             // Fluid type changed — mark the chunk dirty so the next periodic sync ships the
             // new state and request a visual refresh. Don't force a full sync packet.
             this.setChanged();
-            net.minecraft.world.level.block.state.BlockState s = this.getBlockState();
+            BlockState s = this.getBlockState();
             world.setBlocksDirty(pos, s, s);
         }
 
@@ -201,10 +204,12 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
             }
             
             Fluid cur = this.getAttributes();
-            boolean nonEmpty = this.getFluidLevel() > 0;
+            int level = this.getFluidLevel();
             int connMask = 0;
             for (int i = 0; i < 6; i++) if (connections[i]) connMask |= (1 << i);
-            int packedLevelSentinel = nonEmpty ? 1 : 0;
+            // Bucket the level so the display updates on meaningful changes (~256mB) without re-syncing
+            // every tick. 0 = empty (distinct from the lowest non-empty bucket so empty↔fluid still syncs).
+            int packedLevelSentinel = level <= 0 ? 0 : 1 + level / 256;
             if (cur != lastSyncedFluid || packedLevelSentinel != lastSyncedLevel || connMask != lastSyncedConnMask) {
                 lastSyncedFluid = cur;
                 lastSyncedLevel = packedLevelSentinel;
@@ -556,7 +561,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         // unless connections actually changed, and even then just request a visual refresh
         // via {@code setBlocksDirty} instead of a full neighbour-notify.
         if (changed && !world.isClientSide()) {
-            net.minecraft.world.level.block.state.BlockState s = this.getBlockState();
+            BlockState s = this.getBlockState();
             world.setBlocksDirty(pos, s, s);
             this.setChanged();
         }
@@ -630,10 +635,16 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         // entirely.
         Fluid attr = this.getAttributes();
         if (attr != null) {
-            net.minecraft.resources.Identifier fluidId = net.minecraft.core.registries.BuiltInRegistries.FLUID.getKey(attr);
+            Identifier fluidId = BuiltInRegistries.FLUID.getKey(attr);
             if (fluidId != null) NBT.putString("fluid_id", fluidId.toString());
         }
-        NBT.putByte("has_fluid", (byte) (this.getFluidLevel() > 0 ? 1 : 0));
+        // Sync the ACTUAL fluid level, not a binary has-fluid flag. The 26.1 perf pass replaced the
+        // level with a 0/1 byte and readSyncTag hardcoded the client level to 1 — so EVERY non-empty
+        // pipe displayed "Level: 1 mB" (and Pressure 24 Pa) regardless of how full it really was, even
+        // though the server-side transfer worked. The packet-rate concern is handled by the bucketed
+        // sync trigger in updateEntity (only re-syncs on coarse level changes), so writing the real
+        // value here is cheap.
+        NBT.putInt("level", this.getFluidLevel());
     }
 
     @Override
@@ -650,13 +661,17 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         if (fluidIdStr.isEmpty()) {
             f = null;
         } else {
-            net.minecraft.resources.Identifier fluidId = net.minecraft.resources.Identifier.tryParse(fluidIdStr);
-            f = fluidId == null ? null : net.minecraft.core.registries.BuiltInRegistries.FLUID.getValue(fluidId);
-            if (f == net.minecraft.world.level.material.Fluids.EMPTY) f = null;
+            Identifier fluidId = Identifier.tryParse(fluidIdStr);
+            f = fluidId == null ? null : BuiltInRegistries.FLUID.getValue(fluidId);
+            if (f == Fluids.EMPTY) f = null;
         }
         this.setFluid(f);
-        byte hasFluid = NBT.getByteOr("has_fluid", (byte) 0);
-        this.setFluidLevel(hasFluid != 0 ? 1 : 0);
+        // Back-compat: read the real level; fall back to the old has_fluid byte for tags written before
+        // the fix (treat any non-empty legacy tag as 1mB until the next sync ships the real value).
+        if (NBT.contains("level"))
+            this.setFluidLevel(NBT.getIntOr("level", 0));
+        else
+            this.setFluidLevel(NBT.getByteOr("has_fluid", (byte) 0) != 0 ? 1 : 0);
     }
 
     // 1.21.5: BlockEntity#serializeNBT(provider) replaces the no-arg variant; we no longer override.
