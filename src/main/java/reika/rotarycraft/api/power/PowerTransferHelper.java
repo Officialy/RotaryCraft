@@ -44,10 +44,14 @@ public class PowerTransferHelper {
             } else if (toCheck instanceof IOMachine) {
                 BlockPos wx = ((IOMachine) toCheck).getWritePos();
                 BlockPos wx2 = ((IOMachine) toCheck).getWritePos2();
-                return (wx == pos) || (wx2 == pos);
+                // BlockPos must be compared by value: getWritePos() returns a fresh BlockPos, so the
+                // old `wx == pos` reference check was ALWAYS false — every machine that gates on this
+                // anti-exploit helper (e.g. the reactor CPU) saw "no power" every tick and zeroed out,
+                // which made the CPU SCRAM constantly and the control rods un-retractable.
+                return pos.equals(wx) || pos.equals(wx2);
             } else {
                 BlockPos wx = ((PowerGenerator) toCheck).getEmittingPos(pos);
-                return wx == pos;
+                return pos.equals(wx);
             }
         } else {
             return false;

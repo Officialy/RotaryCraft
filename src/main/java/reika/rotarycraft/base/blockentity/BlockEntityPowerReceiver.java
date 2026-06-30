@@ -129,7 +129,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             favorbent = true;
             ratio = -ratio;
         }
-        if (pos == spl.getWritePos() && pos == spl.getWritePos2()) { //We are the inline
+        if (pos.equals(spl.getWritePos()) && pos.equals(spl.getWritePos2())) { //We are the inline (BlockPos must compare by value, not reference)
             powerin[slot][2] = spl.omega; //omega always constant
             if (ratio == 1) { //Even split, favorbent irrelevant
                 powerin[slot][1] = spl.torque / 2;
@@ -142,7 +142,7 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
                 powerin[slot][1] = (int) (spl.torque * ((ratio - 1D) / (ratio)));
             }
             powerin[slot][0] = powerin[slot][1] * powerin[slot][2];
-        } else if (pos == spl.getWritePos2()) { //We are the bend
+        } else if (pos.equals(spl.getWritePos2())) { //We are the bend (BlockPos must compare by value, not reference)
             powerin[slot][2] = spl.omega; //omega always constant
             if (ratio == 1) { //Even split, favorbent irrelevant
                 powerin[slot][1] = spl.torque / 2;
