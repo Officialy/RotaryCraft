@@ -315,13 +315,13 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
         if (fluid == Fluids.LAVA || fluid == Fluids.FLOWING_LAVA)
             return Identifier.withDefaultNamespace("block/lava_still");
         if (fluid == RotaryFluids.JET_FUEL.get())
-            return Identifier.fromNamespaceAndPath("rotarycraft", "block/jet_fuel_still");
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/fluid/jetfuel");
         if (fluid == RotaryFluids.ETHANOL.get())
-            return Identifier.fromNamespaceAndPath("rotarycraft", "block/ethanol_still");
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/fluid/ethanol");
         if (fluid == RotaryFluids.LUBRICANT.get())
-            return Identifier.fromNamespaceAndPath("rotarycraft", "block/lubricant_still");
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/fluid/lubricant");
         if (fluid == RotaryFluids.HSLA_FLUID.get())
-            return Identifier.fromNamespaceAndPath("rotarycraft", "block/molten_hsla_still");
+            return Identifier.fromNamespaceAndPath("rotarycraft", "block/fluid/hsla_still");
         // Generic fallback: use lava_still for hot fluids, water_still for cold.
         return fluid.getFluidType().getTemperature() > 500
                 ? Identifier.withDefaultNamespace("block/lava_still")
