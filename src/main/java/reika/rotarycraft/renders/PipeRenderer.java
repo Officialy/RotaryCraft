@@ -130,9 +130,27 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
                 du = DD2 * (u2 - u) / 4D;
             }
 
+            boolean[] connectedDirs = new boolean[6];
+            for (Direction d : Direction.values()) connectedDirs[d.ordinal()] = isConnected(tile, d);
+
             for (Direction dir : Direction.values()) {
-                boolean connected = isConnected(tile, dir);
-                if (!connected) emitGlassWindow(m, vc, dir, gu, gv, gu2, gv2, light, overlay);
+                boolean connected = connectedDirs[dir.ordinal()];
+                if (!connected) {
+                    emitGlassWindow(m, vc, dir, gu, gv, gu2, gv2, light, overlay);
+                    // Legacy doRenderFace: if a perpendicular neighbour IS connected, also draw a
+                    // copy of this window translated half a block toward it. That half-block strip
+                    // fills the gap between this window and the neighbour's own (mirrored) window,
+                    // so a run of connected pipes reads as one continuous open trough instead of
+                    // isolated per-block squares.
+                    for (Direction perp : Direction.values()) {
+                        if (perp.getAxis() == dir.getAxis()) continue;
+                        if (connectedDirs[perp.ordinal()]) {
+                            Matrix4f shifted = new Matrix4f(m).translate(
+                                    perp.getStepX() * 0.5F, perp.getStepY() * 0.5F, perp.getStepZ() * 0.5F);
+                            emitGlassWindow(shifted, vc, dir, gu, gv, gu2, gv2, light, overlay);
+                        }
+                    }
+                }
                 if (!hasFluid) continue;
                 if (connected) emitConnectedFluid(m, vc, dir, (float) u, (float) v, (float) u2, (float) v2, (float) du, tint, light, overlay);
                 else            emitCap(m, vc, dir, (float) u, (float) v, (float) u2, (float) v2, tint, light, overlay);
