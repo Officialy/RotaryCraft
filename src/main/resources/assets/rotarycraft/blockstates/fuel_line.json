@@ -52,6 +52,42 @@
       "apply": {
         "model": "rotarycraft:block/pipe/fuel_line/arm_east"
       }
+    },
+    {
+      "when": {
+        "conn_west": "false",
+        "conn_north": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/vedge_wn"
+      }
+    },
+    {
+      "when": {
+        "conn_west": "false",
+        "conn_south": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/vedge_ws"
+      }
+    },
+    {
+      "when": {
+        "conn_east": "false",
+        "conn_north": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/vedge_en"
+      }
+    },
+    {
+      "when": {
+        "conn_east": "false",
+        "conn_south": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/vedge_es"
+      }
     }
   ]
 }

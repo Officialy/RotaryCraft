@@ -1,0 +1,76 @@
+{
+  "textures": {
+    "particle": "rotarycraft:block/bedrock",
+    "pipe": "rotarycraft:block/bedrock"
+  },
+  "elements": [
+    {
+      "from": [
+        12,
+        4,
+        12
+      ],
+      "to": [
+        14,
+        12,
+        14
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pipe"
+        }
+      }
+    }
+  ]
+}
