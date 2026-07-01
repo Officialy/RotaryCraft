@@ -137,16 +137,26 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
             RenderType fluidRT =
                     RenderTypes.entityTranslucent(
                             TextureAtlas.LOCATION_BLOCKS);
+            // renderBlockEntityReservoirAt already skips the 1px WALL on a connected side (via
+            // isConnectedOnSide), but this quad still stopped at the fixed 0.0625/0.9375 inset on
+            // every side regardless of connection -- so two connected tanks each left their own
+            // 1px inset in place, showing as a 2px gap in the fluid surface between them even
+            // though the walls themselves were gone. Extend the quad to the full block edge on
+            // whichever sides are actually connected.
+            final float xMin = tile.isConnectedOnSide(Direction.WEST) ? 0F : 0.0625F;
+            final float xMax = tile.isConnectedOnSide(Direction.EAST) ? 1F : 0.9375F;
+            final float zMin = tile.isConnectedOnSide(Direction.NORTH) ? 0F : 0.0625F;
+            final float zMax = tile.isConnectedOnSide(Direction.SOUTH) ? 1F : 0.9375F;
             collector.submitCustomGeometry(poseStack, fluidRT, (pose, vc2) -> {
                 var p = snappedLiq.last();
                 // Top face (+Y), counter-clockwise from below = clockwise from above so the
                 // visible normal points up. Tile UVs roughly 1:1 with the world quad — atlas
                 // sprite is 16x16 px, and the quad is 14/16 wide, so UVs span ~87.5 % of the
                 // sprite which is acceptable for a continuous fluid surface.
-                vc2.addVertex(p, 0.0625F, y, 0.0625F).setColor(rgba).setUv(u,  v ).setOverlay(OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
-                vc2.addVertex(p, 0.0625F, y, 0.9375F).setColor(rgba).setUv(u,  v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
-                vc2.addVertex(p, 0.9375F, y, 0.9375F).setColor(rgba).setUv(u2, v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
-                vc2.addVertex(p, 0.9375F, y, 0.0625F).setColor(rgba).setUv(u2, v ).setOverlay(OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
+                vc2.addVertex(p, xMin, y, zMin).setColor(rgba).setUv(u,  v ).setOverlay(OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
+                vc2.addVertex(p, xMin, y, zMax).setColor(rgba).setUv(u,  v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
+                vc2.addVertex(p, xMax, y, zMax).setColor(rgba).setUv(u2, v2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
+                vc2.addVertex(p, xMax, y, zMin).setColor(rgba).setUv(u2, v ).setOverlay(OverlayTexture.NO_OVERLAY).setLight(lightCoords).setNormal(0F, 1F, 0F);
             });
         }
         // Cover overlay still TODO.
