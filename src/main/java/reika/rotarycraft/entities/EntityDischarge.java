@@ -10,7 +10,8 @@
 package reika.rotarycraft.entities;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,6 +23,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
+import reika.rotarycraft.registry.RotaryEntities;
+
 import java.awt.*;
 
 public class EntityDischarge extends Entity implements IEntityWithComplexSpawn {
@@ -32,13 +35,13 @@ public class EntityDischarge extends Entity implements IEntityWithComplexSpawn {
     public double targetZ;
 
     public EntityDischarge(final EntityType<? extends Entity> entityType, Level world) {
-        super(EntityTypes.AREA_EFFECT_CLOUD, world);
+        super(entityType, world);
         targetX = targetY = targetZ = 0;
         charge = 0;
     }
 
     public EntityDischarge(Level world, double x, double y, double z, int charge, double tx, double ty, double tz) {
-        super(EntityTypes.AREA_EFFECT_CLOUD, world);
+        super(RotaryEntities.DISCHARGE.get(), world);
         this.setPos(x, y, z);
         this.charge = charge;
         targetX = tx;
@@ -60,7 +63,7 @@ public class EntityDischarge extends Entity implements IEntityWithComplexSpawn {
     }
 
     @Override
-    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, net.minecraft.world.damagesource.DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

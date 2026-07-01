@@ -119,6 +119,7 @@ public class RotaryModelLayers {
     }
 
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(RotaryEntities.DISCHARGE.get(), reika.rotarycraft.renders.RenderDischarge::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.FLOODLIGHT.get(), RenderLamp::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SMOKE_DETECTOR.get(), RenderSmokeDetector::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.RESERVOIR.get(), RenderReservoir::new);
