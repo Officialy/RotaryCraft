@@ -441,7 +441,12 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
             torque = releaseTorque;
             omega = releaseOmega;
             power = (long) torque * (long) omega;
-            if (this.tickcount % 26 == 0)
+            // 26.2 fix: legacy used this.getTicksExisted() (vanilla's auto-incrementing tick counter).
+            // The port substituted `tickcount` -- a separate RotaryCraftBlockEntity field this class
+            // never increments, so it stays permanently 0 and `0 % 26 == 0` was always true, firing
+            // the coil sound every tick (~20/sec) instead of every 26 ticks (~1.3s). getTicksExisted()
+            // (DragonAPI's BlockEntityBase) is the real, auto-incrementing equivalent.
+            if (this.getTicksExisted() % 26 == 0)
                 SoundRegistry.COIL.playSoundAtBlock(this);
             if (!isCreative)
                 energy -= power;
