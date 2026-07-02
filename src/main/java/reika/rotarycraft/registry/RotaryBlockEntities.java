@@ -24,8 +24,10 @@ import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
+import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
+import reika.rotarycraft.blockentities.processing.BlockEntityMagnetizer;
 import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
 import reika.rotarycraft.blockentities.production.*;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
@@ -153,8 +155,8 @@ public class RotaryBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDCEngine>> DC_ENGINE = BLOCK_ENTITIES.register("dc_engine", () ->
             new BlockEntityType<>(BlockEntityDCEngine::new, RotaryBlocks.DC_ENGINE.get()));
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.engine.BlockEntityJetEngine>> JET_ENGINE = BLOCK_ENTITIES.register("jet_engine", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.engine.BlockEntityJetEngine::new, RotaryBlocks.JET_ENGINE.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityJetEngine>> JET_ENGINE = BLOCK_ENTITIES.register("jet_engine", () ->
+            new BlockEntityType<>(BlockEntityJetEngine::new, RotaryBlocks.JET_ENGINE.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityPump>> PUMP = BLOCK_ENTITIES.register("pump", () ->
             new BlockEntityType<>(BlockEntityPump::new, RotaryBlocks.PUMP.get()));
@@ -176,6 +178,9 @@ public class RotaryBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityVanDeGraff>> VAN_DE_GRAFF = BLOCK_ENTITIES.register("van_de_graff", () ->
             new BlockEntityType<>(BlockEntityVanDeGraff::new, RotaryBlocks.VAN_DE_GRAFF.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.BlockEntityCreativeCoil>> CREATIVE_COIL = BLOCK_ENTITIES.register("creative_coil", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.BlockEntityCreativeCoil::new, RotaryBlocks.CREATIVE_COIL.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityLandmine>> LANDMINE = BLOCK_ENTITIES.register("landmine", () ->
             new BlockEntityType<>(BlockEntityLandmine::new, RotaryBlocks.LANDMINE.get()));
@@ -293,31 +298,31 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityPulseFurnace::new, RotaryBlocks.PULSE_JET_FURNACE.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFillingStation>> FILLING_STATION = BLOCK_ENTITIES.register("filling_station", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()));
+            new BlockEntityType<>(BlockEntityFillingStation::new, RotaryBlocks.FILLING_STATION.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFan>> FAN = BLOCK_ENTITIES.register("fan", () ->
             new BlockEntityType<>(BlockEntityFan::new, RotaryBlocks.FAN.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityGrinder>> GRINDER = BLOCK_ENTITIES.register("grinder", () ->
             new BlockEntityType<>(BlockEntityGrinder::new, RotaryBlocks.GRINDER.get()));
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.production.BlockEntityFractionator>> FRACTIONATOR = BLOCK_ENTITIES.register("fractionator", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityFractionator::new, RotaryBlocks.FRACTIONATOR.get()));
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityMagnetizer>> MAGNETIZER = BLOCK_ENTITIES.register("magnetizer", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityMagnetizer::new, RotaryBlocks.MAGNETIZER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFractionator>> FRACTIONATOR = BLOCK_ENTITIES.register("fractionator", () ->
+            new BlockEntityType<>(BlockEntityFractionator::new, RotaryBlocks.FRACTIONATOR.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityMagnetizer>> MAGNETIZER = BLOCK_ENTITIES.register("magnetizer", () ->
+            new BlockEntityType<>(BlockEntityMagnetizer::new, RotaryBlocks.MAGNETIZER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityBlastFurnace>> BLAST_FURNACE = BLOCK_ENTITIES.register("blast_furnace", () ->
             new BlockEntityType<>(BlockEntityBlastFurnace::new, RotaryBlocks.BLAST_FURNACE.get()));
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.production.BlockEntityFermenter>> FERMENTER = BLOCK_ENTITIES.register("fermenter", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityFermenter::new, RotaryBlocks.FERMENTER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFermenter>> FERMENTER = BLOCK_ENTITIES.register("fermenter", () ->
+            new BlockEntityType<>(BlockEntityFermenter::new, RotaryBlocks.FERMENTER.get()));
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityExtractor>> EXTRACTOR = BLOCK_ENTITIES.register("extractor", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityExtractor::new, RotaryBlocks.EXTRACTOR.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityExtractor>> EXTRACTOR = BLOCK_ENTITIES.register("extractor", () ->
+            new BlockEntityType<>(BlockEntityExtractor::new, RotaryBlocks.EXTRACTOR.get()));
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.production.BlockEntityBedrockBreaker>> BEDROCK_BREAKER = BLOCK_ENTITIES.register("bedrock_breaker", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityBedrockBreaker::new, RotaryBlocks.BEDROCK_BREAKER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityBedrockBreaker>> BEDROCK_BREAKER = BLOCK_ENTITIES.register("bedrock_breaker", () ->
+            new BlockEntityType<>(BlockEntityBedrockBreaker::new, RotaryBlocks.BEDROCK_BREAKER.get()));
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.production.BlockEntityBedrockSlice>> BEDROCK_SLICE = BLOCK_ENTITIES.register("bedrock_slice", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityBedrockSlice::new, RotaryBlocks.BEDROCKSLICE.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityBedrockSlice>> BEDROCK_SLICE = BLOCK_ENTITIES.register("bedrock_slice", () ->
+            new BlockEntityType<>(BlockEntityBedrockSlice::new, RotaryBlocks.BEDROCKSLICE.get()));
 
 
     /**

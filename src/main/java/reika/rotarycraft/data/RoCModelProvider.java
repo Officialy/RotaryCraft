@@ -150,6 +150,16 @@ public class RoCModelProvider extends ModelProvider {
             } else if (block instanceof BlockWorktable) {
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
                         block, bottomTopMapping("worktable_top", "worktable_bottom", "worktable"), modelOut);
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockCreativeCoil) {
+                // Creative coil: no bespoke art -- a distinctive vanilla gold_block cube signals its
+                // creative/infinite nature at a glance.
+                var gold = new Material(Identifier.fromNamespaceAndPath("minecraft", "block/gold_block"));
+                blockModelId = ModelTemplates.CUBE_ALL.create(
+                        block,
+                        new TextureMapping()
+                                .put(TextureSlot.ALL, gold)
+                                .put(TextureSlot.PARTICLE, gold),
+                        modelOut);
             } else if (isPipe(block)) {
                 // RotaryCraft's per-type pipe textures (block/fluid_pipe.png etc.) don't exist —
                 // the legacy assets used a single piping.png spritesheet that the BER sliced into
