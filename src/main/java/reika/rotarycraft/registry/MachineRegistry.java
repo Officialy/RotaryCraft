@@ -147,6 +147,7 @@ public enum MachineRegistry implements TileEnum {
     CVT(true, "machine.advgear", RotaryBlocks.CVT.get(), BlockEntityAdvancedGear.class, (modelSet) -> new CVTModel(modelSet.bakeLayer(RotaryModelLayers.CVT))),
     HIGHGEAR(true, "machine.advgear", RotaryBlocks.HIGHGEAR.get(), BlockEntityAdvancedGear.class, (modelSet) -> new HighGearModel(modelSet.bakeLayer(RotaryModelLayers.HIGHGEAR))),
     COIL(true, "machine.advgear", RotaryBlocks.COIL.get(), BlockEntityAdvancedGear.class, (modelSet) -> new CoilModel(modelSet.bakeLayer(RotaryModelLayers.COIL))),
+    CREATIVE_COIL(true, "machine.creativecoil", RotaryBlocks.CREATIVE_COIL.get(), BlockEntityCreativeCoil.class, (modelSet) -> new CoilModel(modelSet.bakeLayer(RotaryModelLayers.COIL))),
 
     TNTCANNON(true, "machine.tntcannon", RotaryBlocks.TNT_CANNON.get(), BlockEntityTNTCannon.class/*, (modelSet) -> new TNTCannonModel(modelSet.bakeLayer(RotaryModelLayers.TNT_CANNON))*/),
     //    SONICWEAPON(true, "machine.sonicweapon", BlockRotaryCraftMachine.class, BlockEntitySonicWeapon.class, "RenderSonic"),

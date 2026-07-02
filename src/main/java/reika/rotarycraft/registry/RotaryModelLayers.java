@@ -165,6 +165,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.CVT.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.HIGHGEAR.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COIL.get(), RenderAdvGear::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.CREATIVE_COIL.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WORMGEAR.get(), RenderAdvGear::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.FLYWHEEL.get(), RenderFlywheel::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WINDER.get(), RenderWinder::new);

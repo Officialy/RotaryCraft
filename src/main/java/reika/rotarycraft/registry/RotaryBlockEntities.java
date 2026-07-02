@@ -179,9 +179,6 @@ public class RotaryBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityVanDeGraff>> VAN_DE_GRAFF = BLOCK_ENTITIES.register("van_de_graff", () ->
             new BlockEntityType<>(BlockEntityVanDeGraff::new, RotaryBlocks.VAN_DE_GRAFF.get()));
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.BlockEntityCreativeCoil>> CREATIVE_COIL = BLOCK_ENTITIES.register("creative_coil", () ->
-            new BlockEntityType<>(reika.rotarycraft.blockentities.BlockEntityCreativeCoil::new, RotaryBlocks.CREATIVE_COIL.get()));
-
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityLandmine>> LANDMINE = BLOCK_ENTITIES.register("landmine", () ->
             new BlockEntityType<>(BlockEntityLandmine::new, RotaryBlocks.LANDMINE.get()));
 
@@ -207,6 +204,9 @@ public class RotaryBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAdvancedGear>> COIL = BLOCK_ENTITIES.register("coil", () ->
             new BlockEntityType<>((pos, block) -> new BlockEntityAdvancedGear(BlockEntityAdvancedGear.GearType.COIL, pos, block), RotaryBlocks.COIL.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityCreativeCoil>> CREATIVE_COIL = BLOCK_ENTITIES.register("creative_coil", () ->
+            new BlockEntityType<>(BlockEntityCreativeCoil::new, RotaryBlocks.CREATIVE_COIL.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAdvancedGear>> HIGHGEAR = BLOCK_ENTITIES.register("highgear", () ->
             new BlockEntityType<>((pos, block) -> new BlockEntityAdvancedGear(BlockEntityAdvancedGear.GearType.HIGH, pos, block), RotaryBlocks.HIGHGEAR.get()));

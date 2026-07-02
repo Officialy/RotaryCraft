@@ -28,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -78,9 +79,10 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     private int releaseTorque = 0;
     private int releaseOmega = 0;
     /**
-     * Stored energy, in joules
+     * Stored energy, in joules. Protected (not private) so a creative-variant subclass can seed it --
+     * see {@link reika.rotarycraft.blockentities.transmission.BlockEntityCreativeCoil}.
      */
-    private long energy;
+    protected long energy;
     private boolean isBedrockCoil = false;
     private boolean isCreative;
     private CVTMode cvtMode = CVTMode.MANUAL;
@@ -110,12 +112,21 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
     private boolean enabled = true;
 
     public BlockEntityAdvancedGear(GearType type, BlockPos pos, BlockState state) {
-        super(switch (type){
+        this(type, switch (type) {
             case WORM -> RotaryBlockEntities.WORMGEAR.get();
             case HIGH -> RotaryBlockEntities.HIGHGEAR.get();
             case COIL -> RotaryBlockEntities.COIL.get();
             case CVT -> RotaryBlockEntities.CVT.get();
         }, pos, state);
+    }
+
+    // Variant hook for blocks that reuse a GearType's behaviour under a different concrete block
+    // (the creative coil reuses GearType.COIL's texture/model/GUI/sound wiring but must validate
+    // against its own BlockEntityType.CREATIVE_COIL, not COIL's -- passing the wrong type here
+    // crashes on placement the same way BlockEntityPipe's hardcoded FLUID_PIPE type did for
+    // BlockEntityBedrockPipe before that fix).
+    protected BlockEntityAdvancedGear(GearType type, BlockEntityType<?> beType, BlockPos pos, BlockState state) {
+        super(beType, pos, state);
         gearType = type;
     }
     public static long getMaxStorageCapacity(boolean bedrock) {

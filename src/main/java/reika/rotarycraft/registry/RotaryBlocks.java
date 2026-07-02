@@ -114,7 +114,6 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> MIRROR = registerMachineBlock("mirror", () -> new BlockMirror(blockProperties().strength(5)));
     public static final DeferredBlock<Block> VAN_DE_GRAFF = registerMachineBlock("van_de_graff", () -> new BlockVanDeGraff(blockProperties().strength(5)));
     public static final DeferredBlock<Block> LANDMINE = registerMachineBlock("landmine", () -> new BlockLandmine(blockProperties().strength(5)));
-    public static final DeferredBlock<Block> CREATIVE_COIL = registerMachineBlock("creative_coil", () -> new reika.rotarycraft.base.blocks.entity.BlockCreativeCoil(blockProperties().strength(5)));
 
     public static final DeferredBlock<Block> COOLING_FIN = registerMachineBlock("cooling_fin", () -> new BlockCoolingFin(blockProperties().strength(5)));
     public static final DeferredBlock<Block> MUSIC_BOX = registerMachineBlock("music_box", () -> new BlockMusicBox(blockProperties().strength(5)));
@@ -151,6 +150,10 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> PULSE_JET_FURNACE = registerMachineBlock("pulse_jet_furnace", () -> new BlockPulseJetFurnace(blockProperties().strength(5)));
 
     public static final DeferredBlock<Block> COIL = registerMachineBlock("coil", () -> new BlockCoil(blockProperties().strength(5))); //todo blocks for these 4
+    // "Infinite" coil for easy testing -- reuses BlockCoil/BlockEntityAdvancedGear's GearType.COIL
+    // behaviour wholesale (texture, CoilModel, GUI, sounds); see BlockEntityCreativeCoil for why it
+    // needs its own BlockEntityType instead of sharing COIL's.
+    public static final DeferredBlock<Block> CREATIVE_COIL = registerMachineBlock("creative_coil", () -> new BlockCreativeCoil(blockProperties().strength(5)));
     public static final DeferredBlock<Block> CVT = registerMachineBlock("cvt", () -> new BlockCVT(blockProperties().strength(5)));
     public static final DeferredBlock<Block> WORMGEAR = registerMachineBlock("wormgear", () -> new BlockWormGear(blockProperties().strength(5)));
     public static final DeferredBlock<Block> HIGHGEAR = registerMachineBlock("highgear", () -> new BlockHighGear(blockProperties().strength(5)));
