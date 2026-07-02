@@ -149,7 +149,7 @@ public class BlockGearbox extends BlockBasicMachine {
 
     private static boolean isFlywheelBlock(BlockState state) {
         var block = state.getBlock();
-        return block == reika.rotarycraft.registry.RotaryBlocks.WOOD_FLYWHEEL.get()
+        return block == RotaryBlocks.WOOD_FLYWHEEL.get()
                 || block == RotaryBlocks.HSLA_FLYWHEEL.get()
                 || block == RotaryBlocks.TUNGSTEN_FLYWHEEL.get()
                 || block == RotaryBlocks.DIAMOND_FLYWHEEL.get()

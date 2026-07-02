@@ -12,6 +12,12 @@ package reika.rotarycraft.renders;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -28,6 +34,8 @@ import reika.rotarycraft.models.animated.SplitterModel;
 import reika.rotarycraft.models.animated.SplitterModel2;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryModelLayers;
+
+import java.util.ArrayList;
 
 public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
 
@@ -86,7 +94,7 @@ public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
         // to match the direction convention used by the shaft/gearbox renderers.
         // Pass the {@code failed} flag in the conditions list (legacy: li.get(0)) so the
         // shafts stop spinning when the splitter has been killed by torque overload.
-        java.util.ArrayList<Boolean> li = new java.util.ArrayList<>();
+        ArrayList<Boolean> li = new ArrayList<>();
         li.add(tile.failed);
         splitterModel.renderAll(stack, vertexconsumer, pPackedLight, tile, li, -tile.phi, 0);
 
@@ -102,13 +110,13 @@ public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
     }
 
     @Override
-    public void submit(net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState state,
+    public void submit(BlockEntityRenderState state,
                        PoseStack poseStack,
-                       net.minecraft.client.renderer.SubmitNodeCollector collector,
-                       net.minecraft.client.renderer.state.level.CameraRenderState camera) {
-        net.minecraft.world.level.Level level = net.minecraft.client.Minecraft.getInstance().level;
+                       SubmitNodeCollector collector,
+                       CameraRenderState camera) {
+        Level level = Minecraft.getInstance().level;
         if (level == null) return;
-        net.minecraft.world.level.block.entity.BlockEntity be = level.getBlockEntity(state.blockPos);
+        BlockEntity be = level.getBlockEntity(state.blockPos);
         if (!(be instanceof BlockEntitySplitter tile)) return;
         if (!this.doRenderModel(poseStack, tile)) return;
 

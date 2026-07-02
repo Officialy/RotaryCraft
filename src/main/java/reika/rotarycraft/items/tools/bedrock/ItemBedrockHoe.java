@@ -24,11 +24,12 @@ import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.ConfigRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemBedrockHoe extends HoeItem {
 
     public ItemBedrockHoe() {
-        super(ToolMaterial.NETHERITE, 1, 3.0F, reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(ToolMaterial.NETHERITE, 1, 3.0F, RotaryItems.itemProperties());
 
     }
 

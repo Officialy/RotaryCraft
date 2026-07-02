@@ -33,6 +33,7 @@ import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
 import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityTransmissionMachine;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -128,11 +129,11 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
     private void initIosideFromFacing() {
         // Defaults to merge orientation (cases 0-3); the player can flip to split (cases 8-11)
         // via {@link #setSplitting} or {@link #setIoside}.
-        net.minecraft.world.level.block.state.BlockState state = this.getBlockState();
-        if (state == null || !state.hasProperty(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
+        BlockState state = this.getBlockState();
+        if (state == null || !state.hasProperty(BlockRotaryCraftMachine.FACING)) {
             return; // keep current ioside (0 by default).
         }
-        ioside = switch (state.getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
+        ioside = switch (state.getValue(BlockRotaryCraftMachine.FACING)) {
             case WEST  -> 0;
             case NORTH -> 1;
             case EAST  -> 2;

@@ -5,11 +5,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
 import reika.dragonapi.exception.RegistrationException;
+import reika.dragonapi.instantiable.Alert;
 import reika.dragonapi.instantiable.data.maps.ArrayMap;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 import reika.dragonapi.modinteract.lua.LuaMethod;
@@ -21,6 +26,7 @@ import reika.rotarycraft.registry.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.NavigableSet;
 import java.util.stream.Collectors;
@@ -34,11 +40,11 @@ public class HandbookAuxData {
         try {
             Minecraft mc = Minecraft.getInstance();
             if (mc.level == null) return new ArrayList<>();
-            net.minecraft.server.MinecraftServer server = mc.level.getServer();
+            MinecraftServer server = mc.level.getServer();
             if (server == null) return new ArrayList<>(); // dedicated client – recipes not iterable
             List<Recipe<?>> result = new ArrayList<>();
-            for (net.minecraft.world.item.crafting.RecipeHolder<?> rh :
-                    server.getRecipeManager().recipeMap().byType(net.minecraft.world.item.crafting.RecipeType.CRAFTING)) {
+            for (RecipeHolder<?> rh :
+                    server.getRecipeManager().recipeMap().byType(RecipeType.CRAFTING)) {
                 result.add(rh.value());
             }
             return result;
@@ -148,7 +154,7 @@ public class HandbookAuxData {
             if (k == 0) {
                 ItemStack out = RotaryItems.JETPACK.get().getDefaultInstance();
                 // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
-                List<Recipe<?>> li = java.util.Collections.<Recipe<?>>emptyList();
+                List<Recipe<?>> li = Collections.<Recipe<?>>emptyList();
                 api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
             }
             else if (k == 1) {
@@ -194,7 +200,7 @@ public class HandbookAuxData {
             if (k == 0) {
                 ItemStack out = RotaryItems.JUMP.get().getDefaultInstance();
                 // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
-                List<Recipe<?>> li = java.util.Collections.<Recipe<?>>emptyList();
+                List<Recipe<?>> li = Collections.<Recipe<?>>emptyList();
                 api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
             }
             else {
@@ -282,7 +288,7 @@ public class HandbookAuxData {
         }
         else if (h == HandbookRegistry.RAILGUNAMMO) {
             // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
-            List<Recipe<?>> li = java.util.Collections.<Recipe<?>>emptyList();
+            List<Recipe<?>> li = Collections.<Recipe<?>>emptyList();
             api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
         }
         else if (h == HandbookRegistry.BEDTOOLS) {
@@ -332,8 +338,8 @@ public class HandbookAuxData {
         else if (h == HandbookRegistry.ALLOYING) {
             // This section relies on outdated RecipesBlastFurnace and BlastFurnacePattern.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = java.util.Collections.<ShapedBlastFurnaceRecipe>emptyList();
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = java.util.Collections.<ShapelessBlastFurnaceRecipe>emptyList();
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.<ShapedBlastFurnaceRecipe>emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.<ShapelessBlastFurnaceRecipe>emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);
@@ -355,8 +361,8 @@ public class HandbookAuxData {
         else if (h == HandbookRegistry.COKE) {
             // This section relies on outdated RecipesBlastFurnace and BlastRecipe.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = java.util.Collections.<ShapedBlastFurnaceRecipe>emptyList();
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = java.util.Collections.<ShapelessBlastFurnaceRecipe>emptyList();
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.<ShapedBlastFurnaceRecipe>emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.<ShapelessBlastFurnaceRecipe>emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);
@@ -379,8 +385,8 @@ public class HandbookAuxData {
             ItemStack is = RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance();
             // This section relies on outdated RecipesBlastFurnace and BlastRecipe.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = java.util.Collections.<ShapedBlastFurnaceRecipe>emptyList();
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = java.util.Collections.<ShapelessBlastFurnaceRecipe>emptyList();
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.<ShapedBlastFurnaceRecipe>emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.<ShapelessBlastFurnaceRecipe>emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);
@@ -559,19 +565,19 @@ public class HandbookAuxData {
                 String title = "These are the config settings that have been changed from the defaults, and may have significant " +
                         "changes to the gameplay. If you have further questions, or you wish for these changes to be undone, contact " +
                         "your server admin or modpack creator.";
-                ri.textWithWordWrap(f, net.minecraft.network.chat.FormattedText.of(title), dx + 8, dy + 20, 220, 0xFF333333, false);
-                List<reika.dragonapi.instantiable.Alert> li = HandbookNotifications.instance.getNewAlerts();
+                ri.textWithWordWrap(f, FormattedText.of(title), dx + 8, dy + 20, 220, 0xFF333333, false);
+                List<Alert> li = HandbookNotifications.instance.getNewAlerts();
                 if (li.isEmpty()) {
-                    ri.textWithWordWrap(f, net.minecraft.network.chat.FormattedText.of("All config settings are identical to defaults."), dx + 10, dy + 88, 245, 0xFFFFFFFF, false);
-                    ri.textWithWordWrap(f, net.minecraft.network.chat.FormattedText.of("Your gameplay is in line with what has been intended."), dx + 10, dy + 98, 245, 0xFFFFFFFF, false);
+                    ri.textWithWordWrap(f, FormattedText.of("All config settings are identical to defaults."), dx + 10, dy + 88, 245, 0xFFFFFFFF, false);
+                    ri.textWithWordWrap(f, FormattedText.of("Your gameplay is in line with what has been intended."), dx + 10, dy + 98, 245, 0xFFFFFFFF, false);
                 }
                 else {
                     int row = 0;
                     int base = subpage * 3;
                     int max = Math.min(base + 3, li.size());
                     for (int i = base; i < max; i++) {
-                        reika.dragonapi.instantiable.Alert a = li.get(i);
-                        ri.textWithWordWrap(f, net.minecraft.network.chat.FormattedText.of(a.getMessage()), dx + 10, dy + 88 + row * 44, 245, 0xFFFFFFFF, false);
+                        Alert a = li.get(i);
+                        ri.textWithWordWrap(f, FormattedText.of(a.getMessage()), dx + 10, dy + 88 + row * 44, 245, 0xFFFFFFFF, false);
                         row++;
                     }
                 }

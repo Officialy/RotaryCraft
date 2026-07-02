@@ -1,11 +1,13 @@
 package reika.rotarycraft.registry;
 
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.registries.BuiltInRegistries;
 import reika.dragonapi.ModList;
@@ -40,11 +42,11 @@ public enum GearboxTypes {
 
     public static GearboxTypes getMaterialFromGearboxItem(ItemStack is) {
 //        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null && is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("type"))
-        return GearboxTypes.valueOf(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getStringOr("type", ""));
+        return GearboxTypes.valueOf(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("type", ""));
     }
 
     public static GearboxTypes getMaterialFromCraftingItem(ItemStack is) {
-        Tag idx = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().get("material");
+        Tag idx = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().get("material");
 //        for (GearboxTypes g : typeList) {
 //            if (g == idx)
 //                return g;
@@ -189,7 +191,7 @@ public enum GearboxTypes {
         //return this.getGearboxItemByIndex(ReikaMathLibrary.logbase2(ratio) - 1);
 
         ItemStack is = MachineRegistry.GEARBOX.getBlockState().getBlock().asItem().getDefaultInstance();
-        is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().putString("type", this.name());
+        is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().putString("type", this.name());
         return is;
     }
 

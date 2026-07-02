@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -45,7 +46,7 @@ public class BlockLandmine extends BlockBasicMachine {
     }
 
     @Override
-    protected InteractionResult useItemOn(net.minecraft.world.item.ItemStack pStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult pHit) {
+    protected InteractionResult useItemOn(ItemStack pStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult pHit) {
         BlockEntity entity = level.getBlockEntity(pos);
         if (entity instanceof BlockEntityLandmine landmine && !level.isClientSide() && player instanceof ServerPlayer sp) {
             sp.openMenu(landmine, entity.getBlockPos());

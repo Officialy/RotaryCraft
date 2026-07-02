@@ -10,9 +10,11 @@
 package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.DragonAPI;
@@ -40,7 +42,7 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
     }
 
     public int getExpectedCoilLife() {
-        return this.getUnwindTime() * itemHandler.getStackInSlot(this.getCoilSlot()).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("energy", 0);
+        return this.getUnwindTime() * itemHandler.getStackInSlot(this.getCoilSlot()).getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("energy", 0);
     }
 
 

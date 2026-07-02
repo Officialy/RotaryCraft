@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,6 +26,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.interfaces.blockentity.InertIInv;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
+import reika.dragonapi.libraries.io.ReikaSoundHelper;
+import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.dragonapi.libraries.registry.ReikaParticleHelper;
@@ -32,6 +35,7 @@ import reika.rotarycraft.api.interfaces.SurrogateBedrock;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.DifficultyEffects;
 import reika.rotarycraft.registry.DurationRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
@@ -99,7 +103,7 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
             return false;
         // never punch through the lowest bedrock layer (the void floor) unless the pack
         // owner has explicitly enabled it — legacy guarded y==0, which is getMinY() now
-        if (head.getY() <= world.getMinY() && !reika.rotarycraft.registry.ConfigRegistry.VOIDHOLE.getState())
+        if (head.getY() <= world.getMinY() && !ConfigRegistry.VOIDHOLE.getState())
             return false;
         return true;
     }
@@ -130,7 +134,7 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
             }
         } else if (b != Blocks.AIR.defaultBlockState().getBlock() && !state.isAir()
                 && state.getDestroySpeed(world, head) >= 0) {
-            reika.dragonapi.libraries.io.ReikaSoundHelper.playBreakSound(world, head, b);
+            ReikaSoundHelper.playBreakSound(world, head, b);
             world.removeBlock(head, false);
         }
     }
@@ -146,7 +150,7 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
         if (ReikaInventoryHelper.addToIInv(is, itemHandler))
             return;
         BlockPos drop = worldPosition.above();
-        net.minecraft.world.entity.item.ItemEntity ei = new net.minecraft.world.entity.item.ItemEntity(
+        ItemEntity ei = new ItemEntity(
                 world, drop.getX() + 0.5, drop.getY() + 0.25, drop.getZ() + 0.5, is);
         ei.setDeltaMovement(0, 0.15, 0);
         ei.setDefaultPickUpDelay();
@@ -179,7 +183,7 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
                 step = i;
                 return;
             }
-            if (!reika.dragonapi.libraries.level.ReikaWorldHelper.softBlocks(world, p)) {
+            if (!ReikaWorldHelper.softBlocks(world, p)) {
                 step = i;
                 return;
             }

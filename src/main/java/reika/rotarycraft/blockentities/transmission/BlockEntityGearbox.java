@@ -50,6 +50,7 @@ import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.BlockEntity1DTransmitter;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
+import reika.rotarycraft.base.blocks.entity.transmission.BlockGearbox;
 import reika.rotarycraft.gui.container.machine.GearboxContainer;
 import reika.rotarycraft.registry.*;
 
@@ -104,7 +105,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         // authoritatively rather than trusting the cached `type` field — which the BlockEntityType
         // supplier or stale NBT could leave as WOOD (wrong texture AND wrong power limits → a bedrock
         // gearbox exploding into wood dust under jet power).
-        if (this.getBlockState().getBlock() instanceof reika.rotarycraft.base.blocks.entity.transmission.BlockGearbox bg && bg.type != null)
+        if (this.getBlockState().getBlock() instanceof BlockGearbox bg && bg.type != null)
             return bg.type;
         return type != null ? type : GearboxTypes.WOOD;
     }

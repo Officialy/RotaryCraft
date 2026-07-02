@@ -21,6 +21,7 @@ import reika.dragonapi.instantiable.Interpolation;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
@@ -245,12 +246,12 @@ public class BlockEntityCoolingFin extends RotaryCraftBlockEntity implements Tem
         // down". Route through to the 3-arg implementation here, using the block's FACING
         // property to derive which adjacent BE to cool. FACING is the direction the cooling
         // surface points AT (i.e. the target side), matching the legacy interpretation.
-        net.minecraft.world.level.block.state.BlockState state = this.getBlockState();
-        net.minecraft.core.Direction dir;
-        if (state != null && state.hasProperty(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
-            dir = state.getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING);
+        BlockState state = this.getBlockState();
+        Direction dir;
+        if (state != null && state.hasProperty(BlockRotaryCraftMachine.FACING)) {
+            dir = state.getValue(BlockRotaryCraftMachine.FACING);
         } else {
-            dir = net.minecraft.core.Direction.NORTH; // safe default
+            dir = Direction.NORTH; // safe default
         }
         this.updateEntity(level, blockPos, dir);
     }

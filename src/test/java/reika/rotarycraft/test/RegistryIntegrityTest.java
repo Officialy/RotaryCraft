@@ -1,5 +1,6 @@
 package reika.rotarycraft.test;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,9 @@ import reika.rotarycraft.registry.ExtractOres;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryRecipeSerializers;
 import reika.rotarycraft.registry.RotaryRecipeTypes;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -52,11 +56,11 @@ public class RegistryIntegrityTest {
      */
     @Test
     void extractOresHaveDistinctStageItems() {
-        java.util.Set<net.minecraft.world.item.Item> seen = new java.util.HashSet<>();
+        Set<Item> seen = new HashSet<>();
         for (ExtractOres ore : ExtractOres.oreList) {
             assertNotNull(ore.getOreTag(), ore + " missing ore tag");
             for (int stage = 0; stage < 4; stage++) {
-                net.minecraft.world.item.Item item = ore.getStageItem(stage);
+                Item item = ore.getStageItem(stage);
                 assertNotNull(item, ore + " missing stage " + stage);
                 assertTrue(seen.add(item), "duplicate stage item across chain: " + ore + " stage " + stage);
             }

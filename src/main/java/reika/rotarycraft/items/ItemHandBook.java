@@ -17,11 +17,12 @@ import net.minecraft.world.level.Level;
 
 import reika.rotarycraft.base.ItemRotaryTool;
 import reika.rotarycraft.gui.screen.GuiHandbook;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemHandBook extends ItemRotaryTool {
 
     public ItemHandBook() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     @Override

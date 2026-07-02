@@ -11,7 +11,11 @@ package reika.rotarycraft.blockentities.production;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -23,10 +27,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import reika.dragonapi.instantiable.data.WeightedRandom;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
+import reika.dragonapi.libraries.java.ReikaRandomHelper;
 import reika.rotarycraft.base.blockentity.PoweredLiquidIO;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerFractionator;
+import reika.rotarycraft.registry.DifficultyEffects;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -34,6 +47,7 @@ import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 /**
  * 26.1 port of the 1.7 Fractionator. Converts liquid ethanol + a fixed set of ingredient
@@ -257,8 +271,8 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         // The legacy explosion behaviour can be restored once block-explosion drops are wired.
         if (level != null && !level.isClientSide()) {
             level.playSound(null, worldPosition,
-                    net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE.value(),
-                    net.minecraft.sounds.SoundSource.BLOCKS, 0.6F, 1.5F);
+                    SoundEvents.GENERIC_EXPLODE.value(),
+                    SoundSource.BLOCKS, 0.6F, 1.5F);
             output.removeLiquid(Math.min(2000, output.getFluidLevel()));
         }
     }
@@ -266,12 +280,12 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
     private boolean canRunRecipe() {
         // Output-space check uses the upper-bound legacy PRODUCEFRAC ceiling so the cycle never
         // fires when the output tank would overflow.
-        if (output.getFluidLevel() + reika.rotarycraft.registry.DifficultyEffects.PRODUCEFRAC.getMaxAmount() > CAPACITY)
+        if (output.getFluidLevel() + DifficultyEffects.PRODUCEFRAC.getMaxAmount() > CAPACITY)
             return false;
         // Input-fluid check tracks the per-difficulty actual cost so easy-mode players (who pay
         // ~31 mB ethanol per cycle) aren't gated on a full litre being present.
         int ethanolCost = (int) Math.max(1, ETHANOL_PER_OP
-                * reika.rotarycraft.registry.DifficultyEffects.CONSUMEFRAC.getChance());
+                * DifficultyEffects.CONSUMEFRAC.getChance());
         if (input.getFluidLevel() < ethanolCost) return false;
         if (itemHandler.getStackInSlot(6).getItem() != Items.GHAST_TEAR) return false;
         for (int i = 0; i < 6; i++) {
@@ -287,13 +301,13 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         // / 0.75 for easy / medium / hard), so a medium-difficulty cycle uses only ~250 mB
         // ethanol instead of a flat litre. Match that here so the input tank doesn't drain
         // unrealistically fast and easy-mode players actually get the lighter cost they expect.
-        float consumeFrac = reika.rotarycraft.registry.DifficultyEffects.CONSUMEFRAC.getChance();
+        float consumeFrac = DifficultyEffects.CONSUMEFRAC.getChance();
         int ethanolCost = (int) Math.max(1, ETHANOL_PER_OP * consumeFrac);
         input.removeLiquid(ethanolCost);
         // Yield = legacy 7-point pressure curve × per-difficulty PRODUCEFRAC roll. The legacy
         // PRODUCEFRAC is a random range (e.g. 1000..2200 mB on medium); {@code getInt()} picks
         // a value within that range each cycle.
-        int produceBase = reika.rotarycraft.registry.DifficultyEffects.PRODUCEFRAC.getInt();
+        int produceBase = DifficultyEffects.PRODUCEFRAC.getInt();
         int produced = (int) (produceBase * getYieldRatio());
         output.addLiquid(Math.max(1, produced), RotaryFluids.JET_FUEL.get());
         consumeIngredientsWeighted();
@@ -321,9 +335,9 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         // On medium difficulty: 6 × 0.25 = 1.5 → typically one slot consumed each cycle, with
         // ~50% chance of a second one (fractional-budget probability check below).
         float consume = INGREDIENTS.size()
-                * reika.rotarycraft.registry.DifficultyEffects.CONSUMEFRAC.getChance();
+                * DifficultyEffects.CONSUMEFRAC.getChance();
 
-        reika.dragonapi.instantiable.data.WeightedRandom<Integer> wr = new reika.dragonapi.instantiable.data.WeightedRandom<>();
+        WeightedRandom<Integer> wr = new WeightedRandom<>();
         for (int i = 0; i < 6; i++) {
             ItemStack is = itemHandler.getStackInSlot(i);
             if (is.isEmpty()) continue;
@@ -336,7 +350,7 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
             Integer slot = wr.getRandomEntry();
             if (slot == null) break;            // ran out of weighted entries
             boolean fire = consume >= 1
-                    || reika.dragonapi.libraries.java.ReikaRandomHelper.doWithChance(consume);
+                    || ReikaRandomHelper.doWithChance(consume);
             if (fire) {
                 ItemStack is = itemHandler.getStackInSlot(slot);
                 if (!is.isEmpty()) {
@@ -390,8 +404,8 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
     public boolean hasModelTransparency() { return false; }
 
     @Override
-    public int fillPipe(Direction from, net.neoforged.neoforge.fluids.FluidStack resource,
-                        net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction action) {
+    public int fillPipe(Direction from, FluidStack resource,
+                        IFluidHandler.FluidAction action) {
         // Ethanol can be pushed into the input tank from any horizontal side.
         if (!canReceiveFrom(from)) return 0;
         if (!isValidFluid(resource.getFluid())) return 0;
@@ -405,27 +419,27 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
 
     // 26.1: NBT save/load using ValueOutput/ValueInput so the inventory survives chunk reload.
     @Override
-    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+    protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        net.minecraft.world.level.storage.TagValueOutput nested = net.minecraft.world.level.storage.TagValueOutput.createWithContext(
-                net.minecraft.util.ProblemReporter.DISCARDING,
-                this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess());
+        TagValueOutput nested = TagValueOutput.createWithContext(
+                ProblemReporter.DISCARDING,
+                this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess());
         itemHandler.serialize(nested);
         output.store("ItemsRaw", CompoundTag.CODEC, nested.buildResult());
     }
 
     @Override
-    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+    protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         itemHandler = new ManagedItemHandler(SLOTS) {
             @Override
             protected void onContentsChanged(int slot) { setChanged(); }
         };
-        java.util.Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
+        Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
         if (raw.isPresent()) {
-            net.minecraft.world.level.storage.ValueInput nested = net.minecraft.world.level.storage.TagValueInput.create(
-                    net.minecraft.util.ProblemReporter.DISCARDING,
-                    this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess(),
+            ValueInput nested = TagValueInput.create(
+                    ProblemReporter.DISCARDING,
+                    this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess(),
                     raw.get());
             itemHandler.deserialize(nested);
         }

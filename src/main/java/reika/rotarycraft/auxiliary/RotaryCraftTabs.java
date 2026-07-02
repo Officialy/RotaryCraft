@@ -3,6 +3,7 @@ package reika.rotarycraft.auxiliary;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -14,6 +15,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
+
+import java.util.HashSet;
+
 // 1.21.5: EventBusSubscriber no longer has a `bus` parameter — the mod bus is the only target.
 @EventBusSubscriber(modid = RotaryCraft.MODID)
 public class RotaryCraftTabs {
@@ -290,7 +294,7 @@ public class RotaryCraftTabs {
             // so the same Item is reachable through both registries. NeoForge throws
             // "Itemstack already exists in the tab's list" on a duplicate accept, so we route
             // every candidate through a single seen-set.
-            java.util.HashSet<net.minecraft.world.item.Item> seen = new java.util.HashSet<>();
+            HashSet<Item> seen = new HashSet<>();
             // Every registered block that has a BlockItem. Skips blocks registered through
             // registerBlockOnly that don't have an associated Item (BEDROCK, BEDROCKSLICE,
             // fluid blocks) — asItem() returns Items.AIR for those.

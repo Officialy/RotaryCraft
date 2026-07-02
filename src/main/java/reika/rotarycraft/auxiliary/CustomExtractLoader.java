@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
+import net.neoforged.fml.loading.FMLPaths;
 import reika.rotarycraft.RotaryCraft;
 import reika.dragonapi.interfaces.registry.OreType;
 import reika.dragonapi.io.ReikaFileReader;
@@ -44,7 +45,7 @@ public class CustomExtractLoader {
 
     private final File getFullSavePath() {
         //return new File(RotaryCraft.config.getConfigFolder(), this.getSaveFileName());
-        return new File(net.neoforged.fml.loading.FMLPaths.GAMEDIR.get().toString(), this.getSaveFileName());
+        return new File(FMLPaths.GAMEDIR.get().toString(), this.getSaveFileName());
     }
 
     public void loadFile() {

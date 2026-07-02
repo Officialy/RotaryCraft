@@ -12,6 +12,7 @@ package reika.rotarycraft.blockentities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -211,7 +212,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
                 } else {
                     return;
                 }
-                if (world instanceof net.minecraft.server.level.ServerLevel sl) ent.kill(sl);
+                if (world instanceof ServerLevel sl) ent.kill(sl);
                 world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.1F + 0.5F * DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat(), false);
                 NeoForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy() : null));
             } else {
@@ -223,7 +224,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         for (ExperienceOrb xp : closeorbs) {
             int val = xp.getValue();
             experience += val;
-            if (world instanceof net.minecraft.server.level.ServerLevel sl) xp.kill(sl);
+            if (world instanceof ServerLevel sl) xp.kill(sl);
             world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.BLOCKS, 0.1F, 0.5F * ((DragonAPI.rand.nextFloat() - DragonAPI.rand.nextFloat()) * 0.7F + 1.8F), false);
             NeoForge.EVENT_BUS.post(new VacuumXPAbsorbEvent(this, val));
         }

@@ -9,6 +9,8 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
 /** The progressively-ground bedrock block left by the bedrock breaker. Wears from 0..15 before
@@ -50,7 +52,7 @@ public class BlockEntityBedrockSlice extends BlockEntity {
     }
 
     @Override
-    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+    protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         wear = input.getIntOr("wear", 0);
         dustYield = input.getFloatOr("yield", 1);
@@ -58,7 +60,7 @@ public class BlockEntityBedrockSlice extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+    protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         output.putInt("wear", wear);
         output.putFloat("yield", dustYield);

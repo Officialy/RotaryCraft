@@ -19,7 +19,7 @@ public class ItemSteelShears extends ItemRotaryShears {
 
     public ItemSteelShears() {
         // 1.21.5: defaultDurability → durability.
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties().durability(600));
+        super(RotaryItems.itemProperties().durability(600));
     }
 
     // 1.21.5: Item.isValidRepairItem replaced by Properties.repairable(...); kept as helper.

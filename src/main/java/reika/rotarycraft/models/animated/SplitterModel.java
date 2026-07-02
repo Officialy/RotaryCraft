@@ -1,4 +1,5 @@
 package reika.rotarycraft.models.animated;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -294,8 +295,8 @@ public class SplitterModel extends RotaryModelBase {
 
         if (fail) return;
 
-        com.mojang.math.Axis xp = com.mojang.math.Axis.XP;
-        com.mojang.math.Axis zp = com.mojang.math.Axis.ZP;
+        Axis xp = Axis.XP;
+        Axis zp = Axis.ZP;
 
         // --- Right shaft: rotate +phi around X axis (pivot at y=1, model coord) ------------
         stack.pushPose();

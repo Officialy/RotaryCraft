@@ -30,6 +30,7 @@ import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
 import reika.rotarycraft.blockentities.level.BlockEntityFloodlight;
 import reika.rotarycraft.blockentities.transmission.*;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.HashMap;
 
@@ -95,7 +96,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
     }*/
 
     public ItemScrewdriver() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     @Override

@@ -1,10 +1,12 @@
 package reika.rotarycraft.blockentities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -37,11 +39,11 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     /* --------------------------------------------------------------------- */
     public boolean isAlarming()        { return isAlarm; }
     public boolean lowBattery()        {
-        return hasCoil() && itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("power", 0) <= 8;
+        return hasCoil() && itemHandler.getStackInSlot(0).getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("power", 0) <= 8;
     }
     public int     getRange()          {
         if (!hasCoil()) return 0;
-        int dmg = itemHandler.getStackInSlot(0).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("power", 0);
+        int dmg = itemHandler.getStackInSlot(0).getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("power", 0);
         int val = (int) ReikaMathLibrary.logbase(dmg * dmg, 2);
         return Math.min(val, 8);
     }

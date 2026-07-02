@@ -9,30 +9,33 @@
  ******************************************************************************/
 package reika.rotarycraft.items;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import reika.dragonapi.instantiable.MusicScore;
 import reika.dragonapi.interfaces.item.MusicDataItem;
 import reika.rotarycraft.base.ItemRotaryTool;
+import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.List;
 
 public class ItemDisk extends ItemRotaryTool implements MusicDataItem {
 
     public ItemDisk() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
 
     public void addInformation(ItemStack is, Player ep, List li, boolean par4) {
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
             return;
         li.add("Contains stored music:");
         for (int i = 0; i < 16; i++) {
-            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("ch" + i)) {
-                ListTag track = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
+            if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("ch" + i)) {
+                ListTag track = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
                 if (track.size() > 0)
                     li.add("Track " + i + ": " + track.size() + " entries");
             }
@@ -44,8 +47,8 @@ public class ItemDisk extends ItemRotaryTool implements MusicDataItem {
         MusicScore mus = new MusicScore(16);
         int[] pos = new int[16];
         for (int i = 0; i < 16; i++) {
-            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("ch" + i)) {
-                ListTag li = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
+            if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("ch" + i)) {
+                ListTag li = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
 //                for (int k = 0; k < li.size(); k++) {
 //                    CompoundTag nbt = li.getCompoundOrEmpty(k);
 //                    //ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Dist.DEDICATED_SERVER);

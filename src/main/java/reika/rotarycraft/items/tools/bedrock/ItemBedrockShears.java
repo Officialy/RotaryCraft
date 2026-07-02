@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.item.ItemStack;
 import reika.rotarycraft.base.ItemRotaryShears;
+import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.HashSet;
 
@@ -34,7 +35,7 @@ public class ItemBedrockShears extends ItemRotaryShears {
     }
 
     public ItemBedrockShears() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1));
+        super(RotaryItems.itemProperties().stacksTo(1));
     }
 
     @Override

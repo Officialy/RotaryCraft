@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import reika.dragonapi.libraries.ReikaPlayerAPI;
 import reika.rotarycraft.registry.ConfigRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 
 // 1.21.5 NOTE: SwordItem has been removed; swords are now plain Items configured via
 // Item.Properties.sword(...). onBlockStartBreak / getEnchantmentValue / isRepairable have
@@ -23,7 +24,7 @@ import reika.rotarycraft.registry.ConfigRegistry;
 public class ItemBedrockSword extends Item {
 
     public ItemBedrockSword() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1).sword(ToolMaterial.NETHERITE, 5, 12));
+        super(RotaryItems.itemProperties().stacksTo(1).sword(ToolMaterial.NETHERITE, 5, 12));
     }
 
     @Override

@@ -10,6 +10,7 @@
 package reika.rotarycraft.gui.screen.machine;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -93,7 +94,7 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
     }
 
     @Override
-    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         super.mouseClicked(event, doubleClick);
         input.mouseClicked(event.x(), event.y(), event.button());
         return super.mouseClicked(event, doubleClick);

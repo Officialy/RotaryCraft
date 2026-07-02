@@ -19,6 +19,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
+import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.api.interfaces.TensionStorage;
 import reika.rotarycraft.base.ItemBasic;
 import reika.rotarycraft.registry.RotaryItems;
@@ -33,7 +34,7 @@ public class ItemCoil extends ItemBasic implements TensionStorage {
     private int tension;
 
     public ItemCoil() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1), 1);
+        super(RotaryItems.itemProperties().stacksTo(1), 1);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ItemCoil extends ItemBasic implements TensionStorage {
     // 1.21.5: Item#onCraftedBy signature is now (ItemStack, Player).
     @Override
     public void onCraftedBy(ItemStack stack, Player pPlayer) {
-        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(stack, __T__ -> __T__.putInt("stiffness", stack == RotaryItems.BEDROCK_ALLOY_SPRING.get().getDefaultInstance() ? 4 : 1));
+        ReikaItemHelper.updateStackTag(stack, __T__ -> __T__.putInt("stiffness", stack == RotaryItems.BEDROCK_ALLOY_SPRING.get().getDefaultInstance() ? 4 : 1));
     }
 
     @Override

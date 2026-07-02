@@ -32,6 +32,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import reika.rotarycraft.registry.RotaryBlocks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class BlockMiningPipe extends Block {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
     public BlockMiningPipe() {
-        super(reika.rotarycraft.registry.RotaryBlocks.blockProperties().mapColor(MapColor.METAL).strength(5, 6).sound(SoundType.METAL));
+        super(RotaryBlocks.blockProperties().mapColor(MapColor.METAL).strength(5, 6).sound(SoundType.METAL));
         //this.blockIndexInTexture = 60; Material.METAL, "mining_pipe", 0
     }
 

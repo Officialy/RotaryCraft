@@ -1,12 +1,15 @@
 package reika.rotarycraft.base.blocks.entity.transmission;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 
@@ -31,8 +34,8 @@ public class BlockSplitter extends BlockBasicMachine {
      * saw this as "spazzes out for a second / model rotates around / IO render flickers".
      */
     @Override
-    public void setPlacedBy(net.minecraft.world.level.Level world, BlockPos pos, BlockState state,
-                            net.minecraft.world.entity.LivingEntity placer, net.minecraft.world.item.ItemStack stack) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state,
+                            LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(world, pos, state, placer, stack);
         BlockEntity be = world.getBlockEntity(pos);
         if (be instanceof BlockEntitySplitter sp) {
@@ -62,8 +65,8 @@ public class BlockSplitter extends BlockBasicMachine {
                 BlockEntitySplitter sp = (BlockEntitySplitter) be;
                 sp.getIOSides(lvl, pos, sp.getIoside());
                 if (sp.omega > 0) {
-                    sp.phi += (float) reika.dragonapi.libraries.mathsci.ReikaMathLibrary
-                            .doubpow(reika.dragonapi.libraries.mathsci.ReikaMathLibrary.logbase(sp.omega + 1, 2), 1.05);
+                    sp.phi += (float) ReikaMathLibrary
+                            .doubpow(ReikaMathLibrary.logbase(sp.omega + 1, 2), 1.05);
                 }
             };
         }

@@ -11,13 +11,14 @@ package reika.rotarycraft.items.tools.steel;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.ArmorType;
 import reika.rotarycraft.base.ItemRotaryArmor;
 import reika.rotarycraft.registry.Materials;
 import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemSteelArmor extends ItemRotaryArmor {
 
-    public ItemSteelArmor(net.minecraft.world.item.equipment.ArmorType slot, Properties properties) {
+    public ItemSteelArmor(ArmorType slot, Properties properties) {
         super(Materials.HSLA_STEEL, slot, properties);
     }
 

@@ -14,13 +14,20 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 // 26.2: VertexConsumer removed from BER submission path.
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import com.mojang.math.Axis;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Quaternionf;
 import reika.dragonapi.ModList;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
@@ -91,7 +98,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
             // upside-down to the user ("gearboxes look messed up"). Mirror the
             // splitter/shaft mount: translate to top-centre, yaw by -facing-90°, flip Z 180°.
             var blockstate = tile.getLevel() != null ? tile.getBlockState()
-                    : RotaryBlocks.HSLA_GEARBOX_2x.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, net.minecraft.core.Direction.SOUTH);
+                    : RotaryBlocks.HSLA_GEARBOX_2x.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
             float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
             stack.translate(0.5F, 1.5F, 0.5F);
             stack.mulPose(Axis.YP.rotationDegrees(-f - 90));
@@ -242,13 +249,13 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
      * 26.2 submit hook. Snapshot pose + pass VertexConsumer directly (via tiny adapter for legacy renderBlock...At).
      */
     @Override
-    public void submit(net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState state,
+    public void submit(BlockEntityRenderState state,
                        PoseStack poseStack,
-                       net.minecraft.client.renderer.SubmitNodeCollector collector,
-                       net.minecraft.client.renderer.state.level.CameraRenderState camera) {
-        net.minecraft.world.level.Level level = Minecraft.getInstance().level;
+                       SubmitNodeCollector collector,
+                       CameraRenderState camera) {
+        Level level = Minecraft.getInstance().level;
         if (level == null) return;
-        net.minecraft.world.level.block.entity.BlockEntity be = level.getBlockEntity(state.blockPos);
+        BlockEntity be = level.getBlockEntity(state.blockPos);
         if (!(be instanceof BlockEntityGearbox tile)) return;
         if (!this.doRenderModel(poseStack, tile)) return;
 
@@ -260,7 +267,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
         snapped.last().set(poseStack.last());
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            renderBlockEntityGearboxAt(snapped, tile, vc, light, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY);
+            renderBlockEntityGearboxAt(snapped, tile, vc, light, OverlayTexture.NO_OVERLAY);
         });
         if (tile.isInWorld()) {
             IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());

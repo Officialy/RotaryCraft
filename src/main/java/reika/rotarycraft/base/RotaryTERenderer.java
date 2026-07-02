@@ -47,15 +47,15 @@ public abstract class RotaryTERenderer<TE extends BlockEntity> extends BlockEnti
     }
 
     /**
-     * Builds a texture {@link net.minecraft.resources.Identifier} by appending a file-name
+     * Builds a texture {@link Identifier} by appending a file-name
      * {@code suffix} (e.g. {@code "shafttexw.png"}) to a directory-prefix Identifier whose
      * path already ends in {@code "/"}. Used by renderers whose models share a folder but pick
      * a per-instance file name (shafts by material, gearboxes by gear material, etc.) — avoids
      * the {@code Identifier.parse(prefix + suffix)} idiom, which goes through
      * {@code Identifier.toString()} and re-parses the namespace prefix.
      */
-    protected static net.minecraft.resources.Identifier textureWithSuffix(net.minecraft.resources.Identifier prefix, String suffix) {
-        return net.minecraft.resources.Identifier.fromNamespaceAndPath(prefix.getNamespace(), prefix.getPath() + suffix);
+    protected static Identifier textureWithSuffix(Identifier prefix, String suffix) {
+        return Identifier.fromNamespaceAndPath(prefix.getNamespace(), prefix.getPath() + suffix);
     }
 
 /*    protected void renderFaceColors(BlockEntityIOMachine te, double p2, double p4, double p6) {

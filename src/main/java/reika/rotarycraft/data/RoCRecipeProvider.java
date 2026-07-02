@@ -18,15 +18,21 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import org.jspecify.annotations.Nullable;
+import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
 import reika.rotarycraft.items.tools.ItemEngineUpgrade.UpgradeType;
+import reika.rotarycraft.registry.ExtractOres;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -175,8 +181,8 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
         // the ore block (matched by tag) to dust, then dust→slurry→solution→flakes. The flakes feed
         // the vanilla/blast-furnace smelts below.
         private void extractor() {
-            for (reika.rotarycraft.registry.ExtractOres ore : reika.rotarycraft.registry.ExtractOres.oreList) {
-                String n = ore.name().toLowerCase(java.util.Locale.ROOT);
+            for (ExtractOres ore : ExtractOres.oreList) {
+                String n = ore.name().toLowerCase(Locale.ROOT);
                 extract(n + "_ore_to_dust", 0, tag(ore.getOreTag()), ore.getDust());
                 extract(n + "_dust_to_slurry", 1, Ingredient.of(ore.getDust()), ore.getSlurry());
                 extract(n + "_slurry_to_solution", 2, Ingredient.of(ore.getSlurry()), ore.getSolution());
@@ -185,8 +191,8 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
         }
 
         private void extract(String name, int stage, Ingredient input, Item output) {
-            reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe recipe =
-                    new reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe(stage, input, new ItemStackTemplate(output));
+            ExtractorRecipe recipe =
+                    new ExtractorRecipe(stage, input, new ItemStackTemplate(output));
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
                     Identifier.fromNamespaceAndPath("rotarycraft", "extractor/" + name));
             out.accept(key, recipe, null);
@@ -223,8 +229,8 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
         }
 
         private void ferment(String name, Ingredient catalyst, Ingredient input, ItemStackTemplate output) {
-            reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe recipe =
-                    new reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe(catalyst, input, output);
+            FermenterRecipe recipe =
+                    new FermenterRecipe(catalyst, input, output);
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
                     Identifier.fromNamespaceAndPath("rotarycraft", "fermenter/" + name));
             out.accept(key, recipe, null);
@@ -694,8 +700,8 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
         }
 
         private void pulse(String name, ItemLike input, ItemLike output, int count, float temperature) {
-            reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe recipe =
-                    new reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe(
+            PulseFurnaceRecipe recipe =
+                    new PulseFurnaceRecipe(
                             Ingredient.of(input),
                             new ItemStackTemplate(output.asItem(), count),
                             temperature);
@@ -831,16 +837,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             // CONDENSER: a coil with a redstone core — used to compress steam. Original recipe
             // was 8 iron in a ring + 1 redstone center.
             shaped(RecipeCategory.REDSTONE, RotaryItems.CONDENSER.get())
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
-                    .define('R', net.minecraft.world.item.Items.REDSTONE)
+                    .define('I', Items.IRON_INGOT)
+                    .define('R', Items.REDSTONE)
                     .pattern("III").pattern("IRI").pattern("III")
-                    .unlockedBy("has_iron", has(net.minecraft.world.item.Items.IRON_INGOT))
+                    .unlockedBy("has_iron", has(Items.IRON_INGOT))
                     .save(out);
             // IMPELLER: a turbine blade unit — 4 iron blades around a central HSLA shaft.
             // Original 1.7 used "blades" + hub; we substitute with iron + shaft for
             // accessibility, which matches the pre-bedrock engine progression.
             shaped(RecipeCategory.REDSTONE, RotaryItems.IMPELLER.get())
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('I', Items.IRON_INGOT)
                     .define('S', RotaryItems.HSLA_SHAFT.get())
                     .pattern(" I ").pattern("ISI").pattern(" I ")
                     .unlockedBy("has_hsla_shaft", has(RotaryItems.HSLA_SHAFT.get()))
@@ -858,44 +864,44 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             // can't make HSLA ingots, which blocks every other engine/gearbox/shaft beyond
             // the wooden tier. Build pattern: stone walls + iron core + furnace base.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.BLAST_FURNACE.get())
-                    .define('S', net.minecraft.world.item.Items.STONE)
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
-                    .define('F', net.minecraft.world.item.Items.FURNACE)
+                    .define('S', Items.STONE)
+                    .define('I', Items.IRON_INGOT)
+                    .define('F', Items.FURNACE)
                     .pattern("SIS").pattern("IFI").pattern("SIS")
-                    .unlockedBy("has_furnace", has(net.minecraft.world.item.Items.FURNACE))
+                    .unlockedBy("has_furnace", has(Items.FURNACE))
                     .save(out);
 
             // CYLINDER: combustion chamber — used by gas engine + several others. Iron walls
             // around an empty central cavity (the piston cavity).
             shaped(RecipeCategory.REDSTONE, RotaryItems.CYLINDER.get())
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('I', Items.IRON_INGOT)
                     .pattern("I I").pattern("I I").pattern("III")
-                    .unlockedBy("has_iron", has(net.minecraft.world.item.Items.IRON_INGOT))
+                    .unlockedBy("has_iron", has(Items.IRON_INGOT))
                     .save(out);
 
             // IGNITION_UNIT: spark plug for the gas engine — gold contacts + flint striker.
             shaped(RecipeCategory.REDSTONE, RotaryItems.IGNITION_UNIT.get())
-                    .define('G', net.minecraft.world.item.Items.GOLD_INGOT)
-                    .define('F', net.minecraft.world.item.Items.FLINT)
-                    .define('R', net.minecraft.world.item.Items.REDSTONE)
+                    .define('G', Items.GOLD_INGOT)
+                    .define('F', Items.FLINT)
+                    .define('R', Items.REDSTONE)
                     .pattern(" G ").pattern("RFR").pattern(" G ")
-                    .unlockedBy("has_flint", has(net.minecraft.world.item.Items.FLINT))
+                    .unlockedBy("has_flint", has(Items.FLINT))
                     .save(out);
 
             // HUB: central rotational hub for the wind engine. Wood frame + iron axle.
             shaped(RecipeCategory.REDSTONE, RotaryItems.HUB.get())
-                    .define('W', net.minecraft.world.item.Items.OAK_PLANKS)
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('W', Items.OAK_PLANKS)
+                    .define('I', Items.IRON_INGOT)
                     .pattern("WIW").pattern("IWI").pattern("WIW")
-                    .unlockedBy("has_iron", has(net.minecraft.world.item.Items.IRON_INGOT))
+                    .unlockedBy("has_iron", has(Items.IRON_INGOT))
                     .save(out);
 
             // PROPELLER_BLADE: wind engine blade. Wood plank with iron edge.
             shaped(RecipeCategory.REDSTONE, RotaryItems.PROPELLER_BLADE.get())
-                    .define('W', net.minecraft.world.item.Items.OAK_PLANKS)
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('W', Items.OAK_PLANKS)
+                    .define('I', Items.IRON_INGOT)
                     .pattern("  I").pattern(" W ").pattern("I  ")
-                    .unlockedBy("has_planks", has(net.minecraft.world.item.Items.OAK_PLANKS))
+                    .unlockedBy("has_planks", has(Items.OAK_PLANKS))
                     .save(out);
 
             // ========= 26.1 added recipes: mid-game engine + machine components =========
@@ -905,26 +911,26 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
 
             // GOLD_COIL: AC engine inductor — gold wire wound around an iron core.
             shaped(RecipeCategory.REDSTONE, RotaryItems.GOLD_COIL.get())
-                    .define('G', net.minecraft.world.item.Items.GOLD_INGOT)
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('G', Items.GOLD_INGOT)
+                    .define('I', Items.IRON_INGOT)
                     .pattern("GGG").pattern("GIG").pattern("GGG")
-                    .unlockedBy("has_gold", has(net.minecraft.world.item.Items.GOLD_INGOT))
+                    .unlockedBy("has_gold", has(Items.GOLD_INGOT))
                     .save(out);
 
             // CIRCUIT_BOARD: redstone + gold contacts on a wood substrate.
             shaped(RecipeCategory.REDSTONE, RotaryItems.CIRCUIT_BOARD.get())
-                    .define('R', net.minecraft.world.item.Items.REDSTONE)
-                    .define('G', net.minecraft.world.item.Items.GOLD_NUGGET)
-                    .define('W', net.minecraft.world.item.Items.OAK_PLANKS)
+                    .define('R', Items.REDSTONE)
+                    .define('G', Items.GOLD_NUGGET)
+                    .define('W', Items.OAK_PLANKS)
                     .pattern("RGR").pattern("GWG").pattern("RGR")
-                    .unlockedBy("has_redstone", has(net.minecraft.world.item.Items.REDSTONE))
+                    .unlockedBy("has_redstone", has(Items.REDSTONE))
                     .save(out);
 
             // HSLA_STEEL_GEAR: 4 HSLA ingots in cross pattern + iron in center. Gear teeth
             // form the cross arms, center is the axle bearing.
             shaped(RecipeCategory.REDSTONE, RotaryItems.HSLA_STEEL_GEAR.get())
                     .define('H', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('I', Items.IRON_INGOT)
                     .pattern(" H ").pattern("HIH").pattern(" H ")
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
@@ -948,27 +954,27 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
 
             // COMBUSTOR: diesel engine combustion chamber. Cylinder + flint + iron walls.
             shaped(RecipeCategory.REDSTONE, RotaryItems.COMBUSTOR.get())
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('I', Items.IRON_INGOT)
                     .define('C', RotaryItems.CYLINDER.get())
-                    .define('F', net.minecraft.world.item.Items.FLINT)
+                    .define('F', Items.FLINT)
                     .pattern("IFI").pattern("ICI").pattern("IFI")
                     .unlockedBy("has_cylinder", has(RotaryItems.CYLINDER.get()))
                     .save(out);
 
             // LENS: heat-ray focal lens. Glass refined with redstone for refractive purity.
             shaped(RecipeCategory.MISC, RotaryItems.LENS.get())
-                    .define('G', net.minecraft.world.item.Items.GLASS)
-                    .define('R', net.minecraft.world.item.Items.REDSTONE)
+                    .define('G', Items.GLASS)
+                    .define('R', Items.REDSTONE)
                     .pattern(" G ").pattern("GRG").pattern(" G ")
-                    .unlockedBy("has_glass", has(net.minecraft.world.item.Items.GLASS))
+                    .unlockedBy("has_glass", has(Items.GLASS))
                     .save(out);
 
             // MIRROR: silvered glass for solar / heat ray. Glass + iron substrate.
             shaped(RecipeCategory.MISC, RotaryItems.MIRROR.get())
-                    .define('G', net.minecraft.world.item.Items.GLASS)
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('G', Items.GLASS)
+                    .define('I', Items.IRON_INGOT)
                     .pattern("GGG").pattern("III")
-                    .unlockedBy("has_glass", has(net.minecraft.world.item.Items.GLASS))
+                    .unlockedBy("has_glass", has(Items.GLASS))
                     .save(out);
 
             // BRAKE_DISC now has its faithful original recipe in gearCrafting() (gear-unit + steel
@@ -979,11 +985,11 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             // entire RotaryCraft progression starts blocked since some recipes (Handbook
             // item, etc.) want to be crafted on the Worktable.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.WORKTABLE.get())
-                    .define('W', net.minecraft.world.item.Items.OAK_PLANKS)
-                    .define('C', net.minecraft.world.item.Items.CRAFTING_TABLE)
-                    .define('I', net.minecraft.world.item.Items.IRON_INGOT)
+                    .define('W', Items.OAK_PLANKS)
+                    .define('C', Items.CRAFTING_TABLE)
+                    .define('I', Items.IRON_INGOT)
                     .pattern("WIW").pattern("ICI").pattern("WIW")
-                    .unlockedBy("has_crafting_table", has(net.minecraft.world.item.Items.CRAFTING_TABLE))
+                    .unlockedBy("has_crafting_table", has(Items.CRAFTING_TABLE))
                     .save(out);
 
             // STEAM_ENGINE: "ccc","CIs","PGP" — 3×COBBLE + 1×CONDENSER + 1×IMPELLER + 1×SHAFT
@@ -1916,8 +1922,8 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
          * explicit save() argument that matches the default.
          */
         private void ninePack(Item small, Item large,
-                              @org.jspecify.annotations.Nullable String packId,
-                              @org.jspecify.annotations.Nullable String unpackId,
+                              @Nullable String packId,
+                              @Nullable String unpackId,
                               RecipeCategory packCategory) {
             var pack = shaped(packCategory, large)
                     .define('#', small)

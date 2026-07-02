@@ -13,10 +13,16 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import reika.dragonapi.base.CoreContainer;
 import reika.dragonapi.instantiable.gui.ImagedGuiButton;
+import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
+import reika.rotarycraft.gui.screen.GuiHandbook;
+import reika.rotarycraft.gui.screen.GuiHandbookPage;
+import reika.rotarycraft.registry.HandbookRegistry;
+import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 
 public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends CoreContainer<E>> extends AbstractContainerScreen<T> {
 
@@ -85,17 +91,17 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
     protected void actionPerformed(Button b, int id) {
         if (id == 24000 || id == 24001) {
             inventory.player.closeContainer();
-            reika.rotarycraft.registry.MachineRegistry m = tile.getMachine();
-            int hscreen = reika.rotarycraft.registry.HandbookRegistry.getScreen(m, tile);
-            int hpage = reika.rotarycraft.registry.HandbookRegistry.getPage(m, tile);
+            MachineRegistry m = tile.getMachine();
+            int hscreen = HandbookRegistry.getScreen(m, tile);
+            int hpage = HandbookRegistry.getPage(m, tile);
             if (hscreen < 0 || hpage < 0) {
                 hscreen = 0;
                 hpage = 0;
             }
-            if (reika.dragonapi.libraries.ReikaInventoryHelper.checkForItem(reika.rotarycraft.registry.RotaryItems.HANDBOOK.get(), inventory))
-                Minecraft.getInstance().gui.setScreen(new reika.rotarycraft.gui.screen.GuiHandbook(inventory.player, tile.getLevel(), hscreen, hpage));
+            if (ReikaInventoryHelper.checkForItem(RotaryItems.HANDBOOK.get(), inventory))
+                Minecraft.getInstance().gui.setScreen(new GuiHandbook(inventory.player, tile.getLevel(), hscreen, hpage));
             else
-                Minecraft.getInstance().gui.setScreen(new reika.rotarycraft.gui.screen.GuiHandbookPage(inventory.player, tile.getLevel(), hscreen, hpage));
+                Minecraft.getInstance().gui.setScreen(new GuiHandbookPage(inventory.player, tile.getLevel(), hscreen, hpage));
         }
     }
 

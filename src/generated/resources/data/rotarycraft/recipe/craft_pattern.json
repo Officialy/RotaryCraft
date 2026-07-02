@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "B": "rotarycraft:hsla_steel_plate",
     "S": "rotarycraft:hsla_steel_ingot"

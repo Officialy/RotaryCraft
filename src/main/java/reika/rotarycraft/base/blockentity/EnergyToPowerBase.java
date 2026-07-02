@@ -9,15 +9,19 @@
  ******************************************************************************/
 package reika.rotarycraft.base.blockentity;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -27,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.lwjgl.glfw.GLFW;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.StepTimer;
@@ -163,7 +168,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
 
     @Override
     public final void upgrade(ItemStack item) {
-        if (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == ItemEngineUpgrade.UpgradeType.EFFICIENCY.ordinal()) {
+        if (item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == ItemEngineUpgrade.UpgradeType.EFFICIENCY.ordinal()) {
             efficient = true;
         } else {
             tier++;
@@ -172,17 +177,17 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
     }
 
     public final boolean canUpgradeWith(ItemStack item) {
-        if (!efficient && item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == ItemEngineUpgrade.UpgradeType.EFFICIENCY.ordinal())
+        if (!efficient && item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == ItemEngineUpgrade.UpgradeType.EFFICIENCY.ordinal())
             return true;
         if (tier >= 5)
             return false;
-        if (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == 2) {
-            if (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+        if (item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == 2) {
+            if (item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
                 return false;
-            if (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0) < 720)
+            if (item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("magnet", 0) < 720)
                 return false;
         }
-        return RotaryItems.UPGRADE.get() == item.getItem() && (item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == tier + 1);
+        return RotaryItems.UPGRADE.get() == item.getItem() && (item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("upgradeType", 0) == tier + 1);
     }
 
     protected final boolean isMuffled() {
@@ -341,7 +346,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
         li.add(String.format("Tier %d", tier));
         if (efficient)
             li.add(ChatFormatting.GOLD + "Efficiency Boost");
-        if (com.mojang.blaze3d.platform.InputConstants.isKeyDown(net.minecraft.client.Minecraft.getInstance().getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT)) {
+        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
             int torque = this.getGenTorque();
             int speed = ReikaMathLibrary.intpow2(2, getMaxSpeedBase(tier));
             long power = (long) torque * (long) speed;

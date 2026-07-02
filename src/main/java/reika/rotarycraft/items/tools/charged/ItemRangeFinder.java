@@ -10,11 +10,13 @@
 package reika.rotarycraft.items.tools.charged;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.HitResult;
@@ -32,7 +34,7 @@ public class ItemRangeFinder extends ItemChargedTool {
     @Override
     public InteractionResult use(Level level, Player ep, InteractionHand hand) {
         if (hand.equals(InteractionHand.MAIN_HAND)) {
-            if (this.getDefaultInstance().getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("charge", 0) <= 0) {
+            if (this.getDefaultInstance().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("charge", 0) <= 0) {
                 this.noCharge();
                 return InteractionResult.FAIL;
             }

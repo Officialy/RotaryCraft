@@ -20,10 +20,15 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.auxiliary.IORenderer;
+import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityMonitor;
@@ -80,26 +85,26 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         }
     }
 
-    private void renderReadout(PoseStack poseStack, BlockEntityMonitor tile, SubmitNodeCollector collector, net.minecraft.core.BlockPos blockPos) {
+    private void renderReadout(PoseStack poseStack, BlockEntityMonitor tile, SubmitNodeCollector collector, BlockPos blockPos) {
         Font font = Minecraft.getInstance().font;
-        String powerStr  = "Power: "  + reika.rotarycraft.auxiliary.RotaryAux.formatPower(tile.power);
-        String torqueStr = "Torque: " + reika.rotarycraft.auxiliary.RotaryAux.formatTorque(tile.torque);
-        String speedStr  = "Speed: "  + reika.rotarycraft.auxiliary.RotaryAux.formatSpeed(tile.omega);
+        String powerStr  = "Power: "  + RotaryAux.formatPower(tile.power);
+        String torqueStr = "Torque: " + RotaryAux.formatTorque(tile.torque);
+        String speedStr  = "Speed: "  + RotaryAux.formatSpeed(tile.omega);
 
-        net.minecraft.core.Direction facing = tile.getBlockState()
+        Direction facing = tile.getBlockState()
                 .getValue(BlockRotaryCraftMachine.FACING);
         float facingYaw = facing.toYRot();
 
-        net.minecraft.util.FormattedCharSequence powerLine  =
-                net.minecraft.network.chat.Component.literal(powerStr).getVisualOrderText();
-        net.minecraft.util.FormattedCharSequence torqueLine =
-                net.minecraft.network.chat.Component.literal(torqueStr).getVisualOrderText();
-        net.minecraft.util.FormattedCharSequence speedLine  =
-                net.minecraft.network.chat.Component.literal(speedStr).getVisualOrderText();
+        FormattedCharSequence powerLine  =
+                Component.literal(powerStr).getVisualOrderText();
+        FormattedCharSequence torqueLine =
+                Component.literal(torqueStr).getVisualOrderText();
+        FormattedCharSequence speedLine  =
+                Component.literal(speedStr).getVisualOrderText();
 
         int colour    = 0xFFFFFFFF;
         int light     = 15728880;
-        var mode      = net.minecraft.client.gui.Font.DisplayMode.NORMAL;
+        var mode      = Font.DisplayMode.NORMAL;
         float scale   = 0.0125F;
 
 

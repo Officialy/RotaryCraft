@@ -1,4 +1,5 @@
 package reika.rotarycraft.models.animated;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -249,7 +250,7 @@ public class FanModel extends RotaryModelBase {
         // Rotating fan blades: pivot at y = 1 block, rotate around Z by phi
         stack.pushPose();
         stack.translate(0.0, 1.0, 0.0);
-        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.mulPose(Axis.ZP.rotationDegrees(phi));
         stack.translate(0.0, -1.0, 0.0);
         shape10.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape11.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

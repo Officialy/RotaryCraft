@@ -13,12 +13,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -39,9 +42,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -75,6 +81,8 @@ import reika.rotarycraft.auxiliary.interfaces.UpgradeableMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.api.event.JetEngineEnterFailureEvent;
 import reika.rotarycraft.api.event.JetEngineExplosionEvent;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.gui.container.machine.ContainerJet;
 import reika.rotarycraft.items.tools.ItemEngineUpgrade;
 import reika.rotarycraft.items.tools.ItemEngineUpgrade.UpgradeType;
 import reika.rotarycraft.registry.DifficultyEffects;
@@ -201,7 +209,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         // the `write` field: write is set by getIOSides, which only maps the 4 horizontal facings, so a
         // null/stale write would default to NORTH and check the wrong block → a spurious full choke
         // (engine reads 0 speed and never spins/consumes fuel).
-        Direction intake = this.getBlockState().getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING).getOpposite();
+        Direction intake = this.getBlockState().getValue(BlockRotaryCraftMachine.FACING).getOpposite();
         BlockPos checkPos = blockPos.relative(intake);
         BlockState st = world.getBlockState(checkPos);
         Block b = st.getBlock();
@@ -218,9 +226,9 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
             return 0.75F;
         if (b == Blocks.IRON_BARS)
             return 1F;
-        if (b instanceof net.minecraft.world.level.block.WallBlock)
+        if (b instanceof WallBlock)
             return 0.25F;
-        if (b == Blocks.GLASS_PANE || st.getBlock() instanceof net.minecraft.world.level.block.IronBarsBlock)
+        if (b == Blocks.GLASS_PANE || st.getBlock() instanceof IronBarsBlock)
             return 0.5F;
         AABB box = collisionShape.bounds();
         // Full block: total occlusion.
@@ -761,7 +769,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
             // playLocalSound/addParticle are client-only no-ops; this runs on the server,
             // so broadcast the rattle and debris properly
             ReikaSoundHelper.playSoundAtBlock(world, pos, SoundEvents.BLAZE_HURT, 1F + DragonAPI.rand.nextFloat(), 1F);
-            if (world instanceof net.minecraft.server.level.ServerLevel sl) {
+            if (world instanceof ServerLevel sl) {
                 sl.sendParticles(ParticleTypes.CRIT,
                         pos.getX() + DragonAPI.rand.nextFloat(),
                         pos.getY() + DragonAPI.rand.nextFloat(),
@@ -873,7 +881,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
             int temp = f.getFluidType().getTemperature();
             // Fluid-name lookup: legacy used Fluid.getName().contains("fuel") — 26.1 uses the
             // FluidType registry name. Check for jet/fuel/ethanol via registry-key path.
-            var key = net.minecraft.core.registries.BuiltInRegistries.FLUID.getKey(f);
+            var key = BuiltInRegistries.FLUID.getKey(f);
             String fname = key != null ? key.getPath() : "";
             if (fname.toLowerCase(Locale.ROOT).contains("fuel")) {
                 if (!isJetFailing && DragonAPI.rand.nextInt(200) == 0) {
@@ -1006,8 +1014,8 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
      * onPlace (TODO: wire when block-place hook is added in the parent BlockBasicMachine port).
      */
     public void setDataFromPlacer(ItemStack is) {
-        var data = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
-                net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+        var data = is.getOrDefault(DataComponents.CUSTOM_DATA,
+                CustomData.EMPTY).copyTag();
         if (data != null) {
             FOD = data.getIntOr("damage", 0);
         }
@@ -1081,8 +1089,8 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
             ItemStack upgrade = new ItemStack(RotaryItems.UPGRADE.get());
             CompoundTag tag = new CompoundTag();
             tag.putInt("upgrade", UpgradeType.AFTERBURNER.ordinal());
-            upgrade.set(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
-                    net.minecraft.world.item.component.CustomData.of(tag));
+            upgrade.set(DataComponents.CUSTOM_DATA,
+                    CustomData.of(tag));
             ReikaItemHelper.dropItem(getLevel(),
                     getBlockPos().getX() + 0.5,
                     getBlockPos().getY() + 0.5,
@@ -1126,7 +1134,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         // mod-interface fuel engine but works just as well here — both share BlockEntityEngine
         // as the BE base). Previously returned null which meant right-clicking a jet engine
         // produced no GUI at all.
-        return new reika.rotarycraft.gui.container.machine.ContainerJet(containerId, inv, this);
+        return new ContainerJet(containerId, inv, this);
     }
 
     @Override

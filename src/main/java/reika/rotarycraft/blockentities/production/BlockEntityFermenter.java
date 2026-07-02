@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,6 +41,7 @@ import reika.rotarycraft.registry.DurationRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.RotaryRecipeTypes;
 
 public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver implements TemperatureTE, MultiOperational, ConditionalOperation {
@@ -91,7 +93,7 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
         if (product.isEmpty())
             return -1F;
         // yeast production is more temperature-forgiving than the sludge fermentation step
-        boolean fermenting = !product.is(reika.rotarycraft.registry.RotaryItems.YEAST.get());
+        boolean fermenting = !product.is(RotaryItems.YEAST.get());
         if (temperature < MINUSEFULTEMP)
             return 1F / (MINUSEFULTEMP - temperature);
         if (temperature > MAXUSEFULTEMP)
@@ -183,7 +185,7 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
     }
 
     private void make(ItemStack product) {
-        boolean yeast = product.is(reika.rotarycraft.registry.RotaryItems.YEAST.get());
+        boolean yeast = product.is(RotaryItems.YEAST.get());
 
         ItemStack out = itemHandler.getStackInSlot(2);
         if (out.isEmpty())
@@ -235,7 +237,7 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
     public void testYeastKill() {
         if (temperature < MAXTEMP)
             return;
-        int slot = ReikaInventoryHelper.locateInInventory(reika.rotarycraft.registry.RotaryItems.YEAST.get(), itemHandler);
+        int slot = ReikaInventoryHelper.locateInInventory(RotaryItems.YEAST.get(), itemHandler);
         if (slot != -1) {
             ReikaInventoryHelper.decrStack(slot, itemHandler);
         }
@@ -290,7 +292,7 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
         // slot 0 = catalyst (sugar or yeast), slot 1 = feedstock (dirt or plant matter);
         // the recipe pairing is validated at process time, this just keeps the slots sane
         if (i == 0)
-            return is.is(net.minecraft.world.item.Items.SUGAR) || is.is(reika.rotarycraft.registry.RotaryItems.YEAST.get());
+            return is.is(Items.SUGAR) || is.is(RotaryItems.YEAST.get());
         return true;
     }
 

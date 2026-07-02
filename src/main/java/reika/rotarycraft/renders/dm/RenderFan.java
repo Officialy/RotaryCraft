@@ -24,6 +24,7 @@ import net.minecraft.world.phys.AABB;
 import reika.dragonapi.libraries.ReikaAABBHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.models.animated.FanModel;
 import reika.rotarycraft.registry.RotaryModelLayers;
@@ -40,7 +41,7 @@ public class RenderFan extends RotaryTERenderer<BlockEntityFan> {
         stack.pushPose();
         stack.translate(0.5, 1.5, 0.5);
         // Orientation based on FACING property
-        Direction facing = tile.getBlockState().getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING);
+        Direction facing = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING);
         float yRot = switch (facing) {
             case NORTH -> 180f;
             case SOUTH -> 0f;

@@ -11,8 +11,10 @@ package reika.rotarycraft.blockentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -312,13 +314,13 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         // 26.1: ItemStack.save(CompoundTag) was removed in favour of ItemStack.CODEC against a
         // RegistryOps. Wrap each non-empty stack as `{Slot: i, Stack: <codec-output>}`.
-        var regAcc = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
-        var ops = regAcc.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        var regAcc = level == null ? RegistryAccess.EMPTY : level.registryAccess();
+        var ops = regAcc.createSerializationContext(NbtOps.INSTANCE);
         for (int i = 0; i < matchingItems.length; i++) {
             if (matchingItems[i] != null && !matchingItems[i].isEmpty()) {
                 CompoundTag tag = new CompoundTag();
                 tag.putByte("Slot", (byte) i);
-                net.minecraft.world.item.ItemStack.CODEC.encodeStart(ops, matchingItems[i]).result()
+                ItemStack.CODEC.encodeStart(ops, matchingItems[i]).result()
                         .ifPresent(stackTag -> tag.put("Stack", stackTag));
                 nbttaglist.add(tag);
             }
@@ -338,15 +340,15 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
         ListTag nbttaglist = NBT.getListOrEmpty("Items");
         matchingItems = new ItemStack[18];
 
-        var regAcc = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
-        var ops = regAcc.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        var regAcc = level == null ? RegistryAccess.EMPTY : level.registryAccess();
+        var ops = regAcc.createSerializationContext(NbtOps.INSTANCE);
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag tag = nbttaglist.getCompoundOrEmpty(i);
             byte slot = tag.getByteOr("Slot", (byte) 0);
             if (slot >= 0 && slot < matchingItems.length) {
                 var stackTag = tag.get("Stack");
                 if (stackTag != null) {
-                    matchingItems[slot] = net.minecraft.world.item.ItemStack.CODEC.parse(ops, stackTag).result().orElse(ItemStack.EMPTY);
+                    matchingItems[slot] = ItemStack.CODEC.parse(ops, stackTag).result().orElse(ItemStack.EMPTY);
                 } else {
                     matchingItems[slot] = ItemStack.EMPTY;
                 }
@@ -410,7 +412,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
             if (this == InventoryType.CHEST) {
                 // Accept any vanilla Container (e.g. ChestBlockEntity) or RotaryCraft
                 // HasItemHandler (InventoriedRCBlockEntity implements both).
-                return (te instanceof net.minecraft.world.Container || te instanceof HasItemHandler) && !DSU.isValid(te);
+                return (te instanceof Container || te instanceof HasItemHandler) && !DSU.isValid(te);
             }
             return false;
         }
@@ -421,7 +423,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
                     if (te instanceof HasItemHandler h)
                         yield ReikaInventoryHelper.getLocatedTransferrables(h.getItemHandler());
                     // Vanilla Container fallback — iterate all slots for non-empty stacks
-                    net.minecraft.world.Container inv = (net.minecraft.world.Container) te;
+                    Container inv = (Container) te;
                     HashMap<Integer, ItemStack> map = new HashMap<>();
                     for (int i = 0; i < inv.getContainerSize(); i++) {
                         ItemStack s = inv.getItem(i);
@@ -462,7 +464,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         public int insertItem(BlockEntity te, ItemStack is, int amt) {
             if (this == InventoryType.CHEST) {
-                net.minecraft.world.Container ii = (net.minecraft.world.Container) te;
+                Container ii = (Container) te;
                 int items = 0;
                 boolean flag = true;
                 is = ReikaItemHelper.getSizedItemStack(is, 1);

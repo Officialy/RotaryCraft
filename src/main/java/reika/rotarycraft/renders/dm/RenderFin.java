@@ -12,17 +12,28 @@ package reika.rotarycraft.renders.dm;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import reika.dragonapi.libraries.ReikaAABBHelper;
+import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
 import reika.rotarycraft.models.FinModel;
 import reika.rotarycraft.registry.RotaryModelLayers;
+import reika.rotarycraft.renders.RotaryRenderPipelines;
 
 public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
 
@@ -42,9 +53,9 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
         stack.translate(0.5, 0.5, 0.5);
 
         if (tile.isInWorld()) {
-            net.minecraft.world.level.block.state.BlockState state = tile.getBlockState();
-            if (state != null && state.hasProperty(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
-                net.minecraft.core.Direction facing = state.getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING);
+            BlockState state = tile.getBlockState();
+            if (state != null && state.hasProperty(BlockRotaryCraftMachine.FACING)) {
+                Direction facing = state.getValue(BlockRotaryCraftMachine.FACING);
                 // Original meta→var11 mapping:
                 //   meta 0 (DOWN)=0, meta 1 (UP)=180, meta 2 (NORTH)=0,
                 //   meta 3 (WEST)=90, meta 4 (SOUTH)=180, meta 5 (EAST)=270
@@ -63,7 +74,7 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
                 if (isVertical) {
                     // Original: if (meta < 2) { glRotatef(var11, 0, 0, 1); if (meta == 1) glTranslated(0, -2, 0); }
                     stack.mulPose(Axis.ZP.rotationDegrees(var11));
-                    if (facing == net.minecraft.core.Direction.UP) {
+                    if (facing == Direction.UP) {
                         stack.translate(0, -2, 0);
                     }
                 } else {
@@ -90,13 +101,13 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
     }
 
     @Override
-    public void submit(net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState state,
+    public void submit(BlockEntityRenderState state,
                        PoseStack poseStack,
-                       net.minecraft.client.renderer.SubmitNodeCollector collector,
-                       net.minecraft.client.renderer.state.level.CameraRenderState camera) {
-        net.minecraft.world.level.Level level = net.minecraft.client.Minecraft.getInstance().level;
+                       SubmitNodeCollector collector,
+                       CameraRenderState camera) {
+        Level level = Minecraft.getInstance().level;
         if (level == null) return;
-        net.minecraft.world.level.block.entity.BlockEntity be = level.getBlockEntity(state.blockPos);
+        BlockEntity be = level.getBlockEntity(state.blockPos);
         if (!(be instanceof BlockEntityCoolingFin tile)) return;
         if (!this.doRenderModel(poseStack, tile)) return;
 
@@ -108,7 +119,7 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
             renderBlockEntityCoolingFinAt(snapped, tile, vc, light);
         });
         if (tile.isInWorld()) {
-            reika.rotarycraft.auxiliary.IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
+            IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
             if (tile.ticks > 0) {
                 int[] xyz = tile.getTarget();
                 AABB box = AABB.of(new BoundingBox(xyz[0], xyz[1], xyz[2], xyz[0] + 1, xyz[1] + 1, xyz[2] + 1))
@@ -116,8 +127,8 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
                 ReikaAABBHelper.renderAABB(poseStack, collector, box,
                         tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(),
                         tile.ticks, 0, 127, 255, true,
-                        reika.rotarycraft.renders.RotaryRenderPipelines.NO_DEPTH_FILLED_BOX_TYPE,
-                        reika.rotarycraft.renders.RotaryRenderPipelines.NO_DEPTH_LINES_TYPE);
+                        RotaryRenderPipelines.NO_DEPTH_FILLED_BOX_TYPE,
+                        RotaryRenderPipelines.NO_DEPTH_LINES_TYPE);
             }
         }
     }

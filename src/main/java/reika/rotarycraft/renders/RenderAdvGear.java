@@ -23,6 +23,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -72,7 +73,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
         // RenderShaft's facing→yRot mapping. Shared by all advanced-gear types (the legacy
         // renderer applied the same facing transform regardless of model).
         if (tile.isInWorld()) {
-            net.minecraft.world.level.block.state.BlockState st = tile.getBlockState();
+            BlockState st = tile.getBlockState();
             if (st != null && st.hasProperty(BlockRotaryCraftMachine.FACING)) {
                 Direction facing = st.getValue(BlockRotaryCraftMachine.FACING);
                 if (!facing.getAxis().isVertical()) {

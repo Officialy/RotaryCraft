@@ -13,6 +13,7 @@ package reika.rotarycraft.blockentities.farming;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -380,7 +381,7 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
    private void dropBlocks(Level world, BlockPos pos, Block id) {
        if (id != Blocks.AIR) {
            BlockState state = world.getBlockState(pos);
-           List<ItemStack> drops = Block.getDrops(state, (net.minecraft.server.level.ServerLevel) world, pos, null);
+           List<ItemStack> drops = Block.getDrops(state, (ServerLevel) world, pos, null);
                        for (ItemStack drop : drops) {
                 ReikaItemHelper.dropItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
             }

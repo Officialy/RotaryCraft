@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -154,7 +155,7 @@ public abstract class GearboxBaseModel extends RotaryModelBase {
         // 1.21.5: ModelPart#render takes (PoseStack, VertexConsumer, int packedLight, int packedOverlay, int color).
         // Must forward the real packed light (was hardcoded 0 → gearbox rendered unlit/black, discarding
         // the neighbour-light sampled in RotaryTERenderer.extractRenderState) and NO_OVERLAY (not 0).
-        root.render(stack, tex, light, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        root.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
 /*    protected final void renderSupports(PoseStack stack, BlockEntity te, ArrayList li) {

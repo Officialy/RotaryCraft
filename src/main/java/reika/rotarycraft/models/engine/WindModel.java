@@ -2,6 +2,7 @@ package reika.rotarycraft.models.engine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -11,6 +12,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -257,7 +259,7 @@ public class WindModel extends RotaryModelBase {
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
         final int LM = packedLightIn;
-        final int OV = net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
+        final int OV = OverlayTexture.NO_OVERLAY;
         final int COL = 0xFFFFFFFF;
 
         shape1.render(stack, tex, LM, OV, COL);
@@ -275,7 +277,7 @@ public class WindModel extends RotaryModelBase {
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.mulPose(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape8.render(stack, tex, LM, OV, COL);
         shape8a.render(stack, tex, LM, OV, COL);

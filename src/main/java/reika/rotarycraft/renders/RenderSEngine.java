@@ -93,7 +93,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
             }
             case WIND -> {
                 VertexConsumer vertexconsumer = bufferSource;
-                stack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(270));
+                stack.mulPose(Axis.YP.rotationDegrees(270));
                 windModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
             }
             case STEAM -> {

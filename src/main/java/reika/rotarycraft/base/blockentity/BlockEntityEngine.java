@@ -11,11 +11,13 @@ package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -613,9 +615,9 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     public final boolean canExtractItem(int i, ItemStack itemstack, int j) {
         if (type == EngineType.AC) {
             if (ReikaItemHelper.matchStacks(itemstack, RotaryItems.HSLA_SHAFT_CORE) || ReikaItemHelper.matchStacks(itemstack, RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE)) {
-                if (itemstack.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+                if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
                     return true;
-                return itemstack.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("magnet", 0) == 0;
+                return itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("magnet", 0) == 0;
             }
             return false;
         }

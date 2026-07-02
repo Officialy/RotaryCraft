@@ -17,6 +17,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.Identifier;
@@ -36,8 +37,10 @@ import reika.rotarycraft.auxiliary.HandbookNotifications;
 import reika.rotarycraft.auxiliary.RotaryDescriptions;
 import reika.rotarycraft.auxiliary.interfaces.HandbookEntry;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
+import reika.rotarycraft.registry.Flywheels;
 import reika.rotarycraft.registry.HandbookRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.MaterialRegistry;
 import reika.rotarycraft.renders.GuiMachineRenderState;
 
 import java.util.ArrayList;
@@ -565,20 +568,20 @@ public class GuiHandbook extends Screen {
         }
 
         long SECOND = 1000000000L;
-        int timeStep = (int) ((System.nanoTime() / SECOND) % reika.rotarycraft.registry.MaterialRegistry.values().length);
+        int timeStep = (int) ((System.nanoTime() / SECOND) % MaterialRegistry.values().length);
         float yaw = (int) (System.nanoTime() / 20000000) % 360;
         float variable = 0;
 
         BlockEntity te = null;
         if (m.getBlockState().getBlock() instanceof EntityBlock eb)
-            te = eb.newBlockEntity(net.minecraft.core.BlockPos.ZERO, m.getBlockState());
+            te = eb.newBlockEntity(BlockPos.ZERO, m.getBlockState());
 
         ArrayList<?> conditions = null;
         if (h == HandbookRegistry.SHAFT) {
             variable = -1000F * (timeStep + 1);
         }
         if (h == HandbookRegistry.FLYWHEEL) {
-            int tick = (int) ((System.nanoTime() / SECOND) % reika.rotarycraft.registry.Flywheels.list.length);
+            int tick = (int) ((System.nanoTime() / SECOND) % Flywheels.list.length);
             variable = 500 - 1000F * (tick + 1);
         }
         if (h == HandbookRegistry.GEARBOX) {

@@ -12,12 +12,14 @@ package reika.rotarycraft.auxiliary.recipemanagers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import reika.dragonapi.libraries.rendering.ReikaGuiAPI;
+import reika.rotarycraft.registry.RotaryRecipeTypes;
 
 import java.util.Collection;
 import java.util.List;
@@ -118,11 +120,11 @@ public final class MachineRecipeRenderer {
      */
     private static Recipe<?> findMatchingBlastFurnaceRecipe(Level level, ItemStack out) {
         try {
-            net.minecraft.server.MinecraftServer server = level.getServer();
+            MinecraftServer server = level.getServer();
             if (server == null) return null; // dedicated client — recipes not iterable
             var rm = server.getRecipeManager();
             Collection<RecipeHolder<? extends Recipe<?>>> shaped = (Collection)
-                    rm.recipeMap().byType(reika.rotarycraft.registry.RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get());
+                    rm.recipeMap().byType(RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get());
             for (RecipeHolder<? extends Recipe<?>> rh : shaped) {
                 Recipe<?> r = rh.value();
                 if (r instanceof ShapedBlastFurnaceRecipe sb && ItemStack.isSameItemSameComponents(sb.getOutput(), out)) {
@@ -130,7 +132,7 @@ public final class MachineRecipeRenderer {
                 }
             }
             Collection<RecipeHolder<? extends Recipe<?>>> shapeless = (Collection)
-                    rm.recipeMap().byType(reika.rotarycraft.registry.RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get());
+                    rm.recipeMap().byType(RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get());
             for (RecipeHolder<? extends Recipe<?>> rh : shapeless) {
                 Recipe<?> r = rh.value();
                 if (r instanceof ShapelessBlastFurnaceRecipe sb && ItemStack.isSameItemSameComponents(sb.getOutput(), out)) {

@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
+import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IWailaClientRegistration;
@@ -64,10 +65,10 @@ public class RotaryJadePlugin implements IWailaPlugin {
         //
         // The per-component {@code instanceof} branch is one virtual call + one type-check,
         // negligible next to the network round-trip Jade already does for each looked-at block.
-        registration.registerBlockComponent(new PipeTooltip(),         reika.rotarycraft.base.blocks.BlockBasicMachine.class);
-        registration.registerBlockComponent(new MachinePowerTooltip(), reika.rotarycraft.base.blocks.BlockBasicMachine.class);
-        registration.registerBlockComponent(new EngineExtraTooltip(),  reika.rotarycraft.base.blocks.BlockBasicMachine.class);
-        registration.registerBlockComponent(new ReservoirTooltip(),    reika.rotarycraft.base.blocks.BlockBasicMachine.class);
+        registration.registerBlockComponent(new PipeTooltip(),         BlockBasicMachine.class);
+        registration.registerBlockComponent(new MachinePowerTooltip(), BlockBasicMachine.class);
+        registration.registerBlockComponent(new EngineExtraTooltip(),  BlockBasicMachine.class);
+        registration.registerBlockComponent(new ReservoirTooltip(),    BlockBasicMachine.class);
     }
 
     // ------------------------------------------------------------------------------------

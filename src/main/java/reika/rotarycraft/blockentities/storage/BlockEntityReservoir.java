@@ -27,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -582,7 +583,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         return tank.getFluid();
     }
 
-    public net.neoforged.neoforge.fluids.capability.IFluidHandler getFluidHandler() {
+    public IFluidHandler getFluidHandler() {
         return tank;
     }
 	/*
@@ -612,7 +613,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         if (level == null)
             return false;
         BlockPos npos = worldPosition.relative(dir);
-        net.minecraft.world.level.block.entity.BlockEntity be = level.getBlockEntity(npos);
+        BlockEntity be = level.getBlockEntity(npos);
         if (!(be instanceof BlockEntityReservoir te))
             return false;
         return te.isEmpty() || this.isEmpty() || te.getFluid().getFluid().equals(this.getFluid().getFluid());

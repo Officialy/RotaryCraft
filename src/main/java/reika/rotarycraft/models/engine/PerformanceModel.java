@@ -2,6 +2,7 @@ package reika.rotarycraft.models.engine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -338,7 +339,7 @@ public class PerformanceModel extends RotaryModelBase {
         // Crank / flywheel rotating group — pivot y=1, X-axis rotation by phi.
         stack.pushPose();
         stack.translate(0.0, 1.0, 0.0);
-        stack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(phi));
+        stack.mulPose(Axis.XP.rotationDegrees(phi));
         stack.translate(0.0, -1.0, 0.0);
         shape12.render(stack, tex, LM, OV, COL);
         shape13.render(stack, tex, LM, OV, COL);

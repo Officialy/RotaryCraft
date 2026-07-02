@@ -2,8 +2,10 @@ package reika.rotarycraft.blockentities.level;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -170,14 +172,14 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
 
         // 26.1: ItemStack.save(CompoundTag) removed; round-trip via ItemStack.CODEC + RegistryOps.
         // Also fixed an old inverted-emptiness bug — the legacy loop only saved EMPTY slots.
-        var regAccSave = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
-        var opsSave = regAccSave.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        var regAccSave = level == null ? RegistryAccess.EMPTY : level.registryAccess();
+        var opsSave = regAccSave.createSerializationContext(NbtOps.INSTANCE);
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             var stack = itemHandler.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 CompoundTag entry = new CompoundTag();
                 entry.putShort("Slot", (short) i);
-                net.minecraft.world.item.ItemStack.CODEC.encodeStart(opsSave, stack).result()
+                ItemStack.CODEC.encodeStart(opsSave, stack).result()
                         .ifPresent(stackTag -> entry.put("Stack", stackTag));
                 nbttaglist.add(entry);
             }
@@ -213,15 +215,15 @@ public class BlockEntityBlockFiller extends BlockEntityAreaFiller implements One
             }
         };
         // 26.1: ItemStack.of removed; round-trip via ItemStack.CODEC + RegistryOps.
-        var regAccLoad = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
-        var opsLoad = regAccLoad.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        var regAccLoad = level == null ? RegistryAccess.EMPTY : level.registryAccess();
+        var opsLoad = regAccLoad.createSerializationContext(NbtOps.INSTANCE);
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag entry = nbttaglist.getCompoundOrEmpty(i);
             short slot = entry.getShortOr("Slot", (short) 0);
             if (slot >= 0 && slot < itemHandler.getSlots()) {
                 var stackTag = entry.get("Stack");
                 if (stackTag != null) {
-                    var loaded = net.minecraft.world.item.ItemStack.CODEC.parse(opsLoad, stackTag).result().orElse(ItemStack.EMPTY);
+                    var loaded = ItemStack.CODEC.parse(opsLoad, stackTag).result().orElse(ItemStack.EMPTY);
                     itemHandler.setStackInSlot(slot, loaded);
                 }
             } else {

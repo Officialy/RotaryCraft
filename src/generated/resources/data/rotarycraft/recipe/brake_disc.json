@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "B": "rotarycraft:hsla_steel_bearing",
     "G": "rotarycraft:hsla_steel_gear",

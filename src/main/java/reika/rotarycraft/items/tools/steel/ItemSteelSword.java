@@ -19,7 +19,7 @@ import reika.rotarycraft.registry.RotaryItems;
 public class ItemSteelSword extends Item {
 
     public ItemSteelSword() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties().sword(ToolMaterial.IRON, 5, 2));
+        super(RotaryItems.itemProperties().sword(ToolMaterial.IRON, 5, 2));
     }
 
     public boolean isValidRepairItem(ItemStack tool, ItemStack item) {

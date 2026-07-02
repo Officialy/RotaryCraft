@@ -12,12 +12,16 @@ package reika.rotarycraft.blockentities.engine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerMicroTurbine;
 import reika.rotarycraft.registry.*;
 
 public class BlockEntityMicroturbine extends BlockEntityEngine {
@@ -83,9 +87,9 @@ public class BlockEntityMicroturbine extends BlockEntityEngine {
     }
 
     @Override
-    public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id,
-                                                                          net.minecraft.world.entity.player.Inventory inv,
-                                                                          net.minecraft.world.entity.player.Player player) {
-        return new reika.rotarycraft.gui.container.machine.inventory.ContainerMicroTurbine(id, inv, this);
+    public AbstractContainerMenu createMenu(int id,
+                                                                          Inventory inv,
+                                                                          Player player) {
+        return new ContainerMicroTurbine(id, inv, this);
     }
 }

@@ -13,13 +13,15 @@ package reika.rotarycraft.items.tools;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
 import reika.rotarycraft.base.ItemRotaryArmor;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemIOGoggles extends ItemRotaryArmor {
 
     public ItemIOGoggles() {
-        super(ArmorMaterials.IRON, net.minecraft.world.item.equipment.ArmorType.HELMET, reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1));
+        super(ArmorMaterials.IRON, ArmorType.HELMET, RotaryItems.itemProperties().stacksTo(1));
     }
 
 

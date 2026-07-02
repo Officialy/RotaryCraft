@@ -22,13 +22,14 @@ import net.minecraft.world.level.Level;
 
 import reika.rotarycraft.base.ItemRotaryTool;
 import reika.rotarycraft.gui.container.ContainerHandCraft;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemHandheldCrafting extends ItemRotaryTool implements MenuProvider {
 
     public ItemStack[] items = new ItemStack[9];
 
     public ItemHandheldCrafting() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     @Override

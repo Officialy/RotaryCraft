@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import reika.dragonapi.libraries.ReikaEnchantmentHelper;
+import reika.rotarycraft.registry.RotaryItems;
 
 // 26.1: legacy 1.7.10 features still missing:
 //   - Whole-tree felling via TreeReader / ReikaTreeHelper. Those helpers don't exist in the
@@ -34,7 +35,7 @@ import reika.dragonapi.libraries.ReikaEnchantmentHelper;
 public class ItemBedrockAxe extends AxeItem {
 
     public ItemBedrockAxe() {
-        super(ToolMaterial.NETHERITE, 6F, -3.0F, reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1));
+        super(ToolMaterial.NETHERITE, 6F, -3.0F, RotaryItems.itemProperties().stacksTo(1));
     }
 
     @Override

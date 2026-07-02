@@ -10,7 +10,7 @@
 package reika.rotarycraft;
 
 import net.minecraft.advancements.Advancement;
-import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -19,6 +19,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import reika.dragonapi.DragonAPI;
@@ -36,6 +38,7 @@ import reika.rotarycraft.gui.screen.GuiHandCraft;
 import reika.rotarycraft.gui.screen.machine.*;
 import reika.rotarycraft.gui.screen.machine.inventory.*;
 import reika.rotarycraft.registry.*;
+import reika.rotarycraft.renders.RotaryRenderPipelines;
 
 import java.io.File;
 import java.net.URL;
@@ -99,7 +102,7 @@ public class RotaryCraft extends DragonAPIMod {
             RotaryModelLayers.init(modEventBus);
             // 26.1: register our no-depth-test pipeline used by IORenderer so input/output
             // cubes stay visible even when they sit behind the host block.
-            reika.rotarycraft.renders.RotaryRenderPipelines.register(modEventBus);
+            RotaryRenderPipelines.register(modEventBus);
         }
         LOGGER.info("RotaryCraft:" + " Creating Blocks!");
         RotaryBlocks.BLOCKS.register(modEventBus);
@@ -193,13 +196,13 @@ public class RotaryCraft extends DragonAPIMod {
 
     // The handbook descriptions are parsed from XML in the jar; (re)load them with the
     // client resource reload so language changes and F3+T pick up new text.
-    public void addClientReloadListeners(final net.neoforged.neoforge.client.event.AddClientReloadListenersEvent event) {
-        event.addListener(net.minecraft.resources.Identifier.fromNamespaceAndPath(MODID, "handbook_descriptions"),
-                new reika.rotarycraft.auxiliary.RotaryDescriptions.ReloadListener());
+    public void addClientReloadListeners(final AddClientReloadListenersEvent event) {
+        event.addListener(Identifier.fromNamespaceAndPath(MODID, "handbook_descriptions"),
+                new RotaryDescriptions.ReloadListener());
     }
 
     // 1.21.5: MenuScreens.register is now private; screen registration moved to RegisterMenuScreensEvent.
-    public void registerScreens(final net.neoforged.neoforge.client.event.RegisterMenuScreensEvent event) {
+    public void registerScreens(final RegisterMenuScreensEvent event) {
         event.register(RotaryMenus.STEAM_ENGINE.get(), SteamScreen::new);
         event.register(RotaryMenus.GEARBOX.get(), GearboxScreen::new);
         event.register(RotaryMenus.RESERVOIR.get(), ReservoirScreen::new);
@@ -213,21 +216,21 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.HAND_CRAFT.get(), GuiHandCraft::new);
         event.register(RotaryMenus.MUSIC.get(), GuiMusic::new);
         event.register(RotaryMenus.GRINDER.get(), GuiGrinder::new);
-        event.register(RotaryMenus.FRACTIONATOR.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiFractionator::new);
+        event.register(RotaryMenus.FRACTIONATOR.get(), GuiFractionator::new);
         event.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
-        event.register(RotaryMenus.MICRO_TURBINE.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiMicroTurbine::new);
+        event.register(RotaryMenus.MICRO_TURBINE.get(), GuiMicroTurbine::new);
         event.register(RotaryMenus.BLAST_FURNACE.get(), GuiBlastFurnace::new);
-        event.register(RotaryMenus.WORKTABLE.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiWorktable::new);
+        event.register(RotaryMenus.WORKTABLE.get(), GuiWorktable::new);
         // 26.1: jet engine had no screen registration — right-clicking did nothing. Wire it to
         // the new GuiJetEngine which mirrors the microturbine fuel-bar layout.
-        event.register(RotaryMenus.JET.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiJetEngine::new);
-        event.register(RotaryMenus.FERMENTER.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiFermenter::new);
-        event.register(RotaryMenus.EXTRACTOR.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiExtractor::new);
-        event.register(RotaryMenus.CVT.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiCVT::new);
+        event.register(RotaryMenus.JET.get(), GuiJetEngine::new);
+        event.register(RotaryMenus.FERMENTER.get(), GuiFermenter::new);
+        event.register(RotaryMenus.EXTRACTOR.get(), GuiExtractor::new);
+        event.register(RotaryMenus.CVT.get(), GuiCVT::new);
         event.register(RotaryMenus.COIL.get(), GuiCoil::new);
-        event.register(RotaryMenus.AEROSOLIZER.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiAerosolizer::new);
-        event.register(RotaryMenus.PULSE_FURNACE.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiPulseFurnace::new);
-        event.register(RotaryMenus.FILLING_STATION.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiFillingStation::new);
+        event.register(RotaryMenus.AEROSOLIZER.get(), GuiAerosolizer::new);
+        event.register(RotaryMenus.PULSE_FURNACE.get(), GuiPulseFurnace::new);
+        event.register(RotaryMenus.FILLING_STATION.get(), GuiFillingStation::new);
     }
 
     @Override

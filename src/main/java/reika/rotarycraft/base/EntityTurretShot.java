@@ -10,6 +10,7 @@
 package reika.rotarycraft.base;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.world.damagesource.DamageSource;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.projectile.hurtingprojectile.Fireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.minecraft.core.registries.BuiltInRegistries;
 import reika.rotarycraft.auxiliary.TurretDamage;
@@ -39,7 +41,7 @@ public abstract class EntityTurretShot extends Fireball implements IEntityWithCo
     public EntityTurretShot(Level world, BlockPos pos, BlockPos vpos, BlockEntityAimedCannon te) {
         super(EntityTypes.FIREBALL, world);
         this.setPos(pos.getX(), pos.getY(), pos.getZ());
-        net.minecraft.world.phys.Vec3 direction = new net.minecraft.world.phys.Vec3(vpos.getX() - pos.getX(), vpos.getY() - pos.getY(), vpos.getZ() - pos.getZ()).normalize().scale(0.1);
+        Vec3 direction = new Vec3(vpos.getX() - pos.getX(), vpos.getY() - pos.getY(), vpos.getZ() - pos.getZ()).normalize().scale(0.1);
         this.setDeltaMovement(direction);
         gun = te;
     }
@@ -54,16 +56,16 @@ public abstract class EntityTurretShot extends Fireball implements IEntityWithCo
     }
 
     @Override
-    protected AABB makeBoundingBox(net.minecraft.world.phys.Vec3 pos) {
+    protected AABB makeBoundingBox(Vec3 pos) {
         return new AABB(pos.x + 0.4, pos.y + 0.4, pos.z + 0.4, pos.x + 0.6, pos.y + 0.6, pos.z + 0.6);
     }
 
     @Override
-    public void writeSpawnData(net.minecraft.network.RegistryFriendlyByteBuf data) {
+    public void writeSpawnData(RegistryFriendlyByteBuf data) {
     }
 
     @Override
-    public void readSpawnData(net.minecraft.network.RegistryFriendlyByteBuf data) {
+    public void readSpawnData(RegistryFriendlyByteBuf data) {
     }
 
     protected abstract int getAttackDamage();

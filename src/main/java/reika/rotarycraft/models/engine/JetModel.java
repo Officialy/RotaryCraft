@@ -2,6 +2,7 @@ package reika.rotarycraft.models.engine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -662,7 +663,7 @@ public class JetModel extends RotaryModelBase {
         double d = 1.0625;
         stack.pushPose();
         stack.translate(0, d, 0);
-        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi / factor));
+        stack.mulPose(Axis.ZP.rotationDegrees(phi / factor));
         stack.translate(0, -d, 0);
 
         shape2.render(stack, tex, LM, OV, color);
@@ -705,7 +706,7 @@ public class JetModel extends RotaryModelBase {
 
         stack.pushPose();
         stack.translate(0, d, 0);
-        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.mulPose(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -d, 0);
         shape2a2.render(stack, tex, LM, OV, color);
         shape2a.render(stack, tex, LM, OV, color);

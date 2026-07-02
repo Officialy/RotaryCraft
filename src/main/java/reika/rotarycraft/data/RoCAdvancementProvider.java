@@ -13,6 +13,9 @@ import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import reika.rotarycraft.registry.RotaryAdvancements;
 
 import java.util.ArrayList;
@@ -76,9 +79,9 @@ public class RoCAdvancementProvider extends AdvancementProvider {
                     String key = a.name().toLowerCase(Locale.ENGLISH);
                     // A few machine blocks resolve asItem() to AIR at datagen; fall back to a
                     // non-empty icon so the DisplayInfo / has-item criterion stays valid.
-                    net.minecraft.world.item.Item icon = a.getIconItem();
-                    boolean iconEmpty = icon == null || icon == net.minecraft.world.item.Items.AIR;
-                    net.minecraft.world.level.ItemLike displayIcon = iconEmpty ? net.minecraft.world.item.Items.IRON_INGOT : icon;
+                    Item icon = a.getIconItem();
+                    boolean iconEmpty = icon == null || icon == Items.AIR;
+                    ItemLike displayIcon = iconEmpty ? Items.IRON_INGOT : icon;
 
                     Advancement.Builder b = Advancement.Builder.advancement();
                     if (parent != null)

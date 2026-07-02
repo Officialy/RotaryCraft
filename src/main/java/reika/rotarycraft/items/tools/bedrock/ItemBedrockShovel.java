@@ -25,6 +25,7 @@ import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import reika.dragonapi.instantiable.data.collections.ChancedOutputList;
 import reika.dragonapi.instantiable.data.maps.BlockMap;
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,7 @@ public class ItemBedrockShovel extends ShovelItem {
     }
 
     public ItemBedrockShovel() {
-        super(ToolMaterial.NETHERITE, 4F, -2.8F, reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1));
+        super(ToolMaterial.NETHERITE, 4F, -2.8F, RotaryItems.itemProperties().stacksTo(1));
     }
 
     private static void queue(Block source, ItemLike extra, float chance) {

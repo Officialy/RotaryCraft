@@ -2,12 +2,14 @@ package reika.rotarycraft.blockentities.production;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -15,11 +17,17 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.IBonusYield;
@@ -153,11 +161,11 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     // called BEFORE setLevel(), so level is null. We mirror the parent's null-guard:
     //   level == null ? RegistryAccess.EMPTY : level.registryAccess()
     @Override
-    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+    protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        var registries = this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess();
-        net.minecraft.world.level.storage.TagValueOutput outputOut =
-                net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING, registries);
+        var registries = this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess();
+        TagValueOutput outputOut =
+                TagValueOutput.createWithContext(ProblemReporter.DISCARDING, registries);
         outputInv.serialize(outputOut);
         output.store("output", CompoundTag.CODEC, outputOut.buildResult());
         output.putInt("temp",      temperature);
@@ -167,13 +175,13 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     }
 
     @Override
-    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+    protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        var registries = this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess();
-        java.util.Optional<CompoundTag> rawOut = input.read("output", CompoundTag.CODEC);
+        var registries = this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess();
+        Optional<CompoundTag> rawOut = input.read("output", CompoundTag.CODEC);
         if (rawOut.isPresent()) {
-            net.minecraft.world.level.storage.ValueInput nested =
-                    net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, registries, rawOut.get());
+            ValueInput nested =
+                    TagValueInput.create(ProblemReporter.DISCARDING, registries, rawOut.get());
             outputInv.deserialize(nested);
         }
         temperature    = input.getIntOr("temp", 0);
@@ -204,7 +212,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     }
 
     @Override
-    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         saveAdditional(tag);
         return tag;
@@ -247,21 +255,21 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
          * ---------------------------------------------------------- */
         // 1.21.5: Recipe<T extends RecipeInput>; SimpleContainer isn't a RecipeInput, so wrap it.
         final SimpleContainer invViewFinal = invView;
-        net.minecraft.world.item.crafting.RecipeInput recipeInput = new net.minecraft.world.item.crafting.RecipeInput() {
+        RecipeInput recipeInput = new RecipeInput() {
             @Override public ItemStack getItem(int slot) { return invViewFinal.getItem(slot); }
             @Override public int size() { return invViewFinal.getContainerSize(); }
         };
 
         // getRecipeFor returns Optional<RecipeHolder<T>>; unwrap with .value().
-        Recipe<net.minecraft.world.item.crafting.RecipeInput> matched;
-        Optional<? extends net.minecraft.world.item.crafting.RecipeHolder<? extends Recipe<net.minecraft.world.item.crafting.RecipeInput>>> shaped =
+        Recipe<RecipeInput> matched;
+        Optional<? extends RecipeHolder<? extends Recipe<RecipeInput>>> shaped =
                 level.getServer().getRecipeManager().getRecipeFor(
                         RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get(), recipeInput, level);
 
         if (shaped.isPresent()) {
             matched = shaped.get().value();
         } else {
-            Optional<? extends net.minecraft.world.item.crafting.RecipeHolder<? extends Recipe<net.minecraft.world.item.crafting.RecipeInput>>> shapeless =
+            Optional<? extends RecipeHolder<? extends Recipe<RecipeInput>>> shapeless =
                     level.getServer().getRecipeManager().getRecipeFor(
                             RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get(), recipeInput, level);
             if (shapeless.isEmpty())

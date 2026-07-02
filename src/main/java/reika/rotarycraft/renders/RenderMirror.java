@@ -11,6 +11,7 @@ package reika.rotarycraft.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -48,7 +49,7 @@ public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
         int var11 = 1;     //used to rotate the model about metadata
         int var12 = 0;
         if (!tile.isInWorld()) {
-            stack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90));
+            stack.mulPose(Axis.YP.rotationDegrees(-90));
         }
         stack.translate(0, var12, 0);
         stack.scale(1, var11, 1);

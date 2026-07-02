@@ -58,7 +58,7 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
 
     /**
      * 26.1 PERF: opt out of the legacy 5×-in-first-20-ticks {@code syncAllData(true)} burst.
-     * Same reasoning as {@link reika.rotarycraft.base.blockentity.BlockEntityPiping}: a typical
+     * Same reasoning as {@link BlockEntityPiping}: a typical
      * RotaryCraft setup has many IOMachines per chunk (engines + shaft chains + gearboxes +
      * pumps), and the burst times the number of BEs becomes a per-chunk-load packet storm.
      * Runtime omega/torque/power changes still ship via the periodic {@code BE_NBT_SYNC}

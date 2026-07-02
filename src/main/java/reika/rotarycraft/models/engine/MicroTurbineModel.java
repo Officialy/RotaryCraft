@@ -2,6 +2,7 @@ package reika.rotarycraft.models.engine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -638,7 +639,7 @@ public class MicroTurbineModel extends RotaryModelBase {
         // Turbine fan: rotate Z at pivot y=1 by phi
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.mulPose(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape4.render(stack, tex, LM, OV, COL);
         shape4a.render(stack, tex, LM, OV, COL);
@@ -677,7 +678,7 @@ public class MicroTurbineModel extends RotaryModelBase {
         // Inner turbine: rotate Z at pivot y=1 by phi*2
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi * 2));
+        stack.mulPose(Axis.ZP.rotationDegrees(phi * 2));
         stack.translate(0, -1, 0);
         shape10.render(stack, tex, LM, OV, COL);
         shape10a.render(stack, tex, LM, OV, COL);

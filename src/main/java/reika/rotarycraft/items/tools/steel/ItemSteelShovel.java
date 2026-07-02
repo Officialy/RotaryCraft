@@ -29,7 +29,7 @@ public class ItemSteelShovel extends ShovelItem {
     private int index;
 
     public ItemSteelShovel() {
-        super(ToolMaterial.IRON, 1, 1, reika.rotarycraft.registry.RotaryItems.itemProperties().durability(600));
+        super(ToolMaterial.IRON, 1, 1, RotaryItems.itemProperties().durability(600));
         //this.setHarvestLevel("shovel", ToolMaterial.IRON.getLevel());
     }
 

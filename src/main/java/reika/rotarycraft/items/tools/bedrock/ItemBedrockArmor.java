@@ -9,12 +9,16 @@
  ******************************************************************************/
 package reika.rotarycraft.items.tools.bedrock;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -22,14 +26,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import reika.dragonapi.ModList;
 import reika.dragonapi.libraries.ReikaEnchantmentHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
+import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.base.ItemRotaryArmor;
 import reika.rotarycraft.registry.Materials;
 import reika.rotarycraft.registry.RotaryItems;
@@ -43,7 +50,7 @@ import java.util.Locale;
 // rebuild the rest against the new APIs.
 public class ItemBedrockArmor extends ItemRotaryArmor {
 
-    public ItemBedrockArmor(net.minecraft.world.item.equipment.ArmorType slot, Properties properties) {
+    public ItemBedrockArmor(ArmorType slot, Properties properties) {
         super(Materials.BEDROCK_ALLOY, slot, properties);
     }
 
@@ -80,7 +87,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
 
     // 1.21.5: Item#inventoryTick signature is now (ItemStack, ServerLevel, Entity, EquipmentSlot).
     @Override
-    public void inventoryTick(ItemStack is, net.minecraft.server.level.ServerLevel world, Entity entity, net.minecraft.world.entity.EquipmentSlot slot) {
+    public void inventoryTick(ItemStack is, ServerLevel world, Entity entity, EquipmentSlot slot) {
         this.forceEnchantments(is, world, entity, slot == null ? 0 : slot.getIndex(0));
     }
 
@@ -140,7 +147,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
         }
 
         public boolean existsOn(ItemStack is) {
-            net.minecraft.nbt.CompoundTag tag = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+            CompoundTag tag = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             return tag != null && tag.getBooleanOr(this.getNBT(), false);
         }
 
@@ -149,7 +156,7 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
         }
 
         public void enable(ItemStack is, boolean set) {
-            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean(this.getNBT(), set));
+            ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean(this.getNBT(), set));
         }
 
         public ItemStack[] getUpgradeItems() {

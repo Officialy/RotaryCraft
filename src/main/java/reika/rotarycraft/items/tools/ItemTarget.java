@@ -24,11 +24,12 @@ import reika.dragonapi.libraries.ReikaPlayerAPI;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.mathsci.ReikaVectorHelper;
 import reika.rotarycraft.base.ItemRotaryTool;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemTarget extends ItemRotaryTool {
 
     public ItemTarget() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     @Override

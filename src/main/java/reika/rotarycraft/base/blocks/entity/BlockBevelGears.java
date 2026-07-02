@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
 
@@ -30,8 +31,8 @@ public class BlockBevelGears extends BlockBasicMachine {
             return (lvl, pos, st, be) -> {
                 BlockEntityBevelGear bg = (BlockEntityBevelGear) be;
                 if (bg.omega > 0) {
-                    bg.phi += (float) reika.dragonapi.libraries.mathsci.ReikaMathLibrary
-                            .doubpow(reika.dragonapi.libraries.mathsci.ReikaMathLibrary.logbase(bg.omega + 1, 2), 1.05);
+                    bg.phi += (float) ReikaMathLibrary
+                            .doubpow(ReikaMathLibrary.logbase(bg.omega + 1, 2), 1.05);
                 }
             };
         }

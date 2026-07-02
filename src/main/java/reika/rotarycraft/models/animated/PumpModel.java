@@ -2,6 +2,7 @@ package reika.rotarycraft.models.animated;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
+import reika.rotarycraft.blockentities.production.BlockEntityPump;
 
 import java.util.ArrayList;
 
@@ -224,12 +226,12 @@ public class PumpModel extends RotaryModelBase {
 
         // Animated crank assembly (Shape3/4/5): rotate around X-axis at pivot y = 1.1875 blocks.
         // Same transform as original GL11 version: translate to pivot, rotate, translate back.
-        boolean broken = (te instanceof reika.rotarycraft.blockentities.production.BlockEntityPump p) && p.isBroken();
+        boolean broken = (te instanceof BlockEntityPump p) && p.isBroken();
         if (!broken) {
             stack.pushPose();
             double d = 1.1875;
             stack.translate(0.0, d, 0.0);
-            stack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(phi));
+            stack.mulPose(Axis.XP.rotationDegrees(phi));
             stack.translate(0.0, -d, 0.0);
             shape3.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape4.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

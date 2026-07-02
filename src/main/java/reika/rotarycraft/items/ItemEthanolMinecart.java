@@ -10,6 +10,7 @@
 package reika.rotarycraft.items;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,11 +24,12 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.gameevent.GameEvent;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.ItemRotaryTool;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemEthanolMinecart extends ItemRotaryTool {
 
     public ItemEthanolMinecart() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     @Override
@@ -55,7 +57,7 @@ public class ItemEthanolMinecart extends ItemRotaryTool {
                 }
 
                 //EntityGasMinecart cart = new EntityGasMinecart(level, (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.0625D + d0, (double) blockpos.getZ() + 0.5D);
-                if (itemstack.has(net.minecraft.core.component.DataComponents.CUSTOM_NAME)) {
+                if (itemstack.has(DataComponents.CUSTOM_NAME)) {
                     //    cart.setCustomName(itemstack.getHoverName());
                 }
 

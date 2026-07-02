@@ -10,12 +10,13 @@
 package reika.rotarycraft.items.tools.bedrock;
 
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.equipment.ArmorType;
 
 //@Strippable(value = {"thaumcraft.api.nodes.IRevealer", "thaumcraft.api.IGoggles", "thaumcraft.api.IVisDiscountGear"})
 public class ItemBedReveal extends ItemBedrockArmor {//implements IRevealer, IGoggles, IVisDiscountGear {
 
     public ItemBedReveal(Properties properties) {
-        super(net.minecraft.world.item.equipment.ArmorType.HELMET, properties);
+        super(ArmorType.HELMET, properties);
     }
 
 //    @Override

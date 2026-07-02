@@ -20,15 +20,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
 import reika.rotarycraft.api.power.ShaftPowerReceiver;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.BlockEntityWinder;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
 import reika.rotarycraft.blockentities.transmission.BlockEntityDistributionClutch;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.renders.RotaryRenderPipelines;
 
 /**
  * 1.21.x port: was a stub for the whole refactor and rendered nothing. Now ported against the
@@ -183,13 +187,13 @@ public abstract class IORenderer {
         // renderer drew a cyan (0, 127, 255) bounding box around the target block via
         // ReikaAABBHelper.renderAABB. Since that API isn't ported yet, we render a cyan IO
         // cube on the FACING face instead — same colour as the original target indicator.
-        if (teb instanceof reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin fin) {
+        if (teb instanceof BlockEntityCoolingFin fin) {
             int io = fin.ticks; // same per-tick decay timer the IOMachine path uses
             if (flag) io = 255;
             if (io <= 0) return;
-            net.minecraft.world.level.block.state.BlockState st = fin.getBlockState();
-            if (st != null && st.hasProperty(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
-                Direction dir = st.getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING);
+            BlockState st = fin.getBlockState();
+            if (st != null && st.hasProperty(BlockRotaryCraftMachine.FACING)) {
+                Direction dir = st.getValue(BlockRotaryCraftMachine.FACING);
                 // Cyan (0, 127, 255) — matches original 1.7 target bounding box colour
                 int[] color = {0, 127, 255, io};
                 renderBox(matrixStack, collector, dir.getStepX(), dir.getStepY(), dir.getStepZ(), color);
@@ -250,13 +254,13 @@ public abstract class IORenderer {
         // see those faces. Switch to our {@link reika.rotarycraft.renders.RotaryRenderPipelines#NO_DEPTH_FILLED_BOX_TYPE}
         // which is the same pipeline with the depth test relaxed to {@code ALWAYS_PASS}, so
         // the box draws regardless of what's in front of it.
-        collector.submitCustomGeometry(stack, reika.rotarycraft.renders.RotaryRenderPipelines.NO_DEPTH_FILLED_BOX_TYPE,
+        collector.submitCustomGeometry(stack, RotaryRenderPipelines.NO_DEPTH_FILLED_BOX_TYPE,
                 (pose, buffer) -> emitCube(pose, buffer, x0, y0, z0, x1, y1, z1, fillRgba));
         // Opaque wireframe — 12 edges. Use our {@code NO_DEPTH_LINES_TYPE} so the wireframe
         // mirrors the fill in being visible regardless of camera angle (vanilla
         // {@code RenderTypes.lines} is still depth-tested and would cull edges that sit
         // behind the host block from the camera's perspective).
-        collector.submitCustomGeometry(stack, reika.rotarycraft.renders.RotaryRenderPipelines.NO_DEPTH_LINES_TYPE,
+        collector.submitCustomGeometry(stack, RotaryRenderPipelines.NO_DEPTH_LINES_TYPE,
                 (pose, buffer) -> emitCubeEdges(pose, buffer, x0, y0, z0, x1, y1, z1, outlineRgba));
     }
 

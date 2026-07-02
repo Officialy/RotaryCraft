@@ -30,7 +30,7 @@ import java.util.Locale;
 public class ItemSteelPick extends Item {
 
     public ItemSteelPick() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties().durability(600).pickaxe(ToolMaterial.IRON, 2, 2));
+        super(RotaryItems.itemProperties().durability(600).pickaxe(ToolMaterial.IRON, 2, 2));
 
         //this.setHarvestLevel("pickaxe", ToolMaterial.IRON.getLevel());
         //this.setHarvestLevel("pick", ToolMaterial.IRON.getLevel());

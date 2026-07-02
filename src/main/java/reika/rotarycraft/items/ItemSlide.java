@@ -12,11 +12,12 @@ package reika.rotarycraft.items;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.ItemBasic;
 import net.minecraft.world.item.CreativeModeTab;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemSlide extends ItemBasic {
 
     public ItemSlide() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties(), 1);
+        super(RotaryItems.itemProperties(), 1);
     }
 
 }

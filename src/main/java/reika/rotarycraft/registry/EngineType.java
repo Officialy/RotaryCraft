@@ -212,7 +212,7 @@ public enum EngineType {
             case MICRO -> RotaryBlocks.MICRO_TURBINE.get().asItem();
             case JET -> RotaryBlocks.JET_ENGINE.get().asItem();
         };
-        return item != null && item != net.minecraft.world.item.Items.AIR ? new ItemStack(item) : ItemStack.EMPTY;
+        return item != null && item != Items.AIR ? new ItemStack(item) : ItemStack.EMPTY;
     }
 
     public boolean isEMPImmune() {

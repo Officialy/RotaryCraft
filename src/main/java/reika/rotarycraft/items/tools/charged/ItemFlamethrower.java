@@ -51,7 +51,7 @@ public class ItemFlamethrower extends ItemChargedTool {
      */
     // 1.21.5: getUseDuration signature is now (ItemStack, LivingEntity).
     @Override
-    public int getUseDuration(ItemStack pStack, net.minecraft.world.entity.LivingEntity user) {
+    public int getUseDuration(ItemStack pStack, LivingEntity user) {
         return 7200;
     }
 

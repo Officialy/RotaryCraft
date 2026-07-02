@@ -11,9 +11,11 @@ package reika.rotarycraft.blockentities.transmission;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -783,14 +785,14 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
         ListTag nbttaglist = new ListTag();
 
         // 26.1: ItemStack.save(CompoundTag) removed; round-trip via ItemStack.CODEC + RegistryOps.
-        var regAccSave = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
-        var opsSave = regAccSave.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        var regAccSave = level == null ? RegistryAccess.EMPTY : level.registryAccess();
+        var opsSave = regAccSave.createSerializationContext(NbtOps.INSTANCE);
         for (int i = 0; i < beltHandler.getSlots(); i++) {
             ItemStack belt = beltHandler.getStackInSlot(i);
             if (belt != null && !belt.isEmpty()) {
                 CompoundTag entry = new CompoundTag();
                 entry.putByte("Slot", (byte) i);
-                net.minecraft.world.item.ItemStack.CODEC.encodeStart(opsSave, belt).result()
+                ItemStack.CODEC.encodeStart(opsSave, belt).result()
                         .ifPresent(stackTag -> entry.put("Stack", stackTag));
                 nbttaglist.add(entry);
             }
@@ -808,8 +810,8 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
         super.load(NBT);
         ListTag nbttaglist = NBT.getListOrEmpty("Items");
 
-        var regAccLoad = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
-        var opsLoad = regAccLoad.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        var regAccLoad = level == null ? RegistryAccess.EMPTY : level.registryAccess();
+        var opsLoad = regAccLoad.createSerializationContext(NbtOps.INSTANCE);
         for (int i = 0; i < beltHandler.getSlots(); i++)
             beltHandler.setStackInSlot(i, ItemStack.EMPTY);
         for (int i = 0; i < nbttaglist.size(); i++) {
@@ -818,7 +820,7 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
             if (slot >= 0 && slot < beltHandler.getSlots()) {
                 var stackTag = entry.get("Stack");
                 if (stackTag != null)
-                    beltHandler.setStackInSlot(slot, net.minecraft.world.item.ItemStack.CODEC.parse(opsLoad, stackTag).result().orElse(ItemStack.EMPTY));
+                    beltHandler.setStackInSlot(slot, ItemStack.CODEC.parse(opsLoad, stackTag).result().orElse(ItemStack.EMPTY));
             }
         }
     }

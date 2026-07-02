@@ -41,6 +41,7 @@ import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerPulseFurnace;
 import reika.rotarycraft.registry.*;
 
 public class BlockEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, DiscreteFunction, ConditionalOperation, TemperatureCallback {
@@ -480,6 +481,6 @@ public class BlockEntityPulseFurnace extends InventoriedPowerReceiver implements
 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
-        return new reika.rotarycraft.gui.container.machine.inventory.ContainerPulseFurnace(id, inv, this);
+        return new ContainerPulseFurnace(id, inv, this);
     }
 }

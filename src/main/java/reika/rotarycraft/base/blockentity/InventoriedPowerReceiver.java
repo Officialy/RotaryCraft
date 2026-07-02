@@ -10,6 +10,7 @@
 package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +22,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.util.ProblemReporter;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
+
+import java.util.Optional;
 
 public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver {
 
@@ -85,9 +88,9 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        TagValueOutput nested = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess());
+        TagValueOutput nested = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess());
         itemHandler.serialize(nested);
-        output.store("ItemsRaw", net.minecraft.nbt.CompoundTag.CODEC, nested.buildResult());
+        output.store("ItemsRaw", CompoundTag.CODEC, nested.buildResult());
     }
 
     @Override
@@ -99,9 +102,9 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
                 setChanged();
             }
         };
-        java.util.Optional<CompoundTag> raw = input.read("ItemsRaw", net.minecraft.nbt.CompoundTag.CODEC);
+        Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
         if (raw.isPresent()) {
-            net.minecraft.world.level.storage.ValueInput nested = net.minecraft.world.level.storage.TagValueInput.create(ProblemReporter.DISCARDING, this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
+            ValueInput nested = TagValueInput.create(ProblemReporter.DISCARDING, this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
             itemHandler.deserialize(nested);
         }
     }

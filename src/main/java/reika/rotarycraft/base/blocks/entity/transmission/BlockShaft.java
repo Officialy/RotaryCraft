@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 
+import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 import reika.rotarycraft.registry.MaterialRegistry;
@@ -40,8 +41,8 @@ public class BlockShaft extends BlockBasicMachine {
             return (lvl, pos, st, be) -> {
                 BlockEntityShaft sh = (BlockEntityShaft) be;
                 if (sh.omega > 0) {
-                    sh.phi += (float) reika.dragonapi.libraries.mathsci.ReikaMathLibrary
-                            .doubpow(reika.dragonapi.libraries.mathsci.ReikaMathLibrary.logbase(sh.omega + 1, 2), 1.05);
+                    sh.phi += (float) ReikaMathLibrary
+                            .doubpow(ReikaMathLibrary.logbase(sh.omega + 1, 2), 1.05);
                 }
             };
         }

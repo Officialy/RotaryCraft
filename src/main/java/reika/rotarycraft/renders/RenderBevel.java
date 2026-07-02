@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.network.chat.Style;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -109,7 +111,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         // Face numbers / compass still TODO (need separate per-RT submissions).
     }
 
-    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double x, double y, double z, net.minecraft.client.renderer.SubmitNodeCollector collector) {
+    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double x, double y, double z, SubmitNodeCollector collector) {
         stack.pushPose();
         stack.translate(x, y, z);
         ReikaRenderHelper.disableLighting();
@@ -142,7 +144,7 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
 
             // 26.2: Font.drawInBatch removed; in-world text is submitted via the feature pipeline.
             collector.submitText(stack, 0, 0,
-                    net.minecraft.util.FormattedCharSequence.forward(String.valueOf(i), net.minecraft.network.chat.Style.EMPTY),
+                    FormattedCharSequence.forward(String.valueOf(i), Style.EMPTY),
                     false, Font.DisplayMode.NORMAL, 15728880, 0xFFFFFF, 0, 0);
 
             stack.popPose();

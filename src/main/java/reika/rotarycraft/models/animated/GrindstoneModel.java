@@ -1,4 +1,5 @@
 package reika.rotarycraft.models.animated;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -242,7 +243,7 @@ public class GrindstoneModel extends RotaryModelBase {
         stack.pushPose();
         double d = 0.9375;
         stack.translate(0.0, d, 0.0);
-        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.mulPose(Axis.ZP.rotationDegrees(phi));
         stack.translate(0.0, -d, 0.0);
         shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

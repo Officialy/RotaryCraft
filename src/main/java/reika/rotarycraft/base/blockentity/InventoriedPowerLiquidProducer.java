@@ -2,9 +2,11 @@ package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -12,12 +14,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 
 
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.registry.MachineRegistry;
+
+import java.util.Optional;
 
 public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProducer {
 
@@ -99,15 +107,15 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
     // ManagedItemHandler#serialize(ValueOutput)/deserialize(ValueInput) replaces the old
     // ItemStack.save/of and ListTag round-tripping.
     @Override
-    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+    protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        net.minecraft.world.level.storage.TagValueOutput nested = net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING, this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess());
+        TagValueOutput nested = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess());
         itemHandler.serialize(nested);
         output.store("ItemsRaw", CompoundTag.CODEC, nested.buildResult());
     }
 
     @Override
-    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+    protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         itemHandler = new ManagedItemHandler(getContainerSize()){
             @Override
@@ -115,9 +123,9 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
                 setChanged();
             }
         };
-        java.util.Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
+        Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
         if (raw.isPresent()) {
-            net.minecraft.world.level.storage.ValueInput nested = net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, this.level == null ? net.minecraft.core.RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
+            ValueInput nested = TagValueInput.create(ProblemReporter.DISCARDING, this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
             itemHandler.deserialize(nested);
         }
     }

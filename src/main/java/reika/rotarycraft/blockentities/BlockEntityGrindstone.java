@@ -11,6 +11,7 @@ package reika.rotarycraft.blockentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +27,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
+import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.MultiOperational;
@@ -92,8 +94,8 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
 
     private void createUsesTag() {
         ItemStack is = itemHandler.getStackInSlot(0);
-        if (!reika.dragonapi.libraries.registry.ReikaItemHelper.getOrCreateStackTag(is).contains(NBT_TAG))
-            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt(NBT_TAG, is.getMaxDamage() * 2));
+        if (!ReikaItemHelper.getOrCreateStackTag(is).contains(NBT_TAG))
+            ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt(NBT_TAG, is.getMaxDamage() * 2));
     }
 
     public void getIOSides(Level world, BlockPos pos, int metadata) {
@@ -114,12 +116,12 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
         int dmg = stack.getDamageValue();
         int newdmg = dmg - 1;
         stack.setDamageValue(newdmg);
-        int repair = reika.dragonapi.libraries.registry.ReikaItemHelper.getOrCreateStackTag(stack).getIntOr(NBT_TAG, 0);
-        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(stack, __T__ -> __T__.putInt(NBT_TAG, repair - 1));
+        int repair = ReikaItemHelper.getOrCreateStackTag(stack).getIntOr(NBT_TAG, 0);
+        ReikaItemHelper.updateStackTag(stack, __T__ -> __T__.putInt(NBT_TAG, repair - 1));
     }
 
     public int getMinimumDamageForItem(ItemStack is) {
-        return reika.dragonapi.libraries.registry.ReikaItemHelper.hasStackTag(is) && reika.dragonapi.libraries.registry.ReikaItemHelper.getStackTag(is).contains(NBT_TAG) ? is.getMaxDamage() - Mth.ceil(reika.dragonapi.libraries.registry.ReikaItemHelper.getStackTag(is).getIntOr(NBT_TAG, 0) / 2F) : 0;
+        return ReikaItemHelper.hasStackTag(is) && ReikaItemHelper.getStackTag(is).contains(NBT_TAG) ? is.getMaxDamage() - Mth.ceil(ReikaItemHelper.getStackTag(is).getIntOr(NBT_TAG, 0) / 2F) : 0;
     }
 
     public boolean hasValidItem() {
@@ -153,7 +155,7 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
     public boolean isItemValidForSlot(int slot, ItemStack is) {
         // 1.21.5: SwordItem was collapsed into plain Item + Item.Properties.sword(...). The
         // replacement detection is the swords tag (matches every modded sword that opts in too).
-        return is.isDamageableItem() && (is.getItem() instanceof ShearsItem || is.is(net.minecraft.tags.ItemTags.SWORDS));
+        return is.isDamageableItem() && (is.getItem() instanceof ShearsItem || is.is(ItemTags.SWORDS));
     }
 
     @Override

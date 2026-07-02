@@ -32,6 +32,7 @@ import reika.rotarycraft.auxiliary.TorqueUsage;
 import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
 import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
 import reika.rotarycraft.base.blockentity.BlockEntityTransmissionMachine;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.registry.*;
 
 import java.util.Collection;
@@ -178,9 +179,9 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
     }
 
     private void getIOSidesFromFacing() {
-        net.minecraft.world.level.block.state.BlockState state = this.getBlockState();
-        if (state != null && state.hasProperty(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING)) {
-            read = state.getValue(reika.rotarycraft.base.blocks.BlockRotaryCraftMachine.FACING);
+        BlockState state = this.getBlockState();
+        if (state != null && state.hasProperty(BlockRotaryCraftMachine.FACING)) {
+            read = state.getValue(BlockRotaryCraftMachine.FACING);
             write = read.getOpposite();
         }
     }

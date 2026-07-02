@@ -11,8 +11,10 @@ package reika.rotarycraft.blockentities.engine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -75,7 +77,7 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
 
     @Override
     public boolean canUpgradeWith(ItemStack item) {
-        return !this.hasRedstoneUpgrade() && RotaryItems.UPGRADE.get() == item.getItem() && item.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getStringOr("upgradeType", "").equals(ItemEngineUpgrade.UpgradeType.REDSTONE.name());
+        return !this.hasRedstoneUpgrade() && RotaryItems.UPGRADE.get() == item.getItem() && item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("upgradeType", "").equals(ItemEngineUpgrade.UpgradeType.REDSTONE.name());
     }
 
     @Override
@@ -117,7 +119,7 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
             // 1.21.5: ItemStack(Item, int, CompoundTag) constructor removed and CompoundTag became final.
             // Attach the upgrade type via the CUSTOM_DATA component instead.
             ItemStack upgrade = new ItemStack(RotaryItems.UPGRADE.get(), 1);
-            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(upgrade, __T__ -> __T__.putString("upgrade", ItemEngineUpgrade.UpgradeType.REDSTONE.name()));
+            ReikaItemHelper.updateStackTag(upgrade, __T__ -> __T__.putString("upgrade", ItemEngineUpgrade.UpgradeType.REDSTONE.name()));
             ReikaItemHelper.dropItem(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, upgrade);
         }
     }

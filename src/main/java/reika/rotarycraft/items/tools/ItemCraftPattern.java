@@ -1,6 +1,10 @@
 package reika.rotarycraft.items.tools;
 
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -9,8 +13,14 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -20,6 +30,7 @@ import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.RotaryRecipeTypes;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRenderCallback {
 
@@ -32,7 +43,7 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (player.isCrouching()) {
-            reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(this.getDefaultInstance(), null);
+            ReikaItemHelper.setStackTag(this.getDefaultInstance(), null);
         }
         else {
 //         todo   player.openMenu(RotaryCraft.getInstance(), GuiRegistry.PATTERN.ordinal(), level, 0, 0, 0);
@@ -42,8 +53,8 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
 
     // 1.21.5: Item.appendHoverText now has 5 args including TooltipDisplay and Consumer<Component>.
     @Override
-    public void appendHoverText(ItemStack is, net.minecraft.world.item.Item.TooltipContext ctx, net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> li, TooltipFlag flag) {
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null) {
+    public void appendHoverText(ItemStack is, Item.TooltipContext ctx, TooltipDisplay display, Consumer<Component> li, TooltipFlag flag) {
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null) {
             li.accept(Component.literal("No Crafting Pattern."));
         }
         else {
@@ -72,17 +83,17 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
     }
 
     public static int getStackInputLimit(ItemStack is) {
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
-            int amt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("stacklimit", 0);
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null) {
+            int amt = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("stacklimit", 0);
             return amt > 0 ? amt : 64;
         }
         return 64;
     }
 
     private static void resetNBT(ItemStack is) {
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null) {
-            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("output"));
-            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("recipe"));
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null) {
+            ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("output"));
+            ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("recipe"));
         }
     }
 
@@ -92,29 +103,29 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
         RecipeMode mode = getMode(is);
         resetNBT(is);
         setMode(is, mode);
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
-            reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(is, new CompoundTag());
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
+            ReikaItemHelper.setStackTag(is, new CompoundTag());
         ItemStack out = mode.getRecipe(ic, world);
         boolean valid = out != null;
         CompoundTag recipe = new CompoundTag();
         // 1.21.5: ItemStack.save(CompoundTag) was removed; serialisation now goes through
         // ItemStack.save(HolderLookup.Provider, Tag). Persist via ItemStack.CODEC encode
         // until we plumb a provider end-to-end.
-        net.minecraft.core.HolderLookup.Provider provider = world.registryAccess();
+        HolderLookup.Provider provider = world.registryAccess();
         for (int i = 0; i < 9; i++) {
             ItemStack in = ic.getItem(i);
             if (in != null && !in.isEmpty()) {
-                net.minecraft.nbt.Tag encoded = ItemStack.CODEC.encodeStart(provider.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), in).result().orElse(null);
+                Tag encoded = ItemStack.CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), in).result().orElse(null);
                 if (encoded instanceof CompoundTag ct)
                     recipe.put("slot"+i, ct);
             }
         }
-        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("recipe", recipe));
-        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean("valid", valid));
+        ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("recipe", recipe));
+        ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putBoolean("valid", valid));
         if (valid) {
-            net.minecraft.nbt.Tag encoded = ItemStack.CODEC.encodeStart(provider.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), out).result().orElse(null);
+            Tag encoded = ItemStack.CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), out).result().orElse(null);
             if (encoded instanceof CompoundTag outt)
-                reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("output", outt));
+                ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("output", outt));
         }
     }
 
@@ -133,20 +144,20 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
     }*/
 
     public static RecipeMode getMode(ItemStack is) {
-        return is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? RecipeMode.list[is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("mode", 0)] : RecipeMode.CRAFTING;
+        return is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? RecipeMode.list[is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("mode", 0)] : RecipeMode.CRAFTING;
     }
 
     public static void setMode(ItemStack is, RecipeMode md) {
         if (!RotaryItems.CRAFT_PATTERN.get().equals(is)) //todo check equals
             return;
-        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("mode", md.ordinal()));
+        ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("mode", md.ordinal()));
     }
 
     public static void changeStackLimit(ItemStack is, int change) {
         if (!RotaryItems.CRAFT_PATTERN.get().equals(is)) //todo check equals
             return;
         int limit = getStackInputLimit(is);
-        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("stacklimit", Mth.clamp(limit+change, 1, 64)));
+        ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("stacklimit", Mth.clamp(limit+change, 1, 64)));
     }
 
     public static enum RecipeMode {
@@ -177,11 +188,11 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
             // recipe manager (when available). Returns null on the client until we wire
             // ItemCraftPattern through a server-side handler.
             if (world.isClientSide() || world.getServer() == null) return null;
-            net.minecraft.world.item.crafting.RecipeManager rm = world.getServer().getRecipeManager();
-            net.minecraft.world.item.crafting.CraftingInput input = ic.asCraftInput();
+            RecipeManager rm = world.getServer().getRecipeManager();
+            CraftingInput input = ic.asCraftInput();
             switch (this) {
                 case CRAFTING -> {
-                    return rm.getRecipeFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING, input, world)
+                    return rm.getRecipeFor(RecipeType.CRAFTING, input, world)
                             .map(holder -> holder.value().assemble(input))
                             .orElse(null);
                 }

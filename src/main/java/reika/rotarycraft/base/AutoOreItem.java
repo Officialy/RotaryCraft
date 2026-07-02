@@ -14,11 +14,12 @@ import reika.dragonapi.interfaces.registry.OreType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import reika.rotarycraft.registry.RotaryItems;
 
 public abstract class AutoOreItem extends ItemBasic {
 
     public AutoOreItem() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties(), 64);
+        super(RotaryItems.itemProperties(), 64);
     }
 
     @Override

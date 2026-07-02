@@ -32,7 +32,7 @@ import reika.rotarycraft.registry.RotaryItems;
 public final class ItemBedrockPickaxe extends Item {
 
     public ItemBedrockPickaxe() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties().stacksTo(1).pickaxe(ToolMaterial.NETHERITE, 5, 12));
+        super(RotaryItems.itemProperties().stacksTo(1).pickaxe(ToolMaterial.NETHERITE, 5, 12));
     }
 
     @Override

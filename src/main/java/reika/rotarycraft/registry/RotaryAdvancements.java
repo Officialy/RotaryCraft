@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.Blocks;
 import reika.rotarycraft.RotaryCraft;
 
 import java.util.Locale;
+import java.util.function.Supplier;
 
 public enum RotaryAdvancements {
 
@@ -78,7 +79,7 @@ public enum RotaryAdvancements {
     public final boolean isSpecial;
     // Deferred so the enum can be class-loaded during datagen before item components are bound
     // (a {@code new ItemStack(...)} at static-init time throws "Components not bound yet").
-    private final java.util.function.Supplier<Item> iconSupplier;
+    private final Supplier<Item> iconSupplier;
 
     RotaryAdvancements(int x, int y, Item icon, RotaryAdvancements preReq, boolean special) {
         this(x, y, () -> icon, preReq, special);
@@ -92,7 +93,7 @@ public enum RotaryAdvancements {
         this(x, y, () -> icon.getBlockState().getBlock().asItem(), preReq, special);
     }
 
-    RotaryAdvancements(int x, int y, java.util.function.Supplier<Item> icon, RotaryAdvancements preReq, boolean special) {
+    RotaryAdvancements(int x, int y, Supplier<Item> icon, RotaryAdvancements preReq, boolean special) {
         xPosition = x;
         yPosition = y;
         dependency = preReq;

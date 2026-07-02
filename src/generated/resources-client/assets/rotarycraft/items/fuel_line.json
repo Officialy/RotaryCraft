@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "rotarycraft:block/fuel_line"
+    "model": "rotarycraft:block/pipe/fuel_line/core"
   }
 }

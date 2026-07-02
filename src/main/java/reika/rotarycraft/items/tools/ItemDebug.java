@@ -36,11 +36,12 @@ import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemDebug extends ItemRotaryTool {
 
     public ItemDebug() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     // 26.2 fix: was use(Level,Player,Hand) acting on pos (the player's own feet), so it

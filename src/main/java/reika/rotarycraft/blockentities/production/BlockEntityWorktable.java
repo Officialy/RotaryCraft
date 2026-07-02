@@ -11,10 +11,13 @@
 package reika.rotarycraft.blockentities.production;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -35,6 +38,7 @@ import reika.rotarycraft.auxiliary.interfaces.AlternatingRedstoneUser;
 import reika.rotarycraft.base.ItemChargedArmor;
 import reika.rotarycraft.base.ItemChargedTool;
 import reika.rotarycraft.base.blockentity.InventoriedRCBlockEntity;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerWorktable;
 import reika.rotarycraft.items.tools.ItemCraftPattern;
 import reika.rotarycraft.items.tools.ItemJetPack;
 import reika.rotarycraft.items.tools.ItemJetPack.PackUpgrades;
@@ -44,6 +48,10 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.SoundRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class BlockEntityWorktable extends InventoriedRCBlockEntity implements CraftingTile<BlockEntityWorktable>, TriggerableAction, AlternatingRedstoneUser {
 
@@ -57,13 +65,13 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     /**
      * 26.1: previously RotaryCraftBlockEntity's default {@code createMenu} returned null for
      * the worktable because we never overrode it. Right-clicking the block produced no GUI —
-     * user complaint: "no gui for worktable". Wire it to {@link reika.rotarycraft.gui.container.machine.inventory.ContainerWorktable}.
+     * user complaint: "no gui for worktable". Wire it to {@link ContainerWorktable}.
      */
     @Override
-    public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id,
-            net.minecraft.world.entity.player.Inventory inv,
-            net.minecraft.world.entity.player.Player player) {
-        return new reika.rotarycraft.gui.container.machine.inventory.ContainerWorktable(id, inv, this, level, true);
+    public AbstractContainerMenu createMenu(int id,
+            Inventory inv,
+            Player player) {
+        return new ContainerWorktable(id, inv, this, level, true);
     }
 
     @Override
@@ -224,12 +232,12 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         if (level == null || level.isClientSide() || level.getServer() == null)
             return false;
 
-        java.util.List<ItemStack> items = new java.util.ArrayList<>(9);
+        List<ItemStack> items = new ArrayList<>(9);
         for (int i = 0; i < 9; i++) {
             items.add(itemHandler.getStackInSlot(i));
         }
         CraftingInput input = CraftingInput.of(3, 3, items);
-        java.util.Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager()
+        Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager()
                 .getRecipeFor(RecipeType.CRAFTING, input, level);
         if (optional.isEmpty())
             return false;
@@ -323,11 +331,11 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         int armorslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JUMP.get(), itemHandler);
         int jumpslot = ReikaInventoryHelper.locateInInventory(RotaryItems.JUMP.get(), itemHandler);
         if (jumpslot != -1 && armorslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
-            CompoundTag tag = itemHandler.getStackInSlot(armorslot).getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy();
+            CompoundTag tag = itemHandler.getStackInSlot(armorslot).getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy();
             itemHandler.setStackInSlot(jumpslot, ItemStack.EMPTY);
             itemHandler.setStackInSlot(armorslot, ItemStack.EMPTY);
             ItemStack is = RotaryItems.BEDROCK_ALLOY_JUMP_BOOTS.get().getDefaultInstance();//todo .getEnchantedStack();
-            ReikaNBTHelper.combineNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), tag);
+            ReikaNBTHelper.combineNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(), tag);
             itemHandler.setStackInSlot(9, is);
         }
     }
@@ -376,17 +384,17 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
 //            return is.getItemDamage() > 0;
 //        }
 
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
             return false;
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("dmg", 0) > 0)
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("dmg", 0) > 0)
             return true;
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("damage", 0) > 0)
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("damage", 0) > 0)
             return true;
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lube", 0) > 0)
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("lube", 0) > 0)
             return true;
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getIntOr("lvl", 0) > 0)
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("lvl", 0) > 0)
             return true;
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("ench"))
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("ench"))
             return true;
 //        if (ir == RotaryItems.MACHINE) {
 //            MachineRegistry r = MachineRegistry.machineList.get(is.getItemDamage());
@@ -457,8 +465,8 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
                 itemHandler.setStackInSlot(10, newcoil);
             } else {
                 ItemStack newtool = new ItemStack(toolid, 1);
-                CompoundTag tag = tool.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? tool.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy() : null;
-                reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(newtool, tag);
+                CompoundTag tag = tool.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? tool.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy() : null;
+                ReikaItemHelper.setStackTag(newtool, tag);
                 ItemStack newcoil = new ItemStack(coilid, 1); //todo add coil charge tag
                 itemHandler.setStackInSlot(toolslot, ItemStack.EMPTY);
                 itemHandler.setStackInSlot(coilslot, ItemStack.EMPTY);
@@ -491,17 +499,17 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
             ItemStack jet = itemHandler.getStackInSlot(jetslot);
             ItemStack plate = itemHandler.getStackInSlot(plateslot);
-            CompoundTag tag1 = plate.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? (CompoundTag) plate.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy() : null;
-            CompoundTag tag2 = jet.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() != null ? (CompoundTag) jet.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().copy() : null;
+            CompoundTag tag1 = plate.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? (CompoundTag) plate.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy() : null;
+            CompoundTag tag2 = jet.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? (CompoundTag) jet.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy() : null;
             itemHandler.setStackInSlot(jetslot, ItemStack.EMPTY);
             itemHandler.setStackInSlot(plateslot, ItemStack.EMPTY);
             ItemStack is = (bed ? RotaryItems.BEDROCK_ALLOY_PACK.get().getDefaultInstance() : RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance());
             /*todo get the enchanted version max*/
 
-            if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
-                reika.dragonapi.libraries.registry.ReikaItemHelper.setStackTag(is, new CompoundTag());
-            ReikaNBTHelper.combineNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), tag1);
-            ReikaNBTHelper.combineNBT(is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag(), tag2);
+            if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
+                ReikaItemHelper.setStackTag(is, new CompoundTag());
+            ReikaNBTHelper.combineNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(), tag1);
+            ReikaNBTHelper.combineNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(), tag2);
             itemHandler.setStackInSlot(9, is);
             for (PackUpgrades u : PackUpgrades.values()) {
                 if (u.existsOn(jet)) {
@@ -696,7 +704,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     @Override
     public CraftingContainer constructContainer() {
         AbstractContainerMenu dummy = new AbstractContainerMenu(null, -1) {
-            @Override public net.minecraft.world.item.ItemStack quickMoveStack(Player p, int s) { return net.minecraft.world.item.ItemStack.EMPTY; }
+            @Override public ItemStack quickMoveStack(Player p, int s) { return ItemStack.EMPTY; }
             @Override public boolean stillValid(Player p) { return false; }
         };
         TransientCraftingContainer c = new TransientCraftingContainer(dummy, 3, 3);

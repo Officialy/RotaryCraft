@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import reika.dragonapi.base.CoreContainer;
 import net.minecraft.world.item.ItemStack;
 import reika.dragonapi.base.BlockEntityBase;
@@ -26,7 +27,7 @@ public class BlankContainer<T extends BlockEntityBase> extends CoreContainer<T> 
 
     @Override
     public boolean stillValid(Player player) {
-        return player.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(tile.getBlockPos())) <= 16;
+        return player.distanceToSqr(Vec3.atCenterOf(tile.getBlockPos())) <= 16;
     }
 
     @Override

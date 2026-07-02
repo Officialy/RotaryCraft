@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -508,7 +509,7 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
             // 26.1: MobEffectInstance.load was removed in favour of MobEffectInstance.CODEC.
             // We decode each list entry through the codec; null/invalid entries are skipped.
             for (var o : li) {
-                MobEffectInstance.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, o).result().ifPresent(fx::add);
+                MobEffectInstance.CODEC.parse(NbtOps.INSTANCE, o).result().ifPresent(fx::add);
             }
             return new PotionApplication(fx, amt, lvl);
         }
@@ -527,7 +528,7 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
             // 26.1: MobEffectInstance.save was removed in favour of MobEffectInstance.CODEC.
             // We encode each effect through the codec; failed encodings drop the entry.
             for (MobEffectInstance eff : effects) {
-                MobEffectInstance.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, eff).result().ifPresent(li::add);
+                MobEffectInstance.CODEC.encodeStart(NbtOps.INSTANCE, eff).result().ifPresent(li::add);
             }
             NBT.put("effects", li);
             NBT.putInt("amount", amount);

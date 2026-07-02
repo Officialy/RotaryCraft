@@ -9,7 +9,9 @@
  ******************************************************************************/
 package reika.rotarycraft.registry;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -55,9 +57,9 @@ public class RotaryEntities {
      */
     private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> registerEntityType(final String name, final Supplier<EntityType.Builder<T>> factory) {
         // 1.21.5: EntityType.Builder.build now takes ResourceKey<EntityType<?>> instead of a String.
-        net.minecraft.resources.ResourceKey<EntityType<?>> key = net.minecraft.resources.ResourceKey.create(
-                net.minecraft.core.registries.Registries.ENTITY_TYPE,
-                net.minecraft.resources.Identifier.fromNamespaceAndPath(RotaryCraft.MODID, name));
+        ResourceKey<EntityType<?>> key = ResourceKey.create(
+                Registries.ENTITY_TYPE,
+                Identifier.fromNamespaceAndPath(RotaryCraft.MODID, name));
         return ENTITIES.register(name, () -> factory.get().build(key));
     }
 

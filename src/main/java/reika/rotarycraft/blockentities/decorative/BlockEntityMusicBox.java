@@ -11,6 +11,7 @@ package reika.rotarycraft.blockentities.decorative;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,6 +44,7 @@ import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.dragonapi.libraries.mathsci.ReikaMusicHelper;
+import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 import reika.rotarycraft.gui.container.machine.MusicContainer;
@@ -429,13 +432,13 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
             return;
         if (is.getItem() != RotaryItems.DISK.get())
             return;
-        if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag() == null)
+        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
             return;
         this.clearMusic();
         try {
             for (int i = 0; i < 16; i++) {
-                if (is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().contains("ch" + i)) {
-                    ListTag li = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
+                if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("ch" + i)) {
+                    ListTag li = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
                     for (int k = 0; k < li.size(); k++) {
                         CompoundTag nbt = li.getCompoundOrEmpty(k);
                         //ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Dist.DEDICATED_SERVER);
@@ -467,7 +470,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
                 li.add(nbt);
             }
             final int fi = i; final ListTag fli = li;
-            reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("ch" + fi, fli));
+            ReikaItemHelper.updateStackTag(is, __T__ -> __T__.put("ch" + fi, fli));
         }
     }
 

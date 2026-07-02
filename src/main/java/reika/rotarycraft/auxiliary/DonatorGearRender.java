@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
+import com.mojang.math.Axis;
 import org.joml.Quaternionf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -41,9 +42,9 @@ public class DonatorGearRender implements PlayerRenderObj {
         matrixStack.translate(0, d, 0);
         // 1.21.5 fix: legacy ported {@code new Quaternionf(a,x,y,z)} but Quaternionf takes
         // (x,y,z,w) — yielding a non-normalised quaternion. Use Axis rotations instead.
-        matrixStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(angle));
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(angle));
         matrixStack.translate(0, -d, 0);
-        matrixStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(90));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(90));
         float s = 0.5f;
         matrixStack.scale(s, s, s);
         matrixStack.popPose();

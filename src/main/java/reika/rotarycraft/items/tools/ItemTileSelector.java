@@ -9,6 +9,9 @@
  ******************************************************************************/
 package reika.rotarycraft.items.tools;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
+import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.rotarycraft.auxiliary.interfaces.SelectableTiles;
@@ -21,13 +24,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.Arrays;
 
 public class ItemTileSelector extends ItemRotaryTool {
 
     public ItemTileSelector() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     @Override
@@ -52,7 +56,7 @@ public class ItemTileSelector extends ItemRotaryTool {
     }
 
     private SelectableTiles getController(Level world, ItemStack is) {
-        CompoundTag nbt = is.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+        CompoundTag nbt = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (nbt == null)
             return null;
         // 1.21.5: CompoundTag#getIntArray now returns Optional<int[]>.
@@ -68,7 +72,7 @@ public class ItemTileSelector extends ItemRotaryTool {
 
     private void setID(ItemStack is, int[] id) {
         // 1.21.5: ItemStack.save was removed; persist via the CUSTOM_DATA helper.
-        reika.dragonapi.libraries.registry.ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putIntArray("locID", id));
+        ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putIntArray("locID", id));
         RotaryCraft.LOGGER.debug("Saved tile " + Arrays.toString(id));
     }
 

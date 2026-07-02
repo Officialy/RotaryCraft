@@ -9,9 +9,12 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -264,15 +267,15 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
         mappings = new ItemStack[LENGTH * 3];
 
         // 26.1: ItemStack.of removed; round-trip via ItemStack.CODEC + RegistryOps.
-        var regAcc = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
-        var ops = regAcc.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        var regAcc = level == null ? RegistryAccess.EMPTY : level.registryAccess();
+        var ops = regAcc.createSerializationContext(NbtOps.INSTANCE);
         for (int i = 0; i < nbttaglist.size(); i++) {
             CompoundTag entry = nbttaglist.getCompoundOrEmpty(i);
             byte slot = entry.getByteOr("Slot", (byte) 0);
             if (slot >= 0 && slot < mappings.length) {
                 var stackTag = entry.get("Stack");
                 if (stackTag != null) {
-                    mappings[slot] = net.minecraft.world.item.ItemStack.CODEC.parse(ops, stackTag).result().orElse(ItemStack.EMPTY);
+                    mappings[slot] = ItemStack.CODEC.parse(ops, stackTag).result().orElse(ItemStack.EMPTY);
                 } else {
                     mappings[slot] = ItemStack.EMPTY;
                 }
@@ -291,13 +294,13 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
 
         ListTag nbttaglist = new ListTag();
         // 26.1: ItemStack.save(CompoundTag) removed; round-trip via ItemStack.CODEC + RegistryOps.
-        var regAcc = level == null ? net.minecraft.core.RegistryAccess.EMPTY : level.registryAccess();
-        var ops = regAcc.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
+        var regAcc = level == null ? RegistryAccess.EMPTY : level.registryAccess();
+        var ops = regAcc.createSerializationContext(NbtOps.INSTANCE);
         for (int i = 0; i < mappings.length; i++) {
             if (mappings[i] != null && !mappings[i].isEmpty()) {
                 CompoundTag entry = new CompoundTag();
                 entry.putByte("Slot", (byte) i);
-                net.minecraft.world.item.ItemStack.CODEC.encodeStart(ops, mappings[i]).result()
+                ItemStack.CODEC.encodeStart(ops, mappings[i]).result()
                         .ifPresent(stackTag -> entry.put("Stack", stackTag));
                 nbttaglist.add(entry);
             }
@@ -340,7 +343,7 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
         @Override
         public void destroy() {
             // 1.21.5: Entity#kill() now requires a ServerLevel argument.
-            if (item.level() instanceof net.minecraft.server.level.ServerLevel sl) item.kill(sl);
+            if (item.level() instanceof ServerLevel sl) item.kill(sl);
         }
 		/*
 		@Override

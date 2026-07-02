@@ -1,6 +1,7 @@
 package reika.rotarycraft.auxiliary;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
@@ -24,7 +25,7 @@ public class FreezePotion extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(net.minecraft.server.level.ServerLevel level, LivingEntity e, int pAmplifier) {
+    public boolean applyEffectTick(ServerLevel level, LivingEntity e, int pAmplifier) {
         e.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 20, -30));
         e.fallDistance = 0;
         if (e instanceof Slime) {

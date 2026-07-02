@@ -33,7 +33,7 @@ public abstract class BlockRotaryCraftMachine extends BlockTEBase implements Mac
     * however they are not enabled unless {@link #hasVerticalPlacement} is set to true.
      * Setting a block that does not have vertical placement to face up or down will cause a crash. This may be fixed in the future.
     */
-    public static EnumProperty<net.minecraft.core.Direction> FACING = BlockStateProperties.FACING;
+    public static EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
     public BlockRotaryCraftMachine(BlockBehaviour.Properties properties) {
         super(properties.strength(4, 15));

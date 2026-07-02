@@ -11,11 +11,12 @@ package reika.rotarycraft.items;
 
 import reika.rotarycraft.registry.RotaryBlocks;
 import net.minecraft.world.item.BlockItem;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class BlockItemDeco extends BlockItem {
 
     public BlockItemDeco() {
-        super(RotaryBlocks.DECOTANK.get(), reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryBlocks.DECOTANK.get(), RotaryItems.itemProperties());
     }
 
 }

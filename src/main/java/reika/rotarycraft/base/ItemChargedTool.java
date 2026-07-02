@@ -17,12 +17,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.registry.ConfigRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 
 
 public abstract class ItemChargedTool extends ItemRotaryTool {
 
     public ItemChargedTool() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     @Override

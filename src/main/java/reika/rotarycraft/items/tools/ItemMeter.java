@@ -46,13 +46,14 @@ import reika.rotarycraft.blockentities.weaponry.BlockEntityHeatRay;
 
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class ItemMeter extends ItemRotaryTool {
     public ItemMeter() {
-        super(reika.rotarycraft.registry.RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties());
     }
 
     @Override

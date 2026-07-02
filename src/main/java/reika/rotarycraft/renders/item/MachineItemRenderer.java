@@ -2,17 +2,20 @@ package reika.rotarycraft.renders.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Unit;
 import org.joml.Vector3fc;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.RotaryModelBase;
 import reika.rotarycraft.registry.MachineRegistry;
 
+import java.util.Locale;
 import java.util.function.Consumer;
 
 /**
@@ -60,7 +63,7 @@ public class MachineItemRenderer implements NoDataSpecialModelRenderer {
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.mulPose(Axis.YN.rotationDegrees(90F));
         // Submit the model using the renderType derived from the model's texture.
-        collector.submitModel(model, net.minecraft.util.Unit.INSTANCE, poseStack, texture, lightCoords, overlayCoords, outlineColor, null);
+        collector.submitModel(model, Unit.INSTANCE, poseStack, texture, lightCoords, overlayCoords, outlineColor, null);
         poseStack.popPose();
     }
 
@@ -75,7 +78,7 @@ public class MachineItemRenderer implements NoDataSpecialModelRenderer {
     /** Codec-backed unbaked form. Resolved at bake() time against the live {@link MachineRegistry}. */
     public record Unbaked(String machine) implements NoDataSpecialModelRenderer.Unbaked {
         public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
-                com.mojang.serialization.Codec.STRING.fieldOf("machine").forGetter(Unbaked::machine)
+                Codec.STRING.fieldOf("machine").forGetter(Unbaked::machine)
         ).apply(i, Unbaked::new));
 
         @Override
@@ -87,7 +90,7 @@ public class MachineItemRenderer implements NoDataSpecialModelRenderer {
         public MachineItemRenderer bake(SpecialModelRenderer.BakingContext context) {
             MachineRegistry m;
             try {
-                m = MachineRegistry.valueOf(machine.toUpperCase(java.util.Locale.ROOT));
+                m = MachineRegistry.valueOf(machine.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException e) {
                 RotaryCraft.LOGGER.warn("Unknown machine '{}' in special model renderer", machine);
                 return null;
@@ -118,10 +121,10 @@ public class MachineItemRenderer implements NoDataSpecialModelRenderer {
          * returned the unsuffixed {@code shafttex.png} — the HSLA-tier texture — so a bedrock
          * shaft in hand showed up wearing the HSLA texture.
          */
-        private static net.minecraft.resources.Identifier resolveTextureForMachine(MachineRegistry m, RotaryModelBase modelInstance) {
+        private static Identifier resolveTextureForMachine(MachineRegistry m, RotaryModelBase modelInstance) {
             String tierSuffix = shaftTierSuffix(m);
             if (tierSuffix != null) {
-                return net.minecraft.resources.Identifier.fromNamespaceAndPath(
+                return Identifier.fromNamespaceAndPath(
                         RotaryCraft.MODID,
                         "textures/blockentitytex/transmission/shaft/shafttex" + tierSuffix + ".png");
             }

@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -344,7 +345,7 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
                 ItemStack is = null;
                 if (items[i] instanceof ItemStack stack)
                     is = stack;
-                else if (items[i] instanceof net.minecraft.world.level.ItemLike il)
+                else if (items[i] instanceof ItemLike il)
                     is = new ItemStack(il);
                 if (is != null)
                     this.items.add(is);
