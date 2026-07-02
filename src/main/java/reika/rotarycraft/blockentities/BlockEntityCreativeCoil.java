@@ -16,12 +16,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import reika.rotarycraft.api.power.PowerGenerator;
 import reika.rotarycraft.api.power.ShaftPowerReceiver;
+import reika.rotarycraft.base.blocks.entity.BlockCreativeCoil;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
 /**
- * The Creative Coil's block entity: an infinite, orientation-agnostic shaft-power source. Every server
- * tick it writes a large constant torque/speed to each adjacent {@link ShaftPowerReceiver} that will
- * read from it, and satisfies {@code PowerTransferHelper.checkPowerFrom} via {@link PowerGenerator}.
+ * The Creative Coil's block entity: an infinite shaft-power source that outputs on a single face (its
+ * block's {@link BlockCreativeCoil#FACING}). Every server tick it writes a large constant torque/speed
+ * to the {@link ShaftPowerReceiver} on that side if it will read from us, and satisfies
+ * {@code PowerTransferHelper.checkPowerFrom} via {@link PowerGenerator}.
  *
  * <p>OMEGA is deliberately capped at 4096 -- the value ReactorCraft's own {@code DragonAPI.debugtest}
  * path feeds the solenoid, which maps to the solenoid's max safe render speed. Higher would trip the
@@ -41,14 +43,13 @@ public class BlockEntityCreativeCoil extends BlockEntity implements PowerGenerat
 	public void serverTick() {
 		if (level == null)
 			return;
-		for (Direction dir : Direction.values()) {
-			BlockEntity te = level.getBlockEntity(worldPosition.relative(dir));
-			// dir points coil -> neighbour, so the neighbour reads from the opposite side (back at us).
-			if (te instanceof ShaftPowerReceiver sp && sp.isReceiving() && sp.canReadFrom(dir.getOpposite())) {
-				sp.setOmega(OMEGA);
-				sp.setTorque(TORQUE);
-				sp.setPower(POWER);
-			}
+		Direction out = getBlockState().getValue(BlockCreativeCoil.FACING);
+		BlockEntity te = level.getBlockEntity(worldPosition.relative(out));
+		// `out` points coil -> receiver, so the receiver reads from the opposite side (back at us).
+		if (te instanceof ShaftPowerReceiver sp && sp.isReceiving() && sp.canReadFrom(out.getOpposite())) {
+			sp.setOmega(OMEGA);
+			sp.setTorque(TORQUE);
+			sp.setPower(POWER);
 		}
 	}
 
@@ -64,8 +65,7 @@ public class BlockEntityCreativeCoil extends BlockEntity implements PowerGenerat
 
 	@Override
 	public BlockPos getEmittingPos(BlockPos pos) {
-		// Omni-directional emitter: whoever asks (any adjacent receiver) is a valid target, so echo
-		// their position back -- checkPowerFrom does pos.equals(getEmittingPos(pos)).
-		return pos;
+		// We only power the block on our FACING side; checkPowerFrom does pos.equals(getEmittingPos(pos)).
+		return worldPosition.relative(getBlockState().getValue(BlockCreativeCoil.FACING));
 	}
 }
