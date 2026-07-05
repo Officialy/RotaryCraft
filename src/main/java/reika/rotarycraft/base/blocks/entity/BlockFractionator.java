@@ -17,6 +17,11 @@ public class BlockFractionator extends BlockBasicMachine {
     }
 
     @Override
+    protected boolean isCustomRendered() {
+        return true;
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new BlockEntityFractionator(pPos, pState);
     }
