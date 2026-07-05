@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 hose shell - frame edge (dn)",
+  "credit": "RotaryCraft 1.7.10 hose - flat frame edge (dn)",
   "textures": {
     "particle": "minecraft:block/oak_planks",
     "pipe": "minecraft:block/oak_planks"
@@ -7,67 +7,45 @@
   "elements": [
     {
       "from": [
-        4,
+        2,
         2,
         2
       ],
       "to": [
-        12,
-        4,
+        14,
+        2,
         4
       ],
       "faces": {
         "down": {
           "uv": [
-            0,
-            0,
-            16,
-            16
+            2,
+            2,
+            14,
+            4
           ],
           "texture": "#pipe"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        2
+      ],
+      "to": [
+        14,
+        4,
+        2
+      ],
+      "faces": {
         "north": {
           "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
+            2,
+            12,
+            14,
+            14
           ],
           "texture": "#pipe"
         }

@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 fluid_pipe shell - frame edge (dw)",
+  "credit": "RotaryCraft 1.7.10 fluid_pipe - flat frame edge (dw)",
   "textures": {
     "particle": "rotarycraft:block/steel",
     "pipe": "rotarycraft:block/steel"
@@ -13,61 +13,39 @@
       ],
       "to": [
         4,
-        4,
+        2,
         12
       ],
       "faces": {
         "down": {
           "uv": [
-            0,
-            0,
-            16,
-            16
+            2,
+            4,
+            4,
+            12
           ],
           "texture": "#pipe"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        2
+      ],
+      "to": [
+        2,
+        4,
+        14
+      ],
+      "faces": {
         "west": {
           "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
+            2,
+            12,
+            14,
+            14
           ],
           "texture": "#pipe"
         }

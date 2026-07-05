@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 fluid_pipe shell \u2014 hollow UP connection arm (4 corner bars)",
+  "credit": "RotaryCraft 1.7.10 fluid_pipe - flat arm strips (up)",
   "textures": {
     "particle": "rotarycraft:block/steel",
     "pipe": "rotarycraft:block/steel"
@@ -12,54 +12,17 @@
         2
       ],
       "to": [
-        4,
+        2,
         16,
         4
       ],
       "faces": {
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe",
-          "cullface": "up"
-        },
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
         "west": {
           "uv": [
+            2,
             0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
+            4,
+            2
           ],
           "texture": "#pipe"
         }
@@ -72,54 +35,86 @@
         12
       ],
       "to": [
-        4,
+        2,
         16,
         14
       ],
       "faces": {
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe",
-          "cullface": "up"
-        },
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
         "west": {
           "uv": [
+            12,
             0,
-            0,
-            16,
-            16
+            14,
+            2
           ],
           "texture": "#pipe"
-        },
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        14,
+        2
+      ],
+      "to": [
+        14,
+        16,
+        4
+      ],
+      "faces": {
         "east": {
           "uv": [
+            2,
             0,
+            4,
+            2
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        14,
+        12
+      ],
+      "to": [
+        14,
+        16,
+        14
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            12,
             0,
-            16,
-            16
+            14,
+            2
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        14,
+        2
+      ],
+      "to": [
+        4,
+        16,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            0,
+            4,
+            2
           ],
           "texture": "#pipe"
         }
@@ -134,52 +129,38 @@
       "to": [
         14,
         16,
-        4
+        2
       ],
       "faces": {
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe",
-          "cullface": "up"
-        },
         "north": {
           "uv": [
+            12,
             0,
-            0,
-            16,
-            16
+            14,
+            2
           ],
           "texture": "#pipe"
-        },
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        14,
+        14
+      ],
+      "to": [
+        4,
+        16,
+        14
+      ],
+      "faces": {
         "south": {
           "uv": [
+            2,
             0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
+            4,
+            2
           ],
           "texture": "#pipe"
         }
@@ -189,7 +170,7 @@
       "from": [
         12,
         14,
-        12
+        14
       ],
       "to": [
         14,
@@ -197,49 +178,12 @@
         14
       ],
       "faces": {
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe",
-          "cullface": "up"
-        },
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
         "south": {
           "uv": [
+            12,
             0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
+            14,
+            2
           ],
           "texture": "#pipe"
         }

@@ -1,0 +1,55 @@
+{
+  "credit": "RotaryCraft 1.7.10 fuel_line - flat frame edge (nw)",
+  "textures": {
+    "particle": "minecraft:block/obsidian",
+    "pipe": "minecraft:block/obsidian"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        4,
+        2
+      ],
+      "to": [
+        4,
+        12,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4,
+            4,
+            12
+          ],
+          "texture": "#pipe"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        4,
+        2
+      ],
+      "to": [
+        2,
+        12,
+        4
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            2,
+            4,
+            4,
+            12
+          ],
+          "texture": "#pipe"
+        }
+      }
+    }
+  ]
+}

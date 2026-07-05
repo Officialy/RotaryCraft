@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 pipe shell - glass arm windows (south)",
+  "credit": "RotaryCraft 1.7.10 pipe - glass arm panes (south)",
   "render_type": "minecraft:cutout",
   "textures": {
     "glass": "minecraft:block/glass",
@@ -20,19 +20,19 @@
       "faces": {
         "up": {
           "uv": [
-            4,
-            6,
-            12,
-            10
+            2,
+            2,
+            14,
+            8
           ],
           "texture": "#glass"
         },
         "down": {
           "uv": [
-            4,
-            6,
-            12,
-            10
+            2,
+            2,
+            14,
+            8
           ],
           "texture": "#glass"
         }
@@ -52,19 +52,19 @@
       "faces": {
         "down": {
           "uv": [
-            4,
-            6,
-            12,
-            10
+            2,
+            2,
+            14,
+            8
           ],
           "texture": "#glass"
         },
         "up": {
           "uv": [
-            4,
-            6,
-            12,
-            10
+            2,
+            2,
+            14,
+            8
           ],
           "texture": "#glass"
         }
@@ -84,19 +84,19 @@
       "faces": {
         "west": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         },
         "east": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         }
@@ -116,19 +116,19 @@
       "faces": {
         "east": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         },
         "west": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         }

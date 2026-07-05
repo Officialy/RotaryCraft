@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 bedrock_pipe shell - frame edge (de)",
+  "credit": "RotaryCraft 1.7.10 bedrock_pipe - flat frame edge (de)",
   "textures": {
     "particle": "rotarycraft:block/bedrock",
     "pipe": "rotarycraft:block/bedrock"
@@ -13,61 +13,39 @@
       ],
       "to": [
         14,
-        4,
+        2,
         12
       ],
       "faces": {
         "down": {
           "uv": [
-            0,
-            0,
-            16,
-            16
+            12,
+            4,
+            14,
+            12
           ],
           "texture": "#pipe"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        2,
+        2
+      ],
+      "to": [
+        14,
+        4,
+        14
+      ],
+      "faces": {
         "east": {
           "uv": [
-            0,
-            0,
-            16,
-            16
+            2,
+            12,
+            14,
+            14
           ],
           "texture": "#pipe"
         }

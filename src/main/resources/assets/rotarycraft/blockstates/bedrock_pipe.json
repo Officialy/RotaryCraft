@@ -1,95 +1,6 @@
 {
   "multipart": [
     {
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/core"
-      }
-    },
-    {
-      "when": {
-        "conn_down": "true"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_down"
-      }
-    },
-    {
-      "when": {
-        "conn_up": "true"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_up"
-      }
-    },
-    {
-      "when": {
-        "conn_north": "true"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_north"
-      }
-    },
-    {
-      "when": {
-        "conn_south": "true"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_south"
-      }
-    },
-    {
-      "when": {
-        "conn_west": "true"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_west"
-      }
-    },
-    {
-      "when": {
-        "conn_east": "true"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_east"
-      }
-    },
-    {
-      "when": {
-        "conn_west": "false",
-        "conn_north": "false"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/vedge_wn"
-      }
-    },
-    {
-      "when": {
-        "conn_west": "false",
-        "conn_south": "false"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/vedge_ws"
-      }
-    },
-    {
-      "when": {
-        "conn_east": "false",
-        "conn_north": "false"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/vedge_en"
-      }
-    },
-    {
-      "when": {
-        "conn_east": "false",
-        "conn_south": "false"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/vedge_es"
-      }
-    },
-    {
       "when": {
         "conn_up": "false",
         "conn_north": "false"
@@ -105,24 +16,6 @@
       },
       "apply": {
         "model": "rotarycraft:block/pipe/bedrock_pipe/edge_us"
-      }
-    },
-    {
-      "when": {
-        "conn_down": "false",
-        "conn_north": "false"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/edge_dn"
-      }
-    },
-    {
-      "when": {
-        "conn_down": "false",
-        "conn_south": "false"
-      },
-      "apply": {
-        "model": "rotarycraft:block/pipe/bedrock_pipe/edge_ds"
       }
     },
     {
@@ -146,6 +39,24 @@
     {
       "when": {
         "conn_down": "false",
+        "conn_north": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/edge_dn"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "false",
+        "conn_south": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/edge_ds"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "false",
         "conn_west": "false"
       },
       "apply": {
@@ -159,6 +70,50 @@
       },
       "apply": {
         "model": "rotarycraft:block/pipe/bedrock_pipe/edge_de"
+      }
+    },
+    {
+      "when": {
+        "conn_north": "false",
+        "conn_west": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/edge_nw"
+      }
+    },
+    {
+      "when": {
+        "conn_north": "false",
+        "conn_east": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/edge_ne"
+      }
+    },
+    {
+      "when": {
+        "conn_south": "false",
+        "conn_west": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/edge_sw"
+      }
+    },
+    {
+      "when": {
+        "conn_south": "false",
+        "conn_east": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/edge_se"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_down"
       }
     },
     {
@@ -179,6 +134,14 @@
     },
     {
       "when": {
+        "conn_up": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_up"
+      }
+    },
+    {
+      "when": {
         "conn_up": "false"
       },
       "apply": {
@@ -191,6 +154,14 @@
       },
       "apply": {
         "model": "rotarycraft:block/pipe/armwindow_up"
+      }
+    },
+    {
+      "when": {
+        "conn_north": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_north"
       }
     },
     {
@@ -211,6 +182,14 @@
     },
     {
       "when": {
+        "conn_south": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_south"
+      }
+    },
+    {
+      "when": {
         "conn_south": "false"
       },
       "apply": {
@@ -227,6 +206,14 @@
     },
     {
       "when": {
+        "conn_west": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_west"
+      }
+    },
+    {
+      "when": {
         "conn_west": "false"
       },
       "apply": {
@@ -239,6 +226,14 @@
       },
       "apply": {
         "model": "rotarycraft:block/pipe/armwindow_west"
+      }
+    },
+    {
+      "when": {
+        "conn_east": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/bedrock_pipe/arm_east"
       }
     },
     {

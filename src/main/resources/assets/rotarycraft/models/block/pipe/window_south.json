@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 pipe shell - glass cap window (south)",
+  "credit": "RotaryCraft 1.7.10 pipe - glass cap window (south)",
   "render_type": "minecraft:cutout",
   "textures": {
     "glass": "minecraft:block/glass",
@@ -20,19 +20,19 @@
       "faces": {
         "south": {
           "uv": [
-            4,
-            4,
-            12,
-            12
+            2,
+            2,
+            14,
+            14
           ],
           "texture": "#glass"
         },
         "north": {
           "uv": [
-            4,
-            4,
-            12,
-            12
+            2,
+            2,
+            14,
+            14
           ],
           "texture": "#glass"
         }

@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 fuel_line shell - frame edge (us)",
+  "credit": "RotaryCraft 1.7.10 fuel_line - flat frame edge (us)",
   "textures": {
     "particle": "minecraft:block/obsidian",
     "pipe": "minecraft:block/obsidian"
@@ -7,67 +7,45 @@
   "elements": [
     {
       "from": [
-        4,
-        12,
+        2,
+        14,
         12
       ],
       "to": [
-        12,
+        14,
         14,
         14
       ],
       "faces": {
-        "down": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
         "up": {
           "uv": [
-            0,
-            0,
-            16,
-            16
+            2,
+            12,
+            14,
+            14
           ],
           "texture": "#pipe"
-        },
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        12,
+        14
+      ],
+      "to": [
+        14,
+        14,
+        14
+      ],
+      "faces": {
         "south": {
           "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#pipe"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
+            2,
+            2,
+            14,
+            4
           ],
           "texture": "#pipe"
         }

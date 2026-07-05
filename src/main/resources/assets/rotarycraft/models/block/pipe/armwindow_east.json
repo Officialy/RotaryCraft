@@ -1,5 +1,5 @@
 {
-  "credit": "RotaryCraft 1.7.10 pipe shell - glass arm windows (east)",
+  "credit": "RotaryCraft 1.7.10 pipe - glass arm panes (east)",
   "render_type": "minecraft:cutout",
   "textures": {
     "glass": "minecraft:block/glass",
@@ -20,19 +20,19 @@
       "faces": {
         "up": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         },
         "down": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         }
@@ -52,51 +52,19 @@
       "faces": {
         "down": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         },
         "up": {
           "uv": [
-            6,
-            4,
-            10,
-            12
-          ],
-          "texture": "#glass"
-        }
-      }
-    },
-    {
-      "from": [
-        12,
-        4,
-        14
-      ],
-      "to": [
-        16,
-        12,
-        14
-      ],
-      "faces": {
-        "south": {
-          "uv": [
-            6,
-            4,
-            10,
-            12
-          ],
-          "texture": "#glass"
-        },
-        "north": {
-          "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         }
@@ -116,19 +84,51 @@
       "faces": {
         "north": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         },
         "south": {
           "uv": [
-            6,
-            4,
-            10,
-            12
+            2,
+            2,
+            8,
+            14
+          ],
+          "texture": "#glass"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        4,
+        14
+      ],
+      "to": [
+        16,
+        12,
+        14
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            2,
+            2,
+            8,
+            14
+          ],
+          "texture": "#glass"
+        },
+        "north": {
+          "uv": [
+            2,
+            2,
+            8,
+            14
           ],
           "texture": "#glass"
         }
