@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
+import reika.rotarycraft.blockentities.production.BlockEntityFractionator;
 import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
@@ -39,6 +40,7 @@ import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
 import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryRecipeTypes;
 
 @JeiPlugin
@@ -60,7 +62,8 @@ public class RotaryJEIPlugin implements IModPlugin {
                 new GrinderCategory(gui),
                 new FrictionHeaterCategory(gui),
                 new ExtractorCategory(gui),
-                new FermenterCategory(gui)
+                new FermenterCategory(gui),
+                new FractionatorCategory(gui)
         );
     }
 
@@ -73,6 +76,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         registration.addRecipeCatalyst(MachineRegistry.FRICTION.getCraftedProduct(), FrictionHeaterCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.EXTRACTOR.getCraftedProduct(), ExtractorCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.FERMENTER.getCraftedProduct(), FermenterCategory.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.FRACTIONATOR.getCraftedProduct(), FractionatorCategory.TYPE);
     }
 
     // -------------------------------------------------------------------------
@@ -117,6 +121,9 @@ public class RotaryJEIPlugin implements IModPlugin {
                     .byType(RotaryRecipeTypes.FERMENTER.get())
                     .stream().map(RecipeHolder::value).collect(Collectors.toList());
             registration.addRecipes(FermenterCategory.TYPE, fermenter);
+
+            // The fractionator recipe is hardcoded in the BE, not data-driven — one synthetic entry.
+            registration.addRecipes(FractionatorCategory.TYPE, List.of(FractionatorJEIRecipe.INSTANCE));
 
         } catch (Throwable t) {
             RotaryCraft.LOGGER.error("Failed to register RotaryCraft JEI recipes", t);
@@ -350,6 +357,54 @@ public class RotaryJEIPlugin implements IModPlugin {
                    .addIngredients(recipe.getInput());
             builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 9)
                    .addItemStack(recipe.getOutput());
+        }
+    }
+
+    // =========================================================================
+    // Fractionator — hardcoded jet-fuel recipe: ethanol + 6 ingredients + ghast tear
+    // =========================================================================
+    /** Marker for the single hardcoded fractionator recipe. */
+    public static final class FractionatorJEIRecipe {
+        public static final FractionatorJEIRecipe INSTANCE = new FractionatorJEIRecipe();
+        private FractionatorJEIRecipe() {}
+    }
+
+    public static final class FractionatorCategory implements IRecipeCategory<FractionatorJEIRecipe> {
+
+        public static final RecipeType<FractionatorJEIRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "fractionator", FractionatorJEIRecipe.class);
+
+        private final IDrawable icon;
+
+        public FractionatorCategory(IGuiHelper gui) {
+            this.icon = gui.createDrawableItemStack(MachineRegistry.FRACTIONATOR.getCraftedProduct());
+        }
+
+        @Override public RecipeType<FractionatorJEIRecipe> getRecipeType() { return TYPE; }
+        @Override public Component getTitle() { return Component.translatable("machine.fractionator"); }
+        @Override public int getWidth()  { return 150; }
+        @Override public int getHeight() { return 40; }
+        @Override public IDrawable getIcon() { return icon; }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, FractionatorJEIRecipe recipe, IFocusGroup focuses) {
+            BlockEntityFractionator.registerIngredients();
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 11)
+                   .addFluidStack(RotaryFluids.ETHANOL.get(), BlockEntityFractionator.ETHANOL_PER_OP);
+            for (int i = 0; i < 6; i++) {
+                var item = BlockEntityFractionator.ingredientForSlot(i);
+                if (item == null) continue;
+                builder.addSlot(RecipeIngredientRole.INPUT, 23 + (i % 3) * 18, 2 + (i / 3) * 18)
+                       .addItemStack(new net.minecraft.world.item.ItemStack(item));
+            }
+            builder.addSlot(RecipeIngredientRole.INPUT, 81, 11)
+                   .addItemStack(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.GHAST_TEAR))
+                   .addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                           Component.literal("Catalyst — consumed every 4th cycle")));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 128, 11)
+                   .addFluidStack(RotaryFluids.JET_FUEL.get(), 1000)
+                   .addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                           Component.literal("Yield scales with pressure and difficulty")));
         }
     }
 }
