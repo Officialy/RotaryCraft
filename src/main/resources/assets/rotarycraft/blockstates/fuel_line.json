@@ -91,6 +91,78 @@
     },
     {
       "when": {
+        "conn_up": "false",
+        "conn_north": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/edge_un"
+      }
+    },
+    {
+      "when": {
+        "conn_up": "false",
+        "conn_south": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/edge_us"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "false",
+        "conn_north": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/edge_dn"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "false",
+        "conn_south": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/edge_ds"
+      }
+    },
+    {
+      "when": {
+        "conn_up": "false",
+        "conn_west": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/edge_uw"
+      }
+    },
+    {
+      "when": {
+        "conn_up": "false",
+        "conn_east": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/edge_ue"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "false",
+        "conn_west": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/edge_dw"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "false",
+        "conn_east": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/fuel_line/edge_de"
+      }
+    },
+    {
+      "when": {
         "conn_down": "false"
       },
       "apply": {
