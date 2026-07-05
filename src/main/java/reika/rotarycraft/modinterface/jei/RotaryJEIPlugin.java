@@ -16,6 +16,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
@@ -30,6 +31,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
@@ -51,8 +56,23 @@ public class RotaryJEIPlugin implements IModPlugin {
         registration.addRecipeCategories(
                 new BlastFurnaceShapedCategory(gui),
                 new BlastFurnaceShapelessCategory(gui),
-                new PulseFurnaceCategory(gui)
+                new PulseFurnaceCategory(gui),
+                new GrinderCategory(gui),
+                new FrictionHeaterCategory(gui),
+                new ExtractorCategory(gui),
+                new FermenterCategory(gui)
         );
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(MachineRegistry.BLASTFURNACE.getCraftedProduct(),
+                BlastFurnaceShapedCategory.TYPE, BlastFurnaceShapelessCategory.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.PULSEJET.getCraftedProduct(), PulseFurnaceCategory.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.GRINDER.getCraftedProduct(), GrinderCategory.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.FRICTION.getCraftedProduct(), FrictionHeaterCategory.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.EXTRACTOR.getCraftedProduct(), ExtractorCategory.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.FERMENTER.getCraftedProduct(), FermenterCategory.TYPE);
     }
 
     // -------------------------------------------------------------------------
@@ -77,6 +97,26 @@ public class RotaryJEIPlugin implements IModPlugin {
                     .byType(RotaryRecipeTypes.PULSE_FURNACE.get())
                     .stream().map(RecipeHolder::value).collect(Collectors.toList());
             registration.addRecipes(PulseFurnaceCategory.TYPE, pulse);
+
+            List<GrinderRecipe> grinder = rm.recipeMap()
+                    .byType(RotaryRecipeTypes.GRINDER.get())
+                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
+            registration.addRecipes(GrinderCategory.TYPE, grinder);
+
+            List<FrictionHeaterRecipe> friction = rm.recipeMap()
+                    .byType(RotaryRecipeTypes.FRICTION_HEATER.get())
+                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
+            registration.addRecipes(FrictionHeaterCategory.TYPE, friction);
+
+            List<ExtractorRecipe> extractor = rm.recipeMap()
+                    .byType(RotaryRecipeTypes.EXTRACTOR.get())
+                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
+            registration.addRecipes(ExtractorCategory.TYPE, extractor);
+
+            List<FermenterRecipe> fermenter = rm.recipeMap()
+                    .byType(RotaryRecipeTypes.FERMENTER.get())
+                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
+            registration.addRecipes(FermenterCategory.TYPE, fermenter);
 
         } catch (Throwable t) {
             RotaryCraft.LOGGER.error("Failed to register RotaryCraft JEI recipes", t);
@@ -187,6 +227,128 @@ public class RotaryJEIPlugin implements IModPlugin {
             builder.addSlot(RecipeIngredientRole.INPUT, 1, 9)
                    .addIngredients(recipe.getInput());
             builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
+                   .addItemStack(recipe.getOutput());
+        }
+    }
+
+    // =========================================================================
+    // Grinder — single input → single output
+    // =========================================================================
+    public static final class GrinderCategory implements IRecipeCategory<GrinderRecipe> {
+
+        public static final RecipeType<GrinderRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "grinder", GrinderRecipe.class);
+
+        private final IDrawable icon;
+
+        public GrinderCategory(IGuiHelper gui) {
+            this.icon = gui.createDrawableItemStack(MachineRegistry.GRINDER.getCraftedProduct());
+        }
+
+        @Override public RecipeType<GrinderRecipe> getRecipeType() { return TYPE; }
+        @Override public Component getTitle() { return Component.translatable("machine.grinder"); }
+        @Override public int getWidth()  { return 76; }
+        @Override public int getHeight() { return 36; }
+        @Override public IDrawable getIcon() { return icon; }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, GrinderRecipe recipe, IFocusGroup focuses) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 9)
+                   .addIngredients(recipe.getInput());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
+                   .addItemStack(recipe.getOutput());
+        }
+    }
+
+    // =========================================================================
+    // Friction Heater — single input → single output (heat-driven)
+    // =========================================================================
+    public static final class FrictionHeaterCategory implements IRecipeCategory<FrictionHeaterRecipe> {
+
+        public static final RecipeType<FrictionHeaterRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "friction_heater", FrictionHeaterRecipe.class);
+
+        private final IDrawable icon;
+
+        public FrictionHeaterCategory(IGuiHelper gui) {
+            this.icon = gui.createDrawableItemStack(MachineRegistry.FRICTION.getCraftedProduct());
+        }
+
+        @Override public RecipeType<FrictionHeaterRecipe> getRecipeType() { return TYPE; }
+        @Override public Component getTitle() { return Component.translatable("machine.friction"); }
+        @Override public int getWidth()  { return 76; }
+        @Override public int getHeight() { return 36; }
+        @Override public IDrawable getIcon() { return icon; }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, FrictionHeaterRecipe recipe, IFocusGroup focuses) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 9)
+                   .addIngredients(recipe.getInput());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
+                   .addItemStack(recipe.getOutput())
+                   .addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                           Component.literal((int) recipe.requiredTemperature() + "C")));
+        }
+    }
+
+    // =========================================================================
+    // Extractor — 4-stage ore line (dust → slurry → solution → flakes)
+    // =========================================================================
+    public static final class ExtractorCategory implements IRecipeCategory<ExtractorRecipe> {
+
+        public static final RecipeType<ExtractorRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "extractor", ExtractorRecipe.class);
+
+        private final IDrawable icon;
+
+        public ExtractorCategory(IGuiHelper gui) {
+            this.icon = gui.createDrawableItemStack(MachineRegistry.EXTRACTOR.getCraftedProduct());
+        }
+
+        @Override public RecipeType<ExtractorRecipe> getRecipeType() { return TYPE; }
+        @Override public Component getTitle() { return Component.translatable("machine.extractor"); }
+        @Override public int getWidth()  { return 76; }
+        @Override public int getHeight() { return 36; }
+        @Override public IDrawable getIcon() { return icon; }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, ExtractorRecipe recipe, IFocusGroup focuses) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 9)
+                   .addIngredients(recipe.getInput());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
+                   .addItemStack(recipe.getOutput())
+                   .addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                           Component.literal("Stage " + (recipe.getStage() + 1) + "/4")));
+        }
+    }
+
+    // =========================================================================
+    // Fermenter — catalyst + input → output
+    // =========================================================================
+    public static final class FermenterCategory implements IRecipeCategory<FermenterRecipe> {
+
+        public static final RecipeType<FermenterRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "fermenter", FermenterRecipe.class);
+
+        private final IDrawable icon;
+
+        public FermenterCategory(IGuiHelper gui) {
+            this.icon = gui.createDrawableItemStack(MachineRegistry.FERMENTER.getCraftedProduct());
+        }
+
+        @Override public RecipeType<FermenterRecipe> getRecipeType() { return TYPE; }
+        @Override public Component getTitle() { return Component.translatable("machine.fermenter"); }
+        @Override public int getWidth()  { return 98; }
+        @Override public int getHeight() { return 36; }
+        @Override public IDrawable getIcon() { return icon; }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, FermenterRecipe recipe, IFocusGroup focuses) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 9)
+                   .addIngredients(recipe.getCatalyst());
+            builder.addSlot(RecipeIngredientRole.INPUT, 23, 9)
+                   .addIngredients(recipe.getInput());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 80, 9)
                    .addItemStack(recipe.getOutput());
         }
     }

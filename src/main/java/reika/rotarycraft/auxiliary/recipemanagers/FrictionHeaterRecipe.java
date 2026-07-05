@@ -48,6 +48,10 @@ public class FrictionHeaterRecipe implements Recipe<SingleRecipeInput> {
         return output.create();
     }
 
+    public Ingredient getInput() {
+        return input;
+    }
+
     public float requiredTemperature() {
         return temperature;
     }
