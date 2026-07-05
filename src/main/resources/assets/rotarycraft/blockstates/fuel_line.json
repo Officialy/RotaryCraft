@@ -88,6 +88,102 @@
       "apply": {
         "model": "rotarycraft:block/pipe/fuel_line/vedge_es"
       }
+    },
+    {
+      "when": {
+        "conn_down": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/window_down"
+      }
+    },
+    {
+      "when": {
+        "conn_down": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/armwindow_down"
+      }
+    },
+    {
+      "when": {
+        "conn_up": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/window_up"
+      }
+    },
+    {
+      "when": {
+        "conn_up": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/armwindow_up"
+      }
+    },
+    {
+      "when": {
+        "conn_north": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/window_north"
+      }
+    },
+    {
+      "when": {
+        "conn_north": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/armwindow_north"
+      }
+    },
+    {
+      "when": {
+        "conn_south": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/window_south"
+      }
+    },
+    {
+      "when": {
+        "conn_south": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/armwindow_south"
+      }
+    },
+    {
+      "when": {
+        "conn_west": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/window_west"
+      }
+    },
+    {
+      "when": {
+        "conn_west": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/armwindow_west"
+      }
+    },
+    {
+      "when": {
+        "conn_east": "false"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/window_east"
+      }
+    },
+    {
+      "when": {
+        "conn_east": "true"
+      },
+      "apply": {
+        "model": "rotarycraft:block/pipe/armwindow_east"
+      }
     }
   ]
 }
