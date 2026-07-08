@@ -24,6 +24,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
+import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
 import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
@@ -305,6 +306,8 @@ public class RotaryBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityGrinder>> GRINDER = BLOCK_ENTITIES.register("grinder", () ->
             new BlockEntityType<>(BlockEntityGrinder::new, RotaryBlocks.GRINDER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityCentrifuge>> CENTRIFUGE = BLOCK_ENTITIES.register("centrifuge", () ->
+            new BlockEntityType<>(BlockEntityCentrifuge::new, RotaryBlocks.CENTRIFUGE.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFractionator>> FRACTIONATOR = BLOCK_ENTITIES.register("fractionator", () ->
             new BlockEntityType<>(BlockEntityFractionator::new, RotaryBlocks.FRACTIONATOR.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityMagnetizer>> MAGNETIZER = BLOCK_ENTITIES.register("magnetizer", () ->

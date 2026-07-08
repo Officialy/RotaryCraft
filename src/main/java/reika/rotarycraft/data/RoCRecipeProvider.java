@@ -22,7 +22,10 @@ import org.jspecify.annotations.Nullable;
 import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
+import net.neoforged.neoforge.fluids.FluidStack;
+import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
+import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
@@ -33,6 +36,7 @@ import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -135,6 +139,7 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             ingotChain();
             blastFurnace();
             grinder();
+            centrifuge();
             frictionHeater();
             extractor();
             extractorSmelting();
@@ -165,6 +170,45 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             GrinderRecipe recipe = new GrinderRecipe(Ingredient.of(input), output);
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
                     Identifier.fromNamespaceAndPath("rotarycraft", "grinder/" + name));
+            out.accept(key, recipe, null);
+        }
+
+        // Centrifuge recipes (RotaryRecipeTypes.CENTRIFUGE) — the base-game entries of the legacy
+        // RecipesCentrifuge (chances were percent there; normalized 0..1 here). The mod-interact
+        // entries (Forestry combs, IC2, etc.) and the unported sludge/netherrack-dust items are
+        // deliberately absent.
+        private void centrifuge() {
+            spin("magma_cream", Items.MAGMA_CREAM, null,
+                    co(Items.SLIME_BALL, 1, 1F), co(Items.BLAZE_POWDER, 1, 1F));
+            spin("melon", Items.MELON_SLICE, null,
+                    co(Items.MELON_SEEDS, 4, 1F));
+            spin("pumpkin", Blocks.PUMPKIN, null,
+                    co(Items.PUMPKIN_SEEDS, 12, 1F));
+            spin("wheat", Items.WHEAT, null,
+                    co(Items.WHEAT_SEEDS, 4, 1F));
+            spin("gravel", Blocks.GRAVEL, null,
+                    co(Items.FLINT, 1, 0.5F), co(Blocks.SAND, 1, 0.75F));
+            spin("dirt", Blocks.DIRT, null,
+                    co(Blocks.SAND, 1, 0.8F), co(Blocks.CLAY, 1, 0.1F),
+                    co(Items.WHEAT_SEEDS, 1, 0.02F), co(Items.PUMPKIN_SEEDS, 1, 0.00125F),
+                    co(Items.MELON_SEEDS, 1, 0.00125F), co(Blocks.OAK_SAPLING, 1, 0.0003125F),
+                    co(Blocks.SHORT_GRASS, 1, 0.000625F));
+            spin("blaze_powder", Items.BLAZE_POWDER, null,
+                    co(Items.GUNPOWDER, 1, 1F));
+            // Canola byproduct: husks spin down into lubricant (legacy amount = 75% of the average
+            // canola yield, rounded up to 10; the DifficultyEffects average is 30 → 30 mB).
+            spin("canola_husks", RotaryItems.CANOLA_HUSKS.get(),
+                    new CentrifugeRecipe.FluidOutput(RotaryFluids.LUBRICANT, 30, 1F));
+        }
+
+        private static CentrifugeRecipe.ChancedOutput co(ItemLike item, int count, float chance) {
+            return new CentrifugeRecipe.ChancedOutput(new ItemStackTemplate(item.asItem(), count), chance);
+        }
+
+        private void spin(String name, ItemLike input, CentrifugeRecipe.FluidOutput fluid, CentrifugeRecipe.ChancedOutput... outputs) {
+            CentrifugeRecipe recipe = new CentrifugeRecipe(Ingredient.of(input), List.of(outputs), Optional.ofNullable(fluid));
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "centrifuge/" + name));
             out.accept(key, recipe, null);
         }
 
@@ -1171,6 +1215,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('P', RotaryItems.HSLA_PLATE.get())
                     .pattern("B B").pattern("SGS").pattern("PPP")
                     .unlockedBy("has_saw", has(RotaryItems.SAW.get()))
+                    .save(out);
+            // CENTRIFUGE: legacy "SGS","S S","PgP" — 4×HSLA + glass pane + 2×BASEPANEL + 1×GEARUNIT4,
+            // with the usual port substitutions (BASEPANEL→HSLA_PLATE, GEARUNIT4→HSLA_STEEL_GEAR).
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.CENTRIFUGE.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('G', Items.GLASS_PANE)
+                    .define('g', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .pattern("SGS").pattern("S S").pattern("PgP")
+                    .unlockedBy("has_hsla_gear", has(RotaryItems.HSLA_STEEL_GEAR.get()))
                     .save(out);
             // FRACTIONATOR: "PGP","PPP","BSB" — 5×HSLA_PLATE + 1×STEEL_GEAR + 2×HSLA_INGOT + 1×SHAFT.
             // Approximation of the legacy recipe — restored in 26.1 so the machine can be crafted

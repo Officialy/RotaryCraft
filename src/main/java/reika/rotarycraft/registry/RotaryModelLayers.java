@@ -35,6 +35,7 @@ import reika.rotarycraft.renders.dmi.RenderWinder;
 import reika.rotarycraft.renders.m.RenderReservoir;
 import reika.rotarycraft.renders.m.RenderVanDeGraff;
 import reika.rotarycraft.renders.mi.RenderBigFurnace;
+import reika.rotarycraft.renders.mi.RenderCentrifuge;
 import reika.rotarycraft.renders.mi.RenderExtractor;
 import reika.rotarycraft.renders.mi.RenderFraction;
 import reika.rotarycraft.renders.mi.RenderLandmine;
@@ -85,6 +86,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation COIL = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "coil_model"), "main");
     public static final ModelLayerLocation HIGHGEAR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "high_gear_model"), "main");
     public static final ModelLayerLocation GRINDER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "grinder"), "main");
+    public static final ModelLayerLocation CENTRIFUGE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "centrifuge"), "main");
     public static final ModelLayerLocation FLYWHEEL = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "flywheel"), "main");
     public static final ModelLayerLocation STEAM_TURBINE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "steam_turbine"), "main");
     public static final ModelLayerLocation SPILLWAY = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "spillway"), "main");
@@ -162,6 +164,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.GEARBOX.get(), RenderGearbox::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.BIG_FURNACE.get(), RenderBigFurnace::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.GRINDER.get(), RenderGrinder::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.CENTRIFUGE.get(), RenderCentrifuge::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.CVT.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.HIGHGEAR.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COIL.get(), RenderAdvGear::new);
@@ -220,6 +223,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(SOLAR_TOWER, SolarTowerModel::createLayer);
         event.registerLayerDefinition(BIG_FURNACE, BigFurnaceModel::createLayer);
         event.registerLayerDefinition(GRINDER, GrinderModel::createLayer);
+        event.registerLayerDefinition(CENTRIFUGE, CentrifugeModel::createLayer);
         event.registerLayerDefinition(EXTRACTOR, ExtractorModel::createLayer);
         event.registerLayerDefinition(PULSEJET, PulseFurnaceModel::createLayer);
         event.registerLayerDefinition(FILLING_STATION, FillingStationModel::createLayer);

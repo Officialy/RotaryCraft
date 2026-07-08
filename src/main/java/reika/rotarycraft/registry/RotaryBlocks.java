@@ -158,6 +158,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> WORMGEAR = registerMachineBlock("wormgear", () -> new BlockWormGear(blockProperties().strength(5)));
     public static final DeferredBlock<Block> HIGHGEAR = registerMachineBlock("highgear", () -> new BlockHighGear(blockProperties().strength(5)));
     public static final DeferredBlock<Block> GRINDER = registerMachineBlock("grinder", () -> new BlockGrinder(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> CENTRIFUGE = registerMachineBlock("centrifuge", () -> new BlockCentrifuge(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FRACTIONATOR = registerMachineBlock("fractionator", () -> new BlockFractionator(blockProperties().strength(5)));
     public static final DeferredBlock<Block> MAGNETIZER = registerMachineBlock("magnetizer", () -> new BlockMagnetizer(blockProperties().strength(5)));
 

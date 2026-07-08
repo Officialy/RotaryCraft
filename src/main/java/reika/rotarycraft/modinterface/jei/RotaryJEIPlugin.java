@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
 import reika.rotarycraft.blockentities.production.BlockEntityFractionator;
 import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
@@ -60,6 +61,7 @@ public class RotaryJEIPlugin implements IModPlugin {
                 new BlastFurnaceShapelessCategory(gui),
                 new PulseFurnaceCategory(gui),
                 new GrinderCategory(gui),
+                new CentrifugeCategory(gui),
                 new FrictionHeaterCategory(gui),
                 new ExtractorCategory(gui),
                 new FermenterCategory(gui),
@@ -73,6 +75,7 @@ public class RotaryJEIPlugin implements IModPlugin {
                 BlastFurnaceShapedCategory.TYPE, BlastFurnaceShapelessCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.PULSEJET.getCraftedProduct(), PulseFurnaceCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.GRINDER.getCraftedProduct(), GrinderCategory.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.CENTRIFUGE.getCraftedProduct(), CentrifugeCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.FRICTION.getCraftedProduct(), FrictionHeaterCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.EXTRACTOR.getCraftedProduct(), ExtractorCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.FERMENTER.getCraftedProduct(), FermenterCategory.TYPE);
@@ -106,6 +109,11 @@ public class RotaryJEIPlugin implements IModPlugin {
                     .byType(RotaryRecipeTypes.GRINDER.get())
                     .stream().map(RecipeHolder::value).collect(Collectors.toList());
             registration.addRecipes(GrinderCategory.TYPE, grinder);
+
+            List<CentrifugeRecipe> centrifuge = rm.recipeMap()
+                    .byType(RotaryRecipeTypes.CENTRIFUGE.get())
+                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
+            registration.addRecipes(CentrifugeCategory.TYPE, centrifuge);
 
             List<FrictionHeaterRecipe> friction = rm.recipeMap()
                     .byType(RotaryRecipeTypes.FRICTION_HEATER.get())
@@ -264,6 +272,47 @@ public class RotaryJEIPlugin implements IModPlugin {
                    .addIngredients(recipe.getInput());
             builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
                    .addItemStack(recipe.getOutput());
+        }
+    }
+
+    // =========================================================================
+    // Centrifuge — single input → chanced outputs (+ optional fluid byproduct)
+    // =========================================================================
+    public static final class CentrifugeCategory implements IRecipeCategory<CentrifugeRecipe> {
+
+        public static final RecipeType<CentrifugeRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "centrifuge", CentrifugeRecipe.class);
+
+        private final IDrawable icon;
+
+        public CentrifugeCategory(IGuiHelper gui) {
+            this.icon = gui.createDrawableItemStack(MachineRegistry.CENTRIFUGE.getCraftedProduct());
+        }
+
+        @Override public RecipeType<CentrifugeRecipe> getRecipeType() { return TYPE; }
+        @Override public Component getTitle() { return Component.translatable("machine.centrifuge"); }
+        @Override public int getWidth()  { return 130; }
+        @Override public int getHeight() { return 54; }
+        @Override public IDrawable getIcon() { return icon; }
+
+        @Override
+        public void setRecipe(IRecipeLayoutBuilder builder, CentrifugeRecipe recipe, IFocusGroup focuses) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 19)
+                   .addIngredients(recipe.getInput());
+            int i = 0;
+            for (CentrifugeRecipe.ChancedOutput out : recipe.getOutputs()) {
+                float chance = Math.min(1F, out.chance());
+                builder.addSlot(RecipeIngredientRole.OUTPUT, 58 + (i % 3) * 18, 1 + (i / 3) * 18)
+                       .addItemStack(out.stack().create())
+                       .addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                               Component.literal(String.format("%.4g%% chance", chance * 100))));
+                i++;
+            }
+            recipe.getFluidOutput().ifPresent(f -> builder
+                    .addSlot(RecipeIngredientRole.OUTPUT, 112, 19)
+                    .addFluidStack(f.fluid().value(), f.amount())
+                    .addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                            Component.literal(String.format("%.4g%% chance", Math.min(1F, f.chance()) * 100)))));
         }
     }
 

@@ -47,6 +47,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
+import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
 import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
@@ -227,7 +228,7 @@ public enum MachineRegistry implements TileEnum {
     //    ANTIAIR("machine.antiair", BlockRotaryCraftMachine.class, BlockEntityAAGun.class, "RenderAAGun"),
 //    PIPEPUMP("machine.pipepump", BlockRotaryCraftMachine.class, BlockEntityPipePump.class, "RenderPipePump"),
 //    CHAIN("machine.chain", BlockRotaryCraftMachine.class, BlockEntityChainDrive.class, "RenderBelt"),
-//    CENTRIFUGE("machine.centrifuge", BlockRotaryCraftMachine.class, BlockEntityCentrifuge.class, "RenderCentrifuge"),
+    CENTRIFUGE(true, "machine.centrifuge", RotaryBlocks.CENTRIFUGE.get(), BlockEntityCentrifuge.class, (modelSet) -> new CentrifugeModel(modelSet.bakeLayer(RotaryModelLayers.CENTRIFUGE))),
     //    DRYING("machine.drying", BlockRotaryCraftMachine.class, BlockEntityDryingBed.class, "RenderDryingBed"),
 //    WETTER("machine.wetter", BlockRotaryCraftMachine.class, BlockEntityWetter.class, "RenderWetter"),
 //    DROPS("machine.drops", BlockRotaryCraftMachine.class, BlockEntityDropProcessor.class),
@@ -1013,7 +1014,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, /*COMPACTOR, BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER,*/ HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER/*, PIPEPUMP, CENTRIFUGE, DRYING, WETTER*/ ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, /*COMPACTOR, BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER,*/ HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
                     true;
             default -> false;
         };
@@ -1031,8 +1032,8 @@ public enum MachineRegistry implements TileEnum {
                     MAGNETIZER, FRICTION,*/ COOLINGFIN, /*WORKTABLE, */
                             MULTICLUTCH, SORTING, /*FERTILIZER, AGGREGATOR,
                     FILLINGSTATION, BELT,*/ VANDEGRAFF,/* BUSCONTROLLER,
-                    POWERBUS,*/ BLOWER, REFRIGERATOR/*, CRAFTER,
-                    PIPEPUMP, CENTRIFUGE, DRYING, WETTER */ -> true;
+                    POWERBUS,*/ BLOWER, REFRIGERATOR, CENTRIFUGE/*, CRAFTER,
+                    PIPEPUMP, DRYING, WETTER */ -> true;
             default -> false;
         };
     }
