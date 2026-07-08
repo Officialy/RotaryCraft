@@ -1,0 +1,32 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:dc_engine"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.dumbextractor.description"
+    },
+    "icon": {
+      "id": "rotarycraft:dc_engine"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.dumbextractor.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

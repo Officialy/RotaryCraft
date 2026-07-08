@@ -173,6 +173,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> BEDROCK_PIPE = registerMachineBlock("bedrock_pipe", () -> new BlockBedrockPipe(blockProperties().strength(5)));
     public static final DeferredBlock<Block> WORKTABLE = registerMachineBlock("worktable", () -> new BlockWorktable(blockProperties().strength(5)));
     public static final DeferredBlock<Block> VACUUM = registerMachineBlock("vacuum", () -> new BlockVacuum(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> SONICBORER = registerMachineBlock("sonic_borer", () -> new BlockSonicBorer(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FERMENTER = registerMachineBlock("fermenter", () -> new BlockFermenter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> EXTRACTOR = registerMachineBlock("extractor", () -> new BlockExtractor(blockProperties().strength(5)));

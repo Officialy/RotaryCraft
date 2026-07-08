@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:emerald_slurry",
+  "output": {
+    "id": "rotarycraft:emerald_solution"
+  },
+  "stage": 2
+}

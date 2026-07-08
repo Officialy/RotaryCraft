@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:diamond_bearing",
+    "M": "rotarycraft:mount",
+    "S": "rotarycraft:bedrock_shaft",
+    "c": "rotarycraft:screen",
+    "s": "rotarycraft:circuit_board"
+  },
+  "pattern": [
+    "BSB",
+    "BSB",
+    "sMc"
+  ],
+  "result": {
+    "id": "rotarycraft:cvt"
+  }
+}

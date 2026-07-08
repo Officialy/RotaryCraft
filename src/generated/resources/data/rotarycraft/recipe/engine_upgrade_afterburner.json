@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": "rotarycraft:bedrock_dust",
+    "I": "rotarycraft:ignition_unit",
+    "R": "rotarycraft:compound_turbine",
+    "S": "rotarycraft:high_temperature_combustor"
+  },
+  "pattern": [
+    "SEI",
+    "ERE",
+    "SEI"
+  ],
+  "result": {
+    "components": {
+      "minecraft:custom_data": {
+        "upgradeType": "upgrade.afterburn"
+      }
+    },
+    "id": "rotarycraft:engine_upgrade"
+  }
+}

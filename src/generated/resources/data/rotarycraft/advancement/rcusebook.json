@@ -1,0 +1,32 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:handbook"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.rcusebook.description"
+    },
+    "icon": {
+      "id": "rotarycraft:handbook"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.rcusebook.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

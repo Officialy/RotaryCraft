@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "D": "minecraft:diamond",
+    "O": "minecraft:obsidian",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "t": "rotarycraft:tungsten_ingot"
+  },
+  "pattern": [
+    "BDt",
+    "BSO",
+    "BDt"
+  ],
+  "result": {
+    "id": "rotarycraft:bedrock_breaker"
+  }
+}

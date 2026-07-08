@@ -1,0 +1,32 @@
+{
+  "parent": "rotarycraft:makeyeast",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:jet_fuel_bucket"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.jetfuel.description"
+    },
+    "icon": {
+      "id": "rotarycraft:jet_fuel_bucket"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.jetfuel.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

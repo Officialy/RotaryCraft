@@ -1,0 +1,15 @@
+{
+  "type": "rotarycraft:blast_furnace_shapeless",
+  "additives": [
+    "rotarycraft:silicon_dust"
+  ],
+  "experience": 0.0,
+  "ingredients": [
+    "rotarycraft:aluminum_alloy_powder"
+  ],
+  "output": {
+    "id": "rotarycraft:aluminum_alloy_ingot"
+  },
+  "temperature": 900.0,
+  "timeMultiplier": 1.0
+}

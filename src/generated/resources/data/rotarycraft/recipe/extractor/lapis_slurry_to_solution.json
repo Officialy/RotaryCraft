@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:lapis_slurry",
+  "output": {
+    "id": "rotarycraft:lapis_solution"
+  },
+  "stage": 2
+}

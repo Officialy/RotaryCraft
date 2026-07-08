@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:jetfuel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.recycle.description"
+    },
+    "icon": {
+      "id": "rotarycraft:hsla_steel_scrap"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.recycle.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

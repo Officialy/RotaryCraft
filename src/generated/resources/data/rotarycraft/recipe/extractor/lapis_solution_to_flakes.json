@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:lapis_solution",
+  "output": {
+    "id": "rotarycraft:lapis_flakes"
+  },
+  "stage": 3
+}

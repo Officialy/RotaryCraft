@@ -1,0 +1,48 @@
+{
+  "type": "rotarycraft:centrifuge",
+  "input": "minecraft:dirt",
+  "outputs": [
+    {
+      "chance": 0.8,
+      "item": {
+        "id": "minecraft:sand"
+      }
+    },
+    {
+      "chance": 0.1,
+      "item": {
+        "id": "minecraft:clay"
+      }
+    },
+    {
+      "chance": 0.02,
+      "item": {
+        "id": "minecraft:wheat_seeds"
+      }
+    },
+    {
+      "chance": 0.00125,
+      "item": {
+        "id": "minecraft:pumpkin_seeds"
+      }
+    },
+    {
+      "chance": 0.00125,
+      "item": {
+        "id": "minecraft:melon_seeds"
+      }
+    },
+    {
+      "chance": 3.125E-4,
+      "item": {
+        "id": "minecraft:oak_sapling"
+      }
+    },
+    {
+      "chance": 6.25E-4,
+      "item": {
+        "id": "minecraft:short_grass"
+      }
+    }
+  ]
+}

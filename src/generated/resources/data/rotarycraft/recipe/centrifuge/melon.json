@@ -1,0 +1,12 @@
+{
+  "type": "rotarycraft:centrifuge",
+  "input": "minecraft:melon_slice",
+  "outputs": [
+    {
+      "item": {
+        "count": 4,
+        "id": "minecraft:melon_seeds"
+      }
+    }
+  ]
+}

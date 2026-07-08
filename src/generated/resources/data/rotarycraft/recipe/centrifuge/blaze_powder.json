@@ -1,0 +1,11 @@
+{
+  "type": "rotarycraft:centrifuge",
+  "input": "minecraft:blaze_powder",
+  "outputs": [
+    {
+      "item": {
+        "id": "minecraft:gunpowder"
+      }
+    }
+  ]
+}

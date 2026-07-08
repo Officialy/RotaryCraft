@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:copper_solution",
+  "output": {
+    "id": "rotarycraft:copper_flakes"
+  },
+  "stage": 3
+}

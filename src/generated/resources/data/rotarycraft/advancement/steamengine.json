@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:pump",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.steamengine.description"
+    },
+    "icon": {
+      "id": "rotarycraft:steam_engine"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.steamengine.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

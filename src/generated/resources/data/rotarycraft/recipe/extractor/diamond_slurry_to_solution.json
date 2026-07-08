@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:diamond_slurry",
+  "output": {
+    "id": "rotarycraft:diamond_solution"
+  },
+  "stage": 2
+}

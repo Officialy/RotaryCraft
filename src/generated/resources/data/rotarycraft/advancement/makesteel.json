@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:hsla_steel_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/block/iron_block.png",
+    "description": {
+      "translate": "advancements.rotarycraft.makesteel.description"
+    },
+    "icon": {
+      "id": "rotarycraft:hsla_steel_ingot"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.makesteel.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#c:ores/iron",
+  "output": {
+    "id": "rotarycraft:iron_dust"
+  },
+  "stage": 0
+}

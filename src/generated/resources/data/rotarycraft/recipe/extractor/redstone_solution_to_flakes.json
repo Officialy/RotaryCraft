@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:redstone_solution",
+  "output": {
+    "id": "rotarycraft:redstone_flakes"
+  },
+  "stage": 3
+}

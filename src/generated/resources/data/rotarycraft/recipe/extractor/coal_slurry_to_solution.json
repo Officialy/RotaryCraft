@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:coal_slurry",
+  "output": {
+    "id": "rotarycraft:coal_solution"
+  },
+  "stage": 2
+}

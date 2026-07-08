@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "rotarycraft:block/ferm_front",
+    "side": "rotarycraft:block/ferm_side",
+    "top": "rotarycraft:block/ferm_side"
+  }
+}

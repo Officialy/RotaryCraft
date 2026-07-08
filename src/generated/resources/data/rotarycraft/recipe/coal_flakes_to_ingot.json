@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "experience": 0.1,
+  "ingredient": "rotarycraft:coal_flakes",
+  "result": {
+    "id": "minecraft:coal"
+  }
+}

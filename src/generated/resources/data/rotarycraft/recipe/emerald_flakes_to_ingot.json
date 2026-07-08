@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "experience": 1.0,
+  "ingredient": "rotarycraft:emerald_flakes",
+  "result": {
+    "id": "minecraft:emerald"
+  }
+}

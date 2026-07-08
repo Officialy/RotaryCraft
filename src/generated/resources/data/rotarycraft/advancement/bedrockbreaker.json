@@ -1,0 +1,32 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:bedrock_dust"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.bedrockbreaker.description"
+    },
+    "icon": {
+      "id": "rotarycraft:bedrock_dust"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.bedrockbreaker.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

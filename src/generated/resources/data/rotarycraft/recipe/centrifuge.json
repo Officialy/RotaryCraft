@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass_pane",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "g": "rotarycraft:hsla_steel_gear"
+  },
+  "pattern": [
+    "SGS",
+    "S S",
+    "PgP"
+  ],
+  "result": {
+    "id": "rotarycraft:centrifuge"
+  }
+}

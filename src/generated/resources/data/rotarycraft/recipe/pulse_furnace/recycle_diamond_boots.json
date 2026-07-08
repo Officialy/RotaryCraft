@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:diamond_boots",
+  "output": {
+    "count": 4,
+    "id": "minecraft:diamond"
+  },
+  "temperature": 500.0
+}

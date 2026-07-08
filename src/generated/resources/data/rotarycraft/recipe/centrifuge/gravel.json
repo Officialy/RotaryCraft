@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:centrifuge",
+  "input": "minecraft:gravel",
+  "outputs": [
+    {
+      "chance": 0.5,
+      "item": {
+        "id": "minecraft:flint"
+      }
+    },
+    {
+      "chance": 0.75,
+      "item": {
+        "id": "minecraft:sand"
+      }
+    }
+  ]
+}

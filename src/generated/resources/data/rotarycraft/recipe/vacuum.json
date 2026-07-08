@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:chest",
+    "I": "rotarycraft:impeller",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "w": "minecraft:black_wool"
+  },
+  "pattern": [
+    "SwS",
+    "wIw",
+    "SCS"
+  ],
+  "result": {
+    "id": "rotarycraft:vacuum"
+  }
+}

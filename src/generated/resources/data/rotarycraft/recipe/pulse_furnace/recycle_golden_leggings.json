@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:golden_leggings",
+  "output": {
+    "count": 7,
+    "id": "minecraft:gold_ingot"
+  },
+  "temperature": 600.0
+}

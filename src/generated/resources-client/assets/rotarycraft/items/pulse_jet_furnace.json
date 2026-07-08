@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/pulse_jet_furnace",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "pulsejet"
+    }
+  }
+}

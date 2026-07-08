@@ -1,0 +1,12 @@
+{
+  "type": "rotarycraft:centrifuge",
+  "input": "minecraft:wheat",
+  "outputs": [
+    {
+      "item": {
+        "count": 4,
+        "id": "minecraft:wheat_seeds"
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "rotarycraft:hsla_steel_plate",
+    "I": "rotarycraft:impeller",
+    "W": "minecraft:oak_planks",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "WWW",
+    "WIW",
+    "#s#"
+  ],
+  "result": {
+    "id": "rotarycraft:fan"
+  }
+}

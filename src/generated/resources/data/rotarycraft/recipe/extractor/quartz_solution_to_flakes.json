@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:quartz_solution",
+  "output": {
+    "id": "rotarycraft:quartz_flakes"
+  },
+  "stage": 3
+}

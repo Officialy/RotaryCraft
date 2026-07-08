@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.landmine.description"
+    },
+    "icon": {
+      "id": "rotarycraft:landmine"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.landmine.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

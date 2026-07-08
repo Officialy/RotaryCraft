@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:iron_boots",
+  "output": {
+    "count": 4,
+    "id": "minecraft:iron_ingot"
+  },
+  "temperature": 700.0
+}

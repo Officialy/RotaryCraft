@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:chest",
+    "P": "rotarycraft:fluid_pipe",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SPS",
+    "PCP",
+    "SPS"
+  ],
+  "result": {
+    "id": "rotarycraft:bucket_filler"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "T": "rotarycraft:turbine",
+    "c": "rotarycraft:diamond_shaft_core",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sPs",
+    "GTG",
+    "ScS"
+  ],
+  "result": {
+    "id": "rotarycraft:steam_turbine"
+  }
+}

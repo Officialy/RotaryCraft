@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/creative_coil",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "creative_coil"
+    }
+  }
+}

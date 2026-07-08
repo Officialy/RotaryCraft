@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/filling_station",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/filling_station",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/filling_station"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/filling_station",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/filling_station",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/filling_station",
+      "y": 270
+    }
+  }
+}

@@ -838,6 +838,18 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
                     .save(out);
 
+            // SONICBORER: legacy "ss ","Icp","bbb" — steel + iron bars + compressor + fluid pipe
+            // over a base-panel row (basepanel->HSLA_PLATE, pipe->FLUID_PIPE block).
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.SONICBORER.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('I', Items.IRON_BARS)
+                    .define('c', RotaryItems.COMPRESSOR.get())
+                    .define('p', RotaryBlocks.FLUID_PIPE.get())
+                    .define('b', RotaryItems.HSLA_PLATE.get())
+                    .pattern("ss ").pattern("Icp").pattern("bbb")
+                    .unlockedBy("has_compressor", has(RotaryItems.COMPRESSOR.get()))
+                    .save(out);
+
             // FILLING_STATION (RotaryRecipes 869): "ppS"," iR","ppB" — fluid-pipe frame + steel,
             // an impeller, a reservoir, on a base panel. Fills fuel-using items (e.g. the jetpack).
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.FILLING_STATION.get())

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": "rotarycraft:ball_bearing",
+    "S": "rotarycraft:tungsten_alloy_spring"
+  },
+  "pattern": [
+    "LLL",
+    "LSL",
+    "LLL"
+  ],
+  "result": {
+    "id": "rotarycraft:tungsten_alloy_bearing"
+  }
+}

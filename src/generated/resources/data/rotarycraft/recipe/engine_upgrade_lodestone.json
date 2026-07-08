@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "rotarycraft:gold_coil",
+    "L": "minecraft:lodestone",
+    "r": "minecraft:redstone",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "srs",
+    "rLr",
+    "sCs"
+  ],
+  "result": {
+    "components": {
+      "minecraft:custom_data": {
+        "upgradeType": "upgrade.lodestone"
+      }
+    },
+    "id": "rotarycraft:engine_upgrade"
+  }
+}

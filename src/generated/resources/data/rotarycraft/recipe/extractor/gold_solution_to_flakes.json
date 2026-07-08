@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:gold_solution",
+  "output": {
+    "id": "rotarycraft:gold_flakes"
+  },
+  "stage": 3
+}

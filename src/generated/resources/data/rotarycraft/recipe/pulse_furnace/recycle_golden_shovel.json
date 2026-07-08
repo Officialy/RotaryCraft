@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:golden_shovel",
+  "output": {
+    "id": "minecraft:gold_ingot"
+  },
+  "temperature": 600.0
+}

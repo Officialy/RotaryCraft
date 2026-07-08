@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "R": "rotarycraft:reservoir",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "i": "rotarycraft:impeller",
+    "p": "rotarycraft:fluid_pipe"
+  },
+  "pattern": [
+    "ppS",
+    " iR",
+    "ppB"
+  ],
+  "result": {
+    "id": "rotarycraft:filling_station"
+  }
+}

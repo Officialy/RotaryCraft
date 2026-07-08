@@ -1,0 +1,32 @@
+{
+  "parent": "rotarycraft:bedrockbreaker",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:bedrock_alloy_rod"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.bedrockshaft.description"
+    },
+    "icon": {
+      "id": "rotarycraft:bedrock_alloy_rod"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.bedrockshaft.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

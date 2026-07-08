@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:iron_shovel",
+  "output": {
+    "id": "minecraft:iron_ingot"
+  },
+  "temperature": 700.0
+}

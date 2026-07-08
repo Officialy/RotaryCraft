@@ -1,0 +1,32 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:hsla_steel_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.failsteel.description"
+    },
+    "icon": {
+      "id": "rotarycraft:hsla_steel_block"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.failsteel.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

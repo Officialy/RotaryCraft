@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:obsidian",
+  "output": {
+    "id": "rotarycraft:blastglass"
+  },
+  "temperature": 850.0
+}

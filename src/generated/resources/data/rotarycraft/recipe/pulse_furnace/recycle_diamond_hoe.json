@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:diamond_hoe",
+  "output": {
+    "count": 2,
+    "id": "minecraft:diamond"
+  },
+  "temperature": 500.0
+}

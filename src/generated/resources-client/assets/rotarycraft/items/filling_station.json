@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/filling_station",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "fillingstation"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:hsla_steel_rod"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.steelshaft.description"
+    },
+    "icon": {
+      "id": "rotarycraft:hsla_steel_rod"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.steelshaft.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,12 @@
+{
+  "type": "rotarycraft:centrifuge",
+  "input": "minecraft:pumpkin",
+  "outputs": [
+    {
+      "item": {
+        "count": 12,
+        "id": "minecraft:pumpkin_seeds"
+      }
+    }
+  ]
+}

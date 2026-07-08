@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:fermenter",
+  "catalyst": "minecraft:sugar",
+  "input": "minecraft:dirt",
+  "output": {
+    "id": "rotarycraft:yeast"
+  }
+}

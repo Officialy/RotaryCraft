@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:centrifuge",
+  "fluid_output": {
+    "amount": 30,
+    "fluid": "rotarycraft:lubricant_still"
+  },
+  "input": "rotarycraft:canola_seed_husks",
+  "outputs": []
+}

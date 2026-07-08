@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:quartz_dust",
+  "output": {
+    "id": "rotarycraft:quartz_slurry"
+  },
+  "stage": 1
+}

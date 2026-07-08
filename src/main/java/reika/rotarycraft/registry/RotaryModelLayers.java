@@ -61,6 +61,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation LANDMINE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "landmine"), "main");
     public static final ModelLayerLocation DC_ENGINE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "dc_engine"), "main");
     public static final ModelLayerLocation VACCUUM = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "vacuum"), "main");
+    public static final ModelLayerLocation SONIC_BORER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "sonic_borer"), "main");
     public static final ModelLayerLocation RESERVOIR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "reservoir"), "main");
     public static final ModelLayerLocation SPLITTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "splitter"), "main");
     public static final ModelLayerLocation SPLITTER_2 = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "splitter_2"), "main");
@@ -123,6 +124,7 @@ public class RotaryModelLayers {
 
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(RotaryEntities.DISCHARGE.get(), reika.rotarycraft.renders.RenderDischarge::new);
+        event.registerEntityRenderer(RotaryEntities.SHOCKWAVE.get(), reika.rotarycraft.renders.RenderSonicShot::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.FLOODLIGHT.get(), RenderLamp::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SMOKE_DETECTOR.get(), RenderSmokeDetector::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.RESERVOIR.get(), RenderReservoir::new);
@@ -148,6 +150,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.MAGNETOSTATIC_ENGINE.get(), RenderMagnetic::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SOLAR_TOWER.get(), RenderSolarTower::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.VACUUM.get(), RenderVacuum::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.SONICBORER.get(), reika.rotarycraft.renders.dm.RenderSonicBorer::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COOLING_FIN.get(), RenderFin::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.HEAT_RAY.get(), RenderHRay::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.PLAYER_DETECTOR.get(), RenderDetector::new);
@@ -225,6 +228,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(BIG_FURNACE, BigFurnaceModel::createLayer);
         event.registerLayerDefinition(GRINDER, GrinderModel::createLayer);
         event.registerLayerDefinition(CENTRIFUGE, CentrifugeModel::createLayer);
+        event.registerLayerDefinition(SONIC_BORER, SonicBorerModel::createLayer);
         event.registerLayerDefinition(EXTRACTOR, ExtractorModel::createLayer);
         event.registerLayerDefinition(PULSEJET, PulseFurnaceModel::createLayer);
         event.registerLayerDefinition(FILLING_STATION, FillingStationModel::createLayer);

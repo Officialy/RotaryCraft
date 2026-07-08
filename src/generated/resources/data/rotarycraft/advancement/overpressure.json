@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:steamengine",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.overpressure.description"
+    },
+    "icon": {
+      "id": "rotarycraft:cooling_fin"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.overpressure.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

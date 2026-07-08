@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:emerald_solution",
+  "output": {
+    "id": "rotarycraft:emerald_flakes"
+  },
+  "stage": 3
+}

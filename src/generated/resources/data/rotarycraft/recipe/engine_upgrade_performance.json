@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": "rotarycraft:impeller",
+    "R": "rotarycraft:radiator",
+    "b": "rotarycraft:hsla_steel_plate",
+    "g": "minecraft:gold_ingot",
+    "s": "rotarycraft:aluminum_alloy_ingot"
+  },
+  "pattern": [
+    "sRs",
+    "gGg",
+    " b "
+  ],
+  "result": {
+    "components": {
+      "minecraft:custom_data": {
+        "upgradeType": "upgrade.gasperf"
+      }
+    },
+    "id": "rotarycraft:engine_upgrade"
+  }
+}

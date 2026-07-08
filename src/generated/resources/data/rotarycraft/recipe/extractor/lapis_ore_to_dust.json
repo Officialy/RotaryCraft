@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#c:ores/lapis",
+  "output": {
+    "id": "rotarycraft:lapis_dust"
+  },
+  "stage": 0
+}

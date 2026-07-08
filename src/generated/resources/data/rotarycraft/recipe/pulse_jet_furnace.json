@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "C": "rotarycraft:compressor",
+    "D": "rotarycraft:diffuser",
+    "O": "minecraft:obsidian",
+    "P": "rotarycraft:fluid_pipe",
+    "c": "rotarycraft:combustor"
+  },
+  "pattern": [
+    "OCD",
+    "PcO",
+    "BBB"
+  ],
+  "result": {
+    "id": "rotarycraft:pulse_jet_furnace"
+  }
+}

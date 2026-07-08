@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.floodlight.description"
+    },
+    "icon": {
+      "id": "rotarycraft:floodlight"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.floodlight.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

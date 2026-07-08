@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:iron_solution",
+  "output": {
+    "id": "rotarycraft:iron_flakes"
+  },
+  "stage": 3
+}

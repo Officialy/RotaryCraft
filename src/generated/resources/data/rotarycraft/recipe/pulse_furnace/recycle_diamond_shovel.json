@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:diamond_shovel",
+  "output": {
+    "id": "minecraft:diamond"
+  },
+  "temperature": 500.0
+}

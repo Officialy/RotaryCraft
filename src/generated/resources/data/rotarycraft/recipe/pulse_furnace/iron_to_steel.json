@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "minecraft:iron_ingot",
+  "output": {
+    "count": 2,
+    "id": "rotarycraft:hsla_steel_ingot"
+  },
+  "temperature": 900.0
+}

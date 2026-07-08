@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "experience": 0.7,
+  "ingredient": "rotarycraft:iron_flakes",
+  "result": {
+    "id": "minecraft:iron_ingot"
+  }
+}

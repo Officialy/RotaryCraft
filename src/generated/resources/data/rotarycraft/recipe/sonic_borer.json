@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "I": "minecraft:iron_bars",
+    "b": "rotarycraft:hsla_steel_plate",
+    "c": "rotarycraft:compressor",
+    "p": "rotarycraft:fluid_pipe",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "ss ",
+    "Icp",
+    "bbb"
+  ],
+  "result": {
+    "id": "rotarycraft:sonic_borer"
+  }
+}

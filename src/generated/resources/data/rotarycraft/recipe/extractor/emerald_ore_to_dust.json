@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#c:ores/emerald",
+  "output": {
+    "id": "rotarycraft:emerald_dust"
+  },
+  "stage": 0
+}

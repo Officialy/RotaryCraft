@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:brake_disc",
+    "C": "rotarycraft:tension_coil",
+    "M": "rotarycraft:mount",
+    "S": "rotarycraft:hsla_steel_shaft_core"
+  },
+  "pattern": [
+    "BCS",
+    " M "
+  ],
+  "result": {
+    "id": "rotarycraft:coil"
+  }
+}

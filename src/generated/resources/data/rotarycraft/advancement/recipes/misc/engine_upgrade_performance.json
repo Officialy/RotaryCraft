@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_radiator": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:radiator"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:engine_upgrade_performance"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_radiator"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:engine_upgrade_performance"
+    ]
+  }
+}

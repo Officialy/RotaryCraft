@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#c:ores/quartz",
+  "output": {
+    "id": "rotarycraft:quartz_dust"
+  },
+  "stage": 0
+}

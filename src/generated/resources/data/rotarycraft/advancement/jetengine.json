@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:jetfuel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.jetengine.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "rotarycraft:jet_engine"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.jetengine.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

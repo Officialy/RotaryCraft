@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": "minecraft:ender_pearl",
+    "Q": "minecraft:clock",
+    "q": "minecraft:quartz",
+    "r": "minecraft:redstone",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "rQr",
+    "qsq",
+    "rEr"
+  ],
+  "result": {
+    "components": {
+      "minecraft:custom_data": {
+        "upgradeType": "upgrade.redstone"
+      }
+    },
+    "id": "rotarycraft:engine_upgrade"
+  }
+}

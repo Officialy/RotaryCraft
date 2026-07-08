@@ -21,6 +21,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.entities.EntityDischarge;
 import reika.rotarycraft.entities.EntityIceBlock;
+import reika.rotarycraft.entities.EntitySonicShot;
 
 import java.util.function.Supplier;
 
@@ -37,7 +38,7 @@ public class RotaryEntities {
 //    public static final DeferredHolder<EntityType<?>, EntityType<EntityGasMinecart>> GASCART = registerEntityType("gas_minecart", () -> EntityType.Builder.of((EntityGasMinecart::new), MobCategory.MISC));
 
     //LIQUIDBLOCK(EntityLiquidBlock, "Liquid Block");
-//    public static final DeferredHolder<EntityType<?>, EntityType<EntitySonicShot>> SHOCKWAVE = registerEntityType("shock_wave", () -> EntityType.Builder.of((EntitySonicShot::new), MobCategory.MISC));
+    public static final DeferredHolder<EntityType<?>, EntityType<EntitySonicShot>> SHOCKWAVE = registerEntityType("shock_wave", () -> EntityType.Builder.<EntitySonicShot>of(EntitySonicShot::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(8));
 
     public static final DeferredHolder<EntityType<?>, EntityType<EntityDischarge>> DISCHARGE = registerEntityType("discharge", () -> EntityType.Builder.of((EntityDischarge::new), MobCategory.MISC));
 
