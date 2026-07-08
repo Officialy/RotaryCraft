@@ -30,4 +30,9 @@ public class BlockVacuum extends BlockBasicMachine {
             ((BlockEntityVacuum) pBlockEntity).updateEntity(pLevel1, pPos);
         });
     }
+
+    @Override
+    protected boolean isCustomRendered() {
+        return true;
+    }
 }

@@ -36,6 +36,7 @@ import reika.rotarycraft.renders.m.RenderReservoir;
 import reika.rotarycraft.renders.m.RenderVanDeGraff;
 import reika.rotarycraft.renders.mi.RenderBigFurnace;
 import reika.rotarycraft.renders.mi.RenderCentrifuge;
+import reika.rotarycraft.renders.mi.RenderVacuum;
 import reika.rotarycraft.renders.mi.RenderExtractor;
 import reika.rotarycraft.renders.mi.RenderFraction;
 import reika.rotarycraft.renders.mi.RenderLandmine;
@@ -146,7 +147,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.BEDROCK_SHAFT.get(), RenderShaft::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.MAGNETOSTATIC_ENGINE.get(), RenderMagnetic::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SOLAR_TOWER.get(), RenderSolarTower::new);
-//        event.registerBlockEntityRenderer(RotaryBlockEntities.VACCUUM.get(), RenderVacuum::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.VACUUM.get(), RenderVacuum::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COOLING_FIN.get(), RenderFin::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.HEAT_RAY.get(), RenderHRay::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.PLAYER_DETECTOR.get(), RenderDetector::new);

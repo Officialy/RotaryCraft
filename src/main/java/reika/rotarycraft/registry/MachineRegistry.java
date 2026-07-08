@@ -131,7 +131,7 @@ public enum MachineRegistry implements TileEnum {
 //    GPR(true, "machine.gpr", BlockGPR.class, BlockEntityGPR.class),
     OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class/*, (modelSet) -> new ObsidianMakerModel(modelSet.bakeLayer(RotaryModelLayers.OBSIDIAN_MAKER))*/),
     //    PILEDRIVER("machine.piledriver", BlockRotaryCraftMachine.class, BlockEntityPileDriver.class, "RenderPileDriver"),
-    VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class/*, (modelSet) -> new VacuumModel(modelSet.bakeLayer(RotaryModelLayers.VACUUM))*/),
+    VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class, (modelSet) -> new VacuumModel(modelSet.bakeLayer(RotaryModelLayers.VACCUUM))),
 //    FIREWORK(true, "machine.firework", BlockRotaryCraftMachine.class, BlockEntityFireworkMachine.class),
 //    SPRINKLER(true, "machine.sprinkler", BlockRotaryCraftMachine.class, BlockEntitySprinkler.class, "RenderSprinkler"),
 //    WOODCUTTER("machine.woodcutter", BlockRotaryCraftMachine.class, BlockEntityWoodcutter.class, "RenderWoodcutter"),
