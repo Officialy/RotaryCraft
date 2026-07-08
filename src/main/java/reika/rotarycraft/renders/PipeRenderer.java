@@ -34,6 +34,11 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
+import reika.rotarycraft.blockentities.piping.BlockEntityBedrockPipe;
+import reika.rotarycraft.blockentities.piping.BlockEntityFuelLine;
+import reika.rotarycraft.blockentities.piping.BlockEntityHose;
+import reika.rotarycraft.blockentities.piping.BlockEntitySeparatorPipe;
+import reika.rotarycraft.blockentities.piping.BlockEntitySuctionPipe;
 import reika.rotarycraft.registry.RotaryFluids;
 
 /**
@@ -45,12 +50,14 @@ import reika.rotarycraft.registry.RotaryFluids;
  * side is connected to a neighbour). Uses the legacy half-width / window-width constants and
  * vertex coordinates verbatim, so the visual matches the original pixel-for-pixel.</p>
  *
- * <p>The iron shell of the pipe (12-px cross-frame) is still drawn via the multipart blockstate
- * JSON — only the fluid is BER-rendered, because the fluid surface needs to update every tick
- * based on the BE's {@code liquid} type and {@code liquidLevel}, which is exactly what a BER
- * is for. The fluid sprite comes from the vanilla block-atlas lookup of each fluid's still
- * texture; for fluids whose still texture isn't on the atlas yet (legacy custom-fluid case),
- * we fall back to a tinted quad using the same per-fluid colour palette as the reservoir.</p>
+ * <p>The whole pipe is BER-drawn: the flat shell frame + glass windows come from the shared
+ * {@link PipeShellRenderer} geometry (the blockstate model is empty apart from the particle
+ * texture), and the fluid surface updates every frame from the BE's {@code liquid} type and
+ * {@code liquidLevel}. Keeping the shell in code (rather than baked JSON) lets ReactorCraft's
+ * ducts reuse the identical geometry and leaves the door open for dynamic shell effects. The
+ * fluid sprite comes from the vanilla block-atlas lookup of each fluid's still texture; for
+ * fluids whose still texture isn't on the atlas yet (legacy custom-fluid case), we fall back
+ * to a tinted quad using the same per-fluid colour palette as the reservoir.</p>
  */
 public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
 
@@ -59,21 +66,6 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
     private static final double IN    = 0.5 + SIZE - 0.01;   // 0.865 — inner-far edge
     private static final double IN2   = 0.5 - SIZE + 0.01;   // 0.135 — inner-near edge
     private static final double DD2   = IN - IN2;            // 0.730 — inner span
-
-    // Legacy "glass window" pane — see PipeBodyRenderer.doRenderFace. Spans only the central
-    // window, not the full pipe cross-section, leaving the surrounding shell frame (drawn by the
-    // static blockstate model) visible as a border.
-    private static final float  WINDOW = 0.5F / 2F;           // 0.25 — half-width of the window pane
-    private static final double INW    = 0.5 + WINDOW - 0.01; // 0.74
-    private static final double INW2   = 0.5 - WINDOW + 0.01; // 0.26
-
-    // The static core.json model's solid faces sit at the SIZE-based box boundary (2px..14px,
-    // i.e. 0.125/0.875) — NOT at IN/IN2 (which are inset further toward the centre, for the fluid
-    // cap). A glass quad drawn at IN/IN2 would sit INSIDE that opaque box and never be visible;
-    // the window must be flush with (or just outside) the core's true outer face.
-    private static final double DD     = 0.5 - SIZE;       // 0.125 — core box inset
-    private static final double GOUT   = 1.0 - DD + 0.001; // 0.876 — just outside the +face
-    private static final double GOUT2  = DD - 0.001;       // 0.124 — just outside the -face
 
     private final SpriteGetter sprites;
 
@@ -91,13 +83,12 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
         Fluid fluid = tile.getAttributes();
         boolean hasFluid = fluid != null && fluid != Fluids.EMPTY && tile.getFluidLevel() > 0;
 
-        // Each pipe type now has its own static multipart shell (BlockPipeShell + the hand-authored
-        // blockstate/models under assets/rotarycraft/blockstates/<type>.json) drawing the visible frame
-        // (steel / planks / obsidian / lapis / nether-brick / bedrock, matching 1.7.10's per-material
-        // pipe icons). The BER draws two things on top of that frame: the legacy glass "window" pane
-        // on every open (unconnected) face — see {@code PipeBodyRenderer.doRenderFace} — and, when
-        // there is fluid, the fluid surface through the open core (cap on closed ends, tube walls on
-        // connected ends), matching the legacy {@code renderLiquid} routine.
+        // The whole pipe is BER-drawn (the blockstate model is empty, particle-only): the flat
+        // shell frame + glass windows via the shared PipeShellRenderer geometry (steel / planks /
+        // obsidian / lapis / nether-brick / bedrock, matching 1.7.10's per-material pipe icons),
+        // and, when there is fluid, the fluid surface through the open core (cap on closed ends,
+        // tube walls on connected ends), matching the legacy {@code renderLiquid} routine.
+        TextureAtlasSprite shell = shellSpriteFor(tile);
         TextureAtlasSprite glass = glassSprite();
         TextureAtlasSprite fluidSprite = hasFluid ? stillSpriteFor(fluid) : null;
         int tint = hasFluid ? fluidTint(fluid) : 0;
@@ -113,47 +104,23 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
         collector.submitCustomGeometry(poseStack, rt, (pose2, vc) -> {
             Matrix4f m = snapped.last().pose();
 
-            float gu  = glass.getU0();
-            float gv  = glass.getV0();
-            float gu2 = glass.getU1();
-            float gv2 = glass.getV1();
-
-            float u = 0, v = 0, u2 = 0, v2 = 0;
-            double du = 0;
-            if (hasFluid) {
-                u  = fluidSprite.getU0();
-                v  = fluidSprite.getV0();
-                u2 = fluidSprite.getU1();
-                v2 = fluidSprite.getV1();
-                // Arm-extension texture coordinate offset along the flow axis (matches legacy
-                // {@code double du = dd2*(u2-u)/4D}).
-                du = DD2 * (u2 - u) / 4D;
-            }
-
             boolean[] connectedDirs = new boolean[6];
             for (Direction d : Direction.values()) connectedDirs[d.ordinal()] = isConnected(tile, d);
 
+            PipeShellRenderer.emitShell(m, vc, connectedDirs, shell, glass, 0xFFFFFFFF, light, overlay);
+
+            if (!hasFluid) return;
+            float u  = fluidSprite.getU0();
+            float v  = fluidSprite.getV0();
+            float u2 = fluidSprite.getU1();
+            float v2 = fluidSprite.getV1();
+            // Arm-extension texture coordinate offset along the flow axis (matches legacy
+            // {@code double du = dd2*(u2-u)/4D}).
+            float du = (float) (DD2 * (u2 - u) / 4D);
+
             for (Direction dir : Direction.values()) {
-                boolean connected = connectedDirs[dir.ordinal()];
-                if (!connected) {
-                    emitGlassWindow(m, vc, dir, gu, gv, gu2, gv2, light, overlay);
-                    // Legacy doRenderFace: if a perpendicular neighbour IS connected, also draw a
-                    // copy of this window translated half a block toward it. That half-block strip
-                    // fills the gap between this window and the neighbour's own (mirrored) window,
-                    // so a run of connected pipes reads as one continuous open trough instead of
-                    // isolated per-block squares.
-                    for (Direction perp : Direction.values()) {
-                        if (perp.getAxis() == dir.getAxis()) continue;
-                        if (connectedDirs[perp.ordinal()]) {
-                            Matrix4f shifted = new Matrix4f(m).translate(
-                                    perp.getStepX() * 0.5F, perp.getStepY() * 0.5F, perp.getStepZ() * 0.5F);
-                            emitGlassWindow(shifted, vc, dir, gu, gv, gu2, gv2, light, overlay);
-                        }
-                    }
-                }
-                if (!hasFluid) continue;
-                if (connected) emitConnectedFluid(m, vc, dir, (float) u, (float) v, (float) u2, (float) v2, (float) du, tint, light, overlay);
-                else            emitCap(m, vc, dir, (float) u, (float) v, (float) u2, (float) v2, tint, light, overlay);
+                if (connectedDirs[dir.ordinal()]) emitConnectedFluid(m, vc, dir, u, v, u2, v2, du, tint, light, overlay);
+                else                              emitCap(m, vc, dir, u, v, u2, v2, tint, light, overlay);
             }
         });
     }
@@ -166,40 +133,6 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
      */
     private static boolean isConnected(BlockEntityPiping tile, Direction dir) {
         return tile.isConnectedDirectly(dir);
-    }
-
-    /** Tint for the glass window pane — plain white, matching legacy {@code glColor4f(1,1,1,1)}. */
-    private static final int GLASS_TINT = 0xFFFFFFFF;
-
-    /**
-     * Translucent glass "window" pane on a face with no neighbour pipe / connector — the legacy
-     * {@code iconBlocks[meta][1] = Blocks.glass} overlay. Sits just OUTSIDE the static blockstate
-     * model's solid core box ({@link #GOUT}/{@link #GOUT2}, NOT the inset {@link #IN}/{@link #IN2}
-     * fluid-cap depth — that plane is hidden inside the opaque core and never visible), spanning
-     * only the central {@link #WINDOW} extent so the core's own face shows through as a border.
-     */
-    private static void emitGlassWindow(Matrix4f m, VertexConsumer vc, Direction dir,
-                                         float u, float v, float u2, float v2, int light, int overlay) {
-        switch (dir) {
-            case UP -> {
-                quad(m, vc, INW2, GOUT, INW,  u,  v2, INW,  GOUT, INW,  u2, v2, INW,  GOUT, INW2, u2, v,  INW2, GOUT, INW2, u,  v,  GLASS_TINT, light, overlay, 0, 1, 0);
-            }
-            case DOWN -> {
-                quad(m, vc, INW2, GOUT2, INW2, u,  v,  INW,  GOUT2, INW2, u2, v,  INW,  GOUT2, INW,  u2, v2, INW2, GOUT2, INW,  u,  v2, GLASS_TINT, light, overlay, 0, -1, 0);
-            }
-            case SOUTH -> {
-                quad(m, vc, INW, INW, GOUT,  u,  v,  INW2, INW, GOUT,  u2, v,  INW2, INW2, GOUT,  u2, v2, INW, INW2, GOUT,  u,  v2, GLASS_TINT, light, overlay, 0, 0, 1);
-            }
-            case NORTH -> {
-                quad(m, vc, INW,  INW2, GOUT2, u,  v2, INW2, INW2, GOUT2, u2, v2, INW2, INW, GOUT2, u2, v,  INW,  INW, GOUT2, u,  v,  GLASS_TINT, light, overlay, 0, 0, -1);
-            }
-            case EAST -> {
-                quad(m, vc, GOUT, INW2, INW,  u,  v2, GOUT, INW2, INW2, u2, v2, GOUT, INW, INW2, u2, v,  GOUT, INW, INW,  u,  v,  GLASS_TINT, light, overlay, 1, 0, 0);
-            }
-            case WEST -> {
-                quad(m, vc, GOUT2, INW, INW,  u,  v,  GOUT2, INW, INW2, u2, v,  GOUT2, INW2, INW2, u2, v2, GOUT2, INW2, INW,  u,  v2, GLASS_TINT, light, overlay, -1, 0, 0);
-            }
-        }
     }
 
     /**
@@ -307,6 +240,30 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
     /** The legacy {@code Blocks.glass.getIcon(0,0)} window-pane texture. */
     private TextureAtlasSprite glassSprite() {
         return sprites.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, Identifier.withDefaultNamespace("block/glass")));
+    }
+
+    /**
+     * Per-type shell frame texture, matching the legacy per-material pipe icons (see the 1.7.10
+     * {@code TileEntityPiping.getBlockIcon} overrides): steel for the fluid pipe, planks for the
+     * hose, obsidian for the fuel line, lapis for the separation pipe, nether brick for the
+     * suction pipe, bedrock for the bedrock pipe. Bedrock is checked before the plain pipe since
+     * {@link BlockEntityBedrockPipe} extends {@link BlockEntityPipe}.
+     */
+    private TextureAtlasSprite shellSpriteFor(BlockEntityPiping tile) {
+        Identifier id;
+        if (tile instanceof BlockEntityBedrockPipe)
+            id = Identifier.fromNamespaceAndPath("rotarycraft", "block/bedrock");
+        else if (tile instanceof BlockEntityHose)
+            id = Identifier.withDefaultNamespace("block/oak_planks");
+        else if (tile instanceof BlockEntityFuelLine)
+            id = Identifier.withDefaultNamespace("block/obsidian");
+        else if (tile instanceof BlockEntitySeparatorPipe)
+            id = Identifier.withDefaultNamespace("block/lapis_block");
+        else if (tile instanceof BlockEntitySuctionPipe)
+            id = Identifier.withDefaultNamespace("block/nether_bricks");
+        else
+            id = Identifier.fromNamespaceAndPath("rotarycraft", "block/steel");
+        return sprites.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, id));
     }
 
     private static Identifier stillTextureId(Fluid fluid) {

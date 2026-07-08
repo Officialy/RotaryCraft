@@ -1,0 +1,6 @@
+{
+  "credit": "RotaryCraft pipe - empty model, shell drawn by PipeRenderer BER",
+  "textures": {
+    "particle": "minecraft:block/obsidian"
+  }
+}
