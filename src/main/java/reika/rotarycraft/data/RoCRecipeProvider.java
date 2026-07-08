@@ -1228,15 +1228,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("B B").pattern("SGS").pattern("PPP")
                     .unlockedBy("has_saw", has(RotaryItems.SAW.get()))
                     .save(out);
-            // CENTRIFUGE: legacy "SGS","S S","PgP" — 4×HSLA + glass pane + 2×BASEPANEL + 1×GEARUNIT4,
-            // with the usual port substitutions (BASEPANEL→HSLA_PLATE, GEARUNIT4→HSLA_STEEL_GEAR).
+            // CENTRIFUGE: legacy "SGS","S S","PgP" — steelingot + glass pane, base panel, GEARUNIT4.
+            // Port names: steelingot=HSLA_STEEL_INGOT, basepanel=HSLA_PLATE ("base plate"),
+            // GEARUNIT4=HSLA_STEEL_GEAR_4x (the STEEL 4x gear unit).
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.CENTRIFUGE.get())
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
                     .define('G', Items.GLASS_PANE)
-                    .define('g', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('g', RotaryItems.HSLA_STEEL_GEAR_4x.get())
                     .define('P', RotaryItems.HSLA_PLATE.get())
                     .pattern("SGS").pattern("S S").pattern("PgP")
-                    .unlockedBy("has_hsla_gear", has(RotaryItems.HSLA_STEEL_GEAR.get()))
+                    .unlockedBy("has_hsla_gear", has(RotaryItems.HSLA_STEEL_GEAR_4x.get()))
                     .save(out);
             // FRACTIONATOR: "PGP","PPP","BSB" — 5×HSLA_PLATE + 1×STEEL_GEAR + 2×HSLA_INGOT + 1×SHAFT.
             // Approximation of the legacy recipe — restored in 26.1 so the machine can be crafted

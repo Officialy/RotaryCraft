@@ -56,13 +56,23 @@ import reika.rotarycraft.registry.RotaryBlocks;
 
 import java.util.List;
 
-public class BlockEntityVacuum extends InventoriedPowerReceiver implements RangedEffect, BreakAction, IFluidHandler {
+public class BlockEntityVacuum extends InventoriedPowerReceiver implements RangedEffect, BreakAction, IFluidHandler, HasItemHandler {
 
     public static final int FALLOFF = Math.min(524288, ReikaMathLibrary.ceil2exp(Math.max(1024, ConfigRegistry.VACPOWER.getValue())));
     public boolean equidistant = true;
     public boolean suckIfFull = true;
     private int experience = 0;
     private boolean isFull = false;
+
+    /**
+     * Exposes the collected-items inventory so an adjacent hopper (or chest/pipe) can pull the
+     * vacuumed drops out — the whole vacuum inventory is output, so it maps straight to the
+     * ManagedItemHandler. This is what lets "vacuum → hopper → grinder/chest" automation work.
+     */
+    @Override
+    public reika.dragonapi.instantiable.storage.ManagedItemHandler getItemHandler() {
+        return itemHandler;
+    }
 
     public BlockEntityVacuum(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.VACUUM.get(), pos, state);

@@ -105,9 +105,14 @@ public class RotaryJEIPlugin implements IModPlugin {
                     .stream().map(RecipeHolder::value).collect(Collectors.toList());
             registration.addRecipes(PulseFurnaceCategory.TYPE, pulse);
 
-            List<GrinderRecipe> grinder = rm.recipeMap()
+            List<GrinderRecipe> grinder = new java.util.ArrayList<>(rm.recipeMap()
                     .byType(RotaryRecipeTypes.GRINDER.get())
-                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
+                    .stream().map(RecipeHolder::value).toList());
+            // Display-only: the grinder also mills canola seeds into lubricant (the BE fills its own
+            // tank — this isn't a datapack recipe). An empty item output flags the fluid path.
+            grinder.add(new GrinderRecipe(
+                    Ingredient.of(reika.rotarycraft.registry.RotaryItems.CANOLA_SEEDS.get()),
+                    new net.minecraft.world.item.ItemStackTemplate(net.minecraft.world.item.Items.AIR)));
             registration.addRecipes(GrinderCategory.TYPE, grinder);
 
             List<CentrifugeRecipe> centrifuge = rm.recipeMap()
@@ -270,8 +275,14 @@ public class RotaryJEIPlugin implements IModPlugin {
         public void setRecipe(IRecipeLayoutBuilder builder, GrinderRecipe recipe, IFocusGroup focuses) {
             builder.addSlot(RecipeIngredientRole.INPUT, 1, 9)
                    .addIngredients(recipe.getInput());
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
-                   .addItemStack(recipe.getOutput());
+            // Seeds mill into lubricant (fluid) rather than an item — an empty item output marks that.
+            if (recipe.getOutput().isEmpty()) {
+                builder.addSlot(RecipeIngredientRole.OUTPUT, 54, 5)
+                       .addFluidStack(reika.rotarycraft.registry.RotaryFluids.LUBRICANT.get(), 1000);
+            } else {
+                builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
+                       .addItemStack(recipe.getOutput());
+            }
         }
     }
 

@@ -335,7 +335,9 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
    public void rip2(Level world, BlockPos pos) {
        Block id = world.getBlockState(pos).getBlock();
        BlockState state = world.getBlockState(pos);
-       boolean crop = false;
+       // Any vanilla-style crop (wheat/carrot/potato/beetroot AND the RotaryCraft canola crop, which
+       // extends CropBlock) is harvestable once ripe — the legacy ReikaCropHelper.isCrop check.
+       boolean crop = id instanceof net.minecraft.world.level.block.CropBlock;
        if (id != Blocks.POWDER_SNOW && id != Blocks.COBWEB && 
            id != Blocks.OAK_LEAVES && id != Blocks.BIRCH_LEAVES && 
            id != Blocks.SPRUCE_LEAVES && id != Blocks.JUNGLE_LEAVES &&
@@ -375,7 +377,28 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
        return Math.max(50, 600 - 25 * ReikaMathLibrary.logbase2(omega));
    }
 
+   // Harvest a ripe crop by blowing it: drop its products (minus one seed left to replant) and
+   // reset it to age 0. Port of the legacy CropType harvest path — canola/vanilla crops replant
+   // rather than being destroyed, so a fan over a canola field keeps producing seeds to grind.
    private void harvest(Level world, BlockPos pos, Block id) {
+       if (world.isClientSide() || !(id instanceof net.minecraft.world.level.block.CropBlock cropBlock))
+           return;
+       BlockState state = world.getBlockState(pos);
+       if (!cropBlock.isMaxAge(state))
+           return;
+       List<ItemStack> drops = Block.getDrops(state, (ServerLevel) world, pos, null);
+       // Leave one canola seed in the ground for the replant (net-neutral, matching the legacy
+       // CropMethods.removeOneSeed) so a canola field is sustainable rather than duplicating seeds.
+       boolean seedKept = false;
+       for (ItemStack drop : drops) {
+           if (!seedKept && drop.is(RotaryItems.CANOLA_SEEDS.get())) {
+               drop.shrink(1);
+               seedKept = true;
+           }
+           if (!drop.isEmpty())
+               ReikaItemHelper.dropItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
+       }
+       world.setBlockAndUpdate(pos, cropBlock.getStateForAge(0));
    }
 
    private void dropBlocks(Level world, BlockPos pos, Block id) {
