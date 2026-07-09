@@ -169,7 +169,7 @@ public enum MachineRegistry implements TileEnum {
     //    FREEZEGUN("machine.freezegun", BlockRotaryCraftMachine.class, BlockEntityFreezeGun.class, "RenderFreezeGun"),
     CAVESCANNER("machine.cavescanner", RotaryBlocks.CAVE_SCANNER.get(), BlockEntityCaveFinder.class/*, (modelSet) -> new CaveScannerModel(modelSet.bakeLayer(RotaryModelLayers.CAVE_SCANNER))*/),
     //    SCALECHEST("machine.chest", BlockRotaryCraftMachine.class, BlockEntityScaleableChest.class, "RenderScaleChest"),
-//    IGNITER("machine.firestarter", BlockRotaryCraftMachine.class, BlockEntityIgniter.class),
+    IGNITER(true, "machine.firestarter", RotaryBlocks.IGNITER.get(), BlockEntityIgniter.class),
     MAGNETIZER("machine.magnetizer", RotaryBlocks.MAGNETIZER.get(), BlockEntityMagnetizer.class, (modelSet) -> new MagnetizerModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIZER))),
     CONTAINMENT("machine.containment", RotaryBlocks.CONTAINMENT.get(), BlockEntityContainment.class/*, (modelSet) -> new ContainmentModel(modelSet.bakeLayer(RotaryModelLayers.CONTAINMENT))*/),
     //    SCREEN("machine.screen", BlockRotaryCraftMachine.class, BlockEntityScreen.class, "RenderCCTVScreen"),

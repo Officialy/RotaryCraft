@@ -220,6 +220,7 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.BORER.get(), GuiBorer::new);
         event.register(RotaryMenus.MACHINEGUN.get(), GuiMachineGun::new);
         event.register(RotaryMenus.LAVAMAKER.get(), GuiLavaMaker::new);
+        event.register(RotaryMenus.IGNITER.get(), GuiIgniter::new);
         event.register(RotaryMenus.FRACTIONATOR.get(), GuiFractionator::new);
         event.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
         event.register(RotaryMenus.MICRO_TURBINE.get(), GuiMicroTurbine::new);

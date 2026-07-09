@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/igniter",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/igniter",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/igniter"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/igniter",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/igniter",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/igniter",
+      "y": 270
+    }
+  }
+}

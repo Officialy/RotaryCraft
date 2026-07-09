@@ -131,6 +131,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityMachineGun::new, RotaryBlocks.MACHINEGUN.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityLavaMaker>> LAVAMAKER = BLOCK_ENTITIES.register("rock_melter", () ->
             new BlockEntityType<>(BlockEntityLavaMaker::new, RotaryBlocks.LAVAMAKER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityIgniter>> IGNITER = BLOCK_ENTITIES.register("igniter", () ->
+            new BlockEntityType<>(BlockEntityIgniter::new, RotaryBlocks.IGNITER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->
             new BlockEntityType<>(BlockEntityDistributionClutch::new, RotaryBlocks.DISTRIBUTION_CLUTCH.get()));
 

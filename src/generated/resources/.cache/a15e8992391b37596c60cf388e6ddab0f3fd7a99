@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T19:16:48.1216101	RotaryCraft Recipes
+// 26.2	2026-07-09T19:43:36.6599351	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -108,6 +108,7 @@ a384c8abcde71e0d096ddb961a68346a6570d2b0 data/rotarycraft/advancement/recipes/re
 50ff1f1a1e10637f76ed68717575f223ced43ac2 data/rotarycraft/advancement/recipes/redstone/hsla_shaft.json
 f4c3c29cda8d8e39c89820b81d22f6a83baf566f data/rotarycraft/advancement/recipes/redstone/hsla_steel_gear.json
 ea60b8215b0f4c07a1068e94f9c18df5530f0699 data/rotarycraft/advancement/recipes/redstone/hub.json
+3add23d5297045d1d42a192d3f375cc8f9737cec data/rotarycraft/advancement/recipes/redstone/igniter.json
 65d402d4fcbb596564be482231cfb5b6db316bba data/rotarycraft/advancement/recipes/redstone/ignition_unit.json
 8a79a730515aebccec20ca4391a8a3fcd3762dd5 data/rotarycraft/advancement/recipes/redstone/impeller.json
 a6a82f8a7b4c035d6ee824ca9c26ca91938994a7 data/rotarycraft/advancement/recipes/redstone/item_cannon.json
@@ -347,6 +348,7 @@ ac492da41777d870dc78eb862158116274fda9f9 data/rotarycraft/recipe/hsla_steel_shea
 9c3fd12e81a579527f2c4751dd29842926d7389c data/rotarycraft/recipe/hsla_steel_spring.json
 465ccc298f92379a5a7aaabfd5174d49beccfed0 data/rotarycraft/recipe/hsla_steel_sword.json
 82f1eab62b147763e159fdf52243f61cc9daad93 data/rotarycraft/recipe/hub.json
+eaa2e2ac62c62f399c0e95660ef3b7629c159778 data/rotarycraft/recipe/igniter.json
 d79fc6fc471e734b4aa5b8ee79ace198dca84ef5 data/rotarycraft/recipe/ignition_unit.json
 dae731daacd55bd65e20146663d9cbc5dee7132f data/rotarycraft/recipe/impeller.json
 98cf0165b04a54fea649329a2dfc072c20c82c81 data/rotarycraft/recipe/io_goggles.json

@@ -859,6 +859,15 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
                     .save(out);
 
+            // IGNITER (firestarter): legacy "OGO","GCG","OGO" — obsidian shell, gold, combustor core.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.IGNITER.get())
+                    .define('O', Items.OBSIDIAN)
+                    .define('G', Items.GOLD_INGOT)
+                    .define('C', RotaryItems.COMBUSTOR.get())
+                    .pattern("OGO").pattern("GCG").pattern("OGO")
+                    .unlockedBy("has_combustor", has(RotaryItems.COMBUSTOR.get()))
+                    .save(out);
+
             // LAVAMAKER (rock melter): legacy "SRS","PGP","SsS" — steel + reservoir + base-panel +
             // steel gear + shaft. S=steelingot, R=reservoir, P=basepanel=HSLA_PLATE, G=steelgear, s=shaft.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.LAVAMAKER.get())

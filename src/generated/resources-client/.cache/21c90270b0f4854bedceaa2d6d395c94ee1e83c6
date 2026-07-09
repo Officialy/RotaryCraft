@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T19:16:58.2055644	Model Definitions - rotarycraft
+// 26.2	2026-07-09T19:43:46.7714577	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -74,6 +74,7 @@ e58c2afc2bfc0ba5b77d7910ca9c634b6727a920 assets/rotarycraft/blockstates/hsla_gea
 8fd8fdccb342474926cc1d9feb5ac7c24817216a assets/rotarycraft/blockstates/hsla_shaft.json
 985ccc19cfef90c5e2f8bc75b3438a9d64963b3f assets/rotarycraft/blockstates/hsla_steel_block.json
 6398771df62e012f8d919a3acb823cafc9f646d7 assets/rotarycraft/blockstates/hydro_engine.json
+443f5964816977f4bdcde5ea9d33175c4fee60b0 assets/rotarycraft/blockstates/igniter.json
 754506af8fad95600bab308c3ba8e5442a67eb88 assets/rotarycraft/blockstates/item_cannon.json
 21b0c35ff7dd059085c4e11ff116e8751d65c791 assets/rotarycraft/blockstates/jet_engine.json
 30914dcf4004cba937e474e8212bd6f6e579f6f1 assets/rotarycraft/blockstates/landmine.json
@@ -332,6 +333,7 @@ acd4770e5ce68372136951f78ae4912ca6a9f399 assets/rotarycraft/items/hsla_steel_spr
 b04b2347daf7612e0b28b808ff26d636a171b967 assets/rotarycraft/items/hsla_steel_sword.json
 d4b320e89fa348478231da7520897b9f9d904964 assets/rotarycraft/items/hub.json
 00152e9c703b44405c6ae243501241cf3c1b96d4 assets/rotarycraft/items/hydro_engine.json
+19ed6724529e786328bea852429ad5712809441c assets/rotarycraft/items/igniter.json
 176b1f004273008dcf178c415909a8f9ef62b1c8 assets/rotarycraft/items/ignition_unit.json
 b4adf91726778a236313a401aa0ef0532f748967 assets/rotarycraft/items/impeller.json
 f9d7440683a6736f35708dff9cd9eedbb5e53af3 assets/rotarycraft/items/inductive_blend.json
@@ -564,6 +566,7 @@ d2728390f7018d23a401f0a543a1e6e27ef027ac assets/rotarycraft/models/block/hsla_ge
 374e7360858c20bef3dc9e399c0af9024c4a8d7f assets/rotarycraft/models/block/hsla_shaft.json
 5b9f24e34bfbc83d82fcf7a15eadfb6f457b04a8 assets/rotarycraft/models/block/hsla_steel_block.json
 2bb07ac315ec92c6f798f1a5998f2317c1818b42 assets/rotarycraft/models/block/hydro_engine.json
+13f26aa20bc09779f0da5e91a5d6fe140cffa711 assets/rotarycraft/models/block/igniter.json
 b909160302c8b8f07b50107549e1255a2d6de193 assets/rotarycraft/models/block/item_cannon.json
 6e0eebad6a6e25c3774e532e5f5b93ce52576a6d assets/rotarycraft/models/block/jet_engine.json
 3d2822d45cb10b184ee091413261db17455838f0 assets/rotarycraft/models/block/landmine.json

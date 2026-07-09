@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:combustor",
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:obsidian"
+  },
+  "pattern": [
+    "OGO",
+    "GCG",
+    "OGO"
+  ],
+  "result": {
+    "id": "rotarycraft:igniter"
+  }
+}
