@@ -1,8 +1,9 @@
-// 26.2	2026-07-09T18:11:33.2218451	Model Definitions - rotarycraft
+// 26.2	2026-07-09T18:42:34.783474	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
 cb5fd843f3f16e9d9efd43bffd01b3dcd81eebf4 assets/rotarycraft/blockstates/anthra.json
+633def9d9235bb2ac171e1d21ba1b3135572b1fa assets/rotarycraft/blockstates/arrow_cannon.json
 0583d1cbcda5801dd3b658a371dd469a1f69b541 assets/rotarycraft/blockstates/bcengine.json
 dc14dee9cc4f82573f192b826536153400864cf9 assets/rotarycraft/blockstates/beam.json
 ae214068bbb211a38cc9c43d57d0398fbc68871b assets/rotarycraft/blockstates/beam_mirror.json
@@ -143,6 +144,7 @@ cbbd5711fe9a562bc024d91e861a42f65dddf78e assets/rotarycraft/items/air_cannon.jso
 bedb0f2817745a532375cc3cacaccad719159c10 assets/rotarycraft/items/aluminum_alloy_powder.json
 5f08f7396eaa66d0467eaab40b28889bb7ca9d3b assets/rotarycraft/items/angular_transducer.json
 89a3ac363abc91e8058f47ce83bb7a397b81751f assets/rotarycraft/items/anthra.json
+162fdaed70772936d4d5bf199d326e8a1c4c0fa9 assets/rotarycraft/items/arrow_cannon.json
 3750e393e066f7d41fa7efde6e2debbb0c920df8 assets/rotarycraft/items/ball_bearing.json
 5e9cff761a346ea2b5bfa303ccd625d15e414447 assets/rotarycraft/items/bcengine.json
 c265a97080bb0c43c33bb92604360790b318893b assets/rotarycraft/items/beam.json
@@ -489,6 +491,7 @@ c61e21d8830f682396920d82697096a31365a092 assets/rotarycraft/models/block/ac_engi
 e512d0df4315d0fa0a135631381eddbe34e1e6a9 assets/rotarycraft/models/block/aerosolizer.json
 dfd9b04049fe55c8fc4236fd316d1fadb3f49066 assets/rotarycraft/models/block/air_cannon.json
 1e0b7e02baf6fe2562a2976bf3b0923f9abb2528 assets/rotarycraft/models/block/anthra.json
+b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/arrow_cannon.json
 150e63477178c93cc3c388373107308ada22e877 assets/rotarycraft/models/block/bcengine.json
 feab99cfc081ef3e9370ea2e4dc0f2c48350a956 assets/rotarycraft/models/block/beam.json
 4e21fbeee16adc29909a77eebdd9bcb1916a5a14 assets/rotarycraft/models/block/beam_mirror.json

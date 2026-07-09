@@ -178,6 +178,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> PIPEPUMP = registerMachineBlock("pipe_pump", () -> new BlockPipePump(blockProperties().strength(5)));
     public static final DeferredBlock<Block> AIRGUN = registerMachineBlock("air_cannon", () -> new BlockAirGun(blockProperties().strength(5)));
     public static final DeferredBlock<Block> HYDRATOR = registerMachineBlock("ground_hydrator", () -> new BlockGroundHydrator(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> MACHINEGUN = registerMachineBlock("arrow_cannon", () -> new BlockMachineGun(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FERMENTER = registerMachineBlock("fermenter", () -> new BlockFermenter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> EXTRACTOR = registerMachineBlock("extractor", () -> new BlockExtractor(blockProperties().strength(5)));

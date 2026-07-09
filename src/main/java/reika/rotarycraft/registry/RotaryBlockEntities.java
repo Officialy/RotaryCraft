@@ -126,6 +126,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityAirGun::new, RotaryBlocks.AIRGUN.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityGroundHydrator>> HYDRATOR = BLOCK_ENTITIES.register("ground_hydrator", () ->
             new BlockEntityType<>(BlockEntityGroundHydrator::new, RotaryBlocks.HYDRATOR.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityMachineGun>> MACHINEGUN = BLOCK_ENTITIES.register("arrow_cannon", () ->
+            new BlockEntityType<>(BlockEntityMachineGun::new, RotaryBlocks.MACHINEGUN.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->
             new BlockEntityType<>(BlockEntityDistributionClutch::new, RotaryBlocks.DISTRIBUTION_CLUTCH.get()));
 

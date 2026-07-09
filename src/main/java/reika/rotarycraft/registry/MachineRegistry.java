@@ -196,7 +196,7 @@ public enum MachineRegistry implements TileEnum {
     //    TERRAFORMER("machine.terraformer", BlockRotaryCraftMachine.class, BlockEntityTerraformer.class),
     SORTING("machine.sorting", RotaryBlocks.SORTER.get(), BlockEntitySorting.class),
     //    FUELENHANCER("machine.fuelenhancer", BlockRotaryCraftMachine.class, BlockEntityFuelConverter.class, "RenderFuelConverter"),
-//    ARROWGUN("machine.arrowgun", BlockRotaryCraftMachine.class, BlockEntityMachineGun.class),
+    ARROWGUN(true, "machine.arrowgun", RotaryBlocks.MACHINEGUN.get(), BlockEntityMachineGun.class),
     BOILER("machine.frictionboiler", RotaryBlocks.FRICTION_BOILER.get(), BlockEntityBoiler.class, PowerTypes.STEAM, (modelSet) -> new BoilerModel(modelSet.bakeLayer(RotaryModelLayers.BOILER))),
     STEAMTURBINE(true, "machine.steamturbine", RotaryBlocks.STEAM_TURBINE.get(), BlockEntitySteam.class, PowerTypes.STEAM, (modelSet) -> new SteamTurbineModel(modelSet.bakeLayer(RotaryModelLayers.STEAM_TURBINE))),
     //    FERTILIZER(true, "machine.fertilizer", BlockRotaryCraftMachine.class, BlockEntityFertilizer.class, "RenderFertilizer"),

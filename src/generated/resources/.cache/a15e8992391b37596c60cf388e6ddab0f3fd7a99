@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T18:11:23.086877	RotaryCraft Recipes
+// 26.2	2026-07-09T18:42:24.8688849	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -43,6 +43,7 @@ c778e7c7dee300d2e038ff32dd6fe15d5ffaea4a data/rotarycraft/advancement/recipes/mi
 f6b957f9d288ae16faafece4a98911616b13d790 data/rotarycraft/advancement/recipes/redstone/ac_engine.json
 c47162c8b59367b1d3c5d9b9e083e5e51e27fd9b data/rotarycraft/advancement/recipes/redstone/aerosolizer.json
 5645c37b48f5be5781f7956984361c342bd5634d data/rotarycraft/advancement/recipes/redstone/air_cannon.json
+6e9a1b341698eaf477d796b015f2635432311bc4 data/rotarycraft/advancement/recipes/redstone/arrow_cannon.json
 78b359a600f00b0c95399dd810a9bbc8cda8a646 data/rotarycraft/advancement/recipes/redstone/beam_mirror.json
 998620d2ccc8fbf4b14ec3e46fca7514c44aa00a data/rotarycraft/advancement/recipes/redstone/bedrock_breaker.json
 60d8e3230cb18fbc37b3b5ea08fa2de6ef684693 data/rotarycraft/advancement/recipes/redstone/bedrock_flywheel.json
@@ -183,6 +184,7 @@ e34f95e0ae89aeeba7e530e0bb4d16151fee3efb data/rotarycraft/recipe/aerosolizer.jso
 f3a1f0e6d2df78e2e6341d88d17f7610cb1f46c4 data/rotarycraft/recipe/air_cannon.json
 71e02f7c93be76ab8dbf2e139d180fc6b57880c4 data/rotarycraft/recipe/aluminum_alloy_ingot.json
 690602c2adbf2c3ead651b6a3f4f83d098b00d6d data/rotarycraft/recipe/angular_transducer.json
+697e1dcf99caa2b92a61cad22e082eefb0f47b8f data/rotarycraft/recipe/arrow_cannon.json
 8e21214390d9efa4af9c8fb2d1119cacfc2a7d3f data/rotarycraft/recipe/ball_bearing_block.json
 647322cdaf63a1f4281304b253cc2a677e5f8fad data/rotarycraft/recipe/ball_bearing_from_ingot.json
 5ba2f48bd31b4f45cdbfa0493824e409de966aaf data/rotarycraft/recipe/beam_mirror.json

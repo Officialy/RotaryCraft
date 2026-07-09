@@ -839,6 +839,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
                     .save(out);
 
+            // ARROWGUN (arrow cannon): legacy "SSS","BDB","SBS" — steel shell, base-panel frame, a
+            // dispenser core. S=steelingot, B=basepanel=HSLA_PLATE, D=dispenser.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.MACHINEGUN.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .define('D', Items.DISPENSER)
+                    .pattern("SSS").pattern("BDB").pattern("SBS")
+                    .unlockedBy("has_dispenser", has(Items.DISPENSER))
+                    .save(out);
+
             // HYDRATOR (ground hydrator): legacy "sls","p p","PpP" — steel + ladder + planks over a
             // base-panel base. s=steelingot, l=ladder, p=planks (tag), P=basepanel=HSLA_PLATE.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.HYDRATOR.get())
