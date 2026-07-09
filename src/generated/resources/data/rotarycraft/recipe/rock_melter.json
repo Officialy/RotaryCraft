@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:hsla_steel_gear",
+    "P": "rotarycraft:hsla_steel_plate",
+    "R": "rotarycraft:reservoir",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "SRS",
+    "PGP",
+    "SsS"
+  ],
+  "result": {
+    "id": "rotarycraft:rock_melter"
+  }
+}

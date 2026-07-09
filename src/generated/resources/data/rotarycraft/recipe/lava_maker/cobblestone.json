@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:lava_maker",
+  "amount": 500,
+  "energy": 2820000,
+  "fluid": "minecraft:lava",
+  "input": "minecraft:cobblestone",
+  "temperature": 1000
+}

@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:lava_maker",
+  "amount": 2000,
+  "energy": 480000,
+  "fluid": "minecraft:lava",
+  "input": "minecraft:netherrack",
+  "temperature": 600
+}

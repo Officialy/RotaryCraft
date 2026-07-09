@@ -50,6 +50,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
+import reika.rotarycraft.blockentities.processing.BlockEntityLavaMaker;
 import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
@@ -200,7 +201,7 @@ public enum MachineRegistry implements TileEnum {
     BOILER("machine.frictionboiler", RotaryBlocks.FRICTION_BOILER.get(), BlockEntityBoiler.class, PowerTypes.STEAM, (modelSet) -> new BoilerModel(modelSet.bakeLayer(RotaryModelLayers.BOILER))),
     STEAMTURBINE(true, "machine.steamturbine", RotaryBlocks.STEAM_TURBINE.get(), BlockEntitySteam.class, PowerTypes.STEAM, (modelSet) -> new SteamTurbineModel(modelSet.bakeLayer(RotaryModelLayers.STEAM_TURBINE))),
     //    FERTILIZER(true, "machine.fertilizer", BlockRotaryCraftMachine.class, BlockEntityFertilizer.class, "RenderFertilizer"),
-//    LAVAMAKER(true, "machine.lavamaker", BlockRotaryCraftMachine.class, BlockEntityLavaMaker.class, "RenderRockMelter"),
+    LAVAMAKER(true, "machine.lavamaker", RotaryBlocks.LAVAMAKER.get(), BlockEntityLavaMaker.class, (modelSet) -> new LavaMakerModel(modelSet.bakeLayer(RotaryModelLayers.LAVA_MAKER))),
     //GENERATOR("machine.generator", BlockModEngine.class, BlockEntityGenerator.class, "RenderGenerator", PowerTypes.EU),
     //ELECTRICMOTOR("machine.electricmotor", BlockModEngine.class, BlockEntityElectricMotor.class, "RenderElecMotor", PowerTypes.EU),
     //    AGGREGATOR("machine.aggregator", BlockRotaryCraftMachine.class, BlockEntityAggregator.class, "RenderAggregator"),

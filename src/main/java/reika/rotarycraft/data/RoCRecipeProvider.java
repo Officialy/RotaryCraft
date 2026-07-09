@@ -26,6 +26,7 @@ import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
 import net.neoforged.neoforge.fluids.FluidStack;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
@@ -141,6 +142,7 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             blastFurnace();
             grinder();
             centrifuge();
+            lavaMaker();
             frictionHeater();
             extractor();
             extractorSmelting();
@@ -204,6 +206,24 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
 
         private static CentrifugeRecipe.ChancedOutput co(ItemLike item, int count, float chance) {
             return new CentrifugeRecipe.ChancedOutput(new ItemStackTemplate(item.asItem(), count), chance);
+        }
+
+        // Lava Maker melts (RotaryRecipeTypes.LAVA_MAKER) — the base-game rock->lava set. Energy in
+        // joules (ROCK_MELT_ENERGY = 5.2e6); temperature in C; amount in mB.
+        private void lavaMaker() {
+            melt("stone", Ingredient.of(Items.STONE), 1000, 1000, 5_200_000L);
+            melt("cobblestone", Ingredient.of(Items.COBBLESTONE), 500, 1000, 2_820_000L);
+            melt("netherrack", Ingredient.of(Items.NETHERRACK), 2000, 600, 480_000L);
+            melt("stone_bricks", Ingredient.of(Items.STONE_BRICKS), 1000, 1200, 4_160_000L);
+        }
+
+        private void melt(String name, Ingredient input, int amount, int temperature, long energy) {
+            LavaMakerRecipe recipe = new LavaMakerRecipe(input,
+                    net.minecraft.core.registries.BuiltInRegistries.FLUID.wrapAsHolder(net.minecraft.world.level.material.Fluids.LAVA),
+                    amount, temperature, energy);
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "lava_maker/" + name));
+            out.accept(key, recipe, null);
         }
 
         private void spin(String name, ItemLike input, CentrifugeRecipe.FluidOutput fluid, CentrifugeRecipe.ChancedOutput... outputs) {
@@ -837,6 +857,18 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('C', Items.CHEST)
                     .pattern("SwS").pattern("wIw").pattern("SCS")
                     .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
+            // LAVAMAKER (rock melter): legacy "SRS","PGP","SsS" — steel + reservoir + base-panel +
+            // steel gear + shaft. S=steelingot, R=reservoir, P=basepanel=HSLA_PLATE, G=steelgear, s=shaft.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.LAVAMAKER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('R', RotaryBlocks.RESERVOIR.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('s', RotaryItems.HSLA_SHAFT.get())
+                    .pattern("SRS").pattern("PGP").pattern("SsS")
+                    .unlockedBy("has_reservoir", has(RotaryBlocks.RESERVOIR.get()))
                     .save(out);
 
             // ARROWGUN (arrow cannon): legacy "SSS","BDB","SBS" — steel shell, base-panel frame, a

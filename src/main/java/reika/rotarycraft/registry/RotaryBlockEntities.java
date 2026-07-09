@@ -27,6 +27,7 @@ import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
 import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
+import reika.rotarycraft.blockentities.processing.BlockEntityLavaMaker;
 import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
@@ -128,6 +129,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityGroundHydrator::new, RotaryBlocks.HYDRATOR.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityMachineGun>> MACHINEGUN = BLOCK_ENTITIES.register("arrow_cannon", () ->
             new BlockEntityType<>(BlockEntityMachineGun::new, RotaryBlocks.MACHINEGUN.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityLavaMaker>> LAVAMAKER = BLOCK_ENTITIES.register("rock_melter", () ->
+            new BlockEntityType<>(BlockEntityLavaMaker::new, RotaryBlocks.LAVAMAKER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->
             new BlockEntityType<>(BlockEntityDistributionClutch::new, RotaryBlocks.DISTRIBUTION_CLUTCH.get()));
 

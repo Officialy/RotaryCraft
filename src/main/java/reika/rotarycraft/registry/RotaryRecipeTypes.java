@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
@@ -26,6 +27,8 @@ public class RotaryRecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<GrinderRecipe>> GRINDER = RECIPE_TYPES.register("grinder", () -> new RecipeType<GrinderRecipe>() {});
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<CentrifugeRecipe>> CENTRIFUGE = RECIPE_TYPES.register("centrifuge", () -> new RecipeType<CentrifugeRecipe>() {});
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<LavaMakerRecipe>> LAVA_MAKER = RECIPE_TYPES.register("lava_maker", () -> new RecipeType<LavaMakerRecipe>() {});
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<FrictionHeaterRecipe>> FRICTION_HEATER = RECIPE_TYPES.register("friction_heater", () -> new RecipeType<FrictionHeaterRecipe>() {});
 

@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T18:42:24.8688849	RotaryCraft Recipes
+// 26.2	2026-07-09T19:16:48.1216101	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -131,6 +131,7 @@ c754888e9ea40a7fceafadf6eb58276db94711f9 data/rotarycraft/advancement/recipes/re
 80829159a3f550d1f51bd9d4ac455d6e30b9fd48 data/rotarycraft/advancement/recipes/redstone/refresher.json
 1828d9f64f1915985d88cdbe6a72bf28e30fac51 data/rotarycraft/advancement/recipes/redstone/refrigerator.json
 d0aef2fb274f02f9dfade3af8dac014f4321d7c4 data/rotarycraft/advancement/recipes/redstone/reservoir.json
+0ffc4db001b8e7c7be550a66596b3d44b951b8c7 data/rotarycraft/advancement/recipes/redstone/rock_melter.json
 432c7f0fea15d4a943b352d8f3fd0cc47ef977d2 data/rotarycraft/advancement/recipes/redstone/self_destruct.json
 372557d05120221fcca1081aea376e7be6ded5aa data/rotarycraft/advancement/recipes/redstone/separation.json
 ca861c509955ff44b8bce851e9fc74bcb5c2e39e data/rotarycraft/advancement/recipes/redstone/smoke_detector.json
@@ -355,6 +356,10 @@ f38558e96825c7aa1d842c7887c8f7e7adc5a38f data/rotarycraft/recipe/item_cannon.jso
 2915a1483ba91fb69096cf0eba2f287d91598976 data/rotarycraft/recipe/jet_engine.json
 a09ca1d0c6313772c0fd41d09aa4831ed3550009 data/rotarycraft/recipe/jump_boots.json
 fb9b1f93627fcde3b81a9ef7376a529838532a19 data/rotarycraft/recipe/landmine.json
+53c4321ae256b8f8f5abf237c6f580311f291bb3 data/rotarycraft/recipe/lava_maker/cobblestone.json
+be0bbfd4e1984ee6af2c1254608581b6b9f3c998 data/rotarycraft/recipe/lava_maker/netherrack.json
+969ac1fa8b06fdefa8a1acac9e41b7d5df3fc97b data/rotarycraft/recipe/lava_maker/stone.json
+eb0ba74a59b76d52d2307ef0965b6381606c5141 data/rotarycraft/recipe/lava_maker/stone_bricks.json
 bc86bb70daf08634aa4c0ede21b2d80d4634620d data/rotarycraft/recipe/lava_smeltory.json
 ffdd746447e270e57942879cce58b480563f5ce6 data/rotarycraft/recipe/lens.json
 f5ebce60bb0be396321c6b0f04a22585b6680565 data/rotarycraft/recipe/line_builder.json
@@ -412,6 +417,7 @@ ea820bf3353f0e898bf9d9b8d5662245b2530225 data/rotarycraft/recipe/quartz_flakes_t
 f81cd689932ff4ef54f519251c0e90b92349533c data/rotarycraft/recipe/refresher.json
 5ccddddaa1ba3289e3ba058867d4a7cce3346467 data/rotarycraft/recipe/refrigerator.json
 a7f8b59e1a25b31e727f12ff6024d64ec780c20e data/rotarycraft/recipe/reservoir.json
+d11cab995766e4cd3a94205566f7bb5fb10d85b2 data/rotarycraft/recipe/rock_melter.json
 4aae79612a109d00b34e851942271e8fb50e5763 data/rotarycraft/recipe/screwdriver.json
 41d8e21c0b39209985627fd32b948c0e27b942db data/rotarycraft/recipe/self_destruct.json
 23976f50dcf198176103dda6c82864cc9a5ecbd5 data/rotarycraft/recipe/separation.json

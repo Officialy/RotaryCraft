@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T18:42:24.878413	Loot Tables
+// 26.2	2026-07-09T19:16:48.1284238	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 35618a08eae47dc11e8f8bffb79ff5ecd0cc5286 data/rotarycraft/loot_table/blocks/air_cannon.json
@@ -104,6 +104,7 @@ fa38374c600b27586323fc84b5278672260ab0c9 data/rotarycraft/loot_table/blocks/pump
 9006797cc7461eb7c6bb54f409b86ded3204a3bd data/rotarycraft/loot_table/blocks/refresher.json
 259e2ae50cea3bc18991e8f46b37ef2298e33c3f data/rotarycraft/loot_table/blocks/refrigerator.json
 42a34e84f44af8e8fda32ef4fce8e8c784bfa9dd data/rotarycraft/loot_table/blocks/reservoir.json
+a9d0fccefe985d25b97c9aa237a4162cbd65c39a data/rotarycraft/loot_table/blocks/rock_melter.json
 dbbdc38caf2dd78f509ef120524863e734134bb7 data/rotarycraft/loot_table/blocks/self_destruct.json
 6cc446a11460a4217d1aaadd5349c8a186ece194 data/rotarycraft/loot_table/blocks/separation.json
 48984efe601928759ace314ec8754078db473076 data/rotarycraft/loot_table/blocks/shield.json

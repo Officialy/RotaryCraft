@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T18:42:34.783474	Model Definitions - rotarycraft
+// 26.2	2026-07-09T19:16:58.2055644	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -99,6 +99,7 @@ c793c493df8c93186b481f4241931de2e560352c assets/rotarycraft/blockstates/player_d
 265d5a0492e59bc508cb7929d3fa2481d2a5770f assets/rotarycraft/blockstates/refresher.json
 fd3168060c3a1776bca95b8a947599c05b56b80e assets/rotarycraft/blockstates/refrigerator.json
 7b0ac82b5b119fb64b7c94d374fb421b3f47572b assets/rotarycraft/blockstates/reservoir.json
+8f12487bf35b52f7b52217607741ac110a0cd14e assets/rotarycraft/blockstates/rock_melter.json
 012aa894d1619dc7e809adfe2079462af83a2a1a assets/rotarycraft/blockstates/self_destruct.json
 031850158ac41a517f1c4e4ef07324d3b77e5c53 assets/rotarycraft/blockstates/shield.json
 b05fdba6702caf4621cd2d2acacc1d4dccb25bce assets/rotarycraft/blockstates/smoke_detector.json
@@ -404,6 +405,7 @@ b7b18c71dcb70e46f818e0d5edc5ceaf874878ef assets/rotarycraft/items/redstone_flake
 ecb12479500176934b3f0ef7904d7b4b2a6b267d assets/rotarycraft/items/refresher.json
 1a66eb3c07f38c8ca5afcbf8fba67102785eace1 assets/rotarycraft/items/refrigerator.json
 8c99b40c97b6c22455cf58847afd30c89f18e442 assets/rotarycraft/items/reservoir.json
+7ca2a0617594ef2e79542d97f93fc101a03a77f2 assets/rotarycraft/items/rock_melter.json
 a675f5a77ab0133e1d7a61bf9335643616fa309d assets/rotarycraft/items/salt.json
 2849a33e29d566f524514177580c01975f0eb3c3 assets/rotarycraft/items/saw.json
 388c5e1aececb36eeee02d97f984c4985bc04f19 assets/rotarycraft/items/sawdust.json
@@ -587,6 +589,7 @@ a609305f331e8628043dee53ccac5389e7136ba5 assets/rotarycraft/models/block/perform
 9b75264dabd7027cda456559f43c5ebd80fe2c5f assets/rotarycraft/models/block/refresher.json
 1ee5eb23a14739dfb191491a3d2352c9c37d3aaa assets/rotarycraft/models/block/refrigerator.json
 e1f409274cc63d14cca4c482a1a288ffcbe434b4 assets/rotarycraft/models/block/reservoir.json
+55be5e9ad03439d8964a613979bc1e80003291b7 assets/rotarycraft/models/block/rock_melter.json
 418bd5f4f400c17acaa8ab26d1327d1a8db9b655 assets/rotarycraft/models/block/self_destruct.json
 823ae1319e9080608d45b4c178b568097938641d assets/rotarycraft/models/block/shield.json
 a8b33640f20d37b9a38c3736adf8c0ca752a93f8 assets/rotarycraft/models/block/smoke_detector.json
