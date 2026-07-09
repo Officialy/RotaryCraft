@@ -20,6 +20,7 @@ import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import reika.rotarycraft.blockentities.decorative.BlockEntityParticleEmitter;
 import reika.rotarycraft.blockentities.engine.*;
 import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
+import reika.rotarycraft.blockentities.farming.BlockEntityGroundHydrator;
 import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
@@ -123,6 +124,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityPipePump::new, RotaryBlocks.PIPEPUMP.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAirGun>> AIRGUN = BLOCK_ENTITIES.register("air_cannon", () ->
             new BlockEntityType<>(BlockEntityAirGun::new, RotaryBlocks.AIRGUN.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityGroundHydrator>> HYDRATOR = BLOCK_ENTITIES.register("ground_hydrator", () ->
+            new BlockEntityType<>(BlockEntityGroundHydrator::new, RotaryBlocks.HYDRATOR.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->
             new BlockEntityType<>(BlockEntityDistributionClutch::new, RotaryBlocks.DISTRIBUTION_CLUTCH.get()));
 

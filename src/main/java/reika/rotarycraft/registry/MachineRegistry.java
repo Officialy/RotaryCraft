@@ -44,6 +44,7 @@ import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import reika.rotarycraft.blockentities.decorative.BlockEntityParticleEmitter;
 import reika.rotarycraft.blockentities.engine.*;
 import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
+import reika.rotarycraft.blockentities.farming.BlockEntityGroundHydrator;
 import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.level.*;
@@ -234,7 +235,7 @@ public enum MachineRegistry implements TileEnum {
 //    WETTER("machine.wetter", BlockRotaryCraftMachine.class, BlockEntityWetter.class, "RenderWetter"),
 //    DROPS("machine.drops", BlockRotaryCraftMachine.class, BlockEntityDropProcessor.class),
 //    ITEMFILTER("machine.itemfilter", BlockRotaryCraftMachine.class, BlockEntityItemFilter.class),
-//    HYDRATOR("machine.hydrator", BlockRotaryCraftMachine.class, BlockEntityGroundHydrator.class, "RenderHydrator"),
+    HYDRATOR("machine.hydrator", RotaryBlocks.HYDRATOR.get(), BlockEntityGroundHydrator.class),
     FILLER("machine.filler", RotaryBlocks.FILLER.get(), BlockEntityBlockFiller.class/*, (modelSet) -> new FillerModel(modelSet.bakeLayer(RotaryModelLayers.FILLER))*/),
     //    GATLING("machine.gatling", BlockRotaryCraftMachine.class, BlockEntityMultiCannon.class, "RenderMultiCannon"),
     SPILLWAY("machine.spillway", RotaryBlocks.SPILLWAY.get(), BlockEntitySpillway.class, (modelSet) -> new SpillwayModel(modelSet.bakeLayer(RotaryModelLayers.SPILLWAY))),

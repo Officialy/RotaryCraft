@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T17:42:55.8836382	Model Definitions - rotarycraft
+// 26.2	2026-07-09T18:11:33.2218451	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -60,6 +60,7 @@ bf1aed626af984a13d2f0bdf1945867a4e434a80 assets/rotarycraft/blockstates/friction
 9878ce3b3977392744059d3ad97f6598c57b7309 assets/rotarycraft/blockstates/gpr.json
 3aff6b9ba76dbf9edb4fcb4351c100687f91d3c0 assets/rotarycraft/blockstates/grinder.json
 27f61aa4b92f7a5cdb59293a58fd4fde87661d48 assets/rotarycraft/blockstates/grindstone.json
+e0f05d31ca68f257d300f2210c9e3e51e3e90095 assets/rotarycraft/blockstates/ground_hydrator.json
 45ccfa5f3abc0d750e9bc00e5c4872cb8db610f3 assets/rotarycraft/blockstates/heater.json
 67d567ba6a94c8494c6bb0e09d7306c1a3700f83 assets/rotarycraft/blockstates/heat_ray.json
 a4f7239046c11b0decac65a84b21151d24044dda assets/rotarycraft/blockstates/highgear.json
@@ -284,6 +285,7 @@ f8dbc31dea8fae6b0f8eb70584fd37881dd22774 assets/rotarycraft/items/gold_solution.
 0fb4d97dbcbb51cdc52583e1bf6e934f011354dd assets/rotarycraft/items/gpr.json
 c1d02c423e00720d68998fc943ed06a7f08f058e assets/rotarycraft/items/grinder.json
 e6f33472349a220fd889ba1a7274e4a19900221b assets/rotarycraft/items/grindstone.json
+2f7db6202fdba4f0321562491f3ae4ac4e6fdf41 assets/rotarycraft/items/ground_hydrator.json
 f7843f9d5fa7cb8a79742bd0081890420d1fd1d3 assets/rotarycraft/items/handbook.json
 0ff1b01995d8dd4c524edd990b1ddec627af73db assets/rotarycraft/items/handheld_crafting_table.json
 5042fe03780ec40046d43a25735f843b6225580f assets/rotarycraft/items/heater.json
@@ -544,6 +546,7 @@ eb7b48c7fe20a79f3f85d89287f5248b1e65932a assets/rotarycraft/models/block/gas_eng
 3ed4260e84bfc99f1b1faf7f8a9cf202d0b10fa7 assets/rotarycraft/models/block/gpr.json
 cca47425c6f8a0cf711f535b6ea1553839037ca5 assets/rotarycraft/models/block/grinder.json
 1d7ca01d133dd3a0e7ba2b8eaaa5c30ac8847512 assets/rotarycraft/models/block/grindstone.json
+b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/ground_hydrator.json
 82ec7bb42e67576ddd5cdcc43f08829ff7e3851c assets/rotarycraft/models/block/heater.json
 29f9dcbb52702aedd5cec09863b633799630111e assets/rotarycraft/models/block/heat_ray.json
 a2dcc5a3b0b48772e7af996402712a0af149965a assets/rotarycraft/models/block/highgear.json

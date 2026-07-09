@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T17:42:45.9374456	RotaryCraft Recipes
+// 26.2	2026-07-09T18:11:23.086877	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -94,6 +94,7 @@ a3be9d29dffb48bbca99d0b767f09678ff4d97d7 data/rotarycraft/advancement/recipes/re
 4b82f4bc6c5a5c0b57818f3a8e4b7ac7daa0fae4 data/rotarycraft/advancement/recipes/redstone/gpr.json
 16171f1848266cef5d737870c66c308b91f60638 data/rotarycraft/advancement/recipes/redstone/grinder.json
 ef4cc3a72ef1eeb125e4b769aea7fd3154579e27 data/rotarycraft/advancement/recipes/redstone/grindstone.json
+9b761abf9b3cc65656c5f74fac316dc576bebd89 data/rotarycraft/advancement/recipes/redstone/ground_hydrator.json
 4e5a96e9d18ebf905b9ed10d58898147dd167b39 data/rotarycraft/advancement/recipes/redstone/heater.json
 800d32192832f3034171049b408ec6fb9d645b1a data/rotarycraft/advancement/recipes/redstone/heat_ray.json
 81a036af62e170681d8167a6244b4c806fa10879 data/rotarycraft/advancement/recipes/redstone/highgear.json
@@ -305,6 +306,7 @@ f8333352f44395df7021d6d8e55852ec21b28344 data/rotarycraft/recipe/gold_flakes_to_
 c40e47c723aabc32723a0a9fddf22b3847ac9cd0 data/rotarycraft/recipe/grinder/sandstone_to_sand.json
 45f977d107d4f46b399f22ee792b7de9e58abf4b data/rotarycraft/recipe/grinder/stone_to_cobblestone.json
 c14967d58f4fdc0267ad3c238a0ec7e5889ef050 data/rotarycraft/recipe/grindstone.json
+7a44d93ff3130a0ebe55677dc49a513b337c20c6 data/rotarycraft/recipe/ground_hydrator.json
 01f83136768b1b724c1c281263fe2c000019fc1e data/rotarycraft/recipe/handbook.json
 a9079c6b92087d1fe6887a0ee67e3ae7bde9eb2c data/rotarycraft/recipe/handheld_crafting_table.json
 23aba8b1aecc7033a8a8a22cc354c06a8f62b76d data/rotarycraft/recipe/heater.json

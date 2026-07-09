@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T17:42:45.9431506	Loot Tables
+// 26.2	2026-07-09T18:11:23.0932532	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 35618a08eae47dc11e8f8bffb79ff5ecd0cc5286 data/rotarycraft/loot_table/blocks/air_cannon.json
@@ -64,6 +64,7 @@ d66019895527f79f5b4ed2f728fbb393c29701af data/rotarycraft/loot_table/blocks/fill
 729508b69ddf64ac9cce0c8b08dff682136acfff data/rotarycraft/loot_table/blocks/gpr.json
 23b89b24a8b2cd6600d2b7534fcb982762513104 data/rotarycraft/loot_table/blocks/grinder.json
 4382fbb713bc583c1e8cc6cf27b694538aeb999c data/rotarycraft/loot_table/blocks/grindstone.json
+d10837b7f9361c809deb76101b692d352c8ee963 data/rotarycraft/loot_table/blocks/ground_hydrator.json
 fed746d5f248c72a5cf8baf1f4ec24a92146a53d data/rotarycraft/loot_table/blocks/heater.json
 1421d4f1438b2b4f10a2d94a1c8de2fe37842922 data/rotarycraft/loot_table/blocks/heat_ray.json
 d1ab08d023ceec3b18bb93bb982e82b85476b2a6 data/rotarycraft/loot_table/blocks/highgear.json

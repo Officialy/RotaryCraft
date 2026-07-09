@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/ground_hydrator",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/ground_hydrator",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/ground_hydrator"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/ground_hydrator",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/ground_hydrator",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/ground_hydrator",
+      "y": 270
+    }
+  }
+}

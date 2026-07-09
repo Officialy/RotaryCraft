@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CookingBookCategory;
@@ -836,6 +837,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('C', Items.CHEST)
                     .pattern("SwS").pattern("wIw").pattern("SCS")
                     .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
+            // HYDRATOR (ground hydrator): legacy "sls","p p","PpP" — steel + ladder + planks over a
+            // base-panel base. s=steelingot, l=ladder, p=planks (tag), P=basepanel=HSLA_PLATE.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.HYDRATOR.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('l', Items.LADDER)
+                    .define('p', ItemTags.PLANKS)
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .pattern("sls").pattern("p p").pattern("PpP")
+                    .unlockedBy("has_plate", has(RotaryItems.HSLA_PLATE.get()))
                     .save(out);
 
             // AIRGUN (air cannon): legacy "sps","I S","sps" — steel/base-panel shell, impeller intake,

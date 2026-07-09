@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "rotarycraft:hsla_steel_plate",
+    "l": "minecraft:ladder",
+    "p": "#minecraft:planks",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sls",
+    "p p",
+    "PpP"
+  ],
+  "result": {
+    "id": "rotarycraft:ground_hydrator"
+  }
+}
