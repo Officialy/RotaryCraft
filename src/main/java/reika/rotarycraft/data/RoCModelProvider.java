@@ -148,6 +148,14 @@ public class RoCModelProvider extends ModelProvider {
             } else if (block instanceof BlockWorktable) {
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
                         block, bottomTopMapping("worktable_top", "worktable_bottom", "worktable"), modelOut);
+            } else if (block instanceof BlockMiningPipe) {
+                // Tunnel lining left by the borer. Its id is "miningpipe" but the texture is minepipe.png;
+                // all four SHAPE states share one cube model (the legacy render was cube-ish too).
+                var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/minepipe"));
+                blockModelId = ModelTemplates.CUBE_ALL.create(
+                        block,
+                        new TextureMapping().put(TextureSlot.ALL, tex).put(TextureSlot.PARTICLE, tex),
+                        modelOut);
             } else if (isPipe(block)) {
                 // RotaryCraft's per-type pipe textures (block/fluid_pipe.png etc.) don't exist —
                 // the legacy assets used a single piping.png spritesheet that the BER sliced into
@@ -181,10 +189,7 @@ public class RoCModelProvider extends ModelProvider {
             //    so rotation is moot).
             if (!isPipeShell) {
                 MultiVariantGenerator gen;
-                if (block instanceof BlockMiningPipe) {
-                    gen = MultiVariantGenerator.dispatch(block, single)
-                            .with(horizontalFacingDispatch(BlockStateProperties.HORIZONTAL_FACING));
-                } else if (block instanceof BlockRotaryCraftMachine) {
+                if (block instanceof BlockRotaryCraftMachine) {
                     gen = MultiVariantGenerator.dispatch(block, single)
                             .with(sixWayFacingDispatch(BlockStateProperties.FACING));
                 } else {

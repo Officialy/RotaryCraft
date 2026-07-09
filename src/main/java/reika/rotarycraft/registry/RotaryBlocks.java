@@ -72,7 +72,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> CANOLA = registerBlockOnly("canola", () -> new CanolaBlock(blockProperties().noCollision().randomTicks().instabreak().sound(SoundType.CROP)));
     public static final DeferredBlock<Block> BEAM = register("beam", () -> new Block(blockProperties().strength(20)));
     public static final DeferredBlock<Block> BRIDGE = register("bridge", () -> new Block(blockProperties().strength(20)));
-    public static final DeferredBlock<Block> MININGPIPE = register("miningpipe", () -> new Block(blockProperties().strength(20)));
+    public static final DeferredBlock<Block> MININGPIPE = register("miningpipe", BlockMiningPipe::new);
     public static final DeferredBlock<Block> BLASTGLASS = register("blastglass", () -> new HalfTransparentBlock(blockProperties().strength(20).noOcclusion()));
     public static final DeferredBlock<Block> BLASTPANE = register("blastpane", () -> new StainedGlassPaneBlock(DyeColor.BLACK, blockProperties().strength(20)));
     public static final DeferredBlock<Block> BEDROCKSLICE = registerBlockOnly("bedrockslice", () -> new BlockBedrockSlice(blockProperties().strength(-1, 3600000)));
