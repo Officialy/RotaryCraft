@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "I": "rotarycraft:impeller",
+    "S": "rotarycraft:sonar_unit",
+    "p": "rotarycraft:hsla_steel_plate",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sps",
+    "I S",
+    "sps"
+  ],
+  "result": {
+    "id": "rotarycraft:air_cannon"
+  }
+}

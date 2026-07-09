@@ -1,6 +1,7 @@
-// 26.2	2026-07-09T16:12:46.1760284	Model Definitions - rotarycraft
+// 26.2	2026-07-09T17:42:55.8836382	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
+46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
 cb5fd843f3f16e9d9efd43bffd01b3dcd81eebf4 assets/rotarycraft/blockstates/anthra.json
 0583d1cbcda5801dd3b658a371dd469a1f69b541 assets/rotarycraft/blockstates/bcengine.json
 dc14dee9cc4f82573f192b826536153400864cf9 assets/rotarycraft/blockstates/beam.json
@@ -135,6 +136,7 @@ ac7453754e961d4e3e74edc373f3861085256415 assets/rotarycraft/blockstates/wood_gea
 5876227fc28f2ae6e99eedd8b3d9e6a92868454d assets/rotarycraft/blockstates/wormgear.json
 a8e65ffe0f658588984e7efcb0f736a9c5f66304 assets/rotarycraft/items/ac_engine.json
 d95aff2d12aefcbeba57a5bb4f8eff81c932bae3 assets/rotarycraft/items/aerosolizer.json
+cbbd5711fe9a562bc024d91e861a42f65dddf78e assets/rotarycraft/items/air_cannon.json
 98f73706fccf64680ba2cd8f9866a14ebcabdf86 assets/rotarycraft/items/aluminum_alloy_cylinder.json
 8fe479c6dc5c14afb34ddf7ffa369b04c83d7caf assets/rotarycraft/items/aluminum_alloy_ingot.json
 bedb0f2817745a532375cc3cacaccad719159c10 assets/rotarycraft/items/aluminum_alloy_powder.json
@@ -483,6 +485,7 @@ e7cc0c3431b3a17cd4dd2c72e911abeaafca9506 assets/rotarycraft/items/worm_gear.json
 a47fc2f446127d0b12b304e8222535ac445b5861 assets/rotarycraft/items/yeast.json
 c61e21d8830f682396920d82697096a31365a092 assets/rotarycraft/models/block/ac_engine.json
 e512d0df4315d0fa0a135631381eddbe34e1e6a9 assets/rotarycraft/models/block/aerosolizer.json
+dfd9b04049fe55c8fc4236fd316d1fadb3f49066 assets/rotarycraft/models/block/air_cannon.json
 1e0b7e02baf6fe2562a2976bf3b0923f9abb2528 assets/rotarycraft/models/block/anthra.json
 150e63477178c93cc3c388373107308ada22e877 assets/rotarycraft/models/block/bcengine.json
 feab99cfc081ef3e9370ea2e4dc0f2c48350a956 assets/rotarycraft/models/block/beam.json

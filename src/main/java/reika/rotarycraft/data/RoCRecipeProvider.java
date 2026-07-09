@@ -838,6 +838,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
                     .save(out);
 
+            // AIRGUN (air cannon): legacy "sps","I S","sps" — steel/base-panel shell, impeller intake,
+            // sonar targeting. s=steelingot, p=basepanel=HSLA_PLATE, I=impeller, S=sonar=SONAR_UNIT.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.AIRGUN.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('p', RotaryItems.HSLA_PLATE.get())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('S', RotaryItems.SONAR_UNIT.get())
+                    .pattern("sps").pattern("I S").pattern("sps")
+                    .unlockedBy("has_sonar", has(RotaryItems.SONAR_UNIT.get()))
+                    .save(out);
+
             // PIPEPUMP: legacy "BBB","PIP","BBB" — steel shell around an impeller between two pipes.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.PIPEPUMP.get())
                     .define('B', RotaryItems.HSLA_STEEL_INGOT.get())
