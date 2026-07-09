@@ -179,11 +179,17 @@ public final class PipeShellRenderer {
     public static void emitShell(Matrix4f m, VertexConsumer vc, boolean[] conn,
                                  TextureAtlasSprite shell, TextureAtlasSprite glass,
                                  int shellTint, int light, int overlay) {
+        // Each edge carries two perpendicular strips: r1 lies on face a, r2 on face b. A strip is part
+        // of ITS face's border, so it must be drawn whenever THAT face is a cap (unconnected) --
+        // independently of the other face. Gating both on "a AND b unconnected" dropped a cap face's
+        // border strip along any edge shared with a CONNECTED face, leaving 4 gaps per connected side
+        // (one on each of the four perpendicular cap faces). The arm strips sit beyond the shell plane
+        // (x/y/z 14..16 or 0..2) so they never overlap these shell-plane border strips.
         for (Edge e : EDGES) {
-            if (!conn[e.a().ordinal()] && !conn[e.b().ordinal()]) {
+            if (!conn[e.a().ordinal()])
                 rect(m, vc, e.r1(), shell, shellTint, light, overlay);
+            if (!conn[e.b().ordinal()])
                 rect(m, vc, e.r2(), shell, shellTint, light, overlay);
-            }
         }
         for (Direction d : Direction.values()) {
             if (conn[d.ordinal()]) {
