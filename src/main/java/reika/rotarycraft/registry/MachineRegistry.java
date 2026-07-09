@@ -35,6 +35,7 @@ import reika.rotarycraft.base.RotaryModelBase;
 import reika.rotarycraft.base.blockentity.*;
 import reika.rotarycraft.blockentities.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityPipePump;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFurnaceHeater;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
@@ -226,7 +227,7 @@ public enum MachineRegistry implements TileEnum {
 //    CRAFTER("machine.crafter", BlockRotaryCraftMachine.class, BlockEntityAutoCrafter.class),
     COMPOSTER("machine.composter", RotaryBlocks.COMPOSTER.get(), BlockEntityComposter.class),
     //    ANTIAIR("machine.antiair", BlockRotaryCraftMachine.class, BlockEntityAAGun.class, "RenderAAGun"),
-//    PIPEPUMP("machine.pipepump", BlockRotaryCraftMachine.class, BlockEntityPipePump.class, "RenderPipePump"),
+    PIPEPUMP("machine.pipepump", RotaryBlocks.PIPEPUMP.get(), BlockEntityPipePump.class, (modelSet) -> new PipePumpModel(modelSet.bakeLayer(RotaryModelLayers.PIPE_PUMP))),
 //    CHAIN("machine.chain", BlockRotaryCraftMachine.class, BlockEntityChainDrive.class, "RenderBelt"),
     CENTRIFUGE(true, "machine.centrifuge", RotaryBlocks.CENTRIFUGE.get(), BlockEntityCentrifuge.class, (modelSet) -> new CentrifugeModel(modelSet.bakeLayer(RotaryModelLayers.CENTRIFUGE))),
     //    DRYING("machine.drying", BlockRotaryCraftMachine.class, BlockEntityDryingBed.class, "RenderDryingBed"),

@@ -838,6 +838,15 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
                     .save(out);
 
+            // PIPEPUMP: legacy "BBB","PIP","BBB" — steel shell around an impeller between two pipes.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.PIPEPUMP.get())
+                    .define('B', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .pattern("BBB").pattern("PIP").pattern("BBB")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
             // BORER: legacy "SSS","DGC","BBB" — steel top, drill-head + gear-unit + pcb middle,
             // base-panel base. Port names: steelingot=HSLA_STEEL_INGOT, basepanel=HSLA_PLATE,
             // drill=DRILLHEAD_IRON (BORECRAFT[0]), gearunit=HSLA_STEEL_GEAR_2x, pcb=CIRCUIT_BOARD.

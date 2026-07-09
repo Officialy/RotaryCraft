@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/pipe_pump",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/pipe_pump",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/pipe_pump"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/pipe_pump",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/pipe_pump",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/pipe_pump",
+      "y": 270
+    }
+  }
+}

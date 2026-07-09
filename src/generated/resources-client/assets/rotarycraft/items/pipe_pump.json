@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/pipe_pump",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "pipepump"
+    }
+  }
+}

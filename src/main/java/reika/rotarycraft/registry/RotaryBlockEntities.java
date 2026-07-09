@@ -12,6 +12,7 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.entity.transmission.BlockGearbox;
 import reika.rotarycraft.blockentities.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityPipePump;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFurnaceHeater;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
@@ -118,6 +119,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntitySonicBorer::new, RotaryBlocks.SONICBORER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityBorer>> BORER = BLOCK_ENTITIES.register("borer", () ->
             new BlockEntityType<>(BlockEntityBorer::new, RotaryBlocks.BORER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityPipePump>> PIPEPUMP = BLOCK_ENTITIES.register("pipe_pump", () ->
+            new BlockEntityType<>(BlockEntityPipePump::new, RotaryBlocks.PIPEPUMP.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->
             new BlockEntityType<>(BlockEntityDistributionClutch::new, RotaryBlocks.DISTRIBUTION_CLUTCH.get()));
 

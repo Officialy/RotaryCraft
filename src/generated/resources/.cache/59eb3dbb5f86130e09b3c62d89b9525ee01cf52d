@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T12:36:53.8822714	Loot Tables
+// 26.2	2026-07-09T16:12:35.5660824	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 1f94cfa31e0bfc9f98d0569b16b96797a04009e7 data/rotarycraft/loot_table/blocks/anthra.json
@@ -94,6 +94,7 @@ cbfbca615c4e514792b30f3f6716bd1bc451b495 data/rotarycraft/loot_table/blocks/mob_
 6a594ec4f64e7ea7a48aa7707a2d9b5d1904cd51 data/rotarycraft/loot_table/blocks/obsidian_maker.json
 30517383d4f381c2599cb9f2e2697c0eb19432f9 data/rotarycraft/loot_table/blocks/particle.json
 0fb96f602c10f1fe0d1471b33bd18fcb58e8ede0 data/rotarycraft/loot_table/blocks/performance_engine.json
+73cebf9e1d627f822980118641f52cb90143865d data/rotarycraft/loot_table/blocks/pipe_pump.json
 789e6d4d7037e84f433556c9922d8ad22649e62b data/rotarycraft/loot_table/blocks/player_detector.json
 c1f0a1da73f98ec4f01460d924b6958d608f794d data/rotarycraft/loot_table/blocks/pulse_jet_furnace.json
 fa38374c600b27586323fc84b5278672260ab0c9 data/rotarycraft/loot_table/blocks/pump.json
