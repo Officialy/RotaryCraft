@@ -116,6 +116,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityVacuum::new, RotaryBlocks.VACUUM.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySonicBorer>> SONICBORER = BLOCK_ENTITIES.register("sonic_borer", () ->
             new BlockEntityType<>(BlockEntitySonicBorer::new, RotaryBlocks.SONICBORER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityBorer>> BORER = BLOCK_ENTITIES.register("borer", () ->
+            new BlockEntityType<>(BlockEntityBorer::new, RotaryBlocks.BORER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->
             new BlockEntityType<>(BlockEntityDistributionClutch::new, RotaryBlocks.DISTRIBUTION_CLUTCH.get()));
 

@@ -838,6 +838,19 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
                     .save(out);
 
+            // BORER: legacy "SSS","DGC","BBB" — steel top, drill-head + gear-unit + pcb middle,
+            // base-panel base. Port names: steelingot=HSLA_STEEL_INGOT, basepanel=HSLA_PLATE,
+            // drill=DRILLHEAD_IRON (BORECRAFT[0]), gearunit=HSLA_STEEL_GEAR_2x, pcb=CIRCUIT_BOARD.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BORER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('D', RotaryItems.DRILLHEAD_IRON.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR_2x.get())
+                    .define('C', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .pattern("SSS").pattern("DGC").pattern("BBB")
+                    .unlockedBy("has_drill_head", has(RotaryItems.DRILLHEAD_IRON.get()))
+                    .save(out);
+
             // SONICBORER: legacy "ss ","Icp","bbb" — steel + iron bars + compressor + fluid pipe
             // over a base-panel row (basepanel->HSLA_PLATE, pipe->FLUID_PIPE block).
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.SONICBORER.get())

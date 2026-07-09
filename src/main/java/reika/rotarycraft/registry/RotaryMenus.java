@@ -59,6 +59,7 @@ public interface RotaryMenus {
 
     Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", ContainerGrinder::new);
     Supplier<MenuType<ContainerCentrifuge>> CENTRIFUGE = register("centrifuge", ContainerCentrifuge::new);
+    Supplier<MenuType<ContainerBorer>> BORER = register("borer", ContainerBorer::new);
     Supplier<MenuType<ContainerFractionator>> FRACTIONATOR = register("fractionator", ContainerFractionator::new);
     Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);
 

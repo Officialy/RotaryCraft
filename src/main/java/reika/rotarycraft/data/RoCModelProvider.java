@@ -33,6 +33,7 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.Tests;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.base.blocks.entity.BlockBlastFurnace;
+import reika.rotarycraft.base.blocks.entity.BlockBorer;
 import reika.rotarycraft.base.blocks.entity.BlockFermenter;
 import reika.rotarycraft.base.blocks.entity.BlockMiningPipe;
 import reika.rotarycraft.base.blocks.entity.pipe.BlockPipeShell;
@@ -138,6 +139,10 @@ public class RoCModelProvider extends ModelProvider {
             if (isPipeShell) {
                 blockModelId = Identifier.fromNamespaceAndPath(RotaryCraft.MODID,
                         "block/pipe/" + BuiltInRegistries.BLOCK.getKey(block).getPath() + "/core");
+            } else if (block instanceof BlockBorer) {
+                // Directional drilling machine: drill face out the front, steel sides.
+                blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
+                        block, orientableMapping("borer_front", "steel", "steel"), modelOut);
             } else if (block instanceof BlockBlastFurnace) {
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
                         block, orientableMapping("blastfurn_front", "blastfurn_side", "blastfurn_side"), modelOut);

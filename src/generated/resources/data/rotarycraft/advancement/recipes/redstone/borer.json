@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_drill_head": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:drillhead_iron"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:borer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_drill_head"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:borer"
+    ]
+  }
+}

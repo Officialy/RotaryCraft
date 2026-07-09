@@ -1,4 +1,4 @@
-// 26.2	2026-07-08T23:12:32.2988399	Model Definitions - rotarycraft
+// 26.2	2026-07-09T12:37:05.1602647	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 cb5fd843f3f16e9d9efd43bffd01b3dcd81eebf4 assets/rotarycraft/blockstates/anthra.json
@@ -20,6 +20,7 @@ b7fafacabb9e7084c9113fa21a09cfbaf6c037a9 assets/rotarycraft/blockstates/bedrock_
 29ee91b7926c6f058376d4b4d9f19fa0fc065214 assets/rotarycraft/blockstates/blast_furnace.json
 7253c6a8346a6d19d40834c818b8224a6f052faf assets/rotarycraft/blockstates/block_cannon.json
 2ede5f3c219b4c03f30598f8f0bb5e2ec708655f assets/rotarycraft/blockstates/blower.json
+d5415c700d2fbfa05e36c75e9e9dadedf785fc21 assets/rotarycraft/blockstates/borer.json
 b6f352ece08a681738aa47bfba37e8f4f0636188 assets/rotarycraft/blockstates/bridge.json
 e6098e9855d6c50cc58c849ecf3e2d75248c8a81 assets/rotarycraft/blockstates/bucket_filler.json
 21d097326c1c54ad795e6ddb90bd38b41f8f7cf3 assets/rotarycraft/blockstates/bypass.json
@@ -182,6 +183,7 @@ ee7857b5fb61aa4a494d61e7a06a8d7b4f6a1775 assets/rotarycraft/items/belt.json
 8b9fa0364888cf44f2594392a64faca8f61dd38e assets/rotarycraft/items/blast_furnace.json
 91a1fd4631664088dc35cf76efca9130e887c6a1 assets/rotarycraft/items/block_cannon.json
 1d4dc04bca4e8d0915f6e6a3aa842491bb8e2b0c assets/rotarycraft/items/blower.json
+167e51fb79a63c4c9585d751f8f69c3e274beac3 assets/rotarycraft/items/borer.json
 ac634ca982c8d56b38802b7c924d6849ffa0483c assets/rotarycraft/items/brake_disc.json
 a5a93dbcc2bcf9de8fa4ff53780e009d8dcebc08 assets/rotarycraft/items/bridge.json
 00eb004a03d60c435f4d4d8754196a643ee6c1ce assets/rotarycraft/items/bucket_filler.json
@@ -498,6 +500,7 @@ d3d25c4ad93bc7cfb89d7072fc2d347928b1c107 assets/rotarycraft/models/block/blastgl
 ba191ee848ec5a8ce10edbbff0683022b6f4aeea assets/rotarycraft/models/block/blast_furnace.json
 e8b5591fdecfd5845120848427fcaa0ec0cff289 assets/rotarycraft/models/block/block_cannon.json
 8cbe430b84f5b50699f64bc641a1f7f3d819f723 assets/rotarycraft/models/block/blower.json
+4fd6208433dbacfec1693b6a84666c039408f8ca assets/rotarycraft/models/block/borer.json
 4a6dc497e07a5011c286664c435ad3f2aab28a85 assets/rotarycraft/models/block/bridge.json
 4b879f7444cb9f7c3b52d2a042e3ee1e4ab04774 assets/rotarycraft/models/block/bucket_filler.json
 0a6fd877bf743adfa0820a64fcaeedaaac2d7b49 assets/rotarycraft/models/block/bypass.json
@@ -558,7 +561,7 @@ d5712fddf326a05654875882dff12ed7308aab21 assets/rotarycraft/models/block/lons.js
 19c8ca26922f0e4e9c6ea109f804154150889697 assets/rotarycraft/models/block/magnetostatic_engine.json
 b57524192ed12db4dd2e2a9108927ccad176549a assets/rotarycraft/models/block/merge.json
 e6bb111ae3f88fbb1c900b01b4bcb114f9e5c472 assets/rotarycraft/models/block/microturbine.json
-d06bcb0c3e9811d4b7abd76b8185cd6addb51821 assets/rotarycraft/models/block/miningpipe.json
+7bc7fc2d972d6cf4293ee301de10816298f61f22 assets/rotarycraft/models/block/miningpipe.json
 1ede98806337685d424512282e14405ede00a4a9 assets/rotarycraft/models/block/mirror.json
 41a14f626c2ae176ed3a4de9fa77c5d8a1c87b07 assets/rotarycraft/models/block/mob_harvester.json
 f01c23d71eb2812972bd97e6b052e84090db66d4 assets/rotarycraft/models/block/multi_clutch.json

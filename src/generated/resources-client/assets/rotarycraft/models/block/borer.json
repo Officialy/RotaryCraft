@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "rotarycraft:block/borer_front",
+    "side": "rotarycraft:block/steel",
+    "top": "rotarycraft:block/steel"
+  }
+}

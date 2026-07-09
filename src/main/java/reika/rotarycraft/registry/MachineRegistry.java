@@ -118,7 +118,7 @@ public enum MachineRegistry implements TileEnum {
     SUCTION("machine.suction", RotaryBlocks.SUCTION.get(), BlockEntitySuctionPipe.class/*, (modelSet) -> new SuctionModel(modelSet.bakeLayer(RotaryModelLayers.SUCTION))*/),
     BEDPIPE("machine.bedpipe", RotaryBlocks.BEDROCK_PIPE.get(), BlockEntityBedrockPipe.class/*, (modelSet) -> new BedPipeModel(modelSet.bakeLayer(RotaryModelLayers.BEDROCK_PIPE))*/),
 
-    //    BORER("machine.borer", BlockRotaryCraftMachine.class, BlockEntityBorer.class),
+    BORER(true, "machine.borer", RotaryBlocks.BORER.get(), BlockEntityBorer.class),
 //    LIGHTBRIDGE("machine.lightbridge", BlockRotaryCraftMachine.class, BlockEntityLightBridge.class, "RenderBridge"),
     PUMP("machine.pump", RotaryBlocks.PUMP.get(), BlockEntityPump.class, (modelSet) -> new PumpModel(modelSet.bakeLayer(RotaryModelLayers.PUMP))),
     RESERVOIR(true, "machine.reservoir", RotaryBlocks.RESERVOIR.get(), BlockEntityReservoir.class, (modelSet) -> new ReservoirModel(modelSet.bakeLayer(RotaryModelLayers.RESERVOIR))),

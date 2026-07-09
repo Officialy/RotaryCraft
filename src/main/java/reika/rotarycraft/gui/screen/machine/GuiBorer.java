@@ -1,199 +1,133 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.gui.screen.machine;
-//
-//import java.io.ByteArrayOutputStream;
-//import java.io.DataOutputStream;
-//
-//import net.minecraft.client.gui.components.Button;
-//import net.minecraft.network.chat.Component;
-//import org.lwjgl.opengl.GL11;
-//import reika.rotarycraft.RotaryCraft;
-//import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.registry.PacketRegistry;
-//
-//public class GuiBorer extends GuiMachine {
-//    private final BlockEntityBorer borer;
-//    private final boolean[][] dig = new boolean[7][5];
-//    public String dropstatus;
-//    public boolean drops;
-//    int x;
-//    int y;
-//    private int packetID;
-//
-//    public GuiBorer(Player p5ep, BlockEntityBorer borer) {
-//        super(new CoreMenu(p5ep, borer), borer);
-//        this.borer = borer;
-//        imageHeight = 169;
-//        imageWidth = 176;
-//        dropstatus = "Drops On";
-//        ep = p5ep;
-//        drops = borer.drops;
-//        for (int i = 0; i < 7; i++)
-//            for (int l = 0; l < 5; l++)
-//                dig[i][l] = borer.cutShape[i][l];
-//    }
-//
-//    @Override
-//    public void initGui() {
-//        super.initGui();
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//
-//        String file = "/Reika/RotaryCraft/Textures/GUI/buttons.png";
-//        for (int i = 0; i < 7; i++)
-//            for (int l = 0; l < 5; l++) {
-//                int u = 0;
-//                if (i == 3 && l == 4)
-//                    u = 36;
-//                if (dig[i][l])
-//                    addRenderableWidget(new ImageButton(50 + i + 7 * l, j + 25 + 18 * i, k + 16 + 18 * l, 18, 18, u, 0, file, RotaryCraft.class));
-//                else
-//                    addRenderableWidget(new ImageButton(10 + i + 7 * l, j + 25 + 18 * i, k + 16 + 18 * l, 18, 18, u + 18, 0, file, RotaryCraft.class));
-//            }
-//
-//        addRenderableWidget(new Button(j + 14, -1 + k + 116, 72, 20, Component.literal("Reset Pos'n"), (a) -> this.sendPacket(PacketRegistry.BORERRESET.ordinal()))); //8
-//        addRenderableWidget(new Button(j + 14, k + 140, 148, 20, Component.literal("Toggle All"), (a) -> {
-//            this.sendPacket(PacketRegistry.BORERTOGGLEALL.ordinal());
-//            for (int i = 0; i < 5; i++) {
-//                for (int j = 0; j < 7; j++) {
-//                    dig[j][i] = !dig[j][i];
-//                }
-//            }
-//        })); //6
-//
-//        if (drops)
-//            addRenderableWidget(new Button(j + 90, -1 + k + 116, 72, 20, Component.literal("Drops On"), (a) -> this.toggleDrops())); //7 toggle
-//        else
-//            addRenderableWidget(new Button(j + 90, -1 + k + 116, 72, 20, Component.literal("Drops Off"), (a) -> this.toggleDrops())); //7 toggle
-//    }
-//
-//    public void toggleDrops() {
-//        if (drops) {
-//            dropstatus = "Drops Off";
-//            drops = false;
-//        } else {
-//            dropstatus = "Drops On";
-//            drops = true;
-//        }
-//
-//        this.sendPacket(PacketRegistry.BORERDROPS.ordinal());
-//    }
-//
-//    protected void actionPerformed(Button button) {
-//
-//        if (button.id >= 10 && button.id < 50) {
-//            int rows = (button.id - 10) / 7;
-//            int cols = (button.id - 10) - rows * 7;
-//            //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", button.id, rows, cols));
-//            dig[cols][rows] = true;
-//            packetID = (button.id - 10);
-//            if (button.id == 10)
-//                packetID = 100;
-//            this.sendPacket(PacketRegistry.BORER.ordinal());
-//        }
-//        if (button.id >= 50 && button.id < 24000) {
-//            int rows = (button.id - 50) / 7;
-//            int cols = (button.id - 50) - rows * 7;
-//            //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", button.id, rows, cols));
-//            dig[cols][rows] = false;
-//            packetID = (button.id - 50);
-//            if (button.id == 50)
-//                packetID = 100;
-//            this.sendPacket(PacketRegistry.BORER.ordinal());
-//        }
-//        this.updateScreen();
-//
-//    }
-//
-//    public void sendPacket(int a) {
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream(20); // 5 ints
-//        DataOutputStream outputStream = new DataOutputStream(bos);
-//        try {
-//            //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
-//            outputStream.writeInt(a);
-//            if (a == PacketRegistry.BORERDROPS.ordinal()) {
-//                if (drops)
-//                    outputStream.writeInt(1); //set drops to 0 (false)
-//                else
-//                    outputStream.writeInt(0);
-//                //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
-//            }
-//            if (a == PacketRegistry.BORERTOGGLEALL.ordinal())
-//                outputStream.writeInt(-1);
-//            if (a > PacketRegistry.BORERTOGGLEALL.ordinal())
-//                outputStream.writeInt(-1);
-//            if (a == PacketRegistry.BORER.ordinal()) {
-//                //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(3434));
-//                int rows = packetID / 7;
-//                int cols = packetID - rows * 7;
-//                if (packetID == 100) {
-//                    rows = cols = 0;
-//                }
-//                //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d -> row %d col %d", this.packetID, rows, cols));
-//                if (dig[cols][rows])
-//                    outputStream.writeInt(-1 * packetID);
-//                else
-//                    outputStream.writeInt(packetID);
-//            }
-//            outputStream.writeInt(borer.xCoord);
-//            outputStream.writeInt(borer.yCoord);
-//            outputStream.writeInt(borer.zCoord);
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//        ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, bos);
-//        this.updateScreen();
-//    }
-//
-//    @Override
-//    public void updateScreen() {
-//        super.updateScreen();
-//        x = Mouse.getX();
-//        y = Mouse.getY();
-//        this.initGui();
-//    }
-//
-//    @Override
-//    protected void drawPowerTab(int var5, int var6) {
-//        String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
-//        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//        ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
-//        ScreenUtils.drawTexturedModalRect(imageWidth + var5, var6 + 5, 0, 4, 42, 159);
-//
-//        long frac = ((borer.power * 29L) / borer.MINPOWER);
-//        if (frac > 29)
-//            frac = 29;
-//        ScreenUtils.drawTexturedModalRect(imageWidth + var5 + 5, imageHeight + var6 - 146, 0, 0, (int) frac, 4);
-//
-//        frac = borer.omega * 29L / borer.MINSPEED;
-//        if (frac > 29)
-//            frac = 29;
-//        ScreenUtils.drawTexturedModalRect(imageWidth + var5 + 5, imageHeight + var6 - 86, 0, 0, (int) frac, 4);
-//
-//        frac = borer.torque * 29L / borer.MINTORQUE;
-//        if (frac > 29)
-//            frac = 29;
-//        ScreenUtils.drawTexturedModalRect(imageWidth + var5 + 5, imageHeight + var6 - 26, 0, 0, (int) frac, 4);
-//
-//        api.drawCenteredStringNoShadow(font, "Power:", imageWidth + var5 + 20, var6 + 12, 0xff000000);
-//        api.drawCenteredStringNoShadow(font, "Speed:", imageWidth + var5 + 20, var6 + 71, 0xff000000);
-//        api.drawCenteredStringNoShadow(font, "Torque:", imageWidth + var5 + 20, var6 + 130, 0xff000000);
-//        //this.drawCenteredStringNoShadow(font, String.format("%d/%d", borer.power, borer.MINPOWER), imageWidth+var5+16, var6+16, 0xff000000);
-//    }
-//
-//    @Override
-//    protected String getGuiTexture() {
-//        return "borergui2";
-//    }
-//
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.screen.machine;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.base.MachineScreen;
+import reika.rotarycraft.blockentities.production.BlockEntityBorer;
+import reika.rotarycraft.gui.container.machine.ContainerBorer;
+
+/**
+ * Cut-shape editor for the Boring Machine. Draws the 7x5 grid of toggle cells over the borer GUI
+ * background; clicking a cell flips whether the borer bores it, sent to the server as a
+ * {@code clickMenuButton} (button id {@code col*ROWS+row}). The centre cell is the borer's own line.
+ * A drops-on/off toggle and select-all / clear buttons sit below the grid.
+ */
+public class GuiBorer extends MachineScreen<BlockEntityBorer, ContainerBorer> {
+
+    private static final int GRID_X = 25;
+    private static final int GRID_Y = 16;
+    private static final int CELL = 18;
+
+    private final BlockEntityBorer borer;
+
+    public GuiBorer(ContainerBorer container, Inventory inv, Component title) {
+        super(container, inv, title, 176, 169);
+        borer = container.getBorer();
+        inventory = inv;
+    }
+
+    @Override
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partial) {
+        super.extractBackground(graphics, mouseX, mouseY, partial);
+        int j = (Minecraft.getInstance().getWindow().getGuiScaledWidth() - imageWidth) / 2;
+        int k = (Minecraft.getInstance().getWindow().getGuiScaledHeight() - imageHeight) / 2;
+
+        for (int col = 0; col < BlockEntityBorer.COLS; col++) {
+            for (int row = 0; row < BlockEntityBorer.ROWS; row++) {
+                int x = j + GRID_X + CELL * col;
+                int y = k + GRID_Y + CELL * row;
+                boolean on = borer.cutShape[col][row];
+                boolean centre = col == 3 && row == 4;
+                int fill = centre ? 0xFF3060C0 : (on ? 0xFF30A030 : 0xFF303030);
+                graphics.fill(x + 1, y + 1, x + CELL - 1, y + CELL - 1, fill);
+                graphics.fill(x, y, x + CELL, y + 1, 0xFF101010);
+                graphics.fill(x, y + CELL - 1, x + CELL, y + CELL, 0xFF101010);
+                graphics.fill(x, y, x + 1, y + CELL, 0xFF101010);
+                graphics.fill(x + CELL - 1, y, x + CELL, y + CELL, 0xFF101010);
+            }
+        }
+
+        String dropStatus = "Drops: " + (borer.drops ? "On" : "Off");
+        graphics.text(font, dropStatus, j + GRID_X, k + GRID_Y + CELL * BlockEntityBorer.ROWS + 4, 0x404040);
+        graphics.text(font, borer.isJammed() ? "JAMMED" : (borer.drops ? "Ready" : "Ready"),
+                j + GRID_X + 90, k + GRID_Y + CELL * BlockEntityBorer.ROWS + 4, borer.isJammed() ? 0xC03030 : 0x309030);
+    }
+
+    @Override
+    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+        double mx = event.x();
+        double my = event.y();
+        int j = (Minecraft.getInstance().getWindow().getGuiScaledWidth() - imageWidth) / 2;
+        int k = (Minecraft.getInstance().getWindow().getGuiScaledHeight() - imageHeight) / 2;
+        // Grid cells
+        for (int col = 0; col < BlockEntityBorer.COLS; col++) {
+            for (int row = 0; row < BlockEntityBorer.ROWS; row++) {
+                int x = j + GRID_X + CELL * col;
+                int y = k + GRID_Y + CELL * row;
+                if (mx >= x && mx < x + CELL && my >= y && my < y + CELL) {
+                    int id = col * BlockEntityBorer.ROWS + row;
+                    // Optimistic local flip for instant feedback; server is authoritative + re-syncs.
+                    borer.cutShape[col][row] = !borer.cutShape[col][row];
+                    this.sendButton(id);
+                    return true;
+                }
+            }
+        }
+        // Drops toggle row
+        int dy = k + GRID_Y + CELL * BlockEntityBorer.ROWS + 4;
+        if (my >= dy && my < dy + 10 && mx >= j + GRID_X && mx < j + GRID_X + 80) {
+            borer.drops = !borer.drops;
+            this.sendButton(ContainerBorer.BUTTON_DROPS);
+            return true;
+        }
+        return super.mouseClicked(event, doubleClick);
+    }
+
+    private void sendButton(int id) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gameMode != null)
+            mc.gameMode.handleInventoryButtonClick(this.menu.containerId, id);
+    }
+
+    @Override
+    protected void drawPowerTab(GuiGraphicsExtractor stack, int j, int k) {
+        var loc = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/powertab.png");
+        stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j, k + 4, 0, 4, 42, imageHeight - 4, 256, 256);
+
+        long frac = borer.MINPOWER > 0 ? (borer.power * 29L) / borer.MINPOWER : 29;
+        if (frac > 29) frac = 29;
+        stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 144, 0, 0, (int) frac, 4, 256, 256);
+
+        frac = borer.MINSPEED > 0 ? (borer.omega * 29L) / borer.MINSPEED : (borer.omega > 0 ? 29 : 0);
+        if (frac > 29) frac = 29;
+        stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 84, 0, 0, (int) frac, 4, 256, 256);
+
+        frac = borer.MINTORQUE > 0 ? (borer.torque * 29L) / borer.MINTORQUE : (borer.torque > 0 ? 29 : 0);
+        if (frac > 29) frac = 29;
+        stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 24, 0, 0, (int) frac, 4, 256, 256);
+
+        api.drawCenteredStringNoShadow(stack, font, "Power:", imageWidth + j + 20, k + 9, 0xff000000);
+        api.drawCenteredStringNoShadow(stack, font, "Speed:", imageWidth + j + 20, k + 69, 0xff000000);
+        api.drawCenteredStringNoShadow(stack, font, "Torque:", imageWidth + j + 20, k + 129, 0xff000000);
+    }
+
+    @Override
+    protected String getGuiTexture() {
+        return "borergui";
+    }
+}

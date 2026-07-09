@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "C": "rotarycraft:circuit_board",
+    "D": "rotarycraft:drillhead_iron",
+    "G": "rotarycraft:hsla_steel_gear_2x",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SSS",
+    "DGC",
+    "BBB"
+  ],
+  "result": {
+    "id": "rotarycraft:borer"
+  }
+}
