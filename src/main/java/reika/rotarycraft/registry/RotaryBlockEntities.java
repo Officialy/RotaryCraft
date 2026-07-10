@@ -30,6 +30,8 @@ import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
 import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
+import reika.rotarycraft.blockentities.processing.BlockEntityDryingBed;
+import reika.rotarycraft.blockentities.processing.BlockEntityWetter;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaMaker;
 import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
@@ -143,6 +145,10 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntitySprinkler::new, RotaryBlocks.SPRINKLER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityCompactor>> COMPACTOR = BLOCK_ENTITIES.register("compactor", () ->
             new BlockEntityType<>(BlockEntityCompactor::new, RotaryBlocks.COMPACTOR.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityWetter>> WETTER = BLOCK_ENTITIES.register("wetter", () ->
+            new BlockEntityType<>(BlockEntityWetter::new, RotaryBlocks.WETTER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDryingBed>> DRYING = BLOCK_ENTITIES.register("drying_bed", () ->
+            new BlockEntityType<>(BlockEntityDryingBed::new, RotaryBlocks.DRYING.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityIgniter>> IGNITER = BLOCK_ENTITIES.register("igniter", () ->
             new BlockEntityType<>(BlockEntityIgniter::new, RotaryBlocks.IGNITER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->

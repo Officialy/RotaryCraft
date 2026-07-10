@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:wetter",
+  "amount": 500,
+  "duration": 200,
+  "fluid": "rotarycraft:lubricant_still",
+  "input": "minecraft:sand",
+  "output": "minecraft:soul_sand"
+}

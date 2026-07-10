@@ -1,54 +1,31 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.gui.container.machine.inventory;
-//
-//import net.minecraft.world.entity.player.Inventory;
-//import reika.dragonapi.base.CoreMenu;
-//import reika.rotarycraft.RotaryCraft;
-//
-//public class ContainerDryingBed extends CoreContainer<> {
-//    private final BlockEntityDryingBed te;
-//
-//    public ContainerDryingBed(Inventory playerInv, BlockEntityDryingBed par2BlockEntityDryingBed) {
-//        super(playerInv, par2BlockEntityDryingBed);
-//        te = par2BlockEntityDryingBed;
-//        int getY = te.xCoord;
-//        int posY = te.yCoord;
-//        int posZ = te.zCoord;
-//
-//        this.addSlot(0, 125, 35);
-//
-//        this.addPlayerInventory(playerInv);
-//    }
-//
-//    @Override
-//    public void broadcastChanges() {
-//        super.broadcastChanges();
-//
-//        for (int i = 0; i < crafters.size(); i++) {
-//            ICrafting icrafting = (ICrafting) crafters.get(i);
-//
-//            icrafting.sendProgressBarUpdate(this, 0, te.progress);
-//            //icrafting.sendProgressBarUpdate(this, 1, te.getLevel());
-//        }
-//
-//        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "tank");
-//    }
-//
-//    @Override
-//    public void setData(int par1, int par2) {
-//        switch (par1) {
-//            //case 1: te.setLevel(par2); break;
-//            case 0:
-//                te.progress = par2;
-//                break;
-//        }
-//    }
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.container.machine.inventory;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+
+import reika.dragonapi.base.CoreContainer;
+import reika.rotarycraft.blockentities.processing.BlockEntityDryingBed;
+import reika.rotarycraft.registry.RotaryMenus;
+
+/** Drying bed: single (output-only) dried-product slot. */
+public class ContainerDryingBed extends CoreContainer<BlockEntityDryingBed> {
+
+    public ContainerDryingBed(int id, Inventory inv, FriendlyByteBuf data) {
+        this(id, inv, (BlockEntityDryingBed) inv.player.level().getBlockEntity(data.readBlockPos()));
+    }
+
+    public ContainerDryingBed(int id, Inventory inv, BlockEntityDryingBed te) {
+        super(RotaryMenus.DRYING.get(), id, inv, te);
+        this.addSlot(te.itemHandler.slot(0, 80, 35));
+        this.addPlayerInventory(inv);
+    }
+}

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/drying_bed",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/drying_bed",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/drying_bed"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/drying_bed",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/drying_bed",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/drying_bed",
+      "y": 270
+    }
+  }
+}

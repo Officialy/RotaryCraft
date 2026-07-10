@@ -53,6 +53,10 @@ import reika.rotarycraft.models.SprinklerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.models.animated.CompactorModel;
+import reika.rotarycraft.models.animated.WetterModel;
+import reika.rotarycraft.models.DryingBedModel;
+import reika.rotarycraft.blockentities.processing.BlockEntityWetter;
+import reika.rotarycraft.blockentities.processing.BlockEntityDryingBed;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
@@ -238,8 +242,8 @@ public enum MachineRegistry implements TileEnum {
     PIPEPUMP("machine.pipepump", RotaryBlocks.PIPEPUMP.get(), BlockEntityPipePump.class, (modelSet) -> new PipePumpModel(modelSet.bakeLayer(RotaryModelLayers.PIPE_PUMP))),
 //    CHAIN("machine.chain", BlockRotaryCraftMachine.class, BlockEntityChainDrive.class, "RenderBelt"),
     CENTRIFUGE(true, "machine.centrifuge", RotaryBlocks.CENTRIFUGE.get(), BlockEntityCentrifuge.class, (modelSet) -> new CentrifugeModel(modelSet.bakeLayer(RotaryModelLayers.CENTRIFUGE))),
-    //    DRYING("machine.drying", BlockRotaryCraftMachine.class, BlockEntityDryingBed.class, "RenderDryingBed"),
-//    WETTER("machine.wetter", BlockRotaryCraftMachine.class, BlockEntityWetter.class, "RenderWetter"),
+    DRYING("machine.drying", RotaryBlocks.DRYING.get(), BlockEntityDryingBed.class, (modelSet) -> new DryingBedModel(modelSet.bakeLayer(RotaryModelLayers.DRYING_BED))),
+    WETTER("machine.wetter", RotaryBlocks.WETTER.get(), BlockEntityWetter.class, (modelSet) -> new WetterModel(modelSet.bakeLayer(RotaryModelLayers.WETTER))),
     DROPS("machine.drops", RotaryBlocks.DROPS.get(), BlockEntityDropProcessor.class),
 //    ITEMFILTER("machine.itemfilter", BlockRotaryCraftMachine.class, BlockEntityItemFilter.class),
     HYDRATOR("machine.hydrator", RotaryBlocks.HYDRATOR.get(), BlockEntityGroundHydrator.class),

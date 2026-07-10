@@ -27,6 +27,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.CompactorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
@@ -145,6 +147,7 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             centrifuge();
             lavaMaker();
             compactor();
+            wetterAndDrying();
             frictionHeater();
             extractor();
             extractorSmelting();
@@ -230,6 +233,32 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             compact("blaze_powder", Ingredient.of(Items.BLAZE_POWDER), Items.GLOWSTONE, 1, 2000, 600);
             compact("ice", Ingredient.of(Items.ICE), Items.PACKED_ICE, 2, 24000, -80);
             // GEOSTRATA-PORT: packed ice -> denser GeoStrata ice tiers.
+        }
+
+        // Wetter + Drying Bed recipes (legacy RecipesWetter / RecipesDryingBed, mod fluids gated).
+        private void wetterAndDrying() {
+            wet("sand", Ingredient.of(Items.SAND), RotaryFluids.LUBRICANT.get(), 500, Items.SOUL_SAND, 200);
+            wet("cobblestone", Ingredient.of(Items.COBBLESTONE), RotaryFluids.JET_FUEL.get(), 20, Items.NETHERRACK, 80);
+            dry("water", net.minecraft.world.level.material.Fluids.WATER, 250, RotaryItems.SALT.get(), 1);
+            dry("lava", net.minecraft.world.level.material.Fluids.LAVA, 1000, Items.GOLD_NUGGET, 1);
+        }
+
+        private void wet(String name, Ingredient input, net.minecraft.world.level.material.Fluid fluid, int amount, net.minecraft.world.level.ItemLike output, int duration) {
+            WetterRecipe recipe = new WetterRecipe(input,
+                    net.minecraft.core.registries.BuiltInRegistries.FLUID.wrapAsHolder(fluid), amount,
+                    net.minecraft.core.registries.BuiltInRegistries.ITEM.wrapAsHolder(output.asItem()), duration);
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "wetter/" + name));
+            out.accept(key, recipe, null);
+        }
+
+        private void dry(String name, net.minecraft.world.level.material.Fluid fluid, int amount, net.minecraft.world.level.ItemLike output, int count) {
+            DryingBedRecipe recipe = new DryingBedRecipe(
+                    net.minecraft.core.registries.BuiltInRegistries.FLUID.wrapAsHolder(fluid), amount,
+                    net.minecraft.core.registries.BuiltInRegistries.ITEM.wrapAsHolder(output.asItem()), count);
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "drying_bed/" + name));
+            out.accept(key, recipe, null);
         }
 
         private void compact(String name, Ingredient input, net.minecraft.world.level.ItemLike output, int count, int pressure, int temperature) {
@@ -943,6 +972,24 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('#', RotaryItems.HSLA_PLATE.get())
                     .pattern("SPS").pattern("PGP").pattern("#P#")
                     .unlockedBy("has_pressure_head", has(RotaryItems.PRESSURE_HEAD.get()))
+                    .save(out);
+
+            // WETTER: legacy "S S","gmg","SPS" — glass panes, a mixer core, steel + panel base.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.WETTER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('g', Items.GLASS_PANE)
+                    .define('m', RotaryItems.MIXER.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .pattern("S S").pattern("gmg").pattern("SPS")
+                    .unlockedBy("has_mixer", has(RotaryItems.MIXER.get()))
+                    .save(out);
+
+            // DRYING BED: legacy "S S","SPS","S S" — a steel pan around a base panel.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.DRYING.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .pattern("S S").pattern("SPS").pattern("S S")
+                    .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
             // ARROWGUN (arrow cannon): legacy "SSS","BDB","SBS" — steel shell, base-panel frame, a

@@ -1,0 +1,6 @@
+{
+  "type": "rotarycraft:drying_bed",
+  "amount": 250,
+  "fluid": "minecraft:water",
+  "output": "rotarycraft:salt"
+}

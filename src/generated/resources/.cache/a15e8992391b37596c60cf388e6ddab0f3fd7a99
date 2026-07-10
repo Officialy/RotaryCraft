@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T00:29:41.4637998	RotaryCraft Recipes
+// 26.2	2026-07-11T00:42:51.6261805	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -82,6 +82,7 @@ fa722e7a14e9094e07dc67e1dc46232ae9fbd832 data/rotarycraft/advancement/recipes/re
 66e665b76428a536f651fe0eed5545d4bec9bf82 data/rotarycraft/advancement/recipes/redstone/diamond_shaft.json
 5486e4ede19bbc49039690b2db9ad7b05d4d0745 data/rotarycraft/advancement/recipes/redstone/distribution_clutch.json
 6249a824a15d4e03ea5074d15f096899abdbe26f data/rotarycraft/advancement/recipes/redstone/drop_processor.json
+91dcdafaef21a9bb593125dc1ce97c9d38084e96 data/rotarycraft/advancement/recipes/redstone/drying_bed.json
 573940c2533e1922812c48538bf4a1c83cc44cab data/rotarycraft/advancement/recipes/redstone/dynamometer_ender.json
 cba48326b63ce95742854265cc1759a5dee4cbad data/rotarycraft/advancement/recipes/redstone/dynamometer_silicon.json
 13bef9d6402c5bf6e0a58a884d3cc6c9571f97d9 data/rotarycraft/advancement/recipes/redstone/fan.json
@@ -160,6 +161,7 @@ f3fe755b0096486f590629accb3124a1137fa95d data/rotarycraft/advancement/recipes/re
 5e4e8b51149959f4ae4f57350c3eb726a5cc869e data/rotarycraft/advancement/recipes/redstone/vacuum.json
 4a4582cccf5252f8be39f3ae780524fdbf5fd640 data/rotarycraft/advancement/recipes/redstone/valve.json
 616dbfaf67a51a14499f929d70c7e0173a71e021 data/rotarycraft/advancement/recipes/redstone/van_de_graff.json
+84c695b009a678bae14174b6624868c68cebe365 data/rotarycraft/advancement/recipes/redstone/wetter.json
 6cce933b3cabbbdb79b6f074fb8971091ee46479 data/rotarycraft/advancement/recipes/redstone/winder.json
 0dcd5753034368863d93bcf440531ba43bd40b5a data/rotarycraft/advancement/recipes/redstone/wind_engine.json
 84736255726beaf2f7b88837caebf88f1a0fd8e0 data/rotarycraft/advancement/recipes/redstone/woodcutter.json
@@ -256,6 +258,9 @@ a503204b3eacc527898def75de28b389a06cd810 data/rotarycraft/recipe/diamond_gearbox
 f1f1e556dc03d819084d55c80bd14c6d8bfe47cc data/rotarycraft/recipe/diamond_shaft.json
 ab4e9afa8a41aa45660adaafce5562ac79b9bad1 data/rotarycraft/recipe/distribution_clutch.json
 6650a9572c31d24f063c99dd3f23a56e29833480 data/rotarycraft/recipe/drop_processor.json
+41d5cd387fefeac6237c4af4546f9d56b0041748 data/rotarycraft/recipe/drying_bed.json
+3f05669afd158b642bd8f01ea9b57ce50c362c70 data/rotarycraft/recipe/drying_bed/lava.json
+2c6b3a159678762f6814e7580598ed76e5c74cf3 data/rotarycraft/recipe/drying_bed/water.json
 575d1688ff6b3fd7b0b276e8c8d82558b243b7b5 data/rotarycraft/recipe/dynamometer_ender.json
 e82f6885af71993093201f8354aaacc78be818e9 data/rotarycraft/recipe/dynamometer_silicon.json
 99cbb23366553b9d39e21c1cb09fd610c397a4d1 data/rotarycraft/recipe/emerald_flakes_to_ingot.json
@@ -472,6 +477,9 @@ f8b6525a93a8d6bd17dfb65d09471f97be68f5fc data/rotarycraft/recipe/tungsten_gearbo
 b382ab75d0d783a698767db69fe9135ea73df2e5 data/rotarycraft/recipe/vacuum.json
 9bb3d320c7579586012014422f41d69622d6550c data/rotarycraft/recipe/valve.json
 bea30536e2890f1981d273be9fe16d75a61c1256 data/rotarycraft/recipe/van_de_graff.json
+f0045e7259fb67215c5df143cc2bccef203c9b84 data/rotarycraft/recipe/wetter.json
+2c2ca7061ede230ac555a4cdb17a3c54955887df data/rotarycraft/recipe/wetter/cobblestone.json
+d46a3b191822891afcb979b67701d01ffa3c2eac data/rotarycraft/recipe/wetter/sand.json
 73336d00ad75645ea166e74ccf83927c5e16e5fc data/rotarycraft/recipe/winder.json
 b7b8586e60fc5b9558846cf0030c16109af936c7 data/rotarycraft/recipe/wind_engine.json
 ea04a0439bed5681cb1a8def18e9367ad77a7a03 data/rotarycraft/recipe/woodcutter.json

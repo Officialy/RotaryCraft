@@ -7,6 +7,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.CompactorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
@@ -34,6 +36,14 @@ public class RotaryRecipeSerializers {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CompactorRecipe>> COMPACTOR =
             RECIPE_SERIALIZERS.register("compactor",
                     () -> new RecipeSerializer<>(CompactorRecipe.CODEC, CompactorRecipe.STREAM_CODEC));
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<WetterRecipe>> WETTER =
+            RECIPE_SERIALIZERS.register("wetter",
+                    () -> new RecipeSerializer<>(WetterRecipe.CODEC, WetterRecipe.STREAM_CODEC));
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DryingBedRecipe>> DRYING_BED =
+            RECIPE_SERIALIZERS.register("drying_bed",
+                    () -> new RecipeSerializer<>(DryingBedRecipe.CODEC, DryingBedRecipe.STREAM_CODEC));
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FrictionHeaterRecipe>> FRICTION_HEATER =
             RECIPE_SERIALIZERS.register("friction_heater",

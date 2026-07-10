@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/drying_bed",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "drying"
+    }
+  }
+}

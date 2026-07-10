@@ -68,6 +68,8 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation WOODCUTTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "woodcutter"), "main");
     public static final ModelLayerLocation SPRINKLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "sprinkler"), "main");
     public static final ModelLayerLocation COMPACTOR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "compactor"), "main");
+    public static final ModelLayerLocation WETTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "wetter"), "main");
+    public static final ModelLayerLocation DRYING_BED = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "drying_bed"), "main");
     public static final ModelLayerLocation RESERVOIR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "reservoir"), "main");
     public static final ModelLayerLocation SPLITTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "splitter"), "main");
     public static final ModelLayerLocation SPLITTER_2 = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "splitter_2"), "main");
@@ -163,6 +165,8 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.WOODCUTTER.get(), reika.rotarycraft.renders.dm.RenderWoodcutter::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SPRINKLER.get(), reika.rotarycraft.renders.m.RenderSprinkler::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COMPACTOR.get(), reika.rotarycraft.renders.dmi.RenderCompactor::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.WETTER.get(), reika.rotarycraft.renders.mi.RenderWetter::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.DRYING.get(), reika.rotarycraft.renders.mi.RenderDryingBed::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COOLING_FIN.get(), RenderFin::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.HEAT_RAY.get(), RenderHRay::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.PLAYER_DETECTOR.get(), RenderDetector::new);
@@ -247,6 +251,8 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(WOODCUTTER, WoodcutterModel::createLayer);
         event.registerLayerDefinition(SPRINKLER, SprinklerModel::createLayer);
         event.registerLayerDefinition(COMPACTOR, CompactorModel::createLayer);
+        event.registerLayerDefinition(WETTER, WetterModel::createLayer);
+        event.registerLayerDefinition(DRYING_BED, DryingBedModel::createLayer);
         event.registerLayerDefinition(EXTRACTOR, ExtractorModel::createLayer);
         event.registerLayerDefinition(PULSEJET, PulseFurnaceModel::createLayer);
         event.registerLayerDefinition(FILLING_STATION, FillingStationModel::createLayer);

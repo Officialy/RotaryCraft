@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:wetter",
+  "amount": 20,
+  "duration": 80,
+  "fluid": "rotarycraft:jet_fuel_still",
+  "input": "minecraft:cobblestone",
+  "output": "minecraft:netherrack"
+}

@@ -184,6 +184,8 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> DROPS = registerMachineBlock("drop_processor", () -> new BlockDropProcessor(blockProperties().strength(5)));
     public static final DeferredBlock<Block> SPRINKLER = registerMachineBlock("sprinkler", () -> new BlockSprinkler(blockProperties().strength(5)));
     public static final DeferredBlock<Block> COMPACTOR = registerMachineBlock("compactor", () -> new BlockCompactor(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> WETTER = registerMachineBlock("wetter", () -> new BlockWetter(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> DRYING = registerMachineBlock("drying_bed", () -> new BlockDryingBed(blockProperties().strength(5)));
     public static final DeferredBlock<Block> IGNITER = registerMachineBlock("igniter", () -> new BlockIgniter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FERMENTER = registerMachineBlock("fermenter", () -> new BlockFermenter(blockProperties().strength(5)));
