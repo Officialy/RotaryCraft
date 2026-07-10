@@ -1,113 +1,55 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.renders.dm;
-//
-//import reika.rotarycraft.blockentities.Farming.BlockEntityWoodcutter;
-//import net.minecraft.BlockEntity.BlockEntity;
-//import net.neoforged.client.MinecraftForgeClient;
-//import org.lwjgl.opengl.GL11;
-//import reika.dragonapi.interfaces.blockentity.RenderFetcher;
-//import reika.dragonapi.libraries.rendering.ReikaColorAPI;
-//import reika.rotarycraft.auxiliary.EnchantmentRenderer;
-//import reika.rotarycraft.auxiliary.IORenderer;
-//import reika.rotarycraft.base.RotaryTERenderer;
-//import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
-//import reika.rotarycraft.models.Animated.ModelWoodcutter;
-//
-//public class RenderWoodcutter extends RotaryTERenderer {
-//
-//    private ModelWoodcutter WoodcutterModel = new ModelWoodcutter();
-//
-//    /**
-//     * Renders the BlockEntity for the position.
-//     */
-//    public void renderBlockEntityWoodcutterAt(BlockEntityWoodcutter tile, PoseStack stack, VertexConsumer bufferSource, int light) {
-//        int var9;
-//
-//        if (!tile.isInWorld())
-//            var9 = 0;
-//        else
-//            var9 = tile.getBlockMetadata();
-//
-//        ModelWoodcutter var14;
-//        var14 = WoodcutterModel;
-//        this.bindTextureByName("/reika/rotarycraft/textures/BlockEntitytex/woodcuttertex.png");
-//
-//        this.setupGL(tile, par2, par4, par6);
-//
-//        int var11 = 0;     //used to rotate the model about metadata
-//
-//        if (tile.isInWorld()) {
-//            switch (tile.getBlockMetadata()) {
-//                case 0:
-//                    var11 = 180;
-//                    break;
-//                case 1:
-//                    var11 = 0;
-//                    break;
-//                case 2:
-//                    var11 = 270;
-//                    break;
-//                case 3:
-//                    var11 = 90;
-//                    break;
-//            }
-//
-//            stack.mulPose((float) var11 - 90, 0.0F, 1.0F, 0.0F);
-//
-//        }
-//        float var13;
-//
-//        if (tile.isInWorld()) {
-//            int c = tile.getJamColor();
-//            if (c != -1)
-//                GL11.glColor4f(ReikaColorAPI.getRed(c) / 255F, ReikaColorAPI.getGreen(c) / 255F, ReikaColorAPI.getBlue(c) / 255F, 1);
-//        }
-//
-//        var14.renderAll(stack, tile, null, tile.phi);
-//
-//        this.closeGL(stack, tile);
-//    }
-//
-//    @Override
-//    public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, VertexConsumer bufferSource, int light) {
-//        if (this.doRenderModel((RotaryCraftBlockEntity) tile))
-//            this.renderBlockEntityWoodcutterAt((BlockEntityWoodcutter) tile, par2, par4, par6, par8);
-//        if (MinecraftForgeClient.getRenderPass() != 0 && tile.hasLevel()) {
-//            IORenderer.renderIO(tile, par2, par4, par6);
-//            if (((BlockEntityWoodcutter) tile).getEnchantmentHandler().hasEnchantments())
-//                EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
-//        } else if (!tile.hasLevel()) {
-//            int var11 = 0;
-//            switch (tile.getBlockMetadata()) {
-//                case 0:
-//                    var11 = 180;
-//                    break;
-//                case 1:
-//                    var11 = 0;
-//                    break;
-//                case 2:
-//                    var11 = 270;
-//                    break;
-//                case 3:
-//                    var11 = 90;
-//                    break;
-//            }
-//            stack.mulPose((float) var11 - 90, 0.0F, 1.0F, 0.0F);
-//            if (((BlockEntityWoodcutter) tile).getEnchantmentHandler().hasEnchantments())
-//                EnchantmentRenderer.renderGlint(tile, WoodcutterModel, null, par2, par4, par6);
-//        }
-//    }
-//
-//    @Override
-//    public String getImageFileName(RenderFetcher te) {
-//        return "woodcuttertex.png";
-//    }
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.renders.dm;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.entity.BlockEntity;
+
+import reika.rotarycraft.base.RotaryTERenderer;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.blockentities.farming.BlockEntityWoodcutter;
+import reika.rotarycraft.models.animated.WoodcutterModel;
+import reika.rotarycraft.registry.RotaryModelLayers;
+
+public class RenderWoodcutter extends RotaryTERenderer<BlockEntityWoodcutter> {
+
+    private final WoodcutterModel model;
+
+    public RenderWoodcutter(BlockEntityRendererProvider.Context context) {
+        model = new WoodcutterModel(context.bakeLayer(RotaryModelLayers.WOODCUTTER));
+    }
+
+    private void renderWoodcutterAt(BlockEntityWoodcutter tile, PoseStack stack, VertexConsumer vc, int light) {
+        stack.pushPose();
+        float yaw = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
+        stack.translate(0.5F, 1.5F, 0.5F);
+        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.mulPose(Axis.YP.rotationDegrees(yaw));
+        // The saw blade spins with the input shaft.
+        model.renderAll(stack, vc, light, tile, null, tile.phi, 0);
+        stack.popPose();
+    }
+
+    @Override
+    protected Identifier getSubmitTexture(BlockEntity be) {
+        return WoodcutterModel.TEXTURE_LOCATION;
+    }
+
+    @Override
+    protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer vc, int light) {
+        if (be instanceof BlockEntityWoodcutter wc)
+            renderWoodcutterAt(wc, stack, vc, light);
+    }
+}

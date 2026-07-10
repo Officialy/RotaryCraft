@@ -32,6 +32,7 @@ import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear.GearType;
 import reika.rotarycraft.models.CVTModel;
+import reika.rotarycraft.models.animated.CoilModel;
 import reika.rotarycraft.models.animated.WormModel;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
@@ -47,22 +48,26 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
 
     private final WormModel wormModel;
     private final CVTModel cvtModel;
+    private final CoilModel coilModel;
 
     public RenderAdvGear(BlockEntityRendererProvider.Context context) {
         wormModel = new WormModel(context.bakeLayer(RotaryModelLayers.WORM));
         cvtModel = new CVTModel(context.bakeLayer(RotaryModelLayers.CVT));
+        coilModel = new CoilModel(context.bakeLayer(RotaryModelLayers.COIL));
     }
 
     /**
      * The advanced-gear family (worm / CVT / high / coil) shares one BER and one BE class; the
      * drawn model is chosen per {@link GearType}. Previously every type drew the worm model, so a
-     * CVT in-world showed worm-gear geometry. HIGH/COIL still fall back to the worm model until
-     * their models are wired through here.
+     * CVT (and COIL / the creative coil, which shares COIL's GearType) in-world showed worm-gear
+     * geometry. HIGH still falls back to the worm model until its model is wired through here.
      */
     private RotaryModelBase selectModel(BlockEntityAdvancedGear tile) {
-        if (tile.getGearType() == GearType.CVT)
-            return cvtModel;
-        return wormModel;
+        return switch (tile.getGearType()) {
+            case CVT -> cvtModel;
+            case COIL -> coilModel;
+            default -> wormModel;
+        };
     }
 
     private void renderAt(PoseStack stack, BlockEntityAdvancedGear tile, VertexConsumer bufferSource, int packedLight, RotaryModelBase model) {

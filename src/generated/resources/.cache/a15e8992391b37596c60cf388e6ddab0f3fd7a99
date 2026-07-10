@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T19:43:36.6599351	RotaryCraft Recipes
+// 26.2	2026-07-10T19:36:45.4611439	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -159,6 +159,7 @@ f3fe755b0096486f590629accb3124a1137fa95d data/rotarycraft/advancement/recipes/re
 616dbfaf67a51a14499f929d70c7e0173a71e021 data/rotarycraft/advancement/recipes/redstone/van_de_graff.json
 6cce933b3cabbbdb79b6f074fb8971091ee46479 data/rotarycraft/advancement/recipes/redstone/winder.json
 0dcd5753034368863d93bcf440531ba43bd40b5a data/rotarycraft/advancement/recipes/redstone/wind_engine.json
+84736255726beaf2f7b88837caebf88f1a0fd8e0 data/rotarycraft/advancement/recipes/redstone/woodcutter.json
 04db8fe0900301de532cde983339cab532dfeb6c data/rotarycraft/advancement/recipes/redstone/wood_flywheel.json
 ebe79a6879b4764c940402af63ab9a67ad87c2bf data/rotarycraft/advancement/recipes/redstone/wood_shaft.json
 249733f42c0d0305baac6c96f4a2a63d236f85c8 data/rotarycraft/advancement/recipes/redstone/worktable.json
@@ -460,6 +461,7 @@ b382ab75d0d783a698767db69fe9135ea73df2e5 data/rotarycraft/recipe/vacuum.json
 bea30536e2890f1981d273be9fe16d75a61c1256 data/rotarycraft/recipe/van_de_graff.json
 73336d00ad75645ea166e74ccf83927c5e16e5fc data/rotarycraft/recipe/winder.json
 b7b8586e60fc5b9558846cf0030c16109af936c7 data/rotarycraft/recipe/wind_engine.json
+ea04a0439bed5681cb1a8def18e9367ad77a7a03 data/rotarycraft/recipe/woodcutter.json
 d7cd4cb9557b8e857e2c1d3f00de6aeaaccf83b0 data/rotarycraft/recipe/wood_flywheel.json
 e2551460a58eb1d7fabfce9ad5fc6b0dd866ee11 data/rotarycraft/recipe/wood_shaft.json
 1e3816c7063d09a46b85e19f306311cd7b75a026 data/rotarycraft/recipe/worktable.json

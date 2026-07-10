@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T19:43:46.7714577	Model Definitions - rotarycraft
+// 26.2	2026-07-10T19:36:58.7735243	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -130,6 +130,7 @@ aa1c831f1a341ed0a6c1371d262633047f056ae0 assets/rotarycraft/blockstates/valve.js
 eb5011936e7ebad4146b04eec6523e63be00a5aa assets/rotarycraft/blockstates/van_de_graff.json
 ed21799a0522178abb5815c2b0bd71f768116d6e assets/rotarycraft/blockstates/winder.json
 a0bdb4cafe1b66c292b5d4aef944a1d8da2f509a assets/rotarycraft/blockstates/wind_engine.json
+eabf572b9dde8e7c7fc0d8b831f44c565482534b assets/rotarycraft/blockstates/woodcutter.json
 df33f9a95689636c8d5eea27086f6af5c240cc4c assets/rotarycraft/blockstates/wood_flywheel.json
 a99c5ebc37404353a462f0286f9aa3c54d76ab21 assets/rotarycraft/blockstates/wood_gearbox_16x.json
 1b0e9f1fcaa497a604b583c1a915b97132f76c40 assets/rotarycraft/blockstates/wood_gearbox_2x.json
@@ -480,6 +481,7 @@ f5475dae0314baa01962537f0ecf89aacb4635cd assets/rotarycraft/items/valve.json
 19c426d4a9de55956ad5ea10f177cb4256a82f4c assets/rotarycraft/items/van_de_graff.json
 534d88921858ad8d44e64509627fa32fef734328 assets/rotarycraft/items/winder.json
 56608331a2754edc878d7347e6f4434808bc7c27 assets/rotarycraft/items/wind_engine.json
+344f7564e4467ba03d1c8a39ccc548119b81f63c assets/rotarycraft/items/woodcutter.json
 4f1de062d8d0b617ec4f15ccf7df411a6dc861fb assets/rotarycraft/items/wood_flywheel.json
 b2ce3b0d83012ad80559c4a7d52899ace0b43917 assets/rotarycraft/items/wood_flywheel_core.json
 7c4bdadeee1a0403a55a625e030a175b030e4abf assets/rotarycraft/items/wood_gearbox_16x.json
@@ -622,6 +624,7 @@ dbbe2b10305e2791517c2ef3fda1cb7d6a0b7616 assets/rotarycraft/models/block/valve.j
 f6ba432eedc4c353b2c3dbb314d0a0a6e84ffdc7 assets/rotarycraft/models/block/van_de_graff.json
 4cfc8df39988bf42396442b5f5bdd055c806a80e assets/rotarycraft/models/block/winder.json
 d8d8a06aa1b33a160cd7c6fe401d73db5904984c assets/rotarycraft/models/block/wind_engine.json
+49ac193cb9dfe112dccab96f68d38f806f59ab2b assets/rotarycraft/models/block/woodcutter.json
 f9e6c00f029c1b1cbcb80df034e833b092c28121 assets/rotarycraft/models/block/wood_flywheel.json
 29793744990189c0116f0dd22fdec9a6cf88ed59 assets/rotarycraft/models/block/wood_gearbox_16x.json
 da256b7847d95cccf1e8e6a5575f2e71083f0f29 assets/rotarycraft/models/block/wood_gearbox_2x.json

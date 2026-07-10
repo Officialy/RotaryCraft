@@ -1,4 +1,4 @@
-// 26.2	2026-07-09T19:43:36.665089	Loot Tables
+// 26.2	2026-07-10T19:36:45.4687494	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 35618a08eae47dc11e8f8bffb79ff5ecd0cc5286 data/rotarycraft/loot_table/blocks/air_cannon.json
@@ -137,6 +137,7 @@ badc6b11177d4a2005e7415539f0af43609184ff data/rotarycraft/loot_table/blocks/vacu
 adfa285acab8c2b31f2fd99a925ff74faac22df0 data/rotarycraft/loot_table/blocks/van_de_graff.json
 46693bea8fae3d066db07512faf715ded7da59f1 data/rotarycraft/loot_table/blocks/winder.json
 b14b4ff41904a3958806409d564e8259237a444b data/rotarycraft/loot_table/blocks/wind_engine.json
+1358b3ffbc670e00617458ecdbcf8c39064d1b35 data/rotarycraft/loot_table/blocks/woodcutter.json
 6d87ff4b17784f929886235f4be7d170ff4b8fa0 data/rotarycraft/loot_table/blocks/wood_flywheel.json
 5a7f4dbcba0737a83bbc3c8236275a85043a493c data/rotarycraft/loot_table/blocks/wood_gearbox_16x.json
 9987cb56394c527f37a4a06124c5cc18d8c566e2 data/rotarycraft/loot_table/blocks/wood_gearbox_2x.json

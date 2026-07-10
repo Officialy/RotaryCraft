@@ -47,6 +47,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 import reika.rotarycraft.blockentities.farming.BlockEntityGroundHydrator;
 import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
+import reika.rotarycraft.blockentities.farming.BlockEntityWoodcutter;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
@@ -137,7 +138,7 @@ public enum MachineRegistry implements TileEnum {
     VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class, (modelSet) -> new VacuumModel(modelSet.bakeLayer(RotaryModelLayers.VACCUUM))),
 //    FIREWORK(true, "machine.firework", BlockRotaryCraftMachine.class, BlockEntityFireworkMachine.class),
 //    SPRINKLER(true, "machine.sprinkler", BlockRotaryCraftMachine.class, BlockEntitySprinkler.class, "RenderSprinkler"),
-//    WOODCUTTER("machine.woodcutter", BlockRotaryCraftMachine.class, BlockEntityWoodcutter.class, "RenderWoodcutter"),
+    WOODCUTTER("machine.woodcutter", RotaryBlocks.WOODCUTTER.get(), BlockEntityWoodcutter.class, (modelSet) -> new WoodcutterModel(modelSet.bakeLayer(RotaryModelLayers.WOODCUTTER))),
 //    SPAWNERCONTROLLER("machine.spawnercontroller", BlockRotaryCraftMachine.class, BlockEntitySpawnerController.class, "RenderSpawner"),
     PLAYERDETECTOR(true, "machine.playerdetector", RotaryBlocks.PLAYER_DETECTOR.get(), BlockEntityPlayerDetector.class/*, (modelSet) -> new PlayerDetectorModel(modelSet.bakeLayer(RotaryModelLayers.PLAYER_DETECTOR))*/),
     HEATER(true, "machine.heater", RotaryBlocks.HEATER.get(), BlockEntityHeater.class, (modelSet) -> new HeaterModel(modelSet.bakeLayer(RotaryModelLayers.HEATER))),
@@ -501,8 +502,8 @@ public enum MachineRegistry implements TileEnum {
     public float getMinX(RotaryCraftBlockEntity tile) {
 //        if (this == SPRINKLER)
 //            return 0.3125F;
-//        if (this == WOODCUTTER)
-//            return 0.0625F;
+        if (this == WOODCUTTER)
+            return 0.0625F;
         if (this == SMOKEDETECTOR)
             return 0.25F;
 //        if (this == CCTV)
@@ -527,8 +528,8 @@ public enum MachineRegistry implements TileEnum {
     public float getMinZ(RotaryCraftBlockEntity tile) {
 //        if (this == SPRINKLER)
 //            return 0.3125F;
-//        if (this == WOODCUTTER)
-//            return 0.0625F;
+        if (this == WOODCUTTER)
+            return 0.0625F;
         if (this == SMOKEDETECTOR)
             return 0.25F;
 //        if (this == CCTV)
@@ -545,8 +546,8 @@ public enum MachineRegistry implements TileEnum {
             return 0.75F;
 //        if (this == CCTV)
 //            return 0.75F;
-//        if (this == WOODCUTTER)
-//            return 0.9375F;
+        if (this == WOODCUTTER)
+            return 0.9375F;
 //        if (this == SCALECHEST)
 //            return 0.9375F;
         return 1;
@@ -630,8 +631,8 @@ public enum MachineRegistry implements TileEnum {
             return 0.75F;
 //        if (this == CCTV)
 //            return 0.75F;
-//        if (this == WOODCUTTER)
-//            return 0.9375F;
+        if (this == WOODCUTTER)
+            return 0.9375F;
 //        if (this == SCALECHEST)
 //            return 0.9375F;
         return 1;
@@ -711,7 +712,7 @@ public enum MachineRegistry implements TileEnum {
 
     public boolean is4Sided() {
         return switch (this) {
-            case DC_ENGINE, /*BORER, LIGHTBRIDGE,*/ FLYWHEEL, GEARBOX, SPLITTER, /*FERMENTER,*/ DYNAMOMETER, GRINDER, HEATRAY, /*COMPACTOR, WOODCUTTER,*/ WINDER, WORMGEAR, HIGHGEAR, CVT, COIL, /*BLASTFURNACE, PROJECTOR, SCALECHEST, MAGNETIZER, SCREEN, FRICTION, DISPLAY,*/
+            case DC_ENGINE, /*BORER, LIGHTBRIDGE,*/ FLYWHEEL, GEARBOX, SPLITTER, /*FERMENTER,*/ DYNAMOMETER, GRINDER, HEATRAY, /*COMPACTOR,*/ WOODCUTTER, WINDER, WORMGEAR, HIGHGEAR, CVT, COIL, /*BLASTFURNACE, PROJECTOR, SCALECHEST, MAGNETIZER, SCREEN, FRICTION, DISPLAY,*/
                     MULTICLUTCH, /*ARROWGUN,*/ BEAMMIRROR, /*AIRGUN, SORTING, FILLINGSTATION, DISTILLER, CRYSTALLIZER, BUSCONTROLLER, REFRIGERATOR, DROPS,*/ SPILLWAY ->
                     true;
             default -> false;
@@ -1017,7 +1018,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, /*COMPACTOR, BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER,*/ HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, /*COMPACTOR, BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, /*SPAWNERCONTROLLER,*/ HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
                     true;
             default -> false;
         };

@@ -880,6 +880,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_reservoir", has(RotaryBlocks.RESERVOIR.get()))
                     .save(out);
 
+            // WOODCUTTER: legacy "IS ","PGS","PPI" — steel frame, saws, base panels, a gear unit.
+            // I=steelingot, S=saw, P=basepanel=HSLA_PLATE, G=gearunit=HSLA_STEEL_GEAR_2x.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.WOODCUTTER.get())
+                    .define('I', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('S', RotaryItems.SAW.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR_2x.get())
+                    .pattern("IS ").pattern("PGS").pattern("PPI")
+                    .unlockedBy("has_saw", has(RotaryItems.SAW.get()))
+                    .save(out);
+
             // ARROWGUN (arrow cannon): legacy "SSS","BDB","SBS" — steel shell, base-panel frame, a
             // dispenser core. S=steelingot, B=basepanel=HSLA_PLATE, D=dispenser.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.MACHINEGUN.get())
