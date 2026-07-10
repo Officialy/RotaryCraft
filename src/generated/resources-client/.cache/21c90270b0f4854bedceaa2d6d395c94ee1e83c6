@@ -1,4 +1,4 @@
-// 26.2	2026-07-10T19:36:58.7735243	Model Definitions - rotarycraft
+// 26.2	2026-07-10T19:50:36.8711394	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -47,6 +47,7 @@ d4b1fe581a0f51030f2b5af743cadd1e13befcad assets/rotarycraft/blockstates/diamond_
 4c41eee516ceaf68f83e0d30d0b9a612b20ac0d6 assets/rotarycraft/blockstates/diamond_gearbox_8x.json
 0313674d492d652599f917b45a64773013de197a assets/rotarycraft/blockstates/diamond_shaft.json
 1585cccb8f073383e6648bff710b536119351955 assets/rotarycraft/blockstates/distribution_clutch.json
+23efc8a32270dd724c495e0b7e5b002a0e11c77e assets/rotarycraft/blockstates/drop_processor.json
 3793c666583d3d8e189de87f43543238f5ff37d6 assets/rotarycraft/blockstates/dynamometer.json
 8c8e751b1e93968699f8966885e8ad545f4e14aa assets/rotarycraft/blockstates/extractor.json
 b98b11cb747d23dc82257700fbbc4f1a97b03906 assets/rotarycraft/blockstates/fan.json
@@ -256,6 +257,7 @@ a7519f5dfa228bac731f8e97a116de2334a9b464 assets/rotarycraft/items/diamond_slurry
 bfae4e976865ce8a5d3b5a170d72600e1041f79f assets/rotarycraft/items/diffuser.json
 115625fdc0f68c468291c128250e7d39d60556e0 assets/rotarycraft/items/distribution_clutch.json
 25c62790bffc636a597e146b8a4eaaf2cc368fdd assets/rotarycraft/items/drillhead_iron.json
+303c556a6157397e4475ae60179fe60156e5aa2b assets/rotarycraft/items/drop_processor.json
 036290c8276ec950b4c6a6e72a536eed8982c1c2 assets/rotarycraft/items/dry_ice.json
 0e116137c3a83596f31e455c2d0884288d8cde53 assets/rotarycraft/items/dynamometer.json
 79881dcb413866a773bc420028ea683fc48b525d assets/rotarycraft/items/emerald_dust.json
@@ -541,6 +543,7 @@ ad86238f630690edb01fb2e5c9a5cb73fc2f4cc7 assets/rotarycraft/models/block/diamond
 299a6c8ba9a3e06f78cd34ecaa8634d7a8da1dea assets/rotarycraft/models/block/diamond_gearbox_8x.json
 3bfb73bd94a8eebae3df2fec507bd1f5b9c8caf7 assets/rotarycraft/models/block/diamond_shaft.json
 2ac536cc345c7ce5e43a99fc0105455d98759fa1 assets/rotarycraft/models/block/distribution_clutch.json
+5ac0b08bd18e1897b6e1dcb10e89c947e5e49521 assets/rotarycraft/models/block/drop_processor.json
 d86557323a4da60c9130b1ad42b315f853bc8373 assets/rotarycraft/models/block/dynamometer.json
 7a01aceb44bcc4deb599f770706cdcc70b6460bd assets/rotarycraft/models/block/extractor.json
 feee78200c3c74848f98e8d66300aa203ecb399f assets/rotarycraft/models/block/fan.json

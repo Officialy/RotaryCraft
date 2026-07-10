@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "D": "rotarycraft:drillhead_iron",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "PSP",
+    "PDP",
+    "PSP"
+  ],
+  "result": {
+    "id": "rotarycraft:drop_processor"
+  }
+}

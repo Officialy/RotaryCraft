@@ -891,6 +891,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_saw", has(RotaryItems.SAW.get()))
                     .save(out);
 
+            // DROPS (drop processor): legacy "PSP","PDP","PSP" — panel shell, steel, a drill core.
+            // S=steelingot, D=drill=DRILLHEAD_IRON, P=basepanel=HSLA_PLATE.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.DROPS.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('D', RotaryItems.DRILLHEAD_IRON.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .pattern("PSP").pattern("PDP").pattern("PSP")
+                    .unlockedBy("has_drill", has(RotaryItems.DRILLHEAD_IRON.get()))
+                    .save(out);
+
             // ARROWGUN (arrow cannon): legacy "SSS","BDB","SBS" — steel shell, base-panel frame, a
             // dispenser core. S=steelingot, B=basepanel=HSLA_PLATE, D=dispenser.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.MACHINEGUN.get())
