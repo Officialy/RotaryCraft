@@ -1,4 +1,4 @@
-// 26.2	2026-07-10T20:04:08.2259436	RotaryCraft Recipes
+// 26.2	2026-07-11T00:29:41.4637998	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -66,6 +66,7 @@ b8a62a902df39b4f0604ef39abdb3f01b2188f2f data/rotarycraft/advancement/recipes/re
 7e92b8f4152cc7a7119b0d684cf4213a02717238 data/rotarycraft/advancement/recipes/redstone/clutch.json
 c5537047e62ef0efcac188253cba8ff6e622fccd data/rotarycraft/advancement/recipes/redstone/coil.json
 10ff392fddc48d1a0963c73ffe1c986eaae3ed0c data/rotarycraft/advancement/recipes/redstone/combustor.json
+4759f0182e891dbdede671053a5447b571c0f5c7 data/rotarycraft/advancement/recipes/redstone/compactor.json
 a6d8b4c76f051a696c4e78c2b1f0f55407b7cb2c data/rotarycraft/advancement/recipes/redstone/composter.json
 282797c625a79a7c2b469159d79fa181c619b232 data/rotarycraft/advancement/recipes/redstone/compressor.json
 803fce802314c4cf3efeea2519212c2f9bd535ab data/rotarycraft/advancement/recipes/redstone/condenser.json
@@ -228,6 +229,14 @@ ad1d50a6dae756868091f7da7db182e19d323166 data/rotarycraft/recipe/clutch.json
 754687f373e75cdba9c4c4a088f54419aa2dfdfb data/rotarycraft/recipe/coil.json
 c96f1baac26870c4cbef3b859a3ce84d2a3ea668 data/rotarycraft/recipe/coke.json
 47c1f06cdde334e219c9d71c9f2f87c621a676ec data/rotarycraft/recipe/combustor.json
+67ee5233fa18c4e5c226a423c6354992ef3b87d0 data/rotarycraft/recipe/compactor.json
+ab86af0651d613f0543aa1d4a2ba2a491f6dc6e8 data/rotarycraft/recipe/compactor/anthracite.json
+d5337b5bd23b15be565d38f0fe88d063790f9d10 data/rotarycraft/recipe/compactor/blaze_powder.json
+bbcf7963b3fe7d84d8a8c37c37d3a9cb49aa47c1 data/rotarycraft/recipe/compactor/charcoal.json
+07d34ed0dbba5352cd2e73f49568c5a0a668f845 data/rotarycraft/recipe/compactor/coal.json
+0c69a385d61c3bfdc8944f0bc8dc0a914b5d3f52 data/rotarycraft/recipe/compactor/ice.json
+cb9b767f6992a594ef90a615ff7fcdbb039a7213 data/rotarycraft/recipe/compactor/lonsdaleite.json
+ec56f79e7e4f3b8d73745f137279f5bc6d4b0639 data/rotarycraft/recipe/compactor/prismane.json
 61c223ce41130176e20bb56c45855b8c96338408 data/rotarycraft/recipe/composter.json
 5f16f7298057b466d3b1749f02dce2f7fa087fc0 data/rotarycraft/recipe/compressor.json
 e899903f207fc83a4a9e6a339c43e028ccb07d4f data/rotarycraft/recipe/condenser.json

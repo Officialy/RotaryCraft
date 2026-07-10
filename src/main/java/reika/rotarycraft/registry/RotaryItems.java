@@ -159,6 +159,11 @@ public class RotaryItems {
     public static final DeferredItem<Item> SLUDGE = reg("sludge", () -> new Item(itemProperties()));
 
     public static final DeferredItem<Item> SAWDUST = reg("sawdust", () -> new Item(itemProperties()));
+    // Compactor carbon chain (legacy ItemRegistry.COMPACTS metas 0/1/2): coal -> anthracite ->
+    // prismane -> lonsdaleite -> diamond.
+    public static final DeferredItem<Item> ANTHRACITE = reg("anthracite", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> PRISMANE = reg("prismane", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> LONSDALEITE = reg("lonsdaleite", () -> new Item(itemProperties()));
     //public static final DeferredItem<Item> DECOTANK = reg("deco_tank", () -> new BlockItemDecoTank(RotaryBlocks.DECOTANK.get(), itemProperties()));
 
     //HSLA Steel Items

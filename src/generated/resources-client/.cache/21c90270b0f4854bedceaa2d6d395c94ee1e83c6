@@ -1,4 +1,4 @@
-// 26.2	2026-07-10T20:04:21.5549261	Model Definitions - rotarycraft
+// 26.2	2026-07-11T00:29:52.2623208	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -31,6 +31,7 @@ df4a8d6dd638382d576bb63eb0e7d58ee0df966d assets/rotarycraft/blockstates/cave_sca
 513509e599429018fd858e5b0bef11e1c5d5e0f7 assets/rotarycraft/blockstates/clutch.json
 b20f1e4a05e8c7ca5dd0a5970d06426820b99c9e assets/rotarycraft/blockstates/coil.json
 873327e271d5a66f195cc33f77c85e0cefff1e03 assets/rotarycraft/blockstates/coke_block.json
+1b08aa591cf8003ab53e12031fa85511c1fb5865 assets/rotarycraft/blockstates/compactor.json
 89a66f81347fe334a92ab50bbbc3d62544bbf12b assets/rotarycraft/blockstates/composter.json
 3f945a4fb9fce2c9ee320e305e2ffaa54f9580ee assets/rotarycraft/blockstates/containment.json
 a8238b8c1b76c3b4fd66cd353414dee0477ae1e1 assets/rotarycraft/blockstates/cooling_fin.json
@@ -149,6 +150,7 @@ cbbd5711fe9a562bc024d91e861a42f65dddf78e assets/rotarycraft/items/air_cannon.jso
 bedb0f2817745a532375cc3cacaccad719159c10 assets/rotarycraft/items/aluminum_alloy_powder.json
 5f08f7396eaa66d0467eaab40b28889bb7ca9d3b assets/rotarycraft/items/angular_transducer.json
 89a3ac363abc91e8058f47ce83bb7a397b81751f assets/rotarycraft/items/anthra.json
+8fdf4ec46d6fa279756071923663264a8edf6583 assets/rotarycraft/items/anthracite.json
 162fdaed70772936d4d5bf199d326e8a1c4c0fa9 assets/rotarycraft/items/arrow_cannon.json
 3750e393e066f7d41fa7efde6e2debbb0c920df8 assets/rotarycraft/items/ball_bearing.json
 5e9cff761a346ea2b5bfa303ccd625d15e414447 assets/rotarycraft/items/bcengine.json
@@ -215,6 +217,7 @@ ac353d181a618ad8779ef980a908051417f5e33d assets/rotarycraft/items/coal_flakes.js
 43b83d52b5fee06615db848293bb17c6d60b7bd1 assets/rotarycraft/items/coke.json
 eaba0f5ccfdae52d0fffbc0d23a5f1552726e730 assets/rotarycraft/items/coke_block.json
 5a0248e7a6677d9b8ab086294410d38f5dc5cc14 assets/rotarycraft/items/combustor.json
+99b72bda190b8735981ab1c2fae3685087b1e36e assets/rotarycraft/items/compactor.json
 b635d5e067a584cbeff848648b68ff8dd5f4008b assets/rotarycraft/items/compost.json
 8d091d02b74f6644aa7a011ba762b5c4462afc0c assets/rotarycraft/items/composter.json
 a1af3901bd4b812ac428ad59056636f403b36f06 assets/rotarycraft/items/compound_compressor.json
@@ -366,6 +369,7 @@ c773f98ef1c24959c20015485d0ada169166f381 assets/rotarycraft/items/linear_inducti
 162c13a75787975f8b9a3141a58e28427ce6cdcc assets/rotarycraft/items/liquid_ethanol_bucket.json
 e55f8bf56db4069cf1d565c633e20d5be8a81f2a assets/rotarycraft/items/liquid_nitrogen_bucket.json
 e82851716deb0c952db6395bea2707652df19765 assets/rotarycraft/items/lons.json
+2b76ea36bb0a629995eed42595d44261e29ebf97 assets/rotarycraft/items/lonsdaleite.json
 cb92fff9a151bd6b9d8bb56da0975a20bd10d6b2 assets/rotarycraft/items/lubricant_bucket.json
 55fb978345121fcf9a77fee9a9684f251aa61e0a assets/rotarycraft/items/magnetizer.json
 a868f68c64318992fa415c1524711cf9b4dacfda assets/rotarycraft/items/magnetostatic_engine.json
@@ -392,6 +396,7 @@ a8ce801ddc220cf7a166b9b883f731b351c8736d assets/rotarycraft/items/obsidian_maker
 8787e275561422a23ab1d0cbbb8035400c43f71e assets/rotarycraft/items/player_detector.json
 12111f73e351060ca4469de0ef478c69f236f51c assets/rotarycraft/items/power_module.json
 e1250ec8c9443eb36cec8ed13bef6808918277a2 assets/rotarycraft/items/pressure_head.json
+7ebf9fa5e60ea2dbb3b205ba5e5208c0e4046466 assets/rotarycraft/items/prismane.json
 2bad3043c3ee91c0bfb9fd58944ce0a9d23932b9 assets/rotarycraft/items/propeller_blade.json
 6f8d530066b57d507d1154625908713358aa3721 assets/rotarycraft/items/pulse_jet_furnace.json
 44e8698c28ef2da37e80ddefb0a1b54a1c44d1ef assets/rotarycraft/items/pump.json
@@ -529,6 +534,7 @@ e8b5591fdecfd5845120848427fcaa0ec0cff289 assets/rotarycraft/models/block/block_c
 86f02852f31ce7878c91665225b12c3188f9ad8b assets/rotarycraft/models/block/clutch.json
 0a71398d6cbcba0e9c219a50de9a36b4639cdec0 assets/rotarycraft/models/block/coil.json
 8ce404ccc8ca3c00e4f75a801d16aa5beac1bc2f assets/rotarycraft/models/block/coke_block.json
+3573116d72086cf6fbb83c57153828973f2eeb82 assets/rotarycraft/models/block/compactor.json
 2b39b67e7a3968297e62c27f8eda308c2259367a assets/rotarycraft/models/block/composter.json
 b4547b8013363b2287c664cdd7899a9aed070df2 assets/rotarycraft/models/block/containment.json
 9c89151731a34f5a967fb522d4f2be5b6976c2e9 assets/rotarycraft/models/block/cooling_fin.json
@@ -643,6 +649,7 @@ ae7157e86047f020acb66d0e3a61dbb3c4aa23e2 assets/rotarycraft/models/block/wormgea
 7bd98765d9c94d3bda90f5963da86f3ba0e02e85 assets/rotarycraft/models/item/aluminum_alloy_ingot.json
 bb4729bf00c1b2efa90de6cc2f4cd3abbd5021d8 assets/rotarycraft/models/item/aluminum_alloy_powder.json
 39a8fed67d91eaaca93b1333450a6b23f073a2a0 assets/rotarycraft/models/item/angular_transducer.json
+4711347d3b6a86e6574167e7c5cbe82d1f30633c assets/rotarycraft/models/item/anthracite.json
 af692eef3d98244436621b91c29086d65cf4c23f assets/rotarycraft/models/item/ball_bearing.json
 81b00f2c3b631c93a454f1b23049ed1c129a349b assets/rotarycraft/models/item/bedrock_alloy_axe.json
 675b3a5e3cae5588db2b4825d60cb18d7263b2b2 assets/rotarycraft/models/item/bedrock_alloy_bearing.json
@@ -780,6 +787,7 @@ c7e52095f332320892a0d1d86558be227dafc841 assets/rotarycraft/models/item/lens.jso
 201c914c762a74a1397dbf91e3e8fa3f1145d55b assets/rotarycraft/models/item/linear_induction_motor.json
 5aa2cc11baf2904bed31adaf27c622e25bc23612 assets/rotarycraft/models/item/liquid_ethanol_bucket.json
 9deaf42ccb8e40a6246efbc6136da0ca258e2ff4 assets/rotarycraft/models/item/liquid_nitrogen_bucket.json
+b4a1b6e3fe3633160d7f62aeb244b88fbf8c8886 assets/rotarycraft/models/item/lonsdaleite.json
 af7e3626c16763ff7af0775938b4e0f845234078 assets/rotarycraft/models/item/lubricant_bucket.json
 4dde4a20781c2a1902fc76bd9a4bb82081588ea5 assets/rotarycraft/models/item/mirror_panel.json
 d95c2e4008a3b005ff696952d2febb5cd75a4651 assets/rotarycraft/models/item/mixer.json
@@ -792,6 +800,7 @@ d43116ec5440aabd8bfc85632befc530d23f7266 assets/rotarycraft/models/item/nitrate.
 2d6af53b9aa0da2ca355322794518d1247823275 assets/rotarycraft/models/item/paddle_panel.json
 868fcca353f8ec9433d97ec116fc88b88c7930dd assets/rotarycraft/models/item/power_module.json
 9f8184c1e93e347e30fee1df28c8461497720442 assets/rotarycraft/models/item/pressure_head.json
+4472fab2a7dd673fba2914d3cb360ad720287db4 assets/rotarycraft/models/item/prismane.json
 e35083e072224f1737e8d17ae5b54267ca377820 assets/rotarycraft/models/item/propeller_blade.json
 9b0e144fa13096ff5a317547c8a555267d3f4d81 assets/rotarycraft/models/item/quartz_dust.json
 680c346243ced798069e37e6a107f499fa91fe7f assets/rotarycraft/models/item/quartz_flakes.json

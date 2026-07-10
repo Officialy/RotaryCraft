@@ -1,0 +1,7 @@
+{
+  "type": "rotarycraft:compactor",
+  "input": "minecraft:blaze_powder",
+  "output": "minecraft:glowstone",
+  "pressure": 2000,
+  "temperature": 600
+}

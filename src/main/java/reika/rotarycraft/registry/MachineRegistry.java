@@ -50,7 +50,9 @@ import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.farming.BlockEntitySprinkler;
 import reika.rotarycraft.blockentities.farming.BlockEntityWoodcutter;
 import reika.rotarycraft.models.SprinklerModel;
+import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
+import reika.rotarycraft.models.animated.CompactorModel;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
@@ -132,7 +134,7 @@ public enum MachineRegistry implements TileEnum {
     AEROSOLIZER(true, "machine.aerosolizer", RotaryBlocks.AEROSOLIZER.get(), BlockEntityAerosolizer.class, (modelSet) -> new AerosolizerModel(modelSet.bakeLayer(RotaryModelLayers.AEROSOLIZER))),
     //    EXTRACTOR(true, "machine.extractor", BlockRotaryCraftMachine.class, BlockEntityExtractor.class, "RenderExtractor"),
     PULSEJET(true, "machine.pulsejet", RotaryBlocks.PULSE_JET_FURNACE.get(), BlockEntityPulseFurnace.class, (modelSet) -> new PulseFurnaceModel(modelSet.bakeLayer(RotaryModelLayers.PULSEJET))),
-//    COMPACTOR(true, "machine.compactor", BlockRotaryCraftMachine.class, BlockEntityCompactor.class, "RenderCompactor"),
+    COMPACTOR(true, "machine.compactor", RotaryBlocks.COMPACTOR.get(), BlockEntityCompactor.class, (modelSet) -> new CompactorModel(modelSet.bakeLayer(RotaryModelLayers.COMPACTOR))),
    FAN("machine.fan", RotaryBlocks.FAN.get(), BlockEntityFan.class, (modelSet) -> new FanModel(modelSet.bakeLayer(RotaryModelLayers.FAN))),
     FRACTIONATOR(true, "machine.fractionator", RotaryBlocks.FRACTIONATOR.get(), BlockEntityFractionator.class, (modelSet) -> new FractionModel(modelSet.bakeLayer(RotaryModelLayers.FRACTIONATOR))),
 //    GPR(true, "machine.gpr", BlockGPR.class, BlockEntityGPR.class),
@@ -708,14 +710,14 @@ public enum MachineRegistry implements TileEnum {
         if (e instanceof ItemEntity || e instanceof ExperienceOrb)
             return false;
         return switch (this) {
-            case /*COMPACTOR, */HEATER, /*IGNITER,*/ OBSIDIAN /*, PULSEJET, FRICTION*/ -> true;
+            case COMPACTOR, HEATER, /*IGNITER,*/ OBSIDIAN /*, PULSEJET, FRICTION*/ -> true;
             default -> false;
         };
     }
 
     public boolean is4Sided() {
         return switch (this) {
-            case DC_ENGINE, /*BORER, LIGHTBRIDGE,*/ FLYWHEEL, GEARBOX, SPLITTER, /*FERMENTER,*/ DYNAMOMETER, GRINDER, HEATRAY, /*COMPACTOR,*/ WOODCUTTER, WINDER, WORMGEAR, HIGHGEAR, CVT, COIL, /*BLASTFURNACE, PROJECTOR, SCALECHEST, MAGNETIZER, SCREEN, FRICTION, DISPLAY,*/
+            case DC_ENGINE, /*BORER, LIGHTBRIDGE,*/ FLYWHEEL, GEARBOX, SPLITTER, /*FERMENTER,*/ DYNAMOMETER, GRINDER, HEATRAY, COMPACTOR, WOODCUTTER, WINDER, WORMGEAR, HIGHGEAR, CVT, COIL, /*BLASTFURNACE, PROJECTOR, SCALECHEST, MAGNETIZER, SCREEN, FRICTION, DISPLAY,*/
                     MULTICLUTCH, /*ARROWGUN,*/ BEAMMIRROR, /*AIRGUN, SORTING, FILLINGSTATION, DISTILLER, CRYSTALLIZER, BUSCONTROLLER, REFRIGERATOR, DROPS,*/ SPILLWAY ->
                     true;
             default -> false;
@@ -1021,7 +1023,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, /*COMPACTOR, BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, /*SPAWNERCONTROLLER,*/ HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, /*SPAWNERCONTROLLER,*/ HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
                     true;
             default -> false;
         };

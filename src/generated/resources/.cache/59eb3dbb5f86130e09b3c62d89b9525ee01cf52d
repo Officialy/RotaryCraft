@@ -1,4 +1,4 @@
-// 26.2	2026-07-10T20:04:08.2362624	Loot Tables
+// 26.2	2026-07-11T00:29:41.4693291	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 35618a08eae47dc11e8f8bffb79ff5ecd0cc5286 data/rotarycraft/loot_table/blocks/air_cannon.json
@@ -33,6 +33,7 @@ f2d373f46e8db566e79302902d47ae8ac3e610f7 data/rotarycraft/loot_table/blocks/cent
 0527b0ba51603d99db0aef83840ece5ae5a3ea92 data/rotarycraft/loot_table/blocks/clutch.json
 00b13e029ed201a01512f23988b213315ff80ad4 data/rotarycraft/loot_table/blocks/coil.json
 676201e0bcb9d3d0ac3e49feac5e0f3c03d4a8e0 data/rotarycraft/loot_table/blocks/coke_block.json
+7a8eb3faf9e1ceaee568b02a96009e26371e62d4 data/rotarycraft/loot_table/blocks/compactor.json
 cd899d74d0da0ec255f8c9afae027e3fab5472ff data/rotarycraft/loot_table/blocks/composter.json
 9e5037c74341948a8b0556e5a08bdab0202da3dc data/rotarycraft/loot_table/blocks/containment.json
 5efbbd991dcc9e437bbaaa510a6adac2ede4a966 data/rotarycraft/loot_table/blocks/cooling_fin.json

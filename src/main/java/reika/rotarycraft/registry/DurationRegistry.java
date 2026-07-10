@@ -20,7 +20,7 @@ public enum DurationRegistry {
     BEDROCK(MachineRegistry.BEDROCKBREAKER, 600, 30),
     BORER(MachineRegistry.BORER, 720, 40),
     BUCKETFILLER(MachineRegistry.BUCKETFILLER, 200, 20),
-    //        COMPACTOR(MachineRegistry.COMPACTOR, 300, 15, 4),
+        COMPACTOR(MachineRegistry.COMPACTOR, 300, 15, 4),
 //    CRYSTALLIZER(MachineRegistry.CRYSTALLIZER, 400, 24),
     FERMENTER(MachineRegistry.FERMENTER, 480, 35),
     EXTRACTOR(MachineRegistry.EXTRACTOR, 900, 60, 400, 20, 600, 30, 1200, 80),

@@ -26,6 +26,7 @@ import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
 import net.neoforged.neoforge.fluids.FluidStack;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.CompactorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
@@ -143,6 +144,7 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             grinder();
             centrifuge();
             lavaMaker();
+            compactor();
             frictionHeater();
             extractor();
             extractorSmelting();
@@ -215,6 +217,28 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             melt("cobblestone", Ingredient.of(Items.COBBLESTONE), 500, 1000, 2_820_000L);
             melt("netherrack", Ingredient.of(Items.NETHERRACK), 2000, 600, 480_000L);
             melt("stone_bricks", Ingredient.of(Items.STONE_BRICKS), 1000, 1200, 4_160_000L);
+        }
+
+        // Compactor chain: legacy RecipesCompactor. Counts baked at the legacy MEDIUM difficulty
+        // (DifficultyEffects.COMPACTOR = 2 per step; charcoal pays 3/2). REQ = 550 MPa / 800 C.
+        private void compactor() {
+            compact("coal", Ingredient.of(Items.COAL), RotaryItems.ANTHRACITE.get(), 2, 550000, 800);
+            compact("charcoal", Ingredient.of(Items.CHARCOAL), RotaryItems.ANTHRACITE.get(), 3, 550000, 800);
+            compact("anthracite", Ingredient.of(RotaryItems.ANTHRACITE.get()), RotaryItems.PRISMANE.get(), 2, 550000, 800);
+            compact("prismane", Ingredient.of(RotaryItems.PRISMANE.get()), RotaryItems.LONSDALEITE.get(), 2, 550000, 800);
+            compact("lonsdaleite", Ingredient.of(RotaryItems.LONSDALEITE.get()), Items.DIAMOND, 2, 550000, 800);
+            compact("blaze_powder", Ingredient.of(Items.BLAZE_POWDER), Items.GLOWSTONE, 1, 2000, 600);
+            compact("ice", Ingredient.of(Items.ICE), Items.PACKED_ICE, 2, 24000, -80);
+            // GEOSTRATA-PORT: packed ice -> denser GeoStrata ice tiers.
+        }
+
+        private void compact(String name, Ingredient input, net.minecraft.world.level.ItemLike output, int count, int pressure, int temperature) {
+            CompactorRecipe recipe = new CompactorRecipe(input,
+                    net.minecraft.core.registries.BuiltInRegistries.ITEM.wrapAsHolder(output.asItem()),
+                    count, pressure, temperature);
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "compactor/" + name));
+            out.accept(key, recipe, null);
         }
 
         private void melt(String name, Ingredient input, int amount, int temperature, long energy) {
@@ -908,6 +932,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('P', RotaryItems.HSLA_PLATE.get())
                     .pattern("PSP").pattern("PDP").pattern("PSP")
                     .unlockedBy("has_drill", has(RotaryItems.DRILLHEAD_IRON.get()))
+                    .save(out);
+
+            // COMPACTOR: legacy "SPS","PGP","#P#" — steel, pressure heads, a 16x tungsten gear unit,
+            // base panels.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.COMPACTOR.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('P', RotaryItems.PRESSURE_HEAD.get())
+                    .define('G', RotaryItems.TUNGSTEN_ALLOY_GEAR_16x.get())
+                    .define('#', RotaryItems.HSLA_PLATE.get())
+                    .pattern("SPS").pattern("PGP").pattern("#P#")
+                    .unlockedBy("has_pressure_head", has(RotaryItems.PRESSURE_HEAD.get()))
                     .save(out);
 
             // ARROWGUN (arrow cannon): legacy "SSS","BDB","SBS" — steel shell, base-panel frame, a

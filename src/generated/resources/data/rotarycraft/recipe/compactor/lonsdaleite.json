@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:compactor",
+  "count": 2,
+  "input": "rotarycraft:lonsdaleite",
+  "output": "minecraft:diamond",
+  "pressure": 550000,
+  "temperature": 800
+}
