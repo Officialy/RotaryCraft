@@ -47,7 +47,9 @@ import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 import reika.rotarycraft.blockentities.farming.BlockEntityGroundHydrator;
 import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
+import reika.rotarycraft.blockentities.farming.BlockEntitySprinkler;
 import reika.rotarycraft.blockentities.farming.BlockEntityWoodcutter;
+import reika.rotarycraft.models.SprinklerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
@@ -138,7 +140,7 @@ public enum MachineRegistry implements TileEnum {
     //    PILEDRIVER("machine.piledriver", BlockRotaryCraftMachine.class, BlockEntityPileDriver.class, "RenderPileDriver"),
     VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class, (modelSet) -> new VacuumModel(modelSet.bakeLayer(RotaryModelLayers.VACCUUM))),
 //    FIREWORK(true, "machine.firework", BlockRotaryCraftMachine.class, BlockEntityFireworkMachine.class),
-//    SPRINKLER(true, "machine.sprinkler", BlockRotaryCraftMachine.class, BlockEntitySprinkler.class, "RenderSprinkler"),
+    SPRINKLER(true, "machine.sprinkler", RotaryBlocks.SPRINKLER.get(), BlockEntitySprinkler.class, (modelSet) -> new SprinklerModel(modelSet.bakeLayer(RotaryModelLayers.SPRINKLER))),
     WOODCUTTER("machine.woodcutter", RotaryBlocks.WOODCUTTER.get(), BlockEntityWoodcutter.class, (modelSet) -> new WoodcutterModel(modelSet.bakeLayer(RotaryModelLayers.WOODCUTTER))),
 //    SPAWNERCONTROLLER("machine.spawnercontroller", BlockRotaryCraftMachine.class, BlockEntitySpawnerController.class, "RenderSpawner"),
     PLAYERDETECTOR(true, "machine.playerdetector", RotaryBlocks.PLAYER_DETECTOR.get(), BlockEntityPlayerDetector.class/*, (modelSet) -> new PlayerDetectorModel(modelSet.bakeLayer(RotaryModelLayers.PLAYER_DETECTOR))*/),

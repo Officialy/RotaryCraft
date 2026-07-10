@@ -66,6 +66,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation AIR_GUN = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "air_gun"), "main");
     public static final ModelLayerLocation LAVA_MAKER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "lava_maker"), "main");
     public static final ModelLayerLocation WOODCUTTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "woodcutter"), "main");
+    public static final ModelLayerLocation SPRINKLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "sprinkler"), "main");
     public static final ModelLayerLocation RESERVOIR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "reservoir"), "main");
     public static final ModelLayerLocation SPLITTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "splitter"), "main");
     public static final ModelLayerLocation SPLITTER_2 = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "splitter_2"), "main");
@@ -159,6 +160,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.AIRGUN.get(), reika.rotarycraft.renders.dm.RenderAirGun::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.LAVAMAKER.get(), reika.rotarycraft.renders.mi.RenderLavaMaker::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WOODCUTTER.get(), reika.rotarycraft.renders.dm.RenderWoodcutter::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.SPRINKLER.get(), reika.rotarycraft.renders.m.RenderSprinkler::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COOLING_FIN.get(), RenderFin::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.HEAT_RAY.get(), RenderHRay::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.PLAYER_DETECTOR.get(), RenderDetector::new);
@@ -241,6 +243,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(AIR_GUN, AirGunModel::createLayer);
         event.registerLayerDefinition(LAVA_MAKER, LavaMakerModel::createLayer);
         event.registerLayerDefinition(WOODCUTTER, WoodcutterModel::createLayer);
+        event.registerLayerDefinition(SPRINKLER, SprinklerModel::createLayer);
         event.registerLayerDefinition(EXTRACTOR, ExtractorModel::createLayer);
         event.registerLayerDefinition(PULSEJET, PulseFurnaceModel::createLayer);
         event.registerLayerDefinition(FILLING_STATION, FillingStationModel::createLayer);

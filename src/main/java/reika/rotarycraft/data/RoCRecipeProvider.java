@@ -891,6 +891,15 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_saw", has(RotaryItems.SAW.get()))
                     .save(out);
 
+            // SPRINKLER: legacy 4x " s "," p "," i " — steel (or tin), a pipe, an impeller.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.SPRINKLER.get(), 4)
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('p', RotaryBlocks.FLUID_PIPE.get())
+                    .define('i', RotaryItems.IMPELLER.get())
+                    .pattern(" s ").pattern(" p ").pattern(" i ")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
             // DROPS (drop processor): legacy "PSP","PDP","PSP" — panel shell, steel, a drill core.
             // S=steelingot, D=drill=DRILLHEAD_IRON, P=basepanel=HSLA_PLATE.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.DROPS.get())

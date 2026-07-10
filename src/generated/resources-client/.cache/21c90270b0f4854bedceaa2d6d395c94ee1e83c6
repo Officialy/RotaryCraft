@@ -1,4 +1,4 @@
-// 26.2	2026-07-10T19:50:36.8711394	Model Definitions - rotarycraft
+// 26.2	2026-07-10T20:04:21.5549261	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -111,6 +111,7 @@ ed245f50d97d3969f159d0770421d99d0fab5b60 assets/rotarycraft/blockstates/sorter.j
 29dd1e14c6308061c0940a085e600fabe7601565 assets/rotarycraft/blockstates/spiller.json
 a821f077ae98708db6fd92907de25dfa97ddb5be assets/rotarycraft/blockstates/spillway.json
 4aa6e7b787b414ac07e41f6b9773b9b75a73c851 assets/rotarycraft/blockstates/splitter.json
+9c597d93fd8c8a84aacb312608567715ccc6205e assets/rotarycraft/blockstates/sprinkler.json
 60303f6b26a96f063122870dedd2d3904887e671 assets/rotarycraft/blockstates/steam_engine.json
 a9edce63f4d7a98383b61a2571b72f4daa25b7e3 assets/rotarycraft/blockstates/steam_turbine.json
 2f1b2c7c60d912e5e24d1a3b4d09fd5ff7aeda66 assets/rotarycraft/blockstates/stone_gearbox_16x.json
@@ -437,6 +438,7 @@ f364cd7e7745789c48f4f4e368b587ccb51c8838 assets/rotarycraft/items/smoke_detector
 7e513fc116d8d2572f8c86de727512d498bfdbc8 assets/rotarycraft/items/splitter.json
 e45c0e20207a385c0b5dd8c27e601e09b475763e assets/rotarycraft/items/spring_piston.json
 ef4e5599356804fbd4d4f4431fcfd992bfbef0ed assets/rotarycraft/items/spring_steel_ingot.json
+5c6a08f421ca5129937f87ba2ba3bd6e085f8877 assets/rotarycraft/items/sprinkler.json
 f8beb30d4feead2b85be70fce8a591e80a010908 assets/rotarycraft/items/steam_engine.json
 4ec7b8e7fd6cf308556671d722d022e63de0000e assets/rotarycraft/items/steam_turbine.json
 840bd56cd95c0ec50b1b64ebe929de79f353df32 assets/rotarycraft/items/stone_bearing.json
@@ -607,6 +609,7 @@ a8b33640f20d37b9a38c3736adf8c0ca752a93f8 assets/rotarycraft/models/block/smoke_d
 61ef0862084ab7e1e05c13c3cf5c550fa99e512a assets/rotarycraft/models/block/spiller.json
 9438f28cc0c0fdc1061ab22aac5b4982684dc06b assets/rotarycraft/models/block/spillway.json
 f78a529527fa30ecd820e242beb63a17c1a8da9b assets/rotarycraft/models/block/splitter.json
+7ec1c56033cc8517265eee9659b15a7550513302 assets/rotarycraft/models/block/sprinkler.json
 0bfdd553ad27c1ed5a46273147e82bac4ce4027e assets/rotarycraft/models/block/steam_engine.json
 88c6a2cedf2c6811064832a27ec1d5b20526c861 assets/rotarycraft/models/block/steam_turbine.json
 a50d3f8efc4d2e5de5fa92183ae81555d1514ba8 assets/rotarycraft/models/block/stone_gearbox_16x.json
