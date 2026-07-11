@@ -1,0 +1,6 @@
+{
+  "type": "rotarycraft:crystallizer",
+  "amount": 1000,
+  "fluid": "rotarycraft:ethanol_still",
+  "output": "rotarycraft:ethanol_crystals"
+}

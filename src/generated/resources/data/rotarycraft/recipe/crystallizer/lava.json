@@ -1,0 +1,6 @@
+{
+  "type": "rotarycraft:crystallizer",
+  "amount": 1000,
+  "fluid": "minecraft:lava",
+  "output": "minecraft:stone"
+}

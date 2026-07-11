@@ -1,113 +1,77 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.guis.Machine.Inventory;
-//
-//import org.lwjgl.opengl.GL11;
-//
-//import net.minecraft.entity.player.Player;
-//
-//import net.neoforged.neoforge.fluids.Fluid;
-//
-//import reika.dragonapi.libraries.io.ReikaTextureHelper;
-//import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
-//import reika.rotarycraft.RotaryCraft;
-//import reika.rotarycraft.base.GuiMachine;
-//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerCrystallizer;
-//import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
-//
-//public class GuiCrystallizer extends GuiMachine {
-//    private final BlockEntityCrystallizer te;
-//
-//    public GuiCrystallizer(Player p5ep, BlockEntityCrystallizer Crystallizer) {
-//        super(new ContainerCrystallizer(p5ep, Crystallizer), Crystallizer);
-//        te = Crystallizer;
-//        ep = p5ep;
-//        imageWidth = 176;
-//        imageHeight = 166;
-//    }
-//
-//    /**
-//     * Draw the foreground layer for the GuiContainer (everything in front of the items)
-//     */
-//    @Override
-//    protected void drawGuiContainerForegroundLayer(int a, int b) {
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//
-//        super.drawGuiContainerForegroundLayer(a, b);
-//
-//        if (!te.isEmpty()) {
-//            int i2 = te.getLiquidScaled(72);
-//            int x = 8;
-//            int y = 78 - i2 + 1;
-//            GL11.glColor4f(1, 1, 1, 1);
-//            Fluid f = te.getContainedFluid();
-//            IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
-//            ReikaLiquidRenderer.bindFluidTexture(f);
-//            this.drawTexturedModelRectFromIcon(x, y, ico, 16, i2);
-//
-//            String s = String.format("%d C", te.getFreezingPoint());
-//            api.drawCenteredStringNoShadow(font, s, imageWidth / 2, 56, 0);
-//        }
-//        if (api.isMouseInBox(j + 7, j + 24, k + 6, k + 79)) {
-//            int mx = api.getMouseRealX();
-//            int my = api.getMouseRealY();
-//            api.drawTooltipAt(font, String.format("%d/%d", te.getLevel(), te.getCapacity()), mx - j, my - k);
-//        }
-//        String s = String.format("%d C", te.getTemperature());
-//        api.drawCenteredStringNoShadow(font, s, 50, 30, 0);
-//    }
-//
-//    /**
-//     * Draw the background layer for the GuiContainer (everything behind the items)
-//     */
-//    @Override
-//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.extractBackground(PoseStack poseStack, par1, par2, par3);
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//
-//        int i1 = Math.min(44, te.getProgressScaled(44));
-//        ScreenUtils.drawTexturedModalRect(j + 29, k + 41, 178, 1, i1, 4);
-//    }
-//
-//    @Override
-//    protected String getGuiTexture() {
-//        return "crystalgui";
-//    }
-//
-//    @Override
-//    protected void drawPowerTab(int j, int k) {
-//        String var4 = "/Reika/RotaryCraft/Textures/GUI/powertab.png";
-//        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//        ReikaTextureHelper.bindTexture(RotaryCraft.class, var4);
-//        ScreenUtils.drawTexturedModalRect(imageWidth + j, k + 4, 0, 4, 42, imageHeight - 4);
-//
-//        long frac = (te.power * 29L) / te.MINPOWER;
-//        if (frac > 29)
-//            frac = 29;
-//        ScreenUtils.drawTexturedModalRect(imageWidth + j + 5, imageHeight + k - 144, 0, 0, (int) frac, 4);
-//
-//        frac = (int) (te.omega * 29L) / te.MINSPEED;
-//        if (frac > 29)
-//            frac = 29;
-//        ScreenUtils.drawTexturedModalRect(imageWidth + j + 5, imageHeight + k - 84, 0, 0, (int) frac, 4);
-//
-//        frac = (int) (te.torque * 29L) / te.MINTORQUE;
-//        if (frac > 29)
-//            frac = 29;
-//        this.drawTexturedModalRect(imageWidth + j + 5, imageHeight + k - 24, 0, 0, (int) frac, 4);
-//
-//        api.drawCenteredStringNoShadow(font, "Power:", imageWidth + j + 20, k + 9, 0xff000000);
-//        api.drawCenteredStringNoShadow(font, "Speed:", imageWidth + j + 20, k + 69, 0xff000000);
-//        api.drawCenteredStringNoShadow(font, "Torque:", imageWidth + j + 20, k + 129, 0xff000000);
-//        //this.drawCenteredStringNoShadow(font, String.format("%d/%d", te.power, te.MINPOWER), imageWidth+j+16, k+16, 0xff000000);
-//    }
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.screen.machine.inventory;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.base.MachineScreen;
+import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerCrystallizer;
+
+/** Crystallizer GUI: fluid level + freeze progress + temperature vs freezing point. */
+public class GuiCrystallizer extends MachineScreen<BlockEntityCrystallizer, ContainerCrystallizer> {
+
+    private final BlockEntityCrystallizer crystal;
+
+    public GuiCrystallizer(ContainerCrystallizer container, Inventory inv, Component title) {
+        super(container, inv, title, 176, 166);
+        crystal = (BlockEntityCrystallizer) inv.player.level().getBlockEntity(container.tile.getBlockPos());
+        inventory = inv;
+    }
+
+    @Override
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partial) {
+        super.extractBackground(graphics, mouseX, mouseY, partial);
+        int j = (Minecraft.getInstance().getWindow().getGuiScaledWidth() - imageWidth) / 2;
+        int k = (Minecraft.getInstance().getWindow().getGuiScaledHeight() - imageHeight) / 2;
+
+        // Tank level (blue) on the left.
+        int h = crystal.getLiquidScaled(54);
+        if (h > 0)
+            graphics.fill(j + 18, k + 70 - h, j + 26, k + 70, 0xFF3060d0);
+        // Freeze progress (cyan) between the slots.
+        int w = crystal.getProgressScaled(24);
+        if (w > 0)
+            graphics.fill(j + 46, k + 34, j + 46 + w, k + 42, 0xFF60d0e0);
+        // Temperature readout vs required freezing point.
+        api.drawCenteredStringNoShadow(graphics, font,
+                crystal.getTemperature() + "C / need <= " + crystal.getFreezingPoint() + "C",
+                j + imageWidth / 2, k + 60, 0xff404040);
+    }
+
+    @Override
+    protected void drawPowerTab(GuiGraphicsExtractor stack, int j, int k) {
+        var loc = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/powertab.png");
+        stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j, k + 4, 0, 4, 42, imageHeight - 4, 256, 256);
+        long frac = crystal.MINPOWER > 0 ? (crystal.power * 29L) / crystal.MINPOWER : (crystal.power > 0 ? 29 : 0);
+        if (frac > 29) frac = 29;
+        stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 144, 0, 0, (int) frac, 4, 256, 256);
+        frac = crystal.MINSPEED > 0 ? (crystal.omega * 29L) / crystal.MINSPEED : (crystal.omega > 0 ? 29 : 0);
+        if (frac > 29) frac = 29;
+        stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 84, 0, 0, (int) frac, 4, 256, 256);
+        frac = crystal.MINTORQUE > 0 ? (crystal.torque * 29L) / crystal.MINTORQUE : (crystal.torque > 0 ? 29 : 0);
+        if (frac > 29) frac = 29;
+        stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 24, 0, 0, (int) frac, 4, 256, 256);
+        api.drawCenteredStringNoShadow(stack, font, "Power:", imageWidth + j + 20, k + 9, 0xff000000);
+        api.drawCenteredStringNoShadow(stack, font, "Speed:", imageWidth + j + 20, k + 69, 0xff000000);
+        api.drawCenteredStringNoShadow(stack, font, "Torque:", imageWidth + j + 20, k + 129, 0xff000000);
+    }
+
+    @Override
+    protected String getGuiTexture() {
+        return "crystalgui";
+    }
+}

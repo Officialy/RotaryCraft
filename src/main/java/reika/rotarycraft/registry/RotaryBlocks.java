@@ -194,6 +194,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> CHAIN = registerMachineBlock("chain_drive", () -> new BlockBeltHub(true, blockProperties().strength(5)));
     public static final DeferredBlock<Block> LAWNSPRINKLER = registerMachineBlock("lawn_sprinkler", () -> new BlockLawnSprinkler(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FERTILIZER = registerMachineBlock("fertilizer", () -> new BlockFertilizer(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> CRYSTALLIZER = registerMachineBlock("crystallizer", () -> new BlockCrystallizer(blockProperties().strength(5)));
     public static final DeferredBlock<Block> IGNITER = registerMachineBlock("igniter", () -> new BlockIgniter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FERMENTER = registerMachineBlock("fermenter", () -> new BlockFermenter(blockProperties().strength(5)));

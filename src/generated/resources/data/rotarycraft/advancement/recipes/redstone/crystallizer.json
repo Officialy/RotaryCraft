@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_fin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:cooling_fin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:crystallizer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_fin"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:crystallizer"
+    ]
+  }
+}

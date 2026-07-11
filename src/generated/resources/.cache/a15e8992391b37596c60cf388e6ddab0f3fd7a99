@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T19:44:38.0258686	RotaryCraft Recipes
+// 26.2	2026-07-12T00:59:06.9872718	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -75,6 +75,7 @@ a6d8b4c76f051a696c4e78c2b1f0f55407b7cb2c data/rotarycraft/advancement/recipes/re
 803fce802314c4cf3efeea2519212c2f9bd535ab data/rotarycraft/advancement/recipes/redstone/condenser.json
 a65452cf9dcf518ffd12353f059c1d0f99d51d3d data/rotarycraft/advancement/recipes/redstone/containment.json
 b810a511b5c9918126433874506fae076f60beea data/rotarycraft/advancement/recipes/redstone/cooling_fin.json
+5ea4df3cee3e1182c564ad4dbb66fdac7b8e76c7 data/rotarycraft/advancement/recipes/redstone/crystallizer.json
 4532ba1f33d606b378ee8d8890456ead9aa8e7e3 data/rotarycraft/advancement/recipes/redstone/cvt.json
 9b2b37b1c38fea4d3b70d9e3c16a21d7d9fe4b58 data/rotarycraft/advancement/recipes/redstone/cylinder.json
 9a8333f4785af9e36cdcae2054506a1b24a88292 data/rotarycraft/advancement/recipes/redstone/dc_engine.json
@@ -257,6 +258,10 @@ e899903f207fc83a4a9e6a339c43e028ccb07d4f data/rotarycraft/recipe/condenser.json
 40ded1143cdd01625d1c2d073a5d852de66219c1 data/rotarycraft/recipe/cooling_fin.json
 76e3f7488a4b53c32a957fcc20f4cfbecab6e7b0 data/rotarycraft/recipe/copper_flakes_to_ingot.json
 6a73e09d212632974733e5c6f867947db1319527 data/rotarycraft/recipe/craft_pattern.json
+b14faa556f7296af79dabce5cea59befdfcce61c data/rotarycraft/recipe/crystallizer.json
+bf8a8c75f2126267291cbc8cc8ad326b1124f0ce data/rotarycraft/recipe/crystallizer/ethanol.json
+985f52d1750aee9cd5c87892b73451dfdd9288f1 data/rotarycraft/recipe/crystallizer/lava.json
+8f44dc6be0369a69481726e6681e4e6cda2aa7ee data/rotarycraft/recipe/crystallizer/water.json
 abe9da2a9046d8c440183778bff1a64d585ea909 data/rotarycraft/recipe/cvt.json
 6d97a5fb2a19da8c76bad89a4fe801b347270b4e data/rotarycraft/recipe/cylinder.json
 deb3a18d12ac75ee0facdc3b406f300111af820d data/rotarycraft/recipe/dc_engine.json

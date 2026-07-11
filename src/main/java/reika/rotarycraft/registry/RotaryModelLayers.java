@@ -73,6 +73,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation BELT = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "belt_hub"), "main");
     public static final ModelLayerLocation LAWNSPRINKLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "lawn_sprinkler"), "main");
     public static final ModelLayerLocation FERTILIZER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "fertilizer"), "main");
+    public static final ModelLayerLocation CRYSTALLIZER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "crystallizer"), "main");
     public static final ModelLayerLocation SPAWNER_CONTROLLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "spawner_controller"), "main");
     public static final ModelLayerLocation RESERVOIR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "reservoir"), "main");
     public static final ModelLayerLocation SPLITTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "splitter"), "main");
@@ -174,6 +175,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.BELT.get(), reika.rotarycraft.renders.dm.RenderBelt::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.LAWNSPRINKLER.get(), reika.rotarycraft.renders.m.RenderLawnSprinkler::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.FERTILIZER.get(), reika.rotarycraft.renders.mi.RenderFertilizer::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.CRYSTALLIZER.get(), reika.rotarycraft.renders.mi.RenderCrystallizer::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.CHAIN.get(), reika.rotarycraft.renders.dm.RenderBelt::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SPAWNERCONTROLLER.get(), reika.rotarycraft.renders.m.RenderSpawner::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COOLING_FIN.get(), RenderFin::new);
@@ -265,6 +267,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(BELT, BeltModel::createLayer);
         event.registerLayerDefinition(LAWNSPRINKLER, LawnSprinklerModel::createLayer);
         event.registerLayerDefinition(FERTILIZER, FertilizerModel::createLayer);
+        event.registerLayerDefinition(CRYSTALLIZER, CrystallizerModel::createLayer);
         event.registerLayerDefinition(SPAWNER_CONTROLLER, SpawnerModel::createLayer);
         event.registerLayerDefinition(EXTRACTOR, ExtractorModel::createLayer);
         event.registerLayerDefinition(PULSEJET, PulseFurnaceModel::createLayer);

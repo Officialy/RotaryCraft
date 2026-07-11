@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.CompactorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.CrystallizerRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
@@ -35,6 +36,7 @@ public class RotaryRecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<CompactorRecipe>> COMPACTOR = RECIPE_TYPES.register("compactor", () -> new RecipeType<CompactorRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<WetterRecipe>> WETTER = RECIPE_TYPES.register("wetter", () -> new RecipeType<WetterRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<DryingBedRecipe>> DRYING_BED = RECIPE_TYPES.register("drying_bed", () -> new RecipeType<DryingBedRecipe>() {});
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrystallizerRecipe>> CRYSTALLIZER = RECIPE_TYPES.register("crystallizer", () -> new RecipeType<CrystallizerRecipe>() {});
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<FrictionHeaterRecipe>> FRICTION_HEATER = RECIPE_TYPES.register("friction_heater", () -> new RecipeType<FrictionHeaterRecipe>() {});
 

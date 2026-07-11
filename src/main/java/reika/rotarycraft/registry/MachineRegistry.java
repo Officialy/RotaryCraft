@@ -53,7 +53,9 @@ import reika.rotarycraft.models.SprinklerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.models.animated.BeltModel;
+import reika.rotarycraft.models.animated.CrystallizerModel;
 import reika.rotarycraft.models.animated.FertilizerModel;
+import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
 import reika.rotarycraft.models.animated.LawnSprinklerModel;
 import reika.rotarycraft.blockentities.farming.BlockEntityFertilizer;
 import reika.rotarycraft.blockentities.farming.BlockEntityLawnSprinkler;
@@ -236,7 +238,7 @@ public enum MachineRegistry implements TileEnum {
     //    DISTILLER("machine.distiller", BlockRotaryCraftMachine.class, BlockEntityDistillery.class, "RenderDistillery"),
     //    DYNAMO("machine.dynamo", BlockModEngine.class, BlockEntityDynamo.class, "RenderDynamo", PowerTypes.RF),
     MAGNETIC(true, "machine.magnetic", RotaryBlocks.MAGNETOSTATIC_ENGINE.get(), BlockEntityMagnetEngine.class, PowerTypes.RF, (modelSet) -> new MagneticModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIC))),
-    //    CRYSTALLIZER("machine.crystal", BlockRotaryCraftMachine.class, BlockEntityCrystallizer.class, "RenderCrystal"),
+    CRYSTALLIZER("machine.crystal", RotaryBlocks.CRYSTALLIZER.get(), BlockEntityCrystallizer.class, (modelSet) -> new CrystallizerModel(modelSet.bakeLayer(RotaryModelLayers.CRYSTALLIZER))),
     BUSCONTROLLER("machine.buscontroller", RotaryBlocks.BUSCONTROLLER.get(), BlockEntityBusController.class),
     POWERBUS("machine.bus", RotaryBlocks.POWERBUS.get(), BlockEntityPowerBus.class),
     PARTICLE(true, "machine.particle", RotaryBlocks.PARTICLE.get(), BlockEntityParticleEmitter.class/*, (modelSet) -> new ParticleModel(modelSet.bakeLayer(RotaryModelLayers.PARTICLE))*/),
@@ -1037,7 +1039,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, CRYSTALLIZER, BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
                     true;
             default -> false;
         };

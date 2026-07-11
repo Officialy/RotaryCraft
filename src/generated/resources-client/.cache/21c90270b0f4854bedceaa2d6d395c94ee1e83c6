@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T19:44:50.0819937	Model Definitions - rotarycraft
+// 26.2	2026-07-12T00:59:21.7770439	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -40,6 +40,7 @@ b20f1e4a05e8c7ca5dd0a5970d06426820b99c9e assets/rotarycraft/blockstates/coil.jso
 a8238b8c1b76c3b4fd66cd353414dee0477ae1e1 assets/rotarycraft/blockstates/cooling_fin.json
 f8640156e0369a0140233ecb9dc0b162d9f1217c assets/rotarycraft/blockstates/creative_coil.json
 38e33f58e7e2ef03f6827e1918102c5cb20a8e5d assets/rotarycraft/blockstates/cross.json
+d2109638edfbbf4a881c6a180ecc7f3975b4bf60 assets/rotarycraft/blockstates/crystallizer.json
 dd11f6a68bdc25c43ed549d19e792aadd10787d2 assets/rotarycraft/blockstates/cvt.json
 00c73bcda86fed180d3db804a981065be940381f assets/rotarycraft/blockstates/dc_engine.json
 eea75698cf2b06011c9e6e032f596bbc91bd3a55 assets/rotarycraft/blockstates/deco.json
@@ -246,6 +247,7 @@ f4a0ffeeac6d5702e255f0f1c0c7b914ababc249 assets/rotarycraft/items/copper_solutio
 b8d08d3b99bede903abbfdf7fc7c641bfd794ffb assets/rotarycraft/items/craft_pattern.json
 e8f7f09bb9c15b733827d8eff11c6c97a0e8f76d assets/rotarycraft/items/creative_coil.json
 8793974340e38ebd3d4a6d7732aea2befd450d08 assets/rotarycraft/items/cross.json
+09662d968e3d88011a93f32a7c07e943da2bafb0 assets/rotarycraft/items/crystallizer.json
 97e9d4e4c86bb66cd37dec311e96eeaee337aa96 assets/rotarycraft/items/cvt.json
 356c40e0b737c29b218d94de796d4141ec727e35 assets/rotarycraft/items/cylinder.json
 d6cdcbc31f8df297ff067098dd37ce97cab178bf assets/rotarycraft/items/dc_engine.json
@@ -563,6 +565,7 @@ b4547b8013363b2287c664cdd7899a9aed070df2 assets/rotarycraft/models/block/contain
 9c89151731a34f5a967fb522d4f2be5b6976c2e9 assets/rotarycraft/models/block/cooling_fin.json
 25c64e55c68e0ab2ca6488979c736159e632b561 assets/rotarycraft/models/block/creative_coil.json
 481f65a31015341b5c3a2bad0dc70b6e3cc6044b assets/rotarycraft/models/block/cross.json
+cc7c0619fdbf688339ef935dba9a5a5916732e49 assets/rotarycraft/models/block/crystallizer.json
 3a3eaae931ff2b99efec4517ae882bda52a74b47 assets/rotarycraft/models/block/cvt.json
 dfa62e9574e5163b95a04dab180a76532de760dd assets/rotarycraft/models/block/dc_engine.json
 6ff6a4d0f2386d6142d98f5e23a08ffa062b75e0 assets/rotarycraft/models/block/deco.json

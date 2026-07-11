@@ -27,6 +27,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.CompactorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.CrystallizerRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
@@ -147,6 +148,7 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             centrifuge();
             lavaMaker();
             compactor();
+            crystallizer();
             wetterAndDrying();
             frictionHeater();
             extractor();
@@ -258,6 +260,22 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     net.minecraft.core.registries.BuiltInRegistries.ITEM.wrapAsHolder(output.asItem()), count);
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
                     Identifier.fromNamespaceAndPath("rotarycraft", "drying_bed/" + name));
+            out.accept(key, recipe, null);
+        }
+
+        // Crystallizer freezing (legacy RecipesCrystallizer; ender/redstone mod fluids gated).
+        private void crystallizer() {
+            freeze("water", net.minecraft.world.level.material.Fluids.WATER, 1000, Items.ICE, 1);
+            freeze("lava", net.minecraft.world.level.material.Fluids.LAVA, 1000, Items.STONE, 1);
+            freeze("ethanol", RotaryFluids.ETHANOL.get(), 1000, RotaryItems.ETHANOL.get(), 1);
+        }
+
+        private void freeze(String name, net.minecraft.world.level.material.Fluid fluid, int amount, net.minecraft.world.level.ItemLike output, int count) {
+            CrystallizerRecipe recipe = new CrystallizerRecipe(
+                    net.minecraft.core.registries.BuiltInRegistries.FLUID.wrapAsHolder(fluid), amount,
+                    net.minecraft.core.registries.BuiltInRegistries.ITEM.wrapAsHolder(output.asItem()), count);
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath("rotarycraft", "crystallizer/" + name));
             out.accept(key, recipe, null);
         }
 
@@ -990,6 +1008,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('P', RotaryItems.HSLA_PLATE.get())
                     .pattern("S S").pattern("SPS").pattern("S S")
                     .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out);
+
+            // CRYSTALLIZER: legacy "SFS","FIF","BBB" — steel, cooling fins, an impeller, panels.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.CRYSTALLIZER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('F', RotaryBlocks.COOLING_FIN.get())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .pattern("SFS").pattern("FIF").pattern("BBB")
+                    .unlockedBy("has_fin", has(RotaryBlocks.COOLING_FIN.get()))
                     .save(out);
 
             // FERTILIZER: legacy "PIP"," S ","BCB" — pipes, an impeller, a shaft, a chest hopper,

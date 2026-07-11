@@ -34,6 +34,7 @@ import reika.rotarycraft.blockentities.piping.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
 import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
+import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
 import reika.rotarycraft.blockentities.processing.BlockEntityDryingBed;
 import reika.rotarycraft.blockentities.processing.BlockEntityWetter;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
@@ -169,6 +170,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityLawnSprinkler::new, RotaryBlocks.LAWNSPRINKLER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFertilizer>> FERTILIZER = BLOCK_ENTITIES.register("fertilizer", () ->
             new BlockEntityType<>(BlockEntityFertilizer::new, RotaryBlocks.FERTILIZER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityCrystallizer>> CRYSTALLIZER = BLOCK_ENTITIES.register("crystallizer", () ->
+            new BlockEntityType<>(BlockEntityCrystallizer::new, RotaryBlocks.CRYSTALLIZER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityIgniter>> IGNITER = BLOCK_ENTITIES.register("igniter", () ->
             new BlockEntityType<>(BlockEntityIgniter::new, RotaryBlocks.IGNITER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->
