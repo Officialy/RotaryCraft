@@ -992,6 +992,24 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
+            // BELT HUB (2x): legacy "sBs"," G ","sBs" — steel, panels, a hub core.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BELT.get(), 2)
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .define('G', RotaryItems.HUB.get())
+                    .pattern("sBs").pattern(" G ").pattern("sBs")
+                    .unlockedBy("has_hub", has(RotaryItems.HUB.get()))
+                    .save(out);
+
+            // CHAIN DRIVE (2x): legacy "sBs"," G ","sBs" — steel, panels, a steel gear core.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.CHAIN.get(), 2)
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern("sBs").pattern(" G ").pattern("sBs")
+                    .unlockedBy("has_gear", has(RotaryItems.HSLA_STEEL_GEAR.get()))
+                    .save(out);
+
             // ECU: legacy "IPI","IGI","IRI" — steel shell, circuit board, gold, redstone.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.ECU.get())
                     .define('I', RotaryItems.HSLA_STEEL_INGOT.get())

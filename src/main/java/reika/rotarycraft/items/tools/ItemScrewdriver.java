@@ -274,20 +274,21 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                     return InteractionResult.SUCCESS;
                 }
             }
-            /*if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
-                BlockEntityBeltHub clicked = (BlockEntityBeltHub) te;
-                if (ep.isShiftKeyDown()) {
-                    if (clicked != null) {
+            if (m == MachineRegistry.BELT || m == MachineRegistry.CHAIN) {
+                reika.rotarycraft.blockentities.transmission.BlockEntityBeltHub clicked = (reika.rotarycraft.blockentities.transmission.BlockEntityBeltHub) te;
+                if (clicked != null) {
+                    if (ep.isShiftKeyDown()) {
+                        // Toggle which end is the receiving (emitting) end.
                         clicked.isEmitting = !clicked.isEmitting;
+                    } else {
+                        clicked.reset();
+                        clicked.resetOther();
                     }
-                } else {
-                    int newdmg = damage < 11 ? damage + 1 : 0;
-                    // clicked.setBlockMetadata(newdmg);
-                    clicked.reset();
-                    clicked.resetOther();
+                    clicked.setChanged();
                 }
                 return InteractionResult.SUCCESS;
             }
+            /*if (false) {
             if (m == MachineRegistry.GPR) {
                 BlockEntityGPR clicked = (BlockEntityGPR) te;
                 if (clicked != null) {

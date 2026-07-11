@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T13:36:48.6123446	RotaryCraft Recipes
+// 26.2	2026-07-11T19:08:35.0630357	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -53,6 +53,7 @@ a505628cb516641585b7bcdabe4ec41ab7539511 data/rotarycraft/advancement/recipes/re
 eecf7dacf46c6c9c45f6b7aa62970c8ff1ab8e8b data/rotarycraft/advancement/recipes/redstone/bedrock_gearbox_8x.json
 4f8ab825b6e23b08eefbee42fea3f23ed1113f28 data/rotarycraft/advancement/recipes/redstone/bedrock_pipe.json
 6879d0c631caf9c559b4dffed3daf7f3e51a8680 data/rotarycraft/advancement/recipes/redstone/bedrock_shaft.json
+0e9ec9fad18139289cd2005c4cd727f7d9ed829f data/rotarycraft/advancement/recipes/redstone/belt_hub.json
 f6b51d9cbc7e33e487d2f198a7664af260a3f228 data/rotarycraft/advancement/recipes/redstone/bevel_gears.json
 947bd1daaad7bb147df1d7acfa9080cb1518697b data/rotarycraft/advancement/recipes/redstone/blast_furnace.json
 d446464bbeef32e98afcf7184b7d1bbbf48f23e8 data/rotarycraft/advancement/recipes/redstone/block_cannon.json
@@ -63,6 +64,7 @@ b5a3c44d9958b5c955fdfb8a39b008f3ffbaca85 data/rotarycraft/advancement/recipes/re
 e7fcf8b8ac5204f9fe55ec23702dcd6696e7f3ef data/rotarycraft/advancement/recipes/redstone/bypass.json
 b8a62a902df39b4f0604ef39abdb3f01b2188f2f data/rotarycraft/advancement/recipes/redstone/cave_scanner.json
 05f2ea9c3e6f3550fde4388c2c594ac3d2a82d34 data/rotarycraft/advancement/recipes/redstone/centrifuge.json
+1a0ffb4599b81de61ea13592957bc7ee59adb75e data/rotarycraft/advancement/recipes/redstone/chain_drive.json
 7de8546d3e537c3e1ed033a2984bebb857a5a22f data/rotarycraft/advancement/recipes/redstone/circuit_board.json
 7e92b8f4152cc7a7119b0d684cf4213a02717238 data/rotarycraft/advancement/recipes/redstone/clutch.json
 c5537047e62ef0efcac188253cba8ff6e622fccd data/rotarycraft/advancement/recipes/redstone/coil.json
@@ -211,6 +213,7 @@ f978a855f4bd24b3d3f4b296a4855f425ff2134a data/rotarycraft/recipe/bedrock_gearbox
 c1ac8dd489a247f7959c0116729205aeaf1ab815 data/rotarycraft/recipe/bedrock_gearbox_8x.json
 c8a6126e78839be827c2b45158e52dcee8c14cd1 data/rotarycraft/recipe/bedrock_pipe.json
 b05835a9309d49a639350f3b565da4115431541c data/rotarycraft/recipe/bedrock_shaft.json
+fb1dcee30b2198b86aaa968eeaccc4a7beaf4bf5 data/rotarycraft/recipe/belt_hub.json
 307face7943a78c4b6f1f94eb161a4ac038bc892 data/rotarycraft/recipe/bevel_gears.json
 21fb5522c188f20ade51f0f1b0a6ac993b053187 data/rotarycraft/recipe/blast_furnace.json
 cf15a33a48dccf0d07a225551f3f69950c0cae2b data/rotarycraft/recipe/block_cannon.json
@@ -230,6 +233,7 @@ b094a3308d0f2a1d322206c180014ba87908b7d5 data/rotarycraft/recipe/centrifuge/magm
 384fba348e1261fba694f60574b6c6350d47c111 data/rotarycraft/recipe/centrifuge/melon.json
 a2902c8c166728c7bd0dd0b28991dbec871c5c2d data/rotarycraft/recipe/centrifuge/pumpkin.json
 27e54b17582b7925a6f200d810b0f2f41bd89a99 data/rotarycraft/recipe/centrifuge/wheat.json
+8fc12f774de9429674487e72b57fd236f8a29ffc data/rotarycraft/recipe/chain_drive.json
 24b0fd64be902ee73acf0d59758591f8fc291b0f data/rotarycraft/recipe/circuit_board.json
 ad1d50a6dae756868091f7da7db182e19d323166 data/rotarycraft/recipe/clutch.json
 845f6e4cabb2d6b8d7d7a17ca362ccd703903349 data/rotarycraft/recipe/coal_flakes_to_ingot.json

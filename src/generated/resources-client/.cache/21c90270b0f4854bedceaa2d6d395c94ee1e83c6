@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T13:37:02.0735564	Model Definitions - rotarycraft
+// 26.2	2026-07-11T19:08:47.0590823	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -16,6 +16,7 @@ b5aced254c04cd0f779ec193e2ae254ee99876e1 assets/rotarycraft/blockstates/bedrock_
 f78374a5315af708392f8a116e6ea65bcdb4bc97 assets/rotarycraft/blockstates/bedrock_gearbox_4x.json
 a641bfbdcc77357440af2897451fba3fd7985d37 assets/rotarycraft/blockstates/bedrock_gearbox_8x.json
 b7fafacabb9e7084c9113fa21a09cfbaf6c037a9 assets/rotarycraft/blockstates/bedrock_shaft.json
+1bc303c4fe2f0b0c843703580117f796618d67d2 assets/rotarycraft/blockstates/belt_hub.json
 1e8d38531988164c60bba70e2ee45073848fa717 assets/rotarycraft/blockstates/bevel_gears.json
 8d8a90341ad0bede8b278d8360396d2a3da5ff17 assets/rotarycraft/blockstates/blastglass.json
 84fc6052adbd60ce8e37703abcbed93844a8d885 assets/rotarycraft/blockstates/blastpane.json
@@ -29,6 +30,7 @@ c463d0e97b4bf2d8f3118431a3011568cbced51c assets/rotarycraft/blockstates/bus_cont
 21d097326c1c54ad795e6ddb90bd38b41f8f7cf3 assets/rotarycraft/blockstates/bypass.json
 df4a8d6dd638382d576bb63eb0e7d58ee0df966d assets/rotarycraft/blockstates/cave_scanner.json
 9f8fe839ae137dbb916bba6e2a404aeb24f054c0 assets/rotarycraft/blockstates/centrifuge.json
+74d5f432607c005364ccbf47196141fff741c400 assets/rotarycraft/blockstates/chain_drive.json
 513509e599429018fd858e5b0bef11e1c5d5e0f7 assets/rotarycraft/blockstates/clutch.json
 b20f1e4a05e8c7ca5dd0a5970d06426820b99c9e assets/rotarycraft/blockstates/coil.json
 873327e271d5a66f195cc33f77c85e0cefff1e03 assets/rotarycraft/blockstates/coke_block.json
@@ -196,6 +198,7 @@ faccd4384f6475026811d2ad8ac4dc7690f6b653 assets/rotarycraft/items/bedrock_gearbo
 3666128bba2510efda395109f290348e931c6a41 assets/rotarycraft/items/bedrock_pipe.json
 305cde452e8294ef27a00e60100de79a06681bcc assets/rotarycraft/items/bedrock_shaft.json
 ee7857b5fb61aa4a494d61e7a06a8d7b4f6a1775 assets/rotarycraft/items/belt.json
+4e25e8cdef255140a896d056f79f395d02b5ab0e assets/rotarycraft/items/belt_hub.json
 523ecff50f414ca7c103c22ee046e4697137a778 assets/rotarycraft/items/bevel_gears.json
 4e3f02876d1ecf06dec3cc190c618451dd502f1d assets/rotarycraft/items/blastglass.json
 13597876cb469a5aeb5edb6bf036fc2713676c49 assets/rotarycraft/items/blastpane.json
@@ -213,6 +216,7 @@ c5377bb5dcd8a735bf7402a38e126e00e333606a assets/rotarycraft/items/calculator.jso
 0f8aab9a3878249a5cad0b923ab0fd787e842217 assets/rotarycraft/items/canola_seed_husks.json
 ce5cd79af19ac604586e5fcdff1c829e63750d02 assets/rotarycraft/items/cave_scanner.json
 53e169fd5cddc38563899393c2fa86eca517f5fc assets/rotarycraft/items/centrifuge.json
+63f4f2bce5f2776425c023cefbef8094d378062e assets/rotarycraft/items/chain_drive.json
 a8946e2a0a723cb144aeb16a88b7c33fcab40bb3 assets/rotarycraft/items/chain_link.json
 518ae12925793af25969c24c4a90cf41c6426547 assets/rotarycraft/items/circuit_board.json
 e12e685584756551956a0a637a4f28b2e7f24aea assets/rotarycraft/items/clutch.json
@@ -531,6 +535,7 @@ df274823ca2ca9d5801a1dbf1ca7f640be126e96 assets/rotarycraft/models/block/bedrock
 83d8d82464ad1f821721d5c9ad85e0eaea10d325 assets/rotarycraft/models/block/bedrock_gearbox_4x.json
 3279d337bf3b05209520cc83386d93a69ae40906 assets/rotarycraft/models/block/bedrock_gearbox_8x.json
 2c8f0f44c7f07c092a165063ea4221d7b03eb796 assets/rotarycraft/models/block/bedrock_shaft.json
+4e3d94d078b6dd8c37d341d3163d23ecd3e88f77 assets/rotarycraft/models/block/belt_hub.json
 b453aeb738a34aea2b5e910d122686a006e35b9d assets/rotarycraft/models/block/bevel_gears.json
 d3d25c4ad93bc7cfb89d7072fc2d347928b1c107 assets/rotarycraft/models/block/blastglass.json
 5540976bd3ace080a355159e2ebf8b597b1a4d65 assets/rotarycraft/models/block/blastpane.json
@@ -544,6 +549,7 @@ e8b5591fdecfd5845120848427fcaa0ec0cff289 assets/rotarycraft/models/block/block_c
 0a6fd877bf743adfa0820a64fcaeedaaac2d7b49 assets/rotarycraft/models/block/bypass.json
 7433a9a62dfb6f7181beef47b0bd63188db9c780 assets/rotarycraft/models/block/cave_scanner.json
 89699bca683b500a33defdf49b1fee2cbeee6676 assets/rotarycraft/models/block/centrifuge.json
+00a729f0c7e8500feb28fdace97f107e5b6837f0 assets/rotarycraft/models/block/chain_drive.json
 86f02852f31ce7878c91665225b12c3188f9ad8b assets/rotarycraft/models/block/clutch.json
 0a71398d6cbcba0e9c219a50de9a36b4639cdec0 assets/rotarycraft/models/block/coil.json
 8ce404ccc8ca3c00e4f75a801d16aa5beac1bc2f assets/rotarycraft/models/block/coke_block.json

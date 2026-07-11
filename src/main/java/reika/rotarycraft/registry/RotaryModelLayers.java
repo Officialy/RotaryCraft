@@ -70,6 +70,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation COMPACTOR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "compactor"), "main");
     public static final ModelLayerLocation WETTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "wetter"), "main");
     public static final ModelLayerLocation DRYING_BED = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "drying_bed"), "main");
+    public static final ModelLayerLocation BELT = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "belt_hub"), "main");
     public static final ModelLayerLocation SPAWNER_CONTROLLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "spawner_controller"), "main");
     public static final ModelLayerLocation RESERVOIR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "reservoir"), "main");
     public static final ModelLayerLocation SPLITTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "splitter"), "main");
@@ -168,6 +169,8 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.COMPACTOR.get(), reika.rotarycraft.renders.dmi.RenderCompactor::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WETTER.get(), reika.rotarycraft.renders.mi.RenderWetter::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.DRYING.get(), reika.rotarycraft.renders.mi.RenderDryingBed::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.BELT.get(), reika.rotarycraft.renders.dm.RenderBelt::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.CHAIN.get(), reika.rotarycraft.renders.dm.RenderBelt::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SPAWNERCONTROLLER.get(), reika.rotarycraft.renders.m.RenderSpawner::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COOLING_FIN.get(), RenderFin::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.HEAT_RAY.get(), RenderHRay::new);
@@ -255,6 +258,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(COMPACTOR, CompactorModel::createLayer);
         event.registerLayerDefinition(WETTER, WetterModel::createLayer);
         event.registerLayerDefinition(DRYING_BED, DryingBedModel::createLayer);
+        event.registerLayerDefinition(BELT, BeltModel::createLayer);
         event.registerLayerDefinition(SPAWNER_CONTROLLER, SpawnerModel::createLayer);
         event.registerLayerDefinition(EXTRACTOR, ExtractorModel::createLayer);
         event.registerLayerDefinition(PULSEJET, PulseFurnaceModel::createLayer);

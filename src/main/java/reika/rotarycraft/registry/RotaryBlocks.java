@@ -190,6 +190,8 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> POWERBUS = registerMachineBlock("power_bus", () -> new BlockPowerBus(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BUSCONTROLLER = registerMachineBlock("bus_controller", () -> new BlockBusController(blockProperties().strength(5)));
     public static final DeferredBlock<Block> ECU = registerMachineBlock("engine_control_unit", () -> new BlockEngineController(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> BELT = registerMachineBlock("belt_hub", () -> new BlockBeltHub(false, blockProperties().strength(5)));
+    public static final DeferredBlock<Block> CHAIN = registerMachineBlock("chain_drive", () -> new BlockBeltHub(true, blockProperties().strength(5)));
     public static final DeferredBlock<Block> IGNITER = registerMachineBlock("igniter", () -> new BlockIgniter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FERMENTER = registerMachineBlock("fermenter", () -> new BlockFermenter(blockProperties().strength(5)));

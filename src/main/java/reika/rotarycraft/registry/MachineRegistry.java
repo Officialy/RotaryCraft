@@ -52,7 +52,10 @@ import reika.rotarycraft.blockentities.farming.BlockEntityWoodcutter;
 import reika.rotarycraft.models.SprinklerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
+import reika.rotarycraft.models.animated.BeltModel;
 import reika.rotarycraft.models.animated.CompactorModel;
+import reika.rotarycraft.blockentities.transmission.BlockEntityBeltHub;
+import reika.rotarycraft.blockentities.transmission.BlockEntityChainDrive;
 import reika.rotarycraft.models.animated.WetterModel;
 import reika.rotarycraft.models.DryingBedModel;
 import reika.rotarycraft.models.SpawnerModel;
@@ -222,7 +225,7 @@ public enum MachineRegistry implements TileEnum {
     SONICBORER("machine.sonicborer", RotaryBlocks.SONICBORER.get(), BlockEntitySonicBorer.class, (modelSet) -> new SonicBorerModel(modelSet.bakeLayer(RotaryModelLayers.SONIC_BORER))),
 //    FUELENGINE("machine.fuelengine", BlockModEngine.class, BlockEntityFuelEngine.class, "RenderFuelEngine", ModList.BCENERGY),
     FILLINGSTATION(true, "machine.fillingstation", RotaryBlocks.FILLING_STATION.get(), BlockEntityFillingStation.class, (modelSet) -> new FillingStationModel(modelSet.bakeLayer(RotaryModelLayers.FILLING_STATION))),
-//    BELT("machine.belt", BlockRotaryCraftMachine.class, BlockEntityBeltHub.class, "RenderBelt"),
+    BELT("machine.belt", RotaryBlocks.BELT.get(), BlockEntityBeltHub.class, (modelSet) -> new BeltModel(modelSet.bakeLayer(RotaryModelLayers.BELT))),
     VANDEGRAFF("machine.vandegraff", RotaryBlocks.VAN_DE_GRAFF.get(), BlockEntityVanDeGraff.class, (modelSet) -> new VanDeGraffModel(modelSet.bakeLayer(RotaryModelLayers.VAN_DE_GRAFF))),
     //    DEFOLIATOR("machine.defoliator", BlockRotaryCraftMachine.class, BlockEntityDefoliator.class, "RenderDefoliator"),
     BIGFURNACE(true, "machine.bigfurnace", RotaryBlocks.LAVA_SMELTORY.get(), BlockEntityLavaSmeltery.class, PowerTypes.RF, (modelSet) -> new BigFurnaceModel(modelSet.bakeLayer(RotaryModelLayers.BIG_FURNACE))),
@@ -243,7 +246,7 @@ public enum MachineRegistry implements TileEnum {
     COMPOSTER("machine.composter", RotaryBlocks.COMPOSTER.get(), BlockEntityComposter.class),
     //    ANTIAIR("machine.antiair", BlockRotaryCraftMachine.class, BlockEntityAAGun.class, "RenderAAGun"),
     PIPEPUMP("machine.pipepump", RotaryBlocks.PIPEPUMP.get(), BlockEntityPipePump.class, (modelSet) -> new PipePumpModel(modelSet.bakeLayer(RotaryModelLayers.PIPE_PUMP))),
-//    CHAIN("machine.chain", BlockRotaryCraftMachine.class, BlockEntityChainDrive.class, "RenderBelt"),
+    CHAIN("machine.chain", RotaryBlocks.CHAIN.get(), BlockEntityChainDrive.class, (modelSet) -> new BeltModel(modelSet.bakeLayer(RotaryModelLayers.BELT))),
     CENTRIFUGE(true, "machine.centrifuge", RotaryBlocks.CENTRIFUGE.get(), BlockEntityCentrifuge.class, (modelSet) -> new CentrifugeModel(modelSet.bakeLayer(RotaryModelLayers.CENTRIFUGE))),
     DRYING("machine.drying", RotaryBlocks.DRYING.get(), BlockEntityDryingBed.class, (modelSet) -> new DryingBedModel(modelSet.bakeLayer(RotaryModelLayers.DRYING_BED))),
     WETTER("machine.wetter", RotaryBlocks.WETTER.get(), BlockEntityWetter.class, (modelSet) -> new WetterModel(modelSet.bakeLayer(RotaryModelLayers.WETTER))),

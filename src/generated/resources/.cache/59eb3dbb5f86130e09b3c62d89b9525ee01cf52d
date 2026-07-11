@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T13:36:48.6215699	Loot Tables
+// 26.2	2026-07-11T19:08:35.0690338	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 35618a08eae47dc11e8f8bffb79ff5ecd0cc5286 data/rotarycraft/loot_table/blocks/air_cannon.json
@@ -17,6 +17,7 @@ f451f5bcca31cb0858db70e1d80fba0744300ee5 data/rotarycraft/loot_table/blocks/bedr
 f645fa88a66b8c34fd3c17fe0b540a1be0bd3495 data/rotarycraft/loot_table/blocks/bedrock_gearbox_8x.json
 9161526ec29ffe768edd257e7772ee8e8998723c data/rotarycraft/loot_table/blocks/bedrock_pipe.json
 e2f99dc44b056aafaa3a4a4f5dbc5549d4fdae97 data/rotarycraft/loot_table/blocks/bedrock_shaft.json
+77aafef6a3b480be57c3710cc222652fc235fa21 data/rotarycraft/loot_table/blocks/belt_hub.json
 1a7fd5dacae90d892335a16ad7cd5094165edd1e data/rotarycraft/loot_table/blocks/bevel_gears.json
 bf8448da262b713fc31e9783c55e330c0d594097 data/rotarycraft/loot_table/blocks/blastglass.json
 b4f7aab334ffa170b4003149b75c44fbae719338 data/rotarycraft/loot_table/blocks/blastpane.json
@@ -31,6 +32,7 @@ d936c0f42ec443117b3737b0ef4af161f190aaf8 data/rotarycraft/loot_table/blocks/bus_
 770fefa9d468b89fb3910c64ef252d344722216b data/rotarycraft/loot_table/blocks/canola.json
 6d1fd74f48e6f406db5c19eaeac24f45d2a3dbca data/rotarycraft/loot_table/blocks/cave_scanner.json
 f2d373f46e8db566e79302902d47ae8ac3e610f7 data/rotarycraft/loot_table/blocks/centrifuge.json
+ffdea0b1f0885057b8f9924945ce4606f0350748 data/rotarycraft/loot_table/blocks/chain_drive.json
 0527b0ba51603d99db0aef83840ece5ae5a3ea92 data/rotarycraft/loot_table/blocks/clutch.json
 00b13e029ed201a01512f23988b213315ff80ad4 data/rotarycraft/loot_table/blocks/coil.json
 676201e0bcb9d3d0ac3e49feac5e0f3c03d4a8e0 data/rotarycraft/loot_table/blocks/coke_block.json
