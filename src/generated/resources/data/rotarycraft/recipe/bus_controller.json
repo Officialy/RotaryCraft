@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:circuit_board",
+    "M": "rotarycraft:ball_bearing",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SMS",
+    "MCM",
+    "SMS"
+  ],
+  "result": {
+    "id": "rotarycraft:bus_controller"
+  }
+}

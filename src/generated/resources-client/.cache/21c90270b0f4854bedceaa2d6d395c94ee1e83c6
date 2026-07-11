@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T13:01:44.0357509	Model Definitions - rotarycraft
+// 26.2	2026-07-11T13:22:03.2704942	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
@@ -25,6 +25,7 @@ b7fafacabb9e7084c9113fa21a09cfbaf6c037a9 assets/rotarycraft/blockstates/bedrock_
 d5415c700d2fbfa05e36c75e9e9dadedf785fc21 assets/rotarycraft/blockstates/borer.json
 b6f352ece08a681738aa47bfba37e8f4f0636188 assets/rotarycraft/blockstates/bridge.json
 e6098e9855d6c50cc58c849ecf3e2d75248c8a81 assets/rotarycraft/blockstates/bucket_filler.json
+c463d0e97b4bf2d8f3118431a3011568cbced51c assets/rotarycraft/blockstates/bus_controller.json
 21d097326c1c54ad795e6ddb90bd38b41f8f7cf3 assets/rotarycraft/blockstates/bypass.json
 df4a8d6dd638382d576bb63eb0e7d58ee0df966d assets/rotarycraft/blockstates/cave_scanner.json
 9f8fe839ae137dbb916bba6e2a404aeb24f054c0 assets/rotarycraft/blockstates/centrifuge.json
@@ -98,6 +99,7 @@ ca9d685e05d69cd4869f9fe6d3e5f36add8e6b52 assets/rotarycraft/blockstates/multi_cl
 dc44db630c05405b25b8330a6b9a5c6a8539b61b assets/rotarycraft/blockstates/performance_engine.json
 f67fd78005f360ce031f2a59ad071c3a39169960 assets/rotarycraft/blockstates/pipe_pump.json
 c793c493df8c93186b481f4241931de2e560352c assets/rotarycraft/blockstates/player_detector.json
+6a1099402ddf3c06fdedc634898123a83e669ce9 assets/rotarycraft/blockstates/power_bus.json
 510ac9d219f684b6d9dd780d96d71ad79a7b76c6 assets/rotarycraft/blockstates/pulse_jet_furnace.json
 99bf54c231e8214a3456e8e56caefbecefcc763c assets/rotarycraft/blockstates/pump.json
 265d5a0492e59bc508cb7929d3fa2481d2a5770f assets/rotarycraft/blockstates/refresher.json
@@ -203,6 +205,7 @@ ee7857b5fb61aa4a494d61e7a06a8d7b4f6a1775 assets/rotarycraft/items/belt.json
 ac634ca982c8d56b38802b7c924d6849ffa0483c assets/rotarycraft/items/brake_disc.json
 a5a93dbcc2bcf9de8fa4ff53780e009d8dcebc08 assets/rotarycraft/items/bridge.json
 00eb004a03d60c435f4d4d8754196a643ee6c1ce assets/rotarycraft/items/bucket_filler.json
+2ae68bec67237311f819e0c1cb2d68a6353540aa assets/rotarycraft/items/bus_controller.json
 81ad39005a1a4e761740a45771cead62abeece57 assets/rotarycraft/items/bypass.json
 c5377bb5dcd8a735bf7402a38e126e00e333606a assets/rotarycraft/items/calculator.json
 648a2f844412044e249884b96ecaad5c41dfee2e assets/rotarycraft/items/canola_seeds.json
@@ -398,6 +401,7 @@ a8ce801ddc220cf7a166b9b883f731b351c8736d assets/rotarycraft/items/obsidian_maker
 160c06449358f0e946857a09c11f0e5d2c22878b assets/rotarycraft/items/performance_engine.json
 7ef88800ebb0fe2a6912004b00e227bbb51b1e44 assets/rotarycraft/items/pipe_pump.json
 8787e275561422a23ab1d0cbbb8035400c43f71e assets/rotarycraft/items/player_detector.json
+1f115ea0e9c2946922c9feeec416dfac0443d45a assets/rotarycraft/items/power_bus.json
 12111f73e351060ca4469de0ef478c69f236f51c assets/rotarycraft/items/power_module.json
 e1250ec8c9443eb36cec8ed13bef6808918277a2 assets/rotarycraft/items/pressure_head.json
 7ebf9fa5e60ea2dbb3b205ba5e5208c0e4046466 assets/rotarycraft/items/prismane.json
@@ -534,6 +538,7 @@ e8b5591fdecfd5845120848427fcaa0ec0cff289 assets/rotarycraft/models/block/block_c
 4fd6208433dbacfec1693b6a84666c039408f8ca assets/rotarycraft/models/block/borer.json
 4a6dc497e07a5011c286664c435ad3f2aab28a85 assets/rotarycraft/models/block/bridge.json
 4b879f7444cb9f7c3b52d2a042e3ee1e4ab04774 assets/rotarycraft/models/block/bucket_filler.json
+6ab361c12b35727221e038307abd99d40b340c76 assets/rotarycraft/models/block/bus_controller.json
 0a6fd877bf743adfa0820a64fcaeedaaac2d7b49 assets/rotarycraft/models/block/bypass.json
 7433a9a62dfb6f7181beef47b0bd63188db9c780 assets/rotarycraft/models/block/cave_scanner.json
 89699bca683b500a33defdf49b1fee2cbeee6676 assets/rotarycraft/models/block/centrifuge.json
@@ -607,6 +612,7 @@ d3f69299242eab7162cfb5ae05682d2ac8facf72 assets/rotarycraft/models/block/particl
 a609305f331e8628043dee53ccac5389e7136ba5 assets/rotarycraft/models/block/performance_engine.json
 6ae195feae9f6db12adbc48cf45ec761c3fd42a1 assets/rotarycraft/models/block/pipe_pump.json
 98880258d3c0be70de02a110a306cab1fbfde6ce assets/rotarycraft/models/block/player_detector.json
+3b3788b9690c2987f10c68b5a886190e3fdbb22b assets/rotarycraft/models/block/power_bus.json
 2159830ec1b0525f5f6ac67b7efed60a59ba8d04 assets/rotarycraft/models/block/pulse_jet_furnace.json
 51cbdf9b5122f5605ea2a62d9c6001d02371f2de assets/rotarycraft/models/block/pump.json
 9b75264dabd7027cda456559f43c5ebd80fe2c5f assets/rotarycraft/models/block/refresher.json

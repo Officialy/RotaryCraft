@@ -229,8 +229,8 @@ public enum MachineRegistry implements TileEnum {
     //    DYNAMO("machine.dynamo", BlockModEngine.class, BlockEntityDynamo.class, "RenderDynamo", PowerTypes.RF),
     MAGNETIC(true, "machine.magnetic", RotaryBlocks.MAGNETOSTATIC_ENGINE.get(), BlockEntityMagnetEngine.class, PowerTypes.RF, (modelSet) -> new MagneticModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIC))),
     //    CRYSTALLIZER("machine.crystal", BlockRotaryCraftMachine.class, BlockEntityCrystallizer.class, "RenderCrystal"),
-//    BUSCONTROLLER("machine.buscontroller", BlockRotaryCraftMachine.class, BlockEntityBusController.class),
-//    POWERBUS("machine.bus", BlockRotaryCraftMachine.class, BlockEntityPowerBus.class),
+    BUSCONTROLLER("machine.buscontroller", RotaryBlocks.BUSCONTROLLER.get(), BlockEntityBusController.class),
+    POWERBUS("machine.bus", RotaryBlocks.POWERBUS.get(), BlockEntityPowerBus.class),
     PARTICLE(true, "machine.particle", RotaryBlocks.PARTICLE.get(), BlockEntityParticleEmitter.class/*, (modelSet) -> new ParticleModel(modelSet.bakeLayer(RotaryModelLayers.PARTICLE))*/),
     //    LAWNSPRINKLER("machine.lawnsprinkler", BlockRotaryCraftMachine.class, BlockEntityLawnSprinkler.class, "RenderLawnSprinkler"),
     GRINDSTONE(true, "machine.grindstone", RotaryBlocks.GRINDSTONE.get(), BlockEntityGrindstone.class, (modelSet) -> new GrindstoneModel(modelSet.bakeLayer(RotaryModelLayers.GRINDSTONE))),
@@ -1029,7 +1029,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
                     true;
             default -> false;
         };

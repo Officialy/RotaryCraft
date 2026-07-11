@@ -28,6 +28,7 @@ import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityLaunchCannon;
 import reika.rotarycraft.base.blockentity.EnergyToPowerBase;
 import reika.rotarycraft.blockentities.farming.BlockEntitySpawnerController;
+import reika.rotarycraft.blockentities.transmission.BlockEntityPowerBus;
 import reika.rotarycraft.blockentities.BlockEntityBlower;
 import reika.rotarycraft.blockentities.BlockEntityItemCannon;
 import reika.rotarycraft.blockentities.BlockEntityPlayerDetector;
@@ -444,11 +445,13 @@ public class PacketHandlerCore implements PacketHandler {
                     is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().putString("file", stringdata);
                     break;
                 }
-                /*case POWERBUS:
-                    BlockEntityPowerBus bus = (BlockEntityPowerBus) te;
-                    Direction dir = Direction.values()[data[0] + 2];
-                    bus.setMode(dir, !bus.isSideSpeedMode(dir));
-                    break;*/
+                case POWERBUS: {
+                    BlockEntityPowerBus pbus = (BlockEntityPowerBus) te;
+                    Direction pdir = Direction.values()[data[0] + 2];
+                    pbus.setMode(pdir, !pbus.isSideSpeedMode(pdir));
+                    pbus.setChanged();
+                    break;
+                }
                 case PARTICLES:
                     ((BlockEntityParticleEmitter) te).particleType = ReikaParticleHelper.particleList[data[0]];
                     break;

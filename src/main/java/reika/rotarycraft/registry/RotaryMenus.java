@@ -67,6 +67,7 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerWetter>> WETTER = register("wetter", ContainerWetter::new);
     Supplier<MenuType<ContainerDryingBed>> DRYING = register("drying_bed", ContainerDryingBed::new);
     Supplier<MenuType<ContainerSpawnerController>> SPAWNERCONTROLLER = register("spawner_controller", ContainerSpawnerController::new);
+    Supplier<MenuType<ContainerPowerBus>> POWERBUS = register("power_bus", ContainerPowerBus::new);
     Supplier<MenuType<ContainerIgniter>> IGNITER = register("igniter", ContainerIgniter::new);
     Supplier<MenuType<ContainerFractionator>> FRACTIONATOR = register("fractionator", ContainerFractionator::new);
     Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);

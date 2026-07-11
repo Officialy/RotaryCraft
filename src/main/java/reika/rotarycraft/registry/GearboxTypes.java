@@ -45,6 +45,47 @@ public enum GearboxTypes {
         return GearboxTypes.valueOf(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("type", ""));
     }
 
+    /** Gear-unit item -> transmission ratio (2/4/8/16), or 0 for anything else (26.2: the legacy
+     * metadata part-items are individual registered items now). */
+    public static int getRatioFromPartItem(ItemStack is) {
+        if (is == null || is.isEmpty())
+            return 0;
+        var item = is.getItem();
+        if (item == RotaryItems.HSLA_STEEL_GEAR_2x.get() || item == RotaryItems.TUNGSTEN_ALLOY_GEAR_2x.get()
+                || item == RotaryItems.DIAMOND_GEAR_2x.get() || item == RotaryItems.BEDROCK_ALLOY_GEAR_2x.get())
+            return 2;
+        if (item == RotaryItems.HSLA_STEEL_GEAR_4x.get() || item == RotaryItems.TUNGSTEN_ALLOY_GEAR_4x.get()
+                || item == RotaryItems.DIAMOND_GEAR_4x.get() || item == RotaryItems.BEDROCK_ALLOY_GEAR_4x.get())
+            return 4;
+        if (item == RotaryItems.HSLA_STEEL_GEAR_8x.get() || item == RotaryItems.TUNGSTEN_ALLOY_GEAR_8x.get()
+                || item == RotaryItems.DIAMOND_GEAR_8x.get() || item == RotaryItems.BEDROCK_ALLOY_GEAR_8x.get())
+            return 8;
+        if (item == RotaryItems.HSLA_STEEL_GEAR_16x.get() || item == RotaryItems.TUNGSTEN_ALLOY_GEAR_16x.get()
+                || item == RotaryItems.DIAMOND_GEAR_16x.get() || item == RotaryItems.BEDROCK_ALLOY_GEAR_16x.get())
+            return 16;
+        return 0;
+    }
+
+    /** Gear-unit item -> its gearbox material tier (null for non-gear items). */
+    public static GearboxTypes getGearUnitMaterial(ItemStack is) {
+        if (is == null || is.isEmpty())
+            return null;
+        var item = is.getItem();
+        if (item == RotaryItems.HSLA_STEEL_GEAR_2x.get() || item == RotaryItems.HSLA_STEEL_GEAR_4x.get()
+                || item == RotaryItems.HSLA_STEEL_GEAR_8x.get() || item == RotaryItems.HSLA_STEEL_GEAR_16x.get())
+            return STEEL;
+        if (item == RotaryItems.TUNGSTEN_ALLOY_GEAR_2x.get() || item == RotaryItems.TUNGSTEN_ALLOY_GEAR_4x.get()
+                || item == RotaryItems.TUNGSTEN_ALLOY_GEAR_8x.get() || item == RotaryItems.TUNGSTEN_ALLOY_GEAR_16x.get())
+            return TUNGSTEN;
+        if (item == RotaryItems.DIAMOND_GEAR_2x.get() || item == RotaryItems.DIAMOND_GEAR_4x.get()
+                || item == RotaryItems.DIAMOND_GEAR_8x.get() || item == RotaryItems.DIAMOND_GEAR_16x.get())
+            return DIAMOND;
+        if (item == RotaryItems.BEDROCK_ALLOY_GEAR_2x.get() || item == RotaryItems.BEDROCK_ALLOY_GEAR_4x.get()
+                || item == RotaryItems.BEDROCK_ALLOY_GEAR_8x.get() || item == RotaryItems.BEDROCK_ALLOY_GEAR_16x.get())
+            return BEDROCK;
+        return null;
+    }
+
     public static GearboxTypes getMaterialFromCraftingItem(ItemStack is) {
         Tag idx = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().get("material");
 //        for (GearboxTypes g : typeList) {

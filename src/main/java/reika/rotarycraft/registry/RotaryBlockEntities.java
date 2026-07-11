@@ -152,6 +152,10 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityDryingBed::new, RotaryBlocks.DRYING.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySpawnerController>> SPAWNERCONTROLLER = BLOCK_ENTITIES.register("spawner_controller", () ->
             new BlockEntityType<>(BlockEntitySpawnerController::new, RotaryBlocks.SPAWNERCONTROLLER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityPowerBus>> POWERBUS = BLOCK_ENTITIES.register("power_bus", () ->
+            new BlockEntityType<>(BlockEntityPowerBus::new, RotaryBlocks.POWERBUS.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityBusController>> BUSCONTROLLER = BLOCK_ENTITIES.register("bus_controller", () ->
+            new BlockEntityType<>(BlockEntityBusController::new, RotaryBlocks.BUSCONTROLLER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityIgniter>> IGNITER = BLOCK_ENTITIES.register("igniter", () ->
             new BlockEntityType<>(BlockEntityIgniter::new, RotaryBlocks.IGNITER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->

@@ -992,6 +992,24 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
+            // POWER BUS (4x): legacy "SMS","MCM","SMS" — steel, bearings, a belt core.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.POWERBUS.get(), 4)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('M', RotaryItems.BALL_BEARING.get())
+                    .define('C', RotaryItems.BELT.get())
+                    .pattern("SMS").pattern("MCM").pattern("SMS")
+                    .unlockedBy("has_bearing", has(RotaryItems.BALL_BEARING.get()))
+                    .save(out);
+
+            // BUS CONTROLLER: legacy "SMS","MCM","SMS" — steel, bearings, a circuit board core.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BUSCONTROLLER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('M', RotaryItems.BALL_BEARING.get())
+                    .define('C', RotaryItems.CIRCUIT_BOARD.get())
+                    .pattern("SMS").pattern("MCM").pattern("SMS")
+                    .unlockedBy("has_circuit", has(RotaryItems.CIRCUIT_BOARD.get()))
+                    .save(out);
+
             // SPAWNER CONTROLLER: legacy "PCP","OGO","g g" — panels, a circuit board, obsidian,
             // gold, glowstone feet.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.SPAWNERCONTROLLER.get())
