@@ -189,6 +189,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> SPAWNERCONTROLLER = registerMachineBlock("spawner_controller", () -> new BlockSpawnerController(blockProperties().strength(5)));
     public static final DeferredBlock<Block> POWERBUS = registerMachineBlock("power_bus", () -> new BlockPowerBus(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BUSCONTROLLER = registerMachineBlock("bus_controller", () -> new BlockBusController(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> ECU = registerMachineBlock("engine_control_unit", () -> new BlockEngineController(blockProperties().strength(5)));
     public static final DeferredBlock<Block> IGNITER = registerMachineBlock("igniter", () -> new BlockIgniter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BLAST_FURNACE = registerMachineBlock("blast_furnace", () -> new BlockBlastFurnace(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FERMENTER = registerMachineBlock("fermenter", () -> new BlockFermenter(blockProperties().strength(5)));

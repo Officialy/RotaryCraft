@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T13:21:49.7067615	Loot Tables
+// 26.2	2026-07-11T13:36:48.6215699	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 35618a08eae47dc11e8f8bffb79ff5ecd0cc5286 data/rotarycraft/loot_table/blocks/air_cannon.json
@@ -54,6 +54,7 @@ af0f1e1a70d3277959581b3d49a559a6098b8e6c data/rotarycraft/loot_table/blocks/diam
 9e24f492a3155e0c3f945fb26995c5eb3185ffc3 data/rotarycraft/loot_table/blocks/drop_processor.json
 848e1d1c3c6831d1efa01d082436dfcd2deeb02a data/rotarycraft/loot_table/blocks/drying_bed.json
 a4bb84b86ac24f56529ffceea1a6a26cf082bbc1 data/rotarycraft/loot_table/blocks/dynamometer.json
+e1607ec405131bc0be9a760a18cc9bed317af092 data/rotarycraft/loot_table/blocks/engine_control_unit.json
 968ae9e23d71faefd69a35d139e13dc3f90bfc29 data/rotarycraft/loot_table/blocks/extractor.json
 cd1a1c186885f4ad6c11093904fa379524201b91 data/rotarycraft/loot_table/blocks/fan.json
 0f4b78145c0fa186b42cbf65994b89f54086dcdb data/rotarycraft/loot_table/blocks/fermenter.json

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/engine_control_unit",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/engine_control_unit",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/engine_control_unit"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/engine_control_unit",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/engine_control_unit",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/engine_control_unit",
+      "y": 270
+    }
+  }
+}

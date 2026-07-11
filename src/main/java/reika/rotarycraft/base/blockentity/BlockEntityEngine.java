@@ -50,6 +50,7 @@ import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.*;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityEngineController;
 import reika.rotarycraft.items.tools.ItemIntegratedGearbox;
 import reika.rotarycraft.registry.*;
 
@@ -304,19 +305,19 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         }
     }
 
-//    private BlockEntityEngineController getECU() {
-//        return (BlockEntityEngineController) getAdjacentBlockEntity(isFlipped ? Direction.UP : Direction.DOWN);
-//    }
+    private BlockEntityEngineController getECU() {
+        return getAdjacentBlockEntity(isFlipped ? Direction.UP : Direction.DOWN) instanceof BlockEntityEngineController te ? te : null;
+    }
 
     private void updateSpeed(int maxspeed, boolean revup) {
-//        if (this.hasECU() && this.canBeThrottled()) {
-//            BlockEntityEngineController te = this.getECU();
-//            if (te != null) {
-//                maxspeed *= te.getSpeedMultiplier();
-//            }
-//            if (omega > maxspeed)
-//                revup = false;
-//        }
+        if (this.hasECU() && this.canBeThrottled()) {
+            BlockEntityEngineController te = this.getECU();
+            if (te != null) {
+                maxspeed *= te.getSpeedMultiplier();
+            }
+            if (omega > maxspeed)
+                revup = false;
+        }
         if (revup) {
             if (omega < maxspeed) {
                 omega += 4 * ReikaMathLibrary.logbase(maxspeed + 1, 2);
@@ -332,8 +333,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     private boolean hasECU() {
-//        return this.getMachine(isFlipped ? Direction.UP : Direction.DOWN) == MachineRegistry.ECU;
-        return false;
+        return this.getECU() != null;
     }
 
     /**
@@ -437,37 +437,30 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         }
         float pitch = 1F;
         if (type.isECUControllable() && this.hasECU()) {
-//            BlockEntityEngineController te = this.getECU();
-//            if (te != null) {
-//                if (te.canProducePower()) {
-//                    if (this.canBeThrottled()) {
-//                        int fueltime = type.getFuelUnitDuration();
-//                        if (omega >= type.getSpeed() * te.getSpeedMultiplier()) {
-//                            //omega = (int)(omega*te.getSpeedMultiplier());
-//                            int max = (int) (type.getSpeed() * te.getSpeedMultiplier());
-//                            //this.updateSpeed(max, omega < max);
-//                        } else {
-//                            fueltime = Math.max(type.getFuelUnitDuration() / 4, 1);
-//                        }
-//                        timer.setCap("fuel", fueltime);
-//                        int fuelcap = timer.getCapOf("fuel");
-//                        fuelcap = fuelcap * te.getFuelMultiplier(type.type);
-//                        timer.setCap("fuel", fuelcap);
-//                        pitch = te.getSoundStretch();
-//                        soundfactor = 1F / te.getSoundStretch();
-//                        int soundcap = timer.getCapOf("sound");
-//                        soundcap = (int) (soundcap * soundfactor);
-//                        timer.setCap("sound", soundcap);
-//                        int tempcap = timer.getCapOf("temperature");
-//                        tempcap *= soundfactor;
-//                        timer.setCap("temperature", tempcap);
-//                    }
-//                } else {
-//                    //this.updateSpeed(0, false);
-//                    this.resetPower();
-//                    soundtick = 0;
-//                }
-//            }
+            BlockEntityEngineController te = this.getECU();
+            if (te != null) {
+                if (te.canProducePower()) {
+                    if (this.canBeThrottled()) {
+                        int fueltime = type.getFuelUnitDuration();
+                        if (omega < type.getSpeed() * te.getSpeedMultiplier()) {
+                            fueltime = Math.max(type.getFuelUnitDuration() / 4, 1);
+                        }
+                        timer.setCap("fuel", fueltime);
+                        int fuelcap = timer.getCapOf("fuel");
+                        fuelcap = fuelcap * te.getFuelMultiplier(type.type);
+                        timer.setCap("fuel", fuelcap);
+                        pitch = te.getSoundStretch();
+                        // 26.2: the legacy "sound" ticker is gone (engine drones are client-side
+                        // looping sound instances); only the temperature cadence still stretches.
+                        float soundfactor = 1F / te.getSoundStretch();
+                        int tempcap = timer.getCapOf("temperature");
+                        tempcap *= soundfactor;
+                        timer.setCap("temperature", tempcap);
+                    }
+                } else {
+                    this.resetPower();
+                }
+            }
         }
 
         this.basicPowerReceiver();

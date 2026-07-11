@@ -12,6 +12,7 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.entity.transmission.BlockGearbox;
 import reika.rotarycraft.blockentities.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityEngineController;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityPipePump;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFurnaceHeater;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
@@ -156,6 +157,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityPowerBus::new, RotaryBlocks.POWERBUS.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityBusController>> BUSCONTROLLER = BLOCK_ENTITIES.register("bus_controller", () ->
             new BlockEntityType<>(BlockEntityBusController::new, RotaryBlocks.BUSCONTROLLER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityEngineController>> ECU = BLOCK_ENTITIES.register("engine_control_unit", () ->
+            new BlockEntityType<>(BlockEntityEngineController::new, RotaryBlocks.ECU.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityIgniter>> IGNITER = BLOCK_ENTITIES.register("igniter", () ->
             new BlockEntityType<>(BlockEntityIgniter::new, RotaryBlocks.IGNITER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->

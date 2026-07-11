@@ -992,6 +992,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
+            // ECU: legacy "IPI","IGI","IRI" — steel shell, circuit board, gold, redstone.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.ECU.get())
+                    .define('I', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('P', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('G', Items.GOLD_INGOT)
+                    .define('R', Items.REDSTONE)
+                    .pattern("IPI").pattern("IGI").pattern("IRI")
+                    .unlockedBy("has_circuit", has(RotaryItems.CIRCUIT_BOARD.get()))
+                    .save(out);
+
             // POWER BUS (4x): legacy "SMS","MCM","SMS" — steel, bearings, a belt core.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.POWERBUS.get(), 4)
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
