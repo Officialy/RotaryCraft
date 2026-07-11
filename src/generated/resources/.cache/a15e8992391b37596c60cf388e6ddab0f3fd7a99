@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T19:24:20.8500745	RotaryCraft Recipes
+// 26.2	2026-07-11T19:44:38.0258686	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -90,6 +90,7 @@ fa722e7a14e9094e07dc67e1dc46232ae9fbd832 data/rotarycraft/advancement/recipes/re
 cba48326b63ce95742854265cc1759a5dee4cbad data/rotarycraft/advancement/recipes/redstone/dynamometer_silicon.json
 76d32a2af233192b55802b3eb5c5a547e120b887 data/rotarycraft/advancement/recipes/redstone/engine_control_unit.json
 13bef9d6402c5bf6e0a58a884d3cc6c9571f97d9 data/rotarycraft/advancement/recipes/redstone/fan.json
+af04d42eeb5e69d235b8c2ef9b10cd5b47b991ed data/rotarycraft/advancement/recipes/redstone/fertilizer.json
 32afc3e5cc9ba913a0fa6899957058d6ed5dc0b9 data/rotarycraft/advancement/recipes/redstone/filler.json
 cf11f7587052cd5d29eee0757b821e098d7eb8a7 data/rotarycraft/advancement/recipes/redstone/filling_station.json
 a3be9d29dffb48bbca99d0b767f09678ff4d97d7 data/rotarycraft/advancement/recipes/redstone/floodlight.json
@@ -319,6 +320,7 @@ fc015e772f619cbd2b18e20a3e9af6ef3eadb96c data/rotarycraft/recipe/extractor/redst
 a362f05a07b2f04b5e89c9ce8cb5527b81692b92 data/rotarycraft/recipe/fan.json
 85ca45d01aeb7294d1465c2b339fe0165023fd28 data/rotarycraft/recipe/fermenter/sludge.json
 09416f00826314d71676a5a7685ff14370413c0a data/rotarycraft/recipe/fermenter/yeast.json
+8e232203e9972796c92d435810d971aaabf4b606 data/rotarycraft/recipe/fertilizer.json
 e704c3b03bc83e4b0ed18aa3de70321754a9d01c data/rotarycraft/recipe/filler.json
 dd2773e65f6bee0f94738554d29ebe53d9b674a2 data/rotarycraft/recipe/filling_station.json
 e6d958a8923699340aa65acb78637847b239b59c data/rotarycraft/recipe/floodlight.json

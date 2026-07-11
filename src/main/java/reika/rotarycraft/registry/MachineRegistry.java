@@ -53,7 +53,9 @@ import reika.rotarycraft.models.SprinklerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.models.animated.BeltModel;
+import reika.rotarycraft.models.animated.FertilizerModel;
 import reika.rotarycraft.models.animated.LawnSprinklerModel;
+import reika.rotarycraft.blockentities.farming.BlockEntityFertilizer;
 import reika.rotarycraft.blockentities.farming.BlockEntityLawnSprinkler;
 import reika.rotarycraft.models.animated.CompactorModel;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBeltHub;
@@ -218,7 +220,7 @@ public enum MachineRegistry implements TileEnum {
     ARROWGUN(true, "machine.arrowgun", RotaryBlocks.MACHINEGUN.get(), BlockEntityMachineGun.class),
     BOILER("machine.frictionboiler", RotaryBlocks.FRICTION_BOILER.get(), BlockEntityBoiler.class, PowerTypes.STEAM, (modelSet) -> new BoilerModel(modelSet.bakeLayer(RotaryModelLayers.BOILER))),
     STEAMTURBINE(true, "machine.steamturbine", RotaryBlocks.STEAM_TURBINE.get(), BlockEntitySteam.class, PowerTypes.STEAM, (modelSet) -> new SteamTurbineModel(modelSet.bakeLayer(RotaryModelLayers.STEAM_TURBINE))),
-    //    FERTILIZER(true, "machine.fertilizer", BlockRotaryCraftMachine.class, BlockEntityFertilizer.class, "RenderFertilizer"),
+    FERTILIZER(true, "machine.fertilizer", RotaryBlocks.FERTILIZER.get(), BlockEntityFertilizer.class, (modelSet) -> new FertilizerModel(modelSet.bakeLayer(RotaryModelLayers.FERTILIZER))),
     LAVAMAKER(true, "machine.lavamaker", RotaryBlocks.LAVAMAKER.get(), BlockEntityLavaMaker.class, (modelSet) -> new LavaMakerModel(modelSet.bakeLayer(RotaryModelLayers.LAVA_MAKER))),
     //GENERATOR("machine.generator", BlockModEngine.class, BlockEntityGenerator.class, "RenderGenerator", PowerTypes.EU),
     //ELECTRICMOTOR("machine.electricmotor", BlockModEngine.class, BlockEntityElectricMotor.class, "RenderElecMotor", PowerTypes.EU),
@@ -1035,7 +1037,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
                     true;
             default -> false;
         };

@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T19:24:20.8555904	Loot Tables
+// 26.2	2026-07-11T19:44:38.0319752	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 35618a08eae47dc11e8f8bffb79ff5ecd0cc5286 data/rotarycraft/loot_table/blocks/air_cannon.json
@@ -60,6 +60,7 @@ e1607ec405131bc0be9a760a18cc9bed317af092 data/rotarycraft/loot_table/blocks/engi
 968ae9e23d71faefd69a35d139e13dc3f90bfc29 data/rotarycraft/loot_table/blocks/extractor.json
 cd1a1c186885f4ad6c11093904fa379524201b91 data/rotarycraft/loot_table/blocks/fan.json
 0f4b78145c0fa186b42cbf65994b89f54086dcdb data/rotarycraft/loot_table/blocks/fermenter.json
+82f2751c0fccdfb177bf562ac277df8f5a70dc1e data/rotarycraft/loot_table/blocks/fertilizer.json
 5f5b2f81181cabf5bb4e2d62d7c149c4e01c987b data/rotarycraft/loot_table/blocks/filler.json
 d66019895527f79f5b4ed2f728fbb393c29701af data/rotarycraft/loot_table/blocks/filling_station.json
 4e5b20b9baf488144f2189deb350bf7cd80d79ca data/rotarycraft/loot_table/blocks/floodlight.json

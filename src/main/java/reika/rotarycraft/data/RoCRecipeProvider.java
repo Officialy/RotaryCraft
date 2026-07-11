@@ -992,6 +992,18 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
+            // FERTILIZER: legacy "PIP"," S ","BCB" — pipes, an impeller, a shaft, a chest hopper,
+            // base panels.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FERTILIZER.get())
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('S', RotaryItems.HSLA_SHAFT.get())
+                    .define('C', Items.CHEST)
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .pattern("PIP").pattern(" S ").pattern("BCB")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
             // LAWN SPRINKLER: legacy "PPP"," P ","BIB" — pipes, an impeller, base panels.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.LAWNSPRINKLER.get())
                     .define('P', RotaryBlocks.FLUID_PIPE.get())
