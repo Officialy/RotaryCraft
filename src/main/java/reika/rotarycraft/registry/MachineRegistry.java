@@ -53,6 +53,8 @@ import reika.rotarycraft.models.SprinklerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.models.animated.BeltModel;
+import reika.rotarycraft.models.animated.LawnSprinklerModel;
+import reika.rotarycraft.blockentities.farming.BlockEntityLawnSprinkler;
 import reika.rotarycraft.models.animated.CompactorModel;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBeltHub;
 import reika.rotarycraft.blockentities.transmission.BlockEntityChainDrive;
@@ -236,7 +238,7 @@ public enum MachineRegistry implements TileEnum {
     BUSCONTROLLER("machine.buscontroller", RotaryBlocks.BUSCONTROLLER.get(), BlockEntityBusController.class),
     POWERBUS("machine.bus", RotaryBlocks.POWERBUS.get(), BlockEntityPowerBus.class),
     PARTICLE(true, "machine.particle", RotaryBlocks.PARTICLE.get(), BlockEntityParticleEmitter.class/*, (modelSet) -> new ParticleModel(modelSet.bakeLayer(RotaryModelLayers.PARTICLE))*/),
-    //    LAWNSPRINKLER("machine.lawnsprinkler", BlockRotaryCraftMachine.class, BlockEntityLawnSprinkler.class, "RenderLawnSprinkler"),
+        LAWNSPRINKLER("machine.lawnsprinkler", RotaryBlocks.LAWNSPRINKLER.get(), BlockEntityLawnSprinkler.class, (modelSet) -> new LawnSprinklerModel(modelSet.bakeLayer(RotaryModelLayers.LAWNSPRINKLER))),
     GRINDSTONE(true, "machine.grindstone", RotaryBlocks.GRINDSTONE.get(), BlockEntityGrindstone.class, (modelSet) -> new GrindstoneModel(modelSet.bakeLayer(RotaryModelLayers.GRINDSTONE))),
     BLOWER("machine.blower", RotaryBlocks.BLOWER.get(), BlockEntityBlower.class), // no custom model in original
     //    PORTALSHAFT("machine.portalshaft", BlockRotaryCraftMachine.class, BlockEntityPortalShaft.class, "RenderPortalShaft"),
