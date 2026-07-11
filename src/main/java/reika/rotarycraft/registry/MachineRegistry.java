@@ -55,6 +55,8 @@ import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.models.animated.CompactorModel;
 import reika.rotarycraft.models.animated.WetterModel;
 import reika.rotarycraft.models.DryingBedModel;
+import reika.rotarycraft.models.SpawnerModel;
+import reika.rotarycraft.blockentities.farming.BlockEntitySpawnerController;
 import reika.rotarycraft.blockentities.processing.BlockEntityWetter;
 import reika.rotarycraft.blockentities.processing.BlockEntityDryingBed;
 import reika.rotarycraft.blockentities.level.*;
@@ -148,7 +150,7 @@ public enum MachineRegistry implements TileEnum {
 //    FIREWORK(true, "machine.firework", BlockRotaryCraftMachine.class, BlockEntityFireworkMachine.class),
     SPRINKLER(true, "machine.sprinkler", RotaryBlocks.SPRINKLER.get(), BlockEntitySprinkler.class, (modelSet) -> new SprinklerModel(modelSet.bakeLayer(RotaryModelLayers.SPRINKLER))),
     WOODCUTTER("machine.woodcutter", RotaryBlocks.WOODCUTTER.get(), BlockEntityWoodcutter.class, (modelSet) -> new WoodcutterModel(modelSet.bakeLayer(RotaryModelLayers.WOODCUTTER))),
-//    SPAWNERCONTROLLER("machine.spawnercontroller", BlockRotaryCraftMachine.class, BlockEntitySpawnerController.class, "RenderSpawner"),
+    SPAWNERCONTROLLER("machine.spawnercontroller", RotaryBlocks.SPAWNERCONTROLLER.get(), BlockEntitySpawnerController.class, (modelSet) -> new SpawnerModel(modelSet.bakeLayer(RotaryModelLayers.SPAWNER_CONTROLLER))),
     PLAYERDETECTOR(true, "machine.playerdetector", RotaryBlocks.PLAYER_DETECTOR.get(), BlockEntityPlayerDetector.class/*, (modelSet) -> new PlayerDetectorModel(modelSet.bakeLayer(RotaryModelLayers.PLAYER_DETECTOR))*/),
     HEATER(true, "machine.heater", RotaryBlocks.HEATER.get(), BlockEntityHeater.class, (modelSet) -> new HeaterModel(modelSet.bakeLayer(RotaryModelLayers.HEATER))),
     //    BAITBOX(true, "machine.baitbox", BlockRotaryCraftMachine.class, BlockEntityBaitBox.class, "RenderBaitBox"),
@@ -1027,7 +1029,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, /*SPAWNERCONTROLLER,*/ HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, /*ECU,*/ WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,/* FERTILIZER,*/ MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, /*BUSCONTROLLER, POWERBUS,*/ BIGFURNACE, /*CRYSTALLIZER,*/ BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
                     true;
             default -> false;
         };

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:circuit_board",
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:obsidian",
+    "P": "rotarycraft:hsla_steel_plate",
+    "g": "minecraft:glowstone"
+  },
+  "pattern": [
+    "PCP",
+    "OGO",
+    "g g"
+  ],
+  "result": {
+    "id": "rotarycraft:spawner_controller"
+  }
+}

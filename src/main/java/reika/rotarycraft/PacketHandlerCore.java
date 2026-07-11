@@ -27,6 +27,7 @@ import reika.rotarycraft.base.blockentity.BlockEntityAimedCannon;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityLaunchCannon;
 import reika.rotarycraft.base.blockentity.EnergyToPowerBase;
+import reika.rotarycraft.blockentities.farming.BlockEntitySpawnerController;
 import reika.rotarycraft.blockentities.BlockEntityBlower;
 import reika.rotarycraft.blockentities.BlockEntityItemCannon;
 import reika.rotarycraft.blockentities.BlockEntityPlayerDetector;
@@ -261,17 +262,17 @@ public class PacketHandlerCore implements PacketHandler {
                 case SPLITTERMODE:
                     ((BlockEntitySplitter) te).setMode(data[0]);
                     break;
-//                case SPAWNERTIMER: {
-//                    //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
-//                    BlockEntitySpawnerController spawner = (BlockEntitySpawnerController) te;
-//                    if (data[0] == -1) {
-//                        spawner.disable = true;
-//                    } else {
-//                        spawner.disable = false;
-//                        spawner.setDelay(data[0]);
-//                    }
-//                    break;
-//                }
+                case SPAWNERTIMER: {
+                    BlockEntitySpawnerController spawner = (BlockEntitySpawnerController) te;
+                    if (data[0] == -1) {
+                        spawner.disable = true;
+                    } else {
+                        spawner.disable = false;
+                        spawner.setDelay(data[0]);
+                    }
+                    spawner.setChanged();
+                    break;
+                }
                 case DETECTOR:
                     //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.format("%d  %d", control, data));
                     ((BlockEntityPlayerDetector) te).selectedrange = data[0];

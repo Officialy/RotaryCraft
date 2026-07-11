@@ -1,4 +1,4 @@
-// 26.2	2026-07-11T00:42:51.6261805	RotaryCraft Recipes
+// 26.2	2026-07-11T13:01:30.4473101	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -142,6 +142,7 @@ ca861c509955ff44b8bce851e9fc74bcb5c2e39e data/rotarycraft/advancement/recipes/re
 6b356a1f19ec984af504b7852fd0d44b9e367c1f data/rotarycraft/advancement/recipes/redstone/solar_tower.json
 3bb7910b592122d05d0e3962bef0f2edb1de4f39 data/rotarycraft/advancement/recipes/redstone/sonic_borer.json
 7357ccc7ed3da81fbad57bad78a6a571a8d3c38b data/rotarycraft/advancement/recipes/redstone/sorter.json
+ef5ea3a22feca5eaee76cdf39991c4493dbb9708 data/rotarycraft/advancement/recipes/redstone/spawner_controller.json
 12db2b5875812445b45b323c0d9f8be3df008207 data/rotarycraft/advancement/recipes/redstone/spiller.json
 326a5e1e1f13784b6bd7c08e1faf735e1601a37a data/rotarycraft/advancement/recipes/redstone/spillway.json
 97baa14d440ffa5e2851abc094f5b05b898c2ff2 data/rotarycraft/advancement/recipes/redstone/splitter.json
@@ -447,6 +448,7 @@ dd6b1818d696573224ef17776555a7fffe3d9088 data/rotarycraft/recipe/silicon_dust.js
 787fb65b8f6291053b7668458fef34c7d0cbca5f data/rotarycraft/recipe/solar_tower.json
 1dae872c15059348e506ef05bba2832aa62e50fc data/rotarycraft/recipe/sonic_borer.json
 269aa17c49d416dcd66e90657c9d8ad8beb89bae data/rotarycraft/recipe/sorter.json
+f1263ada2d1983dfe641d5a3b82fc99d3dc22324 data/rotarycraft/recipe/spawner_controller.json
 f9724dfb6bb343ac4a32da63675f3988f03696ff data/rotarycraft/recipe/spiller.json
 e0562b7a0797459c78555704aa1e0b9a0ee1a805 data/rotarycraft/recipe/spillway.json
 23d7ca21cb5cb88f5e4db836d179b13d9663d394 data/rotarycraft/recipe/splitter.json

@@ -992,6 +992,18 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
+            // SPAWNER CONTROLLER: legacy "PCP","OGO","g g" — panels, a circuit board, obsidian,
+            // gold, glowstone feet.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.SPAWNERCONTROLLER.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('C', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('O', Items.OBSIDIAN)
+                    .define('G', Items.GOLD_INGOT)
+                    .define('g', Items.GLOWSTONE)
+                    .pattern("PCP").pattern("OGO").pattern("g g")
+                    .unlockedBy("has_circuit", has(RotaryItems.CIRCUIT_BOARD.get()))
+                    .save(out);
+
             // ARROWGUN (arrow cannon): legacy "SSS","BDB","SBS" — steel shell, base-panel frame, a
             // dispenser core. S=steelingot, B=basepanel=HSLA_PLATE, D=dispenser.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.MACHINEGUN.get())
