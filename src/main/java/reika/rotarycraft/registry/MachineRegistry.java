@@ -63,6 +63,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityFertilizer;
 import reika.rotarycraft.blockentities.farming.BlockEntityLawnSprinkler;
 import reika.rotarycraft.models.animated.CompactorModel;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBeltHub;
+import reika.rotarycraft.blockentities.transmission.BlockEntitySplitBelt;
 import reika.rotarycraft.blockentities.transmission.BlockEntityChainDrive;
 import reika.rotarycraft.models.animated.WetterModel;
 import reika.rotarycraft.models.DryingBedModel;
@@ -234,6 +235,7 @@ public enum MachineRegistry implements TileEnum {
 //    FUELENGINE("machine.fuelengine", BlockModEngine.class, BlockEntityFuelEngine.class, "RenderFuelEngine", ModList.BCENERGY),
     FILLINGSTATION(true, "machine.fillingstation", RotaryBlocks.FILLING_STATION.get(), BlockEntityFillingStation.class, (modelSet) -> new FillingStationModel(modelSet.bakeLayer(RotaryModelLayers.FILLING_STATION))),
     BELT("machine.belt", RotaryBlocks.BELT.get(), BlockEntityBeltHub.class, (modelSet) -> new BeltModel(modelSet.bakeLayer(RotaryModelLayers.BELT))),
+    SPLITBELT("machine.splitbelt", RotaryBlocks.SPLITBELT.get(), BlockEntitySplitBelt.class, (modelSet) -> new BeltModel(modelSet.bakeLayer(RotaryModelLayers.BELT))),
     VANDEGRAFF("machine.vandegraff", RotaryBlocks.VAN_DE_GRAFF.get(), BlockEntityVanDeGraff.class, (modelSet) -> new VanDeGraffModel(modelSet.bakeLayer(RotaryModelLayers.VAN_DE_GRAFF))),
     //    DEFOLIATOR("machine.defoliator", BlockRotaryCraftMachine.class, BlockEntityDefoliator.class, "RenderDefoliator"),
     BIGFURNACE(true, "machine.bigfurnace", RotaryBlocks.LAVA_SMELTORY.get(), BlockEntityLavaSmeltery.class, PowerTypes.RF, (modelSet) -> new BigFurnaceModel(modelSet.bakeLayer(RotaryModelLayers.BIG_FURNACE))),

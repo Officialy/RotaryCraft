@@ -179,6 +179,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.CRYSTALLIZER.get(), reika.rotarycraft.renders.mi.RenderCrystallizer::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.AUTOBREEDER.get(), reika.rotarycraft.renders.mi.RenderBreeder::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.CHAIN.get(), reika.rotarycraft.renders.dm.RenderBelt::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.SPLITBELT.get(), reika.rotarycraft.renders.dm.RenderBelt::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SPAWNERCONTROLLER.get(), reika.rotarycraft.renders.m.RenderSpawner::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COOLING_FIN.get(), RenderFin::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.HEAT_RAY.get(), RenderHRay::new);

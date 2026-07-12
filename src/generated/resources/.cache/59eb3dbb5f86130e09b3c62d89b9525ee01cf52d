@@ -1,4 +1,4 @@
-// 26.2	2026-07-12T01:04:10.4515646	Loot Tables
+// 26.2	2026-07-12T13:03:51.2289432	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 35618a08eae47dc11e8f8bffb79ff5ecd0cc5286 data/rotarycraft/loot_table/blocks/air_cannon.json
@@ -129,6 +129,7 @@ a0b3df35d7950c3de7455ae795d01eb929c489a0 data/rotarycraft/loot_table/blocks/sort
 e63a836453155c42e692fd08b4ac77ccefc0d8a7 data/rotarycraft/loot_table/blocks/spiller.json
 2a1221678fecd6470924ab3b6bed7bb9050b0748 data/rotarycraft/loot_table/blocks/spillway.json
 ed52b8703c55e65a92844d90d39f08e9afa0625b data/rotarycraft/loot_table/blocks/splitter.json
+ba967aecd047f7c57aedf79e136aa0d391f600d1 data/rotarycraft/loot_table/blocks/split_belt.json
 19fc0c70bc447a0ac2e4b1fc6248d91abf103891 data/rotarycraft/loot_table/blocks/sprinkler.json
 ac7ca8183423e512405cf3005795c2f816eab42d data/rotarycraft/loot_table/blocks/steam_engine.json
 7dd186a6de8401de7b23b6875254966488e22ce8 data/rotarycraft/loot_table/blocks/steam_turbine.json

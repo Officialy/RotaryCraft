@@ -1,4 +1,4 @@
-// 26.2	2026-07-12T01:04:10.4410001	RotaryCraft Recipes
+// 26.2	2026-07-12T13:03:51.2229165	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -155,6 +155,7 @@ ef5ea3a22feca5eaee76cdf39991c4493dbb9708 data/rotarycraft/advancement/recipes/re
 12db2b5875812445b45b323c0d9f8be3df008207 data/rotarycraft/advancement/recipes/redstone/spiller.json
 326a5e1e1f13784b6bd7c08e1faf735e1601a37a data/rotarycraft/advancement/recipes/redstone/spillway.json
 97baa14d440ffa5e2851abc094f5b05b898c2ff2 data/rotarycraft/advancement/recipes/redstone/splitter.json
+a88049003bdda3e172146d77339384415d073ad5 data/rotarycraft/advancement/recipes/redstone/split_belt.json
 5a6e053b2bbdc9847c25e781b0bd777f1fd64c37 data/rotarycraft/advancement/recipes/redstone/sprinkler.json
 852ae9a267d79ee582e23c2cc684f7c2d20a5989 data/rotarycraft/advancement/recipes/redstone/steam_engine.json
 3272be7c7f9b2d91ff4e9118d5bd69b638c2bf3d data/rotarycraft/advancement/recipes/redstone/steam_turbine.json
@@ -473,6 +474,7 @@ f1263ada2d1983dfe641d5a3b82fc99d3dc22324 data/rotarycraft/recipe/spawner_control
 f9724dfb6bb343ac4a32da63675f3988f03696ff data/rotarycraft/recipe/spiller.json
 e0562b7a0797459c78555704aa1e0b9a0ee1a805 data/rotarycraft/recipe/spillway.json
 23d7ca21cb5cb88f5e4db836d179b13d9663d394 data/rotarycraft/recipe/splitter.json
+6ba6dec7a99b342987a9008d215a0dd6da8a7149 data/rotarycraft/recipe/split_belt.json
 3013ce37c96d77fc61b468be7dbac7c127779691 data/rotarycraft/recipe/spring_piston.json
 ffcc0c18bb61ee4c1efc0f04ec52b1d27d6e523d data/rotarycraft/recipe/spring_steel_ingot.json
 c0e74f1d8f224cd5bb0814d58d27860059e99a4e data/rotarycraft/recipe/sprinkler.json

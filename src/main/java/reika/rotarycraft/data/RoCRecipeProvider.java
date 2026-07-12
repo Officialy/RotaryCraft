@@ -1010,6 +1010,15 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
+            // SPLIT BELT (2x): legacy " B ","SgS"," B " — two belt hubs bridged by a geared shaft.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.SPLITBELT.get(), 2)
+                    .define('B', RotaryBlocks.BELT.get())
+                    .define('S', RotaryItems.HSLA_SHAFT.get())
+                    .define('g', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern(" B ").pattern("SgS").pattern(" B ")
+                    .unlockedBy("has_belt_hub", has(RotaryBlocks.BELT.get()))
+                    .save(out);
+
             // AUTO BREEDER: legacy "B B","BBB" — five base panels (a trough).
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.AUTOBREEDER.get())
                     .define('B', RotaryItems.HSLA_PLATE.get())

@@ -175,6 +175,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityCrystallizer::new, RotaryBlocks.CRYSTALLIZER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAutoBreeder>> AUTOBREEDER = BLOCK_ENTITIES.register("auto_breeder", () ->
             new BlockEntityType<>(BlockEntityAutoBreeder::new, RotaryBlocks.AUTOBREEDER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySplitBelt>> SPLITBELT = BLOCK_ENTITIES.register("split_belt", () ->
+            new BlockEntityType<>(BlockEntitySplitBelt::new, RotaryBlocks.SPLITBELT.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityIgniter>> IGNITER = BLOCK_ENTITIES.register("igniter", () ->
             new BlockEntityType<>(BlockEntityIgniter::new, RotaryBlocks.IGNITER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->

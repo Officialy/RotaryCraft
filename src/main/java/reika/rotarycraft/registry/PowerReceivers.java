@@ -81,6 +81,7 @@ public enum PowerReceivers {
     SORTING(1024),
     FILLINGSTATION(1024),
     BELT(),
+    SPLITBELT(),
     VANDEGRAFF(),
     DEFOLIATOR(16384),
     BIGFURNACE(2048),

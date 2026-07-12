@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:belt_hub",
+    "S": "rotarycraft:hsla_steel_rod",
+    "g": "rotarycraft:hsla_steel_gear"
+  },
+  "pattern": [
+    " B ",
+    "SgS",
+    " B "
+  ],
+  "result": {
+    "count": 2,
+    "id": "rotarycraft:split_belt"
+  }
+}
