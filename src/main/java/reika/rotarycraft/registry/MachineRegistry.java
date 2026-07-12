@@ -53,7 +53,9 @@ import reika.rotarycraft.models.SprinklerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.models.animated.BeltModel;
+import reika.rotarycraft.models.BreederModel;
 import reika.rotarycraft.models.animated.CrystallizerModel;
+import reika.rotarycraft.blockentities.farming.BlockEntityAutoBreeder;
 import reika.rotarycraft.models.animated.FertilizerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
 import reika.rotarycraft.models.animated.LawnSprinklerModel;
@@ -164,7 +166,7 @@ public enum MachineRegistry implements TileEnum {
     PLAYERDETECTOR(true, "machine.playerdetector", RotaryBlocks.PLAYER_DETECTOR.get(), BlockEntityPlayerDetector.class/*, (modelSet) -> new PlayerDetectorModel(modelSet.bakeLayer(RotaryModelLayers.PLAYER_DETECTOR))*/),
     HEATER(true, "machine.heater", RotaryBlocks.HEATER.get(), BlockEntityHeater.class, (modelSet) -> new HeaterModel(modelSet.bakeLayer(RotaryModelLayers.HEATER))),
     //    BAITBOX(true, "machine.baitbox", BlockRotaryCraftMachine.class, BlockEntityBaitBox.class, "RenderBaitBox"),
-//    AUTOBREEDER(true, "machine.breeder", BlockRotaryCraftMachine.class, BlockEntityAutoBreeder.class, "RenderBreeder"),
+    AUTOBREEDER(true, "machine.breeder", RotaryBlocks.AUTOBREEDER.get(), BlockEntityAutoBreeder.class, (modelSet) -> new BreederModel(modelSet.bakeLayer(RotaryModelLayers.AUTOBREEDER))),
     ECU("machine.ecu", RotaryBlocks.ECU.get(), BlockEntityEngineController.class),
     SMOKEDETECTOR("machine.smokedetector", RotaryBlocks.SMOKE_DETECTOR.get(), BlockEntitySmokeDetector.class, (modelSet) -> new SmokeDetectorModel(modelSet.bakeLayer(RotaryModelLayers.SMOKE_DETECTOR))),
     //    MOBRADAR("machine.mobradar", BlockRotaryCraftMachine.class, BlockEntityMobRadar.class, "RenderMobRadar"),

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate"
+  },
+  "pattern": [
+    "B B",
+    "BBB"
+  ],
+  "result": {
+    "id": "rotarycraft:auto_breeder"
+  }
+}

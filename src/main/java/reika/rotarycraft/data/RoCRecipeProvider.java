@@ -1010,6 +1010,13 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
+            // AUTO BREEDER: legacy "B B","BBB" — five base panels (a trough).
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.AUTOBREEDER.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .pattern("B B").pattern("BBB")
+                    .unlockedBy("has_panel", has(RotaryItems.HSLA_PLATE.get()))
+                    .save(out);
+
             // CRYSTALLIZER: legacy "SFS","FIF","BBB" — steel, cooling fins, an impeller, panels.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.CRYSTALLIZER.get())
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
