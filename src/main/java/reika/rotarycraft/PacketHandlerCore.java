@@ -355,11 +355,9 @@ public class PacketHandlerCore implements PacketHandler {
                             (reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest) te;
                     int pg = Math.max(0, Math.min(data[0], chest.getMaxPage() - 1));
                     chest.page = pg;
+                    chest.syncAllData(false); //push the new page to the client before it rebuilds the menu
                     if (ep instanceof ServerPlayer sp)
-                        sp.openMenu(chest, buf -> {
-                            buf.writeBlockPos(chest.getBlockPos());
-                            buf.writeInt(pg);
-                        });
+                        sp.openMenu(chest, chest.getBlockPos()); //pos-only form, matching the block's right-click open
                     break;
                 }
                 case COILSPEED:

@@ -27,29 +27,40 @@ public class ContainerScaleChest extends IOMachineContainer<BlockEntityScaleable
 
     public final int page;
 
-    // Client-side
+    // Client-side. Only the pos is in the buffer (the vanilla openMenu(MenuProvider, BlockPos) form,
+    // which is how the block's right-click opens it too); the page is read from the synced tile.
     public ContainerScaleChest(int id, Inventory inv, FriendlyByteBuf data) {
-        this(id, inv, (BlockEntityScaleableChest) inv.player.level().getBlockEntity(data.readBlockPos()), data.readInt());
+        this(id, inv, (BlockEntityScaleableChest) inv.player.level().getBlockEntity(data.readBlockPos()));
     }
 
-    // Server-side
+    public ContainerScaleChest(int id, Inventory inv, BlockEntityScaleableChest te) {
+        this(id, inv, te, te.page);
+    }
+
+    // Server-side (explicit page).
     public ContainerScaleChest(int id, Inventory inv, BlockEntityScaleableChest te, int page) {
         super(RotaryMenus.SCALECHEST.get(), id, inv, te);
         this.page = page;
 
+        // Match the original layout so CoreContainer.quickMoveStack's MultiPageInventory boundary
+        // (invsize+base = player inventory start) lands correctly: only [0, offset) hidden slots +
+        // this page's visible slots, NOT the later pages' slots.
         int offset = page * BlockEntityScaleableChest.SLOTS_PER_PAGE;
-        for (int i = 0; i < te.getContainerSize(); i++) {
-            int rel = i - offset;
-            if (rel >= 0 && rel < BlockEntityScaleableChest.SLOTS_PER_PAGE) {
-                int x = 8 + 18 * (rel % 9);
-                int y = 18 + 18 * (rel / 9);
-                this.addSlot(i, x, y);
-            } else {
-                this.addSlot(i, -9000, -9000); //off-screen: kept only so indices align with the tile
-            }
+        for (int i = 0; i < offset; i++)
+            this.addSlot(i, -9000, -9000); //off-screen: kept only so indices align with the tile
+        int visible = te.getSlotsOnPage(page);
+        for (int rel = 0; rel < visible; rel++) {
+            int x = 8 + 18 * (rel % 9);
+            int y = 18 + 18 * (rel / 9);
+            this.addSlot(offset + rel, x, y);
         }
 
-        // 6-row chest grid ends at y=126; player inventory sits below (rows at dy+84, hotbar at dy+142).
+        // Player inventory at a fixed position below the (up to 6-row) chest grid.
         this.addPlayerInventoryWithOffset(inv, 0, 56);
+    }
+
+    @Override
+    public boolean stillValid(net.minecraft.world.entity.player.Player player) {
+        return tile.isUseableByPlayer(player) && super.stillValid(player);
     }
 }
