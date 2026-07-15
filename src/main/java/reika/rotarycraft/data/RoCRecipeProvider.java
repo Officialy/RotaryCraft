@@ -1747,6 +1747,20 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("GgG").pattern("SGS")
                     .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
                     .save(out);
+            // LASERGUN (RotaryRecipes 813): "CLB","APG"," b " — light source, lens, heat-ray barrel,
+            // turret aim unit, power module, steel gear, turret base. (C=bulb → glowstone stand-in,
+            // no dedicated bulb item in the port.)
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.LASER_GUN.get())
+                    .define('C', Items.GLOWSTONE)
+                    .define('L', RotaryItems.LENS.get())
+                    .define('B', RotaryItems.HEAT_RAY_BARREL.get())
+                    .define('A', RotaryItems.TURRET_AIMING_UNIT.get())
+                    .define('P', RotaryItems.POWER_MODULE.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('b', RotaryItems.TURRET_BASE.get())
+                    .pattern("CLB").pattern("APG").pattern(" b ")
+                    .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))
+                    .save(out);
             // FORCEFIELD (RotaryRecipes 770): "lnl","ddd","sgs" — lapis, nether star, diamonds,
             // base panels, gold.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.FORCE_FIELD.get())

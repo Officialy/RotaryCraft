@@ -201,7 +201,7 @@ public enum MachineRegistry implements TileEnum {
     CONTAINMENT("machine.containment", RotaryBlocks.CONTAINMENT.get(), BlockEntityContainment.class/*, (modelSet) -> new ContainmentModel(modelSet.bakeLayer(RotaryModelLayers.CONTAINMENT))*/),
     //    SCREEN("machine.screen", BlockRotaryCraftMachine.class, BlockEntityScreen.class, "RenderCCTVScreen"),
 //    PURIFIER("machine.purifier", BlockRotaryCraftMachine.class, BlockEntityPurifier.class),
-//    LASERGUN("machine.lasergun", BlockRotaryCraftMachine.class, BlockEntityLaserGun.class, "RenderLaserGun"),
+    LASERGUN(true, "machine.lasergun", RotaryBlocks.LASER_GUN.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityLaserGun.class),
     ITEMCANNON("machine.itemcannon", RotaryBlocks.ITEM_CANNON.get(), BlockEntityItemCannon.class, (modelSet) -> new ItemCannonModel(modelSet.bakeLayer(RotaryModelLayers.ITEM_CANNON))),
     LANDMINE("machine.landmine", RotaryBlocks.LANDMINE.get(), BlockEntityLandmine.class, (modelSet) -> new LandmineModel(modelSet.bakeLayer(RotaryModelLayers.LANDMINE))),
     FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class, (modelSet) -> new FrictionModel(modelSet.bakeLayer(RotaryModelLayers.FRICTION_HEATER))),

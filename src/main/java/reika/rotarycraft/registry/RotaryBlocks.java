@@ -93,6 +93,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> SCALECHEST = registerMachineBlock("scalechest", () -> new BlockScaleChest(blockProperties().strength(5)));
     public static final DeferredBlock<Block> LIGHT_BRIDGE = registerMachineBlock("light_bridge", () -> new BlockLightBridge(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FORCE_FIELD = registerMachineBlock("force_field", () -> new BlockForceField(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> LASER_GUN = registerMachineBlock("laser_gun", () -> new BlockLaserGun(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DISTRIBUTION_CLUTCH = registerMachineBlock("distribution_clutch", () -> new BlockDistributionClutch(blockProperties().strength(5)));
     public static final DeferredBlock<Block> CLUTCH = registerMachineBlock("clutch", () -> new BlockClutch(blockProperties().strength(5)));
 

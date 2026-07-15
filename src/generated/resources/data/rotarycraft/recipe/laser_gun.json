@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "A": "rotarycraft:turret_aiming_unit",
+    "B": "rotarycraft:heat_ray_barrel",
+    "C": "minecraft:glowstone",
+    "G": "rotarycraft:hsla_steel_gear",
+    "L": "rotarycraft:lens",
+    "P": "rotarycraft:power_module",
+    "b": "rotarycraft:turret_base"
+  },
+  "pattern": [
+    "CLB",
+    "APG",
+    " b "
+  ],
+  "result": {
+    "id": "rotarycraft:laser_gun"
+  }
+}
