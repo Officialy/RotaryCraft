@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "g": "minecraft:glowstone"
+  },
+  "pattern": [
+    "SGS",
+    "GgG",
+    "SGS"
+  ],
+  "result": {
+    "id": "rotarycraft:lamp"
+  }
+}

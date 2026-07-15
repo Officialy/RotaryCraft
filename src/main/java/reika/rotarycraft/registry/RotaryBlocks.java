@@ -88,6 +88,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> SHAFT_MERGE = registerMachineBlock("merge", () -> new BlockShaftSpecial(MaterialRegistry.STEEL, blockProperties().strength(5), BlockEntityShaft.ShaftType.MERGE));
     public static final DeferredBlock<Block> SPLITTER = registerMachineBlock("splitter", () -> new BlockSplitter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> SMOKE_DETECTOR = registerMachineBlock("smoke_detector", () -> new BlockSmokeDetector(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> LAMP = registerMachineBlock("lamp", () -> new BlockLamp(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DISTRIBUTION_CLUTCH = registerMachineBlock("distribution_clutch", () -> new BlockDistributionClutch(blockProperties().strength(5)));
     public static final DeferredBlock<Block> CLUTCH = registerMachineBlock("clutch", () -> new BlockClutch(blockProperties().strength(5)));
 

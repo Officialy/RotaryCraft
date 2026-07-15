@@ -123,6 +123,8 @@ public class RotaryBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySmokeDetector>> SMOKE_DETECTOR = BLOCK_ENTITIES.register("smoke_detector", () ->
             new BlockEntityType<>(BlockEntitySmokeDetector::new, RotaryBlocks.SMOKE_DETECTOR.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.level.BlockEntityLamp>> LAMP = BLOCK_ENTITIES.register("lamp", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.level.BlockEntityLamp::new, RotaryBlocks.LAMP.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityClutch>> CLUTCH = BLOCK_ENTITIES.register("clutch", () ->
             new BlockEntityType<>(BlockEntityClutch::new, RotaryBlocks.CLUTCH.get()));

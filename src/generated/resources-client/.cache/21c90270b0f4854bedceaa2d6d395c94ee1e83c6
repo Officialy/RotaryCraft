@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T14:08:47.3377807	Model Definitions - rotarycraft
+// 26.2	2026-07-15T14:41:55.5932267	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 6c3400f311393b69a85e620b7317e3878ddf0fed assets/rotarycraft/blockstates/aggregator.json
@@ -89,6 +89,7 @@ e58c2afc2bfc0ba5b77d7910ca9c634b6727a920 assets/rotarycraft/blockstates/hsla_gea
 443f5964816977f4bdcde5ea9d33175c4fee60b0 assets/rotarycraft/blockstates/igniter.json
 754506af8fad95600bab308c3ba8e5442a67eb88 assets/rotarycraft/blockstates/item_cannon.json
 21b0c35ff7dd059085c4e11ff116e8751d65c791 assets/rotarycraft/blockstates/jet_engine.json
+e918b1ac39f56e712af51dfab2eaed4d492d2c6a assets/rotarycraft/blockstates/lamp.json
 30914dcf4004cba937e474e8212bd6f6e579f6f1 assets/rotarycraft/blockstates/landmine.json
 5596c9a2e24591e9f5e0d9add6406b4ece11a3e1 assets/rotarycraft/blockstates/lava_smeltory.json
 88d1e5caf7f6ded69998da2f8e1711cfc88f98a3 assets/rotarycraft/blockstates/lawn_sprinkler.json
@@ -382,6 +383,7 @@ b9524d81e19db243489f6e7a99771a0c7cf3473c assets/rotarycraft/items/item_cannon.js
 9122fff48ad7161901d69c4938778b41df57518b assets/rotarycraft/items/jet_engine.json
 a14b73a6fe68702c2b92099ebf4a4a836b197fc3 assets/rotarycraft/items/jet_fuel_bucket.json
 e67c58f83ebf3115862b1c4ce1b6bbc0599ac5bb assets/rotarycraft/items/jump_boots.json
+62e9ca0a770add6a4743c8a714a75742ced52af3 assets/rotarycraft/items/lamp.json
 b9450c388c09962273bfc04e5540ed0d1fb9a720 assets/rotarycraft/items/landmine.json
 b3f972d62711d5e6ddd7cf247ec72b436a2754b7 assets/rotarycraft/items/lapis_dust.json
 fa1917b33867290e5f01f382c6a2ff3e8c4aae2d assets/rotarycraft/items/lapis_flakes.json
@@ -622,6 +624,7 @@ d2728390f7018d23a401f0a543a1e6e27ef027ac assets/rotarycraft/models/block/hsla_ge
 13f26aa20bc09779f0da5e91a5d6fe140cffa711 assets/rotarycraft/models/block/igniter.json
 b909160302c8b8f07b50107549e1255a2d6de193 assets/rotarycraft/models/block/item_cannon.json
 6e0eebad6a6e25c3774e532e5f5b93ce52576a6d assets/rotarycraft/models/block/jet_engine.json
+2705cfc18e873e3507603787b0b4ede0f29ca236 assets/rotarycraft/models/block/lamp.json
 3d2822d45cb10b184ee091413261db17455838f0 assets/rotarycraft/models/block/landmine.json
 ce4d59452bb08bf38d59a4bf86567da24e02737a assets/rotarycraft/models/block/lava_smeltory.json
 95308768449ad8bf8974410d13fd3409c7d88edc assets/rotarycraft/models/block/lawn_sprinkler.json

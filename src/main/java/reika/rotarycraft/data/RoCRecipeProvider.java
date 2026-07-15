@@ -1739,6 +1739,14 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern(" S ").pattern("RRR").pattern(" N ")
                     .unlockedBy("has_note_block", has(Items.NOTE_BLOCK))
                     .save(out);
+            // LAMP (RotaryRecipes 835): "SGS","GgG","SGS" — steel frame, glass, glowstone core.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.LAMP.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('G', Items.GLASS)
+                    .define('g', Items.GLOWSTONE)
+                    .pattern("SGS").pattern("GgG").pattern("SGS")
+                    .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
+                    .save(out);
             // CONTAINMENT: "lnl","ddd","sgs" — 2×PURPLE_DYE + 1×NETHER_STAR + 3×DIAMOND + 2×BASEPANEL + 1×GOLD.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.CONTAINMENT.get())
                     .define('d', Items.DIAMOND)

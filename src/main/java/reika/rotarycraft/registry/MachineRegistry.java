@@ -215,7 +215,7 @@ public enum MachineRegistry implements TileEnum {
     //    COMPRESSOR("machine.compressor", BlockModEngine.class, BlockEntityAirCompressor.class, "RenderCompressor", PowerTypes.PNEUMATIC),
     //PNEUENGINE("machine.pneuengine", BlockModEngine.class, BlockEntityPneumaticEngine.class, "RenderPneumatic", PowerTypes.PNEUMATIC),
 //    DISPLAY("machine.display", BlockRotaryCraftMachine.class, BlockEntityDisplay.class, "RenderDisplay"),
-//    LAMP("machine.lamp", BlockRotaryCraftMachine.class, BlockEntityLamp.class),
+    LAMP("machine.lamp", RotaryBlocks.LAMP.get(), BlockEntityLamp.class),
 //    EMP("machine.emp", BlockRotaryCraftMachine.class, BlockEntityEMP.class, "RenderEMP"),
     LINEBUILDER("machine.linebuilder", RotaryBlocks.LINE_BUILDER.get(), BlockEntityLineBuilder.class/*, (modelSet) -> new LineBuilderModel(modelSet.bakeLayer(RotaryModelLayers.LINE_BUILDER))*/),
     BEAMMIRROR("machine.beammirror", RotaryBlocks.BEAM_MIRROR.get(), BlockEntityBeamMirror.class, (modelSet) -> new BeamMirrorModel(modelSet.bakeLayer(RotaryModelLayers.BEAM_MIRROR))),

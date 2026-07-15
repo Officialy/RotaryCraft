@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T12:41:52.4574595	Loot Tables
+// 26.2	2026-07-15T14:41:43.5240312	Loot Tables
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 72d93034cc7e77ed9979a8846b5bb43a73aef325 data/rotarycraft/loot_table/blocks/aggregator.json
@@ -94,6 +94,7 @@ f20cafef7e3eb445f01081463a12f2655442b0c6 data/rotarycraft/loot_table/blocks/hydr
 97dfc288915802de58cf0cd8c1777e83cca37842 data/rotarycraft/loot_table/blocks/igniter.json
 1750b85a0ca5203d20fc60fb48ce944334603a14 data/rotarycraft/loot_table/blocks/item_cannon.json
 8a4834971f39047336389a70df7df31a8391c87d data/rotarycraft/loot_table/blocks/jet_engine.json
+317e16f5f27038b29af784fec54a8fe113ef6517 data/rotarycraft/loot_table/blocks/lamp.json
 b8288621e8d2eab187957aa7a110af0a6f0679f1 data/rotarycraft/loot_table/blocks/landmine.json
 6d3207cec64c71c30ddbf85962abbf74cdd80e2e data/rotarycraft/loot_table/blocks/lava_smeltory.json
 928cf8bb0345ea4162c0acd2c82038927d267d74 data/rotarycraft/loot_table/blocks/lawn_sprinkler.json
