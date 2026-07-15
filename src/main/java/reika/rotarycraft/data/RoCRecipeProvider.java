@@ -1747,6 +1747,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("GgG").pattern("SGS")
                     .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
                     .save(out);
+            // EMP (RotaryRecipes 845): "GDG","GsG","PnP" — gold coils, diamond block, bedrock shaft
+            // core, base panels, nether star.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.EMP.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('n', Items.NETHER_STAR)
+                    .define('G', RotaryItems.GOLD_COIL.get())
+                    .define('D', Items.DIAMOND_BLOCK)
+                    .define('s', RotaryItems.BEDROCK_ALLOY_SHAFT_CORE.get())
+                    .pattern("GDG").pattern("GsG").pattern("PnP")
+                    .unlockedBy("has_nether_star", has(Items.NETHER_STAR))
+                    .save(out);
             // RAILGUN (RotaryRecipes 811): " H "," A "," B " — rail head/accelerator, turret aim
             // unit, turret base (stacked vertically).
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.RAILGUN.get())

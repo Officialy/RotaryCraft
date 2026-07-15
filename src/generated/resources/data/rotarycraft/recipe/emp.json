@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "D": "minecraft:diamond_block",
+    "G": "rotarycraft:gold_coil",
+    "P": "rotarycraft:hsla_steel_plate",
+    "n": "minecraft:nether_star",
+    "s": "rotarycraft:bedrock_alloy_shaft_core"
+  },
+  "pattern": [
+    "GDG",
+    "GsG",
+    "PnP"
+  ],
+  "result": {
+    "id": "rotarycraft:emp"
+  }
+}

@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T19:26:27.5507569	Model Definitions - rotarycraft
+// 26.2	2026-07-15T19:36:26.609028	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 6c3400f311393b69a85e620b7317e3878ddf0fed assets/rotarycraft/blockstates/aggregator.json
@@ -57,6 +57,7 @@ d4b1fe581a0f51030f2b5af743cadd1e13befcad assets/rotarycraft/blockstates/diamond_
 23efc8a32270dd724c495e0b7e5b002a0e11c77e assets/rotarycraft/blockstates/drop_processor.json
 1b2f2764494bb72be487fe448b82b4a51b0c09d7 assets/rotarycraft/blockstates/drying_bed.json
 3793c666583d3d8e189de87f43543238f5ff37d6 assets/rotarycraft/blockstates/dynamometer.json
+fb0e06b8a557dab4b412475ff0413e94f70c10b8 assets/rotarycraft/blockstates/emp.json
 ecc3138bdcc13cd48872a8693c71f20c27069760 assets/rotarycraft/blockstates/engine_control_unit.json
 8c8e751b1e93968699f8966885e8ad545f4e14aa assets/rotarycraft/blockstates/extractor.json
 b98b11cb747d23dc82257700fbbc4f1a97b03906 assets/rotarycraft/blockstates/fan.json
@@ -297,6 +298,7 @@ bfae4e976865ce8a5d3b5a170d72600e1041f79f assets/rotarycraft/items/diffuser.json
 23323186bcbcaaf6a82c24d338bafbac24d1544b assets/rotarycraft/items/emerald_flakes.json
 dcc30ef270dee090ea9f329c82dbbd9abc51c824 assets/rotarycraft/items/emerald_slurry.json
 5284ea97b93e65a762be84b6b156acb2a8b20de5 assets/rotarycraft/items/emerald_solution.json
+49604350bed90c3d4e1a400df584e0b069f0e3f5 assets/rotarycraft/items/emp.json
 e2c73963599415dd2e3dfed58749707e3c9823fd assets/rotarycraft/items/engine_control_unit.json
 bc08a6db440f156dc8bcf61393e241d1fbc90376 assets/rotarycraft/items/engine_upgrade.json
 2f22757f5d587e0c570ed6ac8e5a9604d208bee2 assets/rotarycraft/items/ethanol_cart.json
@@ -604,6 +606,7 @@ ad86238f630690edb01fb2e5c9a5cb73fc2f4cc7 assets/rotarycraft/models/block/diamond
 5ac0b08bd18e1897b6e1dcb10e89c947e5e49521 assets/rotarycraft/models/block/drop_processor.json
 19217959333bdbe77158d099a7487e13cc84a1e0 assets/rotarycraft/models/block/drying_bed.json
 d86557323a4da60c9130b1ad42b315f853bc8373 assets/rotarycraft/models/block/dynamometer.json
+b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/emp.json
 d881938fadea14e3614ef6e3e9dc9f0b3f9edd2a assets/rotarycraft/models/block/engine_control_unit.json
 7a01aceb44bcc4deb599f770706cdcc70b6460bd assets/rotarycraft/models/block/extractor.json
 feee78200c3c74848f98e8d66300aa203ecb399f assets/rotarycraft/models/block/fan.json
