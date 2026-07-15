@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "A": "rotarycraft:turret_aiming_unit",
+    "B": "rotarycraft:turret_base",
+    "G": "rotarycraft:hsla_steel_gear",
+    "P": "rotarycraft:cylinder"
+  },
+  "pattern": [
+    "PPG",
+    " GA",
+    "  B"
+  ],
+  "result": {
+    "id": "rotarycraft:multi_cannon"
+  }
+}

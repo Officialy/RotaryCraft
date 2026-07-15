@@ -20,6 +20,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.entities.EntityDischarge;
+import reika.rotarycraft.entities.EntityFlakShot;
+import reika.rotarycraft.entities.EntityFreezeGunShot;
+import reika.rotarycraft.entities.EntityGatlingShot;
 import reika.rotarycraft.entities.EntityIceBlock;
 import reika.rotarycraft.entities.EntityRailGunShot;
 import reika.rotarycraft.entities.EntitySonicShot;
@@ -31,6 +34,12 @@ public class RotaryEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, RotaryCraft.MODID);
 
     public static final DeferredHolder<EntityType<?>, EntityType<EntityRailGunShot>> RAILGUN = registerEntityType("railgun_shot", () -> EntityType.Builder.<EntityRailGunShot>of(EntityRailGunShot::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(8));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EntityFreezeGunShot>> FREEZEGUN = registerEntityType("freezegun_shot", () -> EntityType.Builder.<EntityFreezeGunShot>of(EntityFreezeGunShot::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(8));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EntityFlakShot>> FLAKSHOT = registerEntityType("flak_shot", () -> EntityType.Builder.<EntityFlakShot>of(EntityFlakShot::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(8));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EntityGatlingShot>> GATLING = registerEntityType("gatling_round", () -> EntityType.Builder.<EntityGatlingShot>of(EntityGatlingShot::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(8));
 
 //    public static final DeferredHolder<EntityType<?>, EntityType<EntityFreezeGunShot>> FREEZEGUN = registerEntityType("freezegun_shot", () -> EntityType.Builder.of((EntityFreezeGunShot::new), MobCategory.MISC));
 

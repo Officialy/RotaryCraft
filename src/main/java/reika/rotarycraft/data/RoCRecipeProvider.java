@@ -1777,6 +1777,36 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern(" H ").pattern(" A ").pattern(" B ")
                     .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))
                     .save(out);
+            // FREEZEGUN (RotaryRecipes 799): " ss","iig","sb " — steel, ice, steel gear, turret base.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FREEZE_GUN.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('i', Items.ICE)
+                    .define('g', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('b', RotaryItems.TURRET_BASE.get())
+                    .pattern(" ss").pattern("iig").pattern("sb ")
+                    .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))
+                    .save(out);
+            // ANTIAIR (RotaryRecipes 910): "sss","ppc"," Ba" — steel, pipes, compressor, turret aim
+            // unit, turret base.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.AA_GUN.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('p', RotaryBlocks.FLUID_PIPE.get())
+                    .define('c', RotaryItems.COMPRESSOR.get())
+                    .define('a', RotaryItems.TURRET_AIMING_UNIT.get())
+                    .define('B', RotaryItems.TURRET_BASE.get())
+                    .pattern("sss").pattern("ppc").pattern(" Ba")
+                    .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))
+                    .save(out);
+            // GATLING (RotaryRecipes 930): "PPG"," GA","  B" — cylinders, steel gears, turret aim
+            // unit, turret base.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.MULTI_CANNON.get())
+                    .define('P', RotaryItems.CYLINDER.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('A', RotaryItems.TURRET_AIMING_UNIT.get())
+                    .define('B', RotaryItems.TURRET_BASE.get())
+                    .pattern("PPG").pattern(" GA").pattern("  B")
+                    .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))
+                    .save(out);
             // LASERGUN (RotaryRecipes 813): "CLB","APG"," b " — light source, lens, heat-ray barrel,
             // turret aim unit, power module, steel gear, turret base. (C=bulb → glowstone stand-in,
             // no dedicated bulb item in the port.)

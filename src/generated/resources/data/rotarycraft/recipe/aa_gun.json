@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:turret_base",
+    "a": "rotarycraft:turret_aiming_unit",
+    "c": "rotarycraft:compressor",
+    "p": "rotarycraft:fluid_pipe",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sss",
+    "ppc",
+    " Ba"
+  ],
+  "result": {
+    "id": "rotarycraft:aa_gun"
+  }
+}

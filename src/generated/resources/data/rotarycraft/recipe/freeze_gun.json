@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "b": "rotarycraft:turret_base",
+    "g": "rotarycraft:hsla_steel_gear",
+    "i": "minecraft:ice",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " ss",
+    "iig",
+    "sb "
+  ],
+  "result": {
+    "id": "rotarycraft:freeze_gun"
+  }
+}

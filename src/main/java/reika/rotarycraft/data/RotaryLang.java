@@ -30,6 +30,7 @@ public class RotaryLang extends LanguageProvider {
     private static final java.util.Map<String, String> NAME_OVERRIDES = java.util.Map.ofEntries(
             java.util.Map.entry("borer", "Boring Machine"),
             java.util.Map.entry("scalechest", "Scaleable Chest"),
+            java.util.Map.entry("aa_gun", "AA Gun"),
             java.util.Map.entry("bypass", "Bypass Pipe"),
             java.util.Map.entry("containment", "Containment Field"),
             java.util.Map.entry("distribution_clutch", "Shaft Distribution Clutch"),

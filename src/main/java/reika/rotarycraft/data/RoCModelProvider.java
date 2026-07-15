@@ -154,7 +154,10 @@ public class RoCModelProvider extends ModelProvider {
             } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockLaserGun
                     || block instanceof reika.rotarycraft.base.blocks.entity.BlockRailGun
                     || block instanceof reika.rotarycraft.base.blocks.entity.BlockEMP
-                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockFireworkMachine) {
+                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockFireworkMachine
+                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockFreezeGun
+                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockAAGun
+                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockMultiCannon) {
                 var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"));
                 blockModelId = ModelTemplates.CUBE_ALL.create(
                         block,

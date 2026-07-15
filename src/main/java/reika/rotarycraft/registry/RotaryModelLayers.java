@@ -142,6 +142,9 @@ public class RotaryModelLayers {
         event.registerEntityRenderer(RotaryEntities.DISCHARGE.get(), reika.rotarycraft.renders.RenderDischarge::new);
         event.registerEntityRenderer(RotaryEntities.SHOCKWAVE.get(), reika.rotarycraft.renders.RenderSonicShot::new);
         event.registerEntityRenderer(RotaryEntities.RAILGUN.get(), reika.rotarycraft.renders.RenderRailGunShot::new);
+        event.registerEntityRenderer(RotaryEntities.FREEZEGUN.get(), reika.rotarycraft.renders.RenderTurretShot::new);
+        event.registerEntityRenderer(RotaryEntities.FLAKSHOT.get(), reika.rotarycraft.renders.RenderTurretShot::new);
+        event.registerEntityRenderer(RotaryEntities.GATLING.get(), reika.rotarycraft.renders.RenderTurretShot::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.FLOODLIGHT.get(), RenderLamp::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SMOKE_DETECTOR.get(), RenderSmokeDetector::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.RESERVOIR.get(), RenderReservoir::new);

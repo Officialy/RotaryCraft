@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T19:45:21.7459463	RotaryCraft Recipes
+// 26.2	2026-07-15T23:35:04.0501703	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -40,6 +40,7 @@ df894846c692ae915fb9947e731d8609c09a215e data/rotarycraft/advancement/recipes/mi
 c778e7c7dee300d2e038ff32dd6fe15d5ffaea4a data/rotarycraft/advancement/recipes/misc/tension_coil.json
 9094479a5db252abf0e588ecaba9ad7da0ef4058 data/rotarycraft/advancement/recipes/misc/tungsten_alloy_bearing.json
 97f9fc7918c3020a70aaee7e83feccac2f1e8b20 data/rotarycraft/advancement/recipes/misc/tungsten_ingot_from_smelting.json
+15832676c2b18cfe0552f32d1609fe229ca92e5c data/rotarycraft/advancement/recipes/redstone/aa_gun.json
 f6b957f9d288ae16faafece4a98911616b13d790 data/rotarycraft/advancement/recipes/redstone/ac_engine.json
 c47162c8b59367b1d3c5d9b9e083e5e51e27fd9b data/rotarycraft/advancement/recipes/redstone/aerosolizer.json
 72efc227703e194d729576389bcc995e09dae97f data/rotarycraft/advancement/recipes/redstone/aggregator.json
@@ -102,6 +103,7 @@ a3be9d29dffb48bbca99d0b767f09678ff4d97d7 data/rotarycraft/advancement/recipes/re
 77caac16b8c35bc35b9b20df0d6a2fce3355f171 data/rotarycraft/advancement/recipes/redstone/fluid_pipe.json
 9ab55842f4ea02630c67d7f8441dda444bb898f3 data/rotarycraft/advancement/recipes/redstone/force_field.json
 9e1fc4ed116f8e3508632fe619e502de5e10c241 data/rotarycraft/advancement/recipes/redstone/fractionator.json
+1a659d021b0fe005e7a4aae9c41f6a1e0242f78a data/rotarycraft/advancement/recipes/redstone/freeze_gun.json
 273a9d2bedaac77c0d204260a6936762c2b38449 data/rotarycraft/advancement/recipes/redstone/friction_boiler.json
 1d3fcaf215e60f74dd2c2803e589d6f12e408164 data/rotarycraft/advancement/recipes/redstone/fuel_line.json
 159815a1f35a171dfdd3168c74964c537e608ed0 data/rotarycraft/advancement/recipes/redstone/gas_engine.json
@@ -139,6 +141,7 @@ ffb7d70d159992ef06e8e931c16b8cdeb4d18cee data/rotarycraft/advancement/recipes/re
 48cb121b86f890441d7ce128088b1d34fea95a3d data/rotarycraft/advancement/recipes/redstone/microturbine.json
 a2b088e4c315486b7dd17a7b6aa6030f960387e6 data/rotarycraft/advancement/recipes/redstone/mirror.json
 6252023cbde1a017a8eea7244c89450231507a92 data/rotarycraft/advancement/recipes/redstone/mob_harvester.json
+6441579ed968534d5d16c21ffbeee44909d0d871 data/rotarycraft/advancement/recipes/redstone/multi_cannon.json
 f0dda07aa2cb15d252f916c4981cb99203875238 data/rotarycraft/advancement/recipes/redstone/multi_clutch.json
 77a820a4c00556cb4aaca07271dbe418f38b815a data/rotarycraft/advancement/recipes/redstone/music_box.json
 88ea1e88273c67f8b5b92bc26dfec21899314d5e data/rotarycraft/advancement/recipes/redstone/obsidian_maker.json
@@ -210,6 +213,7 @@ dd96f868ef1c14d00a022acdb6f2c0f0a6fb183b data/rotarycraft/advancement/recipes/to
 7d82eda62b5f4f08f88740999634fe550e24b178 data/rotarycraft/advancement/recipes/tools/target.json
 23ad4ab4b3a065e0250949c0733888416abf0f12 data/rotarycraft/advancement/recipes/tools/tile_selector.json
 628a3c8a5dfeb9154ac75174eacda3402a442348 data/rotarycraft/advancement/recipes/tools/ultrasound.json
+125675cbc2e9af69b8019b291de2076ea765daf9 data/rotarycraft/recipe/aa_gun.json
 e20fe42745293d1715387e1313b23581afd1c790 data/rotarycraft/recipe/ac_engine.json
 e34f95e0ae89aeeba7e530e0bb4d16151fee3efb data/rotarycraft/recipe/aerosolizer.json
 8cba36617c90df9a1800dd696984ea89a0dc92ee data/rotarycraft/recipe/aggregator.json
@@ -350,6 +354,7 @@ e6d958a8923699340aa65acb78637847b239b59c data/rotarycraft/recipe/floodlight.json
 e205b49023bd5f554df5bf27fd460a5f032d0d8f data/rotarycraft/recipe/fluid_pipe.json
 04f142a5c6fefe42c7babd1e696f986a54435b31 data/rotarycraft/recipe/force_field.json
 e0b3fd3d9dfeaf5fe46a75768473571b5aac35ad data/rotarycraft/recipe/fractionator.json
+dc2f91b7f5ef07a5429ab8ea951058af288d2b84 data/rotarycraft/recipe/freeze_gun.json
 b039f7f5497d9bd0c51190aaa0d3fe6b34ea3d45 data/rotarycraft/recipe/friction_boiler.json
 47abf00e244bc394899f9632d65e6481b88f6e5a data/rotarycraft/recipe/friction_heater/hsla_steel_from_scrap.json
 4261e4095604a2ff8b006ab5eb59ef4a9d5a3422 data/rotarycraft/recipe/fuel_line.json
@@ -430,6 +435,7 @@ a4449377daa01c0528c8bd85435eb0c57613ac8e data/rotarycraft/recipe/magnetizer.json
 322045b98901c6acdf698e72e79519dbe1568559 data/rotarycraft/recipe/mirror.json
 aabd7eee2bb646c2fb3e76214256e7a42a0cfbc4 data/rotarycraft/recipe/mirror_panel.json
 6c12095b04f97b83c5660d2172f31a867512c873 data/rotarycraft/recipe/mob_harvester.json
+09b848862adee97152eef2a6ea869f266adec93e data/rotarycraft/recipe/multi_cannon.json
 61dc78f74d241c2da235eb6b090d749447922ab6 data/rotarycraft/recipe/multi_clutch.json
 e3f736c656fd10abc7459800d0a60c9d097b1e1f data/rotarycraft/recipe/music_box.json
 2a440294136e99babd4d61c062bb191bef9a5b5c data/rotarycraft/recipe/music_box_disc.json

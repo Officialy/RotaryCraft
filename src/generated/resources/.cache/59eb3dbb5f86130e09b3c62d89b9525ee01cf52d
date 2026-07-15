@@ -1,4 +1,5 @@
-// 26.2	2026-07-15T19:45:21.7537627	Loot Tables
+// 26.2	2026-07-15T23:35:04.0572677	Loot Tables
+e304b769b52afe7e0b4024818a942eda215d941a data/rotarycraft/loot_table/blocks/aa_gun.json
 b847856e35b02581dcb0a91f23b2958d0a1220f4 data/rotarycraft/loot_table/blocks/ac_engine.json
 05562829d74d3b0bd3e777a3e6661c0595397fbc data/rotarycraft/loot_table/blocks/aerosolizer.json
 72d93034cc7e77ed9979a8846b5bb43a73aef325 data/rotarycraft/loot_table/blocks/aggregator.json
@@ -72,6 +73,7 @@ d66019895527f79f5b4ed2f728fbb393c29701af data/rotarycraft/loot_table/blocks/fill
 12daa9b83a844980d9ee8cc49a71db1045fd3ab6 data/rotarycraft/loot_table/blocks/fluid_pipe.json
 454aab0b06ffbeb85744c702645ae48e2ba2f543 data/rotarycraft/loot_table/blocks/force_field.json
 224661a45ce0ad58b01333a0a98b76c07e75664d data/rotarycraft/loot_table/blocks/fractionator.json
+6571fdb3d1d51845c2cf31f6e35cbe5e1dea9201 data/rotarycraft/loot_table/blocks/freeze_gun.json
 52a83b45966b0a1e90edeeb96af50db53dec05cb data/rotarycraft/loot_table/blocks/friction_boiler.json
 1bc4747f69a018f9d192480b7b1604cf2a336ac1 data/rotarycraft/loot_table/blocks/friction_heater.json
 05208a1038684040e0f76266dceaf35dc9154c0c data/rotarycraft/loot_table/blocks/fuel_line.json
@@ -112,6 +114,7 @@ bee3e646634570d8f5a1851709a565587e0d3c12 data/rotarycraft/loot_table/blocks/micr
 7ab1a6d25e1bd37a8bcf8e2dfea714c4a6dd30f9 data/rotarycraft/loot_table/blocks/miningpipe.json
 2c90e288963781955ad1d1bd981728c8ba10deb6 data/rotarycraft/loot_table/blocks/mirror.json
 cbfbca615c4e514792b30f3f6716bd1bc451b495 data/rotarycraft/loot_table/blocks/mob_harvester.json
+ecca0e516f64e8687a670a3dfbc54c946be77436 data/rotarycraft/loot_table/blocks/multi_cannon.json
 350e1b4dc934e259070952c9f83a7caef187177a data/rotarycraft/loot_table/blocks/multi_clutch.json
 1f6516965733114eed6c7511d030b588ef509714 data/rotarycraft/loot_table/blocks/music_box.json
 6a594ec4f64e7ea7a48aa7707a2d9b5d1904cd51 data/rotarycraft/loot_table/blocks/obsidian_maker.json

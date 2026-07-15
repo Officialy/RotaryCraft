@@ -141,6 +141,12 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.BlockEntityEMP::new, RotaryBlocks.EMP.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.decorative.BlockEntityFireworkMachine>> FIREWORK = BLOCK_ENTITIES.register("firework", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.decorative.BlockEntityFireworkMachine::new, RotaryBlocks.FIREWORK.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityFreezeGun>> FREEZE_GUN = BLOCK_ENTITIES.register("freeze_gun", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityFreezeGun::new, RotaryBlocks.FREEZE_GUN.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityAAGun>> AA_GUN = BLOCK_ENTITIES.register("aa_gun", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityAAGun::new, RotaryBlocks.AA_GUN.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityMultiCannon>> MULTI_CANNON = BLOCK_ENTITIES.register("multi_cannon", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityMultiCannon::new, RotaryBlocks.MULTI_CANNON.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityClutch>> CLUTCH = BLOCK_ENTITIES.register("clutch", () ->
             new BlockEntityType<>(BlockEntityClutch::new, RotaryBlocks.CLUTCH.get()));

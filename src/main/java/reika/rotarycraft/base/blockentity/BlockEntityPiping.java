@@ -508,7 +508,9 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
 
     // 1.21.5: BlockEntity.getRenderBoundingBox was removed; renderers compute their own bounds.
     public final AABB getRenderBoundingBox() {
-        return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 1, worldPosition.getZ() + 1);
+        // Inflate by one so the connection stubs drawn into the six neighbouring blocks are not
+        // culled when the pipe's own block leaves the frustum.
+        return new AABB(worldPosition).inflate(1);
     }
 
     @Override
