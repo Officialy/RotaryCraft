@@ -183,7 +183,7 @@ public enum MachineRegistry implements TileEnum {
     TNTCANNON(true, "machine.tntcannon", RotaryBlocks.TNT_CANNON.get(), BlockEntityTNTCannon.class/*, (modelSet) -> new TNTCannonModel(modelSet.bakeLayer(RotaryModelLayers.TNT_CANNON))*/),
     //    SONICWEAPON(true, "machine.sonicweapon", BlockRotaryCraftMachine.class, BlockEntitySonicWeapon.class, "RenderSonic"),
     BLASTFURNACE(true, "machine.blastfurnace", RotaryBlocks.BLAST_FURNACE.get(), BlockEntityBlastFurnace.class),
-//    FORCEFIELD(true, "machine.forcefield", BlockRotaryCraftMachine.class, BlockEntityForceField.class, "RenderForceField"),
+    FORCEFIELD(true, "machine.forcefield", RotaryBlocks.FORCE_FIELD.get(), BlockEntityForceField.class),
     MUSICBOX(true, "machine.musicbox", RotaryBlocks.MUSIC_BOX.get(), BlockEntityMusicBox.class/*, (modelSet) -> new MusicBoxModel(modelSet.bakeLayer(RotaryModelLayers.MUSIC_BOX))*/),
     SPILLER(true, "machine.spiller", RotaryBlocks.SPILLER.get(), BlockEntitySpiller.class/*, (modelSet) -> new SpillerModel(modelSet.bakeLayer(RotaryModelLayers.SPILLER))*/),
     //    CHUNKLOADER("machine.chunkloader", BlockRotaryCraftMachine.class, BlockEntityChunkLoader.class, "RenderChunkLoader"),

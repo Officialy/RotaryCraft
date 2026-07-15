@@ -1747,6 +1747,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("GgG").pattern("SGS")
                     .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
                     .save(out);
+            // FORCEFIELD (RotaryRecipes 770): "lnl","ddd","sgs" — lapis, nether star, diamonds,
+            // base panels, gold.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FORCE_FIELD.get())
+                    .define('l', Items.LAPIS_LAZULI)
+                    .define('n', Items.NETHER_STAR)
+                    .define('d', Items.DIAMOND)
+                    .define('s', RotaryItems.HSLA_PLATE.get())
+                    .define('g', Items.GOLD_INGOT)
+                    .pattern("lnl").pattern("ddd").pattern("sgs")
+                    .unlockedBy("has_nether_star", has(Items.NETHER_STAR))
+                    .save(out);
             // LIGHTBRIDGE (RotaryRecipes 758): "GgG","BgS","BBD" — gold + glass lens, base panels,
             // steel, diamond focus.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.LIGHT_BRIDGE.get())

@@ -131,6 +131,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest::new, RotaryBlocks.SCALECHEST.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.level.BlockEntityLightBridge>> LIGHT_BRIDGE = BLOCK_ENTITIES.register("light_bridge", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.level.BlockEntityLightBridge::new, RotaryBlocks.LIGHT_BRIDGE.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.weaponry.BlockEntityForceField>> FORCE_FIELD = BLOCK_ENTITIES.register("force_field", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.BlockEntityForceField::new, RotaryBlocks.FORCE_FIELD.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityClutch>> CLUTCH = BLOCK_ENTITIES.register("clutch", () ->
             new BlockEntityType<>(BlockEntityClutch::new, RotaryBlocks.CLUTCH.get()));
