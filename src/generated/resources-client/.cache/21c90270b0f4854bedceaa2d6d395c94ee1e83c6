@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T19:09:21.8895924	Model Definitions - rotarycraft
+// 26.2	2026-07-15T19:26:27.5507569	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 6c3400f311393b69a85e620b7317e3878ddf0fed assets/rotarycraft/blockstates/aggregator.json
@@ -115,6 +115,7 @@ c793c493df8c93186b481f4241931de2e560352c assets/rotarycraft/blockstates/player_d
 6a1099402ddf3c06fdedc634898123a83e669ce9 assets/rotarycraft/blockstates/power_bus.json
 510ac9d219f684b6d9dd780d96d71ad79a7b76c6 assets/rotarycraft/blockstates/pulse_jet_furnace.json
 99bf54c231e8214a3456e8e56caefbecefcc763c assets/rotarycraft/blockstates/pump.json
+4c68c62d41a082e467827c9b2ddf6a9cd9240ddc assets/rotarycraft/blockstates/railgun.json
 265d5a0492e59bc508cb7929d3fa2481d2a5770f assets/rotarycraft/blockstates/refresher.json
 fd3168060c3a1776bca95b8a947599c05b56b80e assets/rotarycraft/blockstates/refrigerator.json
 7b0ac82b5b119fb64b7c94d374fb421b3f47572b assets/rotarycraft/blockstates/reservoir.json
@@ -443,6 +444,7 @@ a98e4437eda287d37e81dc82b4c4ce56f3ec053c assets/rotarycraft/items/quartz_slurry.
 a1f79af4c2724fa5f2b4f7a53e4d3778713a5095 assets/rotarycraft/items/quartz_solution.json
 73d809d097b589eee3cf9cb0681ecbaf9811d3e1 assets/rotarycraft/items/radar_unit.json
 8d9f94459d8314dc89fff040fc101626887ad3e7 assets/rotarycraft/items/radiator.json
+897612eddd1750e16f639e78221a8d5895552320 assets/rotarycraft/items/railgun.json
 86652f66e9824cd644c9651e5f93a0dc63ca4ab5 assets/rotarycraft/items/railgun_accelerator.json
 35898f670ad5aa8c0ab02b15fda2097fcda0ae37 assets/rotarycraft/items/railgun_ammo.json
 3e110baac62a34f6052adcf2cf1437f865137c2c assets/rotarycraft/items/range_finder.json
@@ -660,6 +662,7 @@ a609305f331e8628043dee53ccac5389e7136ba5 assets/rotarycraft/models/block/perform
 3b3788b9690c2987f10c68b5a886190e3fdbb22b assets/rotarycraft/models/block/power_bus.json
 2159830ec1b0525f5f6ac67b7efed60a59ba8d04 assets/rotarycraft/models/block/pulse_jet_furnace.json
 51cbdf9b5122f5605ea2a62d9c6001d02371f2de assets/rotarycraft/models/block/pump.json
+b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/railgun.json
 9b75264dabd7027cda456559f43c5ebd80fe2c5f assets/rotarycraft/models/block/refresher.json
 1ee5eb23a14739dfb191491a3d2352c9c37d3aaa assets/rotarycraft/models/block/refrigerator.json
 e1f409274cc63d14cca4c482a1a288ffcbe434b4 assets/rotarycraft/models/block/reservoir.json

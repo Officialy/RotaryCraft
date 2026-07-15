@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T19:09:09.7355988	RotaryCraft Recipes
+// 26.2	2026-07-15T19:26:16.0806012	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -148,6 +148,7 @@ b12463877baa402b29ed5b887924cc26f89dea0d data/rotarycraft/advancement/recipes/re
 c754888e9ea40a7fceafadf6eb58276db94711f9 data/rotarycraft/advancement/recipes/redstone/propeller_blade.json
 4e82898b546d4e53611989807ce28f2dadfdf6be data/rotarycraft/advancement/recipes/redstone/pulse_jet_furnace.json
 1a3492efe964d81c50bab6e19c7d81f97096d73f data/rotarycraft/advancement/recipes/redstone/pump.json
+8e05639c0a6caef40e9245562347f4617b317741 data/rotarycraft/advancement/recipes/redstone/railgun.json
 80829159a3f550d1f51bd9d4ac455d6e30b9fd48 data/rotarycraft/advancement/recipes/redstone/refresher.json
 1828d9f64f1915985d88cdbe6a72bf28e30fac51 data/rotarycraft/advancement/recipes/redstone/refrigerator.json
 d0aef2fb274f02f9dfade3af8dac014f4321d7c4 data/rotarycraft/advancement/recipes/redstone/reservoir.json
@@ -472,6 +473,7 @@ fffb16cf1275d3050db14979f7b40e23ccc01c04 data/rotarycraft/recipe/pulse_furnace/r
 62d9f91fe7900c0696fe619614f7cb880f53b0c3 data/rotarycraft/recipe/pulse_jet_furnace.json
 b1f4450839268c5e0aa045d62499b50d20be361c data/rotarycraft/recipe/pump.json
 ea820bf3353f0e898bf9d9b8d5662245b2530225 data/rotarycraft/recipe/quartz_flakes_to_ingot.json
+c7177921ff54d1def25e28e4a39cf524a3fc1298 data/rotarycraft/recipe/railgun.json
 5d66dd53a41c3568b707e5c8871b36e187c0c479 data/rotarycraft/recipe/range_finder.json
 f81cd689932ff4ef54f519251c0e90b92349533c data/rotarycraft/recipe/refresher.json
 5ccddddaa1ba3289e3ba058867d4a7cce3346467 data/rotarycraft/recipe/refrigerator.json

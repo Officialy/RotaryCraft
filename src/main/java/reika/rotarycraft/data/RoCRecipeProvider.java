@@ -1747,6 +1747,15 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("GgG").pattern("SGS")
                     .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
                     .save(out);
+            // RAILGUN (RotaryRecipes 811): " H "," A "," B " — rail head/accelerator, turret aim
+            // unit, turret base (stacked vertically).
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.RAILGUN.get())
+                    .define('H', RotaryItems.RAILGUN_ACCELERATOR.get())
+                    .define('A', RotaryItems.TURRET_AIMING_UNIT.get())
+                    .define('B', RotaryItems.TURRET_BASE.get())
+                    .pattern(" H ").pattern(" A ").pattern(" B ")
+                    .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))
+                    .save(out);
             // LASERGUN (RotaryRecipes 813): "CLB","APG"," b " — light source, lens, heat-ray barrel,
             // turret aim unit, power module, steel gear, turret base. (C=bulb → glowstone stand-in,
             // no dedicated bulb item in the port.)

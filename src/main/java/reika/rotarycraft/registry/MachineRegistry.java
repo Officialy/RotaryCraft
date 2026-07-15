@@ -190,7 +190,7 @@ public enum MachineRegistry implements TileEnum {
     MOBHARVESTER("machine.mobharvester", RotaryBlocks.MOB_HARVESTER.get(), BlockEntityMobHarvester.class/*, (modelSet) -> new MobHarvesterModel(modelSet.bakeLayer(RotaryModelLayers.MOB_HARVESTER))*/),
     //    CCTV("machine.cctv", BlockRotaryCraftMachine.class, BlockEntityCCTV.class, "RenderCCTV"),
 //    PROJECTOR("machine.projector", BlockRotaryCraftMachine.class, BlockEntityProjector.class, "RenderProjector"),
-//    RAILGUN("machine.railgun", BlockRotaryCraftMachine.class, BlockEntityRailGun.class, "RenderRailGun"),
+    RAILGUN(true, "machine.railgun", RotaryBlocks.RAILGUN.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityRailGun.class),
     WEATHERCONTROLLER("machine.weather", RotaryBlocks.WEATHER_CONTROLLER.get(), BlockEntityWeatherController.class),
     REFRESHER("machine.refresher", RotaryBlocks.REFRESHER.get(), BlockEntityItemRefresher.class/*, (modelSet) -> new RefresherModel(modelSet.bakeLayer(RotaryModelLayers.REFRESHER))*/),
     //    FREEZEGUN("machine.freezegun", BlockRotaryCraftMachine.class, BlockEntityFreezeGun.class, "RenderFreezeGun"),

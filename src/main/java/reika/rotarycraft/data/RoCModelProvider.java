@@ -151,7 +151,8 @@ public class RoCModelProvider extends ModelProvider {
                 // (bridge_1) with the bridge_side edge texture.
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
                         block, bottomTopMapping("bridge_1", "bridge_1", "bridge_side"), modelOut);
-            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockLaserGun) {
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockLaserGun
+                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockRailGun) {
                 var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"));
                 blockModelId = ModelTemplates.CUBE_ALL.create(
                         block,

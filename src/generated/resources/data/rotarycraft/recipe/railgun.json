@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "A": "rotarycraft:turret_aiming_unit",
+    "B": "rotarycraft:turret_base",
+    "H": "rotarycraft:railgun_accelerator"
+  },
+  "pattern": [
+    " H ",
+    " A ",
+    " B "
+  ],
+  "result": {
+    "id": "rotarycraft:railgun"
+  }
+}

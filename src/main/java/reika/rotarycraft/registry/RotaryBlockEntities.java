@@ -135,6 +135,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.BlockEntityForceField::new, RotaryBlocks.FORCE_FIELD.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityLaserGun>> LASER_GUN = BLOCK_ENTITIES.register("laser_gun", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityLaserGun::new, RotaryBlocks.LASER_GUN.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityRailGun>> RAILGUN = BLOCK_ENTITIES.register("railgun", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityRailGun::new, RotaryBlocks.RAILGUN.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityClutch>> CLUTCH = BLOCK_ENTITIES.register("clutch", () ->
             new BlockEntityType<>(BlockEntityClutch::new, RotaryBlocks.CLUTCH.get()));

@@ -21,6 +21,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.entities.EntityDischarge;
 import reika.rotarycraft.entities.EntityIceBlock;
+import reika.rotarycraft.entities.EntityRailGunShot;
 import reika.rotarycraft.entities.EntitySonicShot;
 
 import java.util.function.Supplier;
@@ -29,7 +30,7 @@ public class RotaryEntities {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, RotaryCraft.MODID);
 
-//    public static final DeferredHolder<EntityType<?>, EntityType<EntityRailGunShot>> RAILGUN = registerEntityType("railgun_shot", () -> EntityType.Builder.of((EntityRailGunShot::new), MobCategory.MISC));
+    public static final DeferredHolder<EntityType<?>, EntityType<EntityRailGunShot>> RAILGUN = registerEntityType("railgun_shot", () -> EntityType.Builder.<EntityRailGunShot>of(EntityRailGunShot::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(8));
 
 //    public static final DeferredHolder<EntityType<?>, EntityType<EntityFreezeGunShot>> FREEZEGUN = registerEntityType("freezegun_shot", () -> EntityType.Builder.of((EntityFreezeGunShot::new), MobCategory.MISC));
 
