@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/light_bridge",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/light_bridge",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/light_bridge"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/light_bridge",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/light_bridge",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/light_bridge",
+      "y": 270
+    }
+  }
+}

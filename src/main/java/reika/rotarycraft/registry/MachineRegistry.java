@@ -149,7 +149,7 @@ public enum MachineRegistry implements TileEnum {
     BEDPIPE("machine.bedpipe", RotaryBlocks.BEDROCK_PIPE.get(), BlockEntityBedrockPipe.class/*, (modelSet) -> new BedPipeModel(modelSet.bakeLayer(RotaryModelLayers.BEDROCK_PIPE))*/),
 
     BORER(true, "machine.borer", RotaryBlocks.BORER.get(), BlockEntityBorer.class),
-//    LIGHTBRIDGE("machine.lightbridge", BlockRotaryCraftMachine.class, BlockEntityLightBridge.class, "RenderBridge"),
+    LIGHTBRIDGE("machine.lightbridge", RotaryBlocks.LIGHT_BRIDGE.get(), BlockEntityLightBridge.class),
     PUMP("machine.pump", RotaryBlocks.PUMP.get(), BlockEntityPump.class, (modelSet) -> new PumpModel(modelSet.bakeLayer(RotaryModelLayers.PUMP))),
     RESERVOIR(true, "machine.reservoir", RotaryBlocks.RESERVOIR.get(), BlockEntityReservoir.class, (modelSet) -> new ReservoirModel(modelSet.bakeLayer(RotaryModelLayers.RESERVOIR))),
     AEROSOLIZER(true, "machine.aerosolizer", RotaryBlocks.AEROSOLIZER.get(), BlockEntityAerosolizer.class, (modelSet) -> new AerosolizerModel(modelSet.bakeLayer(RotaryModelLayers.AEROSOLIZER))),

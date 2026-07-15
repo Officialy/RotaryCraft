@@ -146,6 +146,19 @@ public class RoCModelProvider extends ModelProvider {
                 // Directional drilling machine: drill face out the front, steel sides.
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
                         block, orientableMapping("borer_front", "steel", "steel"), modelOut);
+            } else if (block == reika.rotarycraft.registry.RotaryBlocks.BRIDGE.get()) {
+                // The walkable light-bridge surface placed by the Light Bridge: animated top/bottom
+                // (bridge_1) with the bridge_side edge texture.
+                blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
+                        block, bottomTopMapping("bridge_1", "bridge_1", "bridge_side"), modelOut);
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockLightBridge) {
+                // Emitter body: steel-clad placeholder (no dedicated texture; the placed BRIDGE block
+                // carries the bridge_* textures).
+                var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"));
+                blockModelId = ModelTemplates.CUBE_ALL.create(
+                        block,
+                        new TextureMapping().put(TextureSlot.ALL, tex).put(TextureSlot.PARTICLE, tex),
+                        modelOut);
             } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockScaleChest) {
                 // No dedicated scale-chest texture ships (legacy used an animated-lid BER); steel-clad
                 // placeholder body.

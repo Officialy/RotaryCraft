@@ -1747,6 +1747,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("GgG").pattern("SGS")
                     .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
                     .save(out);
+            // LIGHTBRIDGE (RotaryRecipes 758): "GgG","BgS","BBD" — gold + glass lens, base panels,
+            // steel, diamond focus.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.LIGHT_BRIDGE.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('D', Items.DIAMOND)
+                    .define('G', Items.GOLD_INGOT)
+                    .define('g', Items.GLASS)
+                    .pattern("GgG").pattern("BgS").pattern("BBD")
+                    .unlockedBy("has_diamond", has(Items.DIAMOND))
+                    .save(out);
             // SCALECHEST (RotaryRecipes 785): "sss","scs","sss" — 8 steel around a vanilla chest.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.SCALECHEST.get())
                     .define('s', RotaryItems.HSLA_STEEL_INGOT.get())

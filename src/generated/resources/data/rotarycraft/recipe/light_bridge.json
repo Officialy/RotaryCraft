@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "D": "minecraft:diamond",
+    "G": "minecraft:gold_ingot",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "g": "minecraft:glass"
+  },
+  "pattern": [
+    "GgG",
+    "BgS",
+    "BBD"
+  ],
+  "result": {
+    "id": "rotarycraft:light_bridge"
+  }
+}

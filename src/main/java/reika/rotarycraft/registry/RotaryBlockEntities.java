@@ -129,6 +129,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(reika.rotarycraft.blockentities.level.BlockEntityWeatherController::new, RotaryBlocks.WEATHER_CONTROLLER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest>> SCALECHEST = BLOCK_ENTITIES.register("scalechest", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest::new, RotaryBlocks.SCALECHEST.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.level.BlockEntityLightBridge>> LIGHT_BRIDGE = BLOCK_ENTITIES.register("light_bridge", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.level.BlockEntityLightBridge::new, RotaryBlocks.LIGHT_BRIDGE.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityClutch>> CLUTCH = BLOCK_ENTITIES.register("clutch", () ->
             new BlockEntityType<>(BlockEntityClutch::new, RotaryBlocks.CLUTCH.get()));
