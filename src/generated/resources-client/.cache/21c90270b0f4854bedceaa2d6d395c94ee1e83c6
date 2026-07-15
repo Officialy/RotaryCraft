@@ -1,6 +1,7 @@
-// 26.2	2026-07-12T13:04:02.9039104	Model Definitions - rotarycraft
+// 26.2	2026-07-15T12:07:00.5707447	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
+6c3400f311393b69a85e620b7317e3878ddf0fed assets/rotarycraft/blockstates/aggregator.json
 46c376142f43431454ce0b3169273884168860d6 assets/rotarycraft/blockstates/air_cannon.json
 cb5fd843f3f16e9d9efd43bffd01b3dcd81eebf4 assets/rotarycraft/blockstates/anthra.json
 633def9d9235bb2ac171e1d21ba1b3135572b1fa assets/rotarycraft/blockstates/arrow_cannon.json
@@ -157,6 +158,7 @@ ac7453754e961d4e3e74edc373f3861085256415 assets/rotarycraft/blockstates/wood_gea
 5876227fc28f2ae6e99eedd8b3d9e6a92868454d assets/rotarycraft/blockstates/wormgear.json
 a8e65ffe0f658588984e7efcb0f736a9c5f66304 assets/rotarycraft/items/ac_engine.json
 d95aff2d12aefcbeba57a5bb4f8eff81c932bae3 assets/rotarycraft/items/aerosolizer.json
+84cb8a385dcdf66f6eacc49aac60dcbfc16a9400 assets/rotarycraft/items/aggregator.json
 cbbd5711fe9a562bc024d91e861a42f65dddf78e assets/rotarycraft/items/air_cannon.json
 98f73706fccf64680ba2cd8f9866a14ebcabdf86 assets/rotarycraft/items/aluminum_alloy_cylinder.json
 8fe479c6dc5c14afb34ddf7ffa369b04c83d7caf assets/rotarycraft/items/aluminum_alloy_ingot.json
@@ -530,6 +532,7 @@ e7cc0c3431b3a17cd4dd2c72e911abeaafca9506 assets/rotarycraft/items/worm_gear.json
 a47fc2f446127d0b12b304e8222535ac445b5861 assets/rotarycraft/items/yeast.json
 c61e21d8830f682396920d82697096a31365a092 assets/rotarycraft/models/block/ac_engine.json
 e512d0df4315d0fa0a135631381eddbe34e1e6a9 assets/rotarycraft/models/block/aerosolizer.json
+682918b50dcc2578697c04976a9df253644d5187 assets/rotarycraft/models/block/aggregator.json
 dfd9b04049fe55c8fc4236fd316d1fadb3f49066 assets/rotarycraft/models/block/air_cannon.json
 1e0b7e02baf6fe2562a2976bf3b0923f9abb2528 assets/rotarycraft/models/block/anthra.json
 b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/arrow_cannon.json

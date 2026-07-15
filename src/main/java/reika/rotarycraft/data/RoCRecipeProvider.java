@@ -962,6 +962,18 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_saw", has(RotaryItems.SAW.get()))
                     .save(out);
 
+            // AGGREGATOR: legacy "SPS","GCG","SsS" — steel + base panels + glass panes around a
+            // jet compressor, with a steel shaft at the bottom-centre.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.AGGREGATOR.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('G', Blocks.GLASS_PANE)
+                    .define('C', RotaryItems.COMPRESSOR.get())
+                    .define('s', RotaryItems.HSLA_SHAFT.get())
+                    .pattern("SPS").pattern("GCG").pattern("SsS")
+                    .unlockedBy("has_compressor", has(RotaryItems.COMPRESSOR.get()))
+                    .save(out);
+
             // SPRINKLER: legacy 4x " s "," p "," i " — steel (or tin), a pipe, an impeller.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.SPRINKLER.get(), 4)
                     .define('s', RotaryItems.HSLA_STEEL_INGOT.get())

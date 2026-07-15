@@ -342,6 +342,8 @@ public class RotaryBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityRefrigerator>> REFRIGERATOR = BLOCK_ENTITIES.register("refrigerator", () ->
             new BlockEntityType<>(BlockEntityRefrigerator::new, RotaryBlocks.REFRIGERATOR.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.production.BlockEntityAggregator>> AGGREGATOR = BLOCK_ENTITIES.register("aggregator", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.production.BlockEntityAggregator::new, RotaryBlocks.AGGREGATOR.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityComposter>> COMPOSTER = BLOCK_ENTITIES.register("composter", () ->
             new BlockEntityType<>(BlockEntityComposter::new, RotaryBlocks.COMPOSTER.get()));

@@ -229,7 +229,7 @@ public enum MachineRegistry implements TileEnum {
     LAVAMAKER(true, "machine.lavamaker", RotaryBlocks.LAVAMAKER.get(), BlockEntityLavaMaker.class, (modelSet) -> new LavaMakerModel(modelSet.bakeLayer(RotaryModelLayers.LAVA_MAKER))),
     //GENERATOR("machine.generator", BlockModEngine.class, BlockEntityGenerator.class, "RenderGenerator", PowerTypes.EU),
     //ELECTRICMOTOR("machine.electricmotor", BlockModEngine.class, BlockEntityElectricMotor.class, "RenderElecMotor", PowerTypes.EU),
-    //    AGGREGATOR("machine.aggregator", BlockRotaryCraftMachine.class, BlockEntityAggregator.class, "RenderAggregator"),
+    AGGREGATOR("machine.aggregator", RotaryBlocks.AGGREGATOR.get(), reika.rotarycraft.blockentities.production.BlockEntityAggregator.class, (modelSet) -> new reika.rotarycraft.models.animated.AggregatorModel(modelSet.bakeLayer(RotaryModelLayers.AGGREGATOR))),
     AIRGUN("machine.airgun", RotaryBlocks.AIRGUN.get(), BlockEntityAirGun.class, (modelSet) -> new AirGunModel(modelSet.bakeLayer(RotaryModelLayers.AIR_GUN))),
     SONICBORER("machine.sonicborer", RotaryBlocks.SONICBORER.get(), BlockEntitySonicBorer.class, (modelSet) -> new SonicBorerModel(modelSet.bakeLayer(RotaryModelLayers.SONIC_BORER))),
 //    FUELENGINE("machine.fuelengine", BlockModEngine.class, BlockEntityFuelEngine.class, "RenderFuelEngine", ModList.BCENERGY),
