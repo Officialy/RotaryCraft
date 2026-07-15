@@ -84,6 +84,7 @@ import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
 import reika.rotarycraft.blockentities.production.*;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
+import reika.rotarycraft.blockentities.surveying.BlockEntityGPR;
 import reika.rotarycraft.blockentities.transmission.*;
 import reika.rotarycraft.blockentities.weaponry.*;
 import reika.rotarycraft.models.*;
@@ -156,7 +157,7 @@ public enum MachineRegistry implements TileEnum {
     COMPACTOR(true, "machine.compactor", RotaryBlocks.COMPACTOR.get(), BlockEntityCompactor.class, (modelSet) -> new CompactorModel(modelSet.bakeLayer(RotaryModelLayers.COMPACTOR))),
    FAN("machine.fan", RotaryBlocks.FAN.get(), BlockEntityFan.class, (modelSet) -> new FanModel(modelSet.bakeLayer(RotaryModelLayers.FAN))),
     FRACTIONATOR(true, "machine.fractionator", RotaryBlocks.FRACTIONATOR.get(), BlockEntityFractionator.class, (modelSet) -> new FractionModel(modelSet.bakeLayer(RotaryModelLayers.FRACTIONATOR))),
-//    GPR(true, "machine.gpr", BlockGPR.class, BlockEntityGPR.class),
+    GPR(true, "machine.gpr", RotaryBlocks.GPR.get(), BlockEntityGPR.class),
     OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class/*, (modelSet) -> new ObsidianMakerModel(modelSet.bakeLayer(RotaryModelLayers.OBSIDIAN_MAKER))*/),
     //    PILEDRIVER("machine.piledriver", BlockRotaryCraftMachine.class, BlockEntityPileDriver.class, "RenderPileDriver"),
     VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class, (modelSet) -> new VacuumModel(modelSet.bakeLayer(RotaryModelLayers.VACCUUM))),
@@ -443,8 +444,8 @@ public enum MachineRegistry implements TileEnum {
     }
 
     public static MachineRegistry getMachineMapping(Block id) {
-//        if (id == RotaryBlocks.GPR.get())
-//            return GPR;
+        if (id == RotaryBlocks.GPR.get())
+            return GPR;
         if (id == RotaryBlocks.BEDROCK_GEARBOX_2x.get() || id == RotaryBlocks.BEDROCK_GEARBOX_4x.get() ||
                 id == RotaryBlocks.BEDROCK_GEARBOX_8x.get() || id == RotaryBlocks.BEDROCK_GEARBOX_16x.get() ||
 

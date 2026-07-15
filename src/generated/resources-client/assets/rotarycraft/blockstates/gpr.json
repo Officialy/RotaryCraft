@@ -1,7 +1,27 @@
 {
   "variants": {
-    "": {
+    "facing=down": {
+      "model": "rotarycraft:block/gpr",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/gpr",
+      "y": 90
+    },
+    "facing=north": {
       "model": "rotarycraft:block/gpr"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/gpr",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/gpr",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/gpr",
+      "y": 270
     }
   }
 }

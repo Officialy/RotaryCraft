@@ -1,9 +1,12 @@
-// 26.2	2026-07-02T13:14:12.054426	Advancements
+// 26.2	2026-07-15T14:08:10.0138142	Advancements
 a916220f301948258d017ef5e577c96901779486 data/rotarycraft/advancement/bedrockbreaker.json
 e9c5dad0ea096423b3acc234f5de7d50f1cda702 data/rotarycraft/advancement/bedrockshaft.json
 6399c44c6527cedc827f8d4c453fe3844c36c5d7 data/rotarycraft/advancement/dumbextractor.json
 b8e1a80749a5a51f5035d4b695dbd08a608af7c9 data/rotarycraft/advancement/failsteel.json
 a637a54cf1b491ee7221c68b9de30d5c8eda63f4 data/rotarycraft/advancement/floodlight.json
+1478fcde422028e6fd1154bdad0338bc7b9924b4 data/rotarycraft/advancement/gpr.json
+584dd5fbe0394597318bacd3c4723e59f4b9eada data/rotarycraft/advancement/gprendportal.json
+cd8bc8fb4619f77bff7ddcd775bbc5ff9f181b51 data/rotarycraft/advancement/gprspawner.json
 902cbdff4674a1c75797bff7ac8c18ba9228e2ba data/rotarycraft/advancement/jetchicken.json
 c06c42e5d254f6459c3eefd1e1f268fc7c9dcf69 data/rotarycraft/advancement/jetengine.json
 21a6c957c26cdb89d5c4da7037df0e6d288b5ade data/rotarycraft/advancement/jetfail.json

@@ -34,6 +34,7 @@ import reika.rotarycraft.Tests;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.base.blocks.entity.BlockBlastFurnace;
 import reika.rotarycraft.base.blocks.entity.BlockBorer;
+import reika.rotarycraft.base.blocks.entity.BlockGPR;
 import reika.rotarycraft.base.blocks.entity.BlockGroundHydrator;
 import reika.rotarycraft.base.blocks.entity.BlockMachineGun;
 import reika.rotarycraft.base.blocks.entity.BlockFermenter;
@@ -162,6 +163,11 @@ public class RoCModelProvider extends ModelProvider {
             } else if (block instanceof BlockWorktable) {
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
                         block, bottomTopMapping("worktable_top", "worktable_bottom", "worktable"), modelOut);
+            } else if (block instanceof BlockGPR) {
+                // GPR: biome-variant top textures existed in 1.7.10 via a custom renderer; the static
+                // cube uses the grass top with the metal bottom plate on the base and sides.
+                blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
+                        block, bottomTopMapping("gpr/gpr_top_grass", "gpr/gpr_bottom", "gpr/gpr_bottom"), modelOut);
             } else if (block instanceof BlockMiningPipe) {
                 // Tunnel lining left by the borer. Its id is "miningpipe" but the texture is minepipe.png;
                 // all four SHAPE states share one cube model (the legacy render was cube-ish too).

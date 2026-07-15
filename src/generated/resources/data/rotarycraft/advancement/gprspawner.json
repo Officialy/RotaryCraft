@@ -1,0 +1,33 @@
+{
+  "parent": "rotarycraft:gpr",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:spawner"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.gprspawner.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:spawner"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.gprspawner.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

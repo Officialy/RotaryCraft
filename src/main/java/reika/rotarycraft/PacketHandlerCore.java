@@ -260,6 +260,13 @@ public class PacketHandlerCore implements PacketHandler {
                     bevelTe.setChanged();
                     break;
                 }
+                case GPR: {
+                    reika.rotarycraft.blockentities.surveying.BlockEntityGPR gprTe =
+                            (reika.rotarycraft.blockentities.surveying.BlockEntityGPR) te;
+                    gprTe.shift(gprTe.getGuiDirection(), data[0]); //data[0] = +1/-1 shift, 0 = recenter
+                    gprTe.syncAllData(false);
+                    break;
+                }
                 case SPLITTERMODE:
                     ((BlockEntitySplitter) te).setMode(data[0]);
                     break;

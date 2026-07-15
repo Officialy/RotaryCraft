@@ -70,6 +70,10 @@ public enum RotaryAdvancements {
 //    INSANITY(2, 2, MachineRegistry.EXTRACTOR, EXTRACTOR, true),
 //    INSTANTBED(-6, 4, MachineRegistry.BEDROCKBREAKER, BEDROCKBREAKER, true),
 //    PULSEFIRE(5, -5, MachineRegistry.PULSEJET, JETFUEL, false),
+    // 1.7.10 parented GPR off the PCB achievement (not ported); re-rooted to MAKESTEEL.
+    GPR(-2, 4, MachineRegistry.GPR, MAKESTEEL, false), //build and run a GPR
+    GPRSPAWNER(-2, 6, Blocks.SPAWNER, GPR, true), //scan a mob spawner
+    GPRENDPORTAL(-2, 8, Blocks.END_PORTAL_FRAME, GPRSPAWNER, true), //scan an end portal
     ;
     public static final RotaryAdvancements[] list = values();
 

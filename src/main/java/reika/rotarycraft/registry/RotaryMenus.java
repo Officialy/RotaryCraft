@@ -56,6 +56,11 @@ public interface RotaryMenus {
         return new BlankContainer<>(RotaryMenus.BEVEL.get(), id, inv, (BlockEntityBevelGear) te);
     });
     Supplier<MenuType<MusicContainer>> MUSIC = register("music", MusicContainer::new);
+    Supplier<MenuType<BlankContainer<reika.rotarycraft.blockentities.surveying.BlockEntityGPR>>> GPR = register("gpr", (id, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        BlockEntity te = inv.player.level().getBlockEntity(pos);
+        return new BlankContainer<>(RotaryMenus.GPR.get(), id, inv, (reika.rotarycraft.blockentities.surveying.BlockEntityGPR) te);
+    });
 
     Supplier<MenuType<ContainerGrinder>> GRINDER = register("grinder", ContainerGrinder::new);
     Supplier<MenuType<ContainerCentrifuge>> CENTRIFUGE = register("centrifuge", ContainerCentrifuge::new);

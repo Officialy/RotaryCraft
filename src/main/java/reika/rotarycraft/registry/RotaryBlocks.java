@@ -25,7 +25,7 @@ public class RotaryBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(RotaryCraft.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(RotaryCraft.MODID);
 
-    public static final DeferredBlock<Block> GPR = registerMachineBlock("gpr", () -> new Block(blockProperties().strength(20)));
+    public static final DeferredBlock<Block> GPR = registerMachineBlock("gpr", () -> new BlockGPR(blockProperties().strength(20)));
     public static final DeferredBlock<Block> WOOD_FLYWHEEL = registerMachineBlock("wood_flywheel", () -> new BlockGearbox(GearboxTypes.WOOD, blockProperties().strength(20)));
     public static final DeferredBlock<Block> HSLA_FLYWHEEL = registerMachineBlock("hsla_flywheel", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
     public static final DeferredBlock<Block> TUNGSTEN_FLYWHEEL = registerMachineBlock("tungsten_flywheel", () -> new BlockGearbox(GearboxTypes.TUNGSTEN, blockProperties().strength(20)));

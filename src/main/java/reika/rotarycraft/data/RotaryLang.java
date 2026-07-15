@@ -110,6 +110,9 @@ public class RotaryLang extends LanguageProvider {
         adv("floodlight", "Let There Be Light", "Power a Floodlight to full brightness");
         adv("landmine", "Watch Your Step", "Step on an armed Landmine");
         adv("overpressure", "Keeping Cool", "Cool a Steam Engine with a Cooling Fin");
+        adv("gpr", "X-Ray Vision", "Build and run a Ground Penetrating Radar");
+        adv("gprspawner", "Something Lurks Below", "Scan a mob spawner with the GPR");
+        adv("gprendportal", "The End Is Near", "Scan an End Portal with the GPR");
     }
 
     private void adv(String name, String title, String description) {
