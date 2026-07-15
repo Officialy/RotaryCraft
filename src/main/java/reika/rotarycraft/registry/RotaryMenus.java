@@ -80,6 +80,7 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);
 
     Supplier<MenuType<ContainerBlastFurnace>> BLAST_FURNACE = register("blast_furnace", ContainerBlastFurnace::new);
+    Supplier<MenuType<ContainerScaleChest>> SCALECHEST = register("scalechest", ContainerScaleChest::new);
 //
 //    Supplier<MenuType<GrinderMenu>> GRINDER = register("grinder", () -> IForgeMenuType.create(new GrinderMenu.Factory()));
 //

@@ -83,6 +83,7 @@ import reika.rotarycraft.blockentities.processing.BlockEntityMagnetizer;
 import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
 import reika.rotarycraft.blockentities.production.*;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
+import reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
 import reika.rotarycraft.blockentities.surveying.BlockEntityGPR;
 import reika.rotarycraft.blockentities.transmission.*;
@@ -194,7 +195,7 @@ public enum MachineRegistry implements TileEnum {
     REFRESHER("machine.refresher", RotaryBlocks.REFRESHER.get(), BlockEntityItemRefresher.class/*, (modelSet) -> new RefresherModel(modelSet.bakeLayer(RotaryModelLayers.REFRESHER))*/),
     //    FREEZEGUN("machine.freezegun", BlockRotaryCraftMachine.class, BlockEntityFreezeGun.class, "RenderFreezeGun"),
     CAVESCANNER("machine.cavescanner", RotaryBlocks.CAVE_SCANNER.get(), BlockEntityCaveFinder.class/*, (modelSet) -> new CaveScannerModel(modelSet.bakeLayer(RotaryModelLayers.CAVE_SCANNER))*/),
-    //    SCALECHEST("machine.chest", BlockRotaryCraftMachine.class, BlockEntityScaleableChest.class, "RenderScaleChest"),
+    SCALECHEST(true, "machine.chest", RotaryBlocks.SCALECHEST.get(), BlockEntityScaleableChest.class),
     IGNITER(true, "machine.firestarter", RotaryBlocks.IGNITER.get(), BlockEntityIgniter.class),
     MAGNETIZER("machine.magnetizer", RotaryBlocks.MAGNETIZER.get(), BlockEntityMagnetizer.class, (modelSet) -> new MagnetizerModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIZER))),
     CONTAINMENT("machine.containment", RotaryBlocks.CONTAINMENT.get(), BlockEntityContainment.class/*, (modelSet) -> new ContainmentModel(modelSet.bakeLayer(RotaryModelLayers.CONTAINMENT))*/),

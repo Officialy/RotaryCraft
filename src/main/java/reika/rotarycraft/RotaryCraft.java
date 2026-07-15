@@ -208,6 +208,7 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.RESERVOIR.get(), ReservoirScreen::new);
         event.register(RotaryMenus.BEVEL.get(), GuiBevel::new);
         event.register(RotaryMenus.GPR.get(), GuiGPR::new);
+        event.register(RotaryMenus.SCALECHEST.get(), GuiScaleChest::new);
         event.register(RotaryMenus.SORTER.get(), GuiSorter::new);
         event.register(RotaryMenus.BLOWER.get(), GuiBlower::new);
         event.register(RotaryMenus.LANDMINE.get(), GuiLandmine::new);

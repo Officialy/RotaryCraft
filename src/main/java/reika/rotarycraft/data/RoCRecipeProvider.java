@@ -1747,6 +1747,13 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("GgG").pattern("SGS")
                     .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
                     .save(out);
+            // SCALECHEST (RotaryRecipes 785): "sss","scs","sss" — 8 steel around a vanilla chest.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.SCALECHEST.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('c', Items.CHEST)
+                    .pattern("sss").pattern("scs").pattern("sss")
+                    .unlockedBy("has_steel_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out);
             // WEATHERCONTROLLER (RotaryRecipes 775): "s s","sls","pcp" — steel frame, daylight
             // sensor, base panel, circuit board.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.WEATHER_CONTROLLER.get())

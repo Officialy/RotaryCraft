@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T15:08:21.4882703	RotaryCraft Recipes
+// 26.2	2026-07-15T16:10:03.9941826	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -149,6 +149,7 @@ c754888e9ea40a7fceafadf6eb58276db94711f9 data/rotarycraft/advancement/recipes/re
 1828d9f64f1915985d88cdbe6a72bf28e30fac51 data/rotarycraft/advancement/recipes/redstone/refrigerator.json
 d0aef2fb274f02f9dfade3af8dac014f4321d7c4 data/rotarycraft/advancement/recipes/redstone/reservoir.json
 0ffc4db001b8e7c7be550a66596b3d44b951b8c7 data/rotarycraft/advancement/recipes/redstone/rock_melter.json
+307f257eb92c313c73fdef4f6aef36cf94f985db data/rotarycraft/advancement/recipes/redstone/scalechest.json
 432c7f0fea15d4a943b352d8f3fd0cc47ef977d2 data/rotarycraft/advancement/recipes/redstone/self_destruct.json
 372557d05120221fcca1081aea376e7be6ded5aa data/rotarycraft/advancement/recipes/redstone/separation.json
 ca861c509955ff44b8bce851e9fc74bcb5c2e39e data/rotarycraft/advancement/recipes/redstone/smoke_detector.json
@@ -470,6 +471,7 @@ f81cd689932ff4ef54f519251c0e90b92349533c data/rotarycraft/recipe/refresher.json
 5ccddddaa1ba3289e3ba058867d4a7cce3346467 data/rotarycraft/recipe/refrigerator.json
 a7f8b59e1a25b31e727f12ff6024d64ec780c20e data/rotarycraft/recipe/reservoir.json
 d11cab995766e4cd3a94205566f7bb5fb10d85b2 data/rotarycraft/recipe/rock_melter.json
+9a7794f6d8e5d74d7a551d29033b930d87aec23d data/rotarycraft/recipe/scalechest.json
 4aae79612a109d00b34e851942271e8fb50e5763 data/rotarycraft/recipe/screwdriver.json
 41d8e21c0b39209985627fd32b948c0e27b942db data/rotarycraft/recipe/self_destruct.json
 23976f50dcf198176103dda6c82864cc9a5ecbd5 data/rotarycraft/recipe/separation.json

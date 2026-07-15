@@ -349,13 +349,19 @@ public class PacketHandlerCore implements PacketHandler {
                     break;
                 case FORCE:
                     ((BlockEntityForceField) te).setRange = data[0];
-                    break;
+                    break;*/
                 case CHEST: {
-                    BlockEntityScaleableChest chest = (BlockEntityScaleableChest) te;
-                    chest.page = data[0];
-                    ep.openGui(RotaryCraft.getInstance(), 24000 + data[0], chest.level, chest.xCoord, chest.yCoord, chest.zCoord);
+                    reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest chest =
+                            (reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest) te;
+                    int pg = Math.max(0, Math.min(data[0], chest.getMaxPage() - 1));
+                    chest.page = pg;
+                    if (ep instanceof ServerPlayer sp)
+                        sp.openMenu(chest, buf -> {
+                            buf.writeBlockPos(chest.getBlockPos());
+                            buf.writeInt(pg);
+                        });
                     break;
-                }*/
+                }
                 case COILSPEED:
                     ((BlockEntityAdvancedGear) te).setReleaseOmega(data[0]);
                     break;
