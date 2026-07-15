@@ -1,329 +1,283 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.blockentities.level;
-//
-//import net.minecraft.core.BlockPos;
-//import net.minecraft.entity.effect.EntityLightningBolt;
-//import net.minecraft.world.entity.item.ItemEntity;
-//import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.item.ItemStack;
-//import net.minecraft.world.item.Items;
-//import net.minecraft.world.level.Level;
-//import net.minecraft.world.level.block.Block;
-//import net.minecraft.world.storage.WorldInfo;
-//import net.neoforged.neoforge.common.NeoForge;
-//import net.neoforged.oredict.OreDictionary;
-//import reika.dragonapi.DragonAPI;
-//import reika.dragonapi.libraries.ReikaEntityHelper;
-//import reika.dragonapi.libraries.ReikaInventoryHelper;
-//import reika.dragonapi.libraries.registry.ReikaItemHelper;
-//import reika.rotarycraft.auxiliary.RotaryItems;
-//import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
-//import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
-//
-//import reika.rotarycraft.registry.MachineRegistry;
-//import reika.rotarycraft.registry.RotaryItems;
-//
-//import java.util.ArrayList;
-//
-//public class BlockEntityWeatherController extends InventoriedPowerReceiver implements ConditionalOperation {
-//
-//    private int cooldown = 0;
-//
-//    private RainMode rainmode = RainMode.NONE;
-//
-//    @Override
-//    public Block getBlockEntityBlockID() {
-//        return null;
-//    }
-//
-//    @Override
-//    public void updateEntity(Level world, BlockPos pos) {
-//        super.updateBlockEntity();
-//        this.getPowerBelow();
-//        if (cooldown > 0)
-//            cooldown--;
-//        if (power < MINPOWER)
-//            return;
-//        if (!world.canBlockSeeTheSky(x, y + 1, z))
-//            return;
-//
-//        WorldInfo wi = world.getWorldInfo();
-//        //ReikaJavaLibrary.pConsole(rainmode, Dist.DEDICATED_SERVER);
-//        if (rainmode == RainMode.SUPERSTORM) {
-//            wi.setRaining(true);
-//            wi.setThundering(true);
-//            if (DragonAPI.rand.nextInt(20) == 0) {
-//                int xl = x - 64 + DragonAPI.rand.nextInt(129);
-//                int zl = z - 64 + DragonAPI.rand.nextInt(129);
-//                int yl = world.getTopSolidOrLiquidBlock(xl, zl);
-//                world.addWeatherEffect(new EntityLightningBolt(world, xl, yl, zl));
-//            }
-//        }
-//
-//        if (cooldown > 0)
-//            return;
-//
-//        rainmode = this.getRainMode();
-//        //ReikaJavaLibrary.pConsole(rainmode);
-//        if (rainmode.isRain() && RotaryConfig.COMMON.BANRAIN.getState())
-//            rainmode = RainMode.NONE;
-//
-//        if (this.isAlready(world, rainmode))
-//            return;
-//
-//        if (!rainmode.hasAction())
-//            return;
-//
-//        boolean isThunder = world.isThundering();
-//        boolean rain = rainmode.isRain();
-//        boolean thunder = rainmode.isThunder();
-//        boolean storm = rainmode == RainMode.SUPERSTORM;
-//        wi.setRaining(rain);
-//        wi.setThundering(thunder);
-//        NeoForge.EVENT_BUS.post(new WeatherControlEvent(this, rain, thunder, storm));
-//    }
-//
-//    @Override
-//    protected void animateWithTick(Level level, BlockPos blockPos) {
-//
-//    }
-//
-//    private boolean isAlready(Level world, RainMode m) {
-//        boolean rain = m.isRain();
-//        boolean thunder = m.isThunder();
-//        boolean rain2 = world.isRaining();
-//        boolean thunder2 = world.isThundering();
-//        return rain == rain2 && thunder == thunder2;
-//    }
-//
-//    @Override
-//    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-//        return false;
-//    }
-//
-//    private void fire(ItemStack is, ItemStack is2) {
-//        level.playLocalSound(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "DragonAPI.rand.explode", 1F, 1F);
-//        if (is != null) {
-//            ItemEntity ei = new ItemEntity(level, xCoord + 0.5, yCoord + 1.0625, zCoord + 0.5, new ItemStack(is.getItem(), 1, is.getItemDamage()));
-//            ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
-//            ei.delayBeforeCanPickup = 5000;
-//            ei.getAge() = 5900;
-//            ei.motionY = 3;
-//            if (!level.isClientSide())
-//                level.addFreshEntity(ei);
-//        }
-//        if (is2 != null) {
-//            ItemEntity ei = new ItemEntity(level, xCoord + 0.5, yCoord + 1.0625, zCoord + 0.5, ReikaItemHelper.getSizedItemStack(is2, 1));
-//            ReikaEntityHelper.addRandomDirVelocity(ei, 0.2);
-//            ei.delayBeforeCanPickup = 5000;
-//            ei.getAge() = 5900;
-//            ei.motionY = 3;
-//            if (!level.isClientSide())
-//                level.addFreshEntity(ei);
-//        }
-//    }
-//
-//    private int hasSawdust() {
-//        int sawdust = ReikaInventoryHelper.locateInInventory(RotaryItems.SAWDUST, inv, false);
-//        if (sawdust >= 0)
-//            return sawdust;
-//        ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
-//        for (int i = 0; i < itemHandler.getSlots(); i++) {
-//            ItemStack is = itemHandler.getStackInSlot(i);
-//            if (is != null) {
-//                if (ReikaItemHelper.collectionContainsItemStack(li, is))
-//                    return i;
-//            }
-//        }
-//        return -1;
-//    }
-//
-//    private RainMode getRainMode() {
-//        RainMode rainmode;
-//        ItemStack is = null;
-//        ItemStack is2 = null;
-//        int sawdust = this.hasSawdust();
-//        boolean silverio = ReikaInventoryHelper.checkForItemStack(RotaryItems.SILVERIODIDE, inv, false);
-//        boolean redstone = ReikaInventoryHelper.checkForItem(Items.REDSTONE, inv);
-//        boolean glowdust = ReikaInventoryHelper.checkForItem(Items.GLOWSTONE_DUST, inv);
-//        if (sawdust >= 0) {
-//            rainmode = RainMode.SUN;
-//            is = RotaryItems.SAWDUST;
-//        } else if (silverio) {
-//            rainmode = RainMode.RAIN;
-//            is = RotaryItems.SILVERIODIDE;
-//            if (redstone) {
-//                rainmode = RainMode.THUNDER;
-//                is2 = new ItemStack(Items.REDSTONE, 1, 0);
-//            } else if (glowdust) {
-//                rainmode = RainMode.SUPERSTORM;
-//                is2 = new ItemStack(Items.GLOWSTONE_DUST, 1, 0);
-//            }
-//        } else
-//            rainmode = RainMode.NONE;
-//        //ReikaJavaLibrary.pConsole(rainmode, Dist.DEDICATED_SERVER);
-//        if (this.isAlready(level, rainmode))
-//            return this.rainmode;
-//        cooldown = 200 + DragonAPI.rand.nextInt(400);
-//        if (rainmode.hasAction())
-//            this.fire(is, is2);
-//        int slot = -1;
-//        switch (rainmode) {
-//            case NONE:
-//                break;
-//            case SUN:
-//                slot = sawdust;
-//                ReikaInventoryHelper.decrStack(slot, inv);
-//                break;
-//            case RAIN:
-//                slot = ReikaInventoryHelper.locateInInventory(RotaryItems.SILVERIODIDE, inv, false);
-//                ReikaInventoryHelper.decrStack(slot, inv);
-//                break;
-//            case THUNDER:
-//                slot = ReikaInventoryHelper.locateInInventory(RotaryItems.SILVERIODIDE, inv, false);
-//                ReikaInventoryHelper.decrStack(slot, inv);
-//                slot = ReikaInventoryHelper.locateInInventory(Items.REDSTONE, inv);
-//                ReikaInventoryHelper.decrStack(slot, inv);
-//                break;
-//            case SUPERSTORM:
-//                slot = ReikaInventoryHelper.locateInInventory(RotaryItems.SILVERIODIDE, inv, false);
-//                ReikaInventoryHelper.decrStack(slot, inv);
-//                slot = ReikaInventoryHelper.locateInInventory(Items.GLOWSTONE_DUST, inv);
-//                ReikaInventoryHelper.decrStack(slot, inv);
-//                break;
-//        }
-//        return rainmode;
-//    }
-//
-//    private boolean isValidWeatherItem(ItemStack is) {
-//        if (ReikaItemHelper.matchStacks(is, RotaryItems.SAWDUST))
-//            return true;
-//        if (ReikaItemHelper.matchStacks(is, RotaryItems.SILVERIODIDE))
-//            return true;
-//        if (is.getItem() == Items.REDSTONE)
-//            return true;
-//        if (is.getItem() == Items.GLOWSTONE_DUST)
-//            return true;
-//        ArrayList<ItemStack> li = OreDictionary.getOres("dustWood");
-//        return ReikaItemHelper.collectionContainsItemStack(li, is);
-//    }
-//
-//    @Override
-//    public int getContainerSize() {
-//        return 18;
-//    }
-//
-//    @Override
-//    public boolean hasModelTransparency() {
-//        return false;
-//    }
-//
-//
-//    @Override
-//    public MachineRegistry getMachine() {
-//        return MachineRegistry.WEATHERCONTROLLER;
-//    }
-//
-//    @Override
-//    public boolean isItemValidForSlot(int slot, ItemStack is) {
-//        return this.isValidWeatherItem(is);
-//    }
-//
-//    @Override
-//    public int getRedstoneOverride() {
-//        return 0;
-//    }
-//
-//    @Override
-//    protected String getTEName() {
-//        return null;
-//    }
-//
-//    @Override
-//    public boolean areConditionsMet() {
-//        return this.getRainMode().hasAction();
-//    }
-//
-//    @Override
-//    public String getOperationalStatus() {
-//        return cooldown <= 0 ? this.areConditionsMet() ? "Operational" : "Empty Inventory" : "Idle";
-//    }
-//
-//    @Override
-//    public int getContainerSize() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public boolean isEmpty() {
-//        return false;
-//    }
-//
-//    @Override
-//    public ItemStack getItem(int pIndex) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ItemStack removeItem(int pIndex, int pCount) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ItemStack removeItemNoUpdate(int pIndex) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void setItem(int pIndex, ItemStack pStack) {
-//
-//    }
-//
-//    @Override
-//    public boolean stillValid(Player pPlayer) {
-//        return false;
-//    }
-//
-//    @Override
-//    public void clearContent() {
-//
-//    }
-//
-//    @Override
-//    public boolean hasAnInventory() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean hasATank() {
-//        return false;
-//    }
-//
-//    private enum RainMode {
-//        NONE(),
-//        SUN(),
-//        RAIN(),
-//        THUNDER(),
-//        SUPERSTORM();
-//
-//        public boolean isRain() {
-//            return this.ordinal() > SUN.ordinal();
-//        }
-//
-//        public boolean isThunder() {
-//            return this.ordinal() > RAIN.ordinal();
-//        }
-//
-//        public boolean hasAction() {
-//            return this != NONE;
-//        }
-//    }
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.blockentities.level;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.Heightmap;
+
+import reika.dragonapi.libraries.ReikaInventoryHelper;
+import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
+import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
+import reika.rotarycraft.registry.MachineRegistry;
+import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryItems;
+
+/**
+ * The Weather Controller consumes weather-seeding reagents from its inventory to force the world's
+ * weather: sawdust clears it, silver iodide brings rain, silver iodide + redstone escalates to a
+ * thunderstorm, and silver iodide + glowstone dust conjures a superstorm that also calls down
+ * lightning nearby. It must see the sky, draws shaft power from below, and has a random cooldown
+ * between activations. 1.7.10-faithful; the public {@code WeatherControlEvent} broadcast for other
+ * mods is not fired (API-PORT: the event class is not part of this build).
+ */
+public class BlockEntityWeatherController extends InventoriedPowerReceiver implements ConditionalOperation {
+
+    /** Vanilla weather changes set a duration; the machine re-asserts often, so a long spell persists. */
+    private static final int WEATHER_TIME = 12000;
+
+    private int cooldown = 0;
+    private RainMode rainmode = RainMode.NONE;
+
+    public BlockEntityWeatherController(BlockPos pos, net.minecraft.world.level.block.state.BlockState state) {
+        super(RotaryBlockEntities.WEATHER_CONTROLLER.get(), pos, state);
+    }
+
+    private enum RainMode {
+        NONE,
+        SUN,
+        RAIN,
+        THUNDER,
+        SUPERSTORM;
+
+        public boolean isRain() {
+            return this.ordinal() > SUN.ordinal();
+        }
+
+        public boolean isThunder() {
+            return this.ordinal() > RAIN.ordinal();
+        }
+
+        public boolean hasAction() {
+            return this != NONE;
+        }
+    }
+
+    @Override
+    public void updateEntity(Level world, BlockPos pos) {
+        super.updateBlockEntity();
+        this.getPowerBelow();
+        if (cooldown > 0)
+            cooldown--;
+        if (power < MINPOWER)
+            return;
+        if (!world.canSeeSky(pos.above()))
+            return;
+
+        // Superstorm is actively maintained every tick and rains down lightning.
+        if (rainmode == RainMode.SUPERSTORM && world instanceof ServerLevel sl) {
+            this.setWeather(sl, true, true);
+            if (sl.getRandom().nextInt(20) == 0) {
+                int xl = pos.getX() - 64 + sl.getRandom().nextInt(129);
+                int zl = pos.getZ() - 64 + sl.getRandom().nextInt(129);
+                int yl = sl.getHeight(Heightmap.Types.MOTION_BLOCKING, xl, zl);
+                LightningBolt bolt = new LightningBolt(EntityTypes.LIGHTNING_BOLT, sl);
+                bolt.setPos(xl + 0.5, yl, zl + 0.5);
+                sl.addFreshEntity(bolt);
+            }
+        }
+
+        if (cooldown > 0)
+            return;
+
+        rainmode = this.getRainMode(world, pos);
+        if (this.isAlready(world, rainmode))
+            return;
+        if (!rainmode.hasAction())
+            return;
+
+        if (world instanceof ServerLevel sl) {
+            boolean rain = rainmode.isRain();
+            boolean thunder = rainmode.isThunder();
+            if (rainmode == RainMode.SUN)
+                this.setWeather(sl, false, false);
+            else
+                this.setWeather(sl, rain, thunder);
+        }
+        // API-PORT: legacy fired MinecraftForge.EVENT_BUS.post(new WeatherControlEvent(...)) here
+        // so other mods could react; that event class is not in this build.
+    }
+
+    private void setWeather(ServerLevel sl, boolean rain, boolean thunder) {
+        // 26.x moved weather off ServerLevel.setWeatherParameters into the WeatherData saved-data object.
+        var wd = sl.getWeatherData();
+        if (rain) {
+            wd.setClearWeatherTime(0);
+            wd.setRaining(true);
+            wd.setRainTime(WEATHER_TIME);
+            wd.setThundering(thunder);
+            wd.setThunderTime(thunder ? WEATHER_TIME : 0);
+        } else {
+            wd.setRaining(false);
+            wd.setRainTime(0);
+            wd.setThundering(false);
+            wd.setThunderTime(0);
+            wd.setClearWeatherTime(WEATHER_TIME);
+        }
+        wd.setDirty();
+    }
+
+    private boolean isAlready(Level world, RainMode m) {
+        return m.isRain() == world.isRaining() && m.isThunder() == world.isThundering();
+    }
+
+    private RainMode getRainMode(Level world, BlockPos pos) {
+        int sawdust = ReikaInventoryHelper.locateInInventory(new ItemStack(RotaryItems.SAWDUST.get()), itemHandler, false);
+        int silverio = ReikaInventoryHelper.locateInInventory(new ItemStack(RotaryItems.SILVERIODIDE.get()), itemHandler, false);
+        int redstone = ReikaInventoryHelper.locateInInventory(Items.REDSTONE, itemHandler);
+        int glowdust = ReikaInventoryHelper.locateInInventory(Items.GLOWSTONE_DUST, itemHandler);
+
+        RainMode mode;
+        ItemStack fired = ItemStack.EMPTY;
+        ItemStack fired2 = ItemStack.EMPTY;
+        if (sawdust >= 0) {
+            mode = RainMode.SUN;
+            fired = new ItemStack(RotaryItems.SAWDUST.get());
+        } else if (silverio >= 0) {
+            mode = RainMode.RAIN;
+            fired = new ItemStack(RotaryItems.SILVERIODIDE.get());
+            if (redstone >= 0) {
+                mode = RainMode.THUNDER;
+                fired2 = new ItemStack(Items.REDSTONE);
+            } else if (glowdust >= 0) {
+                mode = RainMode.SUPERSTORM;
+                fired2 = new ItemStack(Items.GLOWSTONE_DUST);
+            }
+        } else {
+            return RainMode.NONE;
+        }
+
+        if (this.isAlready(world, mode))
+            return mode;
+
+        cooldown = 200 + world.getRandom().nextInt(400);
+        this.fire(world, pos, fired, fired2);
+
+        // Consume the reagents that produced this mode.
+        switch (mode) {
+            case SUN -> ReikaInventoryHelper.decrStack(sawdust, itemHandler);
+            case RAIN -> ReikaInventoryHelper.decrStack(silverio, itemHandler);
+            case THUNDER -> {
+                ReikaInventoryHelper.decrStack(silverio, itemHandler);
+                ReikaInventoryHelper.decrStack(redstone, itemHandler);
+            }
+            case SUPERSTORM -> {
+                ReikaInventoryHelper.decrStack(silverio, itemHandler);
+                ReikaInventoryHelper.decrStack(glowdust, itemHandler);
+            }
+            default -> {
+            }
+        }
+        return mode;
+    }
+
+    /** Spits the consumed reagent(s) skyward as a visual "seeding" effect. */
+    private void fire(Level world, BlockPos pos, ItemStack is, ItemStack is2) {
+        if (world.isClientSide())
+            return;
+        world.playSound(null, pos, net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE.value(),
+                net.minecraft.sounds.SoundSource.BLOCKS, 1F, 1F);
+        this.spitUp(world, pos, is);
+        this.spitUp(world, pos, is2);
+    }
+
+    private void spitUp(Level world, BlockPos pos, ItemStack is) {
+        if (is == null || is.isEmpty())
+            return;
+        ItemEntity ei = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.0625, pos.getZ() + 0.5,
+                new ItemStack(is.getItem(), 1));
+        ei.setDeltaMovement((world.getRandom().nextDouble() - 0.5) * 0.2, 3, (world.getRandom().nextDouble() - 0.5) * 0.2);
+        ei.setPickUpDelay(32767); //effectively un-pickup-able; despawns on its own
+        world.addFreshEntity(ei);
+    }
+
+    private boolean isValidWeatherItem(ItemStack is) {
+        if (is.isEmpty())
+            return false;
+        Item item = is.getItem();
+        return item == RotaryItems.SAWDUST.get() || item == RotaryItems.SILVERIODIDE.get()
+                || item == Items.REDSTONE || item == Items.GLOWSTONE_DUST;
+    }
+
+    @Override
+    public int getContainerSize() {
+        return 18;
+    }
+
+    public boolean isItemValidForSlot(int slot, ItemStack is) {
+        return this.isValidWeatherItem(is);
+    }
+
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return false;
+    }
+
+    @Override
+    public boolean hasATank() {
+        return false;
+    }
+
+    @Override
+    public boolean hasAnInventory() {
+        return true;
+    }
+
+    @Override
+    protected void animateWithTick(Level world, BlockPos pos) {
+    }
+
+    @Override
+    public MachineRegistry getMachine() {
+        return MachineRegistry.WEATHERCONTROLLER;
+    }
+
+    @Override
+    protected String getTEName() {
+        return "weathercontroller";
+    }
+
+    @Override
+    public Block getBlockEntityBlockID() {
+        return RotaryBlocks.WEATHER_CONTROLLER.get();
+    }
+
+    @Override
+    public boolean hasModelTransparency() {
+        return false;
+    }
+
+    @Override
+    public int getRedstoneOverride() {
+        return 0;
+    }
+
+    @Override
+    public boolean areConditionsMet() {
+        for (int i = 0; i < this.getContainerSize(); i++) {
+            if (this.isValidWeatherItem(itemHandler.getStackInSlot(i)))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getOperationalStatus() {
+        return this.areConditionsMet() ? "Operational" : "No Reagents";
+    }
+}

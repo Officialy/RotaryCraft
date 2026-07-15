@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T14:41:55.5932267	Model Definitions - rotarycraft
+// 26.2	2026-07-15T15:08:32.6723928	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 6c3400f311393b69a85e620b7317e3878ddf0fed assets/rotarycraft/blockstates/aggregator.json
@@ -146,6 +146,7 @@ cf102109496c940a7e88ca73ae9f9903b017e116 assets/rotarycraft/blockstates/stone_sh
 5f956953b1a01448434ccdb6c6fa4a3c4148816d assets/rotarycraft/blockstates/vacuum.json
 aa1c831f1a341ed0a6c1371d262633047f056ae0 assets/rotarycraft/blockstates/valve.json
 eb5011936e7ebad4146b04eec6523e63be00a5aa assets/rotarycraft/blockstates/van_de_graff.json
+8f27ed266d44c98d70b506b4cc0d8af764e9d9e3 assets/rotarycraft/blockstates/weather_controller.json
 6c2aa183312d504c0831268ccfc9e34e2181a61d assets/rotarycraft/blockstates/wetter.json
 ed21799a0522178abb5815c2b0bd71f768116d6e assets/rotarycraft/blockstates/winder.json
 a0bdb4cafe1b66c292b5d4aef944a1d8da2f509a assets/rotarycraft/blockstates/wind_engine.json
@@ -519,6 +520,7 @@ de5d768deae04e7ba2fe25bb15f4a54d51f3cb52 assets/rotarycraft/items/ultrasound.jso
 1815b9ac7e0808637bc44cf32f4457dc25d89459 assets/rotarycraft/items/vacuum.json
 f5475dae0314baa01962537f0ecf89aacb4635cd assets/rotarycraft/items/valve.json
 19c426d4a9de55956ad5ea10f177cb4256a82f4c assets/rotarycraft/items/van_de_graff.json
+8bd28f8c70a3c6033ca61ffac4d95901aadd7dc2 assets/rotarycraft/items/weather_controller.json
 e689a0a988e8c47ee268a61ad738bb98994a2404 assets/rotarycraft/items/wetter.json
 534d88921858ad8d44e64509627fa32fef734328 assets/rotarycraft/items/winder.json
 56608331a2754edc878d7347e6f4434808bc7c27 assets/rotarycraft/items/wind_engine.json
@@ -681,6 +683,7 @@ ebace339a93a4d691c72eb0961cb953fbb8a25b9 assets/rotarycraft/models/block/tungste
 fd6ee87262a1f5e3521e72690d95d91cea8bae27 assets/rotarycraft/models/block/vacuum.json
 dbbe2b10305e2791517c2ef3fda1cb7d6a0b7616 assets/rotarycraft/models/block/valve.json
 f6ba432eedc4c353b2c3dbb314d0a0a6e84ffdc7 assets/rotarycraft/models/block/van_de_graff.json
+b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/weather_controller.json
 9a8cbcc3a4f1ba318015988d9dd645d7b53f582b assets/rotarycraft/models/block/wetter.json
 4cfc8df39988bf42396442b5f5bdd055c806a80e assets/rotarycraft/models/block/winder.json
 d8d8a06aa1b33a160cd7c6fe401d73db5904984c assets/rotarycraft/models/block/wind_engine.json

@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T14:41:43.5172333	RotaryCraft Recipes
+// 26.2	2026-07-15T15:08:21.4882703	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -176,6 +176,7 @@ f3fe755b0096486f590629accb3124a1137fa95d data/rotarycraft/advancement/recipes/re
 5e4e8b51149959f4ae4f57350c3eb726a5cc869e data/rotarycraft/advancement/recipes/redstone/vacuum.json
 4a4582cccf5252f8be39f3ae780524fdbf5fd640 data/rotarycraft/advancement/recipes/redstone/valve.json
 616dbfaf67a51a14499f929d70c7e0173a71e021 data/rotarycraft/advancement/recipes/redstone/van_de_graff.json
+0d5be46f3758320b6f9d5efe1c2cf5b8ca7c13a1 data/rotarycraft/advancement/recipes/redstone/weather_controller.json
 84c695b009a678bae14174b6624868c68cebe365 data/rotarycraft/advancement/recipes/redstone/wetter.json
 6cce933b3cabbbdb79b6f074fb8971091ee46479 data/rotarycraft/advancement/recipes/redstone/winder.json
 0dcd5753034368863d93bcf440531ba43bd40b5a data/rotarycraft/advancement/recipes/redstone/wind_engine.json
@@ -510,6 +511,7 @@ f8b6525a93a8d6bd17dfb65d09471f97be68f5fc data/rotarycraft/recipe/tungsten_gearbo
 b382ab75d0d783a698767db69fe9135ea73df2e5 data/rotarycraft/recipe/vacuum.json
 9bb3d320c7579586012014422f41d69622d6550c data/rotarycraft/recipe/valve.json
 bea30536e2890f1981d273be9fe16d75a61c1256 data/rotarycraft/recipe/van_de_graff.json
+86999d7304b6e21f8c35c0ba102e98b3b4d9bc58 data/rotarycraft/recipe/weather_controller.json
 f0045e7259fb67215c5df143cc2bccef203c9b84 data/rotarycraft/recipe/wetter.json
 2c2ca7061ede230ac555a4cdb17a3c54955887df data/rotarycraft/recipe/wetter/cobblestone.json
 d46a3b191822891afcb979b67701d01ffa3c2eac data/rotarycraft/recipe/wetter/sand.json

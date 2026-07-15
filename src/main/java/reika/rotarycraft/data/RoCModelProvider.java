@@ -146,6 +146,14 @@ public class RoCModelProvider extends ModelProvider {
                 // Directional drilling machine: drill face out the front, steel sides.
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
                         block, orientableMapping("borer_front", "steel", "steel"), modelOut);
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockWeatherController) {
+                // No dedicated weather-controller texture ships (legacy used a spinning iodide BER);
+                // steel-clad placeholder body, consistent with the other model-less machines.
+                var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"));
+                blockModelId = ModelTemplates.CUBE_ALL.create(
+                        block,
+                        new TextureMapping().put(TextureSlot.ALL, tex).put(TextureSlot.PARTICLE, tex),
+                        modelOut);
             } else if (block instanceof BlockGroundHydrator || block instanceof BlockMachineGun) {
                 // Simple steel-clad body for now (no dedicated model ported yet).
                 var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"));

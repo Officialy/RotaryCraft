@@ -89,6 +89,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> SPLITTER = registerMachineBlock("splitter", () -> new BlockSplitter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> SMOKE_DETECTOR = registerMachineBlock("smoke_detector", () -> new BlockSmokeDetector(blockProperties().strength(5)));
     public static final DeferredBlock<Block> LAMP = registerMachineBlock("lamp", () -> new BlockLamp(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> WEATHER_CONTROLLER = registerMachineBlock("weather_controller", () -> new BlockWeatherController(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DISTRIBUTION_CLUTCH = registerMachineBlock("distribution_clutch", () -> new BlockDistributionClutch(blockProperties().strength(5)));
     public static final DeferredBlock<Block> CLUTCH = registerMachineBlock("clutch", () -> new BlockClutch(blockProperties().strength(5)));
 

@@ -1747,6 +1747,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("GgG").pattern("SGS")
                     .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
                     .save(out);
+            // WEATHERCONTROLLER (RotaryRecipes 775): "s s","sls","pcp" — steel frame, daylight
+            // sensor, base panel, circuit board.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.WEATHER_CONTROLLER.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('l', Items.DAYLIGHT_DETECTOR)
+                    .define('c', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('p', RotaryItems.HSLA_PLATE.get())
+                    .pattern("s s").pattern("sls").pattern("pcp")
+                    .unlockedBy("has_circuit_board", has(RotaryItems.CIRCUIT_BOARD.get()))
+                    .save(out);
             // CONTAINMENT: "lnl","ddd","sgs" — 2×PURPLE_DYE + 1×NETHER_STAR + 3×DIAMOND + 2×BASEPANEL + 1×GOLD.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.CONTAINMENT.get())
                     .define('d', Items.DIAMOND)
