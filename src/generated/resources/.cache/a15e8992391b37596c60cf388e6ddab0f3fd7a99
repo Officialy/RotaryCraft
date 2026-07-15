@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T12:06:37.8476843	RotaryCraft Recipes
+// 26.2	2026-07-15T12:14:38.8532224	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -128,6 +128,7 @@ a6a82f8a7b4c035d6ee824ca9c26ca91938994a7 data/rotarycraft/advancement/recipes/re
 a57361262e14ac16c098c6746595ceaa79fb5741 data/rotarycraft/advancement/recipes/redstone/lava_smeltory.json
 68487b9936273ffc5186450786aaabe5ad3a3366 data/rotarycraft/advancement/recipes/redstone/lawn_sprinkler.json
 0c149d9026e7e823f4acc1b33792b7416534d9dc data/rotarycraft/advancement/recipes/redstone/line_builder.json
+ffb7d70d159992ef06e8e931c16b8cdeb4d18cee data/rotarycraft/advancement/recipes/redstone/magnetizer.json
 48cb121b86f890441d7ce128088b1d34fea95a3d data/rotarycraft/advancement/recipes/redstone/microturbine.json
 a2b088e4c315486b7dd17a7b6aa6030f960387e6 data/rotarycraft/advancement/recipes/redstone/mirror.json
 6252023cbde1a017a8eea7244c89450231507a92 data/rotarycraft/advancement/recipes/redstone/mob_harvester.json
@@ -407,6 +408,7 @@ bc86bb70daf08634aa4c0ede21b2d80d4634620d data/rotarycraft/recipe/lava_smeltory.j
 5df075bb19315ac8dbfa74391cbdbe771db22eb0 data/rotarycraft/recipe/lawn_sprinkler.json
 ffdd746447e270e57942879cce58b480563f5ce6 data/rotarycraft/recipe/lens.json
 f5ebce60bb0be396321c6b0f04a22585b6680565 data/rotarycraft/recipe/line_builder.json
+a4449377daa01c0528c8bd85435eb0c57613ac8e data/rotarycraft/recipe/magnetizer.json
 81a05d9e2ef8baae5d2822f5bab8497c5568ccd9 data/rotarycraft/recipe/microturbine.json
 322045b98901c6acdf698e72e79519dbe1568559 data/rotarycraft/recipe/mirror.json
 aabd7eee2bb646c2fb3e76214256e7a42a0cfbc4 data/rotarycraft/recipe/mirror_panel.json

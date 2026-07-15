@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:compressor",
+    "G": "minecraft:glass_pane",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "s": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "SPS",
+    "GCG",
+    "SsS"
+  ],
+  "result": {
+    "id": "rotarycraft:aggregator"
+  }
+}

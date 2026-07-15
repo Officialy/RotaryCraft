@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "g": "rotarycraft:gold_coil",
+    "m": "rotarycraft:mount",
+    "p": "rotarycraft:hsla_steel_plate",
+    "r": "minecraft:redstone"
+  },
+  "pattern": [
+    "p p",
+    "gmg",
+    "prp"
+  ],
+  "result": {
+    "id": "rotarycraft:magnetizer"
+  }
+}

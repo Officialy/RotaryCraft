@@ -974,6 +974,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_compressor", has(RotaryItems.COMPRESSOR.get()))
                     .save(out);
 
+            // MAGNETIZER: legacy "p p","gmg","prp" — base panels + gold coils around a mount,
+            // with redstone at the bottom-centre.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.MAGNETIZER.get())
+                    .define('p', RotaryItems.HSLA_PLATE.get())
+                    .define('g', RotaryItems.GOLD_COIL.get())
+                    .define('m', RotaryItems.MOUNT.get())
+                    .define('r', Items.REDSTONE)
+                    .pattern("p p").pattern("gmg").pattern("prp")
+                    .unlockedBy("has_gold_coil", has(RotaryItems.GOLD_COIL.get()))
+                    .save(out);
+
             // SPRINKLER: legacy 4x " s "," p "," i " — steel (or tin), a pipe, an impeller.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.SPRINKLER.get(), 4)
                     .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
