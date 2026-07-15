@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T12:14:38.8532224	RotaryCraft Recipes
+// 26.2	2026-07-15T12:41:52.4507744	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -102,6 +102,7 @@ a3be9d29dffb48bbca99d0b767f09678ff4d97d7 data/rotarycraft/advancement/recipes/re
 273a9d2bedaac77c0d204260a6936762c2b38449 data/rotarycraft/advancement/recipes/redstone/friction_boiler.json
 1d3fcaf215e60f74dd2c2803e589d6f12e408164 data/rotarycraft/advancement/recipes/redstone/fuel_line.json
 159815a1f35a171dfdd3168c74964c537e608ed0 data/rotarycraft/advancement/recipes/redstone/gas_engine.json
+f2b91512e3ea9351a14929b96c43c837a56b48ce data/rotarycraft/advancement/recipes/redstone/gas_tank.json
 1235188901a2e85f5bcf26b4e6ca4a17e6f743c8 data/rotarycraft/advancement/recipes/redstone/gold_coil.json
 4b82f4bc6c5a5c0b57818f3a8e4b7ac7daa0fae4 data/rotarycraft/advancement/recipes/redstone/gpr.json
 16171f1848266cef5d737870c66c308b91f60638 data/rotarycraft/advancement/recipes/redstone/grinder.json
@@ -341,6 +342,7 @@ b039f7f5497d9bd0c51190aaa0d3fe6b34ea3d45 data/rotarycraft/recipe/friction_boiler
 47abf00e244bc394899f9632d65e6481b88f6e5a data/rotarycraft/recipe/friction_heater/hsla_steel_from_scrap.json
 4261e4095604a2ff8b006ab5eb59ef4a9d5a3422 data/rotarycraft/recipe/fuel_line.json
 9699f936cf20a0e90aee257ee6ab94f3480cb398 data/rotarycraft/recipe/gas_engine.json
+461ca5859a75c77b2988592bcbd029df1ff15105 data/rotarycraft/recipe/gas_tank.json
 1d9ee3e767728e640fb1c911cf7e17d6fd5a0950 data/rotarycraft/recipe/gold_coil.json
 f8333352f44395df7021d6d8e55852ec21b28344 data/rotarycraft/recipe/gold_flakes_to_ingot.json
 9437272ed2f57c168a379afb5ac43d824543c8a8 data/rotarycraft/recipe/gpr.json

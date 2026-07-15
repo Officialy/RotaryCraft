@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T12:07:00.5707447	Model Definitions - rotarycraft
+// 26.2	2026-07-15T12:42:14.4333184	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 6c3400f311393b69a85e620b7317e3878ddf0fed assets/rotarycraft/blockstates/aggregator.json
@@ -69,6 +69,7 @@ ce644a38542a8edb13dfee6d50d839654c97a673 assets/rotarycraft/blockstates/fraction
 262cd2c68724728effad23ffa275dbb8072f22a5 assets/rotarycraft/blockstates/friction_boiler.json
 bf1aed626af984a13d2f0bdf1945867a4e434a80 assets/rotarycraft/blockstates/friction_heater.json
 189463abdf80052a16fc7e70bbd8617fd39aea3b assets/rotarycraft/blockstates/gas_engine.json
+bd4de8e46f95167f0ac64b38d15330e48ca96610 assets/rotarycraft/blockstates/gas_tank.json
 9878ce3b3977392744059d3ad97f6598c57b7309 assets/rotarycraft/blockstates/gpr.json
 3aff6b9ba76dbf9edb4fcb4351c100687f91d3c0 assets/rotarycraft/blockstates/grinder.json
 27f61aa4b92f7a5cdb59293a58fd4fde87661d48 assets/rotarycraft/blockstates/grindstone.json
@@ -309,6 +310,7 @@ f1b157be958baf9f5132860487af4bb437d6b9e2 assets/rotarycraft/items/fractionator.j
 e7dc426c31ce925d395acdb253537e68187367ce assets/rotarycraft/items/friction_heater.json
 1f46c32c07d1b9cb35c620df8224ec9db49a8ff4 assets/rotarycraft/items/fuel_line.json
 fbe65febbd7834bbcecf014db9d36cdc4b12c16c assets/rotarycraft/items/gas_engine.json
+aa5f3f6134b7ed3297a21b632ee79aa90e0558ef assets/rotarycraft/items/gas_tank.json
 bc43a49f2ee3d1cd7fd5f69bcd4ff0ef8d7f8d19 assets/rotarycraft/items/generator.json
 755cc77368d57a231315c83aeaf28b3bf533d857 assets/rotarycraft/items/gold_coil.json
 aa36f37d30022e83da35b724161530beb6fd5175 assets/rotarycraft/items/gold_dust.json
@@ -600,6 +602,7 @@ b2a34cf4d00c2ab0f30bbaa40db08e4304c8de35 assets/rotarycraft/models/block/fractio
 7f53f1a724e9b44d2407a036fc66d53902da7899 assets/rotarycraft/models/block/friction_boiler.json
 282be9ebd6abc548464ccf5404f0973a55c32295 assets/rotarycraft/models/block/friction_heater.json
 eb7b48c7fe20a79f3f85d89287f5248b1e65932a assets/rotarycraft/models/block/gas_engine.json
+b13a836daa0b539dc7e10d6296ccb802db1e7595 assets/rotarycraft/models/block/gas_tank.json
 3ed4260e84bfc99f1b1faf7f8a9cf202d0b10fa7 assets/rotarycraft/models/block/gpr.json
 cca47425c6f8a0cf711f535b6ea1553839037ca5 assets/rotarycraft/models/block/grinder.json
 1d7ca01d133dd3a0e7ba2b8eaaa5c30ac8847512 assets/rotarycraft/models/block/grindstone.json

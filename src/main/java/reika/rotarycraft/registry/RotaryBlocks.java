@@ -202,6 +202,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> FERMENTER = registerMachineBlock("fermenter", () -> new BlockFermenter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> EXTRACTOR = registerMachineBlock("extractor", () -> new BlockExtractor(blockProperties().strength(5)));
     public static final DeferredBlock<Block> AGGREGATOR = registerMachineBlock("aggregator", () -> new reika.rotarycraft.base.blocks.entity.BlockAggregator(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> GASTANK = registerMachineBlock("gas_tank", () -> new reika.rotarycraft.base.blocks.entity.BlockGasTank(blockProperties().strength(5)));
 
     // 1.21.5: Block.Properties / Item.Properties must have setId() called before the Block/Item
     // constructor runs (BlockBehaviour.<init> dereferences props.id in effectiveDrops()). To avoid

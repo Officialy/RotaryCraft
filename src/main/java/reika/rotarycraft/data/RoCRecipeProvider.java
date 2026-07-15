@@ -985,6 +985,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_gold_coil", has(RotaryItems.GOLD_COIL.get()))
                     .save(out);
 
+            // GASTANK: legacy "SIS","PRP","PPP" — steel + base panels + an impeller around a
+            // reservoir block (the compression core).
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.GASTANK.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('R', RotaryBlocks.RESERVOIR.get())
+                    .pattern("SIS").pattern("PRP").pattern("PPP")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
             // SPRINKLER: legacy 4x " s "," p "," i " — steel (or tin), a pipe, an impeller.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.SPRINKLER.get(), 4)
                     .define('s', RotaryItems.HSLA_STEEL_INGOT.get())

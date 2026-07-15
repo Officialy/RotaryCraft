@@ -251,7 +251,7 @@ public enum MachineRegistry implements TileEnum {
     BLOWER("machine.blower", RotaryBlocks.BLOWER.get(), BlockEntityBlower.class), // no custom model in original
     //    PORTALSHAFT("machine.portalshaft", BlockRotaryCraftMachine.class, BlockEntityPortalShaft.class, "RenderPortalShaft"),
     REFRIGERATOR(true, "machine.refrigerator", RotaryBlocks.REFRIGERATOR.get(), BlockEntityRefrigerator.class/*, (modelSet) -> new RefrigeratorModel(modelSet.bakeLayer(RotaryModelLayers.REFRIGERATOR))*/),
-    //    GASTANK("machine.gastank", BlockRotaryCraftMachine.class, BlockEntityFluidCompressor.class, "RenderGasCompressor"),
+    GASTANK("machine.gastank", RotaryBlocks.GASTANK.get(), reika.rotarycraft.blockentities.storage.BlockEntityFluidCompressor.class, (modelSet) -> new reika.rotarycraft.models.GasCompressorModel(modelSet.bakeLayer(RotaryModelLayers.GASTANK))),
 //    CRAFTER("machine.crafter", BlockRotaryCraftMachine.class, BlockEntityAutoCrafter.class),
     COMPOSTER("machine.composter", RotaryBlocks.COMPOSTER.get(), BlockEntityComposter.class),
     //    ANTIAIR("machine.antiair", BlockRotaryCraftMachine.class, BlockEntityAAGun.class, "RenderAAGun"),

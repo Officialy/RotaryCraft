@@ -67,6 +67,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation LAVA_MAKER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "lava_maker"), "main");
     public static final ModelLayerLocation WOODCUTTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "woodcutter"), "main");
     public static final ModelLayerLocation AGGREGATOR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "aggregator"), "main");
+    public static final ModelLayerLocation GASTANK = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "gastank"), "main");
     public static final ModelLayerLocation SPRINKLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "sprinkler"), "main");
     public static final ModelLayerLocation COMPACTOR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "compactor"), "main");
     public static final ModelLayerLocation WETTER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "wetter"), "main");
@@ -171,6 +172,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.LAVAMAKER.get(), reika.rotarycraft.renders.mi.RenderLavaMaker::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WOODCUTTER.get(), reika.rotarycraft.renders.dm.RenderWoodcutter::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.AGGREGATOR.get(), reika.rotarycraft.renders.m.RenderAggregator::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.GASTANK.get(), reika.rotarycraft.renders.m.RenderGasCompressor::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SPRINKLER.get(), reika.rotarycraft.renders.m.RenderSprinkler::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.COMPACTOR.get(), reika.rotarycraft.renders.dmi.RenderCompactor::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WETTER.get(), reika.rotarycraft.renders.mi.RenderWetter::new);
@@ -266,6 +268,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(LAVA_MAKER, LavaMakerModel::createLayer);
         event.registerLayerDefinition(WOODCUTTER, WoodcutterModel::createLayer);
         event.registerLayerDefinition(AGGREGATOR, reika.rotarycraft.models.animated.AggregatorModel::createLayer);
+        event.registerLayerDefinition(GASTANK, reika.rotarycraft.models.GasCompressorModel::createLayer);
         event.registerLayerDefinition(SPRINKLER, SprinklerModel::createLayer);
         event.registerLayerDefinition(COMPACTOR, CompactorModel::createLayer);
         event.registerLayerDefinition(WETTER, WetterModel::createLayer);
