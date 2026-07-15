@@ -1,4 +1,4 @@
-// 26.2	2026-07-15T19:36:26.609028	Model Definitions - rotarycraft
+// 26.2	2026-07-15T19:45:33.2679354	Model Definitions - rotarycraft
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
 6c3400f311393b69a85e620b7317e3878ddf0fed assets/rotarycraft/blockstates/aggregator.json
@@ -65,6 +65,7 @@ b98b11cb747d23dc82257700fbbc4f1a97b03906 assets/rotarycraft/blockstates/fan.json
 bfefc068cc1c7b570cef411e85cab188c5e0de0e assets/rotarycraft/blockstates/fertilizer.json
 7de529bda37139b42abd38831486282e83e1c501 assets/rotarycraft/blockstates/filler.json
 e49a9254e80737b588b8803cdde391062874ca60 assets/rotarycraft/blockstates/filling_station.json
+54c26a78a7b6eeb5ab5c73756734cf726f0a1193 assets/rotarycraft/blockstates/firework.json
 fdee0af57ff5974dee97257406b27adf7c2a6cbd assets/rotarycraft/blockstates/floodlight.json
 b7c2d1d52c998771110de37c52f0ee7040c6967e assets/rotarycraft/blockstates/force_field.json
 ce644a38542a8edb13dfee6d50d839654c97a673 assets/rotarycraft/blockstates/fractionator.json
@@ -310,6 +311,7 @@ c214ca14233118c8a1d2f598f1f165f717dc1696 assets/rotarycraft/items/fermenter.json
 79b5a12881a7c3e75a2764eec815eb62bac31fcb assets/rotarycraft/items/fertilizer.json
 8975736be57e4e88fcf0944e0b766bd84563906d assets/rotarycraft/items/filler.json
 3c1342f54d1cb693ff4f5258180cf9c3658f9617 assets/rotarycraft/items/filling_station.json
+13c1692ece23c96ffae6b772cdbe611694903645 assets/rotarycraft/items/firework.json
 0125f96c24f8b15d1b28fbd6d4e5a72807e3d845 assets/rotarycraft/items/flamethrower.json
 5a49f485118ddc47503c94a9dc82628fe28e4856 assets/rotarycraft/items/floodlight.json
 87c529ec430bfc6c62b189cd89287f78fc58d9ab assets/rotarycraft/items/flour.json
@@ -614,6 +616,7 @@ e3293155a071a1e35d5aaa16ddb234c154094c16 assets/rotarycraft/models/block/ferment
 a299f1f51fdb36aca81c7ef4c2a6603fd9fbd701 assets/rotarycraft/models/block/fertilizer.json
 8571629d1ead74ea81aebe83f9b4864beb5bfd65 assets/rotarycraft/models/block/filler.json
 7a31884417677044c8169e674303dc6da3d5d020 assets/rotarycraft/models/block/filling_station.json
+b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/firework.json
 341a3fbe8cd66d4a998914eea6da5d4e641c04c3 assets/rotarycraft/models/block/floodlight.json
 b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/force_field.json
 b2a34cf4d00c2ab0f30bbaa40db08e4304c8de35 assets/rotarycraft/models/block/fractionator.json

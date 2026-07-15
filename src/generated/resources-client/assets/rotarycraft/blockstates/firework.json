@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/firework",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/firework",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/firework"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/firework",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/firework",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/firework",
+      "y": 270
+    }
+  }
+}

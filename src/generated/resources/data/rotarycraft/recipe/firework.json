@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "D": "minecraft:dispenser",
+    "E": "minecraft:ender_eye",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "BEB",
+    "BDB",
+    "BRB"
+  ],
+  "result": {
+    "id": "rotarycraft:firework"
+  }
+}

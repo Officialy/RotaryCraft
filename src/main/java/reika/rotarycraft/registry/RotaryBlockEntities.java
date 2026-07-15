@@ -139,6 +139,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityRailGun::new, RotaryBlocks.RAILGUN.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.weaponry.BlockEntityEMP>> EMP = BLOCK_ENTITIES.register("emp", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.weaponry.BlockEntityEMP::new, RotaryBlocks.EMP.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.decorative.BlockEntityFireworkMachine>> FIREWORK = BLOCK_ENTITIES.register("firework", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.decorative.BlockEntityFireworkMachine::new, RotaryBlocks.FIREWORK.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityClutch>> CLUTCH = BLOCK_ENTITIES.register("clutch", () ->
             new BlockEntityType<>(BlockEntityClutch::new, RotaryBlocks.CLUTCH.get()));

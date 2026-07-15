@@ -162,7 +162,7 @@ public enum MachineRegistry implements TileEnum {
     OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class/*, (modelSet) -> new ObsidianMakerModel(modelSet.bakeLayer(RotaryModelLayers.OBSIDIAN_MAKER))*/),
     //    PILEDRIVER("machine.piledriver", BlockRotaryCraftMachine.class, BlockEntityPileDriver.class, "RenderPileDriver"),
     VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class, (modelSet) -> new VacuumModel(modelSet.bakeLayer(RotaryModelLayers.VACCUUM))),
-//    FIREWORK(true, "machine.firework", BlockRotaryCraftMachine.class, BlockEntityFireworkMachine.class),
+    FIREWORK("machine.firework", RotaryBlocks.FIREWORK.get(), reika.rotarycraft.blockentities.decorative.BlockEntityFireworkMachine.class),
     SPRINKLER(true, "machine.sprinkler", RotaryBlocks.SPRINKLER.get(), BlockEntitySprinkler.class, (modelSet) -> new SprinklerModel(modelSet.bakeLayer(RotaryModelLayers.SPRINKLER))),
     WOODCUTTER("machine.woodcutter", RotaryBlocks.WOODCUTTER.get(), BlockEntityWoodcutter.class, (modelSet) -> new WoodcutterModel(modelSet.bakeLayer(RotaryModelLayers.WOODCUTTER))),
     SPAWNERCONTROLLER("machine.spawnercontroller", RotaryBlocks.SPAWNERCONTROLLER.get(), BlockEntitySpawnerController.class, (modelSet) -> new SpawnerModel(modelSet.bakeLayer(RotaryModelLayers.SPAWNER_CONTROLLER))),

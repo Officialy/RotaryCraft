@@ -1747,6 +1747,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("GgG").pattern("SGS")
                     .unlockedBy("has_glowstone", has(Items.GLOWSTONE))
                     .save(out);
+            // FIREWORK (RotaryRecipes 716): "BEB","BDB","BRB" — base panels, ender eyes, dispenser,
+            // redstone.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FIREWORK.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .define('E', Items.ENDER_EYE)
+                    .define('D', Items.DISPENSER)
+                    .define('R', Items.REDSTONE)
+                    .pattern("BEB").pattern("BDB").pattern("BRB")
+                    .unlockedBy("has_dispenser", has(Items.DISPENSER))
+                    .save(out);
             // EMP (RotaryRecipes 845): "GDG","GsG","PnP" — gold coils, diamond block, bedrock shaft
             // core, base panels, nether star.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.EMP.get())
