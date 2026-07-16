@@ -25,6 +25,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaPhysicsHelper;
 import reika.dragonapi.libraries.rendering.ReikaColorAPI;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import reika.rotarycraft.auxiliary.HeatRippleRenderer;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.auxiliary.interfaces.RedstoneUpgradeable;
@@ -187,35 +191,51 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
         stack.popPose();
     }
 
-    private void prepareShader(BlockEntityEngine tile, PoseStack stack) {
-       /* todo if (tile.getEngineType() == EngineType.JET) {
-            BlockEntityJetEngine te = (BlockEntityJetEngine) tile;
-            double dx = 0.625 * tile.getWriteDirection().getStepX();
-            double dz = 0.625 * tile.getWriteDirection().getStepZ();
-            Player ep = Minecraft.getInstance().player;
-            stack.pushPose();
-            stack.translate(0, 1, -0.625);
-            double dist = ep.distanceToSqr(tile.getBlockPos().getX() + 0.5 + dx, tile.getBlockPos().getY() + 0.5, tile.getBlockPos().getZ() + 0.5 + dz);
-            float f = 0;
-            if (te.omega > 0) {
-                f = Math.max(f, (float) Math.sqrt(te.omega * 0.5F / EngineType.JET.getSpeed()));
-            }
-            if (te.temperature > 100) {
-                f = Math.max(f, Math.min(1, (te.temperature - 100F) / (te.getMaxExhaustTemperature() - 100F)));
-            }
-            double dd = 0.25;
-            float fac = te.isAfterburning() ? 1 : 0.75F;
-            for (double d = 0; d <= 3; d += dd) {
-                dx += dd * tile.getWriteDirection().getStepX();
-                dz += dd * tile.getWriteDirection().getStepZ();
-                HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile, tile.getBlockPos().getX() + 0.5 + dx, tile.getBlockPos().getY() + 0.5, tile.getBlockPos().getZ() + 0.5 + dz, ep, dist, f, fac, 1, 1);
-                stack.translate(0, 0, -dd);
-                fac *= te.isAfterburning() ? 0.875 : 0.825;
-                if (fac <= 0.01)
-                    break;
-            }
-            stack.popPose();
-        }*/
+    /**
+     * Lay a line of heat emitters down the jet's exhaust so the air behind it shimmers. Posts every
+     * frame while the engine is spinning or hot; {@link HeatRippleRenderer} owns the rendering and
+     * drops emitters the viewer cannot see.
+     *
+     * <p>1.7.10 walked the exhaust by translating the pose between emitters. Nothing is drawn here,
+     * so this walks world coordinates directly instead.</p>
+     */
+    private void postHeatRipple(BlockEntityEngine tile) {
+        if (tile.getEngineType() != EngineType.JET || !(tile instanceof BlockEntityJetEngine te))
+            return;
+        Player ep = Minecraft.getInstance().player;
+        Direction dir = tile.getWriteDirection();
+        if (ep == null || dir == null)
+            return;
+
+        // Strength is whichever reads hotter: how fast it is spinning, or how hot the exhaust is.
+        float f = 0;
+        if (te.omega > 0)
+            f = Math.max(f, (float) Math.sqrt(te.omega * 0.5F / EngineType.JET.getSpeed()));
+        if (te.temperature > 100)
+            f = Math.max(f, Math.min(1, (te.temperature - 100F) / (te.getMaxExhaustTemperature() - 100F)));
+        if (f <= 0)
+            return;
+
+        BlockPos pos = tile.getBlockPos();
+        double dx = 0.625 * dir.getStepX();
+        double dz = 0.625 * dir.getStepZ();
+        // Measured once at the exhaust mouth and reused down the plume, as in 1.7.10. Squared: the
+        // original handed over a linear distance and squared it on the way to the shader.
+        double distSq = ep.distanceToSqr(pos.getX() + 0.5 + dx, pos.getY() + 0.5, pos.getZ() + 0.5 + dz);
+
+        double dd = 0.25;
+        float fac = te.isAfterburning() ? 1 : 0.75F;
+        for (double d = 0; d <= 3; d += dd) {
+            dx += dd * dir.getStepX();
+            dz += dd * dir.getStepZ();
+            HeatRippleRenderer.instance.addHeatRippleEffectIfLOS(tile,
+                    pos.getX() + 0.5 + dx, pos.getY() + 0.5, pos.getZ() + 0.5 + dz,
+                    ep, distSq, f, fac, 1, 1);
+            // The plume thins out with range; stop once it would be invisible.
+            fac *= te.isAfterburning() ? 0.875 : 0.825;
+            if (fac <= 0.01)
+                break;
+        }
     }
 
     /**
@@ -244,6 +264,10 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
             renderBlockEntityEngineAt(snapped, engine, vc, light);
         });
+
+        // Posted now rather than inside the deferred lambda: the emitters are consumed after the
+        // level finishes drawing, and this only records positions -- it queues no geometry.
+        postHeatRipple(engine);
 
         if (engine instanceof BlockEntityJetEngine jet && jet.getTemperature() > 600) {
             int temp = Math.max(jet.getTemperature() - 600, (jet.getTemperature() - 1000) * 5 / 2);

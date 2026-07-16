@@ -9,14 +9,19 @@
  ******************************************************************************/
 package reika.rotarycraft.renders;
 
+import com.mojang.blaze3d.pipeline.BindGroupLayout;
 import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.PrimitiveTopology;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.BindGroupLayouts;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+import reika.rotarycraft.RotaryCraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -91,6 +96,31 @@ public final class RotaryRenderPipelines {
             RenderSetup.builder(NO_DEPTH_LINES).createRenderSetup()
     );
 
+    /**
+     * The heat-haze pass, driven by {@link reika.rotarycraft.auxiliary.HeatRippleRenderer}: reads the
+     * scene and writes it back displaced around each hot machine.
+     *
+     * <p>Built the way {@code PostChain} builds its own passes (on {@code POST_PROCESSING_SNIPPET},
+     * with vanilla's {@code core/screenquad} vertex shader, which generates the fullscreen triangle
+     * from {@code gl_VertexID} and so needs no vertex buffer). It is driven by hand rather than
+     * declared in the chain JSON because a PostChain compiles its uniforms into an immutable buffer,
+     * and the emitters move every frame; running the pass ourselves lets it take a live UBO.</p>
+     *
+     * <p>{@code POST_PROCESSING_SNIPPET} builds on {@code GLOBALS_SNIPPET}, so the shader also gets
+     * the {@code Globals} block (it reads {@code ScreenSize} for the aspect correction).</p>
+     */
+    public static final RenderPipeline HEAT_RIPPLE = RenderPipeline.builder(RenderPipelines.POST_PROCESSING_SNIPPET)
+            .withLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "pipeline/heatripple"))
+            // The String overloads take a bare path and assume the minecraft namespace, so ours has
+            // to be an explicit Identifier or it ends up as "minecraft:rotarycraft:post/...".
+            .withVertexShader("core/screenquad")
+            .withFragmentShader(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "post/heatripple"))
+            .withBindGroupLayout(BindGroupLayout.builder()
+                    .withSampler("InSampler")
+                    .withUniform("HeatPoints", UniformType.UNIFORM_BUFFER)
+                    .build())
+            .build();
+
     /** Subscribed on the mod event bus by {@code RotaryCraft#RotaryCraft(IEventBus, ...)}. */
     public static void register(IEventBus modBus) {
         modBus.addListener(RotaryRenderPipelines::onRegisterPipelines);
@@ -99,6 +129,7 @@ public final class RotaryRenderPipelines {
     private static void onRegisterPipelines(RegisterRenderPipelinesEvent event) {
         event.registerPipeline(NO_DEPTH_FILLED_BOX);
         event.registerPipeline(NO_DEPTH_LINES);
+        event.registerPipeline(HEAT_RIPPLE);
     }
 
     /** Touching this class loads the static initializers (RT registration); call from client setup. */
