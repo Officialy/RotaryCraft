@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "B": "rotarycraft:hsla_steel_ingot",
-    "G": "rotarycraft:hsla_steel_gear",
-    "P": "rotarycraft:hsla_steel_plate",
-    "S": "rotarycraft:hsla_steel_rod"
+    "F": "rotarycraft:fuel_line",
+    "G": "minecraft:gold_ingot",
+    "I": "rotarycraft:mixer",
+    "P": "rotarycraft:hsla_steel_plate"
   },
   "pattern": [
-    "PGP",
-    "PPP",
-    "BSB"
+    "GFG",
+    "GIG",
+    "GPG"
   ],
   "result": {
     "id": "rotarycraft:fractionator"

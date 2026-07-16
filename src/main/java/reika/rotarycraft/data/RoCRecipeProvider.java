@@ -1255,29 +1255,36 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             // other engines. Without these, the entire engine progression is blocked. Patterns
             // mirror the 1.7.10 RotaryCraft recipes as closely as possible.
             //
-            // CONDENSER: a coil with a redstone core — used to compress steam. Original recipe
-            // was 8 iron in a ring + 1 redstone center.
-            shaped(RecipeCategory.REDSTONE, RotaryItems.CONDENSER.get())
-                    .define('I', Items.IRON_INGOT)
-                    .define('R', Items.REDSTONE)
-                    .pattern("III").pattern("IRI").pattern("III")
-                    .unlockedBy("has_iron", has(Items.IRON_INGOT))
+            // CONDENSER (RotaryRecipes 946): "SPS","PSP","SPS" — steel ingots and pipes, output
+            // DifficultyEffects.SMALLERCRAFT (2 on the default MEDIUM difficulty).
+            shaped(RecipeCategory.REDSTONE, RotaryItems.CONDENSER.get(), 2)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .pattern("SPS").pattern("PSP").pattern("SPS")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
-            // IMPELLER: a turbine blade unit — 4 iron blades around a central HSLA shaft.
-            // Original 1.7 used "blades" + hub; we substitute with iron + shaft for
-            // accessibility, which matches the pre-bedrock engine progression.
+            // IMPELLER (RotaryRecipes 940): " S ","SGS"," S " — steel ingots around a steel gear.
             shaped(RecipeCategory.REDSTONE, RotaryItems.IMPELLER.get())
-                    .define('I', Items.IRON_INGOT)
-                    .define('S', RotaryItems.HSLA_SHAFT.get())
-                    .pattern(" I ").pattern("ISI").pattern(" I ")
-                    .unlockedBy("has_hsla_shaft", has(RotaryItems.HSLA_SHAFT.get()))
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern(" S ").pattern("SGS").pattern(" S ")
+                    .unlockedBy("has_hsla_gear", has(RotaryItems.HSLA_STEEL_GEAR.get()))
                     .save(out);
 
-            // HSLA_PLATE: base panel — pressed from 4 HSLA ingots in a 2×2 pattern. Many
-            // engine/machine recipes depend on this and it didn't have a recipe before.
-            shaped(RecipeCategory.MISC, RotaryItems.HSLA_PLATE.get())
-                    .define('I', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .pattern("II").pattern("II")
+            // HSLA_PLATE / basepanel (RotaryRecipes 999): "SSS" — a row of three steel ingots,
+            // output DifficultyEffects.PARTCRAFT (3 on the default MEDIUM difficulty).
+            shaped(RecipeCategory.MISC, RotaryItems.HSLA_PLATE.get(), 3)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("SSS")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out);
+
+            // HSLA_SHAFT / shaftitem (RotaryRecipes 1100): "  B"," B ","B  " — a diagonal of three
+            // steel ingots, output PARTCRAFT. This is the steel rod that half the mod's parts and
+            // machines list as an ingredient, and it had no recipe at all.
+            shaped(RecipeCategory.MISC, RotaryItems.HSLA_SHAFT.get(), 3)
+                    .define('B', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("  B").pattern(" B ").pattern("B  ")
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
@@ -1604,17 +1611,15 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("SGS").pattern("S S").pattern("PgP")
                     .unlockedBy("has_hsla_gear", has(RotaryItems.HSLA_STEEL_GEAR_4x.get()))
                     .save(out);
-            // FRACTIONATOR: "PGP","PPP","BSB" — 5×HSLA_PLATE + 1×STEEL_GEAR + 2×HSLA_INGOT + 1×SHAFT.
-            // Approximation of the legacy recipe — restored in 26.1 so the machine can be crafted
-            // alongside the rest of the production-tier blocks. Tweak to match the historical
-            // shape once a verified pre-1.8 reference surfaces.
+            // FRACTIONATOR (RotaryRecipes 720): "GFG","GIG","GPG" — gold ingots around a fuel line,
+            // a mixer and a base panel. The previous shape here was invented outright.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.FRACTIONATOR.get())
+                    .define('G', Items.GOLD_INGOT)
+                    .define('F', RotaryBlocks.FUEL_LINE.get())
+                    .define('I', RotaryItems.MIXER.get())
                     .define('P', RotaryItems.HSLA_PLATE.get())
-                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
-                    .define('B', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .define('S', RotaryItems.HSLA_SHAFT.get())
-                    .pattern("PGP").pattern("PPP").pattern("BSB")
-                    .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get()))
+                    .pattern("GFG").pattern("GIG").pattern("GPG")
+                    .unlockedBy("has_mixer", has(RotaryItems.MIXER.get()))
                     .save(out);
             // RESERVOIR: "B B","B B","BBB" — 5×BASEPANEL (no cover variant). Cover variant adds glass pane.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.RESERVOIR.get())
@@ -1807,16 +1812,17 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("PPG").pattern(" GA").pattern("  B")
                     .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))
                     .save(out);
-            // LASERGUN (RotaryRecipes 813): "CLB","APG"," b " — light source, lens, heat-ray barrel,
-            // turret aim unit, power module, steel gear, turret base. (C=bulb → glowstone stand-in,
-            // no dedicated bulb item in the port.)
+            // LASERGUN (RotaryRecipes 813): "CLB","APG"," b " — bulb, lens, heat-ray barrel, turret
+            // aim unit, power module, gear unit, turret base. The bulb is HEAT_RAY_CORE and the gear
+            // unit is the 2x gear (both per this file's own cross-reference table); the glowstone
+            // stand-in and 1x gear that were here were substitutions for items that do exist.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.LASER_GUN.get())
-                    .define('C', Items.GLOWSTONE)
+                    .define('C', RotaryItems.HEAT_RAY_CORE.get())
                     .define('L', RotaryItems.LENS.get())
                     .define('B', RotaryItems.HEAT_RAY_BARREL.get())
                     .define('A', RotaryItems.TURRET_AIMING_UNIT.get())
                     .define('P', RotaryItems.POWER_MODULE.get())
-                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR_2x.get())
                     .define('b', RotaryItems.TURRET_BASE.get())
                     .pattern("CLB").pattern("APG").pattern(" b ")
                     .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))
@@ -2404,14 +2410,14 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_lodestone", has(Items.LODESTONE))
                     .save(out, "rotarycraft:engine_upgrade_lodestone");
 
-            // PERFORMANCE (upgrade.gasperf, original meta=0): upgrades gas engine to sports engine.
-            // Recipe: "sRs","gGg"," b " — s=silumin(alu_alloy), R=radiator, G=gear_unit(2x),
-            // g=gold, b=basepanel. Approximation: silumin ↔ aluminum_alloy_ingot,
-            // gearunit ↔ impeller (closest available item in current port).
+            // PERFORMANCE (RotaryRecipes 1209, UPGRADE meta 0): "sRs","gGg"," b " — s=silumin
+            // (aluminum alloy), R=radiator, G=gear unit (the 2x gear), g=gold, b=base panel.
+            // Upgrades the gas engine to the sports engine. G was standing in as an impeller; the
+            // gear unit it should be does exist.
             engineUpgrade(UpgradeType.PERFORMANCE)
                     .define('s', RotaryItems.ALUMINUM_ALLOY_INGOT.get())
                     .define('R', RotaryItems.RADIATOR.get())
-                    .define('G', RotaryItems.IMPELLER.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR_2x.get())
                     .define('g', Items.GOLD_INGOT)
                     .define('b', RotaryItems.HSLA_PLATE.get())
                     .pattern("sRs").pattern("gGg").pattern(" b ")

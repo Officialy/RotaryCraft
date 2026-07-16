@@ -220,6 +220,10 @@
   "block.rotarycraft.woodcutter": "Woodcutter",
   "block.rotarycraft.worktable": "Worktable",
   "block.rotarycraft.wormgear": "Worm Gear",
+  "config.jade.plugin_rotarycraft.engine_extras": "Engine Extras",
+  "config.jade.plugin_rotarycraft.machine_power": "Machine Power",
+  "config.jade.plugin_rotarycraft.pipe_info": "Pipe Info",
+  "config.jade.plugin_rotarycraft.reservoir_fluid": "Reservoir Fluid",
   "item.rotarycraft.aluminum_alloy_cylinder": "Aluminum Alloy Cylinder",
   "item.rotarycraft.aluminum_alloy_ingot": "Aluminum Alloy Ingot",
   "item.rotarycraft.aluminum_alloy_powder": "Aluminum Alloy Powder",
@@ -435,7 +439,7 @@
   "item.rotarycraft.yeast": "Yeast",
   "tab.rotarycraft": "RotaryCraft",
   "tab.rotarycraft.all": "RotaryCraft (All)",
-  "tab.rotarycraft_ores": "RotaryCraft Ore Flakes",
-  "tab.rotarycraft_tools": "RotaryCraft Tools",
-  "tab.rotarycraft_transmission": "RotaryCraft Transmission"
+  "tab.rotarycraft.ores": "RotaryCraft Ore Flakes",
+  "tab.rotarycraft.tools": "RotaryCraft Tools",
+  "tab.rotarycraft.transmission": "RotaryCraft Transmission"
 }

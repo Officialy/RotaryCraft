@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_hsla_gear": {
+    "has_hsla_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "rotarycraft:hsla_steel_gear"
+            "items": "rotarycraft:hsla_steel_ingot"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:impeller"
+        "recipe": "rotarycraft:hsla_steel_rod"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_hsla_gear"
+      "has_hsla_ingot"
     ]
   ],
   "rewards": {
     "recipes": [
-      "rotarycraft:impeller"
+      "rotarycraft:hsla_steel_rod"
     ]
   }
 }

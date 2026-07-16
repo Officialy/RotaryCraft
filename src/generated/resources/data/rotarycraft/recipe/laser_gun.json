@@ -4,8 +4,8 @@
   "key": {
     "A": "rotarycraft:turret_aiming_unit",
     "B": "rotarycraft:heat_ray_barrel",
-    "C": "minecraft:glowstone",
-    "G": "rotarycraft:hsla_steel_gear",
+    "C": "rotarycraft:heat_ray_core",
+    "G": "rotarycraft:hsla_steel_gear_2x",
     "L": "rotarycraft:lens",
     "P": "rotarycraft:power_module",
     "b": "rotarycraft:turret_base"

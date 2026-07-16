@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "G": "rotarycraft:impeller",
+    "G": "rotarycraft:hsla_steel_gear_2x",
     "R": "rotarycraft:radiator",
     "b": "rotarycraft:hsla_steel_plate",
     "g": "minecraft:gold_ingot",

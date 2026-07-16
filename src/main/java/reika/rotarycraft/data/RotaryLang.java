@@ -7,6 +7,7 @@ import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -27,49 +28,58 @@ public class RotaryLang extends LanguageProvider {
     // Curated block-name corrections sourced from assets/rotarycraft/lang/en_USold.lang (1.7.10), for
     // machines whose registry-path prettify reads wrong. Per-tier/variant blocks are intentionally
     // omitted (their prettified per-tier name is more informative than the original shared label).
-    private static final java.util.Map<String, String> NAME_OVERRIDES = java.util.Map.ofEntries(
-            java.util.Map.entry("borer", "Boring Machine"),
-            java.util.Map.entry("scalechest", "Scaleable Chest"),
-            java.util.Map.entry("aa_gun", "AA Gun"),
-            java.util.Map.entry("bypass", "Bypass Pipe"),
-            java.util.Map.entry("containment", "Containment Field"),
-            java.util.Map.entry("distribution_clutch", "Shaft Distribution Clutch"),
-            java.util.Map.entry("filler", "Block Filler"),
-            java.util.Map.entry("fluid_pipe", "Liquid Pipe"),
-            java.util.Map.entry("fractionator", "Fractionation Unit"),
-            java.util.Map.entry("hose", "Lubricant Hose"),
-            java.util.Map.entry("landmine", "Land Mine"),
-            java.util.Map.entry("lava_smeltory", "Lava Smeltery"),
-            java.util.Map.entry("line_builder", "Block Ram"),
-            java.util.Map.entry("magnetizer", "Magnetizing Unit"),
-            java.util.Map.entry("mirror", "Solar Mirror"),
-            java.util.Map.entry("multi_clutch", "Multi-Directional Clutch"),
-            java.util.Map.entry("obsidian_maker", "Obsidian Factory"),
-            java.util.Map.entry("particle", "Particle Display"),
-            java.util.Map.entry("refresher", "Item Refresher"),
-            java.util.Map.entry("refrigerator", "Refrigeration Unit"),
-            java.util.Map.entry("self_destruct", "Self Destruct Mechanism"),
-            java.util.Map.entry("separation", "Separation Pipe"),
-            java.util.Map.entry("sorter", "Sorting Machine"),
-            java.util.Map.entry("spiller", "Liquid Spiller"),
-            java.util.Map.entry("splitter", "Shaft Junction"),
-            java.util.Map.entry("suction", "Suction Pipe"),
-            java.util.Map.entry("tnt_cannon", "TNT Cannon"),
-            java.util.Map.entry("vacuum", "Item Vacuum"),
-            java.util.Map.entry("valve", "Valve Pipe"),
-            java.util.Map.entry("van_de_graff", "Van De Graaff Generator"),
-            java.util.Map.entry("winder", "Coil Winder"),
-            java.util.Map.entry("cvt", "CVT"),
-            java.util.Map.entry("wormgear", "Worm Gear"));
+    private static final Map<String, String> NAME_OVERRIDES = Map.ofEntries(
+            Map.entry("borer", "Boring Machine"),
+            Map.entry("scalechest", "Scaleable Chest"),
+            Map.entry("aa_gun", "AA Gun"),
+            Map.entry("bypass", "Bypass Pipe"),
+            Map.entry("containment", "Containment Field"),
+            Map.entry("distribution_clutch", "Shaft Distribution Clutch"),
+            Map.entry("filler", "Block Filler"),
+            Map.entry("fluid_pipe", "Liquid Pipe"),
+            Map.entry("fractionator", "Fractionation Unit"),
+            Map.entry("hose", "Lubricant Hose"),
+            Map.entry("landmine", "Land Mine"),
+            Map.entry("lava_smeltory", "Lava Smeltery"),
+            Map.entry("line_builder", "Block Ram"),
+            Map.entry("magnetizer", "Magnetizing Unit"),
+            Map.entry("mirror", "Solar Mirror"),
+            Map.entry("multi_clutch", "Multi-Directional Clutch"),
+            Map.entry("obsidian_maker", "Obsidian Factory"),
+            Map.entry("particle", "Particle Display"),
+            Map.entry("refresher", "Item Refresher"),
+            Map.entry("refrigerator", "Refrigeration Unit"),
+            Map.entry("self_destruct", "Self Destruct Mechanism"),
+            Map.entry("separation", "Separation Pipe"),
+            Map.entry("sorter", "Sorting Machine"),
+            Map.entry("spiller", "Liquid Spiller"),
+            Map.entry("splitter", "Shaft Junction"),
+            Map.entry("suction", "Suction Pipe"),
+            Map.entry("tnt_cannon", "TNT Cannon"),
+            Map.entry("vacuum", "Item Vacuum"),
+            Map.entry("valve", "Valve Pipe"),
+            Map.entry("van_de_graff", "Van De Graaff Generator"),
+            Map.entry("winder", "Coil Winder"),
+            Map.entry("cvt", "CVT"),
+            Map.entry("wormgear", "Worm Gear"));
 
     @Override
     protected void addTranslations() {
         // Creative tabs / categories.
+        // Dotted, matching the keys RotaryCraftTabs actually looks up. Three of these were
+        // registered with underscores, so the transmission/tools/ores tabs showed their raw
+        // translation key in-game; the other two were already dotted.
         add("tab.rotarycraft", "RotaryCraft");
-        add("tab.rotarycraft_transmission", "RotaryCraft Transmission");
-        add("tab.rotarycraft_tools", "RotaryCraft Tools");
-        add("tab.rotarycraft_ores", "RotaryCraft Ore Flakes");
+        add("tab.rotarycraft.transmission", "RotaryCraft Transmission");
+        add("tab.rotarycraft.tools", "RotaryCraft Tools");
+        add("tab.rotarycraft.ores", "RotaryCraft Ore Flakes");
         add("tab.rotarycraft.all", "RotaryCraft (All)");
+
+        // Jade config translations
+        add("config.jade.plugin_rotarycraft.reservoir_fluid", "Reservoir Fluid");
+        add("config.jade.plugin_rotarycraft.machine_power", "Machine Power");
+        add("config.jade.plugin_rotarycraft.engine_extras", "Engine Extras");
+        add("config.jade.plugin_rotarycraft.pipe_info", "Pipe Info");
 
         // Block translations — derived from each block's registry path, with the curated names from the
         // 1.7.10 en_USold.lang for the machines whose prettified path reads wrong (e.g. "Hose" ->

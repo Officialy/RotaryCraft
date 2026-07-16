@@ -1,13 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "S": "rotarycraft:hsla_steel_ingot"
+    "B": "rotarycraft:hsla_steel_ingot"
   },
   "pattern": [
-    "SSS"
+    "  B",
+    " B ",
+    "B  "
   ],
   "result": {
     "count": 3,
-    "id": "rotarycraft:hsla_steel_plate"
+    "id": "rotarycraft:hsla_steel_rod"
   }
 }

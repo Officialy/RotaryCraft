@@ -2,15 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "I": "minecraft:iron_ingot",
-    "R": "minecraft:redstone"
+    "P": "rotarycraft:fluid_pipe",
+    "S": "rotarycraft:hsla_steel_ingot"
   },
   "pattern": [
-    "III",
-    "IRI",
-    "III"
+    "SPS",
+    "PSP",
+    "SPS"
   ],
   "result": {
+    "count": 2,
     "id": "rotarycraft:condenser"
   }
 }
