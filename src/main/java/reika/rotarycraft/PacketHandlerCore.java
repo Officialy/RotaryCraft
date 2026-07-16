@@ -45,10 +45,20 @@ import reika.rotarycraft.registry.PacketRegistry;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Random;
 import java.util.UUID;
 
 public class PacketHandlerCore implements PacketHandler {
+
+    /**
+     * The packets that address the world or the player rather than a machine at (x, y, z), and so are
+     * still meaningful when there is no block entity there. Every other packet in {@link #handleData}
+     * dereferences the tile, so a null one means its machine is gone and the packet is dropped.
+     */
+    private static final EnumSet<PacketRegistry> NO_TILE_NEEDED = EnumSet.of(
+            PacketRegistry.FERTILIZER, PacketRegistry.FRIDGEBREAK, PacketRegistry.GRAVELGUN,
+            PacketRegistry.MUSICPARTICLE, PacketRegistry.SLIDE, PacketRegistry.SPARKLOC);
 
     protected PacketRegistry pack;
 
@@ -194,12 +204,15 @@ public class PacketHandlerCore implements PacketHandler {
             e.printStackTrace();
             return;
         }
-        // 1.7.10 → 1.21.5: the legacy port had `if (te == null) return;` here, which silently
-        // dropped every packet whose (x,y,z) wasn't a loaded tile — including all the non-tile
-        // packets in the switch (MUSICPARTICLE, FERTILIZER, GRAVELGUN, SLIDE, FRIDGEBREAK,
-        // SPARKLOC, …). Do the lookup once, allow null, and let the per-case casts (or the outer
-        // NPE catch) handle tile-targeted packets whose target was destroyed mid-flight.
+        // 1.7.10 → 1.21.5: the legacy port had a blanket `if (te == null) return;` here, which
+        // silently dropped the packets in NO_TILE_NEEDED — they address the world or the player, not
+        // a machine. Every other packet does need the block entity, so a null one means the machine
+        // is gone and there is nothing to apply; drop those quietly. Letting the per-case casts NPE
+        // instead (as this used to) is not viable: screens re-send while they are open, so a machine
+        // destroyed with its GUI up threw once per tick and spammed the log and the player's chat.
         BlockEntity te = world.getBlockEntity(new BlockPos(x, y, z));
+        if (te == null && !NO_TILE_NEEDED.contains(pack))
+            return;
         try {
             switch (pack) {
                /* case BORERTOGGLEALL: {
