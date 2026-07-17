@@ -869,6 +869,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("RER").pattern("GGG").pattern("SSS")
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
+            // POWER_MODULE silicon variant (RotaryRecipes 1054): same shape with SILICON instead
+            // of the ender eye, output 3 instead of 2.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.POWER_MODULE.get(), 3)
+                    .define('R', Items.REDSTONE)
+                    .define('E', RotaryItems.SILICON.get())
+                    .define('G', Items.GOLD_INGOT)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("RER").pattern("GGG").pattern("SSS")
+                    .unlockedBy("has_silicon", has(RotaryItems.SILICON.get()))
+                    .save(out, "rotarycraft:power_module_from_silicon");
 
             // HEAT_RAY_BARREL / barrel (line 1059): "OOO","gtG","OOO" — obsidian, glowstone,
             // tungsten, blast glass.
@@ -972,6 +982,63 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('B', Items.DIAMOND)
                     .pattern("  B").pattern(" B ").pattern("B  ")
                     .unlockedBy("has_diamond", has(Items.DIAMOND))
+                    .save(out);
+
+            // DRILLHEAD_IRON / drill (RotaryRecipes 1005): "SSS","SSS"," S " — steel ingots.
+            // Gates BORER / DROPS / SONICBORER / EXTRACTOR, all of which listed it as an
+            // ingredient but it had no recipe of its own.
+            shaped(RecipeCategory.MISC, RotaryItems.DRILLHEAD_IRON.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("SSS").pattern("SSS").pattern(" S ")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out);
+
+            // ALUMINUM_ALLOY_CYLINDER / aluminumcylinder (RotaryRecipes 957): "SSS","S S","SSS"
+            // — aluminum-alloy (silumin) ring, output 2. Gates the PERFORMANCE_ENGINE.
+            shaped(RecipeCategory.MISC, RotaryItems.ALUMINUM_ALLOY_CYLINDER.get(), 2)
+                    .define('S', RotaryItems.ALUMINUM_ALLOY_INGOT.get())
+                    .pattern("SSS").pattern("S S").pattern("SSS")
+                    .unlockedBy("has_aluminum_alloy_ingot", has(RotaryItems.ALUMINUM_ALLOY_INGOT.get()))
+                    .save(out);
+
+            // Shaft cores (RotaryRecipes 966, per-gearbox loop): "  s"," S ","s  " with
+            // S = gear.getBaseItem(), s = gear.getShaftUnitItem(). The legacy shaft-unit is a
+            // separate GEARCRAFT meta item; the port has no distinct shaft-unit item and uses the
+            // shaft rod as the shaft-unit stand-in (see gearUnitChain), so the rod is used here.
+            // These cores had no recipe, blocking HUB/GENERATOR (steel), STEAM_TURBINE (diamond),
+            // and the compound turbine/compressor (tungsten).
+            shaftCore(RotaryItems.HSLA_SHAFT_CORE.get(), RotaryItems.HSLA_STEEL_INGOT.get(), RotaryItems.HSLA_SHAFT.get());
+            shaftCore(RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE.get(), RotaryItems.TUNGSTEN_ALLOY_SPRING.get(), RotaryItems.TUNGSTEN_ALLOY_SHAFT.get());
+            shaftCore(RotaryItems.DIAMOND_SHAFT_CORE.get(), Items.DIAMOND, RotaryItems.DIAMOND_SHAFT.get());
+
+            // COMPOUND_TURBINE / compoundturb (RotaryRecipes 960): " tS","tst","St " — turbine +
+            // tungsten shaft core + tungsten ingots. Gates the JET_ENGINE.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.COMPOUND_TURBINE.get())
+                    .define('S', RotaryItems.TURBINE.get())
+                    .define('s', RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE.get())
+                    .define('t', RotaryItems.TUNGSTEN_INGOT.get())
+                    .pattern(" tS").pattern("tst").pattern("St ")
+                    .unlockedBy("has_turbine", has(RotaryItems.TURBINE.get()))
+                    .save(out);
+
+            // COMPOUND_COMPRESSOR / compoundcompress (RotaryRecipes 962): " tS","tst","St " —
+            // compressor + tungsten shaft core + tungsten ingots. Gates the JET_ENGINE.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.COMPOUND_COMPRESSOR.get())
+                    .define('S', RotaryItems.COMPRESSOR.get())
+                    .define('s', RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE.get())
+                    .define('t', RotaryItems.TUNGSTEN_INGOT.get())
+                    .pattern(" tS").pattern("tst").pattern("St ")
+                    .unlockedBy("has_compressor", has(RotaryItems.COMPRESSOR.get()))
+                    .save(out);
+        }
+
+        /** Legacy line 966 shaft-core pattern: "  s"," S ","s  ", S = base ingot, s = shaft rod. */
+        private void shaftCore(ItemLike core, ItemLike base, ItemLike shaft) {
+            shaped(RecipeCategory.MISC, core.asItem())
+                    .define('S', base)
+                    .define('s', shaft)
+                    .pattern("  s").pattern(" S ").pattern("s  ")
+                    .unlockedBy("has_shaft", has(shaft.asItem()))
                     .save(out);
         }
 
@@ -1368,16 +1435,18 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             // POWER BUS (4x): legacy "SMS","MCM","SMS" — steel, bearings, a belt core.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.POWERBUS.get(), 4)
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .define('M', RotaryItems.BALL_BEARING.get())
+                    // Legacy 'M' = ItemStacks.bearing = the assembled steel bearing (was BALL_BEARING).
+                    .define('M', RotaryItems.HSLA_STEEL_BEARING.get())
                     .define('C', RotaryItems.BELT.get())
                     .pattern("SMS").pattern("MCM").pattern("SMS")
-                    .unlockedBy("has_bearing", has(RotaryItems.BALL_BEARING.get()))
+                    .unlockedBy("has_bearing", has(RotaryItems.HSLA_STEEL_BEARING.get()))
                     .save(out);
 
             // BUS CONTROLLER: legacy "SMS","MCM","SMS" — steel, bearings, a circuit board core.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.BUSCONTROLLER.get())
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .define('M', RotaryItems.BALL_BEARING.get())
+                    // Legacy 'M' = ItemStacks.bearing = the assembled steel bearing (was BALL_BEARING).
+                    .define('M', RotaryItems.HSLA_STEEL_BEARING.get())
                     .define('C', RotaryItems.CIRCUIT_BOARD.get())
                     .pattern("SMS").pattern("MCM").pattern("SMS")
                     .unlockedBy("has_circuit", has(RotaryItems.CIRCUIT_BOARD.get()))
@@ -1471,6 +1540,42 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('B', RotaryItems.HSLA_PLATE.get())
                     .pattern("ppS").pattern(" iR").pattern("ppB")
                     .unlockedBy("has_reservoir", has(RotaryBlocks.RESERVOIR.get()))
+                    .save(out);
+
+            // FERMENTER (RotaryRecipes 706): "BPB","PIP","BPB" — steel + base-panel shell around an
+            // impeller. Block is registered; its processing recipes are already ported (fermenter()).
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FERMENTER.get())
+                    .define('B', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .pattern("BPB").pattern("PIP").pattern("BPB")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
+            // FRICTION_HEATER (RotaryRecipes 819, MachineRegistry.FRICTION): "S  ","Sss","SPP" —
+            // steel spine, shaft rods, base panels. Block is registered; its smelts are in frictionHeater().
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FRICTION_HEATER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('s', RotaryItems.HSLA_SHAFT.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .pattern("S  ").pattern("Sss").pattern("SPP")
+                    .unlockedBy("has_hsla_shaft", has(RotaryItems.HSLA_SHAFT.get()))
+                    .save(out);
+
+            // EXTRACTOR (RotaryRecipes 756): "SWS","siD","PIN" — S=steel, W=planks, s=stone,
+            // i=impeller, D=drill head, P=base panel, I=shaft rod, N=netherrack. Block is
+            // registered; its four-stage ore chain is already ported (extractor()).
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.EXTRACTOR.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('W', ItemTags.PLANKS)
+                    .define('s', Items.STONE)
+                    .define('i', RotaryItems.IMPELLER.get())
+                    .define('D', RotaryItems.DRILLHEAD_IRON.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('I', RotaryItems.HSLA_SHAFT.get())
+                    .define('N', Items.NETHERRACK)
+                    .pattern("SWS").pattern("siD").pattern("PIN")
+                    .unlockedBy("has_drill_head", has(RotaryItems.DRILLHEAD_IRON.get()))
                     .save(out);
         }
 
@@ -2063,7 +2168,8 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.FREEZE_GUN.get())
                     .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
                     .define('i', Items.ICE)
-                    .define('g', RotaryItems.HSLA_STEEL_GEAR.get())
+                    // Legacy 'g' = ItemStacks.gearunit = the 2x gear unit (was HSLA_STEEL_GEAR).
+                    .define('g', RotaryItems.HSLA_STEEL_GEAR_2x.get())
                     .define('b', RotaryItems.TURRET_BASE.get())
                     .pattern(" ss").pattern("iig").pattern("sb ")
                     .unlockedBy("has_turret_base", has(RotaryItems.TURRET_BASE.get()))

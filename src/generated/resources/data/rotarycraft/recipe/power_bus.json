@@ -3,7 +3,7 @@
   "category": "redstone",
   "key": {
     "C": "rotarycraft:belt",
-    "M": "rotarycraft:ball_bearing",
+    "M": "rotarycraft:hsla_steel_bearing",
     "S": "rotarycraft:hsla_steel_ingot"
   },
   "pattern": [

@@ -3,7 +3,7 @@
   "category": "redstone",
   "key": {
     "b": "rotarycraft:turret_base",
-    "g": "rotarycraft:hsla_steel_gear",
+    "g": "rotarycraft:hsla_steel_gear_2x",
     "i": "minecraft:ice",
     "s": "rotarycraft:hsla_steel_ingot"
   },
