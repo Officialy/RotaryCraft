@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_rod",
+    "G": "rotarycraft:hsla_steel_gear_4x",
+    "g": "rotarycraft:hsla_steel_gear_2x"
+  },
+  "pattern": [
+    " gB",
+    "BG "
+  ],
+  "result": {
+    "id": "rotarycraft:hsla_steel_gear_8x"
+  }
+}

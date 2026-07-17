@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:tungsten_alloy_rod"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tungsten_spring": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:tungsten_alloy_spring"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tungsten_spring"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:tungsten_alloy_rod"
+    ]
+  }
+}

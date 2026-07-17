@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:tungsten_alloy_rod",
+    "G": "rotarycraft:tungsten_alloy_gear_2x"
+  },
+  "pattern": [
+    " GB",
+    "BG "
+  ],
+  "result": {
+    "id": "rotarycraft:tungsten_alloy_gear_4x"
+  }
+}

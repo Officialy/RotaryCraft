@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "W": "rotarycraft:tungsten_alloy_spring"
+  },
+  "pattern": [
+    " W ",
+    "WWW",
+    " W "
+  ],
+  "result": {
+    "count": 5,
+    "id": "rotarycraft:tungsten_alloy_gear"
+  }
+}

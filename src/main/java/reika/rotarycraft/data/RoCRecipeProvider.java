@@ -157,6 +157,7 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             transmissionBlocks();
             gearCrafting();
             craftItems();
+            gearUnitChain();
             utilityMachines();
             pulseFurnace();
             engines();
@@ -947,6 +948,78 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             // RAILGUN_ACCELERATOR / railhead (line 989): "LLL","LGL","LLL" (power module + LIM
             // coils) is skipped — the legacy LIM (linear induction motor) item has no port
             // equivalent, so this recipe cannot be restored without inventing an ingredient.
+
+            // TUNGSTEN_ALLOY_GEAR / tungstengear (line 1092): " W ","WWW"," W " — tungsten
+            // springs, output 5*PARTCRAFT/3 (5 on the default MEDIUM difficulty).
+            shaped(RecipeCategory.REDSTONE, RotaryItems.TUNGSTEN_ALLOY_GEAR.get(), 5)
+                    .define('W', RotaryItems.TUNGSTEN_ALLOY_SPRING.get())
+                    .pattern(" W ").pattern("WWW").pattern(" W ")
+                    .unlockedBy("has_tungsten_spring", has(RotaryItems.TUNGSTEN_ALLOY_SPRING.get()))
+                    .save(out);
+
+            // TUNGSTEN_ALLOY_SHAFT / tungstenshaft (line 1102): "  B"," B ","B  " — tungsten
+            // springs, output PARTCRAFT (3 on MEDIUM).
+            shaped(RecipeCategory.MISC, RotaryItems.TUNGSTEN_ALLOY_SHAFT.get(), 3)
+                    .define('B', RotaryItems.TUNGSTEN_ALLOY_SPRING.get())
+                    .pattern("  B").pattern(" B ").pattern("B  ")
+                    .unlockedBy("has_tungsten_spring", has(RotaryItems.TUNGSTEN_ALLOY_SPRING.get()))
+                    .save(out);
+
+            // DIAMOND_SHAFT / diamondshaft (line 1104): "  B"," B ","B  " — diamonds, output
+            // PARTCRAFT (3 on MEDIUM). (DIAMOND_GEAR / diamondgear is a blast-furnace-only
+            // recipe in the original and is not restored here — see gearCrafting() note.)
+            shaped(RecipeCategory.MISC, RotaryItems.DIAMOND_SHAFT.get(), 3)
+                    .define('B', Items.DIAMOND)
+                    .pattern("  B").pattern(" B ").pattern("B  ")
+                    .unlockedBy("has_diamond", has(Items.DIAMOND))
+                    .save(out);
+        }
+
+        // =====================================================================================
+        // GEAR-UNIT DOUBLING CHAIN — direct port of RotaryRecipes.addCraftItems' per-tier
+        // GearboxTypes loop (lines 1065-1084): each tier's 1x gear doubles into 2x/4x/8x/16x
+        // gear units via a shaft-unit + prior-tier-gear pattern. Legacy registers several
+        // redundant key-layout variants per output; only one faithful variant is restored per
+        // tier here. WOOD/STONE aren't restored (their gear items aren't ported — see
+        // transmissionBlocks() note); DIAMOND/BEDROCK aren't restored because their base 1x gear
+        // is a blast-furnace-only recipe not yet ported.
+        // =====================================================================================
+        private void gearUnitChain() {
+            gearUnits(RotaryItems.HSLA_SHAFT.get(), RotaryItems.HSLA_STEEL_GEAR.get(),
+                    RotaryItems.HSLA_STEEL_GEAR_2x.get(), RotaryItems.HSLA_STEEL_GEAR_4x.get(),
+                    RotaryItems.HSLA_STEEL_GEAR_8x.get(), RotaryItems.HSLA_STEEL_GEAR_16x.get());
+            gearUnits(RotaryItems.TUNGSTEN_ALLOY_SHAFT.get(), RotaryItems.TUNGSTEN_ALLOY_GEAR.get(),
+                    RotaryItems.TUNGSTEN_ALLOY_GEAR_2x.get(), RotaryItems.TUNGSTEN_ALLOY_GEAR_4x.get(),
+                    RotaryItems.TUNGSTEN_ALLOY_GEAR_8x.get(), RotaryItems.TUNGSTEN_ALLOY_GEAR_16x.get());
+        }
+
+        private void gearUnits(ItemLike shaftUnit, ItemLike gear1x, ItemLike gear2x, ItemLike gear4x, ItemLike gear8x, ItemLike gear16x) {
+            shaped(RecipeCategory.REDSTONE, gear2x)
+                    .define('B', shaftUnit)
+                    .define('G', gear1x)
+                    .pattern(" GB").pattern("BG ")
+                    .unlockedBy("has_shaft_unit", has(shaftUnit))
+                    .save(out);
+            shaped(RecipeCategory.REDSTONE, gear4x)
+                    .define('B', shaftUnit)
+                    .define('G', gear2x)
+                    .pattern(" GB").pattern("BG ")
+                    .unlockedBy("has_shaft_unit", has(shaftUnit))
+                    .save(out);
+            shaped(RecipeCategory.REDSTONE, gear8x)
+                    .define('B', shaftUnit)
+                    .define('G', gear4x)
+                    .define('g', gear2x)
+                    .pattern(" gB").pattern("BG ")
+                    .unlockedBy("has_shaft_unit", has(shaftUnit))
+                    .save(out);
+            shaped(RecipeCategory.REDSTONE, gear16x)
+                    .define('B', shaftUnit)
+                    .define('G', gear8x)
+                    .define('g', gear2x)
+                    .pattern(" gB").pattern("BG ")
+                    .unlockedBy("has_shaft_unit", has(shaftUnit))
+                    .save(out);
         }
 
         // =====================================================================================
