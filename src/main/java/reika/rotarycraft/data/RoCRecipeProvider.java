@@ -1337,29 +1337,33 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             // out. Patterns mirror legacy 1.7 designs where preserved; otherwise tuned to be
             // pre-bedrock-tier accessible.
 
-            // GOLD_COIL: AC engine inductor — gold wire wound around an iron core.
+            // GOLD_COIL (RotaryRecipes 947): "GGG","GSG","GGG" — gold ingots around a steel-ingot
+            // core. The center was invented as iron; restored to HSLA steel per the original.
             shaped(RecipeCategory.REDSTONE, RotaryItems.GOLD_COIL.get())
                     .define('G', Items.GOLD_INGOT)
-                    .define('I', Items.IRON_INGOT)
-                    .pattern("GGG").pattern("GIG").pattern("GGG")
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("GGG").pattern("GSG").pattern("GGG")
                     .unlockedBy("has_gold", has(Items.GOLD_INGOT))
                     .save(out);
 
-            // CIRCUIT_BOARD: redstone + gold contacts on a wood substrate.
-            shaped(RecipeCategory.REDSTONE, RotaryItems.CIRCUIT_BOARD.get())
+            // CIRCUIT_BOARD / pcb (RotaryRecipes 1015): "PGP","RER","GPG" — 4×HSLA + 2×GOLD +
+            // 1×REDSTONE + 1×ENDER_PEARL → 2 outputs. The previous shape here (redstone/gold
+            // nugget/plank) was invented outright.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.CIRCUIT_BOARD.get(), 2)
+                    .define('P', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('G', Items.GOLD_INGOT)
                     .define('R', Items.REDSTONE)
-                    .define('G', Items.GOLD_NUGGET)
-                    .define('W', Items.OAK_PLANKS)
-                    .pattern("RGR").pattern("GWG").pattern("RGR")
+                    .define('E', Items.ENDER_PEARL)
+                    .pattern("PGP").pattern("RER").pattern("GPG")
                     .unlockedBy("has_redstone", has(Items.REDSTONE))
                     .save(out);
 
-            // HSLA_STEEL_GEAR: 4 HSLA ingots in cross pattern + iron in center. Gear teeth
-            // form the cross arms, center is the axle bearing.
-            shaped(RecipeCategory.REDSTONE, RotaryItems.HSLA_STEEL_GEAR.get())
-                    .define('H', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .define('I', Items.IRON_INGOT)
-                    .pattern(" H ").pattern("HIH").pattern(" H ")
+            // HSLA_STEEL_GEAR / steelgear (RotaryRecipes 1090): " B ","BBB"," B " — 5×HSLA steel
+            // ingot cross, output DifficultyEffects.PARTCRAFT (3 on the default MEDIUM difficulty).
+            // The previous shape here (cross with an iron center) was invented.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.HSLA_STEEL_GEAR.get(), 3)
+                    .define('B', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern(" B ").pattern("BBB").pattern(" B ")
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
@@ -1876,12 +1880,15 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("lnl").pattern("ddd").pattern("sgs")
                     .unlockedBy("has_nether_star", has(Items.NETHER_STAR))
                     .save(out);
-            // MIRROR (block): " m "," s "," p " — 1×MIRROR_PANEL + 1×HSLA + 1×BASEPANEL.
+            // MIRROR (block, RotaryRecipes 807): "bmb"," g ","pcp" — 2×BLASTGLASS + 1×MIRROR_PANEL
+            // + 1×HSLA_STEEL_GEAR + 2×BASEPANEL + 1×CIRCUIT_BOARD. The previous shape here was invented.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.MIRROR.get())
-                    .define('p', RotaryItems.HSLA_PLATE.get())
+                    .define('b', RotaryBlocks.BLASTGLASS.get())
                     .define('m', RotaryItems.MIRROR.get())
-                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .pattern(" m ").pattern(" s ").pattern(" p ")
+                    .define('g', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('p', RotaryItems.HSLA_PLATE.get())
+                    .define('c', RotaryItems.CIRCUIT_BOARD.get())
+                    .pattern("bmb").pattern(" g ").pattern("pcp")
                     .unlockedBy("has_mirror_panel", has(RotaryItems.MIRROR.get()))
                     .save(out);
             // VANDEGRAFF: "shs","gbg","php" — 1×HSLA + 2×HUB + 2×GLASS_PANE + 1×BELT + 2×BASEPANEL.

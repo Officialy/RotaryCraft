@@ -1,4 +1,4 @@
-// 26.2	2026-07-16T22:30:36.0170192	RotaryCraft Recipes
+// 26.2	2026-07-17T15:46:59.5906707	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -258,7 +258,7 @@ b094a3308d0f2a1d322206c180014ba87908b7d5 data/rotarycraft/recipe/centrifuge/magm
 a2902c8c166728c7bd0dd0b28991dbec871c5c2d data/rotarycraft/recipe/centrifuge/pumpkin.json
 27e54b17582b7925a6f200d810b0f2f41bd89a99 data/rotarycraft/recipe/centrifuge/wheat.json
 8fc12f774de9429674487e72b57fd236f8a29ffc data/rotarycraft/recipe/chain_drive.json
-24b0fd64be902ee73acf0d59758591f8fc291b0f data/rotarycraft/recipe/circuit_board.json
+6533050e30319115938af706ac4a52e9ddf12990 data/rotarycraft/recipe/circuit_board.json
 ad1d50a6dae756868091f7da7db182e19d323166 data/rotarycraft/recipe/clutch.json
 845f6e4cabb2d6b8d7d7a17ca362ccd703903349 data/rotarycraft/recipe/coal_flakes_to_ingot.json
 754687f373e75cdba9c4c4a088f54419aa2dfdfb data/rotarycraft/recipe/coil.json
@@ -361,7 +361,7 @@ b039f7f5497d9bd0c51190aaa0d3fe6b34ea3d45 data/rotarycraft/recipe/friction_boiler
 4261e4095604a2ff8b006ab5eb59ef4a9d5a3422 data/rotarycraft/recipe/fuel_line.json
 9699f936cf20a0e90aee257ee6ab94f3480cb398 data/rotarycraft/recipe/gas_engine.json
 461ca5859a75c77b2988592bcbd029df1ff15105 data/rotarycraft/recipe/gas_tank.json
-1d9ee3e767728e640fb1c911cf7e17d6fd5a0950 data/rotarycraft/recipe/gold_coil.json
+a39ca6fd590b31db54c77d1a1d855716f9eb4e47 data/rotarycraft/recipe/gold_coil.json
 f8333352f44395df7021d6d8e55852ec21b28344 data/rotarycraft/recipe/gold_flakes_to_ingot.json
 9437272ed2f57c168a379afb5ac43d824543c8a8 data/rotarycraft/recipe/gpr.json
 5de00d78d07a76cb52d76ec52738961408581436 data/rotarycraft/recipe/grinder.json
@@ -395,7 +395,7 @@ eadbe0ae4cb78ffa96fcc4e889ca9d0ee64f3817 data/rotarycraft/recipe/hsla_steel_boot
 46ffcb8c989efc6974f8637763f9351a17d4c1e3 data/rotarycraft/recipe/hsla_steel_from_coal.json
 c19a4e58440aed8bcaba7828c9fee6fe4c2f2f3d data/rotarycraft/recipe/hsla_steel_from_coke.json
 59bd850a76cd014479ac2c910493f5666a522844 data/rotarycraft/recipe/hsla_steel_from_scrap.json
-2b38337409bf490766a7515736aac95de847003e data/rotarycraft/recipe/hsla_steel_gear.json
+4666a3a83752a02cfb7c86f39227820a6a556184 data/rotarycraft/recipe/hsla_steel_gear.json
 7f4cc0b630c2df7b61681e1c4f443223468f95a4 data/rotarycraft/recipe/hsla_steel_helmet.json
 2f1ce9ba77667e0b199a173166ef02774a4258dd data/rotarycraft/recipe/hsla_steel_hoe_left.json
 556ec2634d29cf3381262d6207655c32b1ffe3a9 data/rotarycraft/recipe/hsla_steel_hoe_right.json
@@ -434,7 +434,7 @@ ffdd746447e270e57942879cce58b480563f5ce6 data/rotarycraft/recipe/lens.json
 f5ebce60bb0be396321c6b0f04a22585b6680565 data/rotarycraft/recipe/line_builder.json
 a4449377daa01c0528c8bd85435eb0c57613ac8e data/rotarycraft/recipe/magnetizer.json
 81a05d9e2ef8baae5d2822f5bab8497c5568ccd9 data/rotarycraft/recipe/microturbine.json
-322045b98901c6acdf698e72e79519dbe1568559 data/rotarycraft/recipe/mirror.json
+af8783a4e5c69307afa5729bf188c0e799c2cbca data/rotarycraft/recipe/mirror.json
 aabd7eee2bb646c2fb3e76214256e7a42a0cfbc4 data/rotarycraft/recipe/mirror_panel.json
 6c12095b04f97b83c5660d2172f31a867512c873 data/rotarycraft/recipe/mob_harvester.json
 09b848862adee97152eef2a6ea869f266adec93e data/rotarycraft/recipe/multi_cannon.json

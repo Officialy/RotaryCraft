@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
+    "b": "rotarycraft:blastglass",
+    "c": "rotarycraft:circuit_board",
+    "g": "rotarycraft:hsla_steel_gear",
     "m": "rotarycraft:mirror_panel",
-    "p": "rotarycraft:hsla_steel_plate",
-    "s": "rotarycraft:hsla_steel_ingot"
+    "p": "rotarycraft:hsla_steel_plate"
   },
   "pattern": [
-    " m ",
-    " s ",
-    " p "
+    "bmb",
+    " g ",
+    "pcp"
   ],
   "result": {
     "id": "rotarycraft:mirror"
