@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_hsla_shaft": {
+    "has_hsla_gear": {
       "conditions": {
         "items": [
           {
-            "items": "rotarycraft:hsla_steel_rod"
+            "items": "rotarycraft:hsla_steel_gear"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_hsla_shaft"
+      "has_hsla_gear"
     ]
   ],
   "rewards": {

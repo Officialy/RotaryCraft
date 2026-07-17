@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_cylinder": {
+    "has_ignition_unit": {
       "conditions": {
         "items": [
           {
-            "items": "rotarycraft:cylinder"
+            "items": "rotarycraft:ignition_unit"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_cylinder"
+      "has_ignition_unit"
     ]
   ],
   "rewards": {

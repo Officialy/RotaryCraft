@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "H": "rotarycraft:hsla_steel_ingot",
-    "S": "rotarycraft:hsla_steel_rod"
+    "G": "rotarycraft:hsla_steel_gear",
+    "S": "rotarycraft:hsla_steel_ingot"
   },
   "pattern": [
-    "HHH",
-    "HSH",
-    "HHH"
+    "SSS",
+    "SGS",
+    "SSS"
   ],
   "result": {
     "id": "rotarycraft:compressor"

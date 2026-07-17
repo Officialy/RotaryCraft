@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "F": "minecraft:flint",
     "G": "minecraft:gold_ingot",
-    "R": "minecraft:redstone"
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
   },
   "pattern": [
-    " G ",
-    "RFR",
-    " G "
+    "G G",
+    "SRS",
+    "SSS"
   ],
   "result": {
     "id": "rotarycraft:ignition_unit"

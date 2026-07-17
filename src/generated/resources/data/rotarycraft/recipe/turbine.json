@@ -2,14 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "H": "rotarycraft:hsla_steel_ingot",
-    "P": "rotarycraft:hsla_steel_plate",
-    "S": "rotarycraft:hsla_steel_rod"
+    "G": "rotarycraft:compressor",
+    "s": "rotarycraft:propeller_blade"
   },
   "pattern": [
-    "HPH",
-    "PSP",
-    "HPH"
+    "sss",
+    "sGs",
+    "sss"
   ],
   "result": {
     "id": "rotarycraft:turbine"

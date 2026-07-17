@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "C": "rotarycraft:cylinder",
-    "F": "minecraft:flint",
-    "I": "minecraft:iron_ingot"
+    "G": "rotarycraft:ignition_unit",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
   },
   "pattern": [
-    "IFI",
-    "ICI",
-    "IFI"
+    "SSS",
+    "SRS",
+    "SGS"
   ],
   "result": {
     "id": "rotarycraft:combustor"

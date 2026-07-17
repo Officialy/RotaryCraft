@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_planks": {
+    "has_hsla_shaft": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:oak_planks"
+            "items": "rotarycraft:hsla_steel_rod"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:propeller_blade"
+        "recipe": "rotarycraft:propeller_blade_down"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_planks"
+      "has_hsla_shaft"
     ]
   ],
   "rewards": {
     "recipes": [
-      "rotarycraft:propeller_blade"
+      "rotarycraft:propeller_blade_down"
     ]
   }
 }

@@ -1299,38 +1299,52 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_furnace", has(Items.FURNACE))
                     .save(out);
 
-            // CYLINDER: combustion chamber — used by gas engine + several others. Iron walls
-            // around an empty central cavity (the piston cavity).
-            shaped(RecipeCategory.REDSTONE, RotaryItems.CYLINDER.get())
-                    .define('I', Items.IRON_INGOT)
-                    .pattern("I I").pattern("I I").pattern("III")
-                    .unlockedBy("has_iron", has(Items.IRON_INGOT))
+            // CYLINDER (RotaryRecipes 955): "SSS","S S","SSS" — a steel-ingot ring, output 2.
+            // The previous shape here (solid iron box) was invented.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.CYLINDER.get(), 2)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("SSS").pattern("S S").pattern("SSS")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
-            // IGNITION_UNIT: spark plug for the gas engine — gold contacts + flint striker.
+            // IGNITION_UNIT / igniter (RotaryRecipes 969): "G G","SRS","SSS" — steel ingots
+            // around redstone, gold contacts on top. The previous shape here (flint striker)
+            // was invented.
             shaped(RecipeCategory.REDSTONE, RotaryItems.IGNITION_UNIT.get())
                     .define('G', Items.GOLD_INGOT)
-                    .define('F', Items.FLINT)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
                     .define('R', Items.REDSTONE)
-                    .pattern(" G ").pattern("RFR").pattern(" G ")
-                    .unlockedBy("has_flint", has(Items.FLINT))
+                    .pattern("G G").pattern("SRS").pattern("SSS")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
-            // HUB: central rotational hub for the wind engine. Wood frame + iron axle.
+            // HUB (RotaryRecipes 982): "  B"," C ","G  " — a steel gear, a steel bearing, and a
+            // shaft core. The previous shape here (wood/iron ring) was invented.
             shaped(RecipeCategory.REDSTONE, RotaryItems.HUB.get())
-                    .define('W', Items.OAK_PLANKS)
-                    .define('I', Items.IRON_INGOT)
-                    .pattern("WIW").pattern("IWI").pattern("WIW")
-                    .unlockedBy("has_iron", has(Items.IRON_INGOT))
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('B', RotaryItems.HSLA_STEEL_BEARING.get())
+                    .define('C', RotaryItems.HSLA_SHAFT_CORE.get())
+                    .pattern("  B").pattern(" C ").pattern("G  ")
+                    .unlockedBy("has_hsla_steel_bearing", has(RotaryItems.HSLA_STEEL_BEARING.get()))
                     .save(out);
 
-            // PROPELLER_BLADE: wind engine blade. Wood plank with iron edge.
+            // PROPELLER_BLADE / prop (RotaryRecipes 977-980): two mirrored diagonal variants,
+            // each 1×SHAFT + 1×STEEL_INGOT + 1×BASEPANEL. The previous shape here (wood/iron)
+            // was invented.
             shaped(RecipeCategory.REDSTONE, RotaryItems.PROPELLER_BLADE.get())
-                    .define('W', Items.OAK_PLANKS)
-                    .define('I', Items.IRON_INGOT)
-                    .pattern("  I").pattern(" W ").pattern("I  ")
-                    .unlockedBy("has_planks", has(Items.OAK_PLANKS))
-                    .save(out);
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('S', RotaryItems.HSLA_SHAFT.get())
+                    .define('I', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern(" S ").pattern(" I ").pattern(" P ")
+                    .unlockedBy("has_hsla_shaft", has(RotaryItems.HSLA_SHAFT.get()))
+                    .save(out, "rotarycraft:propeller_blade_up");
+            shaped(RecipeCategory.REDSTONE, RotaryItems.PROPELLER_BLADE.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('S', RotaryItems.HSLA_SHAFT.get())
+                    .define('I', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern(" P ").pattern(" I ").pattern(" S ")
+                    .unlockedBy("has_hsla_shaft", has(RotaryItems.HSLA_SHAFT.get()))
+                    .save(out, "rotarycraft:propeller_blade_down");
 
             // ========= 26.1 added recipes: mid-game engine + machine components =========
             // Without these, post-steam-engine progression (AC, jet, heat ray, etc.) is locked
@@ -1367,38 +1381,41 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
-            // COMPRESSOR: jet engine intake stage — 4 HSLA blades around an HSLA shaft.
+            // COMPRESSOR (RotaryRecipes 942): "SSS","SGS","SSS" — a steel-ingot ring around a
+            // steel gear. The previous shape here (shaft-cored ring) was invented.
             shaped(RecipeCategory.REDSTONE, RotaryItems.COMPRESSOR.get())
-                    .define('H', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .define('S', RotaryItems.HSLA_SHAFT.get())
-                    .pattern("HHH").pattern("HSH").pattern("HHH")
-                    .unlockedBy("has_hsla_shaft", has(RotaryItems.HSLA_SHAFT.get()))
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern("SSS").pattern("SGS").pattern("SSS")
+                    .unlockedBy("has_hsla_gear", has(RotaryItems.HSLA_STEEL_GEAR.get()))
                     .save(out);
 
-            // TURBINE: jet engine exhaust stage — HSLA blades + plate frame.
+            // TURBINE (RotaryRecipes 943): "sss","sGs","sss" — propeller blades around a
+            // compressor. The previous shape here (plate/shaft ring) was invented.
             shaped(RecipeCategory.REDSTONE, RotaryItems.TURBINE.get())
-                    .define('H', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .define('P', RotaryItems.HSLA_PLATE.get())
-                    .define('S', RotaryItems.HSLA_SHAFT.get())
-                    .pattern("HPH").pattern("PSP").pattern("HPH")
-                    .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get()))
+                    .define('s', RotaryItems.PROPELLER_BLADE.get())
+                    .define('G', RotaryItems.COMPRESSOR.get())
+                    .pattern("sss").pattern("sGs").pattern("sss")
+                    .unlockedBy("has_compressor", has(RotaryItems.COMPRESSOR.get()))
                     .save(out);
 
-            // COMBUSTOR: diesel engine combustion chamber. Cylinder + flint + iron walls.
+            // COMBUSTOR (RotaryRecipes 951): "SSS","SRS","SGS" — steel ingots around redstone
+            // and an ignition unit. The previous shape here (cylinder/flint/iron) was invented.
             shaped(RecipeCategory.REDSTONE, RotaryItems.COMBUSTOR.get())
-                    .define('I', Items.IRON_INGOT)
-                    .define('C', RotaryItems.CYLINDER.get())
-                    .define('F', Items.FLINT)
-                    .pattern("IFI").pattern("ICI").pattern("IFI")
-                    .unlockedBy("has_cylinder", has(RotaryItems.CYLINDER.get()))
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('R', Items.REDSTONE)
+                    .define('G', RotaryItems.IGNITION_UNIT.get())
+                    .pattern("SSS").pattern("SRS").pattern("SGS")
+                    .unlockedBy("has_ignition_unit", has(RotaryItems.IGNITION_UNIT.get()))
                     .save(out);
 
-            // LENS: heat-ray focal lens. Glass refined with redstone for refractive purity.
+            // LENS (RotaryRecipes 1050): " D ","DGD"," D " — diamonds around blast glass. The
+            // previous shape here (glass/redstone) was invented.
             shaped(RecipeCategory.MISC, RotaryItems.LENS.get())
-                    .define('G', Items.GLASS)
-                    .define('R', Items.REDSTONE)
-                    .pattern(" G ").pattern("GRG").pattern(" G ")
-                    .unlockedBy("has_glass", has(Items.GLASS))
+                    .define('D', Items.DIAMOND)
+                    .define('G', RotaryBlocks.BLASTGLASS.get())
+                    .pattern(" D ").pattern("DGD").pattern(" D ")
+                    .unlockedBy("has_blastglass", has(RotaryBlocks.BLASTGLASS.get()))
                     .save(out);
 
             // MIRROR: silvered glass for solar / heat ray. Glass + iron substrate.

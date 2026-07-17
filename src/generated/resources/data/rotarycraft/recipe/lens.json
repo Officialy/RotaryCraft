@@ -1,13 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "G": "minecraft:glass",
-    "R": "minecraft:redstone"
+    "D": "minecraft:diamond",
+    "G": "rotarycraft:blastglass"
   },
   "pattern": [
-    " G ",
-    "GRG",
-    " G "
+    " D ",
+    "DGD",
+    " D "
   ],
   "result": {
     "id": "rotarycraft:lens"

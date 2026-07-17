@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_hsla_plate": {
+    "has_compressor": {
       "conditions": {
         "items": [
           {
-            "items": "rotarycraft:hsla_steel_plate"
+            "items": "rotarycraft:compressor"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_hsla_plate"
+      "has_compressor"
     ]
   ],
   "rewards": {
