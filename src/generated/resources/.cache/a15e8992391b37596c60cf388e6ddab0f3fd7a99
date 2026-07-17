@@ -1,4 +1,4 @@
-// 26.2	2026-07-17T15:55:34.4676479	RotaryCraft Recipes
+// 26.2	2026-07-17T15:58:35.7176511	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -10,6 +10,7 @@ d97b98c2cfe2871f38483c0df9d9d1651f7ee7de data/rotarycraft/advancement/recipes/co
 326f3626964cad4bd3bee4adbbc9d473b31ba1b6 data/rotarycraft/advancement/recipes/misc/ball_bearing_from_ingot.json
 dee9b02433928bd4985dd611b3889718d3b5c835 data/rotarycraft/advancement/recipes/misc/bedrock_alloy_flywheel_core.json
 e97f132ec6e54c8bf2f1e4d2aa458ff5a21dfe96 data/rotarycraft/advancement/recipes/misc/brake_disc.json
+f917c384eca9318047e5409b7f023bcb5e02ee98 data/rotarycraft/advancement/recipes/misc/chain_link.json
 02d96589668a312cdf2fd06929929a2268ec8963 data/rotarycraft/advancement/recipes/misc/coal_flakes_to_ingot.json
 6c2c9a282c2bcbdd6b5529d8d7d75baec1e43bf7 data/rotarycraft/advancement/recipes/misc/copper_flakes_to_ingot.json
 6b7a0284eb6d4222d990ddfb0ecdb7d4104888f6 data/rotarycraft/advancement/recipes/misc/craft_pattern.json
@@ -199,6 +200,8 @@ fde21e020851cf2768cb02ddac21aa2f69939e9b data/rotarycraft/advancement/recipes/re
 781a2ab056ca16e07b044e22cdc3614cf457ad78 data/rotarycraft/advancement/recipes/redstone/tungsten_gearbox_8x.json
 6f02b2da0a307fe716b0d2c2cb0e147f7f0ae909 data/rotarycraft/advancement/recipes/redstone/tungsten_shaft.json
 d08c99bcfd780c9f19e96aa24f9ac29dfb64cce5 data/rotarycraft/advancement/recipes/redstone/turbine.json
+0feb3add1916674cd8d09717138e14c00532a98e data/rotarycraft/advancement/recipes/redstone/turret_aiming_unit.json
+496d04eeef21b536c3cbb1a707515da58b1119b6 data/rotarycraft/advancement/recipes/redstone/turret_base.json
 5e4e8b51149959f4ae4f57350c3eb726a5cc869e data/rotarycraft/advancement/recipes/redstone/vacuum.json
 4a4582cccf5252f8be39f3ae780524fdbf5fd640 data/rotarycraft/advancement/recipes/redstone/valve.json
 616dbfaf67a51a14499f929d70c7e0173a71e021 data/rotarycraft/advancement/recipes/redstone/van_de_graff.json
@@ -274,6 +277,7 @@ b094a3308d0f2a1d322206c180014ba87908b7d5 data/rotarycraft/recipe/centrifuge/magm
 a2902c8c166728c7bd0dd0b28991dbec871c5c2d data/rotarycraft/recipe/centrifuge/pumpkin.json
 27e54b17582b7925a6f200d810b0f2f41bd89a99 data/rotarycraft/recipe/centrifuge/wheat.json
 8fc12f774de9429674487e72b57fd236f8a29ffc data/rotarycraft/recipe/chain_drive.json
+97a9581f618a92bcee0f170e80b9066706e95ae9 data/rotarycraft/recipe/chain_link.json
 6533050e30319115938af706ac4a52e9ddf12990 data/rotarycraft/recipe/circuit_board.json
 ad1d50a6dae756868091f7da7db182e19d323166 data/rotarycraft/recipe/clutch.json
 845f6e4cabb2d6b8d7d7a17ca362ccd703903349 data/rotarycraft/recipe/coal_flakes_to_ingot.json
@@ -559,6 +563,8 @@ f8b6525a93a8d6bd17dfb65d09471f97be68f5fc data/rotarycraft/recipe/tungsten_gearbo
 1f9c94c75c2a8c3590d3a866d193308f2b030088 data/rotarycraft/recipe/tungsten_ingot_from_smelting.json
 00d09d88e50a8537c4dbf317868cacff040a14a0 data/rotarycraft/recipe/tungsten_shaft.json
 b1fde8a0af9d730eff0233e84824fe46264e7ab2 data/rotarycraft/recipe/turbine.json
+2a4c01268cd64218876b0ecb3db2dec51a5eb1e5 data/rotarycraft/recipe/turret_aiming_unit.json
+601fa538a59f62086fd395a2ce6f736eee507072 data/rotarycraft/recipe/turret_base.json
 01c956144cda070a44753cf3070fbcf8a55e0d2b data/rotarycraft/recipe/ultrasound.json
 b382ab75d0d783a698767db69fe9135ea73df2e5 data/rotarycraft/recipe/vacuum.json
 9bb3d320c7579586012014422f41d69622d6550c data/rotarycraft/recipe/valve.json

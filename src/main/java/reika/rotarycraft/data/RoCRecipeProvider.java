@@ -914,6 +914,39 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("GGG").pattern("PPP").pattern("SSS")
                     .unlockedBy("has_fluid_pipe", has(RotaryBlocks.FLUID_PIPE.get()))
                     .save(out);
+
+            // TURRET_BASE / railbase (line 991): " S ","PGP" — a steel-gear pin over a base
+            // panel + gear-unit (2x) frame.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.TURRET_BASE.get())
+                    .define('S', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('G', RotaryItems.HSLA_STEEL_GEAR_2x.get())
+                    .pattern(" S ").pattern("PGP")
+                    .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get()))
+                    .save(out);
+
+            // TURRET_AIMING_UNIT / railaim (line 993): "sds","CRC","sgs" — steel + diamond
+            // targeting ring around a radar unit, circuit board, and generator.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.TURRET_AIMING_UNIT.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('d', Items.DIAMOND)
+                    .define('C', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('R', RotaryItems.RADAR_UNIT.get())
+                    .define('g', RotaryItems.GENERATOR.get())
+                    .pattern("sds").pattern("CRC").pattern("sgs")
+                    .unlockedBy("has_radar_unit", has(RotaryItems.RADAR_UNIT.get()))
+                    .save(out);
+
+            // CHAIN_LINK / chain (line 1124): "s s"," s ","s s" — steel ingots, output 4.
+            shaped(RecipeCategory.MISC, RotaryItems.CHAIN_LINK.get(), 4)
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("s s").pattern(" s ").pattern("s s")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out);
+
+            // RAILGUN_ACCELERATOR / railhead (line 989): "LLL","LGL","LLL" (power module + LIM
+            // coils) is skipped — the legacy LIM (linear induction motor) item has no port
+            // equivalent, so this recipe cannot be restored without inventing an ingredient.
         }
 
         // =====================================================================================

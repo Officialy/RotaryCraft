@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:hsla_steel_gear_2x",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_gear"
+  },
+  "pattern": [
+    " S ",
+    "PGP"
+  ],
+  "result": {
+    "id": "rotarycraft:turret_base"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:circuit_board",
+    "R": "rotarycraft:radar_unit",
+    "d": "minecraft:diamond",
+    "g": "rotarycraft:generator",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "sds",
+    "CRC",
+    "sgs"
+  ],
+  "result": {
+    "id": "rotarycraft:turret_aiming_unit"
+  }
+}

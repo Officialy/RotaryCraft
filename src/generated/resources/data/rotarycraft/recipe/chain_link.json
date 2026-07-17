@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "s s",
+    " s ",
+    "s s"
+  ],
+  "result": {
+    "count": 4,
+    "id": "rotarycraft:chain_link"
+  }
+}
