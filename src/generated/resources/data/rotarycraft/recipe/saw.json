@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:hsla_steel_gear",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "S S",
+    " C ",
+    "S S"
+  ],
+  "result": {
+    "id": "rotarycraft:saw"
+  }
+}

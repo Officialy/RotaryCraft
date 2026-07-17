@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " SS",
+    "S  ",
+    " SS"
+  ],
+  "result": {
+    "id": "rotarycraft:diffuser"
+  }
+}

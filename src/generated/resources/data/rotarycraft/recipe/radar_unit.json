@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "M": "rotarycraft:dc_engine",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SSS",
+    " G ",
+    "RMR"
+  ],
+  "result": {
+    "id": "rotarycraft:radar_unit"
+  }
+}

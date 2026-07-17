@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "minecraft:blaze_rod",
+    "D": "minecraft:nether_star",
+    "G": "minecraft:glowstone",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "GGG",
+    "BDB",
+    "BRB"
+  ],
+  "result": {
+    "id": "rotarycraft:heat_ray_core"
+  }
+}

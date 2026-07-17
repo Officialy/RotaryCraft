@@ -156,6 +156,7 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
             fermenter();
             transmissionBlocks();
             gearCrafting();
+            craftItems();
             utilityMachines();
             pulseFurnace();
             engines();
@@ -773,6 +774,145 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .define('M', RotaryItems.MOUNT.get())
                     .pattern("BCS").pattern(" M ")
                     .unlockedBy("has_tension_coil", has(RotaryItems.TENSION_COIL.get()))
+                    .save(out);
+        }
+
+        // =====================================================================================
+        // BASE CRAFT ITEMS — direct port of RotaryRecipes.addCraftItems (lines 939-1125). These
+        // parts are referenced as ingredients throughout machines()/engines(), but previously had
+        // no crafting recipe of their own, making them permanently uncraftable.
+        // =====================================================================================
+        private void craftItems() {
+            // MOUNT (line 1002): "S S","SBS" — steel ingots around a base panel.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.MOUNT.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .pattern("S S").pattern("SBS")
+                    .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get()))
+                    .save(out);
+
+            // PRESSURE_HEAD / presshead (line 1007): "SOD","ODB","DBB" — steel, diamonds,
+            // obsidian, bedrock dust.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.PRESSURE_HEAD.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('D', Items.DIAMOND)
+                    .define('O', Items.OBSIDIAN)
+                    .define('B', RotaryItems.BEDROCK_DUST.get())
+                    .pattern("SOD").pattern("ODB").pattern("DBB")
+                    .unlockedBy("has_bedrock_dust", has(RotaryItems.BEDROCK_DUST.get()))
+                    .save(out);
+
+            // SCREEN (line 1009): "SGS","SCS" — steel + glass pane frame around a circuit board.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.SCREEN.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('C', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('G', Items.GLASS_PANE)
+                    .pattern("SGS").pattern("SCS")
+                    .unlockedBy("has_circuit_board", has(RotaryItems.CIRCUIT_BOARD.get()))
+                    .save(out);
+
+            // MIXER (line 1011): " S ","SIS"," S " — steel ingots around an impeller.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.MIXER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .pattern(" S ").pattern("SIS").pattern(" S ")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+
+            // SAW (line 1013): "S S"," C ","S S" — steel ingots around a steel gear.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.SAW.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('C', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern("S S").pattern(" C ").pattern("S S")
+                    .unlockedBy("has_hsla_gear", has(RotaryItems.HSLA_STEEL_GEAR.get()))
+                    .save(out);
+
+            // SONAR_UNIT / sonar (line 1022): " S ","SNS","RCR" — steel, redstone, noteblock,
+            // circuit board.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.SONAR_UNIT.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('R', Items.REDSTONE)
+                    .define('N', Items.NOTE_BLOCK)
+                    .define('C', RotaryItems.CIRCUIT_BOARD.get())
+                    .pattern(" S ").pattern("SNS").pattern("RCR")
+                    .unlockedBy("has_circuit_board", has(RotaryItems.CIRCUIT_BOARD.get()))
+                    .save(out);
+
+            // RADAR_UNIT / radar (line 1024): "SSS"," G ","RMR" — steel, redstone, gold, and a
+            // DC engine as the rotating dish motor.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.RADAR_UNIT.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('R', Items.REDSTONE)
+                    .define('G', Items.GOLD_INGOT)
+                    .define('M', RotaryBlocks.DC_ENGINE.get())
+                    .pattern("SSS").pattern(" G ").pattern("RMR")
+                    .unlockedBy("has_dc_engine", has(RotaryBlocks.DC_ENGINE.get()))
+                    .save(out);
+
+            // BELT (line 1027): "LLL","LSL","LLL" — leather around a steel ingot, output
+            // DifficultyEffects.BELTCRAFT (8 on the default MEDIUM difficulty).
+            shaped(RecipeCategory.REDSTONE, RotaryItems.BELT.get(), 8)
+                    .define('L', Items.LEATHER)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("LLL").pattern("LSL").pattern("LLL")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out);
+
+            // POWER_MODULE / power (line 1052): "RER","GGG","SSS" — redstone, ender eye, gold,
+            // steel, output 2.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.POWER_MODULE.get(), 2)
+                    .define('R', Items.REDSTONE)
+                    .define('E', Items.ENDER_EYE)
+                    .define('G', Items.GOLD_INGOT)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("RER").pattern("GGG").pattern("SSS")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out);
+
+            // HEAT_RAY_BARREL / barrel (line 1059): "OOO","gtG","OOO" — obsidian, glowstone,
+            // tungsten, blast glass.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.HEAT_RAY_BARREL.get())
+                    .define('O', Items.OBSIDIAN)
+                    .define('g', Items.GLOWSTONE)
+                    .define('t', RotaryItems.TUNGSTEN_INGOT.get())
+                    .define('G', RotaryBlocks.BLASTGLASS.get())
+                    .pattern("OOO").pattern("gtG").pattern("OOO")
+                    .unlockedBy("has_blastglass", has(RotaryBlocks.BLASTGLASS.get()))
+                    .save(out);
+
+            // HEAT_RAY_CORE / bulb (line 1061): "GGG","BDB","BRB" — glowstone, nether star,
+            // redstone, blaze rods.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.HEAT_RAY_CORE.get())
+                    .define('G', Items.GLOWSTONE)
+                    .define('D', Items.NETHER_STAR)
+                    .define('R', Items.REDSTONE)
+                    .define('B', Items.BLAZE_ROD)
+                    .pattern("GGG").pattern("BDB").pattern("BRB")
+                    .unlockedBy("has_nether_star", has(Items.NETHER_STAR))
+                    .save(out);
+
+            // GENERATOR (item, line 1121): "  G"," C ","G  " — gold coils and a shaft core.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.GENERATOR.get())
+                    .define('G', RotaryItems.GOLD_COIL.get())
+                    .define('C', RotaryItems.HSLA_SHAFT_CORE.get())
+                    .pattern("  G").pattern(" C ").pattern("G  ")
+                    .unlockedBy("has_gold_coil", has(RotaryItems.GOLD_COIL.get()))
+                    .save(out);
+
+            // DIFFUSER (line 944): " SS","S  "," SS" — steel ingots.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.DIFFUSER.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern(" SS").pattern("S  ").pattern(" SS")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .save(out);
+
+            // RADIATOR (line 945): "GGG","PPP","SSS" — gold, fluid pipe, steel.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.RADIATOR.get())
+                    .define('G', Items.GOLD_INGOT)
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .pattern("GGG").pattern("PPP").pattern("SSS")
+                    .unlockedBy("has_fluid_pipe", has(RotaryBlocks.FLUID_PIPE.get()))
                     .save(out);
         }
 

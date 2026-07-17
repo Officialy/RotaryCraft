@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dc_engine": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:dc_engine"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "rotarycraft:radar_unit"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dc_engine"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:radar_unit"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:bedrock_dust",
+    "D": "minecraft:diamond",
+    "O": "minecraft:obsidian",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SOD",
+    "ODB",
+    "DBB"
+  ],
+  "result": {
+    "id": "rotarycraft:pressure_head"
+  }
+}

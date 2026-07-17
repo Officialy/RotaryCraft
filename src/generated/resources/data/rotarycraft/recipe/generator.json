@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:hsla_steel_shaft_core",
+    "G": "rotarycraft:gold_coil"
+  },
+  "pattern": [
+    "  G",
+    " C ",
+    "G  "
+  ],
+  "result": {
+    "id": "rotarycraft:generator"
+  }
+}

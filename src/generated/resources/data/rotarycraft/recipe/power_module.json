@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "E": "minecraft:ender_eye",
+    "G": "minecraft:gold_ingot",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "RER",
+    "GGG",
+    "SSS"
+  ],
+  "result": {
+    "count": 2,
+    "id": "rotarycraft:power_module"
+  }
+}

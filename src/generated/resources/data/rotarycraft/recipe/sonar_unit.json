@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:circuit_board",
+    "N": "minecraft:note_block",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " S ",
+    "SNS",
+    "RCR"
+  ],
+  "result": {
+    "id": "rotarycraft:sonar_unit"
+  }
+}

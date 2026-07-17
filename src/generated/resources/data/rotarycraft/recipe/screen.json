@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:circuit_board",
+    "G": "minecraft:glass_pane",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SGS",
+    "SCS"
+  ],
+  "result": {
+    "id": "rotarycraft:screen"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "I": "rotarycraft:impeller",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " S ",
+    "SIS",
+    " S "
+  ],
+  "result": {
+    "id": "rotarycraft:mixer"
+  }
+}

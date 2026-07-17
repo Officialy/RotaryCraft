@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "L": "minecraft:leather",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "LLL",
+    "LSL",
+    "LLL"
+  ],
+  "result": {
+    "count": 8,
+    "id": "rotarycraft:belt"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "rotarycraft:blastglass",
+    "O": "minecraft:obsidian",
+    "g": "minecraft:glowstone",
+    "t": "rotarycraft:tungsten_ingot"
+  },
+  "pattern": [
+    "OOO",
+    "gtG",
+    "OOO"
+  ],
+  "result": {
+    "id": "rotarycraft:heat_ray_barrel"
+  }
+}
