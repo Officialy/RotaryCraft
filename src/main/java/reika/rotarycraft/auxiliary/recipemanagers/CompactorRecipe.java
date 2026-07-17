@@ -40,6 +40,12 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
  * (coal -> anthracite -> prismane -> lonsdaleite -> diamond) is the flagship use. Output stored as
  * item-holder + count (an ItemStack field trips "Components not bound" during datagen). Data-driven
  * port of the legacy {@code RecipesCompactor}.
+ *
+ * <p>{@code inputDamage} / {@code outputDamage} carry the {@code getDamageValue()}-variant charge used
+ * by ReactorCraft's magnet chain (lodestone -> charge 0, then charge i -> charge i+1). {@code inputDamage
+ * < 0} means "match any damage" (the carbon chain leaves both absent); a non-zero {@code outputDamage}
+ * is stamped onto the result stack. Storing the damage as an int rather than a full output ItemStack
+ * keeps clear of the datagen "Components not bound" trap.</p>
  */
 public class CompactorRecipe implements Recipe<SingleRecipeInput> {
 
@@ -48,18 +54,27 @@ public class CompactorRecipe implements Recipe<SingleRecipeInput> {
     private final int count;
     private final int pressure;
     private final int temperature;
+    private final int inputDamage;
+    private final int outputDamage;
 
     public CompactorRecipe(Ingredient input, Holder<Item> output, int count, int pressure, int temperature) {
+        this(input, output, count, pressure, temperature, -1, 0);
+    }
+
+    public CompactorRecipe(Ingredient input, Holder<Item> output, int count, int pressure, int temperature,
+                           int inputDamage, int outputDamage) {
         this.input = input;
         this.output = output;
         this.count = count;
         this.pressure = pressure;
         this.temperature = temperature;
+        this.inputDamage = inputDamage;
+        this.outputDamage = outputDamage;
     }
 
     @Override
     public boolean matches(SingleRecipeInput in, Level level) {
-        return input.test(in.item());
+        return input.test(in.item()) && (inputDamage < 0 || in.item().getDamageValue() == inputDamage);
     }
 
     @Override
@@ -72,7 +87,10 @@ public class CompactorRecipe implements Recipe<SingleRecipeInput> {
     }
 
     public ItemStack getResult() {
-        return new ItemStack(output.value(), count);
+        ItemStack s = new ItemStack(output.value(), count);
+        if (outputDamage != 0)
+            s.setDamageValue(outputDamage);
+        return s;
     }
 
     /** Required machine pressure in kPa. */
@@ -120,7 +138,9 @@ public class CompactorRecipe implements Recipe<SingleRecipeInput> {
             BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("output").forGetter(r -> r.output),
             Codec.INT.optionalFieldOf("count", 1).forGetter(r -> r.count),
             Codec.INT.fieldOf("pressure").forGetter(r -> r.pressure),
-            Codec.INT.fieldOf("temperature").forGetter(r -> r.temperature)
+            Codec.INT.fieldOf("temperature").forGetter(r -> r.temperature),
+            Codec.INT.optionalFieldOf("input_damage", -1).forGetter(r -> r.inputDamage),
+            Codec.INT.optionalFieldOf("output_damage", 0).forGetter(r -> r.outputDamage)
     ).apply(inst, CompactorRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CompactorRecipe> STREAM_CODEC = StreamCodec.of(
@@ -130,10 +150,14 @@ public class CompactorRecipe implements Recipe<SingleRecipeInput> {
                 buf.writeVarInt(r.count);
                 buf.writeVarInt(r.pressure);
                 buf.writeVarInt(r.temperature);
+                buf.writeVarInt(r.inputDamage);
+                buf.writeVarInt(r.outputDamage);
             },
             buf -> new CompactorRecipe(
                     Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
                     ByteBufCodecs.holderRegistry(Registries.ITEM).decode(buf),
+                    buf.readVarInt(),
+                    buf.readVarInt(),
                     buf.readVarInt(),
                     buf.readVarInt(),
                     buf.readVarInt()));
