@@ -1,4 +1,4 @@
-// 26.2	2026-07-17T16:02:26.4177204	RotaryCraft Recipes
+// 26.2	2026-07-17T16:07:25.1895171	RotaryCraft Recipes
 ffbd977a5e8b9c0a6f52ea9c0ccc1426a9df4700 data/rotarycraft/advancement/recipes/building_blocks/hsla_steel_block.json
 77e4c2e1032321e2a53012593d147338c6643643 data/rotarycraft/advancement/recipes/combat/hsla_steel_boots.json
 81219ff386f5aa40debf0d1c7bac0d7283dda8df data/rotarycraft/advancement/recipes/combat/hsla_steel_chestplate.json
@@ -74,6 +74,7 @@ b8a62a902df39b4f0604ef39abdb3f01b2188f2f data/rotarycraft/advancement/recipes/re
 05f2ea9c3e6f3550fde4388c2c594ac3d2a82d34 data/rotarycraft/advancement/recipes/redstone/centrifuge.json
 1a0ffb4599b81de61ea13592957bc7ee59adb75e data/rotarycraft/advancement/recipes/redstone/chain_drive.json
 7de8546d3e537c3e1ed033a2984bebb857a5a22f data/rotarycraft/advancement/recipes/redstone/circuit_board.json
+605348118efc64059bbf9e56733d68972bdaec08 data/rotarycraft/advancement/recipes/redstone/circuit_board_from_silicon.json
 7e92b8f4152cc7a7119b0d684cf4213a02717238 data/rotarycraft/advancement/recipes/redstone/clutch.json
 c5537047e62ef0efcac188253cba8ff6e622fccd data/rotarycraft/advancement/recipes/redstone/coil.json
 3ed5424c53f1908b39cdd5ad8377e6981162c341 data/rotarycraft/advancement/recipes/redstone/combustor.json
@@ -290,6 +291,7 @@ a2902c8c166728c7bd0dd0b28991dbec871c5c2d data/rotarycraft/recipe/centrifuge/pump
 8fc12f774de9429674487e72b57fd236f8a29ffc data/rotarycraft/recipe/chain_drive.json
 97a9581f618a92bcee0f170e80b9066706e95ae9 data/rotarycraft/recipe/chain_link.json
 6533050e30319115938af706ac4a52e9ddf12990 data/rotarycraft/recipe/circuit_board.json
+3757f331d550fffe3229eee2082477acf9f232fc data/rotarycraft/recipe/circuit_board_from_silicon.json
 ad1d50a6dae756868091f7da7db182e19d323166 data/rotarycraft/recipe/clutch.json
 845f6e4cabb2d6b8d7d7a17ca362ccd703903349 data/rotarycraft/recipe/coal_flakes_to_ingot.json
 754687f373e75cdba9c4c4a088f54419aa2dfdfb data/rotarycraft/recipe/coil.json

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "E": "rotarycraft:silicon",
+    "G": "minecraft:gold_ingot",
+    "P": "rotarycraft:hsla_steel_ingot",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "PGP",
+    "RER",
+    "GPG"
+  ],
+  "result": {
+    "count": 3,
+    "id": "rotarycraft:circuit_board"
+  }
+}

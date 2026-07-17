@@ -1617,6 +1617,16 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .pattern("PGP").pattern("RER").pattern("GPG")
                     .unlockedBy("has_redstone", has(Items.REDSTONE))
                     .save(out);
+            // CIRCUIT_BOARD / pcb, silicon alternative (RotaryRecipes 1017): same shape with
+            // SILICON instead of the ender pearl, → 3 outputs instead of 2.
+            shaped(RecipeCategory.REDSTONE, RotaryItems.CIRCUIT_BOARD.get(), 3)
+                    .define('P', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('G', Items.GOLD_INGOT)
+                    .define('R', Items.REDSTONE)
+                    .define('E', RotaryItems.SILICON.get())
+                    .pattern("PGP").pattern("RER").pattern("GPG")
+                    .unlockedBy("has_silicon", has(RotaryItems.SILICON.get()))
+                    .save(out, "rotarycraft:circuit_board_from_silicon");
 
             // HSLA_STEEL_GEAR / steelgear (RotaryRecipes 1090): " B ","BBB"," B " — 5×HSLA steel
             // ingot cross, output DifficultyEffects.PARTCRAFT (3 on the default MEDIUM difficulty).
