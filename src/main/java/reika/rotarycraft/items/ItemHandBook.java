@@ -9,14 +9,12 @@
  ******************************************************************************/
 package reika.rotarycraft.items;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import reika.rotarycraft.base.ItemRotaryTool;
-import reika.rotarycraft.gui.screen.GuiHandbook;
 import reika.rotarycraft.registry.RotaryItems;
 
 public class ItemHandBook extends ItemRotaryTool {
@@ -28,7 +26,7 @@ public class ItemHandBook extends ItemRotaryTool {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (level.isClientSide() && hand.equals(InteractionHand.MAIN_HAND)) {
-            Minecraft.getInstance().gui.setScreen(new GuiHandbook(player, level, 0, 0));
+            reika.rotarycraft.client.ClientScreens.openHandbook(player, level);
         }
         return super.use(level, player, hand);
     }
