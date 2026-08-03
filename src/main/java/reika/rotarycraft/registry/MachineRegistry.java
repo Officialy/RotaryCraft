@@ -9,8 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.registry;
 
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -31,7 +29,6 @@ import reika.dragonapi.modregistry.PowerTypes;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.ModDependency;
 import reika.rotarycraft.auxiliary.interfaces.*;
-import reika.rotarycraft.base.RotaryModelBase;
 import reika.rotarycraft.base.blockentity.*;
 import reika.rotarycraft.blockentities.*;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
@@ -49,25 +46,15 @@ import reika.rotarycraft.blockentities.farming.BlockEntityFan;
 import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.farming.BlockEntitySprinkler;
 import reika.rotarycraft.blockentities.farming.BlockEntityWoodcutter;
-import reika.rotarycraft.models.SprinklerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
-import reika.rotarycraft.models.animated.BeltModel;
-import reika.rotarycraft.models.BreederModel;
-import reika.rotarycraft.models.animated.CrystallizerModel;
 import reika.rotarycraft.blockentities.farming.BlockEntityAutoBreeder;
-import reika.rotarycraft.models.animated.FertilizerModel;
 import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
-import reika.rotarycraft.models.animated.LawnSprinklerModel;
 import reika.rotarycraft.blockentities.farming.BlockEntityFertilizer;
 import reika.rotarycraft.blockentities.farming.BlockEntityLawnSprinkler;
-import reika.rotarycraft.models.animated.CompactorModel;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBeltHub;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitBelt;
 import reika.rotarycraft.blockentities.transmission.BlockEntityChainDrive;
-import reika.rotarycraft.models.animated.WetterModel;
-import reika.rotarycraft.models.DryingBedModel;
-import reika.rotarycraft.models.SpawnerModel;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityEngineController;
 import reika.rotarycraft.blockentities.farming.BlockEntitySpawnerController;
 import reika.rotarycraft.blockentities.processing.BlockEntityWetter;
@@ -88,18 +75,9 @@ import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
 import reika.rotarycraft.blockentities.surveying.BlockEntityGPR;
 import reika.rotarycraft.blockentities.transmission.*;
 import reika.rotarycraft.blockentities.weaponry.*;
-import reika.rotarycraft.models.*;
-import reika.rotarycraft.models.animated.*;
-import reika.rotarycraft.models.animated.shaftonly.ClutchModel;
-import reika.rotarycraft.models.animated.shaftonly.CrossModel;
-import reika.rotarycraft.models.animated.shaftonly.ShaftModel;
-import reika.rotarycraft.models.engine.*;
 import reika.rotarycraft.modinterface.conversion.BlockEntityBoiler;
 import reika.rotarycraft.modinterface.conversion.BlockEntityMagnetEngine;
 import reika.rotarycraft.modinterface.conversion.BlockEntitySteam;
-import reika.rotarycraft.modinterface.model.BoilerModel;
-import reika.rotarycraft.modinterface.model.MagneticModel;
-import reika.rotarycraft.modinterface.model.SteamTurbineModel;
 
 import java.util.Locale;
 import java.util.function.Function;
@@ -109,172 +87,172 @@ import java.util.function.Function;
  */
 public enum MachineRegistry implements TileEnum {
 
-    WIND_ENGINE("machine.wind_engine", RotaryBlocks.WIND_ENGINE.get(), BlockEntityWindEngine.class, EngineType.WIND, (modelSet) -> new WindModel(modelSet.bakeLayer(RotaryModelLayers.WIND_ENGINE))),
-    STEAM_ENGINE(true, "machine.steam_engine", RotaryBlocks.STEAM_ENGINE.get(), BlockEntitySteamEngine.class, EngineType.STEAM, (modelSet) -> new SteamModel(modelSet.bakeLayer(RotaryModelLayers.STEAM_ENGINE))),
-    PERFORMANCE_ENGINE(true, "machine.performance_engine", RotaryBlocks.PERFORMANCE_ENGINE.get(), BlockEntityPerformanceEngine.class, EngineType.SPORT, (modelSet) -> new PerformanceModel(modelSet.bakeLayer(RotaryModelLayers.PERFORMANCE_ENGINE))),
-    MICRO_TURBINE(true, "machine.micro_turbine", RotaryBlocks.MICRO_TURBINE.get(), BlockEntityMicroturbine.class, EngineType.MICRO, (modelSet) -> new MicroTurbineModel(modelSet.bakeLayer(RotaryModelLayers.MICRO_ENGINE))),
-    GAS_ENGINE(true, "machine.gas_engine", RotaryBlocks.GAS_ENGINE.get(), BlockEntityGasEngine.class, EngineType.GAS, (modelSet) -> new CombustionModel(modelSet.bakeLayer(RotaryModelLayers.COMBUSTION_ENGINE))),
-    DC_ENGINE("machine.dc_engine", RotaryBlocks.DC_ENGINE.get(), BlockEntityDCEngine.class, EngineType.DC, (modelSet) -> new DCModel(modelSet.bakeLayer(RotaryModelLayers.DC_ENGINE))),
-    AC_ENGINE("machine.ac_engine", RotaryBlocks.AC_ENGINE.get(), BlockEntityACEngine.class, EngineType.AC, (modelSet) -> new ACModel(modelSet.bakeLayer(RotaryModelLayers.AC_ENGINE))),
-    JET_ENGINE(true, "machine.jet_engine", RotaryBlocks.JET_ENGINE.get(), BlockEntityJetEngine.class, EngineType.JET, (modelSet) -> new JetModel(modelSet.bakeLayer(RotaryModelLayers.JET_ENGINE))),
+    WIND_ENGINE("machine.wind_engine", RotaryBlocks.WIND_ENGINE.get(), BlockEntityWindEngine.class, EngineType.WIND),
+    STEAM_ENGINE(true, "machine.steam_engine", RotaryBlocks.STEAM_ENGINE.get(), BlockEntitySteamEngine.class, EngineType.STEAM),
+    PERFORMANCE_ENGINE(true, "machine.performance_engine", RotaryBlocks.PERFORMANCE_ENGINE.get(), BlockEntityPerformanceEngine.class, EngineType.SPORT),
+    MICRO_TURBINE(true, "machine.micro_turbine", RotaryBlocks.MICRO_TURBINE.get(), BlockEntityMicroturbine.class, EngineType.MICRO),
+    GAS_ENGINE(true, "machine.gas_engine", RotaryBlocks.GAS_ENGINE.get(), BlockEntityGasEngine.class, EngineType.GAS),
+    DC_ENGINE("machine.dc_engine", RotaryBlocks.DC_ENGINE.get(), BlockEntityDCEngine.class, EngineType.DC),
+    AC_ENGINE("machine.ac_engine", RotaryBlocks.AC_ENGINE.get(), BlockEntityACEngine.class, EngineType.AC),
+    JET_ENGINE(true, "machine.jet_engine", RotaryBlocks.JET_ENGINE.get(), BlockEntityJetEngine.class, EngineType.JET),
 
-    FLYWHEEL(true, "machine.flywheel", RotaryBlocks.HSLA_FLYWHEEL.get(), BlockEntityFlywheel.class, (modelSet) -> new FlywheelModel(modelSet.bakeLayer(RotaryModelLayers.FLYWHEEL))),
-    WOOD_SHAFT("machine.shaft", RotaryBlocks.WOOD_SHAFT.get(), BlockEntityShaft.class, (modelSet) -> new ShaftModel(modelSet.bakeLayer(RotaryModelLayers.SHAFT))),
-    STONE_SHAFT("machine.shaft", RotaryBlocks.STONE_SHAFT.get(), BlockEntityShaft.class, (modelSet) -> new ShaftModel(modelSet.bakeLayer(RotaryModelLayers.SHAFT))),
-    HSLA_SHAFT("machine.shaft", RotaryBlocks.HSLA_SHAFT.get(), BlockEntityShaft.class, (modelSet) -> new ShaftModel(modelSet.bakeLayer(RotaryModelLayers.SHAFT))),
-    TUNGSTEN_SHAFT("machine.shaft", RotaryBlocks.TUNGSTEN_SHAFT.get(), BlockEntityShaft.class, (modelSet) -> new ShaftModel(modelSet.bakeLayer(RotaryModelLayers.SHAFT))),
-    DIAMOND_SHAFT("machine.shaft", RotaryBlocks.DIAMOND_SHAFT.get(), BlockEntityShaft.class, (modelSet) -> new ShaftModel(modelSet.bakeLayer(RotaryModelLayers.SHAFT))),
-    BEDROCK_SHAFT("machine.shaft", RotaryBlocks.BEDROCK_SHAFT.get(), BlockEntityShaft.class, (modelset) -> new ShaftModel(modelset.bakeLayer(RotaryModelLayers.SHAFT))),
-    SHAFT_CROSS("machine.shaft", RotaryBlocks.SHAFT_CROSS.get(), BlockEntityShaft.class, (modelset) -> new CrossModel(modelset.bakeLayer(RotaryModelLayers.SHAFT_CROSS))),
-    SHAFT_MERGE("machine.shaft", RotaryBlocks.SHAFT_MERGE.get(), BlockEntityShaft.class, (modelset) -> new CrossModel(modelset.bakeLayer(RotaryModelLayers.SHAFT_CROSS))),
+    FLYWHEEL(true, "machine.flywheel", RotaryBlocks.HSLA_FLYWHEEL.get(), BlockEntityFlywheel.class),
+    WOOD_SHAFT("machine.shaft", RotaryBlocks.WOOD_SHAFT.get(), BlockEntityShaft.class),
+    STONE_SHAFT("machine.shaft", RotaryBlocks.STONE_SHAFT.get(), BlockEntityShaft.class),
+    HSLA_SHAFT("machine.shaft", RotaryBlocks.HSLA_SHAFT.get(), BlockEntityShaft.class),
+    TUNGSTEN_SHAFT("machine.shaft", RotaryBlocks.TUNGSTEN_SHAFT.get(), BlockEntityShaft.class),
+    DIAMOND_SHAFT("machine.shaft", RotaryBlocks.DIAMOND_SHAFT.get(), BlockEntityShaft.class),
+    BEDROCK_SHAFT("machine.shaft", RotaryBlocks.BEDROCK_SHAFT.get(), BlockEntityShaft.class),
+    SHAFT_CROSS("machine.shaft", RotaryBlocks.SHAFT_CROSS.get(), BlockEntityShaft.class),
+    SHAFT_MERGE("machine.shaft", RotaryBlocks.SHAFT_MERGE.get(), BlockEntityShaft.class),
 
-    BEVELGEARS(true, "machine.bevel", RotaryBlocks.BEVEL_GEARS.get(), BlockEntityBevelGear.class, (modelSet) -> new BevelModel(modelSet.bakeLayer(RotaryModelLayers.BEVEL))),
-    GEARBOX(true, "machine.gearbox", RotaryBlocks.HSLA_GEARBOX_2x.get(), BlockEntityGearbox.class, (modelSet) -> new GearboxModel(modelSet.bakeLayer(RotaryModelLayers.GEARBOX))),
-    SPLITTER(true, "machine.splitter", RotaryBlocks.SPLITTER.get(), BlockEntitySplitter.class, (modelSet) -> new SplitterModel(modelSet.bakeLayer(RotaryModelLayers.SPLITTER))),
+    BEVELGEARS(true, "machine.bevel", RotaryBlocks.BEVEL_GEARS.get(), BlockEntityBevelGear.class),
+    GEARBOX(true, "machine.gearbox", RotaryBlocks.HSLA_GEARBOX_2x.get(), BlockEntityGearbox.class),
+    SPLITTER(true, "machine.splitter", RotaryBlocks.SPLITTER.get(), BlockEntitySplitter.class),
     //            FERMENTER("machine.fermenter", BlockRotaryCraftMachine.class, BlockEntityFermenter.class),
-    FLOODLIGHT("machine.floodlight", RotaryBlocks.FLOODLIGHT.get(), BlockEntityFloodlight.class, (modelSet) -> new LampModel(modelSet.bakeLayer(RotaryModelLayers.FLOODLIGHT))),
-    CLUTCH("machine.clutch", RotaryBlocks.CLUTCH.get(), BlockEntityClutch.class, (modelSet) -> new ClutchModel(modelSet.bakeLayer(RotaryModelLayers.CLUTCH))),
-    DYNAMOMETER("machine.dyna", RotaryBlocks.DYNAMOMETER.get(), BlockEntityMonitor.class, (modelSet) -> new MonitorModel(modelSet.bakeLayer(RotaryModelLayers.DYNOMONITOR))),
-    GRINDER(true, "machine.grinder", RotaryBlocks.GRINDER.get(), BlockEntityGrinder.class, (modelSet) -> new GrinderModel(modelSet.bakeLayer(RotaryModelLayers.GRINDER))),
-    HEATRAY("machine.heatray", RotaryBlocks.HEAT_RAY.get(), BlockEntityHeatRay.class/*, (modelSet) -> new HeatRayModel(modelSet.bakeLayer(RotaryModelLayers.HEAT_RAY))*/),
+    FLOODLIGHT("machine.floodlight", RotaryBlocks.FLOODLIGHT.get(), BlockEntityFloodlight.class),
+    CLUTCH("machine.clutch", RotaryBlocks.CLUTCH.get(), BlockEntityClutch.class),
+    DYNAMOMETER("machine.dyna", RotaryBlocks.DYNAMOMETER.get(), BlockEntityMonitor.class),
+    GRINDER(true, "machine.grinder", RotaryBlocks.GRINDER.get(), BlockEntityGrinder.class),
+    HEATRAY("machine.heatray", RotaryBlocks.HEAT_RAY.get(), BlockEntityHeatRay.class),
 
     //                       PIPES
-    HOSE("machine.hose", RotaryBlocks.HOSE.get(), BlockEntityHose.class/*, (modelSet) -> new HoseModel(modelSet.bakeLayer(RotaryModelLayers.HOSE))*/),
-    PIPE("machine.pipe", RotaryBlocks.FLUID_PIPE.get(), BlockEntityPipe.class/*, (modelSet) -> new PipeModel(modelSet.bakeLayer(RotaryModelLayers.PIPE))*/),
-    FUELLINE("machine.fuelline", RotaryBlocks.FUEL_LINE.get(), BlockEntityFuelLine.class/*, (modelSet) -> new FuelLineModel(modelSet.bakeLayer(RotaryModelLayers.FUEL_LINE))*/),
-    VALVE("machine.valve", RotaryBlocks.VALVE.get(), BlockEntityValve.class/*, (modelSet) -> new ValveModel(modelSet.bakeLayer(RotaryModelLayers.VALVE))*/),
-    BYPASS("machine.bypass", RotaryBlocks.BYPASS.get(), BlockEntityBypass.class/*, (modelSet) -> new BypassModel(modelSet.bakeLayer(RotaryModelLayers.BYPASS))*/),
-    SEPARATION("machine.separation", RotaryBlocks.SEPARATION.get(), BlockEntitySeparatorPipe.class/*, (modelSet) -> new SeparationModel(modelSet.bakeLayer(RotaryModelLayers.SEPARATION))*/),
-    SUCTION("machine.suction", RotaryBlocks.SUCTION.get(), BlockEntitySuctionPipe.class/*, (modelSet) -> new SuctionModel(modelSet.bakeLayer(RotaryModelLayers.SUCTION))*/),
-    BEDPIPE("machine.bedpipe", RotaryBlocks.BEDROCK_PIPE.get(), BlockEntityBedrockPipe.class/*, (modelSet) -> new BedPipeModel(modelSet.bakeLayer(RotaryModelLayers.BEDROCK_PIPE))*/),
+    HOSE("machine.hose", RotaryBlocks.HOSE.get(), BlockEntityHose.class),
+    PIPE("machine.pipe", RotaryBlocks.FLUID_PIPE.get(), BlockEntityPipe.class),
+    FUELLINE("machine.fuelline", RotaryBlocks.FUEL_LINE.get(), BlockEntityFuelLine.class),
+    VALVE("machine.valve", RotaryBlocks.VALVE.get(), BlockEntityValve.class),
+    BYPASS("machine.bypass", RotaryBlocks.BYPASS.get(), BlockEntityBypass.class),
+    SEPARATION("machine.separation", RotaryBlocks.SEPARATION.get(), BlockEntitySeparatorPipe.class),
+    SUCTION("machine.suction", RotaryBlocks.SUCTION.get(), BlockEntitySuctionPipe.class),
+    BEDPIPE("machine.bedpipe", RotaryBlocks.BEDROCK_PIPE.get(), BlockEntityBedrockPipe.class),
 
     BORER(true, "machine.borer", RotaryBlocks.BORER.get(), BlockEntityBorer.class),
     LIGHTBRIDGE("machine.lightbridge", RotaryBlocks.LIGHT_BRIDGE.get(), BlockEntityLightBridge.class),
-    PUMP("machine.pump", RotaryBlocks.PUMP.get(), BlockEntityPump.class, (modelSet) -> new PumpModel(modelSet.bakeLayer(RotaryModelLayers.PUMP))),
-    RESERVOIR(true, "machine.reservoir", RotaryBlocks.RESERVOIR.get(), BlockEntityReservoir.class, (modelSet) -> new ReservoirModel(modelSet.bakeLayer(RotaryModelLayers.RESERVOIR))),
-    AEROSOLIZER(true, "machine.aerosolizer", RotaryBlocks.AEROSOLIZER.get(), BlockEntityAerosolizer.class, (modelSet) -> new AerosolizerModel(modelSet.bakeLayer(RotaryModelLayers.AEROSOLIZER))),
+    PUMP("machine.pump", RotaryBlocks.PUMP.get(), BlockEntityPump.class),
+    RESERVOIR(true, "machine.reservoir", RotaryBlocks.RESERVOIR.get(), BlockEntityReservoir.class),
+    AEROSOLIZER(true, "machine.aerosolizer", RotaryBlocks.AEROSOLIZER.get(), BlockEntityAerosolizer.class),
     //    EXTRACTOR(true, "machine.extractor", BlockRotaryCraftMachine.class, BlockEntityExtractor.class, "RenderExtractor"),
-    PULSEJET(true, "machine.pulsejet", RotaryBlocks.PULSE_JET_FURNACE.get(), BlockEntityPulseFurnace.class, (modelSet) -> new PulseFurnaceModel(modelSet.bakeLayer(RotaryModelLayers.PULSEJET))),
-    COMPACTOR(true, "machine.compactor", RotaryBlocks.COMPACTOR.get(), BlockEntityCompactor.class, (modelSet) -> new CompactorModel(modelSet.bakeLayer(RotaryModelLayers.COMPACTOR))),
-   FAN("machine.fan", RotaryBlocks.FAN.get(), BlockEntityFan.class, (modelSet) -> new FanModel(modelSet.bakeLayer(RotaryModelLayers.FAN))),
-    FRACTIONATOR(true, "machine.fractionator", RotaryBlocks.FRACTIONATOR.get(), BlockEntityFractionator.class, (modelSet) -> new FractionModel(modelSet.bakeLayer(RotaryModelLayers.FRACTIONATOR))),
+    PULSEJET(true, "machine.pulsejet", RotaryBlocks.PULSE_JET_FURNACE.get(), BlockEntityPulseFurnace.class),
+    COMPACTOR(true, "machine.compactor", RotaryBlocks.COMPACTOR.get(), BlockEntityCompactor.class),
+   FAN("machine.fan", RotaryBlocks.FAN.get(), BlockEntityFan.class),
+    FRACTIONATOR(true, "machine.fractionator", RotaryBlocks.FRACTIONATOR.get(), BlockEntityFractionator.class),
     GPR(true, "machine.gpr", RotaryBlocks.GPR.get(), BlockEntityGPR.class),
-    OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class/*, (modelSet) -> new ObsidianMakerModel(modelSet.bakeLayer(RotaryModelLayers.OBSIDIAN_MAKER))*/),
+    OBSIDIAN(true, "machine.obsidian", RotaryBlocks.OBSIDIAN_MAKER.get(), BlockEntityObsidianMaker.class),
     //    PILEDRIVER("machine.piledriver", BlockRotaryCraftMachine.class, BlockEntityPileDriver.class, "RenderPileDriver"),
-    VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class, (modelSet) -> new VacuumModel(modelSet.bakeLayer(RotaryModelLayers.VACCUUM))),
+    VACUUM(true, "machine.vacuum", RotaryBlocks.VACUUM.get(), BlockEntityVacuum.class),
     FIREWORK("machine.firework", RotaryBlocks.FIREWORK.get(), reika.rotarycraft.blockentities.decorative.BlockEntityFireworkMachine.class),
-    SPRINKLER(true, "machine.sprinkler", RotaryBlocks.SPRINKLER.get(), BlockEntitySprinkler.class, (modelSet) -> new SprinklerModel(modelSet.bakeLayer(RotaryModelLayers.SPRINKLER))),
-    WOODCUTTER("machine.woodcutter", RotaryBlocks.WOODCUTTER.get(), BlockEntityWoodcutter.class, (modelSet) -> new WoodcutterModel(modelSet.bakeLayer(RotaryModelLayers.WOODCUTTER))),
-    SPAWNERCONTROLLER("machine.spawnercontroller", RotaryBlocks.SPAWNERCONTROLLER.get(), BlockEntitySpawnerController.class, (modelSet) -> new SpawnerModel(modelSet.bakeLayer(RotaryModelLayers.SPAWNER_CONTROLLER))),
-    PLAYERDETECTOR(true, "machine.playerdetector", RotaryBlocks.PLAYER_DETECTOR.get(), BlockEntityPlayerDetector.class/*, (modelSet) -> new PlayerDetectorModel(modelSet.bakeLayer(RotaryModelLayers.PLAYER_DETECTOR))*/),
-    HEATER(true, "machine.heater", RotaryBlocks.HEATER.get(), BlockEntityHeater.class, (modelSet) -> new HeaterModel(modelSet.bakeLayer(RotaryModelLayers.HEATER))),
+    SPRINKLER(true, "machine.sprinkler", RotaryBlocks.SPRINKLER.get(), BlockEntitySprinkler.class),
+    WOODCUTTER("machine.woodcutter", RotaryBlocks.WOODCUTTER.get(), BlockEntityWoodcutter.class),
+    SPAWNERCONTROLLER("machine.spawnercontroller", RotaryBlocks.SPAWNERCONTROLLER.get(), BlockEntitySpawnerController.class),
+    PLAYERDETECTOR(true, "machine.playerdetector", RotaryBlocks.PLAYER_DETECTOR.get(), BlockEntityPlayerDetector.class),
+    HEATER(true, "machine.heater", RotaryBlocks.HEATER.get(), BlockEntityHeater.class),
     //    BAITBOX(true, "machine.baitbox", BlockRotaryCraftMachine.class, BlockEntityBaitBox.class, "RenderBaitBox"),
-    AUTOBREEDER(true, "machine.breeder", RotaryBlocks.AUTOBREEDER.get(), BlockEntityAutoBreeder.class, (modelSet) -> new BreederModel(modelSet.bakeLayer(RotaryModelLayers.AUTOBREEDER))),
+    AUTOBREEDER(true, "machine.breeder", RotaryBlocks.AUTOBREEDER.get(), BlockEntityAutoBreeder.class),
     ECU("machine.ecu", RotaryBlocks.ECU.get(), BlockEntityEngineController.class),
-    SMOKEDETECTOR("machine.smokedetector", RotaryBlocks.SMOKE_DETECTOR.get(), BlockEntitySmokeDetector.class, (modelSet) -> new SmokeDetectorModel(modelSet.bakeLayer(RotaryModelLayers.SMOKE_DETECTOR))),
+    SMOKEDETECTOR("machine.smokedetector", RotaryBlocks.SMOKE_DETECTOR.get(), BlockEntitySmokeDetector.class),
     //    MOBRADAR("machine.mobradar", BlockRotaryCraftMachine.class, BlockEntityMobRadar.class, "RenderMobRadar"),
-    WINDER(true, "machine.winder", RotaryBlocks.WINDER.get(), BlockEntityWinder.class, (modelSet) -> new WinderModel(modelSet.bakeLayer(RotaryModelLayers.WINDER))),
-    WORMGEAR("machine.advgear", RotaryBlocks.WORMGEAR.get(), BlockEntityAdvancedGear.class, (modelSet) -> new WormModel(modelSet.bakeLayer(RotaryModelLayers.WORM))),
-    CVT(true, "machine.advgear", RotaryBlocks.CVT.get(), BlockEntityAdvancedGear.class, (modelSet) -> new CVTModel(modelSet.bakeLayer(RotaryModelLayers.CVT))),
-    HIGHGEAR(true, "machine.advgear", RotaryBlocks.HIGHGEAR.get(), BlockEntityAdvancedGear.class, (modelSet) -> new HighGearModel(modelSet.bakeLayer(RotaryModelLayers.HIGHGEAR))),
-    COIL(true, "machine.advgear", RotaryBlocks.COIL.get(), BlockEntityAdvancedGear.class, (modelSet) -> new CoilModel(modelSet.bakeLayer(RotaryModelLayers.COIL))),
-    CREATIVE_COIL(true, "machine.creativecoil", RotaryBlocks.CREATIVE_COIL.get(), BlockEntityCreativeCoil.class, (modelSet) -> new CoilModel(modelSet.bakeLayer(RotaryModelLayers.COIL))),
+    WINDER(true, "machine.winder", RotaryBlocks.WINDER.get(), BlockEntityWinder.class),
+    WORMGEAR("machine.advgear", RotaryBlocks.WORMGEAR.get(), BlockEntityAdvancedGear.class),
+    CVT(true, "machine.advgear", RotaryBlocks.CVT.get(), BlockEntityAdvancedGear.class),
+    HIGHGEAR(true, "machine.advgear", RotaryBlocks.HIGHGEAR.get(), BlockEntityAdvancedGear.class),
+    COIL(true, "machine.advgear", RotaryBlocks.COIL.get(), BlockEntityAdvancedGear.class),
+    CREATIVE_COIL(true, "machine.creativecoil", RotaryBlocks.CREATIVE_COIL.get(), BlockEntityCreativeCoil.class),
 
-    TNTCANNON(true, "machine.tntcannon", RotaryBlocks.TNT_CANNON.get(), BlockEntityTNTCannon.class/*, (modelSet) -> new TNTCannonModel(modelSet.bakeLayer(RotaryModelLayers.TNT_CANNON))*/),
+    TNTCANNON(true, "machine.tntcannon", RotaryBlocks.TNT_CANNON.get(), BlockEntityTNTCannon.class),
     //    SONICWEAPON(true, "machine.sonicweapon", BlockRotaryCraftMachine.class, BlockEntitySonicWeapon.class, "RenderSonic"),
     BLASTFURNACE(true, "machine.blastfurnace", RotaryBlocks.BLAST_FURNACE.get(), BlockEntityBlastFurnace.class),
     FORCEFIELD(true, "machine.forcefield", RotaryBlocks.FORCE_FIELD.get(), BlockEntityForceField.class),
-    MUSICBOX(true, "machine.musicbox", RotaryBlocks.MUSIC_BOX.get(), BlockEntityMusicBox.class/*, (modelSet) -> new MusicBoxModel(modelSet.bakeLayer(RotaryModelLayers.MUSIC_BOX))*/),
-    SPILLER(true, "machine.spiller", RotaryBlocks.SPILLER.get(), BlockEntitySpiller.class/*, (modelSet) -> new SpillerModel(modelSet.bakeLayer(RotaryModelLayers.SPILLER))*/),
+    MUSICBOX(true, "machine.musicbox", RotaryBlocks.MUSIC_BOX.get(), BlockEntityMusicBox.class),
+    SPILLER(true, "machine.spiller", RotaryBlocks.SPILLER.get(), BlockEntitySpiller.class),
     //    CHUNKLOADER("machine.chunkloader", BlockRotaryCraftMachine.class, BlockEntityChunkLoader.class, "RenderChunkLoader"),
-    MOBHARVESTER("machine.mobharvester", RotaryBlocks.MOB_HARVESTER.get(), BlockEntityMobHarvester.class/*, (modelSet) -> new MobHarvesterModel(modelSet.bakeLayer(RotaryModelLayers.MOB_HARVESTER))*/),
+    MOBHARVESTER("machine.mobharvester", RotaryBlocks.MOB_HARVESTER.get(), BlockEntityMobHarvester.class),
     //    CCTV("machine.cctv", BlockRotaryCraftMachine.class, BlockEntityCCTV.class, "RenderCCTV"),
 //    PROJECTOR("machine.projector", BlockRotaryCraftMachine.class, BlockEntityProjector.class, "RenderProjector"),
     RAILGUN("machine.railgun", RotaryBlocks.RAILGUN.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityRailGun.class),
     WEATHERCONTROLLER("machine.weather", RotaryBlocks.WEATHER_CONTROLLER.get(), BlockEntityWeatherController.class),
-    REFRESHER("machine.refresher", RotaryBlocks.REFRESHER.get(), BlockEntityItemRefresher.class/*, (modelSet) -> new RefresherModel(modelSet.bakeLayer(RotaryModelLayers.REFRESHER))*/),
+    REFRESHER("machine.refresher", RotaryBlocks.REFRESHER.get(), BlockEntityItemRefresher.class),
     FREEZEGUN("machine.freezegun", RotaryBlocks.FREEZE_GUN.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityFreezeGun.class),
-    CAVESCANNER("machine.cavescanner", RotaryBlocks.CAVE_SCANNER.get(), BlockEntityCaveFinder.class/*, (modelSet) -> new CaveScannerModel(modelSet.bakeLayer(RotaryModelLayers.CAVE_SCANNER))*/),
+    CAVESCANNER("machine.cavescanner", RotaryBlocks.CAVE_SCANNER.get(), BlockEntityCaveFinder.class),
     SCALECHEST(true, "machine.chest", RotaryBlocks.SCALECHEST.get(), BlockEntityScaleableChest.class),
     IGNITER(true, "machine.firestarter", RotaryBlocks.IGNITER.get(), BlockEntityIgniter.class),
-    MAGNETIZER("machine.magnetizer", RotaryBlocks.MAGNETIZER.get(), BlockEntityMagnetizer.class, (modelSet) -> new MagnetizerModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIZER))),
-    CONTAINMENT("machine.containment", RotaryBlocks.CONTAINMENT.get(), BlockEntityContainment.class/*, (modelSet) -> new ContainmentModel(modelSet.bakeLayer(RotaryModelLayers.CONTAINMENT))*/),
+    MAGNETIZER("machine.magnetizer", RotaryBlocks.MAGNETIZER.get(), BlockEntityMagnetizer.class),
+    CONTAINMENT("machine.containment", RotaryBlocks.CONTAINMENT.get(), BlockEntityContainment.class),
     //    SCREEN("machine.screen", BlockRotaryCraftMachine.class, BlockEntityScreen.class, "RenderCCTVScreen"),
 //    PURIFIER("machine.purifier", BlockRotaryCraftMachine.class, BlockEntityPurifier.class),
     LASERGUN("machine.lasergun", RotaryBlocks.LASER_GUN.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityLaserGun.class),
-    ITEMCANNON("machine.itemcannon", RotaryBlocks.ITEM_CANNON.get(), BlockEntityItemCannon.class, (modelSet) -> new ItemCannonModel(modelSet.bakeLayer(RotaryModelLayers.ITEM_CANNON))),
-    LANDMINE("machine.landmine", RotaryBlocks.LANDMINE.get(), BlockEntityLandmine.class, (modelSet) -> new LandmineModel(modelSet.bakeLayer(RotaryModelLayers.LANDMINE))),
-    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class, (modelSet) -> new FrictionModel(modelSet.bakeLayer(RotaryModelLayers.FRICTION_HEATER))),
-    BLOCKCANNON("machine.blockcannon", RotaryBlocks.BLOCK_CANNON.get(), BlockEntityBlockCannon.class/*, (modelSet) -> new BlockCannonModel(modelSet.bakeLayer(RotaryModelLayers.BLOCK_CANNON))*/),
+    ITEMCANNON("machine.itemcannon", RotaryBlocks.ITEM_CANNON.get(), BlockEntityItemCannon.class),
+    LANDMINE("machine.landmine", RotaryBlocks.LANDMINE.get(), BlockEntityLandmine.class),
+    FRICTION("machine.friction", RotaryBlocks.FRICTION_HEATER.get(), BlockEntityFurnaceHeater.class),
+    BLOCKCANNON("machine.blockcannon", RotaryBlocks.BLOCK_CANNON.get(), BlockEntityBlockCannon.class),
     BUCKETFILLER("machine.bucketfiller", RotaryBlocks.BUCKET_FILLER.get(), BlockEntityBucketFiller.class),
-    MIRROR("machine.mirror", RotaryBlocks.MIRROR.get(), BlockEntityMirror.class, (modelSet) -> new MirrorModel(modelSet.bakeLayer(RotaryModelLayers.MIRROR))),
-    SOLARTOWER("machine.solartower", RotaryBlocks.SOLAR_TOWER.get(), BlockEntitySolarTower.class, (modelSet) -> new SolarTowerModel(modelSet.bakeLayer(RotaryModelLayers.SOLAR_TOWER))),
+    MIRROR("machine.mirror", RotaryBlocks.MIRROR.get(), BlockEntityMirror.class),
+    SOLARTOWER("machine.solartower", RotaryBlocks.SOLAR_TOWER.get(), BlockEntitySolarTower.class),
     //    SPYCAM("machine.spycam", BlockRotaryCraftMachine.class, BlockEntitySpyCam.class, "RenderSpyCam"),
-    SELFDESTRUCT("machine.selfdestruct", RotaryBlocks.SELF_DESTRUCT.get(), BlockEntitySelfDestruct.class/*, (modelSet) -> new SelfDestructModel(modelSet.bakeLayer(RotaryModelLayers.SELF_DESTRUCT))*/),
-    COOLINGFIN("machine.coolingfin", RotaryBlocks.COOLING_FIN.get(), BlockEntityCoolingFin.class, (modelSet) -> new FinModel(modelSet.bakeLayer(RotaryModelLayers.COOLING_FIN))),
+    SELFDESTRUCT("machine.selfdestruct", RotaryBlocks.SELF_DESTRUCT.get(), BlockEntitySelfDestruct.class),
+    COOLINGFIN("machine.coolingfin", RotaryBlocks.COOLING_FIN.get(), BlockEntityCoolingFin.class),
     WORKTABLE(true, "machine.worktable", RotaryBlocks.WORKTABLE.get(), BlockEntityWorktable.class), // 26.1: hasGui=true so right-click opens GuiWorktable
     //    COMPRESSOR("machine.compressor", BlockModEngine.class, BlockEntityAirCompressor.class, "RenderCompressor", PowerTypes.PNEUMATIC),
     //PNEUENGINE("machine.pneuengine", BlockModEngine.class, BlockEntityPneumaticEngine.class, "RenderPneumatic", PowerTypes.PNEUMATIC),
 //    DISPLAY("machine.display", BlockRotaryCraftMachine.class, BlockEntityDisplay.class, "RenderDisplay"),
     LAMP("machine.lamp", RotaryBlocks.LAMP.get(), BlockEntityLamp.class),
     EMP("machine.emp", RotaryBlocks.EMP.get(), reika.rotarycraft.blockentities.weaponry.BlockEntityEMP.class),
-    LINEBUILDER("machine.linebuilder", RotaryBlocks.LINE_BUILDER.get(), BlockEntityLineBuilder.class/*, (modelSet) -> new LineBuilderModel(modelSet.bakeLayer(RotaryModelLayers.LINE_BUILDER))*/),
-    BEAMMIRROR("machine.beammirror", RotaryBlocks.BEAM_MIRROR.get(), BlockEntityBeamMirror.class, (modelSet) -> new BeamMirrorModel(modelSet.bakeLayer(RotaryModelLayers.BEAM_MIRROR))),
-    MULTICLUTCH("machine.multiclutch", RotaryBlocks.MULTI_CLUTCH.get(), BlockEntityMultiClutch.class, (modelSet) -> new MultiClutchModel(modelSet.bakeLayer(RotaryModelLayers.MULTI_CLUTCH))),
+    LINEBUILDER("machine.linebuilder", RotaryBlocks.LINE_BUILDER.get(), BlockEntityLineBuilder.class),
+    BEAMMIRROR("machine.beammirror", RotaryBlocks.BEAM_MIRROR.get(), BlockEntityBeamMirror.class),
+    MULTICLUTCH("machine.multiclutch", RotaryBlocks.MULTI_CLUTCH.get(), BlockEntityMultiClutch.class),
     //    TERRAFORMER("machine.terraformer", BlockRotaryCraftMachine.class, BlockEntityTerraformer.class),
     SORTING("machine.sorting", RotaryBlocks.SORTER.get(), BlockEntitySorting.class),
     //    FUELENHANCER("machine.fuelenhancer", BlockRotaryCraftMachine.class, BlockEntityFuelConverter.class, "RenderFuelConverter"),
     ARROWGUN(true, "machine.arrowgun", RotaryBlocks.MACHINEGUN.get(), BlockEntityMachineGun.class),
-    BOILER("machine.frictionboiler", RotaryBlocks.FRICTION_BOILER.get(), BlockEntityBoiler.class, PowerTypes.STEAM, (modelSet) -> new BoilerModel(modelSet.bakeLayer(RotaryModelLayers.BOILER))),
-    STEAMTURBINE(true, "machine.steamturbine", RotaryBlocks.STEAM_TURBINE.get(), BlockEntitySteam.class, PowerTypes.STEAM, (modelSet) -> new SteamTurbineModel(modelSet.bakeLayer(RotaryModelLayers.STEAM_TURBINE))),
-    FERTILIZER(true, "machine.fertilizer", RotaryBlocks.FERTILIZER.get(), BlockEntityFertilizer.class, (modelSet) -> new FertilizerModel(modelSet.bakeLayer(RotaryModelLayers.FERTILIZER))),
-    LAVAMAKER(true, "machine.lavamaker", RotaryBlocks.LAVAMAKER.get(), BlockEntityLavaMaker.class, (modelSet) -> new LavaMakerModel(modelSet.bakeLayer(RotaryModelLayers.LAVA_MAKER))),
+    BOILER("machine.frictionboiler", RotaryBlocks.FRICTION_BOILER.get(), BlockEntityBoiler.class, PowerTypes.STEAM),
+    STEAMTURBINE(true, "machine.steamturbine", RotaryBlocks.STEAM_TURBINE.get(), BlockEntitySteam.class, PowerTypes.STEAM),
+    FERTILIZER(true, "machine.fertilizer", RotaryBlocks.FERTILIZER.get(), BlockEntityFertilizer.class),
+    LAVAMAKER(true, "machine.lavamaker", RotaryBlocks.LAVAMAKER.get(), BlockEntityLavaMaker.class),
     //GENERATOR("machine.generator", BlockModEngine.class, BlockEntityGenerator.class, "RenderGenerator", PowerTypes.EU),
     //ELECTRICMOTOR("machine.electricmotor", BlockModEngine.class, BlockEntityElectricMotor.class, "RenderElecMotor", PowerTypes.EU),
-    AGGREGATOR("machine.aggregator", RotaryBlocks.AGGREGATOR.get(), reika.rotarycraft.blockentities.production.BlockEntityAggregator.class, (modelSet) -> new reika.rotarycraft.models.animated.AggregatorModel(modelSet.bakeLayer(RotaryModelLayers.AGGREGATOR))),
-    AIRGUN("machine.airgun", RotaryBlocks.AIRGUN.get(), BlockEntityAirGun.class, (modelSet) -> new AirGunModel(modelSet.bakeLayer(RotaryModelLayers.AIR_GUN))),
-    SONICBORER("machine.sonicborer", RotaryBlocks.SONICBORER.get(), BlockEntitySonicBorer.class, (modelSet) -> new SonicBorerModel(modelSet.bakeLayer(RotaryModelLayers.SONIC_BORER))),
+    AGGREGATOR("machine.aggregator", RotaryBlocks.AGGREGATOR.get(), reika.rotarycraft.blockentities.production.BlockEntityAggregator.class),
+    AIRGUN("machine.airgun", RotaryBlocks.AIRGUN.get(), BlockEntityAirGun.class),
+    SONICBORER("machine.sonicborer", RotaryBlocks.SONICBORER.get(), BlockEntitySonicBorer.class),
 //    FUELENGINE("machine.fuelengine", BlockModEngine.class, BlockEntityFuelEngine.class, "RenderFuelEngine", ModList.BCENERGY),
-    FILLINGSTATION(true, "machine.fillingstation", RotaryBlocks.FILLING_STATION.get(), BlockEntityFillingStation.class, (modelSet) -> new FillingStationModel(modelSet.bakeLayer(RotaryModelLayers.FILLING_STATION))),
-    BELT("machine.belt", RotaryBlocks.BELT.get(), BlockEntityBeltHub.class, (modelSet) -> new BeltModel(modelSet.bakeLayer(RotaryModelLayers.BELT))),
-    SPLITBELT("machine.splitbelt", RotaryBlocks.SPLITBELT.get(), BlockEntitySplitBelt.class, (modelSet) -> new BeltModel(modelSet.bakeLayer(RotaryModelLayers.BELT))),
-    VANDEGRAFF("machine.vandegraff", RotaryBlocks.VAN_DE_GRAFF.get(), BlockEntityVanDeGraff.class, (modelSet) -> new VanDeGraffModel(modelSet.bakeLayer(RotaryModelLayers.VAN_DE_GRAFF))),
+    FILLINGSTATION(true, "machine.fillingstation", RotaryBlocks.FILLING_STATION.get(), BlockEntityFillingStation.class),
+    BELT("machine.belt", RotaryBlocks.BELT.get(), BlockEntityBeltHub.class),
+    SPLITBELT("machine.splitbelt", RotaryBlocks.SPLITBELT.get(), BlockEntitySplitBelt.class),
+    VANDEGRAFF("machine.vandegraff", RotaryBlocks.VAN_DE_GRAFF.get(), BlockEntityVanDeGraff.class),
     //    DEFOLIATOR("machine.defoliator", BlockRotaryCraftMachine.class, BlockEntityDefoliator.class, "RenderDefoliator"),
-    BIGFURNACE(true, "machine.bigfurnace", RotaryBlocks.LAVA_SMELTORY.get(), BlockEntityLavaSmeltery.class, PowerTypes.RF, (modelSet) -> new BigFurnaceModel(modelSet.bakeLayer(RotaryModelLayers.BIG_FURNACE))),
+    BIGFURNACE(true, "machine.bigfurnace", RotaryBlocks.LAVA_SMELTORY.get(), BlockEntityLavaSmeltery.class, PowerTypes.RF),
     //    DISTILLER("machine.distiller", BlockRotaryCraftMachine.class, BlockEntityDistillery.class, "RenderDistillery"),
     //    DYNAMO("machine.dynamo", BlockModEngine.class, BlockEntityDynamo.class, "RenderDynamo", PowerTypes.RF),
-    MAGNETIC(true, "machine.magnetic", RotaryBlocks.MAGNETOSTATIC_ENGINE.get(), BlockEntityMagnetEngine.class, PowerTypes.RF, (modelSet) -> new MagneticModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIC))),
-    CRYSTALLIZER("machine.crystal", RotaryBlocks.CRYSTALLIZER.get(), BlockEntityCrystallizer.class, (modelSet) -> new CrystallizerModel(modelSet.bakeLayer(RotaryModelLayers.CRYSTALLIZER))),
+    MAGNETIC(true, "machine.magnetic", RotaryBlocks.MAGNETOSTATIC_ENGINE.get(), BlockEntityMagnetEngine.class, PowerTypes.RF),
+    CRYSTALLIZER("machine.crystal", RotaryBlocks.CRYSTALLIZER.get(), BlockEntityCrystallizer.class),
     BUSCONTROLLER("machine.buscontroller", RotaryBlocks.BUSCONTROLLER.get(), BlockEntityBusController.class),
     POWERBUS("machine.bus", RotaryBlocks.POWERBUS.get(), BlockEntityPowerBus.class),
-    PARTICLE(true, "machine.particle", RotaryBlocks.PARTICLE.get(), BlockEntityParticleEmitter.class/*, (modelSet) -> new ParticleModel(modelSet.bakeLayer(RotaryModelLayers.PARTICLE))*/),
-        LAWNSPRINKLER("machine.lawnsprinkler", RotaryBlocks.LAWNSPRINKLER.get(), BlockEntityLawnSprinkler.class, (modelSet) -> new LawnSprinklerModel(modelSet.bakeLayer(RotaryModelLayers.LAWNSPRINKLER))),
-    GRINDSTONE(true, "machine.grindstone", RotaryBlocks.GRINDSTONE.get(), BlockEntityGrindstone.class, (modelSet) -> new GrindstoneModel(modelSet.bakeLayer(RotaryModelLayers.GRINDSTONE))),
+    PARTICLE(true, "machine.particle", RotaryBlocks.PARTICLE.get(), BlockEntityParticleEmitter.class),
+        LAWNSPRINKLER("machine.lawnsprinkler", RotaryBlocks.LAWNSPRINKLER.get(), BlockEntityLawnSprinkler.class),
+    GRINDSTONE(true, "machine.grindstone", RotaryBlocks.GRINDSTONE.get(), BlockEntityGrindstone.class),
     BLOWER("machine.blower", RotaryBlocks.BLOWER.get(), BlockEntityBlower.class), // no custom model in original
     //    PORTALSHAFT("machine.portalshaft", BlockRotaryCraftMachine.class, BlockEntityPortalShaft.class, "RenderPortalShaft"),
-    REFRIGERATOR(true, "machine.refrigerator", RotaryBlocks.REFRIGERATOR.get(), BlockEntityRefrigerator.class/*, (modelSet) -> new RefrigeratorModel(modelSet.bakeLayer(RotaryModelLayers.REFRIGERATOR))*/),
-    GASTANK("machine.gastank", RotaryBlocks.GASTANK.get(), reika.rotarycraft.blockentities.storage.BlockEntityFluidCompressor.class, (modelSet) -> new reika.rotarycraft.models.GasCompressorModel(modelSet.bakeLayer(RotaryModelLayers.GASTANK))),
+    REFRIGERATOR(true, "machine.refrigerator", RotaryBlocks.REFRIGERATOR.get(), BlockEntityRefrigerator.class),
+    GASTANK("machine.gastank", RotaryBlocks.GASTANK.get(), reika.rotarycraft.blockentities.storage.BlockEntityFluidCompressor.class),
 //    CRAFTER("machine.crafter", BlockRotaryCraftMachine.class, BlockEntityAutoCrafter.class),
     COMPOSTER("machine.composter", RotaryBlocks.COMPOSTER.get(), BlockEntityComposter.class),
     ANTIAIR("machine.antiair", RotaryBlocks.AA_GUN.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityAAGun.class),
-    PIPEPUMP("machine.pipepump", RotaryBlocks.PIPEPUMP.get(), BlockEntityPipePump.class, (modelSet) -> new PipePumpModel(modelSet.bakeLayer(RotaryModelLayers.PIPE_PUMP))),
-    CHAIN("machine.chain", RotaryBlocks.CHAIN.get(), BlockEntityChainDrive.class, (modelSet) -> new BeltModel(modelSet.bakeLayer(RotaryModelLayers.BELT))),
-    CENTRIFUGE(true, "machine.centrifuge", RotaryBlocks.CENTRIFUGE.get(), BlockEntityCentrifuge.class, (modelSet) -> new CentrifugeModel(modelSet.bakeLayer(RotaryModelLayers.CENTRIFUGE))),
-    DRYING("machine.drying", RotaryBlocks.DRYING.get(), BlockEntityDryingBed.class, (modelSet) -> new DryingBedModel(modelSet.bakeLayer(RotaryModelLayers.DRYING_BED))),
-    WETTER("machine.wetter", RotaryBlocks.WETTER.get(), BlockEntityWetter.class, (modelSet) -> new WetterModel(modelSet.bakeLayer(RotaryModelLayers.WETTER))),
+    PIPEPUMP("machine.pipepump", RotaryBlocks.PIPEPUMP.get(), BlockEntityPipePump.class),
+    CHAIN("machine.chain", RotaryBlocks.CHAIN.get(), BlockEntityChainDrive.class),
+    CENTRIFUGE(true, "machine.centrifuge", RotaryBlocks.CENTRIFUGE.get(), BlockEntityCentrifuge.class),
+    DRYING("machine.drying", RotaryBlocks.DRYING.get(), BlockEntityDryingBed.class),
+    WETTER("machine.wetter", RotaryBlocks.WETTER.get(), BlockEntityWetter.class),
     DROPS("machine.drops", RotaryBlocks.DROPS.get(), BlockEntityDropProcessor.class),
 //    ITEMFILTER("machine.itemfilter", BlockRotaryCraftMachine.class, BlockEntityItemFilter.class),
     HYDRATOR("machine.hydrator", RotaryBlocks.HYDRATOR.get(), BlockEntityGroundHydrator.class),
-    FILLER("machine.filler", RotaryBlocks.FILLER.get(), BlockEntityBlockFiller.class/*, (modelSet) -> new FillerModel(modelSet.bakeLayer(RotaryModelLayers.FILLER))*/),
+    FILLER("machine.filler", RotaryBlocks.FILLER.get(), BlockEntityBlockFiller.class),
     GATLING("machine.gatling", RotaryBlocks.MULTI_CANNON.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityMultiCannon.class),
-    SPILLWAY("machine.spillway", RotaryBlocks.SPILLWAY.get(), BlockEntitySpillway.class, (modelSet) -> new SpillwayModel(modelSet.bakeLayer(RotaryModelLayers.SPILLWAY))),
+    SPILLWAY("machine.spillway", RotaryBlocks.SPILLWAY.get(), BlockEntitySpillway.class),
     //    FLAMETURRET("machine.flameturret", BlockRotaryCraftMachine.class, BlockEntityFlameTurret.class, "RenderFlameTurret"),
 //    BUNDLEDBUS("machine.bundledbus", BlockRotaryCraftMachine.class, BlockEntityBundledBus.class, ModList.APPENG, ModList.PROJRED),
-    DISTRIBCLUTCH("machine.distribclutch", RotaryBlocks.DISTRIBUTION_CLUTCH.get(), BlockEntityDistributionClutch.class, (modelSet) -> new DistribClutchModel(modelSet.bakeLayer(RotaryModelLayers.DISTRIB_CLUTCH))),
-    BEDROCKBREAKER("machine.bedrock", RotaryBlocks.BEDROCK_BREAKER.get(), BlockEntityBedrockBreaker.class, (modelSet) -> new BedrockBreakerModel(modelSet.bakeLayer(RotaryModelLayers.BEDROCK_BREAKER))),
-    HYDRO_ENGINE("machine.hydro_engine", RotaryBlocks.HYDRO_ENGINE.get(), BlockEntityHydroEngine.class, EngineType.HYDRO, (modelSet) -> new HydroModel(modelSet.bakeLayer(RotaryModelLayers.HYDRO_ENGINE))),
+    DISTRIBCLUTCH("machine.distribclutch", RotaryBlocks.DISTRIBUTION_CLUTCH.get(), BlockEntityDistributionClutch.class),
+    BEDROCKBREAKER("machine.bedrock", RotaryBlocks.BEDROCK_BREAKER.get(), BlockEntityBedrockBreaker.class),
+    HYDRO_ENGINE("machine.hydro_engine", RotaryBlocks.HYDRO_ENGINE.get(), BlockEntityHydroEngine.class, EngineType.HYDRO),
     FERMENTER(true, "machine.fermenter", RotaryBlocks.FERMENTER.get(), BlockEntityFermenter.class),
-    EXTRACTOR(true, "machine.extractor", RotaryBlocks.EXTRACTOR.get(), BlockEntityExtractor.class, (modelSet) -> new ExtractorModel(modelSet.bakeLayer(RotaryModelLayers.EXTRACTOR)));
+    EXTRACTOR(true, "machine.extractor", RotaryBlocks.EXTRACTOR.get(), BlockEntityExtractor.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
@@ -287,8 +265,6 @@ public enum MachineRegistry implements TileEnum {
     private PowerReceivers receiver;
     private boolean hasGui;
 
-    private boolean hasModel = false;
-    private Function<EntityModelSet, ? extends RotaryModelBase> model;
 
     MachineRegistry(String n, Block b, Class<? extends RotaryCraftBlockEntity> tile) {
         name = n;
@@ -316,52 +292,11 @@ public enum MachineRegistry implements TileEnum {
         this.hasGui = hasGui;
     }
 
-    MachineRegistry(boolean hasGui, String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, Function<EntityModelSet, ? extends RotaryModelBase> model) {
-        this(n, b, tile);
-        this.hasGui = hasGui;
-        this.model = model;
-        hasModel = true;
-    }
 
-    MachineRegistry(String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, Function<EntityModelSet, ? extends RotaryModelBase> model) {
-        this(n, b, tile);
-        this.model = model;
-        hasModel = true;
-    }
 
-    MachineRegistry(boolean hasGui, String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, EngineType e, Function<EntityModelSet, ? extends RotaryModelBase> model) {
-        this(n, b, tile);
-        engineType = e;
-        receiver = PowerReceivers.initialize(this);
-        this.hasGui = hasGui;
-        this.model = model;
-        hasModel = true;
-    }
 
-    MachineRegistry(String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, EngineType e, Function<EntityModelSet, ? extends RotaryModelBase> model) {
-        this(n, b, tile);
-        engineType = e;
-        receiver = PowerReceivers.initialize(this);
-        this.model = model;
-        hasModel = true;
-    }
 
-    MachineRegistry(boolean hasGui, String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, PowerTypes e, Function<EntityModelSet, ? extends RotaryModelBase> model) {
-        this(n, b, tile);
-        powertype = e;
-        receiver = PowerReceivers.initialize(this);
-        this.hasGui = hasGui;
-        this.model = model;
-        hasModel = true;
-    }
 
-    MachineRegistry(String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, PowerTypes e, Function<EntityModelSet, ? extends RotaryModelBase> model) {
-        this(n, b, tile);
-        powertype = e;
-        receiver = PowerReceivers.initialize(this);
-        this.model = model;
-        hasModel = true;
-    }
 
     MachineRegistry(String n, Block b, Class<? extends RotaryCraftBlockEntity> tile, ModList... a) {
         this(n, b, tile);
@@ -493,9 +428,6 @@ public enum MachineRegistry implements TileEnum {
             }
             return li;
         }*/
-    public boolean hasModel() {
-        return hasModel;
-    }
 
     public int getNumberDirections() {
         if (this.is2Sided())
@@ -695,9 +627,12 @@ public enum MachineRegistry implements TileEnum {
 
     @Override
     public String getName() {
-//        return LanguageRegistry.instance().getStringLocalization("rcmachine."+this.name().toLowerCase());
-        return I18n.get("rcmachine" + name.toLowerCase(Locale.ROOT));
-//        return name;
+        // Component.translatable, not the client-only I18n: this is called during registry setup
+        // (PowerReceivers.initialize) on a dedicated server, where I18n does not exist. On the client
+        // this still resolves through the active language; on the server it yields the key, which is
+        // what the server has always been able to say about a translation.
+        return net.minecraft.network.chat.Component
+                .translatable("rcmachine" + name.toLowerCase(Locale.ROOT)).getString();
     }
 
     /**
@@ -716,9 +651,6 @@ public enum MachineRegistry implements TileEnum {
      * Gets the {@link RotaryModelBase} for the machine / BlockEntity.
      * Returning null shouldn't happen, if it does you're trying to access a machine that doesnt have a model, or something went wrong
      */
-    public Function<EntityModelSet, ? extends RotaryModelBase> getModel() {
-        return model;
-    }
 
     public boolean isPowerReceiver() {
         return BlockEntityPowerReceiver.class.isAssignableFrom(te);
@@ -1011,7 +943,7 @@ public enum MachineRegistry implements TileEnum {
                     MICRO_TURBINE,
                     GAS_ENGINE,
                     DC_ENGINE,
-                    AC_ENGINE, BLOCKCANNON, ITEMCANNON, DYNAMOMETER, HEATRAY, GRINDSTONE, MIRROR -> true;
+                 AC_ENGINE, BLOCKCANNON, ITEMCANNON, DYNAMOMETER, HEATRAY, GRINDSTONE, MIRROR, FRICTION, MAGNETIZER, CRYSTALLIZER, SONICBORER, AIRGUN -> true;
             default -> false;
         };
     }
@@ -1035,7 +967,7 @@ public enum MachineRegistry implements TileEnum {
         if (this.isCritical())
             return true;
         return switch (this) {
-            case /*BEDROCKBREAKER,*/ STEAM_ENGINE,
+            case BEDROCKBREAKER, STEAM_ENGINE,
                     PERFORMANCE_ENGINE,
                     MICRO_TURBINE,
                     GAS_ENGINE,
@@ -1045,7 +977,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, /*FERMENTER,*/ GRINDER, COMPACTOR, /*BORER,*/ PUMP, /*EXTRACTOR, FAN, FRACTIONATOR,*/ WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, /*BLASTFURNACE,*/ MOBHARVESTER, /*MAGNETIZER, FRICTION,*/ MIRROR, SOLARTOWER, COOLINGFIN, /*WORKTABLE, COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, /*LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT,*/ VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, CRYSTALLIZER, BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE/*, PIPEPUMP, DRYING, WETTER*/ ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, FERMENTER, GRINDER, COMPACTOR, BORER, PUMP, EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, BLASTFURNACE, MOBHARVESTER, MAGNETIZER, FRICTION, MIRROR, SOLARTOWER, COOLINGFIN, WORKTABLE, /*COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT, VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, CRYSTALLIZER, BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE, PIPEPUMP, DRYING, WETTER ->
                     true;
             default -> false;
         };
@@ -1055,16 +987,16 @@ public enum MachineRegistry implements TileEnum {
         if (this.isPipe())
             return true;
         return switch (this) {
-            case /*BEDROCKBREAKER, ENGINE, SHAFT, */
+            case BEDROCKBREAKER, /*ENGINE, SHAFT, */
                     BEVELGEARS, SPLITTER, GEARBOX,
-                            /*FERMENTER,*/ GRINDER,/* COMPACTOR,*/ PUMP,
-                            /*EXTRACTOR, FAN, FRACTIONATOR,*/ HEATER,
-                            HEATRAY, WINDER, /*ADVANCEDGEARS, BLASTFURNACE,
-                    MAGNETIZER, FRICTION,*/ COOLINGFIN, /*WORKTABLE, */
-                            MULTICLUTCH, SORTING, /*FERTILIZER, AGGREGATOR,
-                    FILLINGSTATION, BELT,*/ VANDEGRAFF,/* BUSCONTROLLER,
-                    POWERBUS,*/ BLOWER, REFRIGERATOR, CENTRIFUGE/*, CRAFTER,
-                    PIPEPUMP, DRYING, WETTER */ -> true;
+                            FERMENTER, GRINDER,/* COMPACTOR,*/ PUMP,
+                            EXTRACTOR, FAN, FRACTIONATOR, HEATER,
+                            HEATRAY, WINDER, /*ADVANCEDGEARS, */BLASTFURNACE,
+                    MAGNETIZER, FRICTION, COOLINGFIN, WORKTABLE,
+                            MULTICLUTCH, SORTING, FERTILIZER, AGGREGATOR,
+                    FILLINGSTATION, BELT, VANDEGRAFF, BUSCONTROLLER,
+                    POWERBUS, BLOWER, REFRIGERATOR, CENTRIFUGE/*, CRAFTER*/,
+                    PIPEPUMP, DRYING, WETTER  -> true;
             default -> false;
         };
     }

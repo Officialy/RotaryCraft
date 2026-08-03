@@ -276,7 +276,7 @@ public class RoCModelProvider extends ModelProvider {
             Item asItem = block.asItem();
             if (asItem != Items.AIR) {
                 MachineRegistry mr = MachineRegistry.getMachineMapping(block);
-                if (mr != null && mr.hasModel() && mr.getModel() != null) {
+                if (mr != null && reika.rotarycraft.client.MachineModels.has(mr)) {
                     itemModelOut.accept(asItem, ItemModelUtils.specialModel(
                             blockModelId,
                             new MachineItemRenderer.Unbaked(mr.name().toLowerCase(Locale.ROOT))

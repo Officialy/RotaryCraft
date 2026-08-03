@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  * }
  * }</pre>
  * The {@code machine} field is the {@link MachineRegistry} enum name in lowercase. Baking
- * resolves the corresponding {@link RotaryModelBase} via {@link MachineRegistry#getModel()}.
+ * resolves the corresponding {@link RotaryModelBase} via {@code MachineModels}.
  * Registration of the codec lives in {@link reika.rotarycraft.client.RotaryClientExtensions}.
  */
 public class MachineItemRenderer implements NoDataSpecialModelRenderer {
@@ -95,11 +95,11 @@ public class MachineItemRenderer implements NoDataSpecialModelRenderer {
                 RotaryCraft.LOGGER.warn("Unknown machine '{}' in special model renderer", machine);
                 return null;
             }
-            if (!m.hasModel() || m.getModel() == null) {
+            if (!reika.rotarycraft.client.MachineModels.has(m)) {
                 RotaryCraft.LOGGER.warn("MachineRegistry.{} has no model registered; skipping special renderer", m);
                 return null;
             }
-            RotaryModelBase modelInstance = m.getModel().apply(context.entityModelSet());
+            RotaryModelBase modelInstance = reika.rotarycraft.client.MachineModels.get(m).apply(context.entityModelSet());
             return new MachineItemRenderer(modelInstance, resolveTextureForMachine(m, modelInstance));
         }
 

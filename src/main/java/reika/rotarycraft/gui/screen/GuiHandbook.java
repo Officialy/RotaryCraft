@@ -559,7 +559,7 @@ public class GuiHandbook extends Screen {
     }
 
     protected final void doRenderMachine(GuiGraphicsExtractor graphics, int x, int y, HandbookRegistry h, MachineRegistry m) {
-        if (!m.hasModel() || m.isPipe()) {
+        if (!reika.rotarycraft.client.MachineModels.has(m) || m.isPipe()) {
             ItemStack is = m.getBlockState().getBlock().asItem().getDefaultInstance();
             if (!is.isEmpty()) {
                 ReikaGuiAPI.instance.drawItemStack(graphics, font, is, x - 8, y - 8);

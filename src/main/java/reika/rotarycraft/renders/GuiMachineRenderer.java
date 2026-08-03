@@ -39,7 +39,7 @@ public class GuiMachineRenderer extends PictureInPictureRenderer<GuiMachineRende
     @Override
     protected void renderToTexture(GuiMachineRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
         RotaryModelBase model = models.computeIfAbsent(state.machine(),
-                m -> m.getModel().apply(Minecraft.getInstance().getEntityModels()));
+                m -> reika.rotarycraft.client.MachineModels.get(m).apply(Minecraft.getInstance().getEntityModels()));
         if (model == null)
             return;
         Minecraft.getInstance().gameRenderer.lighting().setupFor(Lighting.Entry.ENTITY_IN_UI);
