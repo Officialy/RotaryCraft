@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
@@ -105,14 +106,17 @@ public class RotaryJEIPlugin implements IModPlugin {
                     .stream().map(RecipeHolder::value).collect(Collectors.toList());
             registration.addRecipes(PulseFurnaceCategory.TYPE, pulse);
 
-            List<GrinderRecipe> grinder = new java.util.ArrayList<>(rm.recipeMap()
+            List<GrinderJEIRecipe> grinder = new java.util.ArrayList<>(rm.recipeMap()
                     .byType(RotaryRecipeTypes.GRINDER.get())
-                    .stream().map(RecipeHolder::value).toList());
+                    .stream().map(RecipeHolder::value)
+                    .map(recipe -> new GrinderJEIRecipe(recipe.getInput(), recipe.getOutput(), false))
+                    .toList());
             // Display-only: the grinder also mills canola seeds into lubricant (the BE fills its own
-            // tank — this isn't a datapack recipe). An empty item output flags the fluid path.
-            grinder.add(new GrinderRecipe(
+            // tank — this isn't a datapack recipe). Keep that presentation separate from the
+            // serialized item-output recipe instead of constructing an illegal AIR template.
+            grinder.add(new GrinderJEIRecipe(
                     Ingredient.of(reika.rotarycraft.registry.RotaryItems.CANOLA_SEEDS.get()),
-                    new net.minecraft.world.item.ItemStackTemplate(net.minecraft.world.item.Items.AIR)));
+                    ItemStack.EMPTY, true));
             registration.addRecipes(GrinderCategory.TYPE, grinder);
 
             List<CentrifugeRecipe> centrifuge = rm.recipeMap()
@@ -254,10 +258,12 @@ public class RotaryJEIPlugin implements IModPlugin {
     // =========================================================================
     // Grinder — single input → single output
     // =========================================================================
-    public static final class GrinderCategory implements IRecipeCategory<GrinderRecipe> {
+    public record GrinderJEIRecipe(Ingredient input, ItemStack output, boolean lubricant) {}
 
-        public static final RecipeType<GrinderRecipe> TYPE =
-                RecipeType.create(RotaryCraft.MODID, "grinder", GrinderRecipe.class);
+    public static final class GrinderCategory implements IRecipeCategory<GrinderJEIRecipe> {
+
+        public static final RecipeType<GrinderJEIRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "grinder", GrinderJEIRecipe.class);
 
         private final IDrawable icon;
 
@@ -265,23 +271,23 @@ public class RotaryJEIPlugin implements IModPlugin {
             this.icon = gui.createDrawableItemStack(MachineRegistry.GRINDER.getCraftedProduct());
         }
 
-        @Override public RecipeType<GrinderRecipe> getRecipeType() { return TYPE; }
+        @Override public RecipeType<GrinderJEIRecipe> getRecipeType() { return TYPE; }
         @Override public Component getTitle() { return Component.translatable("machine.grinder"); }
         @Override public int getWidth()  { return 76; }
         @Override public int getHeight() { return 36; }
         @Override public IDrawable getIcon() { return icon; }
 
         @Override
-        public void setRecipe(IRecipeLayoutBuilder builder, GrinderRecipe recipe, IFocusGroup focuses) {
+        public void setRecipe(IRecipeLayoutBuilder builder, GrinderJEIRecipe recipe, IFocusGroup focuses) {
             builder.addSlot(RecipeIngredientRole.INPUT, 1, 9)
-                   .addIngredients(recipe.getInput());
+                   .addIngredients(recipe.input());
             // Seeds mill into lubricant (fluid) rather than an item — an empty item output marks that.
-            if (recipe.getOutput().isEmpty()) {
+            if (recipe.lubricant()) {
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 54, 5)
                        .addFluidStack(reika.rotarycraft.registry.RotaryFluids.LUBRICANT.get(), 1000);
             } else {
                 builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
-                       .addItemStack(recipe.getOutput());
+                       .addItemStack(recipe.output());
             }
         }
     }

@@ -611,7 +611,50 @@ public class ElecMotorModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        final int white = 0xFFFFFFFF;
+
+        stack.pushPose();
+        stack.translate(0, 0.9375, 0);
+        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.translate(0, -0.9375, 0);
+        shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);
+        shape2a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);
+        stack.popPose();
+
+        ModelPart[] fixed = {shape1, shape1a, shape1b, shape1c, shape1d, shape1e, shape1f,
+                shape1g, shape1h, shape1u, shape1i, shape1k, shape1l, shape1m, shape1n,
+                shape1o, shape1p, shape1q, shape1r, shape1s, shape3, shape4, shape4a,
+                shape4b, shape4c, shape1ka, shape1kb, shape1kc, shape1kd, shape1ke,
+                shape1kf, shape1kg, shape1kh};
+        for (ModelPart part : fixed)
+            part.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);
+
+        int finColor = conditions.size() > 1 ? (Integer)conditions.get(1) : 0x515168;
+        boolean powered = conditions.size() > 2 && (Boolean)conditions.get(2);
+        int finLight = powered ? 0xF000F0 : packedLightIn;
+        int finArgb = 0xFF000000 | finColor;
+        ModelPart[] fins = {shape5, shape5a, shape5b, shape5c, shape5d, shape5e, shape5f, shape5g};
+        for (ModelPart part : fins)
+            part.render(stack, tex, finLight, OverlayTexture.NO_OVERLAY, finArgb);
+
+        int count = conditions.isEmpty() ? 5 : (Integer)conditions.get(0);
+        double step = 0.125 * (6 - count);
+        double lead = count == 2 ? 0.2 : count == 4 ? 0.0625 : 0;
+        stack.pushPose();
+        stack.scale(1, 1, 0.25F);
+        stack.translate(0, 0, 0.75 - lead);
+        if (count > 0 && step > 0) {
+            for (double i = 0; i < 1.9; i += step) {
+                stack.pushPose();
+                stack.translate(0, 0, -i);
+                c1.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);
+                c1a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);
+                c1b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);
+                c1c.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);
+                stack.popPose();
+            }
+        }
+        stack.popPose();
 
     }
 

@@ -80,8 +80,9 @@ public class DryingBedRecipe implements Recipe<SingleRecipeInput> {
         return amount;
     }
 
-    @Override
-    public boolean showNotification() {
+    @Override public boolean isSpecial() { return true; }
+
+    @Override public boolean showNotification() {
         return false;
     }
 
