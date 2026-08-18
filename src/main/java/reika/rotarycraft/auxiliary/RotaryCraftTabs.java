@@ -15,6 +15,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
+import reika.dragonapi.libraries.registry.ReikaItemHelper;
 
 import java.util.HashSet;
 
@@ -63,6 +64,19 @@ public class RotaryCraftTabs {
 
     public static void register(IEventBus modEventBus) {
         CREATIVE_MODE_TABS.register(modEventBus);
+    }
+
+    /**
+     * A jetpack stack filled to its capacity. The fuel level is the only thing stored — {@code fuel} in
+     * the stack's custom data — because {@link reika.rotarycraft.items.tools.ItemJetPack#getCurrentFluid}
+     * derives the fluid from the level rather than reading it back, the pack running on jet fuel and
+     * nothing else.
+     */
+    private static ItemStack filledJetPack(Item item) {
+        ItemStack is = new ItemStack(item);
+        int capacity = ((reika.rotarycraft.items.tools.ItemJetPack)item).getMaxFuel(is);
+        ReikaItemHelper.updateStackTag(is, tag -> tag.putInt("fuel", capacity));
+        return is;
     }
 
     @SubscribeEvent
@@ -247,6 +261,11 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.ANGULAR_TRANSDUCER.get());
             event.accept(RotaryItems.ETHANOL_CART.get());
             event.accept(RotaryItems.JETPACK.get());
+            event.accept(RotaryItems.BEDROCK_ALLOY_PACK.get());
+            // A fuelled bedrock pack as well as an empty one. The pack is useless until a filling
+            // station has been built and run, which is a long way into the tech tree, so a creative
+            // player who only wants to fly has no way to get a working one out of the menu.
+            event.accept(filledJetPack(RotaryItems.BEDROCK_ALLOY_PACK.get()));
             event.accept(RotaryItems.JUMP.get());
             event.accept(RotaryItems.BEDROCK_ALLOY_JUMP_BOOTS.get());
             event.accept(RotaryItems.UPGRADE.get());
