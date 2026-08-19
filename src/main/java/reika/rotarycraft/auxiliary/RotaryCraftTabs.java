@@ -261,11 +261,6 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.ANGULAR_TRANSDUCER.get());
             event.accept(RotaryItems.ETHANOL_CART.get());
             event.accept(RotaryItems.JETPACK.get());
-            event.accept(RotaryItems.BEDROCK_ALLOY_PACK.get());
-            // A fuelled bedrock pack as well as an empty one. The pack is useless until a filling
-            // station has been built and run, which is a long way into the tech tree, so a creative
-            // player who only wants to fly has no way to get a working one out of the menu.
-            event.accept(filledJetPack(RotaryItems.BEDROCK_ALLOY_PACK.get()));
             event.accept(RotaryItems.JUMP.get());
             event.accept(RotaryItems.BEDROCK_ALLOY_JUMP_BOOTS.get());
             event.accept(RotaryItems.UPGRADE.get());
@@ -291,6 +286,14 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.HSLA_DRILL.get());
             event.accept(RotaryItems.HSLA_STEEL_PACK.get());
             event.accept(RotaryItems.BEDROCK_ALLOY_PACK.get());
+            // A fuelled pack beside the empty one. The pack is useless until a filling station has
+            // been built and run, which is a long way into the tech tree, so a creative player who
+            // only wants to fly has no way to get a working one out of the menu otherwise.
+            //
+            // The two must differ in their components or the tab rejects the second: its backing set
+            // is ItemStackLinkedSet.createTypeAndComponentsSet, so a stack that failed to take its
+            // fuel would collide with the empty one rather than quietly arriving empty.
+            event.accept(filledJetPack(RotaryItems.BEDROCK_ALLOY_PACK.get()));
             event.accept(RotaryItems.BEDROCK_ALLOY_HELMET.get());
             event.accept(RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get());
             event.accept(RotaryItems.BEDROCK_ALLOY_LEGGINGS.get());
