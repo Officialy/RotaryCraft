@@ -54,35 +54,30 @@ public class ReservoirModel extends RotaryModelBase {
 
         root.addOrReplaceChild("mx",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(56, 0)
                         .addBox(0, 0, 0, 1, 16, 16),
                 PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("mz",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(56, 0)
                         .addBox(0, 0, 0, 1, 16, 16),
                 PartPose.offsetAndRotation(7, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("pz",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 16, 1),
                 PartPose.offsetAndRotation(-8, 8, 7, 0, 0, 0));
 
         root.addOrReplaceChild("px",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 16, 1),
                 PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("bottom",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 46)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));

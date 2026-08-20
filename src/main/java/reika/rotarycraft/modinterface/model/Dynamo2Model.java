@@ -45,14 +45,12 @@ public class Dynamo2Model extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 10, 16),
                 PartPose.offsetAndRotation(-8, 14, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(70, 0)
                         .addBox(0, 0, 0, 8, 6, 8),
                 PartPose.offsetAndRotation(-4, 8, -4, 0, 0, 0));

@@ -59,63 +59,54 @@ public class VanDeGraffModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(65, 0)
                         .addBox(-4, -3, -4, 8, 6, 8),
                 PartPose.offsetAndRotation(0, 12, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape3",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 18)
                         .addBox(-3, -2, -5, 6, 4, 10),
                 PartPose.offsetAndRotation(0, 12, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape3a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 18)
                         .addBox(-3, -4, -3, 6, 1, 6),
                 PartPose.offsetAndRotation(0, 12, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape3b",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 18)
                         .addBox(-5, -2, -3, 10, 4, 6),
                 PartPose.offsetAndRotation(0, 12, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape4",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 33)
                         .addBox(-2.5F, 0, -2.5F, 5, 8, 5),
                 PartPose.offsetAndRotation(0, 15, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape5",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 49)
                         .addBox(0, 0, 0, 8, 2, 8),
                 PartPose.offsetAndRotation(-4, 21, -4, 0, 0, 0));
 
         root.addOrReplaceChild("shape6",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 60)
                         .addBox(0, 0, 0, 2, 8, 1),
                 PartPose.offsetAndRotation(-1, 14, -1.3F, 0, 0, 0));
 
         root.addOrReplaceChild("shape6a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 60)
                         .addBox(0, 0, 0, 2, 8, 1),
                 PartPose.offsetAndRotation(-1, 14, 0.25F, 0, 0, 0));

@@ -49,42 +49,36 @@ public class GasCompressorModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(65, 0)
                         .addBox(-2, 0, -2, 4, 15, 4),
                 PartPose.offsetAndRotation(0, 8, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape3",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 19)
                         .addBox(-7, 0, -7, 14, 8, 14),
                 PartPose.offsetAndRotation(0, 15, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape4",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 42)
                         .addBox(-5, 0, -5, 10, 5, 10),
                 PartPose.offsetAndRotation(0, 10, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape5",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(78, 21)
                         .addBox(-5.5F, 0, -5.5F, 11, 1, 11),
                 PartPose.offsetAndRotation(0, 14.5F, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape5a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(83, 0)
                         .addBox(-2.5F, 0, -2.5F, 5, 1, 5),
                 PartPose.offsetAndRotation(0, 9.5F, 0, 0, 0, 0));

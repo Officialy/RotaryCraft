@@ -42,14 +42,12 @@ public class SmokeDetectorModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 8, 1, 8),
                 PartPose.offsetAndRotation(-4, 8, -4, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(32, 0)
                         .addBox(0, 0, 0, 6, 1, 6),
                 PartPose.offsetAndRotation(-3, 9, -3, 0, 0, 0));

@@ -68,7 +68,6 @@ public class ClutchModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
@@ -147,14 +146,12 @@ public class ClutchModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape14",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(104, 0)
                         .addBox(0, 0, 0, 6, 6, 6),
                 PartPose.offsetAndRotation(-3, 13, -3, 0, 0, 0));
 
         root.addOrReplaceChild("shape15",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(95, 0)
                         .addBox(0, 0, 0, 8, 4, 8),
                 PartPose.offsetAndRotation(-4, 19, -4, 0, 0, 0));

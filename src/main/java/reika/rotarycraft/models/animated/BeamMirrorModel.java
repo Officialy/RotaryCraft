@@ -58,49 +58,42 @@ public class BeamMirrorModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 71)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape4",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 19)
                         .addBox(-1, -4.1F, -4, 2, 11, 1),
                 PartPose.offsetAndRotation(0, 23, 0, -1.047198F, 0, 0));
 
         root.addOrReplaceChild("shape5",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(66, 0)
                         .addBox(-7, 6.1F, 5.3F, 14, 3, 1),
                 PartPose.offsetAndRotation(0, 9, 0, -0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape5a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 57)
                         .addBox(-4, 3, 1.5F, 8, 11, 1),
                 PartPose.offsetAndRotation(0, 9, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape5b",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(66, 11)
                         .addBox(-7, 3, 2.1F, 14, 3, 1),
                 PartPose.offsetAndRotation(0, 9, 0, -0.2617994F, 0, 0));
 
         root.addOrReplaceChild("shape5c",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(66, 5)
                         .addBox(-7, 4.7F, 3.5F, 14, 3, 1),
                 PartPose.offsetAndRotation(0, 9, 0, -0.5235988F, 0, 0));
 
         root.addOrReplaceChild("shape5d",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(66, 17)
                         .addBox(-7, 0.6F, 1.3F, 14, 3, 1),
                 PartPose.offsetAndRotation(0, 9, 0, 0, 0, 0));

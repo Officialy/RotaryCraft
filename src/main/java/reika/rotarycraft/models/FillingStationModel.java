@@ -54,56 +54,48 @@ public class FillingStationModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape2a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(65, 17)
                         .addBox(0, 0, 0, 16, 15, 1),
                 PartPose.offsetAndRotation(-8, 8, -5, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(65, 0)
                         .addBox(0, 0, 0, 16, 15, 1),
                 PartPose.offsetAndRotation(-8, 8, 7, 0, 0, 0));
 
         root.addOrReplaceChild("shape3",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 31)
                         .addBox(0, 0, 0, 1, 15, 11),
                 PartPose.offsetAndRotation(7, 8, -4, 0, 0, 0));
 
         root.addOrReplaceChild("shape3a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 31)
                         .addBox(0, 0, 0, 1, 15, 11),
                 PartPose.offsetAndRotation(-8, 8, -4, 0, 0, 0));
 
         root.addOrReplaceChild("shape4",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 19)
                         .addBox(0, 0, 0, 16, 1, 2),
                 PartPose.offsetAndRotation(-8, 8, -7, 0, 0, 0));
 
         root.addOrReplaceChild("shape5",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(38, 19)
                         .addBox(0, 0, 0, 1, 14, 2),
                 PartPose.offsetAndRotation(7, 9, -7, 0, 0, 0));
 
         root.addOrReplaceChild("shape5a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(38, 19)
                         .addBox(0, 0, 0, 1, 14, 2),
                 PartPose.offsetAndRotation(-8, 9, -7, 0, 0, 0));

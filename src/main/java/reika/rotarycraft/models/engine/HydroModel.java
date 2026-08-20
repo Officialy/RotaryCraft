@@ -56,56 +56,48 @@ public class HydroModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, -1, -1, 17, 2, 2),
                 PartPose.offsetAndRotation(-8.5F, 16, 0, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape1a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, -1, -1, 17, 2, 2),
                 PartPose.offsetAndRotation(-8.5F, 16, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 34)
                         .addBox(0, -0.5F, -16, 14, 1, 32),
                 PartPose.offsetAndRotation(-7, 16, 0, 1.570796F, 0, 0));
 
         root.addOrReplaceChild("shape2a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 34)
                         .addBox(0, -0.5F, -16, 14, 1, 32),
                 PartPose.offsetAndRotation(-7, 16, 0, 2.356194F, 0, 0));
 
         root.addOrReplaceChild("shape2b",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 34)
                         .addBox(0, -0.5F, -16, 14, 1, 32),
                 PartPose.offsetAndRotation(-7, 16, 0, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape2c",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 34)
                         .addBox(0, -0.5F, -16, 14, 1, 32),
                 PartPose.offsetAndRotation(-7, 16, 0, 0, 0, 0));
 
         root.addOrReplaceChild("shape3",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(75, 0)
                         .addBox(0, 0, 0, 1, 16, 16),
                 PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape3d",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(40, 0)
                         .addBox(0, 0, 0, 1, 16, 16),
                 PartPose.offsetAndRotation(7, 8, -8, 0, 0, 0));

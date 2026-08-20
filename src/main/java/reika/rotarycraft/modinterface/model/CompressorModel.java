@@ -62,70 +62,60 @@ public class CompressorModel extends RotaryModelBase {
 
         root.addOrReplaceChild("ring1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(75, 21)
                         .addBox(0, 0, 0, 4, 4, 16),
                 PartPose.offsetAndRotation(4, 16, -8, 0, 0, 0));
 
         root.addOrReplaceChild("base",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 21)
                         .addBox(0, 0, 0, 16, 4, 16),
                 PartPose.offsetAndRotation(-8, 20, -8, 0, 0, 0));
 
         root.addOrReplaceChild("ring2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 53)
                         .addBox(0, 0, 0, 8, 4, 4),
                 PartPose.offsetAndRotation(-4, 16, 4, 0, 0, 0));
 
         root.addOrReplaceChild("ring3",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(75, 0)
                         .addBox(0, 0, 0, 4, 4, 16),
                 PartPose.offsetAndRotation(-8, 16, -8, 0, 0, 0));
 
         root.addOrReplaceChild("ring",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 43)
                         .addBox(0, 0, 0, 8, 4, 4),
                 PartPose.offsetAndRotation(-4, 16, -8, 0, 0, 0));
 
         root.addOrReplaceChild("core",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(41, 0)
                         .addBox(0, 0, 0, 8, 12, 8),
                 PartPose.offsetAndRotation(-4, 8, -4, 0, 0, 0));
 
         root.addOrReplaceChild("jacket",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 72)
                         .addBox(0, 0, 0, 10, 8, 1),
                 PartPose.offsetAndRotation(-5, 12, 4, 0, 0, 0));
 
         root.addOrReplaceChild("jacket2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(24, 70)
                         .addBox(0, 0, 0, 1, 8, 8),
                 PartPose.offsetAndRotation(4, 12, -4, 0, 0, 0));
 
         root.addOrReplaceChild("jacket1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 62)
                         .addBox(0, 0, 0, 10, 8, 1),
                 PartPose.offsetAndRotation(-5, 12, -5, 0, 0, 0));
 
         root.addOrReplaceChild("jacket3",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(27, 47)
                         .addBox(0, 0, 0, 1, 8, 8),
                 PartPose.offsetAndRotation(-5, 12, -4, 0, 0, 0));

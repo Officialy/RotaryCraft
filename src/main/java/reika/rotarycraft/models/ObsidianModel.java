@@ -52,49 +52,42 @@ public class ObsidianModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 18)
                         .addBox(0, 0, 0, 1, 11, 14),
                 PartPose.offsetAndRotation(7, 12, -7, 0, 0, 0));
 
         root.addOrReplaceChild("shape2a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 18)
                         .addBox(0, 0, 0, 1, 11, 14),
                 PartPose.offsetAndRotation(-8, 12, -7, 0, 0, 0));
 
         root.addOrReplaceChild("shape3",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(32, 18)
                         .addBox(0, 0, 0, 16, 11, 1),
                 PartPose.offsetAndRotation(-8, 12, 7, 0, 0, 0));
 
         root.addOrReplaceChild("shape3a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(32, 18)
                         .addBox(0, 0, 0, 16, 11, 1),
                 PartPose.offsetAndRotation(-8, 12, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape4",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(64, 0)
                         .addBox(0, 0, 0, 14, 1, 14),
                 PartPose.offsetAndRotation(-7, 14, -7, 0, 0, 0));
 
         root.addOrReplaceChild("shape5",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 44)
                         .addBox(0, 0, 0, 14, 1, 14),
                 PartPose.offsetAndRotation(-7, 12, -7, 0, 0, 0));

@@ -39,7 +39,6 @@ public class FullBlockModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 16, 16),
                 PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));

@@ -54,49 +54,42 @@ public class SpyCamModel extends RotaryModelBase {
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 19)
                         .addBox(0, 0, 0, 12, 2, 12),
                 PartPose.offsetAndRotation(-6, 9, -6, 0, 0, 0));
 
         root.addOrReplaceChild("shape3",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 35)
                         .addBox(0, 0, 0, 8, 3, 8),
                 PartPose.offsetAndRotation(-4, 11, -4, 0, 0, 0));
 
         root.addOrReplaceChild("shape4",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 48)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(1, 14, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape4a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 57)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(-2, 14, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape5a",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 74)
                         .addBox(0, 0, 0, 2, 4, 1),
                 PartPose.offsetAndRotation(-1, 14, 1, 0, 0, 0));
 
         root.addOrReplaceChild("shape5",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 67)
                         .addBox(0, 0, 0, 2, 4, 1),
                 PartPose.offsetAndRotation(-1, 14, -2, 0, 0, 0));
