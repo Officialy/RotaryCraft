@@ -1,10 +1,7 @@
 package reika.rotarycraft.models.animated;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import reika.rotarycraft.base.RotaryModelBase;
-import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -60,81 +57,18 @@ public class GearboxModel extends GearboxBaseModel {
         this.shape26 = modelPart.getChild("shape26");
         this.shape27 = modelPart.getChild("shape27");
         this.shape28 = modelPart.getChild("shape28");
+
+        addSupport(shape28);
+        // ModelGearbox.renderAll opened with a translate it never undid, so it also framed the
+        // support column.
+        setSupportOffset(0.015125F, -0.006125F);
     }
 
 
     public static LayerDefinition createLayer() {
         var definition = new MeshDefinition();
         var root = definition.getRoot();
-        root.addOrReplaceChild("shape1",
-                CubeListBuilder.create()
-                        .mirror(true)
-                        .texOffs(0, 0)
-                        .addBox(0, 0, 0, 16, 1, 16),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape2",
-                CubeListBuilder.create()
-                        .texOffs(64, 0)
-                        .addBox(0, 0, 0, 1, 12, 16),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape3",
-                CubeListBuilder.create()
-                        .texOffs(64, 0)
-                        .addBox(0, 0, 0, 1, 12, 16),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape4",
-                CubeListBuilder.create()
-                        .texOffs(0, 17)
-                        .addBox(0, 0, 0, 14, 4, 1),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape5",
-                CubeListBuilder.create()
-                        .texOffs(0, 17)
-                        .addBox(0, 0, 0, 14, 4, 1),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape6",
-                CubeListBuilder.create()
-                        .texOffs(30, 17)
-                        .addBox(0, 0, 0, 1, 3, 1),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape7",
-                CubeListBuilder.create()
-                        .texOffs(30, 17)
-                        .addBox(0, 0, 0, 1, 3, 1),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape8",
-                CubeListBuilder.create()
-                        .texOffs(30, 17)
-                        .addBox(0, 0, 0, 1, 3, 1),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape9",
-                CubeListBuilder.create()
-                        .texOffs(30, 17)
-                        .addBox(0, 0, 0, 1, 3, 1),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape10",
-                CubeListBuilder.create()
-                        .texOffs(42, 17)
-                        .addBox(0, 0, 0, 1, 3, 10),
-                PartPose.ZERO);
-
-        root.addOrReplaceChild("shape11",
-                CubeListBuilder.create()
-                        .texOffs(42, 17)
-                        .addBox(0, 0, 0, 1, 3, 10),
-                PartPose.ZERO);
-
-
-        //
+        addBaseParts(root);
 
         root.addOrReplaceChild("shape12",
                 CubeListBuilder.create()
@@ -150,35 +84,30 @@ public class GearboxModel extends GearboxBaseModel {
 
         root.addOrReplaceChild("shape14",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(-5, 14, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape15",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(-5, 16, -3, 0.8028515F, 0, 0));
 
         root.addOrReplaceChild("shape16",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 6, 6),
                 PartPose.offsetAndRotation(-4, 11.4F, 0.8F, 0, 0, 0));
 
         root.addOrReplaceChild("shape17",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 6, 6),
                 PartPose.offsetAndRotation(-4, 14.5F, -0.5F, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape18",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 3, 3),
                 PartPose.offsetAndRotation(-5, 14.5F, 2, 0.7853982F, 0, 0));
@@ -191,69 +120,94 @@ public class GearboxModel extends GearboxBaseModel {
 
         root.addOrReplaceChild("shape20",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 27)
                         .addBox(0, 0, 0, 8, 2, 2),
                 PartPose.offsetAndRotation(-3, 13.5F, 3, 0, 0, 0));
 
         root.addOrReplaceChild("shape21",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 27)
                         .addBox(0, 0, 0, 8, 2, 2),
                 PartPose.offsetAndRotation(-3, 14.5F, 2.5F, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape22",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(5, 12.4F, 1.8F, 0, 0, 0));
 
         root.addOrReplaceChild("shape23",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(5, 14.5F, 1, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape24",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 27)
                         .addBox(0, 0, 0, 3, 2, 2),
                 PartPose.offsetAndRotation(5.5F, 15, -1, 0, 0, 0));
 
         root.addOrReplaceChild("shape25",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(0, 27)
                         .addBox(0, 0, 0, 3, 2, 2),
                 PartPose.offsetAndRotation(5.5F, 16, -1.4F, 0.7853982F, 0, 0.0174533F));
 
         root.addOrReplaceChild("shape26",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(5, 14, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape27",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 0)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(5, 16, -3, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape28",
                 CubeListBuilder.create()
-                        .mirror(true)
                         .texOffs(100, 19)
                         .addBox(0, 0, 0, 2, 10, 3),
                 PartPose.offsetAndRotation(0, 13, 2.4F, 0, 0, 0));
 
         return LayerDefinition.create(definition, 128, 32);
     }
+
+    /**
+     * Faithful to {@code ModelGearbox.renderAll}: three gear groups, the first two geared 1.25x off
+     * the shaft and the last turning at shaft speed.
+     */
+    @Override
+    protected void renderGears(PoseStack stack, VertexConsumer tex, int light, float phi) {
+        stack.pushPose();
+        stack.translate(0, 0.015125F, -0.006125F);
+
+        stack.pushPose();
+        stack.translate(0, 0.9025F, 0.25F);
+        stack.mulPose(Axis.XP.rotationDegrees(-phi * 1.25F));
+        stack.translate(0, -0.9025F, -0.25F);
+        this.render(stack, tex, light, shape20, shape21, shape22, shape23, shape16, shape17, shape18, shape19);
+        stack.popPose();
+
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.mulPose(Axis.XP.rotationDegrees(phi * 1.25F));
+        stack.translate(0, -1, 0);
+        this.render(stack, tex, light, shape26, shape27, shape24, shape25);
+        stack.popPose();
+
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.translate(0, -1, 0);
+        this.render(stack, tex, light, shape14, shape15, shape12, shape13);
+        stack.popPose();
+
+        stack.popPose();
+    }
+
     @Override
     public Identifier getTexture() {
         // Directory prefix is used by the world-renderer with per-material suffix; the item

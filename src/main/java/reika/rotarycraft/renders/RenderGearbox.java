@@ -10,42 +10,36 @@
 package reika.rotarycraft.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 // 26.2: VertexConsumer removed from BER submission path.
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import com.mojang.math.Axis;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.joml.Quaternionf;
 import reika.dragonapi.ModList;
-import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.base.model.GearboxBaseModel;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
 import reika.rotarycraft.models.animated.Gearbox16Model;
 import reika.rotarycraft.models.animated.Gearbox4Model;
 import reika.rotarycraft.models.animated.Gearbox8Model;
 import reika.rotarycraft.models.animated.GearboxModel;
-import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
-import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
 
@@ -86,70 +80,63 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
         return ret;
     }*/
 
-    /**
-     * Renders the BlockEntity for the position.
-     */
-    public void renderBlockEntityGearboxAt(PoseStack stack, BlockEntityGearbox tile, VertexConsumer bufferSource, int light, int overlay) {
-//        this.setupGL(stack, tile, par2, par4, par6);
-
-        if (tile.isInWorld()) {
-            // 26.1 fix: legacy port left the gearbox at the block's local origin (corner),
-            // with no facing rotation and no Z-axis flip, so the model appeared offset and
-            // upside-down to the user ("gearboxes look messed up"). Mirror the
-            // splitter/shaft mount: translate to top-centre, yaw by -facing-90°, flip Z 180°.
-            var blockstate = tile.getLevel() != null ? tile.getBlockState()
-                    : RotaryBlocks.HSLA_GEARBOX_2x.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
-            float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
-            stack.translate(0.5F, 1.5F, 0.5F);
-            stack.mulPose(Axis.YP.rotationDegrees(-f - 90));
-            stack.mulPose(Axis.ZP.rotationDegrees(180));
-            ArrayList li = ReikaJavaLibrary.makeListFrom(tile.getBearingTier());
-
-            switch (tile.getRatio()) {
-                case 2 -> {
-                    VertexConsumer vertexconsumer = bufferSource;
-                    gearboxModel.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
-                }
-                case 4 -> {
-                    VertexConsumer vertexconsumer = bufferSource;
-                    gearboxModel4.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
-                }
-                case 8 -> {
-                    VertexConsumer vertexconsumer = bufferSource;
-                    gearboxModel8.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
-                }
-                case 16 -> {
-                    VertexConsumer vertexconsumer = bufferSource;
-                    gearboxModel16.renderAll(stack, vertexconsumer, light, tile, li, -tile.phi);
-                }
-            }
-
-        } else {
-            //ReikaChatHelper.write(this.itemMetadata);
-            stack.mulPose(Axis.YP.rotationDegrees(-90));
-            switch (tile.getRatio()) {
-                case 2 -> {
-                    VertexConsumer vertexconsumer = bufferSource;
-                    gearboxModel.renderAll(stack, vertexconsumer, light, tile, null);
-                }
-                case 4 -> {
-                    VertexConsumer vertexconsumer = bufferSource;
-                    gearboxModel4.renderAll(stack, vertexconsumer, light, tile, null);
-                }
-                case 8 -> {
-                    VertexConsumer vertexconsumer = bufferSource;
-                    gearboxModel8.renderAll(stack, vertexconsumer, light, tile, null);
-                }
-                case 16 -> {
-                    VertexConsumer vertexconsumer = bufferSource;
-                    gearboxModel16.renderAll(stack, vertexconsumer, light, tile, null);
-                }
-            }
-        }
-
-//        this.closeGL(stack, tile);
+    private GearboxBaseModel getModel(BlockEntityGearbox tile) {
+        return switch (tile.getRatio()) {
+            case 4 -> gearboxModel4;
+            case 8 -> gearboxModel8;
+            case 16 -> gearboxModel16;
+            default -> gearboxModel;
+        };
     }
 
+    /**
+     * The yaw the 1.7.10 renderer applied for each gearbox orientation. It switched on
+     * {@code metadata & 3} (0/1/2/3 = read EAST/WEST/SOUTH/NORTH, per
+     * {@code TileEntity1DTransmitter.getIOSides}) with the angles 0/180/90/270; the port stores the
+     * <em>opposite</em> of the read side in {@code FACING}, so the same four cases come out as
+     * WEST/EAST/NORTH/SOUTH — which is exactly {@code toYRot() + 270}.
+     */
+    private static float getModelYaw(Direction facing) {
+        return (facing.toYRot() + 270F) % 360F;
+    }
+
+    /**
+     * 1.7.10 {@code RotaryTERenderer.setupGL} plus the gearbox's own facing rotation.
+     *
+     * <p>{@code setupGL} did {@code translate(x,y,z); scale(1,-1,-1); translate(0.5,0.5,0.5);
+     * translate(0,-2,-1)}, i.e. a translation to the block's top-centre followed by a 180° flip
+     * about X ({@code scale(1,-1,-1)} <em>is</em> {@code Rx(180)}); the flip is expressed as a
+     * rotation here so the normal matrix stays well-defined.
+     */
+    private static void setupPose(PoseStack stack, BlockEntityGearbox tile) {
+        stack.translate(0.5F, 1.5F, 0.5F);
+        stack.mulPose(Axis.XP.rotationDegrees(180));
+
+        if (!tile.isInWorld()) {
+            stack.mulPose(Axis.YP.rotationDegrees(-90));
+            return;
+        }
+
+        Direction facing = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING);
+        if (tile.isFlipped) {
+            // setupGL's ceiling-mount branch: flip the machine over and drop it back into its block.
+            stack.mulPose(Axis.XP.rotationDegrees(180));
+            stack.translate(0, -2, 0);
+            // Legacy `metadata > 1`, i.e. the two Z-axis orientations, also needed a half turn.
+            if (facing.getAxis() == Direction.Axis.Z)
+                stack.mulPose(Axis.YP.rotationDegrees(180));
+        }
+        stack.mulPose(Axis.YP.rotationDegrees(getModelYaw(facing)));
+    }
+
+    private static PoseStack snapshot(PoseStack from) {
+        PoseStack snapped = new PoseStack();
+        snapped.last().set(from.last());
+        return snapped;
+    }
+
+    /** IO-goggles overlay naming the gearbox's current mode. Not wired up yet (see the todos). */
+    @SuppressWarnings("unused")
     private void renderMode(PoseStack stack, BlockEntityGearbox tile, double par2, double par4, double par6) {
         ItemStack is = Minecraft.getInstance().player.getItemBySlot(EquipmentSlot.HEAD);
         boolean flag = ReikaItemHelper.matchStacks(is, RotaryItems.IO_GOGGLES.get());
@@ -231,22 +218,13 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
         stack.popPose();
     }*/
 
-    // 1.21.5: render -> submit; @Override dropped
-    public void render(BlockEntityGearbox tile, float p_112308_, PoseStack stack, VertexConsumer bufferSource, int packetLight, int overlay) {
-        if (this.doRenderModel(stack, tile))
-            this.renderBlockEntityGearboxAt(stack, tile, bufferSource, packetLight, overlay);
-        if ((tile).isInWorld()) {//todo && MinecraftForgeClient.getRenderPass() == 1) {
-            IORenderer.renderIO(stack, bufferSource, tile, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ());
-//todo            this.renderLiquid(stack, tile);
-            //this.renderMode((BlockEntityGearbox)tile, par2, par4, par6);
-        }
-        if (!tile.hasLevel()) {
-//         todo   this.renderLiquid(stack, tile);
-        }
-    }
-
     /**
-     * 26.2 submit hook. Snapshot pose + pass VertexConsumer directly (via tiny adapter for legacy renderBlock...At).
+     * 26.2 submit hook.
+     *
+     * <p>Two submissions, because the original bound two textures: the housing and gear train use
+     * the gearbox material's texture, while {@code ModelGearboxBase.renderSupports} rebound the
+     * <em>bearing tier</em>'s before drawing the support columns. Each submission gets its own pose
+     * snapshot — the lambdas run deferred, so they must not share mutable state.
      */
     @Override
     public void submit(BlockEntityRenderState state,
@@ -259,20 +237,29 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
         if (!(be instanceof BlockEntityGearbox tile)) return;
         if (!this.doRenderModel(poseStack, tile)) return;
 
+        GearboxBaseModel model = this.getModel(tile);
+        int light = state.lightCoords;
+        float phi = -tile.phi;
+
         // The per-ratio GearboxModel subclasses share the same texture directory; pick the file
         // by material via {@link GearboxTypes#getBaseGearboxTexture}.
-        RenderType rt = RenderTypes.entityCutout(textureWithSuffix(GearboxModel.TEXTURE_LOCATION, tile.getGearboxType().getBaseGearboxTexture()));
+        RenderType body = RenderTypes.entityCutout(
+                textureWithSuffix(GearboxModel.TEXTURE_LOCATION, tile.getGearboxType().getBaseGearboxTexture()));
+        RenderType bearings = RenderTypes.entityCutout(
+                textureWithSuffix(GearboxModel.TEXTURE_LOCATION, tile.getBearingTier().getBaseGearboxTexture()));
 
-        PoseStack snapped = new PoseStack();
-        snapped.last().set(poseStack.last());
-        int light = state.lightCoords;
-        collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            renderBlockEntityGearboxAt(snapped, tile, vc, light, OverlayTexture.NO_OVERLAY);
-        });
+        PoseStack bodyPose = snapshot(poseStack);
+        setupPose(bodyPose, tile);
+        collector.submitCustomGeometry(poseStack, body, (pose, vc) -> model.renderMain(bodyPose, vc, light, phi));
+
+        PoseStack bearingPose = snapshot(poseStack);
+        setupPose(bearingPose, tile);
+        collector.submitCustomGeometry(poseStack, bearings, (pose, vc) -> model.renderSupports(bearingPose, vc, light));
+
         if (tile.isInWorld()) {
             IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
+//todo            this.renderLiquid(stack, tile);
         }
     }
 
 }
-
