@@ -170,10 +170,10 @@
 //			int melt = RecipesLavaMaker.getRecipes().getMeltTemperature(is);
 //			Font f = Minecraft.getMinecraft().fontRenderer;
 //			String s = String.format("%dmB @ %dC", fs.amount, melt);
-//			f.text(s, 165-f.width(s), 73, 0);
+//			f.text(s, 165-f.width(s), 73, 0xFF000000);
 //
 //			s = String.format("%s", fs.getLocalizedName());
-//			f.text(s, 165-f.width(s), 83, 0);
+//			f.text(s, 165-f.width(s), 83, 0xFF000000);
 //		}
 //	}
 //

@@ -104,7 +104,7 @@
 //
 //        ScreenUtils.drawTexturedModalRect(getY, getY(), 0, 0, imageWidth, imageHeight);
 //
-//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, title, getY + imageWidth / 2, getY() + 6, 4210752);
+//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, title, getY + imageWidth / 2, getY() + 6, 0xFF404040);
 //        super.drawScreen(x, y, f);
 //    }
 //

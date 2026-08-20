@@ -63,7 +63,7 @@ public class GuiBorer extends MachineScreen<BlockEntityBorer, ContainerBorer> {
         }
 
         String dropStatus = "Drops: " + (borer.drops ? "On" : "Off");
-        graphics.text(font, dropStatus, j + GRID_X, k + GRID_Y + CELL * BlockEntityBorer.ROWS + 4, 0x404040);
+        graphics.text(font, dropStatus, j + GRID_X, k + GRID_Y + CELL * BlockEntityBorer.ROWS + 4, 0xFF404040);
         graphics.text(font, borer.isJammed() ? "JAMMED" : (borer.drops ? "Ready" : "Ready"),
                 j + GRID_X + 90, k + GRID_Y + CELL * BlockEntityBorer.ROWS + 4, borer.isJammed() ? 0xC03030 : 0x309030);
     }

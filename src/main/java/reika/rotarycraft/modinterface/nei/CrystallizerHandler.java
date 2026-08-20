@@ -151,7 +151,7 @@
 //			int freeze = TileEntityCrystallizer.getFreezingPoint(fs);
 //			Font f = Minecraft.getMinecraft().fontRenderer;
 //			String s = String.format("%dC", freeze);
-//			ReikaGuiAPI.instance.drawCenteredStringNoShadow(f, s, 45, 20, 0);
+//			ReikaGuiAPI.instance.drawCenteredStringNoShadow(f, s, 45, 20, 0xFF000000);
 //		}
 //	}
 //
@@ -187,7 +187,7 @@
 //			//}
 //			Font fr = Minecraft.getMinecraft().fontRenderer;
 //			String s = f.getLocalizedName()+" ("+fs.amount+" mB)";
-//			fr.text(s, 22, 56, 0);
+//			fr.text(s, 22, 56, 0xFF000000);
 //		}
 //	}
 //

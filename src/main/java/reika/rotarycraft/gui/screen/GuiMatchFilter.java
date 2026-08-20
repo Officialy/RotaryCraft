@@ -27,7 +27,7 @@
 //     */
 //    @Override
 //    protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "Match Filter", imageWidth / 2, 6, 4210752);
+//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "Match Filter", imageWidth / 2, 6, 0xFF404040);
 //        font.draw(I18n.get("container.inventory"), 8, imageHeight - 96 + 2, 4210752);
 //    }
 //

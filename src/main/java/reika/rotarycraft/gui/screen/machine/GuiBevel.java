@@ -124,16 +124,16 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Blan
         int j = (width - imageWidth) / 2 - 2;
         int k = (height - imageHeight) / 2 - 12;
 
-        stack.text(font,  "Input Side", j + 24, k + 32, 4210752);
-        stack.text(font,  "Output Side", j + 99, k + 32, 4210752);
+        stack.text(font,  "Input Side", j + 24, k + 32, 0xFF404040);
+        stack.text(font,  "Output Side", j + 99, k + 32, 0xFF404040);
 
         if (ConfigRegistry.COLORBLIND.getState()) {
             for (int i = 0; i < 6; i++) {
-                stack.text(font,  String.valueOf(i), j + 30, k + 49 + i * 22, 0);
+                stack.text(font,  String.valueOf(i), j + 30, k + 49 + i * 22, 0xFF000000);
             }
 
             for (int i = 0; i < 6; i++) {
-                stack.text(font,  String.valueOf(i), j + imageWidth - 68, k + 49 + i * 22, 0);
+                stack.text(font,  String.valueOf(i), j + imageWidth - 68, k + 49 + i * 22, 0xFF000000);
             }
         }
     }

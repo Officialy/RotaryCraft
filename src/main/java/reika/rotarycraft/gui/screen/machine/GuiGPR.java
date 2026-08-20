@@ -89,7 +89,7 @@ public class GuiGPR extends NonPoweredMachineScreen<BlockEntityGPR, BlankContain
         }
         String s = gpr.getLookDirection().toString();
         int w = font.width(s);
-        stack.text(font, s, a + (imageWidth - w) / 2, b + 6, 0xffffff);
+        stack.text(font, s, a + (imageWidth - w) / 2, b + 6, 0xFFFFFFFF);
     }
 
     @Override

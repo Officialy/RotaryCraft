@@ -103,7 +103,7 @@
 //
 //        int j = (width - imageWidth) / 2;
 //        int k = (height - imageHeight) / 2;
-//        api.drawCenteredStringNoShadow(font, tile.getMultiValuedName(), imageWidth / 2, 5, 4210752);
+//        api.drawCenteredStringNoShadow(font, tile.getMultiValuedName(), imageWidth / 2, 5, 0xFF404040);
 //        if (tile instanceof Container)
 //            font.draw(I18n.get("container.inventory"), 8, (imageHeight - 96) + 3, 4210752);
 //

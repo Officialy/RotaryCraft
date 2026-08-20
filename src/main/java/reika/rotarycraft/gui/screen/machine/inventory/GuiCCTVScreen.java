@@ -32,7 +32,7 @@
 //    protected void drawGuiContainerForegroundLayer(int a, int b) {
 //        super.drawGuiContainerForegroundLayer(a, b);
 //
-//        api.drawCenteredStringNoShadow(font, "Camera Select", imageWidth / 2, 54, 4210752);
+//        api.drawCenteredStringNoShadow(font, "Camera Select", imageWidth / 2, 54, 0xFF404040);
 //    }
 //
 //    @Override

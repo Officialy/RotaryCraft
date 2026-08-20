@@ -30,8 +30,8 @@
 //     */
 //    @Override
 //    protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "WorldEdit Block Selection", imageWidth / 2, 6, 4210752);
-//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "(Leave empty to delete blocks)", imageWidth / 2, 20, 4210752);
+//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "WorldEdit Block Selection", imageWidth / 2, 6, 0xFF404040);
+//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "(Leave empty to delete blocks)", imageWidth / 2, 20, 0xFF404040);
 //        font.draw(I18n.get("container.inventory"), 8, imageHeight - 96 + 2, 4210752);
 //    }
 //

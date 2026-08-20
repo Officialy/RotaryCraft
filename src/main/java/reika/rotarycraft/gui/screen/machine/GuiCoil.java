@@ -111,19 +111,19 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
-        graphics.text(font, "Output Speed", imageWidth / 2 - 82, 22, 4210752, false);
+        graphics.text(font, "Output Speed", imageWidth / 2 - 82, 22, 0xFF404040, false);
         if (!coil.isCreative())
-            graphics.text(font, String.format("(Max %d)", coil.getMaximumEmission()), imageWidth / 2 - 82, 37, 4210752, false);
-        graphics.text(font, "Output Torque", imageWidth / 2 - 82, 52, 4210752, false);
-        graphics.text(font, "rad/s", imageWidth / 2 + 53, 22, 4210752, false);
-        graphics.text(font, "Nm", imageWidth / 2 + 53, 52, 4210752, false);
+            graphics.text(font, String.format("(Max %d)", coil.getMaximumEmission()), imageWidth / 2 - 82, 37, 0xFF404040, false);
+        graphics.text(font, "Output Torque", imageWidth / 2 - 82, 52, 0xFF404040, false);
+        graphics.text(font, "rad/s", imageWidth / 2 + 53, 22, 0xFF404040, false);
+        graphics.text(font, "Nm", imageWidth / 2 + 53, 52, 0xFF404040, false);
         if (!coil.isCreative()) {
             double e = coil.getEnergy() / 20D;
             String s = String.format("Stored Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(e), ReikaEngLibrary.getSIPrefix(e));
-            graphics.text(font, s, imageWidth / 2 - 82, 80 - 8, 4210752, false);
+            graphics.text(font, s, imageWidth / 2 - 82, 80 - 8, 0xFF404040, false);
             long max = coil.getMaxStorageCapacity();
             s = String.format("Max Energy: %.3f%sJ", ReikaMathLibrary.getThousandBase(max), ReikaEngLibrary.getSIPrefix(max));
-            graphics.text(font, s, imageWidth / 2 - 82, 80 - 8 + 14, 4210752, false);
+            graphics.text(font, s, imageWidth / 2 - 82, 80 - 8 + 14, 0xFF404040, false);
         }
         if (!inputOmega.isFocused())
             graphics.text(font, String.format("%d", coil.getReleaseOmega()), imageWidth / 2 - 3, 22, 0xffffffff, false);

@@ -73,10 +73,10 @@
 //        String inv = I18n.get("container.inventory");
 //        font.draw(inv, imageWidth - font.width(inv) - 8, imageHeight - 96 + 2, 4210752);
 //        if (RotaryItems.CRAFTPATTERN.matchItem(this.getItem())) {
-//            ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, ItemCraftPattern.getMode(this.getItem()).displayName, imageWidth / 2, 6, 4210752);
+//            ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, ItemCraftPattern.getMode(this.getItem()).displayName, imageWidth / 2, 6, 0xFF404040);
 //            int lim = ItemCraftPattern.getStackInputLimit(this.getItem());
-//            ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, lim == 64 ? "\u221E" : String.valueOf(lim), 16, 40 + 12, 4210752);
-//            //ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "Limit", 16, 60, 4210752);
+//            ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, lim == 64 ? "\u221E" : String.valueOf(lim), 16, 40 + 12, 0xFF404040);
+//            //ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "Limit", 16, 60, 0xFF404040);
 //            font.draw("Input Limit", 6, 72, 4210752);
 //            ReikaGuiAPI.instance.drawItemStack(itemRender, ItemCraftPattern.getMode(this.getItem()).getIcon(), 8, 8);
 //        }

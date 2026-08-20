@@ -77,8 +77,8 @@ public class GuiScaleChest extends MachineScreen<BlockEntityScaleableChest, Cont
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int pMouseX, int pMouseY) {
-        graphics.text(font, "Page " + (page + 1) + "/" + Math.max(1, chest.getMaxPage()), 26, 4, 0x404040);
-        graphics.text(font, chest.getNumberSlots() + " slots", imageWidth - 70, 4, 0x404040);
+        graphics.text(font, "Page " + (page + 1) + "/" + Math.max(1, chest.getMaxPage()), 26, 4, 0xFF404040);
+        graphics.text(font, chest.getNumberSlots() + " slots", imageWidth - 70, 4, 0xFF404040);
     }
 
     @Override

@@ -131,7 +131,7 @@
 //
 //	private void drawText(RightClickRecipe rec) {
 //		ReikaTextureHelper.bindFontTexture();
-//		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, rec.description, 120, 160, 0);
+//		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, rec.description, 120, 160, 0xFF000000);
 //	}
 //
 //	private void renderMachine(RightClickRecipe rec) {

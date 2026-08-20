@@ -57,7 +57,7 @@ public class GuiBlastFurnace extends NonPoweredMachineScreen<BlockEntityBlastFur
         int c = 0;
         if (blast.getTemperature() >= 1000)
             c = 1;
-        poseStack.text(font, blast.getTemperature() + "C", 17 + c, 6, 4210752, false);
+        poseStack.text(font, blast.getTemperature() + "C", 17 + c, 6, 0xFF404040, false);
     }
 
     //

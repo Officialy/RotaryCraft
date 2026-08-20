@@ -32,8 +32,8 @@ public class GuiHandCraft extends AbstractContainerScreen<ContainerHandCraft> {
     // space (extractLabels is translated by leftPos/topPos under 26.1).
     @Override
     protected void extractLabels(GuiGraphicsExtractor stack, int pMouseX, int pMouseY) {
-        stack.text(font, I18n.get("container.crafting"), 28, 6, 4210752, false);
-        stack.text(font, I18n.get("container.inventory"), 8, imageHeight - 96 + 2, 4210752, false);
+        stack.text(font, I18n.get("container.crafting"), 28, 6, 0xFF404040, false);
+        stack.text(font, I18n.get("container.inventory"), 8, imageHeight - 96 + 2, 0xFF404040, false);
     }
 
     @Override

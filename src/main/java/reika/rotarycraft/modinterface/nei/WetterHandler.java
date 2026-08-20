@@ -178,8 +178,8 @@
 //
 //		String s = r.recipe.getFluid().getLocalizedName();
 //		int l = Minecraft.getMinecraft().fontRenderer.width(s);
-//		Minecraft.getMinecraft().fontRenderer.text(s, x-l-5, y2-4, 0);
-//		Minecraft.getMinecraft().fontRenderer.text(r.recipe.getFluid().amount+" mB", x+20, y2-4, 0);
+//		Minecraft.getMinecraft().fontRenderer.text(s, x-l-5, y2-4, 0xFF000000);
+//		Minecraft.getMinecraft().fontRenderer.text(r.recipe.getFluid().amount+" mB", x+20, y2-4, 0xFF000000);
 //	}
 //
 //}

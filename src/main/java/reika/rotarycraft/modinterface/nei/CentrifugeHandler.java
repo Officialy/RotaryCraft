@@ -212,7 +212,7 @@
 //			Font fr = Minecraft.getMinecraft().fontRenderer;
 //			String s = f.getLocalizedName()+" ("+fs.amount+" mB) ("+r.recipe.getFluidChance()+"%)";
 //			int l = fr.width(s);
-//			fr.text(s, 166-l, 70, 0);
+//			fr.text(s, 166-l, 70, 0xFF000000);
 //		}
 //	}
 //

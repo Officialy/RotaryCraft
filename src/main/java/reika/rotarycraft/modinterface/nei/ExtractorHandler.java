@@ -295,8 +295,8 @@
 //	@Override
 //	public void drawExtras(int recipe) {
 //		int chance = this.getDupeChance(recipe);
-//		Minecraft.getMinecraft().fontRenderer.text(String.format("%d%s duplication chance per stage", chance, "%"), -2, 65, 0x333333, false);
-//		Minecraft.getMinecraft().fontRenderer.text(String.format("(Average %.2f units per ore)", Math.pow(1+0.01*this.getDupeChance(recipe), 4)), 9, 76, 0x333333, false);
+//		Minecraft.getMinecraft().fontRenderer.text(String.format("%d%s duplication chance per stage", chance, "%"), -2, 65, 0xFF333333, false);
+//		Minecraft.getMinecraft().fontRenderer.text(String.format("(Average %.2f units per ore)", Math.pow(1+0.01*this.getDupeChance(recipe), 4)), 9, 76, 0xFF333333, false);
 //
 //		ItemStack is = ((ExtractorRecipe)arecipes.get(recipe)).getSolution();
 //		ExtractorBonus bon = ExtractorBonus.getBonusForIngredient(is);
@@ -304,7 +304,7 @@
 //			ExtractorBonus bonus = ExtractorBonus.getBonusForIngredient(is);
 //			if (bonus != null) {
 //				String s = String.format("%.2f%s", bon.getBonusPercent(), "%");
-//				ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, s, 157, 34, 0);
+//				ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, s, 157, 34, 0xFF000000);
 //				//Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(s, 146, 34, 0xffffff);
 //			}
 //		}

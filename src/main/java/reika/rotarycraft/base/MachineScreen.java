@@ -123,11 +123,11 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
 //        else if (tile instanceof BlockEntityScaleableChest)
 //            font.draw(tile.getMultiValuedName(), 8, 6, 4210752);
 //        else
-        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, minecraft.font, tile.getName(), imageWidth / 2, 5, 4210752);
+        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, minecraft.font, tile.getName(), imageWidth / 2, 5, 0xFF404040);
 
         if (tile instanceof Container && this.labelInventory()) {
             int dx = this.inventoryLabelLeft() ? 8 : imageWidth - 58;
-            stack.text(Minecraft.getInstance().font, I18n.get("container.inventory"), dx, (imageHeight - 96) + 3, 4210752);
+            stack.text(Minecraft.getInstance().font, I18n.get("container.inventory"), dx, (imageHeight - 96) + 3, 0xFF404040);
         }
 
         this.drawHelpTab(j, k);

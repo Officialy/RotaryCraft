@@ -42,7 +42,7 @@ public class GuiAerosolizer extends GuiPowerOnlyMachine<BlockEntityAerosolizer, 
                 int bx = j + 62 + 18 * x;
                 int by = k + 17 + 18 * i;
                 api.fillBar(graphics, bx, by, 16, by + 16, aero.getPotionColor(slot), amount, 16, true);
-                api.drawCenteredStringNoShadow(graphics, font, String.format("%d", aero.getPotionLevel(slot)), bx + 8, by + 5, 0x000000);
+                api.drawCenteredStringNoShadow(graphics, font, String.format("%d", aero.getPotionLevel(slot)), bx + 8, by + 5, 0xFF000000);
             }
         }
     }

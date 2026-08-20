@@ -171,7 +171,7 @@
 //			int x = 23;
 //			int y = 57;
 //			String s = String.format("%s: %d mB", fs.getLocalizedName(), fs.amount);
-//			Minecraft.getMinecraft().fontRenderer.text(s, x, y, 0);
+//			Minecraft.getMinecraft().fontRenderer.text(s, x, y, 0xFF000000);
 //		}
 //	}
 //

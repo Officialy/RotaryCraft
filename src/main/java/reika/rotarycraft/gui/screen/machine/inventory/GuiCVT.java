@@ -142,20 +142,20 @@ public class GuiCVT extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Con
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         switch (mode) {
             case MANUAL -> {
-                graphics.text(font, "Belt Ratio:", imageWidth / 2 - 32, 31, 4210752, false);
+                graphics.text(font, "Belt Ratio:", imageWidth / 2 - 32, 31, 0xFF404040, false);
                 if (input == null || !input.isFocused())
                     graphics.text(font, String.format("%d", Math.abs(cvt.getRatio())), imageWidth / 2 + 36, 31, 0xffffffff, false);
             }
             case AUTO -> {
-                graphics.text(font, "Target Torque:", imageWidth / 2 - 48, 40, 4210752, false);
+                graphics.text(font, "Target Torque:", imageWidth / 2 - 48, 40, 0xFF404040, false);
                 if (input == null || !input.isFocused())
                     graphics.text(font, String.format("%d", Math.abs(cvt.getTargetTorque())), imageWidth / 2 + 36, 40, 0xffffffff, false);
-                graphics.text(font, String.format("Current Input: %d Nm", cvt.getTorqueIn()), imageWidth / 2 - 30, 60, 4210752, false);
+                graphics.text(font, String.format("Current Input: %d Nm", cvt.getTorqueIn()), imageWidth / 2 - 30, 60, 0xFF404040, false);
                 int r = cvt.getRatio();
-                graphics.text(font, String.format("Current Ratio: %dx (%s)", Math.abs(r), r < 0 ? "Torque" : "Speed"), imageWidth / 2 - 30, 72, 4210752, false);
+                graphics.text(font, String.format("Current Ratio: %dx (%s)", Math.abs(r), r < 0 ? "Torque" : "Speed"), imageWidth / 2 - 30, 72, 0xFF404040, false);
             }
             case REDSTONE -> {
-                graphics.text(font, "Belt Ratio:", imageWidth / 2 - 46, 48, 4210752, false);
+                graphics.text(font, "Belt Ratio:", imageWidth / 2 - 46, 48, 0xFF404040, false);
                 api.drawItemStack(graphics, font, new ItemStack(Blocks.REDSTONE_TORCH), 129, 31);
                 api.drawItemStack(graphics, font, new ItemStack(Blocks.REDSTONE_TORCH), 129, 54);
             }
@@ -182,9 +182,9 @@ public class GuiCVT extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Con
             int max = cvt.getMaxRatio();
             int r = Math.abs(cvt.getRatio());
             if (r > max)
-                api.drawCenteredStringNoShadow(graphics, font, String.format("(%d)", max), j + imageWidth / 2 + 88, k + 31, 0xff0000);
+                api.drawCenteredStringNoShadow(graphics, font, String.format("(%d)", max), j + imageWidth / 2 + 88, k + 31, 0xFFFF0000);
             else
-                api.drawCenteredStringNoShadow(graphics, font, String.format("(%d)", r == 0 ? 1 : r), j + imageWidth / 2 + 88, k + 31, 4210752);
+                api.drawCenteredStringNoShadow(graphics, font, String.format("(%d)", r == 0 ? 1 : r), j + imageWidth / 2 + 88, k + 31, 0xFF404040);
         }
 
         if (input != null)

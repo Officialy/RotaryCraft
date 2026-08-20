@@ -48,7 +48,7 @@ public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrind
 
 
         //foreground
-        poseStack.text(font, "Lubricant", j + 5, k + 11, 4210752);
+        poseStack.text(font, "Lubricant", j + 5, k + 11, 0xFF404040);
 
         if (api.isMouseInBox(j + 23, j + 32, k + 20, k + 76, mouseX, mouseY)) {
             api.drawTooltipAt(poseStack, font, String.format("%d/%d", grin.getFluidLevel(), BlockEntityGrinder.MAXLUBE), mouseX, mouseY);

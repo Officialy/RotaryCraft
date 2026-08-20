@@ -39,36 +39,56 @@ public class GearboxScreen extends NonPoweredMachineScreen<BlockEntityGearbox, G
 
         // foreground read-outs (legacy drawGuiContainerForegroundLayer, gui-relative coords offset by j,k)
         String s = gbx.isLiving() ? "Mana" : "Lubricant";
-        stack.text(font, s, j + 5, k + 12, 4210752);
+        stack.text(font, s, j + 5, k + 12, 0xFF404040);
 
-        stack.text(font, "Damage:", j + 68, k + 60, 0x000000);
+        stack.text(font, "Damage:", j + 68, k + 60, 0xFF000000);
         int damage = gbx.getDamagePercent();
         if (damage < 10)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0x00ff00);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFF00FF00);
         if (damage < 25 && damage >= 10)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0x55ff00);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFF55FF00);
         if (damage < 50 && damage >= 25)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xffff00);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFFFF00);
         if (damage < 80 && damage >= 50)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xff5500);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFF5500);
         if (damage >= 80)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xff0000);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFF0000);
 
-        stack.text(font, "Ratio:", j + 80, k + 24, 0x000000);
-        stack.text(font, "Mode:", j + 80, k + 36, 0x000000);
-        stack.text(font, "Power:", j + 74, k + 48, 0x000000);
+        stack.text(font, "Ratio:", j + 80, k + 24, 0xFF000000);
+        stack.text(font, "Mode:", j + 80, k + 36, 0xFF000000);
+        stack.text(font, "Power:", j + 74, k + 48, 0xFF000000);
 
-        stack.text(font, String.format("%5d ", gbx.getRatio()), j + 127, k + 24, 0x000000);
+        stack.text(font, String.format("%5d ", gbx.getRatio()), j + 127, k + 24, 0xFF000000);
         if (gbx.reduction)
-            stack.text(font, "Torque", j + 115, k + 36, 0x000000);
+            stack.text(font, "Torque", j + 115, k + 36, 0xFF000000);
         else
-            stack.text(font, " Speed", j + 115, k + 36, 0x000000);
+            stack.text(font, " Speed", j + 115, k + 36, 0xFF000000);
 
         String pw = RotaryAux.formatPower(gbx.power);
-        stack.text(font, pw, j + 150 - font.width(pw), k + 48, 0x000000);
+        stack.text(font, pw, j + 150 - font.width(pw), k + 48, 0xFF000000);
 
-        if (!gbx.isLiving() && api.isMouseInBox(j + 23, j + 32, k + 20, k + 76, pX, pY)) {
-            api.drawTooltipAt(stack, font, String.format("%.1f/%d", gbx.getLubricant() / 1000F, gbx.getMaxLubricant() / 1000), pX, pY);
+    }
+
+    /**
+     * The lubricant read-out used to be drawn straight into {@code extractBackground}, so the
+     * handbook buttons - which are widgets, extracted afterwards - painted over half of it.
+     * {@code extractTooltip} runs after {@code extractContents} and hands the text to the tooltip
+     * layer, which draws above everything.
+     *
+     * <p>Coordinates here are raw screen coordinates with no pose translate, so the hit box stays
+     * absolute (j/k based) exactly as the legacy {@code api.isMouseInBox} check had it.
+     */
+    @Override
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractTooltip(graphics, mouseX, mouseY);
+        if (gbx.isLiving())
+            return;
+        int j = (width - imageWidth) / 2;
+        int k = (height - imageHeight) / 2;
+        if (api.isMouseInBox(j + 23, j + 32, k + 20, k + 76, mouseX, mouseY)) {
+            graphics.setTooltipForNextFrame(font, Component.literal(
+                    String.format("%.1f/%d", gbx.getLubricant() / 1000F, gbx.getMaxLubricant() / 1000)),
+                    mouseX, mouseY);
         }
     }
 

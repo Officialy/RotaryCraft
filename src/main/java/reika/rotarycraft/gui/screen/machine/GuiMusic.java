@@ -153,9 +153,9 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
 
         input.drawKeys(stack);
 
-        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Note Length", 51, 42, 0);
-        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Instrument", 200, 42, 0);
-        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Channel Select", imageWidth / 2, 85, 0);
+        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Note Length", 51, 42, 0xFF000000);
+        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Instrument", 200, 42, 0xFF000000);
+        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Channel Select", imageWidth / 2, 85, 0xFF000000);
 
         // 26.1: divider line under the "Channel Select" label. Original 1.7 used Tesselator
         // primitives via stack.pose(); the new pipeline gives us a clean rectangle-fill API

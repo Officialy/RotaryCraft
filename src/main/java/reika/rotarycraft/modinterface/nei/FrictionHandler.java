@@ -120,8 +120,8 @@
 //		FrictionHeaterRecipe rec = (FrictionHeaterRecipe)arecipes.get(recipe);
 //		String temp = String.format("Requires %dC", rec.temperature);
 //		String time = String.format("Time: %.2fs", rec.duration/20D);
-//		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, temp, 83, 65, 0);
-//		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, time, 83, 80, 0);
+//		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, temp, 83, 65, 0xFF000000);
+//		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, time, 83, 80, 0xFF000000);
 //	}
 //
 //}

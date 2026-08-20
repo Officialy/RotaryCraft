@@ -41,7 +41,7 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, 
             c = 4;
         else if (te.getTemperature() >= 100)
             c = 2;
-        api.drawCenteredStringNoShadow(stack, font, te.getTemperature() + "C", imageWidth - 13 - c, 6, 4210752);
+        api.drawCenteredStringNoShadow(stack, font, te.getTemperature() + "C", imageWidth - 13 - c, 6, 0xFF404040);
     }
 
     /**

@@ -139,7 +139,7 @@
 //
 //		PulseJetRecipeNEI r = (PulseJetRecipeNEI)arecipes.get(recipe);
 //		String sg = String.format("Min Temperature: %dC", r.reference.requiredTemperature);
-//		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, sg, 83, 61, 0);
+//		ReikaGuiAPI.instance.drawCenteredStringNoShadow(Minecraft.getMinecraft().fontRenderer, sg, 83, 61, 0xFF000000);
 //	}
 //
 //}

@@ -356,7 +356,7 @@ public class HandbookAuxData {
             } else {
                 RotaryCraft.LOGGER.warn("No alloying recipes found for display in HandbookAuxData.");
             }
-            // api.drawCenteredStringNoShadow(f, p.getRequiredTemperature()+"C", dx+54, dy+66, 0); // p.getRequiredTemperature() is not available
+            // api.drawCenteredStringNoShadow(f, p.getRequiredTemperature()+"C", dx+54, dy+66, 0xFF000000); // p.getRequiredTemperature() is not available
         }
         else if (h == HandbookRegistry.COKE) {
             // This section relies on outdated RecipesBlastFurnace and BlastRecipe.
@@ -379,7 +379,7 @@ public class HandbookAuxData {
             } else {
                 RotaryCraft.LOGGER.warn("No coke recipes found for display in HandbookAuxData.");
             }
-            // api.drawCenteredStringNoShadow(f, p.temperature+"C", dx+54, dy+66, 0); // p.temperature is not available
+            // api.drawCenteredStringNoShadow(f, p.temperature+"C", dx+54, dy+66, 0xFF000000); // p.temperature is not available
         }
         else if (h == HandbookRegistry.STEELINGOT) {
             ItemStack is = RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance();
@@ -414,7 +414,7 @@ public class HandbookAuxData {
                 api.drawCircle(ri, xc, yc, r, 0);
                 api.drawLine(ri, xc, yc, xc+r, yc, 0);
                 api.drawLine(ri, xc, yc, (int)(xc+r-0.459*r), (int)(yc-0.841*r), 0);
-                ri.text(f, "One radian", xc+r+10, yc-4, 0x000000); // Changed f.draw to ri.drawString
+                ri.text(f, "One radian", xc+r+10, yc-4, 0xFF000000); // Changed f.draw to ri.drawString
             }
             else if (h == HandbookRegistry.PHYSICS) {
                 int r = 5;
@@ -425,8 +425,8 @@ public class HandbookAuxData {
                 api.drawLine(ri, xc+45, yc, xc+45, yc+20, 0xff0000);
                 api.drawLine(ri, xc+45, yc, xc+50, yc+5, 0xff0000);
                 api.drawLine(ri, xc+45, yc, xc+40, yc+5, 0xff0000);
-                ri.text(f, "Distance", xc+4, yc-10, 0x0000ff); // Changed f.draw to ri.drawString
-                ri.text(f, "Force", xc+30, yc+20, 0xff0000); // Changed f.draw to ri.drawString
+                ri.text(f, "Distance", xc+4, yc-10, 0xFF0000FF); // Changed f.draw to ri.drawString
+                ri.text(f, "Force", xc+30, yc+20, 0xFFFF0000); // Changed f.draw to ri.drawString
 
                 api.drawLine(ri, xc-2*r, (int)(yc-1.4*r), xc-r, yc-r*2-2, 0x8800ff);
                 api.drawLine(ri, xc-2*r, (int)(yc-1.4*r), xc-2*r-2, yc, 0x8800ff);
@@ -435,7 +435,7 @@ public class HandbookAuxData {
                 api.drawLine(ri, xc+2, yc+r*2+2, xc-r, yc+r*2+2, 0x8800ff);
                 api.drawLine(ri, xc+2, yc+r*2+2, xc-3, yc+r*2+7, 0x8800ff);
                 api.drawLine(ri, xc+2, yc+r*2+2, xc-3, yc+r*2-3, 0x8800ff);
-                ri.text(f, "Torque", xc-24, yc+18, 0x8800ff); // Changed f.draw to ri.drawString
+                ri.text(f, "Torque", xc-24, yc+18, 0xFF8800FF); // Changed f.draw to ri.drawString
 
                 r = 35;
                 xc = dx+125+r+r/2;
@@ -453,9 +453,9 @@ public class HandbookAuxData {
 
                 int xOffset = 2;
                 int yOffset = 6;
-                ri.text(f, "1 rad/s", xc+r-4+xOffset, yc+18-yOffset, 0xff0000); // Changed f.draw to ri.drawString
-                ri.text(f, n1+" rad/s", xc+r-4+xOffset, yc+18+10-yOffset, 0x0000ff); // Changed f.draw to ri.drawString
-                ri.text(f, n2+" rad/s", xc+r-4+xOffset, yc+18+20-yOffset, 0x00a000); // Changed f.draw to ri.drawString
+                ri.text(f, "1 rad/s", xc+r-4+xOffset, yc+18-yOffset, 0xFFFF0000); // Changed f.draw to ri.drawString
+                ri.text(f, n1+" rad/s", xc+r-4+xOffset, yc+18+10-yOffset, 0xFF0000FF); // Changed f.draw to ri.drawString
+                ri.text(f, n2+" rad/s", xc+r-4+xOffset, yc+18+20-yOffset, 0xFF00A000); // Changed f.draw to ri.drawString
             }
             /*
             else if (h == HandbookRegistry.BAITBOX && subpage == 1) { // BAITBOX is not a field
@@ -474,7 +474,7 @@ public class HandbookAuxData {
                 for (long key : s) {
                     if (t == subpage) {
                         String sg = String.format("- %d W", key);
-                        ri.text(f, sg, dx+14, dy+6, 0); // Changed f.draw to ri.drawString, fixed getStringWidth argument
+                        ri.text(f, sg, dx+14, dy+6, 0xFF000000); // Changed f.draw to ri.drawString, fixed getStringWidth argument
                         NavigableSet<MachineRegistry> c = powerData.get(key);
                         int k = 0;
                         int n = 0;
@@ -553,7 +553,7 @@ public class HandbookAuxData {
                                 if (cur.isDocumented()) { // Simplified condition
                                     //ReikaRenderHelper.disableLighting();
                                     String s = cur.getReturnType().displayName+" "+cur.displayName+"("+cur.getArgsAsString()+")";
-                                    ri.text(f, s, dx+11, dy+88+k*10, 0xffffff); // Changed f.draw to ri.drawString
+                                    ri.text(f, s, dx+11, dy+88+k*10, 0xFFFFFFFF); // Changed f.draw to ri.drawString
                                     k++;
                                 }
                             }

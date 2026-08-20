@@ -101,7 +101,7 @@
 //                ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
 //                IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(liq.getFluid());
 //                this.drawTexturedModelRectFromIcon(48, 17 + i * 39, ico, 16, 16);
-//                api.drawCenteredStringNoShadow(font, String.format("%d", liq.amount), 56, 21 + i * 39, 0);
+//                api.drawCenteredStringNoShadow(font, String.format("%d", liq.amount), 56, 21 + i * 39, 0xFF000000);
 //            } else {
 //                api.drawLine(48, 17 + i * 39, 16 + 48, 16 + 17 + i * 39, 0);
 //                api.drawLine(16 + 48, 17 + i * 39, 48, 16 + 17 + i * 39, 0);

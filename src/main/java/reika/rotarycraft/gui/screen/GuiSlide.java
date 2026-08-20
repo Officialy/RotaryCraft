@@ -95,8 +95,8 @@
 //            int d = input.getCursorPosition();
 //            //font.drawStringWithShadow(file.substring(d, Math.min(file.length(), 37+d)), getY+10, getY()+imageHeight-15, 0xaaaaaa);
 //        }
-//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "Select an image file. Be sure to include", posX + imageWidth / 2 + 1, posY + 4, 4210752);
-//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "C:/ and file extension and use \"/\", not \"\\\".", posX + imageWidth / 2 + 1, posY + 14, 4210752);
+//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "Select an image file. Be sure to include", posX + imageWidth / 2 + 1, posY + 4, 0xFF404040);
+//        ReikaGuiAPI.instance.drawCenteredStringNoShadow(font, "C:/ and file extension and use \"/\", not \"\\\".", posX + imageWidth / 2 + 1, posY + 14, 0xFF404040);
 //        super.render(poseStack, x, y, f);
 //    }
 //}
