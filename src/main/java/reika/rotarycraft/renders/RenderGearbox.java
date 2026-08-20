@@ -19,6 +19,11 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +31,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.dragonapi.ModList;
+import reika.dragonapi.libraries.rendering.ReikaColorAPI;
+import reika.rotarycraft.RotaryCraft;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
@@ -50,7 +57,11 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
 
     private static Field manaIcon;
 
+    /** Block-atlas sprite lookup for the lubricant surface; only obtainable at construction. */
+    private final SpriteGetter sprites;
+
     public RenderGearbox(BlockEntityRendererProvider.Context context) {
+        sprites = context.sprites();
         gearboxModel = new GearboxModel(context.bakeLayer(RotaryModelLayers.GEARBOX));
         gearboxModel4 = new Gearbox4Model(context.bakeLayer(RotaryModelLayers.GEARBOX_4));
         gearboxModel8 = new Gearbox8Model(context.bakeLayer(RotaryModelLayers.GEARBOX_8));
@@ -167,56 +178,73 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
         }
     }
 
-/*    private void renderLiquid(PoseStack stack, BlockEntity tile) {
-        stack.pushPose();
-//        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        BlockEntityGearbox tr = (BlockEntityGearbox) tile;
-        if (tr.getLubricant() > 0) {
-            Fluid f = RotaryFluids.LUBRICANT.get();
-            ReikaLiquidRenderer.bindFluidTexture(f);
-            IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(f);
-            int c = 0xffffff;
-            if (tr.isLiving()) {
-                ico = this.getManaIcon();
-                float t = tr.getTicksExisted() + ReikaRenderHelper.getPartialTickTime();
-                c = ReikaColorAPI.getModifiedHue(0x0000ff, 192 + (int) (32 * Math.sin(t / 16D)));
-            }
-            float u = ico.getMinU();
-            float v = ico.getMinV();
-            float du = ico.getMaxU();
-            float dv = ico.getMaxV();
-            double h = 0.0625 + (4D / 16D * tr.getLubricant() / tr.getMaxLubricant()) * 0.9;
-            if (tr.isFlipped) {
-                h = 1 - h;
-                GL11.glDisable(GL11.GL_CULL_FACE);
-            }
-            Tesselator tess = Tesselator.getInstance();
-            BufferBuilder v5 = tess.getBuilder();
-            v5.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-            v5.color(c);
-            v5.normal(0, 1, 0);
-            v5.vertex(0.0625, h, 0.9375).uv(u, dv);
-            v5.vertex(0.9375, h, 0.9375).uv(du, dv);
-            v5.vertex(0.9375, h, 0.0625).uv(du, v);
-            v5.vertex(0.0625, h, 0.0625).uv(u, v);
+/**
+     * The lubricant surface inside the casing, faithful to {@code RenderGearbox.renderLiquid}: a
+     * single horizontal quad inset 1px from each wall, its height scaling with the tank, textured
+     * with the lubricant's still sprite. A living (botania) gearbox shows mana instead — the
+     * original fell back to water's sprite tinted with a hue that cycles over ~16 ticks.
+     *
+     * <p>Drawn in unrotated block-local space: 1.7.10 called this straight off the TE's render
+     * coordinates, outside the model's flip/yaw, so the surface stays level regardless of facing.
+     */
+    private void renderLiquid(PoseStack poseStack, SubmitNodeCollector collector, BlockEntityGearbox tile, int light) {
+        int max = tile.getMaxLubricant();
+        int lube = tile.getLubricant();
+        if (max <= 0 || lube <= 0)
+            return;
 
-            if (tr.isFlipped) {
-                ico = Blocks.GLASS.getIcon(0, 0);
-                u = ico.getMinU();
-                v = ico.getMinV();
-                du = ico.getMaxU();
-                dv = ico.getMaxV();
-                double o = 0.005;
-                v5.vertex(0.0625, h - o, 0.9375).uv(u, dv);
-                v5.vertex(0.9375, h - o, 0.9375).uv(du, dv);
-                v5.vertex(0.9375, h - o, 0.0625).uv(du, v);
-                v5.vertex(0.0625, h - o, 0.0625).uv(u, v);
-            }
-            v5.end();
+        boolean living = tile.isLiving();
+        // Beware the transcription: 1.7.10 reads `4D/16D * lube / max`, i.e. (0.25 * lube) / max
+        // evaluated in doubles. Writing it as 0.25 * (lube / max) is integer division and pins the
+        // surface at the 1px floor forever.
+        double h = 0.0625 + (0.25D * lube / max) * 0.9;
+        boolean flipped = tile.isFlipped;
+        if (flipped)
+            h = 1 - h;
+
+        int colour = 0xFFFFFFFF;
+        Identifier tex;
+        if (living) {
+            // Original: mana pool icon if Botania exposed one, else water; tinted with a hue that
+            // sweeps 192..224 over 16 ticks.
+            float t = tile.getTicksExisted() + Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
+            colour = 0xFF000000 | ReikaColorAPI.getModifiedHue(0x0000ff, 192 + (int) (32 * Math.sin(t / 16D)));
+            tex = Identifier.withDefaultNamespace("block/water_still");
+        } else {
+            tex = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/fluid/lubricant");
         }
-        //GL11.glPopAttrib();
-        stack.popPose();
-    }*/
+
+        TextureAtlasSprite sprite = sprites.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, tex));
+        final float u = sprite.getU0(), v = sprite.getV0(), du = sprite.getU1(), dv = sprite.getV1();
+        final float y = (float) h;
+        final int rgba = colour;
+
+        PoseStack snapped = snapshot(poseStack);
+        collector.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), (pose, vc) -> {
+            var pp = snapped.last();
+            vc.addVertex(pp, 0.0625F, y, 0.9375F).setColor(rgba).setUv(u,  dv).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0F, 1F, 0F);
+            vc.addVertex(pp, 0.9375F, y, 0.9375F).setColor(rgba).setUv(du, dv).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0F, 1F, 0F);
+            vc.addVertex(pp, 0.9375F, y, 0.0625F).setColor(rgba).setUv(du, v ).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0F, 1F, 0F);
+            vc.addVertex(pp, 0.0625F, y, 0.0625F).setColor(rgba).setUv(u,  v ).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0F, 1F, 0F);
+        });
+
+        if (flipped) {
+            // Ceiling-mounted: the original laid a glass sheet just under the surface so the
+            // lubricant reads as held in rather than hanging.
+            TextureAtlasSprite glass = sprites.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS,
+                    Identifier.withDefaultNamespace("block/glass")));
+            final float gu = glass.getU0(), gv = glass.getV0(), gdu = glass.getU1(), gdv = glass.getV1();
+            final float gy = (float) (h - 0.005);
+            PoseStack snappedGlass = snapshot(poseStack);
+            collector.submitCustomGeometry(poseStack, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), (pose, vc) -> {
+                var pp = snappedGlass.last();
+                vc.addVertex(pp, 0.0625F, gy, 0.9375F).setColor(-1).setUv(gu,  gdv).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0F, 1F, 0F);
+                vc.addVertex(pp, 0.9375F, gy, 0.9375F).setColor(-1).setUv(gdu, gdv).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0F, 1F, 0F);
+                vc.addVertex(pp, 0.9375F, gy, 0.0625F).setColor(-1).setUv(gdu, gv ).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0F, 1F, 0F);
+                vc.addVertex(pp, 0.0625F, gy, 0.0625F).setColor(-1).setUv(gu,  gv ).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(0F, 1F, 0F);
+            });
+        }
+    }
 
     /**
      * 26.2 submit hook.
@@ -258,7 +286,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
 
         if (tile.isInWorld()) {
             IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
-//todo            this.renderLiquid(stack, tile);
+            this.renderLiquid(poseStack, collector, tile, light);
         }
     }
 

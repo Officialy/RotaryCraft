@@ -46,6 +46,7 @@ import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
+import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
 
 @WailaPlugin
 public class RotaryJadePlugin implements IWailaPlugin {
@@ -53,6 +54,7 @@ public class RotaryJadePlugin implements IWailaPlugin {
     private static final Identifier PIPE_UID  = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "pipe_info");
     private static final Identifier MACH_UID  = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "machine_power");
     private static final Identifier TANK_UID  = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "reservoir_fluid");
+    private static final Identifier GEAR_UID  = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "gearbox_lubricant");
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
@@ -69,6 +71,7 @@ public class RotaryJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(new MachinePowerTooltip(), BlockBasicMachine.class);
         registration.registerBlockComponent(new EngineExtraTooltip(),  BlockBasicMachine.class);
         registration.registerBlockComponent(new ReservoirTooltip(),    BlockBasicMachine.class);
+        registration.registerBlockComponent(new GearboxTooltip(),      BlockBasicMachine.class);
     }
 
     // ------------------------------------------------------------------------------------
@@ -204,6 +207,48 @@ public class RotaryJadePlugin implements IWailaPlugin {
 
     // ------------------------------------------------------------------------------------
     // Reservoir tank fill state — individual block + total network volume.
+
+    // ------------------------------------------------------------------------------------
+    // Gearbox — lubricant (or mana, for a living gearbox) level and wear.
+
+    private static final class GearboxTooltip implements IBlockComponentProvider {
+        @Override public Identifier getUid() { return GEAR_UID; }
+
+        /**
+         * Reads the client-side BE rather than requesting server data. The gearbox tank rides
+         * {@code writeSyncTag}, and {@code BlockEntityBase} sends a delta sync every
+         * {@code getPacketDelay()} (5) ticks, so the client value is at most a quarter-second
+         * stale — the same source the in-world lubricant surface and the GUI bar read.
+         */
+        @Override
+        public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+            BlockEntity be = accessor.getBlockEntity();
+            if (!(be instanceof BlockEntityGearbox gear)) return;
+
+            int max = gear.getMaxLubricant();
+            if (max > 0) {
+                int lube = gear.getLubricant();
+                String label = gear.isLiving() ? "Mana: " : "Lubricant: ";
+                tooltip.add(Component.literal(label).withStyle(ChatFormatting.GRAY)
+                        .append(Component.literal(lube + " / " + max + " mB")
+                                .withStyle(lube == 0 ? ChatFormatting.RED
+                                        : lube * 4 < max ? ChatFormatting.YELLOW : ChatFormatting.AQUA)));
+            }
+
+            int wear = gear.getDamagePercent();
+            if (wear > 0) {
+                tooltip.add(Component.literal("Damage: ").withStyle(ChatFormatting.GRAY)
+                        .append(Component.literal(wear + "%").withStyle(
+                                wear >= 80 ? ChatFormatting.RED
+                                        : wear >= 50 ? ChatFormatting.GOLD
+                                        : wear >= 25 ? ChatFormatting.YELLOW : ChatFormatting.GREEN)));
+            }
+
+            tooltip.add(Component.literal("Ratio: ").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(gear.getRatio() + "x " + (gear.reduction ? "torque" : "speed"))
+                            .withStyle(ChatFormatting.WHITE)));
+        }
+    }
 
     private static final class ReservoirTooltip implements IBlockComponentProvider {
         @Override public Identifier getUid() { return TANK_UID; }
