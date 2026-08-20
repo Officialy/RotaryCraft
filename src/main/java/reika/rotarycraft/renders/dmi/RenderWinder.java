@@ -46,6 +46,17 @@ public class RenderWinder extends RotaryTERenderer<BlockEntityWinder> {
         return WinderModel.TEXTURE_LOCATION;
     }
 
+    /**
+     * ModelWinder draws the coil mirrored ({@code glScaled(-1, 1, 1)}), which reverses the triangle
+     * winding; 1.7.10 compensated with {@code glFrontFace(GL_CW)}, and 26.2 has no per-draw
+     * equivalent. RenderTypes.entityCutout is the no-cull pipeline (entityCutoutCull is the culling
+     * one), so routing the model through it keeps the mirrored faces visible.
+     */
+    @Override
+    protected boolean useEntityCutout() {
+        return true;
+    }
+
     @Override
     protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer mbs, int light) {
         if (be instanceof BlockEntityWinder winder)

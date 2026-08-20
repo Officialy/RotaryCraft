@@ -1,4 +1,6 @@
 package reika.rotarycraft.models.animated;
+
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -203,42 +205,52 @@ public class WinderModel extends RotaryModelBase {
         return LayerDefinition.create(definition, 128, 128);
     }
 
+        /**
+     * Faithful to {@code ModelWinder.renderAll}: frame, then the spool turning on Z, then - only
+     * when a spring is loaded - the coil.
+     *
+     * <p>The coil is drawn mirrored: 1.7.10 paired its {@code glScaled(-1, 1, 1)} with
+     * {@code glFrontFace(GL_CW)} to keep the reversed winding facing outwards. 26.2 has no
+     * per-draw front-face switch, so {@link reika.rotarycraft.renders.dmi.RenderWinder} routes the
+     * model through the no-cull entityCutout pipeline instead.
+     */
     @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        /*boolean has = (Boolean)conditions.get(0);
-        shape1.render(te, f5);
-        shape2.render(te, f5);
-        shape2a.render(te, f5);
-        shape3.render(te, f5);
-        shape3a.render(te, f5);
-        shape4.render(te, f5);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
+                          ArrayList<?> conditions, float phi, float theta) {
+        shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        stack.pushPose();
         stack.translate(0, 1.0625, 0);
-        stack.glRotatef(phi, 0, 0, 1);
+        stack.mulPose(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1.0625, 0);
-        Shape5.render(te, f5);
-        Shape5a.render(te, f5);
-        stack.translate(0, 1.0625, 0);
-        stack.mulPose(-phi, 0, 0, 1);
-        stack.translate(0, -1.0625, 0);
-        if (!has)
-            return;
-        GL11.glScaled(-1, 1, 1);
-        GL11.glFrontFace(GL11.GL_CW);
-        Shape6.render(te, f5);
-        Shape6a.render(te, f5);
-        Shape6b.render(te, f5);
-        Shape6c.render(te, f5);
-        Shape6d.render(te, f5);
-        Shape6e.render(te, f5);
-        Shape6f.render(te, f5);
-        Shape6g.render(te, f5);
-        Shape6h.render(te, f5);
-        Shape6i.render(te, f5);
-        Shape6j.render(te, f5);
-        Shape6k.render(te, f5);
-        GL11.glScaled(-1, 1, 1);
-        GL11.glFrontFace(GL11.GL_CCW);*/
+        shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape5a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.popPose();
+
+        if (hasSpring(conditions))
+            this.renderSpring(stack, tex, light);
     }
+
+    /** True when the caller passed a loaded spring, as {@code li.get(0)} did in 1.7.10. */
+    public static boolean hasSpring(ArrayList<?> conditions) {
+        return conditions != null && !conditions.isEmpty() && Boolean.TRUE.equals(conditions.get(0));
+    }
+
+    /** The mirrored coil - see {@link #renderAll} for why it needs a no-cull pipeline. */
+    public void renderSpring(PoseStack stack, VertexConsumer tex, int light) {
+        stack.pushPose();
+        stack.scale(-1, 1, 1);
+        for (ModelPart p : new ModelPart[]{shape6, shape6a, shape6b, shape6c, shape6d, shape6e,
+                shape6f, shape6g, shape6h, shape6i, shape6j, shape6k})
+            p.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.popPose();
+    }
+
     @Override
     public Identifier getTexture() {
         return TEXTURE_LOCATION;
