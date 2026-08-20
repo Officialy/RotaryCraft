@@ -137,9 +137,21 @@ public class AerosolizerModel extends RotaryModelBase {
     }
 
     @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
+                          ArrayList<?> conditions, float phi, float theta) {
+        //boolean on = (Boolean)li.get(0);
+        shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape8.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape9.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        //if (on)
+        //    Shape10.render(te, f5);
+        shape11.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package reika.rotarycraft.models.engine;
 
+import com.mojang.math.Axis;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
@@ -184,8 +186,32 @@ public class ACModel extends RotaryModelBase {
     }
 
     @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
+                          ArrayList<?> conditions, float phi, float theta) {
+        shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape12.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        stack.translate(0, 1, 0);
+        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.translate(0, -1, 0);
+        shape13.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape14.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.translate(0, 1, 0);
+        stack.mulPose(Axis.XP.rotationDegrees(-phi));
+        stack.translate(0, -1, 0);
+
+        shape15.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape16.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape17.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape18.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape19.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape20.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
     @Override

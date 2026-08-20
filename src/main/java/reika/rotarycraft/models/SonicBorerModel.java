@@ -1,4 +1,6 @@
 package reika.rotarycraft.models;
+
+import com.mojang.math.Axis;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -562,8 +564,76 @@ public class SonicBorerModel extends RotaryModelBase {
     }
 
         @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
+                          ArrayList<?> conditions, float phi, float theta) {
+        shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1h.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1j.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1k.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1l.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1m.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1n.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1o.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1p.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1q.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1r.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        shape1s.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1t.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape8.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape8a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape8b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape8c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape8d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape8e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape8f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape9.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape9a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        double d = 0.9375;
+        stack.translate(0, d, 0);
+        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.translate(0, -d, 0);
+        shape1f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape1i.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2h.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2i.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2j.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2k.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.translate(0, d, 0);
+        stack.mulPose(Axis.ZP.rotationDegrees(-phi));
+        stack.translate(0, -d, 0);
     }
 
     @Override

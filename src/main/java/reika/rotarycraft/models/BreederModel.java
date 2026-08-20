@@ -292,8 +292,50 @@ public class BreederModel extends RotaryModelBase {
     }
 
         @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
+                          ArrayList<?> conditions, float phi, float theta) {
+        boolean wheat = (Boolean)conditions.get(0);
+        boolean carrots = (Boolean)conditions.get(1);
+        boolean meat = (Boolean)conditions.get(2);
+        boolean fish = (Boolean)conditions.get(3);
+        boolean greens = (Boolean)conditions.get(4);
+        shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        if (carrots) {
+            shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5h.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape5i.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        }
+        if (greens) {
+            shape6a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape6b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape6c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape6d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape6e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        }
+        if (meat) {
+            shape7.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape7a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape7b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        }
+        if (fish) {
+            shape8.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape8a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape8b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape8c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        }
+        if (wheat)
+            shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
     @Override

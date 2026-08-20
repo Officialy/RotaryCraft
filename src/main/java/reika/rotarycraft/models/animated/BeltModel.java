@@ -1,4 +1,6 @@
 package reika.rotarycraft.models.animated;
+
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
@@ -292,8 +294,46 @@ public class BeltModel extends RotaryModelBase {
     }
 
         @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
+                          ArrayList<?> conditions, float phi, float theta) {
+        shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shaape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        double d = 1;
+        stack.translate(0, d, 0);
+        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.translate(0, -d, 0);
+
+        s1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        s2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w7.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w8.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w9.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w10.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w11.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w12.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w13.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w14.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        w15.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        c1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        c2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        c3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        stack.translate(0, d, 0);
+        stack.mulPose(Axis.ZP.rotationDegrees(-phi));
+        stack.translate(0, -d, 0);
     }
 
     @Override

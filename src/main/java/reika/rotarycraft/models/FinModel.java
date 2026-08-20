@@ -1,4 +1,6 @@
 package reika.rotarycraft.models;
+
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin.FinSettings;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
@@ -226,8 +228,47 @@ public class FinModel extends RotaryModelBase {
     }
 
     @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
+                          ArrayList<?> conditions, float phi, float theta) {
+        shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+        boolean flag1 = true;
+        boolean flag2 = true;
+
+        boolean inWorld = conditions != null && !conditions.isEmpty() && (Boolean) conditions.get(0);
+        if (inWorld) {
+            shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape3a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape3b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape3c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+
+            FinSettings s = (FinSettings) conditions.get(1);
+            flag1 = s != FinSettings.QUARTER;
+            flag2 = s == FinSettings.FULL;
+        }
+
+        if (flag1) {
+            if (flag2) {
+                shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                shape2o.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                shape2n.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                shape2l.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                shape2j.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                shape2f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                shape2d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                shape2b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            }
+
+            shape2m.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            shape2e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        }
+
+        shape2k.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2i.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2h.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
 

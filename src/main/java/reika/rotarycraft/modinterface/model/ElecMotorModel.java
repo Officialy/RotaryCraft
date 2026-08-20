@@ -1,5 +1,7 @@
 package reika.rotarycraft.modinterface.model;
 
+import com.mojang.math.Axis;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;

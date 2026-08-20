@@ -1,4 +1,6 @@
 package reika.rotarycraft.models;
+
+import com.mojang.math.Axis;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import reika.rotarycraft.base.RotaryModelBase;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -130,8 +132,34 @@ public class CCTVModel extends RotaryModelBase {
     }
 
         @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
+                          ArrayList<?> conditions, float phi, float theta) {
+        double d = 0.175;
+        double d1 = 0.0625;
+        shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.translate(0, 0, d1);
+        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.translate(0, 0, -d1);
+        stack.translate(0, 1, 0);
+        stack.translate(0, 0, d);
+        stack.mulPose(Axis.XP.rotationDegrees(theta));
+        stack.translate(0, -1, 0);
+        stack.translate(0, 0, -d);
+        shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape3a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape5a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        shape7.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.translate(0, 1, 0);
+        stack.mulPose(Axis.XP.rotationDegrees(-theta));
+        stack.translate(0, -1, 0);
+        stack.translate(0, 0, d1);
+        stack.mulPose(Axis.YP.rotationDegrees(-phi));
+        stack.translate(0, 0, -d1);
     }
 
     @Override
