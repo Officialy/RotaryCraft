@@ -9,6 +9,10 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.transmission;
 
+import java.util.Locale;
+
+import net.minecraft.core.registries.BuiltInRegistries;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -52,6 +56,25 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
 
     public BlockEntityFlywheel(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.FLYWHEEL.get(), pos, state);
+        type = typeFromState(state);
+    }
+
+    /**
+     * 1.7.10 set the material from the placed item's damage value ({@code setMaterialFromItem});
+     * metadata items are gone and each material is its own block, so derive it from the block's
+     * registry path — the same trick {@link BlockEntityGearbox} uses for its ratio. Without this
+     * {@code type} stayed {@link Flywheels#WOOD} forever: every flywheel rendered the wood texture
+     * and ran with wood's torque limit, density and tensile strength.
+     */
+    private static Flywheels typeFromState(BlockState state) {
+        String path = BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath();
+        for (Flywheels f : Flywheels.list) {
+            if (path.equals(f.name().toLowerCase(Locale.ENGLISH) + "_flywheel"))
+                return f;
+        }
+        if (path.equals("depleted_uranium_flywheel"))
+            return Flywheels.DEPLETEDU;
+        return Flywheels.WOOD;
     }
 
     public int getOppTorque(BlockEntityFlywheel reading) {
@@ -105,12 +128,15 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
 //    }
 
     @Override
+    /** One block per material, so this is 1:1 — it drives what breaking the flywheel drops. */
     public Block getBlockEntityBlockID() {
         return switch (this.getTypeOrdinal()) {
             case WOOD -> RotaryBlocks.WOOD_FLYWHEEL.get();
-            case STONE, IRON -> RotaryBlocks.HSLA_FLYWHEEL.get();
-            case GOLD, DEPLETEDU -> RotaryBlocks.DIAMOND_FLYWHEEL.get();
+            case STONE -> RotaryBlocks.STONE_FLYWHEEL.get();
+            case IRON -> RotaryBlocks.IRON_FLYWHEEL.get();
+            case GOLD -> RotaryBlocks.GOLD_FLYWHEEL.get();
             case TUNGSTEN -> RotaryBlocks.TUNGSTEN_FLYWHEEL.get();
+            case DEPLETEDU -> RotaryBlocks.DEPLETED_URANIUM_FLYWHEEL.get();
             case BEDROCK -> RotaryBlocks.BEDROCK_FLYWHEEL.get();
         };
     }

@@ -209,9 +209,11 @@ public class RotaryCraftTabs {
 
         if (event.getTab() == ROTARYCRAFT_TRANSMISSION.get()) {
             event.accept(RotaryBlocks.WOOD_FLYWHEEL.get().asItem());
-            event.accept(RotaryBlocks.HSLA_FLYWHEEL.get().asItem());
+            event.accept(RotaryBlocks.STONE_FLYWHEEL.get().asItem());
+            event.accept(RotaryBlocks.IRON_FLYWHEEL.get().asItem());
+            event.accept(RotaryBlocks.GOLD_FLYWHEEL.get().asItem());
             event.accept(RotaryBlocks.TUNGSTEN_FLYWHEEL.get().asItem());
-            event.accept(RotaryBlocks.DIAMOND_FLYWHEEL.get().asItem());
+            event.accept(RotaryBlocks.DEPLETED_URANIUM_FLYWHEEL.get().asItem());
             event.accept(RotaryBlocks.BEDROCK_FLYWHEEL.get().asItem());
             event.accept(RotaryBlocks.HSLA_GEARBOX_2x.get().asItem());
             event.accept(RotaryBlocks.HSLA_GEARBOX_4x.get().asItem());

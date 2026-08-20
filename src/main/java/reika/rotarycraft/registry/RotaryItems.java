@@ -51,6 +51,7 @@ public class RotaryItems {
     public static final DeferredItem<Item> IRON_FLYWHEEL_CORE = reg("iron_flywheel_core", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> GOLD_FLYWHEEL_CORE = reg("gold_flywheel_core", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> TUNGSTEN_ALLOY_FLYWHEEL_CORE = reg("tungsten_alloy_flywheel_core", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> DEPLETED_URANIUM_FLYWHEEL_CORE = reg("depleted_uranium_flywheel_core", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> BEDROCK_ALLOY_FLYWHEEL_CORE = reg("bedrock_alloy_flywheel_core", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> NETHERRACK_DUST = reg("netherrack_dust", () -> new Item(itemProperties()));
 

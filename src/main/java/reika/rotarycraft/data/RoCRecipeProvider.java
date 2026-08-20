@@ -9,9 +9,10 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CookingBookCategory;
@@ -20,24 +21,11 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import org.jspecify.annotations.Nullable;
-import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
-import net.neoforged.neoforge.fluids.FluidStack;
-import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.CompactorRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.CrystallizerRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
-import reika.rotarycraft.registry.RotaryFluids;
-import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
-import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.*;
 import reika.rotarycraft.items.tools.ItemEngineUpgrade.UpgradeType;
 import reika.rotarycraft.registry.ExtractOres;
 import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryItems;
 
 import java.util.List;
@@ -634,13 +622,14 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .save(out);
 
             // --- Flywheel blocks (legacy "W","M": 1 core + 1 MOUNT → 1 flywheel block) ---
+            // RotaryRecipes 1436: one per Flywheels entry, "W","M" = core over a mount.
             flywheel(RotaryBlocks.WOOD_FLYWHEEL.get(), RotaryItems.WOOD_FLYWHEEL_CORE.get());
-            flywheel(RotaryBlocks.HSLA_FLYWHEEL.get(), RotaryItems.IRON_FLYWHEEL_CORE.get());
+            flywheel(RotaryBlocks.STONE_FLYWHEEL.get(), RotaryItems.STONE_FLYWHEEL_CORE.get());
+            flywheel(RotaryBlocks.IRON_FLYWHEEL.get(), RotaryItems.IRON_FLYWHEEL_CORE.get());
+            flywheel(RotaryBlocks.GOLD_FLYWHEEL.get(), RotaryItems.GOLD_FLYWHEEL_CORE.get());
             flywheel(RotaryBlocks.TUNGSTEN_FLYWHEEL.get(), RotaryItems.TUNGSTEN_ALLOY_FLYWHEEL_CORE.get());
+            flywheel(RotaryBlocks.DEPLETED_URANIUM_FLYWHEEL.get(), RotaryItems.DEPLETED_URANIUM_FLYWHEEL_CORE.get());
             flywheel(RotaryBlocks.BEDROCK_FLYWHEEL.get(), RotaryItems.BEDROCK_ALLOY_FLYWHEEL_CORE.get());
-            // DIAMOND_FLYWHEEL: there is no diamond flywheel tier upstream (the 7th Flywheels enum
-            // value is DEPLETEDU, gated on mod-provided depleted uranium); the port's misnamed
-            // "diamond" flywheel block has no canonical core item/recipe — left for a later pass.
 
             // --- Gearbox blocks (legacy: 1 gear + 1 MOUNT → 1 gearbox block, per ratio) ---
             gearbox(RotaryBlocks.HSLA_GEARBOX_2x.get(), RotaryItems.HSLA_STEEL_GEAR_2x.get());
@@ -757,14 +746,21 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
                     .unlockedBy("has_hsla_steel_spring", has(RotaryItems.HSLA_STEEL_SPRING.get()))
                     .save(out);
 
-            // Bedrock flywheel core (RotaryRecipes 243, per-tier "WWW","WGW","WWW"): a ring of the
-            // tier's raw material (bedrock alloy ingot) around a steel gear.
-            shaped(RecipeCategory.MISC, RotaryItems.BEDROCK_ALLOY_FLYWHEEL_CORE.get())
-                    .define('W', RotaryItems.BEDROCK_ALLOY_INGOT.get())
-                    .define('G', RotaryItems.HSLA_STEEL_GEAR.get())
-                    .pattern("WWW").pattern("WGW").pattern("WWW")
-                    .unlockedBy("has_bedrock_alloy_ingot", has(RotaryItems.BEDROCK_ALLOY_INGOT.get()))
-                    .save(out);
+            // Flywheel cores (RotaryRecipes 236-243): per tier, "WWW","WGW","WWW" — a ring of the
+            // tier's raw material around a steel gear. Raw materials from Flywheels.getRawMaterial:
+            // plankWood / stone / iron ingot / gold ingot / tungsten alloy ingot (1.7.10's
+            // misleadingly named ItemStacks.springtungsten = compactNames[12] "misc.tungalloy") /
+            // the depletedUranium oredict / bedrock alloy ingot.
+            flywheelCore(RotaryItems.WOOD_FLYWHEEL_CORE.get(), ItemTags.PLANKS, "planks");
+            flywheelCore(RotaryItems.STONE_FLYWHEEL_CORE.get(), Blocks.STONE, "stone");
+            flywheelCore(RotaryItems.IRON_FLYWHEEL_CORE.get(), Items.IRON_INGOT, "iron_ingot");
+            flywheelCore(RotaryItems.GOLD_FLYWHEEL_CORE.get(), Items.GOLD_INGOT, "gold_ingot");
+            flywheelCore(RotaryItems.TUNGSTEN_ALLOY_FLYWHEEL_CORE.get(), RotaryItems.TUNGSTEN_ALLOY_INGOT.get(), "tungsten_alloy_ingot");
+            // 1.7.10 skipped this recipe entirely when the depletedUranium oredict was empty
+            // (ReactorCraft registers it). A tag nothing populates behaves the same way: the recipe
+            // exists but never matches, so RotaryCraft stays standalone-safe with no conditions.
+            flywheelCore(RotaryItems.DEPLETED_URANIUM_FLYWHEEL_CORE.get(), DEPLETED_URANIUM, "depleted_uranium");
+            flywheelCore(RotaryItems.BEDROCK_ALLOY_FLYWHEEL_CORE.get(), RotaryItems.BEDROCK_ALLOY_INGOT.get(), "bedrock_alloy_ingot");
 
             // Coil block / energy storage gear (meta 2): "BCS"," M " — brake + tension coil +
             // shaft core over a mount.
@@ -2842,6 +2838,32 @@ public final class RoCRecipeProvider extends RecipeProvider.Runner {
         // =====================================================================================
 
         /** Legacy line 700 pattern: 1 core + 1 MOUNT → 1 flywheel block. */
+        /**
+         * 1.7.10 keyed the depleted-uranium flywheel core off the {@code depletedUranium} oredict,
+         * which ReactorCraft registers for its depleted fuel rod and old pellet, and skipped the
+         * recipe when nothing provided it. The modern equivalent is a {@code c:} tag: RotaryCraft
+         * needs no dependency on ReactorCraft, and if nothing populates the tag the recipe simply
+         * never matches — the same outcome as the legacy skip.
+         */
+        private static final TagKey<Item> DEPLETED_URANIUM = TagKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath("c", "ingots/depleted_uranium"));
+
+        /** Legacy line 243: a ring of the tier's raw material around a steel gear. */
+        private void flywheelCore(ItemLike core, ItemLike raw, String rawName) {
+            finishCore(shaped(RecipeCategory.MISC, core.asItem()).define('W', raw), rawName);
+        }
+
+        private void flywheelCore(ItemLike core, TagKey<Item> raw, String rawName) {
+            finishCore(shaped(RecipeCategory.MISC, core.asItem()).define('W', raw), rawName);
+        }
+
+        private void finishCore(ShapedRecipeBuilder b, String rawName) {
+            b.define('G', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .pattern("WWW").pattern("WGW").pattern("WWW")
+                    .unlockedBy("has_" + rawName, has(RotaryItems.HSLA_STEEL_GEAR.get()))
+                    .save(out);
+        }
+
         private void flywheel(ItemLike flywheel, ItemLike core) {
             shaped(RecipeCategory.REDSTONE, flywheel.asItem())
                     .define('W', core)

@@ -211,8 +211,9 @@ public class RotaryBlockEntities {
     // looks it up from the block when first ticked.
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityFlywheel>> FLYWHEEL = BLOCK_ENTITIES.register("flywheel", () ->
             new BlockEntityType<>(BlockEntityFlywheel::new,
-                    RotaryBlocks.WOOD_FLYWHEEL.get(), RotaryBlocks.HSLA_FLYWHEEL.get(),
-                    RotaryBlocks.TUNGSTEN_FLYWHEEL.get(), RotaryBlocks.DIAMOND_FLYWHEEL.get(),
+                    RotaryBlocks.WOOD_FLYWHEEL.get(), RotaryBlocks.STONE_FLYWHEEL.get(),
+                    RotaryBlocks.IRON_FLYWHEEL.get(), RotaryBlocks.GOLD_FLYWHEEL.get(),
+                    RotaryBlocks.TUNGSTEN_FLYWHEEL.get(), RotaryBlocks.DEPLETED_URANIUM_FLYWHEEL.get(),
                     RotaryBlocks.BEDROCK_FLYWHEEL.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityReservoir>> RESERVOIR = BLOCK_ENTITIES.register("reservoir", () ->

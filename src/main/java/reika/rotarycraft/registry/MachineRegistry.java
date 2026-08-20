@@ -96,7 +96,7 @@ public enum MachineRegistry implements TileEnum {
     AC_ENGINE("machine.ac_engine", RotaryBlocks.AC_ENGINE.get(), BlockEntityACEngine.class, EngineType.AC),
     JET_ENGINE(true, "machine.jet_engine", RotaryBlocks.JET_ENGINE.get(), BlockEntityJetEngine.class, EngineType.JET),
 
-    FLYWHEEL(true, "machine.flywheel", RotaryBlocks.HSLA_FLYWHEEL.get(), BlockEntityFlywheel.class),
+    FLYWHEEL(true, "machine.flywheel", RotaryBlocks.IRON_FLYWHEEL.get(), BlockEntityFlywheel.class),
     WOOD_SHAFT("machine.shaft", RotaryBlocks.WOOD_SHAFT.get(), BlockEntityShaft.class),
     STONE_SHAFT("machine.shaft", RotaryBlocks.STONE_SHAFT.get(), BlockEntityShaft.class),
     HSLA_SHAFT("machine.shaft", RotaryBlocks.HSLA_SHAFT.get(), BlockEntityShaft.class),
@@ -400,8 +400,10 @@ public enum MachineRegistry implements TileEnum {
                 || id == RotaryBlocks.STONE_GEARBOX_2x.get()  || id == RotaryBlocks.STONE_GEARBOX_4x.get()
                 || id == RotaryBlocks.STONE_GEARBOX_8x.get()  || id == RotaryBlocks.STONE_GEARBOX_16x.get() )
             return GEARBOX;
-        if (id == RotaryBlocks.HSLA_FLYWHEEL.get() || id == RotaryBlocks.BEDROCK_FLYWHEEL.get() || id == RotaryBlocks.DIAMOND_FLYWHEEL.get()
-                || id == RotaryBlocks.TUNGSTEN_FLYWHEEL.get() || id == RotaryBlocks.WOOD_FLYWHEEL.get())
+        if (id == RotaryBlocks.WOOD_FLYWHEEL.get() || id == RotaryBlocks.STONE_FLYWHEEL.get()
+                || id == RotaryBlocks.IRON_FLYWHEEL.get() || id == RotaryBlocks.GOLD_FLYWHEEL.get()
+                || id == RotaryBlocks.TUNGSTEN_FLYWHEEL.get() || id == RotaryBlocks.DEPLETED_URANIUM_FLYWHEEL.get()
+                || id == RotaryBlocks.BEDROCK_FLYWHEEL.get())
             return FLYWHEEL;
         return machineMappings.get(id);
     }

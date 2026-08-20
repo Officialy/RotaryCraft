@@ -26,10 +26,18 @@ public class RotaryBlocks {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(RotaryCraft.MODID);
 
     public static final DeferredBlock<Block> GPR = registerMachineBlock("gpr", () -> new BlockGPR(blockProperties().strength(20)));
+    // 1.7.10 had ONE flywheel block whose material lived in the TE, set from the placed item's
+    // damage value; metadata items are gone, so the port follows its own gearbox/shaft convention
+    // of one block per material. The set is {@link Flywheels}: wood, stone, iron, gold, tungsten,
+    // depleted uranium, bedrock — NOT the gearbox's materials, which is what these were originally
+    // (mis)named after. They stay BlockGearbox instances: that class already supplies the BE, the
+    // ticker and the flywheel branch, and the class name was never the fidelity gap.
     public static final DeferredBlock<Block> WOOD_FLYWHEEL = registerMachineBlock("wood_flywheel", () -> new BlockGearbox(GearboxTypes.WOOD, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> HSLA_FLYWHEEL = registerMachineBlock("hsla_flywheel", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> STONE_FLYWHEEL = registerMachineBlock("stone_flywheel", () -> new BlockGearbox(GearboxTypes.STONE, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> IRON_FLYWHEEL = registerMachineBlock("iron_flywheel", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> GOLD_FLYWHEEL = registerMachineBlock("gold_flywheel", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
     public static final DeferredBlock<Block> TUNGSTEN_FLYWHEEL = registerMachineBlock("tungsten_flywheel", () -> new BlockGearbox(GearboxTypes.TUNGSTEN, blockProperties().strength(20)));
-    public static final DeferredBlock<Block> DIAMOND_FLYWHEEL = registerMachineBlock("diamond_flywheel", () -> new BlockGearbox(GearboxTypes.DIAMOND, blockProperties().strength(20)));
+    public static final DeferredBlock<Block> DEPLETED_URANIUM_FLYWHEEL = registerMachineBlock("depleted_uranium_flywheel", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));
     public static final DeferredBlock<Block> BEDROCK_FLYWHEEL = registerMachineBlock("bedrock_flywheel", () -> new BlockGearbox(GearboxTypes.BEDROCK, blockProperties().strength(20)));
 
     public static final DeferredBlock<Block> HSLA_GEARBOX_2x = registerMachineBlock("hsla_gearbox_2x", () -> new BlockGearbox(GearboxTypes.STEEL, blockProperties().strength(20)));

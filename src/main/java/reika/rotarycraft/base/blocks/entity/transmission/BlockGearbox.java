@@ -155,9 +155,11 @@ public class BlockGearbox extends BlockBasicMachine {
     private static boolean isFlywheelBlock(BlockState state) {
         var block = state.getBlock();
         return block == RotaryBlocks.WOOD_FLYWHEEL.get()
-                || block == RotaryBlocks.HSLA_FLYWHEEL.get()
+                || block == RotaryBlocks.STONE_FLYWHEEL.get()
+                || block == RotaryBlocks.IRON_FLYWHEEL.get()
+                || block == RotaryBlocks.GOLD_FLYWHEEL.get()
                 || block == RotaryBlocks.TUNGSTEN_FLYWHEEL.get()
-                || block == RotaryBlocks.DIAMOND_FLYWHEEL.get()
+                || block == RotaryBlocks.DEPLETED_URANIUM_FLYWHEEL.get()
                 || block == RotaryBlocks.BEDROCK_FLYWHEEL.get();
     }
 
