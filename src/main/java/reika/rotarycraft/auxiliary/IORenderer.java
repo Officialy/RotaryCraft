@@ -20,13 +20,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
 import reika.rotarycraft.api.power.ShaftPowerReceiver;
 import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
-import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.blockentities.BlockEntityWinder;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
 import reika.rotarycraft.blockentities.transmission.BlockEntityDistributionClutch;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
@@ -48,6 +45,13 @@ import reika.rotarycraft.renders.RotaryRenderPipelines;
 public abstract class IORenderer {
 
     private static final Direction[] dirs = Direction.values();
+
+    /**
+     * 1.7.10 drew every IO box at {@code x - 0.0625*expand .. x + 1 + 0.0625*expand} with
+     * {@code expand = 0.5}, i.e. inflated by half a pixel on all six sides so the box clears the
+     * neighbour's surfaces. A flush unit cube z-fights with those faces.
+     */
+    private static final float EXPAND = 0.03125F;
 
     /* ----------------------------------------------------------------------- */
     /*  Public entry points                                                    */
@@ -183,22 +187,11 @@ public abstract class IORenderer {
                 }
             }
         }
-        // 26.1: cooling fin isn't an IOMachine — it's a TemperatureTE. The original 1.7
-        // renderer drew a cyan (0, 127, 255) bounding box around the target block via
-        // ReikaAABBHelper.renderAABB. Since that API isn't ported yet, we render a cyan IO
-        // cube on the FACING face instead — same colour as the original target indicator.
-        if (teb instanceof BlockEntityCoolingFin fin) {
-            int io = fin.ticks; // same per-tick decay timer the IOMachine path uses
-            if (flag) io = 255;
-            if (io <= 0) return;
-            BlockState st = fin.getBlockState();
-            if (st != null && st.hasProperty(BlockRotaryCraftMachine.FACING)) {
-                Direction dir = st.getValue(BlockRotaryCraftMachine.FACING);
-                // Cyan (0, 127, 255) — matches original 1.7 target bounding box colour
-                int[] color = {0, 127, 255, io};
-                renderBox(matrixStack, collector, dir.getStepX(), dir.getStepY(), dir.getStepZ(), color);
-            }
-        }
+        // The cooling fin's cyan target indicator is NOT drawn here. 1.7.10 kept it in
+        // RenderFin.renderTarget as an AABB around the block the fin is actually cooling - which
+        // can be several blocks away - and the port does the same. An earlier version of this
+        // method drew a second cyan cube on the fin's FACING face, which was both an invention
+        // and a duplicate.
     }
 
     /* ----------------------------------------------------------------------- */
@@ -244,8 +237,8 @@ public abstract class IORenderer {
         int fillRgba    = (fillAlpha    << 24) | ((color[0] & 0xFF) << 16) | ((color[1] & 0xFF) << 8) | (color[2] & 0xFF);
         int outlineRgba = (outlineAlpha << 24) | ((color[0] & 0xFF) << 16) | ((color[1] & 0xFF) << 8) | (color[2] & 0xFF);
 
-        final float x0 = ox, y0 = oy, z0 = oz;
-        final float x1 = ox + 1, y1 = oy + 1, z1 = oz + 1;
+        final float x0 = ox - EXPAND, y0 = oy - EXPAND, z0 = oz - EXPAND;
+        final float x1 = ox + 1 + EXPAND, y1 = oy + 1 + EXPAND, z1 = oz + 1 + EXPAND;
         // Filled translucent body.
         // 26.1 fix: was using {@code RenderTypes.debugFilledBox()} which has
         // {@code CompareOp.LESS_THAN_OR_EQUAL} depth state — so when an IO cube sat behind the
@@ -284,7 +277,8 @@ public abstract class IORenderer {
     }
 
     /**
-     * One line segment. {@link RenderTypes#lines} uses the POSITION_COLOR_NORMAL_LINE_WIDTH
+     * One line segment, at the GL default width 1.7.10 drew these with (it never called
+     * {@code glLineWidth}). {@link RenderTypes#lines} uses the POSITION_COLOR_NORMAL_LINE_WIDTH
      * vertex format — every vertex must carry a {@code setLineWidth} call or
      * {@code BufferBuilder.endLastVertex} crashes with "Missing elements in vertex: LineWidth".
      */
@@ -292,8 +286,8 @@ public abstract class IORenderer {
         float nx = x2 - x1, ny = y2 - y1, nz = z2 - z1;
         float len = (float) Math.sqrt(nx * nx + ny * ny + nz * nz);
         if (len > 0) { nx /= len; ny /= len; nz /= len; }
-        b.addVertex(pose, x1, y1, z1).setColor(rgba).setNormal(pose, nx, ny, nz).setLineWidth(2.0F);
-        b.addVertex(pose, x2, y2, z2).setColor(rgba).setNormal(pose, nx, ny, nz).setLineWidth(2.0F);
+        b.addVertex(pose, x1, y1, z1).setColor(rgba).setNormal(pose, nx, ny, nz).setLineWidth(1.0F);
+        b.addVertex(pose, x2, y2, z2).setColor(rgba).setNormal(pose, nx, ny, nz).setLineWidth(1.0F);
     }
 
     private static void emitCube(PoseStack.Pose pose, VertexConsumer b, float x0, float y0, float z0, float x1, float y1, float z1, int rgba) {

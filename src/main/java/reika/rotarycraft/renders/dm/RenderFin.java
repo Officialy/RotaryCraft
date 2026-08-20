@@ -24,7 +24,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import reika.dragonapi.libraries.ReikaAABBHelper;
 import reika.rotarycraft.auxiliary.IORenderer;
@@ -122,7 +121,7 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
             IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
             if (tile.ticks > 0) {
                 int[] xyz = tile.getTarget();
-                AABB box = AABB.of(new BoundingBox(xyz[0], xyz[1], xyz[2], xyz[0] + 1, xyz[1] + 1, xyz[2] + 1))
+                AABB box = new AABB(xyz[0], xyz[1], xyz[2], xyz[0] + 1, xyz[1] + 1, xyz[2] + 1)
                         .inflate(0.03125, 0.03125, 0.03125);
                 ReikaAABBHelper.renderAABB(poseStack, collector, box,
                         tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(),
@@ -135,7 +134,7 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
 
     private void renderTarget(PoseStack stack, BlockEntityCoolingFin tile) {
         int[] xyz = tile.getTarget();
-        AABB box = AABB.of(new BoundingBox(xyz[0], xyz[1], xyz[2], xyz[0] + 1, xyz[1] + 1, xyz[2] + 1)).inflate(0.03125, 0.03125, 0.03125);
+        AABB box = new AABB(xyz[0], xyz[1], xyz[2], xyz[0] + 1, xyz[1] + 1, xyz[2] + 1).inflate(0.03125, 0.03125, 0.03125);
         ReikaAABBHelper.renderAABB(stack, box, tile.getBlockPos().getX(), tile.getBlockPos().getY(), tile.getBlockPos().getZ(), tile.ticks, 0, 127, 255, true);
     }
 
