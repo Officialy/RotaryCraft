@@ -568,43 +568,33 @@ public class GuiHandbook extends Screen {
         }
 
         long SECOND = 1000000000L;
-        int timeStep = (int) ((System.nanoTime() / SECOND) % MaterialRegistry.values().length);
         float yaw = (int) (System.nanoTime() / 20000000) % 360;
-        float variable = 0;
 
         BlockEntity te = null;
         if (m.getBlockState().getBlock() instanceof EntityBlock eb)
             te = eb.newBlockEntity(BlockPos.ZERO, m.getBlockState());
 
+        // 1.7.10 also computed a `variable` here (-1000F * (timeStep + 1) for shaft/gearbox,
+        // -1000/-2000/-3000 for worm/CVT/coil) and passed it as the *partialTicks* argument of
+        // TileEntityRendererDispatcher.renderTileEntityAt. Only RenderAdvGear ever read it
+        // (`par8 <= -999F` -> `itemMetadata = (int)-par8/1000`), to pick which of
+        // worm/CVT/coil/high-gear to draw when there was no in-world TE; every other renderer
+        // ignored it, and nothing treated it as an angle. MachineModels already resolves the model
+        // per MachineRegistry here, so the sentinel has no job left — and routing it into the
+        // model's `phi` made the handbook gears snap to an arbitrary angle once a second.
         ArrayList<?> conditions = null;
-        if (h == HandbookRegistry.SHAFT) {
-            variable = -1000F * (timeStep + 1);
-        }
-        if (h == HandbookRegistry.FLYWHEEL) {
-            int tick = (int) ((System.nanoTime() / SECOND) % Flywheels.list.length);
-            variable = 500 - 1000F * (tick + 1);
-        }
-        if (h == HandbookRegistry.GEARBOX) {
-            variable = -1000F * (timeStep + 1);
-        }
-        if (h == HandbookRegistry.WORM) {
-            variable = -1000F;
-        }
-        if (h == HandbookRegistry.CVT) {
-            variable = -2000F;
-        }
         if (h == HandbookRegistry.COIL) {
+            // Real behaviour, not part of the sentinel: alternate the coil's bedrock look.
             int tick = (int) ((System.nanoTime() / SECOND) % 2);
             if (tick == 1 && te instanceof BlockEntityAdvancedGear gear)
                 gear.setBedrock(true);
-            variable = -3000F;
         }
         if (h == HandbookRegistry.HYDROENGINE) {
             conditions = ReikaJavaLibrary.makeListFrom(false, false);
         }
 
         int half = 40;
-        graphics.submitPictureInPictureRenderState(new GuiMachineRenderState(m, te, conditions, variable, renderq, yaw,
+        graphics.submitPictureInPictureRenderState(new GuiMachineRenderState(m, te, conditions, renderq, yaw,
                 x - half, y - 30, x + half, y + 50, 48, null));
     }
 

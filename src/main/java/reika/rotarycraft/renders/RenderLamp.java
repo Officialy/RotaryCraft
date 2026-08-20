@@ -22,6 +22,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import reika.dragonapi.libraries.java.ReikaJavaLibrary;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
@@ -59,21 +60,35 @@ public class RenderLamp extends RotaryTERenderer<BlockEntityFloodlight> {
             stack.mulPose(Axis.YP.rotationDegrees(-f));
         }
 
-        Direction facing = blockstate.getValue(BlockRotaryCraftMachine.FACING);
-        if (tile.isInWorld() && (facing == Direction.DOWN || facing == Direction.UP)) {
-            VertexConsumer vertexconsumer = bufferSource;
-            lampModelV.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        // 1.7.10 called renderAll with the model's condition list, not a blanket root render:
+        // the vertical lamp only draws its beam segments while `beammode` is on, and the
+        // horizontal one skips its backing plate when told it is vertical (never, at this site).
+        if (isVertical(tile)) {
+            lampModelV.renderAll(stack, bufferSource, pPackedLight, tile,
+                    ReikaJavaLibrary.makeListFrom(tile.beammode), 0);
         } else {
-            VertexConsumer vertexconsumer = bufferSource;
-            lampModel.renderToBuffer(stack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            lampModel.renderAll(stack, bufferSource, pPackedLight, tile,
+                    ReikaJavaLibrary.makeListFrom(false), 0);
         }
 
         stack.popPose();
     }
 
+    /** Ceiling/floor mount — the legacy {@code getBlockMetadata() > 3} test. */
+    private static boolean isVertical(BlockEntityFloodlight tile) {
+        if (!tile.isInWorld())
+            return false;
+        Direction facing = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING);
+        return facing == Direction.DOWN || facing == Direction.UP;
+    }
+
+    // 1.7.10 bound LampVertical.png for the vertical model and lamptex.png otherwise; the port
+    // returned the horizontal texture for both, so lampvertical.png shipped but was never used.
     @Override
     protected Identifier getSubmitTexture(BlockEntity be) {
-        return LampModel.TEXTURE_LOCATION;
+        return be instanceof BlockEntityFloodlight lamp && isVertical(lamp)
+                ? VLampModel.TEXTURE_LOCATION
+                : LampModel.TEXTURE_LOCATION;
     }
 
     @Override

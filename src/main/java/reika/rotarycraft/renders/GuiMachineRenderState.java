@@ -12,12 +12,15 @@ import java.util.ArrayList;
  * Picture-in-picture state for drawing a rotating machine model inside a GUI
  * (the handbook's machine pages). Carries everything {@link GuiMachineRenderer}
  * needs to bake and pose the {@link reika.rotarycraft.base.RotaryModelBase}.
+ *
+ * <p>There is deliberately no animation angle: 1.7.10 handbook previews rendered the
+ * machine's own {@code phi}, which is 0 on the throwaway BE built for the page, so the
+ * model is static under a rotating camera.
  */
 public record GuiMachineRenderState(
         MachineRegistry machine,
         @Nullable BlockEntity blockEntity,
         @Nullable ArrayList<?> conditions,
-        float phi,
         float pitch,
         float yaw,
         int x0,
@@ -30,9 +33,9 @@ public record GuiMachineRenderState(
 ) implements PictureInPictureRenderState {
 
     public GuiMachineRenderState(MachineRegistry machine, @Nullable BlockEntity blockEntity, @Nullable ArrayList<?> conditions,
-                                 float phi, float pitch, float yaw,
+                                 float pitch, float yaw,
                                  int x0, int y0, int x1, int y1, float scale, @Nullable ScreenRectangle scissorArea) {
-        this(machine, blockEntity, conditions, phi, pitch, yaw, x0, y0, x1, y1, scale, scissorArea,
+        this(machine, blockEntity, conditions, pitch, yaw, x0, y0, x1, y1, scale, scissorArea,
                 PictureInPictureRenderState.getBounds(x0, y0, x1, y1, scissorArea));
     }
 }

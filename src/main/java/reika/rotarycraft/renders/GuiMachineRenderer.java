@@ -51,7 +51,7 @@ public class GuiMachineRenderer extends PictureInPictureRenderer<GuiMachineRende
         // We still use the RenderType to select the pipeline; submitCustomGeometry gives us the VC.
         RenderType rt = RenderTypes.entitySolid(model.getTexture());
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            model.renderAll(poseStack, vc, LightCoordsUtil.FULL_BRIGHT, state.blockEntity(), state.conditions(), state.phi(), 0);
+            model.renderAll(poseStack, vc, LightCoordsUtil.FULL_BRIGHT, state.blockEntity(), state.conditions(), 0, 0);
         });
     }
 

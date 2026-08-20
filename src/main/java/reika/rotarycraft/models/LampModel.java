@@ -63,121 +63,106 @@ public class LampModel extends RotaryModelBase {
         this.shape14 = modelPart.getChild("shape14");
         this.shape15 = modelPart.getChild("shape15");
         this.shape16 = modelPart.getChild("shape16");
-
-        this.shape1.setPos(-8F, 23F, -8F);
-        this.shape2.setPos(-7F, 10F, -2F);
-        this.shape3.setPos(-6F, 11F, -6F);
-        this.shape4.setPos(4F, 11F, -6F);
-        this.shape5.setPos(-4F, 11F, -6F);
-        this.shape6.setPos(-4F, 21F, -6F);
-        this.shape7.setPos(4F, 12F, -8F);
-        this.shape8.setPos(-5F, 12F, -8F);
-        this.shape9.setPos(-4F, 12F, -8F);
-        this.shape10.setPos(-4F, 21F, -8F);
-        this.shape11.setPos(-6F, 11F, 6F);
-        this.shape12.setPos(-4F, 20F, -6F);
-        this.shape13.setPos(-4F, 13F, -6F);
-        this.shape14.setPos(-4F, 14F, -6F);
-        this.shape15.setPos(3F, 14F, -6F);
-        this.shape16.setPos(-3F, 14F, -4F);
+        // Part offsets live in createLayer() (PartPose), the single source of truth;
+        // they used to be re-applied here on the baked ModelPart.
     }
 
     public static LayerDefinition createLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
         partdefinition.addOrReplaceChild("shape1", CubeListBuilder.create().texOffs(0, 0)
-                .addBox(0F, 0F, 0F, 16, 1, 16).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 16, 1, 16).mirror(), PartPose.offset(-8, 23, -8));
 
 //        shape1.setPos(-8F, 23F, -8F);
 //        shape1
 
         partdefinition.addOrReplaceChild("shape2", CubeListBuilder.create().texOffs(64, 27)
-                .addBox(0F, 0F, 0F, 14, 14, 8).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 14, 14, 8).mirror(), PartPose.offset(-7, 10, -2));
 
 //        Shape2 = new ModelPart(this, 64, 27);
 //        Shape2.setPos(-7F, 10F, -2F);
 //        Shape2
         partdefinition.addOrReplaceChild("shape3", CubeListBuilder.create().texOffs(0, 58)
-                .addBox(0F, 0F, 0F, 2, 12, 4).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 2, 12, 4).mirror(), PartPose.offset(-6, 11, -6));
 
 //        Shape3 = new ModelPart(this, 0, 58);
 //        Shape3.setPos(-6F, 11F, -6F);
 //        Shape3
 
         partdefinition.addOrReplaceChild("shape4", CubeListBuilder.create().texOffs(0, 58)
-                .addBox(0F, 0F, 0F, 2, 12, 4).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 2, 12, 4).mirror(), PartPose.offset(4, 11, -6));
 //        Shape4 = new ModelPart(this, 0, 58);
 //        Shape4.setPos(4F, 11F, -6F);
 //        Shape4
 
         partdefinition.addOrReplaceChild("shape5", CubeListBuilder.create().texOffs(0, 52)
-                .addBox(0F, 0F, 0F, 8, 2, 4).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 8, 2, 4).mirror(), PartPose.offset(-4, 11, -6));
 //        Shape5 = new ModelPart(this, 0, 52);
 //        Shape5.setPos(-4F, 11F, -6F);
 //        Shape5
 
         partdefinition.addOrReplaceChild("shape6", CubeListBuilder.create().texOffs(0, 52)
-                .addBox(0F, 0F, 0F, 8, 2, 4).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 8, 2, 4).mirror(), PartPose.offset(-4, 21, -6));
 //        Shape6 = new ModelPart(this, 0, 52);
 //        Shape6.setPos(-4F, 21F, -6F);
 //        Shape6
 
         partdefinition.addOrReplaceChild("shape7", CubeListBuilder.create().texOffs(12, 58)
-                .addBox(0F, 0F, 0F, 1, 10, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 1, 10, 2).mirror(), PartPose.offset(4, 12, -8));
 //        Shape7 = new ModelPart(this, 12, 58);
 //        Shape7.setPos(4F, 12F, -8F);
 //        Shape7
 
         partdefinition.addOrReplaceChild("shape8", CubeListBuilder.create().texOffs(12, 58)
-                .addBox(0F, 0F, 0F, 1, 10, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 1, 10, 2).mirror(), PartPose.offset(-5, 12, -8));
 //        Shape8 = new ModelPart(this, 12, 58);
 //        Shape8.setPos(-5F, 12F, -8F);
 //        Shape8
 
         partdefinition.addOrReplaceChild("shape9", CubeListBuilder.create().texOffs(32, 54)
-                .addBox(0F, 0F, 0F, 8, 1, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 8, 1, 2).mirror(), PartPose.offset(-4, 12, -8));
 //        Shape9 = new ModelPart(this, 32, 54);
 //        Shape9.setPos(-4F, 12F, -8F);
 //        Shape9
 
         partdefinition.addOrReplaceChild("shape10", CubeListBuilder.create().texOffs(32, 54)
-                .addBox(0F, 0F, 0F, 8, 1, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 8, 1, 2).mirror(), PartPose.offset(-4, 21, -8));
 //        Shape10 = new ModelPart(this, 32, 54);
 //        Shape10.setPos(-4F, 21F, -8F);
 //        Shape10
 
         partdefinition.addOrReplaceChild("shape11", CubeListBuilder.create().texOffs(64, 49)
-                .addBox(0F, 0F, 0F, 12, 12, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 12, 12, 2).mirror(), PartPose.offset(-6, 11, 6));
 //        Shape11 = new ModelPart(this, 64, 49);
 //        Shape11.setPos(-6F, 11F, 6F);
 //        Shape11
 
         partdefinition.addOrReplaceChild("shape12", CubeListBuilder.create().texOffs(32, 57)
-                .addBox(0F, 0F, 0F, 8, 1, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 8, 1, 2).mirror(), PartPose.offset(-4, 20, -6));
 //        Shape12 = new ModelPart(this, 32, 57);
 //        Shape12.setPos(-4F, 20F, -6F);
 //        Shape12
 
         partdefinition.addOrReplaceChild("shape13", CubeListBuilder.create().texOffs(32, 57)
-                .addBox(0F, 0F, 0F, 8, 1, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 8, 1, 2).mirror(), PartPose.offset(-4, 13, -6));
 //        Shape13 = new ModelPart(this, 32, 57);
 //        Shape13.setPos(-4F, 13F, -6F);
 //        Shape13
 
         partdefinition.addOrReplaceChild("shape14", CubeListBuilder.create().texOffs(20, 24)
-                .addBox(0F, 0F, 0F, 1, 6, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 1, 6, 2).mirror(), PartPose.offset(-4, 14, -6));
 //        Shape14 = new ModelPart(this, 20, 24);
 //        Shape14.setPos(-4F, 14F, -6F);
 //        Shape14
 
         partdefinition.addOrReplaceChild("shape15", CubeListBuilder.create().texOffs(20, 24)
-                .addBox(0F, 0F, 0F, 1, 6, 2).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 1, 6, 2).mirror(), PartPose.offset(3, 14, -6));
 //        Shape15 = new ModelPart(this, 20, 24);
 //        Shape15.setPos(3F, 14F, -6F);
 //        Shape15
 
         partdefinition.addOrReplaceChild("shape16", CubeListBuilder.create().texOffs(-1, 45)
-                .addBox(0F, 0F, 0F, 6, 6, 1).mirror(), PartPose.offset(0, 0, 0));
+                .addBox(0F, 0F, 0F, 6, 6, 1).mirror(), PartPose.offset(-3, 14, -4));
 
 //        Shape16 = new ModelPart(this, -1, 45);
 //        Shape16.setPos(-3F, 14F, -4F);
@@ -186,9 +171,18 @@ public class LampModel extends RotaryModelBase {
     }
 
 
+    /**
+     * {@code ModelLamp.renderAll} skipped the 16x1x16 backing plate (shape1) when the caller
+     * passed {@code vertical}; every other part is unconditional.
+     */
     @Override
-    public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+    public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
+        boolean vertical = conditions != null && !conditions.isEmpty() && Boolean.TRUE.equals(conditions.get(0));
+        if (!vertical)
+            shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        for (ModelPart p : new ModelPart[]{shape2, shape3, shape4, shape5, shape6, shape7, shape8,
+                shape9, shape10, shape11, shape12, shape13, shape14, shape15, shape16})
+            p.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }
 
     @Override

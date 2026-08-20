@@ -15,6 +15,7 @@
 
 package reika.rotarycraft.models;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.RotaryModelBase;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import java.util.ArrayList;
@@ -39,6 +40,14 @@ import java.util.ArrayList;
 
 
 public class VLampModel extends RotaryModelBase {
+
+    /**
+     * 1.7.10 {@code RenderLamp} bound {@code LampVertical.png} for the ceiling/floor-mounted
+     * floodlight and {@code lamptex.png} for the wall-mounted one; the port had both pointing at
+     * {@code lamptex.png}, leaving the shipped vertical texture unused.
+     */
+    public static final Identifier TEXTURE_LOCATION =
+            Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/blockentitytex/lampvertical.png");
     //fields
     public final ModelPart shape1;
     public final ModelPart shape2;
@@ -86,28 +95,8 @@ public class VLampModel extends RotaryModelBase {
         this.shape18 = root.getChild("shape18");
         this.shape18b = root.getChild("shape18b");
         this.shape19 = root.getChild("shape19");
-
-        this.shape1.setPos(-8F, 23F, -8F);
-        this.shape2.setPos(-7F, 16F, 7F);
-        this.shape3.setPos(-6F, 12F, 6F);
-        this.shape4.setPos(4F, 12F, 6F);
-        this.shape5.setPos(-4F, 12F, 6F);
-        this.shape6.setPos(-4F, 12.1F, -4F);
-        this.shape7.setPos(4F, 10F, 5F);
-        this.shape8.setPos(-5F, 10F, 5F);
-        this.shape9.setPos(-4F, 10F, 5F);
-        this.shape10.setPos(-4F, 10.1F, -4F);
-        this.shape11.setPos(-7.5F, 21F, 7.5F);
-        this.shape12.setPos(-4F, 10F, 4F);
-        this.shape13.setPos(-4F, 10.1F, -3F);
-        this.shape14.setPos(-4F, 10F, 3F);
-        this.shape15.setPos(3F, 10F, 3F);
-        this.shape16.setPos(-3F, 11F, 3F);
-        this.shape17.setPos(-2F, 10F, -6F);
-        this.shape17b.setPos(-2F, 10F, 5F);
-        this.shape18.setPos(5F, 10F, -2F);
-        this.shape18b.setPos(-6F, 10F, -2F);
-        this.shape19.setPos(-4F, 8F, -4F);
+        // Part offsets live in createLayer() (PartPose), the single source of truth;
+        // they used to be re-applied here on the baked ModelPart.
 
     }
 
@@ -117,87 +106,87 @@ public class VLampModel extends RotaryModelBase {
 
         partdefinition.addOrReplaceChild("shape1", CubeListBuilder.create().texOffs(0, 0)
                 .addBox(0F, 0F, 0F, 16, 1, 16)
-                .mirror(), PartPose.rotation(0F, 0F, 0F));
+                .mirror(), PartPose.offset(-8, 23, -8));
 
         partdefinition.addOrReplaceChild("shape2", CubeListBuilder.create().texOffs(67, 30)
                 .addBox(0F, 0F, 0F, 14, 14, 5)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-7, 16, 7, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape3", CubeListBuilder.create().texOffs(0, 58)
                 .addBox(0F, 0F, 0F, 2, 12, 4)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-6, 12, 6, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape4", CubeListBuilder.create().texOffs(0, 58)
                 .addBox(0F, 0F, 0F, 2, 12, 4)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(4, 12, 6, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape5", CubeListBuilder.create().texOffs(0, 52)
                 .addBox(0F, 0F, 0F, 8, 2, 4)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-4, 12, 6, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape6", CubeListBuilder.create().texOffs(0, 52)
                 .addBox(0F, 0F, 0F, 8, 2, 4)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-4, 12.1F, -4, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape7", CubeListBuilder.create().texOffs(12, 58)
                 .addBox(0F, 0F, 0F, 1, 10, 2)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(4, 10, 5, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape8", CubeListBuilder.create().texOffs(12, 58)
                 .addBox(0F, 0F, 0F, 1, 10, 2)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-5, 10, 5, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape9", CubeListBuilder.create().texOffs(32, 54)
                 .addBox(0F, 0F, 0F, 8, 1, 2)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-4, 10, 5, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape10", CubeListBuilder.create().texOffs(32, 54)
                 .addBox(0F, 0F, 0F, 8, 1, 2)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-4, 10.1F, -4, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape11", CubeListBuilder.create().texOffs(64, 49)
                 .addBox(0F, 0F, 0F, 15, 15, 2)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-7.5F, 21, 7.5F, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape12", CubeListBuilder.create().texOffs(32, 57)
                 .addBox(0F, 0F, 0F, 8, 1, 2)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-4, 10, 4, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape13", CubeListBuilder.create().texOffs(32, 57)
                 .addBox(0F, 0F, 0F, 8, 1, 2)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-4, 10.1F, -3, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape14", CubeListBuilder.create().texOffs(20, 24)
                 .addBox(0F, 0F, 0F, 1, 6, 2)
-                .mirror(), PartPose.rotation(-1.56207F, 0F, -0.0174533F));
+                .mirror(), PartPose.offsetAndRotation(-4, 10, 3, -1.56207F, 0, -0.0174533F));
 
         partdefinition.addOrReplaceChild("shape15", CubeListBuilder.create().texOffs(20, 24)
                 .addBox(0F, 0F, 0F, 1, 6, 2)
-                .mirror(), PartPose.rotation(-1.56207F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(3, 10, 3, -1.56207F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape16", CubeListBuilder.create().texOffs(-1, 45)
                 .addBox(0F, 0F, 0F, 6, 6, 1)
-                .mirror(), PartPose.rotation(-1.570796F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-3, 11, 3, -1.570796F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape17", CubeListBuilder.create().texOffs(0, 84)
                 .addBox(0F, 0F, 0F, 4, 7, 1)
-                .mirror(), PartPose.rotation(-0.1396263F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-2, 10, -6, -0.1396263F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape17b", CubeListBuilder.create().texOffs(0, 84)
                 .addBox(0F, 0F, 0F, 4, 7, 1)
-                .mirror(), PartPose.rotation(0.1396263F, 0F, 0F));
+                .mirror(), PartPose.offsetAndRotation(-2, 10, 5, 0.1396263F, 0, 0));
 
         partdefinition.addOrReplaceChild("shape18", CubeListBuilder.create().texOffs(0, 84)
                 .addBox(0F, 0F, 0F, 1, 7, 4)
-                .mirror(), PartPose.rotation(0F, 0F, -0.1396263F));
+                .mirror(), PartPose.offsetAndRotation(5, 10, -2, 0, 0, -0.1396263F));
 
         partdefinition.addOrReplaceChild("shape18b", CubeListBuilder.create().texOffs(0, 84)
                 .addBox(0F, 0F, 0F, 1, 7, 4).mirror()
-                .mirror(), PartPose.rotation(0F, 0F, 0.1396263F));
+                .mirror(), PartPose.offsetAndRotation(-6, 10, -2, 0, 0, 0.1396263F));
 
         partdefinition.addOrReplaceChild("shape19", CubeListBuilder.create().texOffs(0, 96)
                 .addBox(0F, 0F, 0F, 8, 2, 8)
-                .mirror(), PartPose.ZERO);
+                .mirror(), PartPose.offset(-4, 8, -4));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
@@ -231,7 +220,7 @@ public class VLampModel extends RotaryModelBase {
     }
     @Override
     public Identifier getTexture() {
-        return LampModel.TEXTURE_LOCATION;
+        return TEXTURE_LOCATION;
     }
 }
 
