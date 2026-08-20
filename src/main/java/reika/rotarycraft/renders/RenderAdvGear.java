@@ -33,6 +33,7 @@ import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear.GearType;
 import reika.rotarycraft.models.CVTModel;
 import reika.rotarycraft.models.animated.CoilModel;
+import reika.rotarycraft.models.animated.HighGearModel;
 import reika.rotarycraft.models.animated.WormModel;
 import reika.rotarycraft.registry.RotaryModelLayers;
 
@@ -49,11 +50,13 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
     private final WormModel wormModel;
     private final CVTModel cvtModel;
     private final CoilModel coilModel;
+    private final HighGearModel highGearModel;
 
     public RenderAdvGear(BlockEntityRendererProvider.Context context) {
         wormModel = new WormModel(context.bakeLayer(RotaryModelLayers.WORM));
         cvtModel = new CVTModel(context.bakeLayer(RotaryModelLayers.CVT));
         coilModel = new CoilModel(context.bakeLayer(RotaryModelLayers.COIL));
+        highGearModel = new HighGearModel(context.bakeLayer(RotaryModelLayers.HIGHGEAR));
     }
 
     /**
@@ -66,29 +69,55 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
         return switch (tile.getGearType()) {
             case CVT -> cvtModel;
             case COIL -> coilModel;
+            case HIGH -> highGearModel;
             default -> wormModel;
         };
     }
 
-    private void renderAt(PoseStack stack, BlockEntityAdvancedGear tile, VertexConsumer bufferSource, int packedLight, RotaryModelBase model) {
+    /**
+     * Per-type texture. Everything but the coil uses its model's own; a bedrock-cored coil gets
+     * {@code coiltex_bed.png}, which 1.7.10 bound on {@code isBedrockCoil()} and the port never
+     * referenced.
+     */
+    private static Identifier textureFor(BlockEntityAdvancedGear tile, RotaryModelBase model) {
+        if (tile.getGearType() == GearType.COIL && tile.isBedrockCoil())
+            return CoilModel.BEDROCK_TEXTURE;
+        return model.getTexture();
+    }
+
+    /**
+     * 1.7.10 switched on {@code metadata % 4} with angles 0/180/90/270 for read
+     * EAST/WEST/SOUTH/NORTH and then added 180. The port stores the <em>opposite</em> of the read
+     * side in {@code FACING}, so the four cases become WEST/EAST/NORTH/SOUTH — which works out to
+     * {@code toYRot() + 90}.
+     */
+    private static float getModelYaw(Direction facing) {
+        return (facing.toYRot() + 90F) % 360F;
+    }
+
+    /**
+     * 1.7.10 {@code setupGL} then the facing yaw: translate to the block's top-centre, flip 180°
+     * about X ({@code scale(1,-1,-1)} is {@code Rx(180)}), then yaw.
+     *
+     * <p>The port previously applied {@code Rz(180)} <em>before</em> the yaw. Since
+     * {@code T·Rz(180)·Ry(b) == T·Rx(180)·Ry(b+180)}, its effective yaw was {@code -toYRot+270} —
+     * right at EAST/WEST but 180° out at NORTH/SOUTH.
+     */
+    private void renderAt(PoseStack stack, BlockEntityAdvancedGear tile, VertexConsumer tex, int light, RotaryModelBase model) {
         stack.pushPose();
         stack.translate(0.5, 1.5, 0.5);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
-        // Rotate around Y so the gear's axis aligns with the block's FACING. Matches
-        // RenderShaft's facing→yRot mapping. Shared by all advanced-gear types (the legacy
-        // renderer applied the same facing transform regardless of model).
+        stack.mulPose(Axis.XP.rotationDegrees(180));
         if (tile.isInWorld()) {
             BlockState st = tile.getBlockState();
             if (st != null && st.hasProperty(BlockRotaryCraftMachine.FACING)) {
                 Direction facing = st.getValue(BlockRotaryCraftMachine.FACING);
-                if (!facing.getAxis().isVertical()) {
-                    float yRot = facing.toYRot();
-                    stack.mulPose(Axis.YP.rotationDegrees(-yRot + 90));
-                }
+                if (!facing.getAxis().isVertical())
+                    stack.mulPose(Axis.YP.rotationDegrees(getModelYaw(facing)));
             }
         }
-        VertexConsumer vc = bufferSource;
-        model.renderAll(stack, vc, packedLight, tile, ReikaJavaLibrary.makeListFrom(false), -tile.phi, 0);
+        // phi is NOT negated here: unlike RenderShaft/RenderGearbox, the legacy RenderAdvGear
+        // passed `tile.phi` straight through, so the port's `-tile.phi` spun these backwards.
+        model.renderAll(stack, tex, light, tile, ReikaJavaLibrary.makeListFrom(false), tile.phi, 0);
         stack.popPose();
     }
 
@@ -105,7 +134,7 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
         snapped.last().set(poseStack.last());
         // The render type must be bound to the same texture the model draws with, or the CVT would
         // be drawn into the worm's shaft-texture layer.
-        RenderType rt = RenderTypes.entityCutout(model.getTexture());
+        RenderType rt = RenderTypes.entityCutout(textureFor(tile, model));
         int light = state.lightCoords;
         collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
             renderAt(snapped, tile, vc, light, model);

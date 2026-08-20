@@ -212,7 +212,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.COIL.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.CREATIVE_COIL.get(), RenderAdvGear::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WORMGEAR.get(), RenderAdvGear::new);
-//        event.registerBlockEntityRenderer(RotaryBlockEntities.FLYWHEEL.get(), RenderFlywheel::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.FLYWHEEL.get(), RenderFlywheel::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.WINDER.get(), RenderWinder::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.AEROSOLIZER.get(), AerosolizerRenderer::new);
 //        event.registerBlockEntityRenderer(RotaryBlockEntities.CLUTCH.get(), RenderClutch::new);

@@ -137,7 +137,11 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
 
     @Override
     protected void animateWithTick(Level level, BlockPos blockPos) {
-
+        if (!this.isInWorld()) {
+            phi = 0;
+            return;
+        }
+        phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
     }
 
     private void playSounds() {
@@ -379,14 +383,6 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
         return false;
     }
 
-//    @Override
-//    protected void animateWithTick(Level world, BlockPos pos) {
-//        if (!this.isInWorld()) {
-//            phi = 0;
-//            return;
-//        }
-//        phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
-//    }
 
     @Override
     public MachineRegistry getMachine() {

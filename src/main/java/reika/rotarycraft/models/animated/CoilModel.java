@@ -21,7 +21,11 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class CoilModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/steamtex.png");
+    /** 1.7.10 bound {@code Transmission/coiltex.png}; the port pointed at the steam engine's skin. */
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/coiltex.png");
+
+    /** A bedrock-cored coil has its own texture, chosen by the renderer per BE. */
+    public static final Identifier BEDROCK_TEXTURE = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/coiltex_bed.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;

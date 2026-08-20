@@ -133,12 +133,17 @@ public class BlockGearbox extends BlockBasicMachine {
             // 26.1 fix: gear animation lived on the server's phi accumulator, which never
             // synced — gears looked frozen on the client. Mirror server animateWithTick on
             // the client by integrating the locally-synced omega so the gears actually spin.
+            // This block class backs both gearboxes and flywheels, and the branch only handled
+            // gearboxes, so flywheel discs stayed frozen even once their renderer existed.
+            if (isFlywheelBlock(pState)) {
+                @SuppressWarnings("unchecked")
+                BlockEntityTicker<T> t = (BlockEntityTicker<T>) clientPhiTicker(BlockEntityFlywheel.class);
+                return t;
+            }
             return (lvl, pos, st, be) -> {
-                if (be instanceof BlockEntityGearbox) {
-                BlockEntityGearbox g = (BlockEntityGearbox) be;
-                if (g.omega > 0) {
+                if (be instanceof BlockEntityGearbox g && g.omega > 0) {
                     g.phi += (float) ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(g.omega + 1, 2), 1.05);
-                }}
+                }
             };
         }
         if (isFlywheelBlock(pState)) {
