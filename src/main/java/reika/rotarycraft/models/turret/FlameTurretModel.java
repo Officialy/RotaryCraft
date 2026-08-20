@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class FlameTurretModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/turret");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/flameturrettex.png");
 
     private final ModelPart shape12b2;
     private final ModelPart shape5;

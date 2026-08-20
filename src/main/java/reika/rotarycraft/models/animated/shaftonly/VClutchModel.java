@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class VClutchModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/shaft/shafttex.png");
 
     private final ModelPart shape14b;
     private final ModelPart shape15b;

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class MultiCannonModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/turret");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/multicannontex.png");
 
     private final ModelPart shape10;
     private final ModelPart shape3;

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class RailGunModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/turret/railguntex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/railguntex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape1a;

@@ -23,7 +23,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class FuelConverterModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/steamtex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/fuelconverttex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape1a;

@@ -25,7 +25,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class ElecMotorModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/modinterface/elecmotortex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/converter/elecmotortex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape1a;

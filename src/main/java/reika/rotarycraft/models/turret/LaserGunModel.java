@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class LaserGunModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/turret");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/lasertex.png");
 
     private final ModelPart shape3;
     private final ModelPart shape5;
