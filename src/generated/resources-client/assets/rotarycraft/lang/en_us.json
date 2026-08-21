@@ -223,6 +223,7 @@
   "block.rotarycraft.worktable": "Worktable",
   "block.rotarycraft.wormgear": "Worm Gear",
   "config.jade.plugin_rotarycraft.engine_extras": "Engine Extras",
+  "config.jade.plugin_rotarycraft.gearbox_lubricant": "Gearbox Lubricant",
   "config.jade.plugin_rotarycraft.machine_power": "Machine Power",
   "config.jade.plugin_rotarycraft.pipe_info": "Pipe Info",
   "config.jade.plugin_rotarycraft.reservoir_fluid": "Reservoir Fluid",
