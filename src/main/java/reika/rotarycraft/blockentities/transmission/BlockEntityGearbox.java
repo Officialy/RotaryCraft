@@ -332,9 +332,17 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         return Math.max(0.1, 1 + add);
     }
 
+    /**
+     * 1.7.10 recomputed the ratio from block metadata every tick ({@code 1 + metadata/4}, giving
+     * 2/4/8/16). Metadata is gone and each ratio is its own block, so re-derive from the block
+     * state -- which is what the constructor already does.
+     *
+     * <p>The port had kept the legacy shape with the metadata term commented out, leaving
+     * {@code tratio = 1} hardcoded: this ran every tick from {@code transferPower} and overwrote
+     * the correctly derived ratio with 2, so every 4x/8x/16x gearbox silently behaved as a 2x.
+     */
     private void calculateRatio() {
-        int tratio = 1;// + this.getBlockMetadata() / 4;
-        ratio = (int) ReikaMathLibrary.intpow(2, tratio);
+        ratio = ratioFromState(this.getBlockState());
     }
 
     @Override

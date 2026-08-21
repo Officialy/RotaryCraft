@@ -22,6 +22,14 @@ import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
 import reika.rotarycraft.blockentities.production.BlockEntityBedrockBreaker;
 import reika.rotarycraft.blockentities.production.BlockEntityFermenter;
 import reika.rotarycraft.data.RoCTestStructureProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import reika.rotarycraft.blockentities.engine.BlockEntityDCEngine;
+import reika.rotarycraft.blockentities.transmission.BlockEntityCreativeCoil;
+import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
+import reika.rotarycraft.registry.EngineType;
+import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlocks;
 
 import java.util.List;
@@ -71,6 +79,281 @@ public final class RotaryGameTests {
                 h -> placesAndTicks(h, RotaryBlocks.BEDROCK_BREAKER.get(), BlockEntityBedrockBreaker.class));
         register(event, env, "hydro_engine_places", 40,
                 h -> placesAndTicks(h, RotaryBlocks.HYDRO_ENGINE.get(), BlockEntityHydroEngine.class));
+
+        // The rig itself, so a failure in any chain test below is attributable.
+        register(event, env, "creative_coil_emits", 60, RotaryGameTests::creativeCoilEmits);
+
+        // Gearboxes: the ratio must come from the block, and reduction/acceleration must apply it.
+        register(event, env, "gearbox_reduction_ratios", 80, RotaryGameTests::gearboxReductionRatios);
+        register(event, env, "gearbox_acceleration_ratios", 80, RotaryGameTests::gearboxAccelerationRatios);
+        register(event, env, "gearbox_chain_compounds", 80, RotaryGameTests::gearboxChainCompounds);
+
+        // A machine driven by a creative coil rather than an engine + gearbox rig.
+        register(event, env, "bedrock_breaker_breaks_stone", 300, RotaryGameTests::bedrockBreakerBreaksStone);
+        register(event, env, "bedrock_breaker_slices_bedrock", 300, RotaryGameTests::bedrockBreakerSlicesBedrock);
+
+        // Engines on their own, with only what each one actually needs.
+        register(event, env, "dc_engine_standalone_power", 120, RotaryGameTests::dcEngineStandalonePower);
+        register(event, env, "engine_types_declare_consistent_power", 20,
+                RotaryGameTests::engineTypesDeclareConsistentPower);
+
+        // Progression: the crafting chain from vanilla materials to the end-game tiers.
+        register(event, env, "progression_recipe_chain", 40, RotaryProgressionTests::recipeChain);
+
+        // Broad safety net over every registered machine.
+        register(event, env, "machine_block_entities", 100, RotaryGameTests::machineBlockEntities);
+    }
+
+    // ------------------------------------------------------------------------------------
+    // Power rig
+
+    /** The coil must emit exactly what it was told to, or every chain test below is meaningless. */
+    private static void creativeCoilEmits(GameTestHelper helper) {
+        int z = RotaryPowerTests.ROWS[0];
+        BlockEntityCreativeCoil coil = RotaryPowerTests.coil(helper, 1, z, 1024, 1024);
+        helper.startSequence()
+                .thenIdle(5)
+                .thenExecute(() -> {
+                    helper.assertTrue(coil.isCreative(), "creative coil must report isCreative");
+                    helper.assertTrue(coil.getWriteDirection() == Direction.EAST,
+                            "coil facing EAST must write EAST, was " + coil.getWriteDirection());
+                    RotaryPowerTests.assertPower(helper, coil, 1024, 1024, "creative coil output");
+                })
+                .thenSucceed();
+    }
+
+    // ------------------------------------------------------------------------------------
+    // Gearboxes
+
+    /**
+     * A reduction gearbox trades speed for torque by its ratio: {@code omega/ratio},
+     * {@code torque*ratio}. The ratio comes from the block variant ({@code *_gearbox_8x}), so this
+     * fails loudly if anything overwrites it -- which is exactly what a stale per-tick
+     * {@code calculateRatio()} did, pinning every gearbox to 2x whichever block it actually was.
+     */
+    private static void gearboxReductionRatios(GameTestHelper helper) {
+        gearboxRatioTest(helper, true);
+    }
+
+    /** The same gearbox with {@code reduction = false} trades torque for speed instead. */
+    private static void gearboxAccelerationRatios(GameTestHelper helper) {
+        gearboxRatioTest(helper, false);
+    }
+
+    /**
+     * One independent coil+gearbox chain per ratio, each on its own z row so they cannot feed one
+     * another. Input is 1024/1024 so every ratio divides exactly and the expectations are whole
+     * numbers -- no rounding to reason about when a case fails.
+     */
+    private static void gearboxRatioTest(GameTestHelper helper, boolean reduction) {
+        final int torqueIn = 1024;
+        final int omegaIn = 1024;
+        final int[] ratios = {2, 4, 8, 16};
+
+        for (int i = 0; i < ratios.length; i++) {
+            int z = RotaryPowerTests.ROWS[i];
+            RotaryPowerTests.coil(helper, 1, z, torqueIn, omegaIn);
+            RotaryPowerTests.place(helper, 2, z, RotaryPowerTests.gearbox(ratios[i]), Direction.EAST);
+            RotaryPowerTests.gearboxAt(helper, 2, z).reduction = reduction;
+        }
+
+        helper.startSequence()
+                .thenIdle(10)
+                .thenExecute(() -> {
+                    for (int i = 0; i < ratios.length; i++) {
+                        int ratio = ratios[i];
+                        int z = RotaryPowerTests.ROWS[i];
+                        BlockEntityCreativeCoil coil = helper.getBlockEntity(
+                                RotaryPowerTests.at(1, z), BlockEntityCreativeCoil.class);
+                        BlockEntityGearbox box = RotaryPowerTests.gearboxAt(helper, 2, z);
+                        String label = (reduction ? "reduction " : "accelerator ") + ratio + "x gearbox";
+
+                        RotaryPowerTests.assertLink(helper, coil, box, label);
+                        helper.assertTrue(box.getRatio() == ratio,
+                                label + ": ratio was " + box.getRatio() + ", expected " + ratio
+                                        + " (it must come from the block variant, not be recomputed)");
+
+                        int expTorque = reduction ? torqueIn * ratio : torqueIn / ratio;
+                        int expOmega = reduction ? omegaIn / ratio : omegaIn * ratio;
+                        RotaryPowerTests.assertPower(helper, box, expTorque, expOmega, label);
+                    }
+                })
+                .thenSucceed();
+    }
+
+    /**
+     * Two reduction gearboxes back to back must compound: 4x then 2x is 8x overall. Catches a
+     * gearbox that reads its own output, or one that fails to re-derive its input each tick.
+     */
+    private static void gearboxChainCompounds(GameTestHelper helper) {
+        final int z = RotaryPowerTests.ROWS[0];
+        final int torqueIn = 1024;
+        final int omegaIn = 1024;
+
+        RotaryPowerTests.coil(helper, 1, z, torqueIn, omegaIn);
+        RotaryPowerTests.place(helper, 2, z, RotaryPowerTests.gearbox(4), Direction.EAST);
+        RotaryPowerTests.place(helper, 3, z, RotaryPowerTests.gearbox(2), Direction.EAST);
+
+        helper.startSequence()
+                // A tick per hop for the chain to settle: each BE reads its neighbour once a tick.
+                .thenIdle(15)
+                .thenExecute(() -> {
+                    BlockEntityCreativeCoil coil = helper.getBlockEntity(
+                            RotaryPowerTests.at(1, z), BlockEntityCreativeCoil.class);
+                    BlockEntityGearbox first = RotaryPowerTests.gearboxAt(helper, 2, z);
+                    BlockEntityGearbox second = RotaryPowerTests.gearboxAt(helper, 3, z);
+
+                    RotaryPowerTests.assertLink(helper, coil, first, "coil -> 4x gearbox");
+                    RotaryPowerTests.assertLink(helper, first, second, "4x gearbox -> 2x gearbox");
+
+                    RotaryPowerTests.assertPower(helper, first, torqueIn * 4, omegaIn / 4, "first (4x) stage");
+                    RotaryPowerTests.assertPower(helper, second, torqueIn * 8, omegaIn / 8, "chained 4x then 2x");
+                })
+                .thenSucceed();
+    }
+
+    // ------------------------------------------------------------------------------------
+    // Machines, powered by a creative coil rather than an engine + gearbox rig
+
+    /**
+     * Bedrock breaker fed straight from a coil above its power floor
+     * ({@code PowerReceivers.BEDROCKBREAKER}: 16384 Nm, 4194304 W). A plain stone block in the head
+     * position must simply be removed.
+     */
+    private static void bedrockBreakerBreaksStone(GameTestHelper helper) {
+        breakerTest(helper, Blocks.STONE, Blocks.AIR);
+    }
+
+    /** Bedrock instead becomes a bedrock slice, the first stage of the grind cycle. */
+    private static void bedrockBreakerSlicesBedrock(GameTestHelper helper) {
+        breakerTest(helper, Blocks.BEDROCK, RotaryBlocks.BEDROCKSLICE.get());
+    }
+
+    /**
+     * coil -> bedrock breaker -> target. The breaker reads from {@code facing.getOpposite()} and
+     * grinds along {@code facing}, so facing EAST puts the coil to its west and the target east.
+     *
+     * <p>Budgeted generously: the breaker only calls {@code process()} once
+     * {@code tickcount >= DurationRegistry.BEDROCK.getOperationTime(omega)}, which has a floor of
+     * 30 ticks even at high speed.
+     */
+    private static void breakerTest(GameTestHelper helper, Block targetBlock, Block expected) {
+        final int z = RotaryPowerTests.ROWS[0];
+        final BlockPos target = RotaryPowerTests.at(3, z);
+
+        // Operation time is 600 - 30*log2(omega) ticks, so a high speed is what makes this
+        // test short: 32768 rad/s gives 150 ticks per grind rather than 330 at 512.
+        RotaryPowerTests.coil(helper, 1, z, 16384, 32768);
+        RotaryPowerTests.place(helper, 2, z, RotaryBlocks.BEDROCK_BREAKER.get(), Direction.EAST);
+        helper.setBlock(target, targetBlock);
+
+        BlockEntityBedrockBreaker breaker = helper.getBlockEntity(
+                RotaryPowerTests.at(2, z), BlockEntityBedrockBreaker.class);
+
+        helper.startSequence()
+                .thenIdle(10)
+                .thenExecute(() -> {
+                    BlockEntityCreativeCoil coil = helper.getBlockEntity(
+                            RotaryPowerTests.at(1, z), BlockEntityCreativeCoil.class);
+                    RotaryPowerTests.assertLink(helper, coil, breaker, "coil -> bedrock breaker");
+                    helper.assertTrue(breaker.power >= 4194304L,
+                            "breaker received " + breaker.power + " W, below its 4194304 W minimum");
+                    helper.assertTrue(breaker.torque >= 16384,
+                            "breaker received " + breaker.torque + " Nm, below its 16384 Nm minimum");
+                })
+                // One full grind cycle plus slack.
+                .thenIdle(200)
+                .thenExecute(() -> helper.assertBlockPresent(expected, target))
+                .thenSucceed();
+    }
+
+    // ------------------------------------------------------------------------------------
+    // Engines, standalone
+
+    /**
+     * A DC engine needs nothing but a redstone signal ({@code getRequirements}), so it can be
+     * tested entirely on its own -- no fuel, no gearbox, no shaft. It ramps {@code omega} by
+     * {@code 4*log2(maxspeed+1)} per tick, so roughly 8 ticks to reach its rated speed.
+     */
+    private static void dcEngineStandalonePower(GameTestHelper helper) {
+        final int z = RotaryPowerTests.ROWS[0];
+        helper.setBlock(RotaryPowerTests.at(1, z), Blocks.REDSTONE_BLOCK);
+        RotaryPowerTests.place(helper, 2, z, RotaryBlocks.DC_ENGINE.get(), Direction.EAST);
+        BlockEntityDCEngine engine = helper.getBlockEntity(
+                RotaryPowerTests.at(2, z), BlockEntityDCEngine.class);
+
+        helper.startSequence()
+                .thenIdle(60)
+                .thenExecute(() -> {
+                    EngineType type = EngineType.DC;
+                    helper.assertTrue(engine.omega == type.getSpeed(),
+                            "DC engine reached " + engine.omega + " rad/s, expected its rated " + type.getSpeed());
+                    helper.assertTrue(engine.torque == type.getTorque(),
+                            "DC engine produced " + engine.torque + " Nm, expected its rated " + type.getTorque());
+                    helper.assertTrue(engine.power == type.getPower(),
+                            "DC engine produced " + engine.power + " W, expected " + type.getPower());
+                })
+                .thenSucceed();
+    }
+
+    /**
+     * Every engine tier's declared numbers must be self-consistent, because the handbook, the ECU
+     * multipliers and the gearbox limits are all derived from them.
+     */
+    private static void engineTypesDeclareConsistentPower(GameTestHelper helper) {
+        for (EngineType e : EngineType.values()) {
+            helper.assertTrue(e.getSpeed() > 0, e + " must declare a positive speed");
+            helper.assertTrue(e.getTorque() > 0, e + " must declare a positive torque");
+            helper.assertTrue(e.getPower() == (long) e.getSpeed() * e.getTorque(),
+                    e + " power " + e.getPower() + " != speed*torque " + ((long) e.getSpeed() * e.getTorque()));
+        }
+        helper.succeed();
+    }
+
+    // ------------------------------------------------------------------------------------
+
+    /**
+     * Every registered machine must place, produce its declared BlockEntity class, and have that
+     * BlockEntityType accept the state it was placed as. Catches the whole family of
+     * wrong-BE-type and missing-registration mistakes in one pass, the way
+     * {@code ElectriGameTests.machineBlockEntities} does.
+     */
+    private static void machineBlockEntities(GameTestHelper helper) {
+        // Each machine gets its own slot. Re-placing over a live BlockEntity made vanilla's own
+        // state validation throw, and 2-block spacing keeps neighbours from powering each other.
+        int slot = 0;
+        int checked = 0;
+        for (int mi = 0; mi < MachineRegistry.machineList.length; mi++) {
+            MachineRegistry m = MachineRegistry.machineList.get(mi);
+            BlockState state = m.getBlockState();
+            if (state == null || m.getTEClass() == null)
+                continue;
+            BlockPos probe = sweepSlot(slot++);
+            if (probe == null)
+                break; // arena full; the count assertion below still guards coverage
+            helper.setBlock(probe, state);
+            BlockEntity be = helper.getLevel().getBlockEntity(helper.absolutePos(probe));
+            if (be == null)
+                continue; // block carries no BlockEntity of its own
+            helper.assertTrue(m.getTEClass().isInstance(be),
+                    m + " placed a " + be.getClass().getSimpleName()
+                            + ", expected " + m.getTEClass().getSimpleName());
+            helper.assertTrue(be.getType().isValid(helper.getLevel().getBlockState(helper.absolutePos(probe))),
+                    m + "'s BlockEntityType must accept its own registered block state");
+            checked++;
+        }
+        helper.assertTrue(checked > 20, "only " + checked + " machines were probed; the sweep is not running");
+        helper.succeed();
+    }
+
+    /** 2-spaced grid over the 9x9 arena on two levels: 25 slots per level, 50 in all. */
+    private static BlockPos sweepSlot(int i) {
+        int perLevel = 25;
+        if (i >= perLevel * 2)
+            return null;
+        int y = 1 + (i / perLevel) * 3;
+        int j = i % perLevel;
+        return new BlockPos((j % 5) * 2, y, (j / 5) * 2);
     }
 
     /**

@@ -80,6 +80,7 @@ public class RotaryLang extends LanguageProvider {
         add("config.jade.plugin_rotarycraft.machine_power", "Machine Power");
         add("config.jade.plugin_rotarycraft.engine_extras", "Engine Extras");
         add("config.jade.plugin_rotarycraft.pipe_info", "Pipe Info");
+        add("config.jade.plugin_rotarycraft.gearbox_lubricant", "Gearbox Lubricant");
 
         // Block translations — derived from each block's registry path, with the curated names from the
         // 1.7.10 en_USold.lang for the machines whose prettified path reads wrong (e.g. "Hose" ->
