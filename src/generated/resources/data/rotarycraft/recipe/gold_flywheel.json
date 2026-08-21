@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "M": "rotarycraft:mount",
+    "W": "rotarycraft:gold_flywheel_core"
+  },
+  "pattern": [
+    "W",
+    "M"
+  ],
+  "result": {
+    "id": "rotarycraft:gold_flywheel"
+  }
+}

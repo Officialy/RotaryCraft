@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "D": "rotarycraft:drillhead_iron",
+    "I": "rotarycraft:hsla_steel_rod",
+    "N": "minecraft:netherrack",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "W": "#minecraft:planks",
+    "i": "rotarycraft:impeller",
+    "s": "minecraft:stone"
+  },
+  "pattern": [
+    "SWS",
+    "siD",
+    "PIN"
+  ],
+  "result": {
+    "id": "rotarycraft:extractor"
+  }
+}

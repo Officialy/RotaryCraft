@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_bedrock_alloy_ingot": {
+    "has_stone": {
       "conditions": {
         "items": [
           {
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:bedrock_alloy_flywheel_core"
+        "recipe": "rotarycraft:stone_flywheel_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_bedrock_alloy_ingot"
+      "has_stone"
     ]
   ],
   "rewards": {
     "recipes": [
-      "rotarycraft:bedrock_alloy_flywheel_core"
+      "rotarycraft:stone_flywheel_core"
     ]
   }
 }

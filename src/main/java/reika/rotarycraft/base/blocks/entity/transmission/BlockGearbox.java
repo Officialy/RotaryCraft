@@ -9,6 +9,8 @@
  ******************************************************************************/
 package reika.rotarycraft.base.blocks.entity.transmission;
 
+import reika.rotarycraft.auxiliary.RotaryAux;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -61,9 +63,12 @@ public class BlockGearbox extends BlockBasicMachine {
 //
     @Override
     public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion) {
-        BlockEntityGearbox gbx = (BlockEntityGearbox) level.getBlockEntity(pos);
-        if (gbx == null)
-            return 0;
+        // This class backs the flywheel blocks too, whose BE is a BlockEntityFlywheel — an
+        // unchecked cast here threw ClassCastException on any explosion near a flywheel. 1.7.10's
+        // separate BlockFlywheel overrode neither this nor the harvest check, so flywheels take the
+        // vanilla default; only gearboxes scale resistance by material.
+        if (!(level.getBlockEntity(pos) instanceof BlockEntityGearbox gbx))
+            return super.getExplosionResistance(state, level, pos, explosion);
         MaterialRegistry type = gbx.getGearboxType().material;
         return switch (type) {
             case WOOD -> 5F;
@@ -108,8 +113,12 @@ public class BlockGearbox extends BlockBasicMachine {
     public boolean canHarvest(Level world, Player player, BlockPos pos) {
         if (player.isCreative())
             return false;
-        BlockEntityGearbox gbx = (BlockEntityGearbox) world.getBlockEntity(pos);
-        if (gbx == null)
+        BlockEntity be = world.getBlockEntity(pos);
+        // 1.7.10 BlockFlywheel.canHarvest deferred to RotaryAux.canHarvestSteelMachine rather than
+        // testing a per-material pickaxe tier; the gearbox path keeps its own material check.
+        if (be instanceof BlockEntityFlywheel)
+            return RotaryAux.canHarvestSteelMachine(player);
+        if (!(be instanceof BlockEntityGearbox gbx))
             return false;
         MaterialRegistry type = gbx.getGearboxType().material;
         return type.isHarvestablePickaxe(player.getInventory().getSelectedItem());

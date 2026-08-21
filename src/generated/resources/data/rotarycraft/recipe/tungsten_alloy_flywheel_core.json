@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": "rotarycraft:hsla_steel_gear",
+    "W": "rotarycraft:tungsten_alloy_ingot"
+  },
+  "pattern": [
+    "WWW",
+    "WGW",
+    "WWW"
+  ],
+  "result": {
+    "id": "rotarycraft:tungsten_alloy_flywheel_core"
+  }
+}

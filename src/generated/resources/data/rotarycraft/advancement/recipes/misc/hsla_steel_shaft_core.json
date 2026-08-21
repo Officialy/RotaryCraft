@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_bedrock_alloy_ingot": {
+    "has_shaft": {
       "conditions": {
         "items": [
           {
-            "items": "rotarycraft:hsla_steel_gear"
+            "items": "rotarycraft:hsla_steel_rod"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:bedrock_alloy_flywheel_core"
+        "recipe": "rotarycraft:hsla_steel_shaft_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_bedrock_alloy_ingot"
+      "has_shaft"
     ]
   ],
   "rewards": {
     "recipes": [
-      "rotarycraft:bedrock_alloy_flywheel_core"
+      "rotarycraft:hsla_steel_shaft_core"
     ]
   }
 }

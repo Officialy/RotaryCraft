@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "SSS",
+    "SSS",
+    " S "
+  ],
+  "result": {
+    "id": "rotarycraft:drillhead_iron"
+  }
+}

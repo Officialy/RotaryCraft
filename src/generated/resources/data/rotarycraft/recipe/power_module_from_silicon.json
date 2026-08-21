@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "E": "rotarycraft:silicon",
+    "G": "minecraft:gold_ingot",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "RER",
+    "GGG",
+    "SSS"
+  ],
+  "result": {
+    "count": 3,
+    "id": "rotarycraft:power_module"
+  }
+}

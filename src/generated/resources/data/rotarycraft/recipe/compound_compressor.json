@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "S": "rotarycraft:compressor",
+    "s": "rotarycraft:tungsten_alloy_shaft_core",
+    "t": "rotarycraft:tungsten_ingot"
+  },
+  "pattern": [
+    " tS",
+    "tst",
+    "St "
+  ],
+  "result": {
+    "id": "rotarycraft:compound_compressor"
+  }
+}
