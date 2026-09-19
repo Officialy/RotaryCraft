@@ -18,7 +18,12 @@ neoForge {
     runs {
         gameTest {
             type = "gameTestServer"
+            gameDirectory = file('run-gametest')
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            def selector = project.hasProperty('gameTestSelector')
+                    ? project.property('gameTestSelector').toString()
+                    : "${project.mod_id}:*"
+            programArguments.addAll '--tests', selector
         }
     }
 }

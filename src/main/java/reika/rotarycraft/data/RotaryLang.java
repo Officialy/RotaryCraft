@@ -66,9 +66,6 @@ public class RotaryLang extends LanguageProvider {
     @Override
     protected void addTranslations() {
         // Creative tabs / categories.
-        // Dotted, matching the keys RotaryCraftTabs actually looks up. Three of these were
-        // registered with underscores, so the transmission/tools/ores tabs showed their raw
-        // translation key in-game; the other two were already dotted.
         add("tab.rotarycraft", "RotaryCraft");
         add("tab.rotarycraft.transmission", "RotaryCraft Transmission");
         add("tab.rotarycraft.tools", "RotaryCraft Tools");
@@ -82,11 +79,6 @@ public class RotaryLang extends LanguageProvider {
         add("config.jade.plugin_rotarycraft.pipe_info", "Pipe Info");
         add("config.jade.plugin_rotarycraft.gearbox_lubricant", "Gearbox Lubricant");
 
-        // Block translations — derived from each block's registry path, with the curated names from the
-        // 1.7.10 en_USold.lang for the machines whose prettified path reads wrong (e.g. "Hose" ->
-        // "Lubricant Hose", "Fluid Pipe" -> "Liquid Pipe"). Only the names where the original is clearly
-        // better are overridden; per-tier blocks (Wood Shaft, HSLA Flywheel, ...) keep their prettified
-        // name since the original lumped them under one shared label.
         RotaryBlocks.BLOCKS.getEntries().forEach(holder -> {
             String path = holder.getId().getPath();
             addBlock(holder, NAME_OVERRIDES.getOrDefault(path, prettify(path)));
@@ -134,11 +126,10 @@ public class RotaryLang extends LanguageProvider {
     }
 
     /**
-     * Convert {@code wood_flywheel} → {@code "Wood Flywheel"}. Acronym whitelist preserves
-     * all-caps for tokens like {@code hsla} → "HSLA", {@code dc} → "DC", {@code ac} → "AC",
-     * {@code emp} → "EMP", {@code tnt} → "TNT" — vanilla title-casing would render these as
-     * "Hsla Steel Plate" / "Dc Engine" which reads poorly for the established acronyms in
-     * RotaryCraft's UI.
+     * Acronym whitelist to prevent prettify() from lowercasing certain registry-path segments. For example:
+     * {@code hsla} → "HSLA", {@code dc} → "DC",
+     * {@code ac} → "AC",
+     * {@code emp} → "EMP", {@code tnt} → "TNT"
      */
     private static final Set<String> ACRONYMS = Set.of(
             "hsla", "dc", "ac", "emp", "tnt", "cvt", "io", "cctv", "gpr", "rc", "ic"
