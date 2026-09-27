@@ -229,8 +229,24 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private boolean craft() {
+        ItemStack result = getCraftingResult();
+        if (result.isEmpty()) return false;
+
+        ItemStack existing = itemHandler.getStackInSlot(13);
+        if (!existing.isEmpty()) {
+            if (!ItemStack.isSameItemSameComponents(existing, result)) return false;
+            if (existing.getCount() + result.getCount() > Math.min(this.getMaxStackSize(), result.getMaxStackSize())) return false;
+        }
+
+        ReikaInventoryHelper.addOrSetStack(result, itemHandler, 13);
+        for (int i = 0; i < 9; i++) ReikaInventoryHelper.decrStack(i, itemHandler);
+        SoundRegistry.CRAFT.playSoundAtBlock(level, worldPosition, 0.3F, 1.5F);
+        return true;
+    }
+
+    public ItemStack getCraftingResult() {
         if (level == null || level.isClientSide() || level.getServer() == null)
-            return false;
+            return ItemStack.EMPTY;
 
         List<ItemStack> items = new ArrayList<>(9);
         for (int i = 0; i < 9; i++) {
@@ -240,29 +256,11 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager()
                 .getRecipeFor(RecipeType.CRAFTING, input, level);
         if (optional.isEmpty())
-            return false;
+            return ItemStack.EMPTY;
 
         CraftingRecipe recipe = optional.get().value();
         ItemStack result = recipe.assemble(input);
-        if (result.isEmpty())
-            return false;
-
-        ItemStack existing = itemHandler.getStackInSlot(13);
-        if (!existing.isEmpty()) {
-            if (!ItemStack.isSameItemSameComponents(existing, result))
-                return false;
-            if (existing.getCount() + result.getCount() > Math.min(this.getMaxStackSize(), result.getMaxStackSize()))
-                return false;
-        }
-
-        ReikaInventoryHelper.addOrSetStack(result, itemHandler, 13);
-
-        for (int i = 0; i < 9; i++) {
-            ReikaInventoryHelper.decrStack(i, itemHandler);
-        }
-
-        SoundRegistry.CRAFT.playSoundAtBlock(level, worldPosition, 0.3F, 1.5F);
-        return true;
+        return result;
     }
 
     public boolean isReadyToCraft() {

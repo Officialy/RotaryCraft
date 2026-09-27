@@ -44,10 +44,13 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.interfaces.blockentity.PlaceNotification;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
@@ -75,6 +78,7 @@ import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
 import reika.rotarycraft.blockentities.production.BlockEntityFermenter;
 import reika.rotarycraft.blockentities.production.BlockEntityObsidianMaker;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
+import reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
@@ -252,65 +256,22 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         if (ep.isCrouching() && !(te instanceof BlockEntityCaveFinder))
             return InteractionResult.PASS;
 
-        // 26.1: generic bucket-fill for fuel-burning engines (microturbine, gas, jet, sport,
-        // steam). The original 1.7 pathway routed bucket → fuel-tank through
-        // FluidContainerRegistry; that API is gone. Vanilla {@link net.minecraft.world.item.BucketItem}
-        // now exposes its content fluid via the public {@code content} field. We map
-        // water/jet-fuel/ethanol/lubricant buckets to the matching engine sub-tank, swap the
-        // bucket back to an empty one (in survival), and sync. Without this branch a fresh
-        // microturbine had no way to receive jet fuel — the only intake was a fuel-line from
-        // below, which the user wouldn't have built that early.
         if (te instanceof BlockEntityEngine engine
-                && is != null && !is.isEmpty()
+                && !is.isEmpty() && is.getCount() == 1
                 && is.getItem() instanceof BucketItem bi) {
             Fluid f = bi.content;
-            if (f != null && f != Fluids.EMPTY) {
-                int filled = engine.fillPipe(
-                        engine.getBlockState().getValue(BlockRotaryCraftMachine.FACING),
-                        new FluidStack(f, 1000),
-                        IFluidHandler.FluidAction.SIMULATE);
-                // If that side rejects (canFill is direction-sensitive), retry through the
-                // engine's actual fuel input direction by going directly through addFuel for
-                // jet fuel / ethanol — they're the engine-fuels the user wants to bucket-load.
-                if (filled <= 0) {
-                    if (f == RotaryFluids.JET_FUEL.get() && engine.getEngineType().isJetFueled()
-                            || f == RotaryFluids.ETHANOL.get() && engine.getEngineType().isEthanolFueled()) {
-                        engine.addFuel(1000);
-                        if (!ep.isCreative())
-                            ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                        te.syncAllData(true);
-                        return InteractionResult.SUCCESS;
-                    }
-                    if (f == Fluids.WATER && engine.getEngineType().isWaterPiped()) {
-                        engine.addWater(1000);
-                        if (!ep.isCreative())
-                            ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                        te.syncAllData(true);
-                        return InteractionResult.SUCCESS;
-                    }
-                } else {
-                    // The pipe-side path accepted it — commit the fill.
-                    engine.fillPipe(
-                            engine.getBlockState().getValue(BlockRotaryCraftMachine.FACING),
-                            new FluidStack(f, 1000),
-                            IFluidHandler.FluidAction.EXECUTE);
-                    if (!ep.isCreative())
-                        ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                    te.syncAllData(true);
-                    return InteractionResult.SUCCESS;
-                }
+            if (f != null && f != Fluids.EMPTY &&
+                    this.insertBucket(engine, f, level, ep, pHand, new ItemStack(Items.BUCKET))) {
+                return InteractionResult.SUCCESS;
             }
         }
 
         if (te instanceof BlockEntityAdvancedGear) {
             BlockEntityAdvancedGear tile = (BlockEntityAdvancedGear) te;
-            if (tile.getGearType().isLubricated() && tile.canAcceptAnotherLubricantBucket()) {
-                if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.LUBE_BUCKET)) {
-                    tile.addLubricant(1000);
-                    if (!ep.isCreative())
-                        ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                    return InteractionResult.SUCCESS;
-                }
+            if (tile.getGearType().isLubricated() && is.getCount() == 1
+                    && ReikaItemHelper.matchStacks(is, RotaryItems.LUBE_BUCKET)
+                    && this.insertBucket(tile, RotaryFluids.LUBRICANT.get(), level, ep, pHand, new ItemStack(Items.BUCKET))) {
+                return InteractionResult.SUCCESS;
             }
         }
 
@@ -529,12 +490,6 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                         te.syncAllData(true);
                         return InteractionResult.SUCCESS;
                     }
-                // 26.1: NeoForge's Capabilities.FluidHandler.ITEM still works, but the underlying
-                // wire format moved to ResourceHandler<FluidResource>. Generic bucket fill/drain
-                // via the item capability isn't wired yet; only the explicit single-item branches
-                // below are honoured (glass bottle → water bottle, jet-fuel bucket reject). Adding
-                // generic bucket support is a self-contained future improvement and doesn't gate
-                // anything else.
                 } else if (is.getItem() == Items.GLASS_BOTTLE) {
                     int size = is.getCount();
                     if (tr.getFluidLevel() > 0 && tr.getFluid().getFluid().equals(Fluids.WATER)) {
@@ -542,34 +497,23 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                         te.syncAllData(true);
                         return InteractionResult.SUCCESS;
                     }
-                } else if (is.getItem() instanceof BucketItem bi) {
-                    // 26.1 fix: previously special-cased only vanilla water/lava buckets AND
-                    // rejected the jet-fuel bucket outright — but the user wanted "jet fuel and
-                    // other mod fluids" to fill the reservoir too. Generic path: probe the bucket
-                    // item for its content fluid via {@code BucketItem.content}, which is set by
-                    // all standard {@code DispensibleContainerItem} buckets including vanilla
-                    // water/lava, the RotaryCraft fluid buckets, and modded fluid buckets.
+                } else if (is.getCount() == 1 && is.getItem() instanceof BucketItem bi) {
                     Fluid f = bi.content;
-                    if (f != null && f != Fluids.EMPTY && tr.canAcceptFluid(f)) {
-                        FluidStack stack = new FluidStack(f, 1000);
-                        int filled = tr.fillPipe(Direction.NORTH, stack,
-                                IFluidHandler.FluidAction.EXECUTE);
-                        if (filled > 0) {
-                            if (!ep.isCreative())
-                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                            te.syncAllData(true);
-                            return InteractionResult.SUCCESS;
-                        }
+                    if (f != null && f != Fluids.EMPTY && tr.canAcceptFluid(f)
+                            && this.insertBucket(tr, f, level, ep, pHand, new ItemStack(Items.BUCKET))) {
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
         }
-        /*if (m == MachineRegistry.SCALECHEST) {
-            BlockEntityScaleableChest tc = (BlockEntityScaleableChest)te;
+        // Unpowered or power-flickering chests stay shut. V33a returned false ("not handled"), so the
+        // held item's own use still proceeds: PASS, not FAIL.
+        if (m == MachineRegistry.SCALECHEST) {
+            BlockEntityScaleableChest tc = (BlockEntityScaleableChest) te;
             if (!tc.isUseableByPlayer(ep))
-                return InteractionResult.FAIL;
+                return InteractionResult.PASS;
         }
-        if (m == MachineRegistry.BEDROCKBREAKER && !ep.isShiftKeyDown()) {
+        /*if (m == MachineRegistry.BEDROCKBREAKER && !ep.isShiftKeyDown()) {
             BlockEntityBedrockBreaker tb = (BlockEntityBedrockBreaker)te;
             tb.dropInventory();
             ((BlockEntityBase)te).syncAllData(true);
@@ -628,41 +572,25 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         }*/
         if (m == MachineRegistry.OBSIDIAN) {
             BlockEntityObsidianMaker fm = (BlockEntityObsidianMaker) te;
-            if (fm.getWater() + 1000 <= BlockEntityObsidianMaker.CAPACITY && is != null && is.getItem() == Items.WATER_BUCKET) {
-                fm.addWater(1000);
-                if (!ep.isCreative()) {
-                    ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                }
-                te.syncAllData(true);
+            if (is.getCount() == 1 && is.is(Items.WATER_BUCKET)
+                    && this.insertBucket(fm, Fluids.WATER, level, ep, pHand, new ItemStack(Items.BUCKET))) {
                 return InteractionResult.SUCCESS;
-            } else if (fm.getLava() + 1000 <= BlockEntityObsidianMaker.CAPACITY && is != null && is.getItem() == Items.LAVA_BUCKET) {
-                fm.addLava(1000);
-                if (!ep.isCreative()) {
-                    ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                }
-                te.syncAllData(true);
+            } else if (is.getCount() == 1 && is.is(Items.LAVA_BUCKET)
+                    && this.insertBucket(fm, Fluids.LAVA, level, ep, pHand, new ItemStack(Items.BUCKET))) {
                 return InteractionResult.SUCCESS;
             }
         }
         if (m == MachineRegistry.FERMENTER) {
             BlockEntityFermenter fm = (BlockEntityFermenter) te;
-            if (fm.getLiquidLevel() + 1000 <= BlockEntityFermenter.CAPACITY
-                    && is != null && is.getItem() == Items.WATER_BUCKET) {
-                fm.addLiquid(1000);
-                if (!ep.isCreative())
-                    ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                te.syncAllData(true);
+            if (is.getCount() == 1 && is.is(Items.WATER_BUCKET)
+                    && this.insertBucket(fm, Fluids.WATER, level, ep, pHand, new ItemStack(Items.BUCKET))) {
                 return InteractionResult.SUCCESS;
             }
         }
         if (m == MachineRegistry.PULSEJET) {
             BlockEntityPulseFurnace pf = (BlockEntityPulseFurnace) te;
-            if (pf.getFuel() + 1000 <= BlockEntityPulseFurnace.MAXFUEL
-                    && is != null && is.getItem() == RotaryItems.JET_FUEL_BUCKET.get()) {
-                pf.addFuel(1000);
-                if (!ep.isCreative())
-                    ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                te.syncAllData(true);
+            if (is.getCount() == 1 && is.is(RotaryItems.JET_FUEL_BUCKET.get())
+                    && this.insertBucket(pf, RotaryFluids.JET_FUEL.get(), level, ep, pHand, new ItemStack(Items.BUCKET))) {
                 return InteractionResult.SUCCESS;
             }
         }
@@ -679,12 +607,8 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         }*/
         if (m == MachineRegistry.BIGFURNACE) {
             BlockEntityLavaSmeltery bf = (BlockEntityLavaSmeltery) te;
-            if (bf.getLiquidLevel() + 1000 <= bf.getCapacity() && is != null && is.getItem() == Items.LAVA_BUCKET) { //todo check getLiquidLevel
-                bf.addLiquid(1000);
-                if (!ep.isCreative()) {
-                    ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                }
-                te.syncAllData(true);
+            if (is.getCount() == 1 && is.is(Items.LAVA_BUCKET)
+                    && this.insertBucket(bf, Fluids.LAVA, level, ep, pHand, new ItemStack(Items.BUCKET))) {
                 return InteractionResult.SUCCESS;
             }
         }
@@ -790,8 +714,6 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         }
 
         if (te instanceof BlockEntityEngine tile) {
-            if (is != null && is.getItem() == RotaryItems.JET_FUEL_BUCKET.get())
-                return InteractionResult.FAIL;
             /*if (is != null && ReikaItemHelper.matchStacks(is, RotaryItems.TURBINE)) {
                 if (tile.getEngineType() == EngineType.JET && ((TileEntityJetEngine) tile).FOD > 0) {
                     ((TileEntityJetEngine) tile).repairJet();
@@ -816,97 +738,25 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                     return InteractionResult.SUCCESS;
                 }
             }*/
-            if (is != null && is.getCount() == 1) {
-                if (is.getItem() == Items.BUCKET) {
-                    if (tile.getEngineType().isEthanolFueled()) {
-                        if (tile.getFuelLevel() >= 1000) {
-                            ep.setItemSlot(EquipmentSlot.MAINHAND, RotaryItems.ETHANOL_BUCKET.get().getDefaultInstance());
-                            tile.subtractFuel(1000);
-                        } else {
-                            if (ConfigRegistry.CLEARCHAT.getState())
-                                ReikaChatHelper.clearChat();
-                            ReikaChatHelper.write("Engine does not have enough fuel to extract!");
-                        }
-                        return InteractionResult.SUCCESS;
-                    }
-                    if (tile.getEngineType().isJetFueled()) {
-                        if (tile.getFuelLevel() >= 1000) {
-                            ep.setItemSlot(EquipmentSlot.MAINHAND, RotaryItems.JET_FUEL_BUCKET.get().getDefaultInstance());
-                            tile.subtractFuel(1000);
-                        } else {
-                            if (ConfigRegistry.CLEARCHAT.getState())
-                                ReikaChatHelper.clearChat();
-                            ReikaChatHelper.write("Engine does not have enough fuel to extract!");
-                        }
-                        return InteractionResult.SUCCESS;
-                    }
-                    if (tile.getEngineType().requiresLubricant()) {
-                        if (tile.getLube() >= 1000) {
-                            ep.setItemSlot(EquipmentSlot.MAINHAND, RotaryItems.LUBE_BUCKET.get().getDefaultInstance());
-                            tile.removeLubricant(1000);
-                        } else {
-                            if (ConfigRegistry.CLEARCHAT.getState())
-                                ReikaChatHelper.clearChat();
-                            ReikaChatHelper.write("Engine does not have enough fuel to extract!");
-                        }
-                        return InteractionResult.SUCCESS;
-                    }
-                }
-                if (tile.getEngineType().isJetFueled()) {
-                    if (ReikaItemHelper.matchStacks(is, RotaryItems.JET_FUEL_BUCKET)) {
-                        if (tile.getFuelLevel() <= BlockEntityEngine.FUELCAP - 1000) {
-                            if (!ep.isCreative())
-                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                            tile.addFuel(1000);
-                        } else {
-                            if (ConfigRegistry.CLEARCHAT.getState())
-                                ReikaChatHelper.clearChat();
-                            ReikaChatHelper.write("Engine is too full to add fuel!");
-                        }
-                        return InteractionResult.SUCCESS;
-                    }
-                }
+            if (is.getCount() == 1 && is.is(Items.BUCKET)) {
+                Fluid fluid = null;
+                ItemStack filledBucket = ItemStack.EMPTY;
                 if (tile.getEngineType().isEthanolFueled()) {
-                    if (ReikaItemHelper.matchStacks(is, RotaryItems.ETHANOL_BUCKET)) {
-                        if (tile.getFuelLevel() <= BlockEntityEngine.FUELCAP - 1000) {
-                            if (!ep.isCreative())
-                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                            tile.addFuel(1000);
-                        } else {
-                            if (ConfigRegistry.CLEARCHAT.getState())
-                                ReikaChatHelper.clearChat();
-                            ReikaChatHelper.write("Engine is too full to add fuel!");
-                        }
-                        return InteractionResult.SUCCESS;
-                    }
+                    fluid = RotaryFluids.ETHANOL.get();
+                    filledBucket = new ItemStack(RotaryItems.ETHANOL_BUCKET.get());
+                } else if (tile.getEngineType().isJetFueled()) {
+                    fluid = RotaryFluids.JET_FUEL.get();
+                    filledBucket = new ItemStack(RotaryItems.JET_FUEL_BUCKET.get());
+                } else if (tile.getEngineType().requiresLubricant()) {
+                    fluid = RotaryFluids.LUBRICANT.get();
+                    filledBucket = new ItemStack(RotaryItems.LUBE_BUCKET.get());
                 }
-                if (tile.getEngineType().requiresLubricant()) {
-                    if (ReikaItemHelper.matchStacks(is, RotaryItems.LUBE_BUCKET)) {
-                        if (tile.getLube() <= BlockEntityEngine.LUBECAP - 1000) {
-                            if (!ep.isCreative())
-                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                            tile.addLubricant(1000);
-                        } else {
-                            if (ConfigRegistry.CLEARCHAT.getState())
-                                ReikaChatHelper.clearChat();
-                            ReikaChatHelper.write("Engine is too full to add lubricant!");
-                        }
-                        return InteractionResult.SUCCESS;
+                if (fluid != null) {
+                    if (!this.extractBucket(tile, fluid, level, ep, pHand, filledBucket)) {
+                        if (ConfigRegistry.CLEARCHAT.getState()) ReikaChatHelper.clearChat();
+                        ReikaChatHelper.write("Engine does not have enough fluid to extract!");
                     }
-                }
-                if (tile.getEngineType().needsWater()) {
-                    if (is != null && is.getItem() == Items.WATER_BUCKET) {
-                        if (tile.getWater() <= BlockEntityEngine.CAPACITY - 1000) {
-                            if (!ep.isCreative())
-                                ep.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BUCKET));
-                            tile.addWater(1000);
-                        } else {
-                            if (ConfigRegistry.CLEARCHAT.getState())
-                                ReikaChatHelper.clearChat();
-                            ReikaChatHelper.write("Engine is too full to add water!");
-                        }
-                        return InteractionResult.SUCCESS;
-                    }
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
@@ -925,6 +775,46 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         // trigger syncs via {@code setChanged}/{@code recomputeConnections}; this fallback is
         // redundant and harmful.
         return InteractionResult.FAIL;
+    }
+
+    private boolean insertBucket(HasFluidResourceHandler machine, Fluid fluid, Level level,
+            Player player, InteractionHand hand, ItemStack emptyContainer) {
+        ResourceHandler<FluidResource> handler = machine.getFluidHandler(null);
+        if (handler == null) return false;
+        FluidResource resource = FluidResource.of(fluid);
+        if (level.isClientSide()) {
+            for (int i = 0; i < handler.size(); i++) {
+                if (handler.isValid(i, resource) && handler.getCapacityAsLong(i, resource)
+                        - handler.getAmountAsLong(i) >= 1000) return true;
+            }
+            return false;
+        }
+        try (Transaction transaction = Transaction.openRoot()) {
+            if (handler.insert(resource, 1000, transaction) != 1000) return false;
+            transaction.commit();
+        }
+        if (!player.isCreative()) player.setItemInHand(hand, emptyContainer);
+        return true;
+    }
+
+    private boolean extractBucket(HasFluidResourceHandler machine, Fluid fluid, Level level,
+            Player player, InteractionHand hand, ItemStack filledContainer) {
+        ResourceHandler<FluidResource> handler = machine.getFluidHandler(null);
+        if (handler == null) return false;
+        FluidResource resource = FluidResource.of(fluid);
+        if (level.isClientSide()) {
+            for (int i = 0; i < handler.size(); i++) {
+                if (resource.equals(handler.getResource(i)) && handler.getAmountAsLong(i) >= 1000)
+                    return true;
+            }
+            return false;
+        }
+        try (Transaction transaction = Transaction.openRoot()) {
+            if (handler.extract(resource, 1000, transaction) != 1000) return false;
+            transaction.commit();
+        }
+        if (!player.isCreative()) player.setItemInHand(hand, filledContainer);
+        return true;
     }
 
     // 1.21.5: Block.appendHoverText removed; tooltips are now on Item. Kept as a helper for BlockItem subclass wiring.

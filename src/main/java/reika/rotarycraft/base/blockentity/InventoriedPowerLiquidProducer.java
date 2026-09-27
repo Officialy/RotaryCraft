@@ -133,35 +133,11 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
 
     public abstract int getContainerSize();
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
 
-    @Override
-    public  FluidStack getFluidInTank(int tank) {
-        return null;
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public  FluidStack drain(int maxDrain, FluidAction action) {
-        return FluidStack.EMPTY;
-    }
 
     @Override
     public Block getBlockEntityBlockID() {
@@ -204,8 +180,4 @@ public abstract class InventoriedPowerLiquidProducer extends PoweredLiquidProduc
         return false;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
-        return 0;
-    }
 }

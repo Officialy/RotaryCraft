@@ -16,8 +16,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
@@ -26,9 +29,12 @@ import reika.rotarycraft.registry.MachineRegistry;
 import java.util.Locale;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements PipeConnector, IFluidHandler {//, IPipeConnection {
+public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements PipeConnector, HasFluidResourceHandler {//, IPipeConnection {
 
     protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH)), this.getCapacity());
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[]{tank}, (index, resource) -> this.isValidFluid(resource.getFluid()),
+            (index, resource) -> false, this::setChanged);
 
     public PoweredLiquidReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -61,44 +67,17 @@ public abstract class PoweredLiquidReceiver extends PoweredLiquidBase implements
         return f != null && f.equals(this.getInputFluid());
     }
 
-    // NeoForge IFluidHandler — exposes the input tank so pipes/hoppers and code-driven testing
-    // can fill it. Delegates to the HybridTank; only the machine's input fluid is accepted.
     @Override
-    public int getTanks() {
-        return 1;
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || canReceiveFrom(side) ? fluidHandler : null;
     }
 
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return this.tank.getFluid();
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return this.tank.getCapacity();
-    }
 
-    @Override
-    public boolean isFluidValid(int tank, FluidStack stack) {
-        return this.isValidFluid(stack.getFluid());
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        if (!this.isValidFluid(resource.getFluid()))
-            return 0;
-        return this.tank.fill(resource, action);
-    }
 
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return this.tank.drain(resource, action);
-    }
 
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return this.tank.drain(maxDrain, action);
-    }
+
 
 
     public abstract boolean canReceiveFrom(Direction from);

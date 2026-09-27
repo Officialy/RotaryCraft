@@ -23,7 +23,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class Dynamo2Model extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/steamtex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/converter/dynamotex2.png");
 
     private final ModelPart shape1;
     private final ModelPart shape2;
@@ -69,4 +69,3 @@ public class Dynamo2Model extends RotaryModelBase {
         return TEXTURE_LOCATION;
     }
 }
-

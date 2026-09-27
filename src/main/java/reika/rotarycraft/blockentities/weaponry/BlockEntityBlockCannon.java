@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -104,8 +104,8 @@ public class BlockEntityBlockCannon extends BlockEntityLaunchCannon {
                         return new BlockToFire(is, bk, i);
                     }
                 } */ else {
-                    FluidStack fs = FluidUtil.getFluidContained(itemHandler.getStackInSlot(i)).get();
-                    if (fs != null) {
+                    FluidStack fs = FluidUtil.getFirstStackContained(itemHandler.getStackInSlot(i));
+                    if (!fs.isEmpty()) {
                         Fluid f = fs.getFluid();
 //                        if (f.canBePlacedInWorld()) {
                         BlockKey bk = new BlockKey(f.defaultFluidState().createLegacyBlock());

@@ -16,9 +16,12 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
@@ -27,18 +30,17 @@ import reika.rotarycraft.registry.MachineRegistry;
 import java.util.Locale;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements IFluidHandler, PipeConnector {//}, IPipeConnection {
+public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements PipeConnector, HasFluidResourceHandler {//}, IPipeConnection {
 
     protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getTEName().toLowerCase(Locale.ENGLISH)), this.getCapacity());
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[]{tank}, (index, resource) -> false,
+            (index, resource) -> true, this::setChanged);
 
     public PoweredLiquidProducer(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    @Override
-    public  FluidStack drain(FluidStack resource, FluidAction action) {
-        return this.canDrain(resource.getFluid()) ? tank.drain(resource.getAmount(), action) : FluidStack.EMPTY;
-    }
 
     public final boolean canDrain(Fluid fluid) {
 //        return this.canOutputTo(from) && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);
@@ -63,6 +65,11 @@ public abstract class PoweredLiquidProducer extends PoweredLiquidBase implements
     }
 
     public abstract boolean canOutputTo(Direction to);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || canOutputTo(side) ? fluidHandler : null;
+    }
 
     @Override
     public final boolean canConnectToPipeOnSide(MachineRegistry p, Direction side) {

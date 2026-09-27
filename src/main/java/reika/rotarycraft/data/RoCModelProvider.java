@@ -163,7 +163,8 @@ public class RoCModelProvider extends ModelProvider {
                         block,
                         new TextureMapping().put(TextureSlot.ALL, tex).put(TextureSlot.PARTICLE, tex),
                         modelOut);
-            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockForceField) {
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockDynamo
+                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockForceField) {
                 var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"));
                 blockModelId = ModelTemplates.CUBE_ALL.create(
                         block,

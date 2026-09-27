@@ -107,11 +107,6 @@ public class BlockEntityLavaMaker extends InventoriedPowerLiquidProducer impleme
         return itemHandler;
     }
 
-    // Producer: drainable from any side (outputs the melted fluid to a pipe).
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction action) {
-        return tank.drain(maxDrain, action);
-    }
 
     @Override
     protected void animateWithTick(Level world, BlockPos pos) {
@@ -144,7 +139,8 @@ public class BlockEntityLavaMaker extends InventoriedPowerLiquidProducer impleme
             if (r == null)
                 continue;
             FluidStack fs = r.getFluid();
-            if (this.canMake(fs) && energy >= r.getMeltEnergy() * 20L) {
+            if (temperature >= r.getMeltTemperature() && this.canMake(fs)
+                    && energy >= r.getMeltEnergy() * 20L) {
                 tank.addLiquid(fs.getAmount(), fs.getFluid());
                 itemHandler.extractItem(i, 1, false);
                 energy -= r.getMeltEnergy() * 20L;

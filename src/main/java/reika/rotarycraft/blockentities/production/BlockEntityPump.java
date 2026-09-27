@@ -14,6 +14,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -22,10 +24,13 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.fml.loading.FMLEnvironment;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.ReikaFluidHelper;
@@ -42,7 +47,7 @@ import reika.rotarycraft.registry.*;
 
 import java.util.List;
 
-public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeConnector, DiscreteFunction {
+public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeConnector, DiscreteFunction, HasFluidResourceHandler {
 
     public final static int CAPACITY = 24 * 1000;
     /**
@@ -51,6 +56,14 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     public static final int FALLOFF = 256; //256W per 1 kPa
     private final BlockArray blocks = new BlockArray();
     private final HybridTank tank = new HybridTank("pump", CAPACITY);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> false,
+            (index, resource) -> true, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side.getAxis().isHorizontal() ? fluidHandler : null;
+    }
 
     public int duplicationAmount;
     private int soundtick = 200;
@@ -68,6 +81,8 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     @Override
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
+        if (world.isClientSide())
+            return;
         soundtick++;
         tickcount++;
         this.getIOSides(getBlockState().getValue(BlockRotaryCraftMachine.FACING));
@@ -83,7 +98,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
             blocks.recursiveAddLiquidWithBounds(world, pos.getX(), pos.getY() - 1, pos.getZ(), pos.getX() - 16, pos.getY() - 2, pos.getZ() - 16, pos.getX() + 16, pos.getY() - 1, pos.getZ() + 16, f);
             blocks.reverseBlockOrder();
         }
-        if (damage > 400)
+        if (damage >= 400)
             power = 0;
         //ReikaJavaLibrary.pConsole(FMLEnvironment.getDist()+" for "+blocks.getSize());
         if (blocks.isEmpty())
@@ -135,7 +150,7 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         }
         if (inbox.size() > 0 && !ReikaEntityHelper.allAreDead(inbox, false))
             damage++;
-        if (damage >= 400)
+        if (damage == 400)
             this.breakPump(world, pos);
     }
 
@@ -152,13 +167,15 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     public void harvest(Level world, BlockPos pos, BlockPos loc) {
         if (world.isClientSide())
             return;
+        if (!world.getFluidState(loc).isSource())
+            return;
         FluidStack fs = ReikaWorldHelper.getDrainableFluid(world, loc);
         if (fs == null || !tank.canTakeIn(fs))
             return;
         Fluid f = fs.getFluid();
 //        ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d  %d  %d  %d", loc.xCoord, loc.yCoord, loc.zCoord, world.getBlock(loc.xCoord, loc.yCoord, loc.zCoord)));
-        if (f != Fluids.LAVA)//|| !ReikaWorldHelper.is1p9InfiniteLava(world, loc))
-            world.setBlock(loc, Blocks.AIR.defaultBlockState(), 1);
+        if (f != Fluids.LAVA || !this.isInfiniteLavaSource(world, loc))
+            world.setBlock(loc, Blocks.AIR.defaultBlockState(), 3);
         int mult = 1;
         if (this.canMultiply(f)) {
             if (power / MINPOWER >= 16)
@@ -183,11 +200,26 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         return fluid.equals(Fluids.WATER);
     }
 
+    /** Preserve the legacy five-source exception when vanilla lava source conversion is enabled. */
+    private boolean isInfiniteLavaSource(Level world, BlockPos pos) {
+        if (!(world instanceof ServerLevel server)
+                || !server.getGameRules().get(GameRules.LAVA_SOURCE_CONVERSION))
+            return false;
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            var state = world.getFluidState(pos.relative(side));
+            if (!state.isSource() || state.getType() != Fluids.LAVA)
+                return false;
+        }
+        return true;
+    }
+
     public boolean isSource(Level world, BlockPos pos) {
         //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d, %d, %d, %d", x,y,z,(int)id));
         //ReikaWorldHelper.legacySetBlockWithNotify(world, pos, 49);
         Block liqid = world.getBlockState(pos).getBlock();
         if (!(/*liqid instanceof BlockFluidBase || */liqid instanceof LiquidBlock))
+            return false;
+        if (!world.getFluidState(pos).isSource())
             return false;
 //        boolean srcmeta = liqid instanceof BlockFluidFinite ? world.getBlockMetadata(pos) == 7 : world.getBlockMetadata(pos) == 0;
         Fluid f2 = ReikaFluidHelper.lookupFluidForBlock(liqid.defaultBlockState());
@@ -267,10 +299,6 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         return side.getStepY() == 0;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
 
     @Override
     public void onEMP() {
@@ -314,12 +342,6 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
 
 
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        if (from.getStepY() != 0)
-            return FluidStack.EMPTY;
-        return tank.drain(maxDrain, doDrain);
-    }
 
     @Override
     public int getOperationTime() {
@@ -336,5 +358,3 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         return true;
     }
 }
-
-

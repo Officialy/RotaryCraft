@@ -7,6 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 import reika.dragonapi.interfaces.IBonusYield;
 import reika.dragonapi.interfaces.IHasXP;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYield, IHasXP, IHeatRecipe {
-    private final List<Ingredient> ingredients;
+    private final ShapedRecipePattern pattern;
     // 1.21.5: stored as ItemStackTemplate (deferred Holder<Item>) so the recipe can be built during
     // datagen before Item components are bound; materialized via output.create() at runtime.
     private final ItemStackTemplate output;
@@ -38,8 +40,8 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
     private final int bonusMin;
     private final int bonusMax;
 
-    public ShapedBlastFurnaceRecipe(List<Ingredient> ingredients, ItemStackTemplate output, float temperature, float experience, float timeMultiplier, boolean needsAdditives, int chance, int min, int max) {
-        this.ingredients = ingredients;
+    public ShapedBlastFurnaceRecipe(ShapedRecipePattern pattern, ItemStackTemplate output, float temperature, float experience, float timeMultiplier, boolean needsAdditives, int chance, int min, int max) {
+        this.pattern = pattern;
         this.output = output;
         this.operatingTemperature = temperature;
         this.experience = experience;
@@ -56,29 +58,12 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
 
     @Override
     public boolean matches(RecipeInput input, Level world) {
-        boolean satisfied = !needsAdditives;
-
-        for (int i = 0; i < 3; i++) {
-            if (8 + i >= input.size()) break;
-            ItemStack additiveStack = input.getItem(8 + i);
-            if (!additiveStack.isEmpty() && i < this.ingredients.size() && this.ingredients.get(i).test(additiveStack)) {
-                satisfied = true;
-            }
-        }
-
-        if (satisfied) {
-            for (int i = 0; i < 9; i++) {
-                if (i >= input.size()) return false;
-                ItemStack recipeStack = input.getItem(i);
-                if (!recipeStack.isEmpty() && i < this.ingredients.size() && this.ingredients.get(i).test(recipeStack)) {
-                    continue;
-                }
-                return false;
-            }
-            return true;
-        }
-
-        return false;
+        if (input.size() < 10 || needsAdditives)
+            return false;
+        List<ItemStack> grid = new ArrayList<>(9);
+        for (int i = 1; i <= 9; i++)
+            grid.add(input.getItem(i));
+        return pattern.matches(CraftingInput.of(3, 3, grid));
     }
 
     @Override
@@ -91,7 +76,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
     }
 
     public List<Ingredient> getIngredients() {
-        return ingredients;
+        return pattern.ingredients().stream().flatMap(java.util.Optional::stream).toList();
     }
 
     public float getExperience() {
@@ -118,7 +103,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
 
     @Override
     public PlacementInfo placementInfo() {
-        return PlacementInfo.create(ingredients);
+        return PlacementInfo.createFromOptionals(pattern.ingredients());
     }
 
     @Override
@@ -145,7 +130,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
     @Override public float requiredTemperature() { return operatingTemperature; }
 
     public static final MapCodec<ShapedBlastFurnaceRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(r -> r.ingredients),
+            ShapedRecipePattern.MAP_CODEC.forGetter(r -> r.pattern),
             ItemStackTemplate.CODEC.fieldOf("output").forGetter(r -> r.output),
             Codec.FLOAT.fieldOf("temperature").forGetter(r -> r.operatingTemperature),
             Codec.FLOAT.fieldOf("experience").forGetter(r -> r.experience),
@@ -158,8 +143,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ShapedBlastFurnaceRecipe> STREAM_CODEC = StreamCodec.of(
             (buf, r) -> {
-                buf.writeVarInt(r.ingredients.size());
-                for (Ingredient ing : r.ingredients) Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ing);
+                ShapedRecipePattern.STREAM_CODEC.encode(buf, r.pattern);
                 ItemStackTemplate.STREAM_CODEC.encode(buf, r.output);
                 buf.writeFloat(r.operatingTemperature);
                 buf.writeFloat(r.experience);
@@ -170,9 +154,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
                 buf.writeVarInt(r.bonusMax);
             },
             buf -> {
-                int ic = buf.readVarInt();
-                List<Ingredient> ings = new ArrayList<>();
-                for (int i = 0; i < ic; i++) ings.add(Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
+                ShapedRecipePattern pattern = ShapedRecipePattern.STREAM_CODEC.decode(buf);
                 ItemStackTemplate out = ItemStackTemplate.STREAM_CODEC.decode(buf);
                 float temp = buf.readFloat();
                 float xp = buf.readFloat();
@@ -181,7 +163,7 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
                 int bc = buf.readVarInt();
                 int bmin = buf.readVarInt();
                 int bmax = buf.readVarInt();
-                return new ShapedBlastFurnaceRecipe(ings, out, temp, xp, tm, na, bc, bmin, bmax);
+                return new ShapedBlastFurnaceRecipe(pattern, out, temp, xp, tm, na, bc, bmin, bmax);
             }
     );
 }

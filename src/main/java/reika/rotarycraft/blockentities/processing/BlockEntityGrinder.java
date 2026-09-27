@@ -25,12 +25,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 
 
 import reika.dragonapi.instantiable.data.collections.OneWayCollections.OneWaySet;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.data.KeyedItemStack;
 import reika.dragonapi.instantiable.data.maps.ItemHashMap;
 import reika.dragonapi.libraries.ReikaFluidHelper;
@@ -47,7 +50,7 @@ import reika.rotarycraft.registry.*;
 
 import java.util.Collection;
 
-public class BlockEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, MultiOperational, ConditionalOperation, DamagingContact, EnchantableMachine {
+public class BlockEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, MultiOperational, ConditionalOperation, DamagingContact, EnchantableMachine, HasFluidResourceHandler {
 
     public static final int MAXLUBE = 4000;
     private static final int MIN_LUBE_PRODUCTION = DifficultyEffects.CANOLA.getAverageAmount();
@@ -73,6 +76,14 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
             return stack.getFluid().isSame(RotaryFluids.LUBRICANT.get());
         }
     };
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> false,
+            (index, resource) -> true, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side != Direction.UP ? fluidHandler : null;
+    }
 
     public int grinderCookTime;
     public boolean idle = false;
@@ -345,21 +356,11 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
         return side != Direction.DOWN;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
 
     @Override
     public void onEMP() {
     }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        if (this.canDrain(from, null))
-            return tank.drain(maxDrain, doDrain);
-        return FluidStack.EMPTY;
-    }
 
     public boolean canDrain(Direction from, FluidStack fluid) {
         return from != Direction.UP && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);

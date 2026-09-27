@@ -18,7 +18,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.CombinedResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -37,6 +45,53 @@ import reika.rotarycraft.registry.RotaryFluids;
 public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerator, SimpleProvider, /*IPipeConnection,*/ PipeConnector {
 
 	public static final int CAPACITY = 300000;
+	private final ResourceHandler<FluidResource> steamHandler = new SteamResourceHandler();
+	private final class SteamResourceHandler extends SnapshotJournal<Integer>
+			implements ResourceHandler<FluidResource> {
+		@Override public int size() { return 1; }
+		@Override public FluidResource getResource(int index) {
+			if (index != 0) throw new IndexOutOfBoundsException(index);
+			return storedEnergy > 0 ? FluidResource.of(RotaryFluids.STEAM.get()) : FluidResource.EMPTY;
+		}
+		@Override public long getAmountAsLong(int index) {
+			if (index != 0) throw new IndexOutOfBoundsException(index);
+			return storedEnergy;
+		}
+		@Override public long getCapacityAsLong(int index, FluidResource resource) {
+			if (index != 0) throw new IndexOutOfBoundsException(index);
+			return resource.isEmpty() || isValid(index, resource) ? CAPACITY : 0;
+		}
+		@Override public boolean isValid(int index, FluidResource resource) {
+			if (index != 0) throw new IndexOutOfBoundsException(index);
+			return resource.equals(FluidResource.of(RotaryFluids.STEAM.get()));
+		}
+		@Override public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+			TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+			if (!isValid(index, resource) || amount == 0) return 0;
+			int accepted = addEnergy(amount, false);
+			if (accepted > 0) {
+				updateSnapshots(transaction);
+				addEnergy(accepted, true);
+			}
+			return accepted;
+		}
+		@Override public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+			TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+			if (index != 0) throw new IndexOutOfBoundsException(index);
+			return 0;
+		}
+		@Override protected Integer createSnapshot() { return storedEnergy; }
+		@Override protected void revertToSnapshot(Integer snapshot) { storedEnergy = snapshot; }
+		@Override protected void onRootCommit(Integer originalState) { setChanged(); }
+	}
+	private final ResourceHandler<FluidResource> combinedFluidHandler =
+			new CombinedResourceHandler<>(super.getFluidHandler(null), steamHandler);
+
+	@Override
+	public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+		return side == null || side == this.getBlockState().getValue(BlockRotaryCraftMachine.FACING)
+				? combinedFluidHandler : super.getFluidHandler(side);
+	}
 
 	public BlockEntitySteam(BlockPos pos, BlockState state) {
 		super(RotaryBlockEntities.STEAM_TURBINE.get(), pos, state);
@@ -97,22 +152,22 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 	}
 
 	private void getSteam(Level world, BlockPos pos) {
-		int drain = 25;
-		if (storedEnergy <= this.getMaxStorage()-drain) {
-			BlockEntity te = world.getBlockEntity(pos);
-			if (te instanceof IFluidHandler ic) {
-				FluidStack liq = ic.drain(drain, FluidAction.EXECUTE);
-				if (liq != null && liq.getAmount() > 0 && liq.getFluid().equals(Fluids.WATER))
-					//steam.addLiquid(liq.amount, FluidRegistry.getFluid("steam"));
-					this.addEnergy(liq.getAmount(), FluidAction.EXECUTE);
-			}
+		if (world.isClientSide() || storedEnergy >= this.getMaxStorage()) return;
+		Direction inlet = this.getBlockState().getValue(BlockRotaryCraftMachine.FACING);
+		var source = world.getCapability(Capabilities.Fluid.BLOCK, pos.relative(inlet), inlet.getOpposite());
+		if (source == null) return;
+		try (Transaction transaction = Transaction.openRoot()) {
+			var moved = ResourceHandlerUtil.moveFirst(source, steamHandler,
+					resource -> resource.equals(FluidResource.of(RotaryFluids.STEAM.get())),
+					25, transaction);
+			if (moved != null) transaction.commit();
 		}
 	}
 
-	private int addEnergy(int amount, FluidAction doAdd) {
+	private int addEnergy(int amount, boolean doAdd) {
 		int max = this.getMaxStorage()-storedEnergy;
 		int add = Math.min(max, amount);
-		if (doAdd.execute())
+		if (doAdd)
 			storedEnergy += add;
 		return add;
 	}
@@ -142,17 +197,7 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 		return side == this.getFacing() ? BlockEntityPiping.Flow.INPUT : super.getFlowForSide(side);
 	}
 
-	@Override
-	public int fillPipe(Direction from, FluidStack resource, FluidAction doFill) {
-		if (super.canFill(from, resource.getFluid()))
-			return super.fillPipe(from, resource, doFill);
-		return this.canFill(from, resource.getFluid()) ? this.addEnergy(resource.getAmount(), doFill) : 0;
-	}
 
-	@Override
-	public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-		return FluidStack.EMPTY;
-	}
 	@Override
 	public boolean canFill(Direction from, Fluid fluid) {
 		return super.canFill(from, fluid) || from == this.getFacing() && fluid.equals(RotaryFluids.STEAM.get());
@@ -160,7 +205,8 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 
 	@Override
 	public boolean isValidSupplier(BlockEntity te) {
-		return te instanceof IFluidHandler || te instanceof BlockEntityPipe;
+		return te != null && level != null && level.getCapability(Capabilities.Fluid.BLOCK,
+				te.getBlockPos(), this.getBlockState().getValue(BlockRotaryCraftMachine.FACING).getOpposite()) != null;
 	}
 
 	@Override
@@ -183,40 +229,12 @@ public class BlockEntitySteam extends EnergyToPowerBase implements PowerGenerato
 		return 0xffffff;
 	}
 
-	@Override
-	public int getTanks() {
-		return 1;
-	}
 
-	@Override
-	public  FluidStack getFluidInTank(int tank) {
-		return new FluidStack(RotaryFluids.STEAM.get(), 0);
-	}
 
-	@Override
-	public int getTankCapacity(int tank) {
-		return 24000;
-	}
 
-	@Override
-	public boolean isFluidValid(int tank,  FluidStack stack) {
-		return false;
-	}
 
-	@Override
-	public int fill(FluidStack resource, FluidAction action) {
-		return 0;
-	}
 
-	@Override
-	public  FluidStack drain(FluidStack resource, FluidAction action) {
-		return null;
-	}
 
-	@Override
-	public  FluidStack drain(int maxDrain, FluidAction action) {
-		return null;
-	}
 
 	@Override
 	public boolean hasAnInventory() {

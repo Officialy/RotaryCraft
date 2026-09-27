@@ -23,12 +23,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -47,6 +49,7 @@ import reika.rotarycraft.auxiliary.interfaces.Wettable;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.registry.DurationRegistry;
+import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -61,8 +64,8 @@ import reika.rotarycraft.registry.RotaryItems;
  * <p>26.2 port notes: tree identity is tag-driven through TreeReader (legacy TreeType/ModWoodList
  * gone) so any correctly-tagged tree works; the slime-tree jam and TwilightForest/dye-tree special
  * cases are gated out (mods not ported -- {@code wet()}/jam kept for the Wettable contract). The
- * legacy non-INSTACUT falling-block cosmetic mode is not ported; cutting always drops items. The
- * legacy InertIInv/ProcessingMachine markers are not ported (no GUI; slot 0 is machine-managed).</p>
+ * non-INSTACUT mode lets unsupported tree blocks fall as in 1.7.10. The legacy
+ * InertIInv/ProcessingMachine markers are not ported (no GUI; slot 0 is machine-managed).</p>
  */
 public class BlockEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine,
         DamagingContact, Wettable, MultiOperational, ConditionalOperation {
@@ -197,6 +200,11 @@ public class BlockEntityWoodcutter extends InventoriedPowerReceiver implements E
             return;
 
         boolean wasLog = tree.getTreeLog() != null && state.is(tree.getTreeLog());
+        if (!ConfigRegistry.INSTACUT.getState() && FallingBlock.isFree(world.getBlockState(c.below()))) {
+            FallingBlockEntity falling = FallingBlockEntity.fall(world, c, state);
+            falling.time = -5000;
+            return;
+        }
         this.cutBlock(world, machine, c, state);
 
         // Replant on the ground row (machine level) where the trunk stood.
@@ -433,9 +441,11 @@ public class BlockEntityWoodcutter extends InventoriedPowerReceiver implements E
 
     @Override
     public int getOperationTime() {
+        if (!ConfigRegistry.INSTACUT.getState())
+            return 0;
         int base = DurationRegistry.WOODCUTTER.getOperationTime(omega);
         float ench = ReikaEnchantmentHelper.getEfficiencyMultiplier(enchantments.getEnchantment(Enchantments.EFFICIENCY));
-        return (int) (base / ench);
+        return Math.max(1, (int) (base / ench));
     }
 
     @Override

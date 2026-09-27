@@ -43,6 +43,7 @@ public class RotaryLang extends LanguageProvider {
             Map.entry("lava_smeltory", "Lava Smeltery"),
             Map.entry("line_builder", "Block Ram"),
             Map.entry("magnetizer", "Magnetizing Unit"),
+            Map.entry("rotational_dynamo", "Rotational Dynamo"),
             Map.entry("mirror", "Solar Mirror"),
             Map.entry("multi_clutch", "Multi-Directional Clutch"),
             Map.entry("obsidian_maker", "Obsidian Factory"),
@@ -78,6 +79,27 @@ public class RotaryLang extends LanguageProvider {
         add("config.jade.plugin_rotarycraft.engine_extras", "Engine Extras");
         add("config.jade.plugin_rotarycraft.pipe_info", "Pipe Info");
         add("config.jade.plugin_rotarycraft.gearbox_lubricant", "Gearbox Lubricant");
+        add("config.jade.plugin_rotarycraft.machine_state", "Machine State");
+        add("jade.rotarycraft.shutdown", "Shut down by EMP");
+        add("jade.rotarycraft.power_required", "Requires %s W");
+        add("jade.rotarycraft.status", "Status: %s");
+        add("jade.rotarycraft.temperature", "Temperature: %s / %s °C");
+        add("jade.rotarycraft.range", "Range: %s / %s blocks");
+        add("jade.rotarycraft.fluid", "%s: %s / %s mB");
+        add("jade.rotarycraft.comparator", "Comparator: %s / 15");
+        add("jei.rotarycraft.lava_requirements", "Requires %s °C and %s J");
+        add("jei.rotarycraft.compactor_input", "4 items consumed");
+        add("jei.rotarycraft.compactor_requirements", "Requires %s kPa and %s °C");
+        add("jei.rotarycraft.wetter_duration", "%s base ticks");
+        add("jei.rotarycraft.magnetizer_input", "Minimum speed: %s rad/s; alternating redstone required");
+        add("jei.rotarycraft.magnetizer_output", "Magnetic charge increases over time; %s rad/s per µT");
+        add("jei.rotarycraft.composter_yeast", "Yeast catalyst; consumed occasionally");
+        add("jei.rotarycraft.composter_temperature", "Requires 40–70 °C");
+        add("jei.rotarycraft.refrigerator_yield", "100–2000 mB per ice; yield scales with torque");
+        add("jei.rotarycraft.refrigerator_byproduct", "25%% chance; quantity varies");
+        add("jei.rotarycraft.obsidian_temperature", "100%% obsidian at 550–750 °C; output varies outside this range");
+        add("jei.rotarycraft.cobblestone_temperature", "Cobblestone outside the obsidian temperature range; chance varies");
+        add("jei.rotarycraft.cobblestone_lava", "50 mB must be present; lava is not consumed for cobblestone");
 
         RotaryBlocks.BLOCKS.getEntries().forEach(holder -> {
             String path = holder.getId().getPath();

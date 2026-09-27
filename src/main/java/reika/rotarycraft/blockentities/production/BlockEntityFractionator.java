@@ -13,8 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,6 +21,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,29 +31,27 @@ import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.instantiable.data.WeightedRandom;
+import reika.dragonapi.instantiable.math.MovingAverage;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.java.ReikaRandomHelper;
 import reika.rotarycraft.base.blockentity.PoweredLiquidIO;
+import reika.rotarycraft.auxiliary.recipemanagers.FractionatorRecipe;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerFractionator;
 import reika.rotarycraft.registry.DifficultyEffects;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryFluids;
-import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.registry.RotaryRecipeTypes;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
- * 26.1 port of the 1.7 Fractionator. Converts liquid ethanol + a fixed set of ingredient
- * items + a ghast tear catalyst into liquid jet fuel. Simpler than the legacy implementation
- * (no pressure or yield curve) — fires whenever all six ingredients are present, the
- * ghast-tear catalyst is filled, and the input tank holds ≥1000 mB of ethanol; consumes one
- * of each ingredient + 1000 mB ethanol per cycle and emits 1000 mB jet fuel.
+ * Converts ethanol and six ingredients into jet fuel. A ghast tear is required as a solvent,
+ * while the ingredient consumption and fuel yield follow the legacy weighted and pressure models.
  */
 public class BlockEntityFractionator extends PoweredLiquidIO implements Container {
 
@@ -67,32 +64,6 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
     public static final int  MIN_TORQUE    = 32;
 
     private static final int SLOTS = 7;
-
-    private static final LinkedHashMap<Item, Float> INGREDIENTS = new LinkedHashMap<>();
-
-    public static void registerIngredients() {
-        if (!INGREDIENTS.isEmpty()) return;
-        INGREDIENTS.put(Items.BLAZE_POWDER, 1.5F);
-        INGREDIENTS.put(RotaryItems.COAL_DUST.get(), 1F);
-        INGREDIENTS.put(Items.MAGMA_CREAM, 0.75F);
-        INGREDIENTS.put(Items.DYE.pink(), 0.5F);
-        INGREDIENTS.put(RotaryItems.NETHERRACK_DUST.get(), 2F);
-        INGREDIENTS.put(RotaryItems.TAR.get(), 1.5F);
-    }
-
-    public static boolean isIngredient(ItemStack is) {
-        registerIngredients();
-        return !is.isEmpty() && INGREDIENTS.containsKey(is.getItem());
-    }
-
-    public static Item ingredientForSlot(int slot) {
-        registerIngredients();
-        int i = 0;
-        for (Item k : INGREDIENTS.keySet()) {
-            if (i++ == slot) return k;
-        }
-        return null;
-    }
 
     /** Inventory backing for the GUI's 7 slots. Public for {@link ContainerFractionator}. */
     public ManagedItemHandler itemHandler = new ManagedItemHandler(SLOTS) {
@@ -107,6 +78,7 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
      * machine has torque input, decays toward ambient otherwise. Affects {@link #getYieldRatio}.
      */
     private int pressure;
+    private MovingAverage torqueInput = new MovingAverage(20);
 
     /**
      * Maximum pressure before overpressure failure (kPa-ish, scaled units). 1000 ≈ 10 atm.
@@ -146,7 +118,6 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
 
     public BlockEntityFractionator(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.FRACTIONATOR.get(), pos, state);
-        registerIngredients();
     }
 
     @Override
@@ -166,7 +137,8 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
 
     @Override
     public Fluid getInputFluid() {
-        return RotaryFluids.ETHANOL.get();
+        FractionatorRecipe recipe = this.getConfiguredRecipe();
+        return recipe == null ? Fluids.EMPTY : recipe.getInputFluid();
     }
 
     @Override
@@ -201,9 +173,11 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
 
     public boolean isItemValidForSlot(int slot, ItemStack is) {
         if (is.isEmpty()) return false;
-        if (slot == 6) return is.getItem() == Items.GHAST_TEAR;
-        Item needed = ingredientForSlot(slot);
-        return needed != null && is.getItem() == needed;
+        FractionatorRecipe recipe = this.getConfiguredRecipe();
+        if (recipe == null) return false;
+        if (slot == 6) return recipe.getSolvent().test(is);
+        return slot >= 0 && slot < 6 && recipe.getIngredients().stream()
+                .anyMatch(entry -> entry.ingredient().test(is));
     }
 
     public boolean hasAnInventory() { return true; }
@@ -213,110 +187,98 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         super.updateBlockEntity();
         this.getPowerBelow();
         power = (long) omega * (long) torque;
+        torqueInput.addValue(torque);
 
         if (world.isClientSide()) return;
 
         tickcount++;
-        // Pressure dynamics every 20 ticks (~1 s). Builds up while the machine has torque,
-        // bleeds off toward ambient otherwise. Triggers overpressure failure at the cap.
+        // The original machine samples a 20-tick torque average before each pressure update.
         if ((tickcount % 20) == 0) updatePressure();
 
         if (power < MIN_POWER || omega < MIN_SPEED || torque < MIN_TORQUE) {
             mixTime = 0;
             return;
         }
-        if (!canRunRecipe()) {
+        FractionatorRecipe recipe = this.getRecipe();
+        if (recipe == null || !canRunRecipe(recipe)) {
             mixTime = 0;
             return;
         }
         mixTime++;
         if (mixTime >= OPERATION_TIME) {
             mixTime = 0;
-            runRecipe();
+            runRecipe(recipe);
             setChanged();
         }
     }
 
-    /**
-     * Simplified port of the legacy pressure model. The 1.7 BE used a {@code MovingAverage} of
-     * torque to drive both rise and decay; we use the current torque directly. Behaviourally:
-     *   - {@code torque > 0} → pressure rises by ~√torque per cycle
-     *   - {@code torque ≤ 0} → pressure decays toward ambient (much faster)
-     *   - pressure > MAX_PRESSURE → triggers overpressure (set to AIR + small effect)
-     */
+    /** The original 20-tick moving-average pressure model; overpressure caps at 1000. */
     private void updatePressure() {
         int local = pressure;
         int ambient = 100; // ~1 atm in legacy units
         int dp = local - ambient;
         int sub = (int) (Math.signum(dp) * Math.max(1, Math.abs(dp / 16)));
-        if (torque <= 0) sub *= 8;
+        int averageTorque = (int) torqueInput.getAverage();
+        if (averageTorque <= 0) sub *= 8;
 
         local -= sub;
-        if (torque > 0) local += (int) (1.8 * Math.sqrt(torque));
+        if (averageTorque > 0) local += (int) (1.8 * Math.sqrt(averageTorque));
 
-        if (local > MAX_PRESSURE) {
-            overpressure();
-            local = MAX_PRESSURE;
-        }
+        if (local > MAX_PRESSURE) local = MAX_PRESSURE;
         if (pressure < local) {
-            pressure += Math.max(1, Math.min(10, (local - pressure) / 4));
+            pressure += Math.max(1, Math.min(ReikaRandomHelper.getRandomPlusMinus(6, 13), (local - pressure) / 4));
         } else {
             pressure = local;
         }
     }
 
-    private void overpressure() {
-        // Simple overpressure: drop a small amount of jet fuel to the world (legacy explosively
-        // destroyed the BE). Keep the user's machine alive so they can recover from a runaway.
-        // The legacy explosion behaviour can be restored once block-explosion drops are wired.
-        if (level != null && !level.isClientSide()) {
-            level.playSound(null, worldPosition,
-                    SoundEvents.GENERIC_EXPLODE.value(),
-                    SoundSource.BLOCKS, 0.6F, 1.5F);
-            output.removeLiquid(Math.min(2000, output.getFluidLevel()));
-        }
+    private FractionatorRecipe getConfiguredRecipe() {
+        if (level == null || level.getServer() == null) return null;
+        return level.getServer().getRecipeManager().recipeMap()
+                .byType(RotaryRecipeTypes.FRACTIONATOR.get()).stream()
+                .map(holder -> holder.value()).findFirst().orElse(null);
     }
 
-    private boolean canRunRecipe() {
+    private FractionatorRecipe getRecipe() {
+        if (level == null || level.getServer() == null) return null;
+        ArrayList<ItemStack> solids = new ArrayList<>(6);
+        for (int i = 0; i < 6; i++) solids.add(itemHandler.getStackInSlot(i));
+        FractionatorRecipe.FractionatorInput recipeInput = new FractionatorRecipe.FractionatorInput(
+                solids, itemHandler.getStackInSlot(6), input.getFluid());
+        return level.getServer().getRecipeManager()
+                .getRecipeFor(RotaryRecipeTypes.FRACTIONATOR.get(), recipeInput, level)
+                .map(holder -> holder.value()).orElse(null);
+    }
+
+    private boolean canRunRecipe(FractionatorRecipe recipe) {
         // Output-space check uses the upper-bound legacy PRODUCEFRAC ceiling so the cycle never
         // fires when the output tank would overflow.
-        if (output.getFluidLevel() + DifficultyEffects.PRODUCEFRAC.getMaxAmount() > CAPACITY)
+        if (output.getFluidLevel() + (int) Math.ceil(DifficultyEffects.PRODUCEFRAC.getMaxAmount() * 2.5) > CAPACITY)
             return false;
         // Input-fluid check tracks the per-difficulty actual cost so easy-mode players (who pay
         // ~31 mB ethanol per cycle) aren't gated on a full litre being present.
-        int ethanolCost = (int) Math.max(1, ETHANOL_PER_OP
+        int ethanolCost = (int) Math.max(1, recipe.getInputAmount()
                 * DifficultyEffects.CONSUMEFRAC.getChance());
         if (input.getFluidLevel() < ethanolCost) return false;
-        if (itemHandler.getStackInSlot(6).getItem() != Items.GHAST_TEAR) return false;
-        for (int i = 0; i < 6; i++) {
-            if (itemHandler.getStackInSlot(i).isEmpty()) return false;
-            Item required = ingredientForSlot(i);
-            if (required == null || itemHandler.getStackInSlot(i).getItem() != required) return false;
-        }
         return true;
     }
 
-    private void runRecipe() {
+    private void runRecipe(FractionatorRecipe recipe) {
         // Legacy 1.7 ethanol consumption was {@code 1000 mB × CONSUMEFRAC.getChance()} (0.03 / 0.25
         // / 0.75 for easy / medium / hard), so a medium-difficulty cycle uses only ~250 mB
         // ethanol instead of a flat litre. Match that here so the input tank doesn't drain
         // unrealistically fast and easy-mode players actually get the lighter cost they expect.
         float consumeFrac = DifficultyEffects.CONSUMEFRAC.getChance();
-        int ethanolCost = (int) Math.max(1, ETHANOL_PER_OP * consumeFrac);
+        int ethanolCost = (int) Math.max(1, recipe.getInputAmount() * consumeFrac);
         input.removeLiquid(ethanolCost);
         // Yield = legacy 7-point pressure curve × per-difficulty PRODUCEFRAC roll. The legacy
         // PRODUCEFRAC is a random range (e.g. 1000..2200 mB on medium); {@code getInt()} picks
         // a value within that range each cycle.
         int produceBase = DifficultyEffects.PRODUCEFRAC.getInt();
         int produced = (int) (produceBase * getYieldRatio());
-        output.addLiquid(Math.max(1, produced), RotaryFluids.JET_FUEL.get());
-        consumeIngredientsWeighted();
-        // Ghast tear is a catalyst — consumed every 4 cycles only.
-        if ((mixTime & 3) == 0) {
-            ItemStack tear = itemHandler.getStackInSlot(6);
-            tear.shrink(1);
-            itemHandler.setStackInSlot(6, tear);
-        }
+        output.addLiquid(Math.max(1, produced), recipe.getOutputFluid());
+        consumeIngredientsWeighted(recipe);
+        // The ghast tear is a solvent requirement, not a consumed ingredient in the 1.7 machine.
     }
 
     /**
@@ -330,19 +292,19 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
      * trailing fractional pick by probability — matches the legacy
      * {@code doWithChance(consume - floor)} behaviour.</p>
      */
-    private void consumeIngredientsWeighted() {
+    private void consumeIngredientsWeighted(FractionatorRecipe recipe) {
         // Legacy: {@code consume = ingredients.size() × CONSUMEFRAC.getChance()}.
         // On medium difficulty: 6 × 0.25 = 1.5 → typically one slot consumed each cycle, with
         // ~50% chance of a second one (fractional-budget probability check below).
-        float consume = INGREDIENTS.size()
+        float consume = recipe.getIngredients().size()
                 * DifficultyEffects.CONSUMEFRAC.getChance();
 
         WeightedRandom<Integer> wr = new WeightedRandom<>();
         for (int i = 0; i < 6; i++) {
             ItemStack is = itemHandler.getStackInSlot(i);
             if (is.isEmpty()) continue;
-            Float weight = INGREDIENTS.get(is.getItem());
-            if (weight == null || weight <= 0) continue;
+            float weight = recipe.weightFor(is);
+            if (weight <= 0) continue;
             wr.addEntry(i, weight);
         }
 
@@ -372,6 +334,9 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         super.writeSyncTag(tag);
         tag.putInt("mix", mixTime);
         tag.putInt("press", pressure);
+        CompoundTag average = new CompoundTag();
+        torqueInput.saveAdditional(average);
+        tag.put("torqueAverage", average);
     }
 
     @Override
@@ -379,6 +344,8 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         super.readSyncTag(tag);
         mixTime = tag.getIntOr("mix", 0);
         pressure = tag.getIntOr("press", 0);
+        if (tag.contains("torqueAverage"))
+            torqueInput = MovingAverage.load(tag.getCompoundOrEmpty("torqueAverage"));
     }
 
     @Override
@@ -394,7 +361,7 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
 
     @Override
     public int getRedstoneOverride() {
-        return (int) (15.0 * output.getFluidLevel() / CAPACITY);
+        return (int) (15.0 * getYieldRatio() / YIELD_POINTS[YIELD_POINTS.length - 1][1]);
     }
 
     @Override
@@ -403,14 +370,6 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
     @Override
     public boolean hasModelTransparency() { return false; }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource,
-                        IFluidHandler.FluidAction action) {
-        // Ethanol can be pushed into the input tank from any horizontal side.
-        if (!canReceiveFrom(from)) return 0;
-        if (!isValidFluid(resource.getFluid())) return 0;
-        return input.fill(resource, action);
-    }
 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {

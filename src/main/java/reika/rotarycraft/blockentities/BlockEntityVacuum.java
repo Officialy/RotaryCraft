@@ -31,7 +31,12 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.interfaces.blockentity.HasItemHandler;
 
 import reika.dragonapi.DragonAPI;
@@ -56,12 +61,64 @@ import reika.rotarycraft.registry.RotaryBlocks;
 
 import java.util.List;
 
-public class BlockEntityVacuum extends InventoriedPowerReceiver implements RangedEffect, BreakAction, IFluidHandler, HasItemHandler {
+public class BlockEntityVacuum extends InventoriedPowerReceiver implements RangedEffect, BreakAction, HasItemHandler, HasFluidResourceHandler {
 
     public static final int FALLOFF = Math.min(524288, ReikaMathLibrary.ceil2exp(Math.max(1024, ConfigRegistry.VACPOWER.getValue())));
     public boolean equidistant = true;
     public boolean suckIfFull = true;
     private int experience = 0;
+    private final ResourceHandler<FluidResource> fluidHandler = new XPFluidHandler();
+
+    private static int xpFluidRatio() {
+        FluidStack unit = ReikaXPFluidHelper.getFluid();
+        return unit == null ? 0 : unit.getAmount();
+    }
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return xpFluidRatio() > 0 ? fluidHandler : null;
+    }
+
+    private final class XPFluidHandler extends SnapshotJournal<Integer> implements ResourceHandler<FluidResource> {
+        @Override public int size() { return 1; }
+        @Override public FluidResource getResource(int index) {
+            java.util.Objects.checkIndex(index, 1);
+            return experience > 0 && xpFluidRatio() > 0
+                    ? FluidResource.of(ReikaXPFluidHelper.getFluidType()) : FluidResource.EMPTY;
+        }
+        @Override public long getAmountAsLong(int index) {
+            java.util.Objects.checkIndex(index, 1);
+            return (long) experience * xpFluidRatio();
+        }
+        @Override public long getCapacityAsLong(int index, FluidResource resource) {
+            java.util.Objects.checkIndex(index, 1);
+            return resource.isEmpty() || isValid(index, resource) ? Integer.MAX_VALUE : 0;
+        }
+        @Override public boolean isValid(int index, FluidResource resource) {
+            java.util.Objects.checkIndex(index, 1);
+            return xpFluidRatio() > 0 && !resource.isEmpty()
+                    && resource.equals(FluidResource.of(ReikaXPFluidHelper.getFluidType()));
+        }
+        @Override public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            java.util.Objects.checkIndex(index, 1);
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            return 0;
+        }
+        @Override public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            java.util.Objects.checkIndex(index, 1);
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            if (!isValid(index, resource) || amount == 0) return 0;
+            int ratio = xpFluidRatio();
+            int xp = Math.min(experience, amount / ratio);
+            if (xp <= 0) return 0;
+            updateSnapshots(transaction);
+            experience -= xp;
+            return xp * ratio;
+        }
+        @Override protected Integer createSnapshot() { return experience; }
+        @Override protected void revertToSnapshot(Integer snapshot) { experience = snapshot; }
+        @Override protected void onRootCommit(Integer originalState) { setChanged(); }
+    }
     private boolean isFull = false;
 
     /**
@@ -374,43 +431,15 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         ReikaWorldHelper.splitAndSpawnXP(level, worldPosition.getX() + DragonAPI.rand.nextFloat(), worldPosition.getY() + DragonAPI.rand.nextFloat(), worldPosition.getZ() + DragonAPI.rand.nextFloat(), experience);
     }
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
 
     
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
 
     @Override
     public boolean hasAnInventory() {

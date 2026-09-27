@@ -25,6 +25,7 @@ public final class RoCDataProviders {
         // Client-side resources: language, block / item models.
         event.createProvider(output -> new RotaryLang(output, "en_us"));
         event.createProvider(RoCModelProvider::new);
+        event.createProvider(RoCLegacyItemAtlasProvider::new);
     }
 
     @SubscribeEvent

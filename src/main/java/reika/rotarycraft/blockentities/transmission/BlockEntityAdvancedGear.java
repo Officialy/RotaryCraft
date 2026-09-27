@@ -32,10 +32,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.interfaces.blockentity.HasItemHandler;
 import reika.dragonapi.interfaces.blockentity.PartialInventory;
@@ -69,10 +72,20 @@ import reika.rotarycraft.registry.*;
 // slot 31 is the belt required for the CVT to run at all). {@code IFluidHandler} is still the
 // deprecated NeoForge interface (the lubricant tank hasn't been migrated yet) hence the suppression.
 @SuppressWarnings("removal")
-public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements HasItemHandler, PowerGenerator, PartialInventory, PartialTank, PipeConnector, IFluidHandler, ToggleTile, CVTController {
+public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements HasItemHandler, PowerGenerator, PartialInventory, PartialTank, PipeConnector, ToggleTile, CVTController, HasFluidResourceHandler {
 
     public static final int WORMRATIO = 64;
     private final HybridTank lubricant = new HybridTank("advgear", 20000);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {lubricant},
+            (index, resource) -> this.getGearType().consumesLubricant()
+                    && resource.getFluid() == RotaryFluids.LUBRICANT.get(),
+            (index, resource) -> false, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return this.getGearType().consumesLubricant() ? fluidHandler : null;
+    }
     private final CVTState[] cvtState = new CVTState[2];
     public boolean torquemode = true;
     private boolean isReleasing = false;
@@ -999,50 +1012,14 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
         return this.getGearType().consumesLubricant() && (p == MachineRegistry.HOSE || p == MachineRegistry.BEDPIPE);
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction doFill) {
-        return this.canFill(from, resource.getFluid()) ? lubricant.fill(resource, doFill) : 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
 
-    @Override
-    public  FluidStack getFluidInTank(int tank) {
-        return null;
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public  FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
 
-    @Override
-    public  FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
 
     @Override
     public Flow getFlowForSide(Direction side) {

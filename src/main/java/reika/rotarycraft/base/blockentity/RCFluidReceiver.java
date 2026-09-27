@@ -22,14 +22,25 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 
 import java.util.Locale;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements IFluidHandler, PipeConnector { //, IPipeConnection {
+public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements PipeConnector, HasFluidResourceHandler { //, IPipeConnection {
 
     protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH)), this.getCapacity());
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> isValidFluid(resource.getFluid()),
+            (index, resource) -> false, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || canReceiveFrom(side) ? fluidHandler : null;
+    }
 
     public RCFluidReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -69,46 +80,15 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
         return false;
     }
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-
-        if (!this.canFill(resource.getFluid()))
-            return 0;
-        return tank.fill(resource, action);
-    }
 
     
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return FluidStack.EMPTY;
-    }
 
 
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return FluidStack.EMPTY;
-    }
 
     @Override
     public boolean hasAnInventory() {
@@ -117,7 +97,7 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
 
     @Override
     public boolean hasATank() {
-        return false;
+        return true;
     }
 
     @Override
@@ -125,10 +105,6 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
         return false;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
     public abstract boolean canReceiveFrom(Direction from);
 

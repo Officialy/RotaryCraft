@@ -1,20 +1,18 @@
 {
   "type": "rotarycraft:blast_furnace_shaped",
   "experience": 0.0,
-  "ingredients": [
-    "rotarycraft:bedrock_dust",
-    "rotarycraft:bedrock_dust",
-    "rotarycraft:bedrock_dust",
-    "rotarycraft:bedrock_dust",
-    "rotarycraft:hsla_steel_bearing",
-    "rotarycraft:bedrock_dust",
-    "rotarycraft:bedrock_dust",
-    "rotarycraft:bedrock_dust",
-    "rotarycraft:bedrock_dust"
-  ],
+  "key": {
+    "B": "rotarycraft:hsla_steel_bearing",
+    "D": "rotarycraft:bedrock_dust"
+  },
   "output": {
     "id": "rotarycraft:bedrock_alloy_bearing"
   },
+  "pattern": [
+    "DDD",
+    "DBD",
+    "DDD"
+  ],
   "temperature": 1000.0,
   "timeMultiplier": 1.0
 }

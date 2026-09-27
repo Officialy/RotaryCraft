@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -25,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import reika.dragonapi.interfaces.blockentity.MultiPageInventory;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
@@ -32,6 +35,7 @@ import reika.rotarycraft.gui.container.machine.inventory.ContainerScaleChest;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryDataComponents;
 
 /**
  * The Scaleable Chest is a shaft-powered mass-storage block: the number of usable slots grows with
@@ -40,6 +44,12 @@ import reika.rotarycraft.registry.RotaryBlocks;
  * off too often (someone trying to abuse it as free bottomless storage that dumps when unpowered)
  * it destabilises, venting smoke and eventually exploding, dropping itself. 1.7.10-faithful; the
  * animated chest lid / open-close sounds (a client-only BER flourish) are not ported.
+ *
+ * <p>Breaking never spills the inventory ({@link #dropsInventoryOnBroken()}). A player harvest
+ * carries it inside the dropped chest item instead ({@link ScaleChestContents}, copied by the
+ * datagen'd loot table and restored on placement). Every other removal — explosion, the
+ * power-flicker self-destruct, creative breaking — voids it, as V33a did: only its
+ * {@code harvestBlock} wrote the inventory to the item, and {@code getDrops} returned a bare chest.</p>
  */
 public class BlockEntityScaleableChest extends InventoriedPowerReceiver implements MultiPageInventory, MenuProvider {
 
@@ -113,8 +123,9 @@ public class BlockEntityScaleableChest extends InventoriedPowerReceiver implemen
         return true;
     }
 
+    @Override
     public boolean isUseableByPlayer(Player ep) {
-        return numchanges == 0 && power >= MINPOWER;
+        return numchanges == 0 && power >= MINPOWER && this.isPlayerAccessible(ep);
     }
 
     @Override
@@ -224,6 +235,41 @@ public class BlockEntityScaleableChest extends InventoriedPowerReceiver implemen
         super.writeSyncTag(NBT);
         NBT.putInt("pg", page);
         NBT.putInt("chng", numchanges);
+    }
+
+    // ==== Contents carried by the harvested item (V33a writeInventoryToItem / readInventoryFromItem) ====
+
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder components) {
+        super.collectImplicitComponents(components);
+        ScaleChestContents contents = ScaleChestContents.fromHandler(itemHandler);
+        // An empty chest drops a plain item, so it still stacks with freshly crafted ones.
+        if (!contents.isEmpty())
+            components.set(RotaryDataComponents.SCALE_CHEST_CONTENTS.get(), contents);
+    }
+
+    @Override
+    protected void applyImplicitComponents(DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        ScaleChestContents contents = components.get(RotaryDataComponents.SCALE_CHEST_CONTENTS.get());
+        if (contents != null)
+            contents.copyInto(itemHandler);
+    }
+
+    @Override
+    public void removeComponentsFromTag(ValueOutput output) {
+        super.removeComponentsFromTag(output);
+        output.discard("ItemsRaw");
+    }
+
+    /**
+     * Deliberately empty. Vanilla's default spills a {@code Container}'s contents here (this chest
+     * is not one today, but nothing should start spilling it by inheritance): the harvest loot
+     * table reads this already-removed block entity afterwards to fill the dropped item, so a spill
+     * would duplicate the inventory. Unharvested removals void it, per V33a.
+     */
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
     }
 
     // ==== MenuProvider: the paged GUI (page carried through the open packet) ====

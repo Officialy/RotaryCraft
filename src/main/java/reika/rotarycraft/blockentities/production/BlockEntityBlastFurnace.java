@@ -38,6 +38,8 @@ import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.RotaryAux;
+import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.FrictionHeatable;
@@ -73,7 +75,7 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     /* --------------------------------------------------------------------- */
     /*  Constants                                                            */
     /* --------------------------------------------------------------------- */
-    public static final int SMELT_TEMP  = 232; //Lowest temp you can make Galinstan
+    public static final int SMELT_TEMP  = 600;
     public static final int BEDROCK_TEMP = 1450;
     public static final int MAX_TEMP     = 2000;
 
@@ -282,27 +284,22 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
         if (temperature < requiredTemp)
             return false;
 
-        // Count actual inputs in the crafting grid (slots 1-9)
-        int inputCount = 0;
-        for (int i = 1; i <= 9; i++) {
-            ItemStack stack = itemHandler.getStackInSlot(i);
-            if (!stack.isEmpty()) {
-                inputCount += stack.getCount();
-            }
+        int occupied = 0;
+        for (int i = 1; i <= 9; i++)
+            if (!itemHandler.getStackInSlot(i).isEmpty()) occupied++;
+        if (leaveLastItem) {
+            for (int i = 1; i <= 9; i++)
+                if (!itemHandler.getStackInSlot(i).isEmpty() && itemHandler.getStackInSlot(i).getCount() == 1)
+                    return false;
         }
 
-        // Get base result and scale by input count
         ItemStack result = matched.assemble(recipeInput).copy();
-        result.setCount(inputCount); // Scale base output to match input amount
-
-        // Apply bonus yield if recipe supports it
-        if (matched instanceof IBonusYield bonus) {
-            if (rand.nextInt(100) < bonus.bonusChance()) {
-                int bonusPerItem = bonus.bonusMin() +
-                        rand.nextInt(bonus.bonusMax() - bonus.bonusMin() + 1);
-                int totalBonus = bonusPerItem * inputCount; // Scale bonus by input count too
-                result.grow(totalBonus);
-            }
+        int produced = matched instanceof ShapelessBlastFurnaceRecipe shapeless
+                ? occupied / shapeless.getMainCount() : 1;
+        result.setCount(result.getCount() * produced);
+        if (matched instanceof ShapelessBlastFurnaceRecipe shapeless && shapeless.requiresEmptyOutput()) {
+            for (int i = 0; i < outputInv.getSlots(); i++)
+                if (!outputInv.getStackInSlot(i).isEmpty()) return false;
         }
 
         /* ------------------------------------------------------------
@@ -316,28 +313,35 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
         /* ------------------------------------------------------------
          * Progress bar
          * ---------------------------------------------------------- */
+        float multiplier = matched instanceof ShapedBlastFurnaceRecipe shapedRecipe
+                ? shapedRecipe.getTimeMultiplier()
+                : ((ShapelessBlastFurnaceRecipe) matched).getTimeMultiplier();
         progress++;
-        if (progress < getOperationTime())
+        if (progress < Math.max(1, Math.round(getOperationTime() * multiplier)))
             return true;            // still smelting
 
         /* ------------  craft  ------------------------------------ */
+        if (matched instanceof ShapelessBlastFurnaceRecipe bonus && bonus.bonusChance() > 0) {
+            // The source's bonusYield is stored as hundredths in this recipe format. On MEDIUM,
+            // BONUSSTEEL=1; its chance rises with the square of the number made in one batch.
+            double chance = Math.pow(1.005D, produced * produced) - 1D;
+            if (rand.nextDouble() < chance) {
+                int boosted = (int) (produced * (1F + rand.nextFloat() * bonus.bonusChance() / 100F));
+                result.setCount(Math.max(1, matched.assemble(recipeInput).getCount() * boosted));
+            }
+        }
+        if (!canOutput(result)) return true;
         progress = 0;
 
-        // ---- consume the 9-grid inputs (slots 1‥9)
         for (int i = 1; i <= 9; i++)
-            itemHandler.extractItem(i, 1, false);
-
-        // ---- consume the centre additive (slot 0) – at least one,
-        //      but possibly more depending on recipe size
-        itemHandler.extractItem(0, matched.placementInfo().ingredients().size(), false);
-
-        // ---- random chance to consume the *other* additives.
-        //      Using the original RotaryCraft probabilities:
-        //      slot 11: 40 % , slot 14: 25 %
-        if (rand.nextFloat() < 0.40F)
-            itemHandler.extractItem(11, 1, false);
-        if (rand.nextFloat() < 0.25F)
-            itemHandler.extractItem(14, 1, false);
+            if (!itemHandler.getStackInSlot(i).isEmpty()) itemHandler.extractItem(i, 1, false);
+        if (matched instanceof ShapelessBlastFurnaceRecipe shapeless) {
+            for (ShapelessBlastFurnaceRecipe.Additive additive : shapeless.getAdditives()) {
+                float chance = Math.min(1F, Math.max(additive.chance(), additive.chance() * produced));
+                for (int n = 0; n < additive.count(); n++)
+                    if (rand.nextFloat() < chance) itemHandler.extractItem(additive.slot(), 1, false);
+            }
+        }
 
         /* ------------------------------------------------------------
          * Push the results – tries 10, then 12, then 13, merging where
@@ -362,10 +366,13 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
     /*  Helper – output handling                                             */
     /* --------------------------------------------------------------------- */
     private boolean canOutput(ItemStack stack) {
+        int remaining = stack.getCount();
         for (int i = 0; i < outputInv.getSlots(); i++) {
             ItemStack existing = outputInv.getStackInSlot(i);
-            if (existing.isEmpty() || ReikaItemHelper.areStacksCombinable(existing, stack, existing.getMaxStackSize()))
-                return true;
+            if (existing.isEmpty()) remaining -= Math.min(stack.getMaxStackSize(), 64);
+            else if (ItemStack.isSameItemSameComponents(existing, stack))
+                remaining -= Math.max(0, Math.min(existing.getMaxStackSize(), 64) - existing.getCount());
+            if (remaining <= 0) return true;
         }
         return false;
     }

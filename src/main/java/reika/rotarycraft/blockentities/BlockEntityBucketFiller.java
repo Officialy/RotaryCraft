@@ -21,8 +21,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.FilteredFluidResourceHandler;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
@@ -33,8 +41,9 @@ import reika.rotarycraft.registry.DurationRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
+import reika.rotarycraft.registry.RotaryBlocks;
 
-public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, DiscreteFunction, ConditionalOperation {
+public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements PipeConnector, DiscreteFunction, ConditionalOperation, HasFluidResourceHandler {
 
     public static final int CAPACITY = 24000;
     public static final Fluid WATER = Fluids.WATER;
@@ -43,6 +52,17 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
     public static final Fluid LUBRICANT = RotaryFluids.LUBRICANT.get();
     private final HybridTank tank = new HybridTank("bucketfiller", CAPACITY);
     public boolean filling = true;
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> true,
+            (index, resource) -> true, this::setChanged);
+    private final ResourceHandler<FluidResource> pipeFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> filling,
+            (index, resource) -> !filling);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null ? fluidHandler : side.getAxis().isHorizontal() ? pipeFluidView : null;
+    }
 
     public BlockEntityBucketFiller(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.BUCKET_FILLER.get(), pos, state);
@@ -55,12 +75,13 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.BUCKET_FILLER.get();
     }
 
     //@Override
     public void updateEntity(Level world, BlockPos pos) {
-        super.updateBlockEntity();
+        super.updateEntity();
+        if (world.isClientSide()) return;
         tickcount++;
         this.getSummativeSidedPower();
         if (power < MINPOWER)
@@ -72,12 +93,12 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
             if (tickcount <= this.getOperationTime())
                 return;
             tickcount = 0;
-//            this.fillBuckets();
+            this.fillBuckets();
         } else {
             if (tickcount <= this.getOperationTime())
                 return;
             tickcount = 0;
-//            this.emptyBuckets();
+            this.emptyBuckets();
         }
     }
 
@@ -91,42 +112,31 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
         return 0;
     }
 
-//    private void emptyBuckets() {
-//        for (int i = 0; i < itemHandler.getSlots(); i++) {
-//            ItemStack slot = itemHandler.getStackInSlot(i);
-//            if (slot != null) {
-//                FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(slot);
-//                if (fluid != null) {
-//                    if (this.canAccept(fluid.getFluid())) {
-//                        if (tank.getCapacity() >= fluid.amount + tank.getLevel()) {
-//                            ItemStack is = FluidContainerRegistry.drainFluidContainer(slot);
-//                            ReikaInventoryHelper.decrStack(i, inv);
-//                            if (is != null)
-//                                if (!ReikaInventoryHelper.addToIInv(is, this))
-//                                    ReikaItemHelper.dropItem(level, worldPosition.above().offset(0.5, 0, 0.5), is);
-//                            tank.addLiquid(fluid.getAmount(), fluid.getFluid());
-//                            return; //uncomment to only allow 1 bucket at a time
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private void fillBuckets() {
-//        for (int i = 0; i < itemHandler.getSlots(); i++) {
-//            ItemStack slot = itemHandler.getStackInSlot(i);
-//            if (slot != null && FluidContainerRegistry.isEmptyContainer(slot)) {
-//                ItemStack is = FluidContainerRegistry.fillFluidContainer(tank.getFluid(), slot);
-//                if (is != null) {
-//                    tank.removeLiquid(FluidContainerRegistry.getFluidForFilledItem(is).amount);
-//                    ReikaInventoryHelper.decrStack(i, inv);
-//                    if (!ReikaInventoryHelper.addToIInv(is, this))
-//                        ReikaItemHelper.dropItem(level, worldPosition.offset(0.5, 0.5, 0.5), is);
-//                }
-//            }
-//        }
-//    }
+    private void emptyBuckets() {
+        transferContainers(false);
+    }
+
+    private void fillBuckets() {
+        transferContainers(true);
+    }
+
+    private void transferContainers(boolean fillContainer) {
+        for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+            ItemStack input = itemHandler.getStackInSlot(slot);
+            if (input.isEmpty()) continue;
+            ResourceHandler<FluidResource> container = ItemAccess.forHandlerIndex(itemHandler, slot)
+                    .oneByOne().getCapability(Capabilities.Fluid.ITEM);
+            if (container == null) continue;
+            try (Transaction transaction = Transaction.openRoot()) {
+                var moved = fillContainer
+                        ? ResourceHandlerUtil.moveFirst(fluidHandler, container, resource -> true, 1000, transaction)
+                        : ResourceHandlerUtil.moveFirst(container, fluidHandler, resource -> true, 1000, transaction);
+                if (moved == null) continue;
+                transaction.commit();
+                return;
+            }
+        }
+    }
 
     @Override
     public boolean hasModelTransparency() {
@@ -169,15 +179,7 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
         return side.getStepY() == 0;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
     public boolean canAccept(Fluid f) {
         return tank.isEmpty() || f.equals(tank.getActualFluid().getFluid());
     }

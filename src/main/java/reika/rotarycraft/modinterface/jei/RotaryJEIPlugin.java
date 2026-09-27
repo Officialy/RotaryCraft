@@ -1,18 +1,18 @@
 /*******************************************************************************
  * @author Reika Kalseki / 26.1 port by OfficialyMax
  *
- * JEI (Just Enough Items) integration for RotaryCraft. Provides recipe categories
- * for the Blast Furnace (shaped + shapeless) and Pulse Jet Furnace so that players
- * can look up what those machines can produce.
+ * JEI (Just Enough Items) integration for RotaryCraft machine processes.
  ******************************************************************************/
 package reika.rotarycraft.modinterface.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.IRecipeManager;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -27,20 +27,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeMap;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
-import reika.rotarycraft.blockentities.production.BlockEntityFractionator;
+import reika.rotarycraft.auxiliary.recipemanagers.FractionatorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.RecipesMagnetizer;
+import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
+import reika.rotarycraft.modinterface.jei.RotaryAdditionalJEICategories.*;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryRecipeTypes;
@@ -49,6 +55,9 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
 public class RotaryJEIPlugin implements IModPlugin {
 
     public static final Identifier UID = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "jei_plugin");
+    private static IJeiRuntime runtime;
+    private static RecipeMap registeredMap;
+    private static Map<RecipeType<?>, List<?>> registeredDataRecipes = Map.of();
 
     @Override
     public Identifier getPluginUid() { return UID; }
@@ -66,7 +75,16 @@ public class RotaryJEIPlugin implements IModPlugin {
                 new FrictionHeaterCategory(gui),
                 new ExtractorCategory(gui),
                 new FermenterCategory(gui),
-                new FractionatorCategory(gui)
+                new FractionatorCategory(gui),
+                new LavaMaker(gui),
+                new Compactor(gui),
+                new Wetter(gui),
+                new DryingBed(gui),
+                new Crystallizer(gui),
+                new Magnetizer(gui),
+                new Composter(gui),
+                new Refrigerator(gui),
+                new ObsidianMaker(gui)
         );
     }
 
@@ -81,74 +99,165 @@ public class RotaryJEIPlugin implements IModPlugin {
         registration.addRecipeCatalyst(MachineRegistry.EXTRACTOR.getCraftedProduct(), ExtractorCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.FERMENTER.getCraftedProduct(), FermenterCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.FRACTIONATOR.getCraftedProduct(), FractionatorCategory.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.LAVAMAKER.getCraftedProduct(), LavaMaker.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.COMPACTOR.getCraftedProduct(), Compactor.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.WETTER.getCraftedProduct(), Wetter.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.DRYING.getCraftedProduct(), DryingBed.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.CRYSTALLIZER.getCraftedProduct(), Crystallizer.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.MAGNETIZER.getCraftedProduct(), Magnetizer.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.COMPOSTER.getCraftedProduct(), Composter.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.REFRIGERATOR.getCraftedProduct(), Refrigerator.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.OBSIDIAN.getCraftedProduct(), ObsidianMaker.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.WORKTABLE.getCraftedProduct(), RecipeTypes.CRAFTING);
     }
 
     // -------------------------------------------------------------------------
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         try {
-            MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
-            if (server == null) return; // dedicated client — skip
-            var rm = server.getRecipeManager();
-
-            List<ShapedBlastFurnaceRecipe> shaped = rm.recipeMap()
-                    .byType(RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get())
-                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
-            registration.addRecipes(BlastFurnaceShapedCategory.TYPE, shaped);
-
-            List<ShapelessBlastFurnaceRecipe> shapeless = rm.recipeMap()
-                    .byType(RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get())
-                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
-            registration.addRecipes(BlastFurnaceShapelessCategory.TYPE, shapeless);
-
-            List<PulseFurnaceRecipe> pulse = rm.recipeMap()
-                    .byType(RotaryRecipeTypes.PULSE_FURNACE.get())
-                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
-            registration.addRecipes(PulseFurnaceCategory.TYPE, pulse);
-
-            List<GrinderJEIRecipe> grinder = new java.util.ArrayList<>(rm.recipeMap()
-                    .byType(RotaryRecipeTypes.GRINDER.get())
-                    .stream().map(RecipeHolder::value)
-                    .map(recipe -> new GrinderJEIRecipe(recipe.getInput(), recipe.getOutput(), false))
+            registration.addRecipes(Magnetizer.TYPE,
+                    List.copyOf(RecipesMagnetizer.getRecipes().getAllRecipes()));
+            registration.addRecipes(Composter.TYPE, BlockEntityComposter.getAllCompostables().stream()
+                    .filter(stack -> BlockEntityComposter.getCompostValue(stack) > 0)
+                    .map(stack -> new Composting(stack.copy(), BlockEntityComposter.getCompostValue(stack)))
                     .toList());
-            // Display-only: the grinder also mills canola seeds into lubricant (the BE fills its own
-            // tank — this isn't a datapack recipe). Keep that presentation separate from the
-            // serialized item-output recipe instead of constructing an illegal AIR template.
-            grinder.add(new GrinderJEIRecipe(
-                    Ingredient.of(reika.rotarycraft.registry.RotaryItems.CANOLA_SEEDS.get()),
-                    ItemStack.EMPTY, true));
-            registration.addRecipes(GrinderCategory.TYPE, grinder);
+            registration.addRecipes(Refrigerator.TYPE, List.of(new Cooling()));
+            registration.addRecipes(ObsidianMaker.TYPE,
+                    List.of(new ObsidianMix(true), new ObsidianMix(false)));
 
-            List<CentrifugeRecipe> centrifuge = rm.recipeMap()
-                    .byType(RotaryRecipeTypes.CENTRIFUGE.get())
-                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
-            registration.addRecipes(CentrifugeCategory.TYPE, centrifuge);
-
-            List<FrictionHeaterRecipe> friction = rm.recipeMap()
-                    .byType(RotaryRecipeTypes.FRICTION_HEATER.get())
-                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
-            registration.addRecipes(FrictionHeaterCategory.TYPE, friction);
-
-            List<ExtractorRecipe> extractor = rm.recipeMap()
-                    .byType(RotaryRecipeTypes.EXTRACTOR.get())
-                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
-            registration.addRecipes(ExtractorCategory.TYPE, extractor);
-
-            List<FermenterRecipe> fermenter = rm.recipeMap()
-                    .byType(RotaryRecipeTypes.FERMENTER.get())
-                    .stream().map(RecipeHolder::value).collect(Collectors.toList());
-            registration.addRecipes(FermenterCategory.TYPE, fermenter);
-
-            // The fractionator recipe is hardcoded in the BE, not data-driven — one synthetic entry.
-            registration.addRecipes(FractionatorCategory.TYPE, List.of(FractionatorJEIRecipe.INSTANCE));
+            MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
+            RecipeMap recipes = RotaryRecipeSync.Client.getCurrentRecipes();
+            if (recipes == null && server != null)
+                recipes = server.getRecipeManager().recipeMap();
+            if (recipes != null) {
+                addDataRecipes(recipes, registration::addRecipes);
+                registeredMap = recipes;
+            }
 
         } catch (Throwable t) {
             RotaryCraft.LOGGER.error("Failed to register RotaryCraft JEI recipes", t);
         }
     }
 
+    @FunctionalInterface
+    private interface RecipeSink {
+        <T> void accept(RecipeType<T> type, List<T> recipes);
+    }
+
+    private static void addDataRecipes(RecipeMap recipes, RecipeSink sink) {
+        Map<RecipeType<?>, List<?>> added = new HashMap<>();
+        RecipeSink tracked = new RecipeSink() {
+            @Override
+            public <T> void accept(RecipeType<T> type, List<T> values) {
+                sink.accept(type, values);
+                added.put(type, values);
+            }
+        };
+
+        List<ShapedBlastFurnaceRecipe> shaped = recipes
+                .byType(RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get())
+                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        tracked.accept(BlastFurnaceShapedCategory.TYPE, shaped);
+
+        List<ShapelessBlastFurnaceRecipe> shapeless = recipes
+                .byType(RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get())
+                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        tracked.accept(BlastFurnaceShapelessCategory.TYPE, shapeless);
+
+        List<PulseFurnaceRecipe> pulse = recipes
+                .byType(RotaryRecipeTypes.PULSE_FURNACE.get())
+                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        tracked.accept(PulseFurnaceCategory.TYPE, pulse);
+
+        List<GrinderJEIRecipe> grinder = new java.util.ArrayList<>(recipes
+                .byType(RotaryRecipeTypes.GRINDER.get())
+                .stream().map(RecipeHolder::value)
+                .map(recipe -> new GrinderJEIRecipe(recipe.getInput(), recipe.getOutput(), false))
+                .toList());
+        // Display-only: the grinder also mills canola seeds into lubricant (the BE fills its own
+        // tank — this isn't a datapack recipe). Keep that presentation separate from the
+        // serialized item-output recipe instead of constructing an illegal AIR template.
+        grinder.add(new GrinderJEIRecipe(
+                Ingredient.of(reika.rotarycraft.registry.RotaryItems.CANOLA_SEEDS.get()),
+                ItemStack.EMPTY, true));
+        tracked.accept(GrinderCategory.TYPE, grinder);
+
+        List<CentrifugeRecipe> centrifuge = recipes
+                .byType(RotaryRecipeTypes.CENTRIFUGE.get())
+                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        tracked.accept(CentrifugeCategory.TYPE, centrifuge);
+
+        List<FrictionHeaterRecipe> friction = recipes
+                .byType(RotaryRecipeTypes.FRICTION_HEATER.get())
+                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        tracked.accept(FrictionHeaterCategory.TYPE, friction);
+
+        List<ExtractorRecipe> extractor = recipes
+                .byType(RotaryRecipeTypes.EXTRACTOR.get())
+                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        tracked.accept(ExtractorCategory.TYPE, extractor);
+
+        List<FermenterRecipe> fermenter = recipes
+                .byType(RotaryRecipeTypes.FERMENTER.get())
+                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        tracked.accept(FermenterCategory.TYPE, fermenter);
+
+        List<FractionatorRecipe> fractionator = recipes
+                .byType(RotaryRecipeTypes.FRACTIONATOR.get())
+                .stream().map(RecipeHolder::value).collect(Collectors.toList());
+        tracked.accept(FractionatorCategory.TYPE, fractionator);
+
+        tracked.accept(LavaMaker.TYPE, recipes
+                .byType(RotaryRecipeTypes.LAVA_MAKER.get()).stream()
+                .map(RecipeHolder::value).toList());
+        tracked.accept(Compactor.TYPE, recipes
+                .byType(RotaryRecipeTypes.COMPACTOR.get()).stream()
+                .map(RecipeHolder::value).toList());
+        tracked.accept(Wetter.TYPE, recipes
+                .byType(RotaryRecipeTypes.WETTER.get()).stream()
+                .map(RecipeHolder::value).toList());
+        tracked.accept(DryingBed.TYPE, recipes
+                .byType(RotaryRecipeTypes.DRYING_BED.get()).stream()
+                .map(RecipeHolder::value).toList());
+        tracked.accept(Crystallizer.TYPE, recipes
+                .byType(RotaryRecipeTypes.CRYSTALLIZER.get()).stream()
+                .map(RecipeHolder::value).toList());
+
+        registeredDataRecipes = Map.copyOf(added);
+    }
+
     @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {}
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        runtime = jeiRuntime;
+        RecipeMap synced = RotaryRecipeSync.Client.getCurrentRecipes();
+        if (synced != null && synced != registeredMap)
+            onRecipeMapReceived(synced);
+    }
+
+    @Override
+    public void onRuntimeUnavailable() {
+        runtime = null;
+        registeredMap = null;
+        registeredDataRecipes = Map.of();
+    }
+
+    static void onRecipeMapReceived(RecipeMap recipes) {
+        if (runtime == null || recipes == registeredMap)
+            return;
+        try {
+            hideRegisteredDataRecipes(runtime.getRecipeManager());
+            addDataRecipes(recipes, runtime.getRecipeManager()::addRecipes);
+            registeredMap = recipes;
+        } catch (Throwable t) {
+            RotaryCraft.LOGGER.error("Failed to update RotaryCraft JEI recipes after datapack sync", t);
+        }
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static void hideRegisteredDataRecipes(IRecipeManager manager) {
+        for (var entry : registeredDataRecipes.entrySet())
+            manager.hideRecipes((RecipeType) entry.getKey(), entry.getValue());
+    }
 
     // =========================================================================
     // Blast Furnace — shaped (3×3 grid of ingredients, like crafting)
@@ -429,16 +538,10 @@ public class RotaryJEIPlugin implements IModPlugin {
     // =========================================================================
     // Fractionator — hardcoded jet-fuel recipe: ethanol + 6 ingredients + ghast tear
     // =========================================================================
-    /** Marker for the single hardcoded fractionator recipe. */
-    public static final class FractionatorJEIRecipe {
-        public static final FractionatorJEIRecipe INSTANCE = new FractionatorJEIRecipe();
-        private FractionatorJEIRecipe() {}
-    }
+    public static final class FractionatorCategory implements IRecipeCategory<FractionatorRecipe> {
 
-    public static final class FractionatorCategory implements IRecipeCategory<FractionatorJEIRecipe> {
-
-        public static final RecipeType<FractionatorJEIRecipe> TYPE =
-                RecipeType.create(RotaryCraft.MODID, "fractionator", FractionatorJEIRecipe.class);
+        public static final RecipeType<FractionatorRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "fractionator", FractionatorRecipe.class);
 
         private final IDrawable icon;
 
@@ -446,29 +549,29 @@ public class RotaryJEIPlugin implements IModPlugin {
             this.icon = gui.createDrawableItemStack(MachineRegistry.FRACTIONATOR.getCraftedProduct());
         }
 
-        @Override public RecipeType<FractionatorJEIRecipe> getRecipeType() { return TYPE; }
+        @Override public RecipeType<FractionatorRecipe> getRecipeType() { return TYPE; }
         @Override public Component getTitle() { return Component.translatable("machine.fractionator"); }
         @Override public int getWidth()  { return 150; }
         @Override public int getHeight() { return 40; }
         @Override public IDrawable getIcon() { return icon; }
 
         @Override
-        public void setRecipe(IRecipeLayoutBuilder builder, FractionatorJEIRecipe recipe, IFocusGroup focuses) {
-            BlockEntityFractionator.registerIngredients();
+        public void setRecipe(IRecipeLayoutBuilder builder, FractionatorRecipe recipe, IFocusGroup focuses) {
             builder.addSlot(RecipeIngredientRole.INPUT, 1, 11)
-                   .addFluidStack(RotaryFluids.ETHANOL.get(), BlockEntityFractionator.ETHANOL_PER_OP);
-            for (int i = 0; i < 6; i++) {
-                var item = BlockEntityFractionator.ingredientForSlot(i);
-                if (item == null) continue;
+                   .addFluidStack(recipe.getInputFluid(), recipe.getInputAmount());
+            for (int i = 0; i < recipe.getIngredients().size(); i++) {
+                var entry = recipe.getIngredients().get(i);
                 builder.addSlot(RecipeIngredientRole.INPUT, 23 + (i % 3) * 18, 2 + (i / 3) * 18)
-                       .addItemStack(new net.minecraft.world.item.ItemStack(item));
+                       .addIngredients(entry.ingredient())
+                       .addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                               Component.literal("Consumption weight: " + entry.weight())));
             }
             builder.addSlot(RecipeIngredientRole.INPUT, 81, 11)
-                   .addItemStack(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.GHAST_TEAR))
+                   .addIngredients(recipe.getSolvent())
                    .addRichTooltipCallback((view, tooltip) -> tooltip.add(
-                           Component.literal("Catalyst — consumed every 4th cycle")));
+                           Component.literal("Solvent — required but not consumed")));
             builder.addSlot(RecipeIngredientRole.OUTPUT, 128, 11)
-                   .addFluidStack(RotaryFluids.JET_FUEL.get(), 1000)
+                   .addFluidStack(recipe.getOutputFluid(), recipe.getNominalOutput())
                    .addRichTooltipCallback((view, tooltip) -> tooltip.add(
                            Component.literal("Yield scales with pressure and difficulty")));
         }

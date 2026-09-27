@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.api.interfaces.Fillable;
@@ -167,15 +166,7 @@ public class BlockEntityFillingStation extends InventoriedPowerLiquidInOut imple
         return m == MachineRegistry.FUELLINE || m.isStandardPipe() || m == MachineRegistry.HOSE;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction doFill) {
-        return resource.isEmpty() ? 0 : tank.fill(resource, doFill);
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
     @Override
     public void onEMP() {

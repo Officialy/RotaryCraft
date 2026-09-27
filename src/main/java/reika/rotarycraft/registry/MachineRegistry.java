@@ -78,6 +78,7 @@ import reika.rotarycraft.blockentities.weaponry.*;
 import reika.rotarycraft.modinterface.conversion.BlockEntityBoiler;
 import reika.rotarycraft.modinterface.conversion.BlockEntityMagnetEngine;
 import reika.rotarycraft.modinterface.conversion.BlockEntitySteam;
+import reika.rotarycraft.modinterface.conversion.TileEntityDynamo;
 
 import java.util.Locale;
 import java.util.function.Function;
@@ -220,7 +221,6 @@ public enum MachineRegistry implements TileEnum {
     //    DEFOLIATOR("machine.defoliator", BlockRotaryCraftMachine.class, BlockEntityDefoliator.class, "RenderDefoliator"),
     BIGFURNACE(true, "machine.bigfurnace", RotaryBlocks.LAVA_SMELTORY.get(), BlockEntityLavaSmeltery.class, PowerTypes.RF),
     //    DISTILLER("machine.distiller", BlockRotaryCraftMachine.class, BlockEntityDistillery.class, "RenderDistillery"),
-    //    DYNAMO("machine.dynamo", BlockModEngine.class, BlockEntityDynamo.class, "RenderDynamo", PowerTypes.RF),
     MAGNETIC(true, "machine.magnetic", RotaryBlocks.MAGNETOSTATIC_ENGINE.get(), BlockEntityMagnetEngine.class, PowerTypes.RF),
     CRYSTALLIZER("machine.crystal", RotaryBlocks.CRYSTALLIZER.get(), BlockEntityCrystallizer.class),
     BUSCONTROLLER("machine.buscontroller", RotaryBlocks.BUSCONTROLLER.get(), BlockEntityBusController.class),
@@ -252,7 +252,8 @@ public enum MachineRegistry implements TileEnum {
     BEDROCKBREAKER("machine.bedrock", RotaryBlocks.BEDROCK_BREAKER.get(), BlockEntityBedrockBreaker.class),
     HYDRO_ENGINE("machine.hydro_engine", RotaryBlocks.HYDRO_ENGINE.get(), BlockEntityHydroEngine.class, EngineType.HYDRO),
     FERMENTER(true, "machine.fermenter", RotaryBlocks.FERMENTER.get(), BlockEntityFermenter.class),
-    EXTRACTOR(true, "machine.extractor", RotaryBlocks.EXTRACTOR.get(), BlockEntityExtractor.class);
+    EXTRACTOR(true, "machine.extractor", RotaryBlocks.EXTRACTOR.get(), BlockEntityExtractor.class),
+    DYNAMO("machine.dynamo", RotaryBlocks.ROTATIONAL_DYNAMO.get(), TileEntityDynamo.class, PowerTypes.RF);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
@@ -699,7 +700,7 @@ public enum MachineRegistry implements TileEnum {
 
     public boolean isModConversionEngine() {
         return switch (this) {
-            case /*DYNAMO, COMPRESSOR,*/ BOILER /*,GENERATOR*/ -> true;
+            case DYNAMO, BOILER -> true;
             default -> false;
         };
     }
@@ -848,7 +849,6 @@ public enum MachineRegistry implements TileEnum {
             return true;
 //        if (this == COMPRESSOR)
         return true;
-//        return this == DYNAMO;
     }
 
     public boolean allowsAcceleration() {
@@ -979,7 +979,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, FERMENTER, GRINDER, COMPACTOR, BORER, PUMP, EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, BLASTFURNACE, MOBHARVESTER, MAGNETIZER, FRICTION, MIRROR, SOLARTOWER, COOLINGFIN, WORKTABLE, /*COMPRESSOR, DYNAMO,*/ MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT, VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, CRYSTALLIZER, BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE, PIPEPUMP, DRYING, WETTER ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, FERMENTER, GRINDER, COMPACTOR, BORER, PUMP, EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, BLASTFURNACE, MOBHARVESTER, MAGNETIZER, FRICTION, MIRROR, SOLARTOWER, COOLINGFIN, WORKTABLE, DYNAMO, MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT, VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, CRYSTALLIZER, BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE, PIPEPUMP, DRYING, WETTER ->
                     true;
             default -> false;
         };

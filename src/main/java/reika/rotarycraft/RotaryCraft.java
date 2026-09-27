@@ -37,6 +37,7 @@ import reika.rotarycraft.auxiliary.*;
 import reika.rotarycraft.gui.screen.GuiHandCraft;
 import reika.rotarycraft.gui.screen.machine.*;
 import reika.rotarycraft.gui.screen.machine.inventory.*;
+import reika.rotarycraft.modinterface.jei.RotaryRecipeSync;
 import reika.rotarycraft.registry.*;
 import reika.rotarycraft.renders.RotaryRenderPipelines;
 
@@ -95,6 +96,7 @@ public class RotaryCraft extends DragonAPIMod {
         RotaryGameTests.TEST_INSTANCE_TYPES.register(modEventBus);
         // Expose machine inventories (and tanks) as standard NeoForge block capabilities.
         modEventBus.addListener(RotaryBlockEntities::registerCapabilities);
+        RotaryRecipeSync.register();
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
             modEventBus.addListener(this::clientSetup);
             modEventBus.addListener(this::registerScreens);
@@ -116,6 +118,7 @@ public class RotaryCraft extends DragonAPIMod {
         LOGGER.info("RotaryCraft:" + " Creating Items!");
         RotaryItems.ITEMS.register(modEventBus);
         RotaryBlocks.ITEMS.register(modEventBus);
+        RotaryDataComponents.COMPONENTS.register(modEventBus);
 
         LOGGER.info("RotaryCraft:" + " Creating Fluids!");
         RotaryFluids.FLUID_TYPES.register(modEventBus);

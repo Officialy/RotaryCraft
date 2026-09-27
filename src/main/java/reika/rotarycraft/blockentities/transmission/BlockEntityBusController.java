@@ -154,18 +154,7 @@ public class BlockEntityBusController extends PoweredLiquidReceiver implements T
         return 8000;
     }
 
-    // Pure consumer: lubricant only flows in.
-    @Override
-    public net.neoforged.neoforge.fluids.FluidStack drainPipe(Direction from, int maxDrain, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction action) {
-        return net.neoforged.neoforge.fluids.FluidStack.EMPTY;
-    }
 
-    @Override
-    public int fillPipe(Direction from, net.neoforged.neoforge.fluids.FluidStack resource, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction action) {
-        if (!this.canReceiveFrom(from) || !this.isValidFluid(resource.getFluid()))
-            return 0;
-        return tank.fill(resource, action);
-    }
 
     @Override
     public void breakBlock() {

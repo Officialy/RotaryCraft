@@ -9,11 +9,13 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.production;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
@@ -21,6 +23,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -28,14 +31,19 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.neoforged.neoforge.common.NeoForge;
 
 import reika.dragonapi.libraries.ReikaInventoryHelper;
+import reika.dragonapi.libraries.ReikaPlayerAPI;
 import reika.dragonapi.libraries.io.ReikaSoundHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.auxiliary.MachineEnchantmentHandler;
+import reika.rotarycraft.api.event.BorerDigEvent;
+import reika.rotarycraft.api.interfaces.IgnoredByBorer;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.EnchantableMachine;
 import reika.rotarycraft.base.blockentity.BlockEntityBeamMachine;
+import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.base.blocks.entity.BlockMiningPipe;
 import reika.rotarycraft.gui.container.machine.ContainerBorer;
@@ -51,7 +59,7 @@ import reika.rotarycraft.registry.RotaryBlocks;
  * the GUI edits) and lining the shaft behind it with {@link BlockMiningPipe}. It skips over pipe it has
  * already laid, so it keeps digging fresh ground rather than re-mining its own shaft. If the required
  * power/torque to break the next slice exceeds what it's fed, it jams. Port of the legacy
- * {@code TileEntityBorer}, minus the 1.7-only chunk-anticipation worldgen and mod-protection hooks.
+ * {@code TileEntityBorer}.
  */
 public class BlockEntityBorer extends BlockEntityBeamMachine implements EnchantableMachine, DiscreteFunction {
 
@@ -156,7 +164,7 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
         if (tickcount == 1 || step == 1)
             isMiningAir = this.checkMiningAir(world, pos);
 
-        if (!world.isClientSide() && tickcount >= this.getOperationTime() || (isMiningAir && tickcount % 5 == 0)) {
+        if (!world.isClientSide() && (tickcount >= this.getOperationTime() || (isMiningAir && tickcount % 5 == 0))) {
             this.skipMiningPipes(world, pos, 0, 128);
             this.calcReqPower(world, pos);
             if (power >= reqpow && reqpow != -1) {
@@ -189,9 +197,8 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
      * runs along the horizontal axis perpendicular to facing, row {@code j} (0..4) runs up the Y axis
      * (borer at the bottom). Faithful to the legacy {@code x+step*facing + a*(i-3)}, {@code y+(4-j)}.
      */
-    // NOTE: the borer tunnels indefinitely along its facing. The 1.7 chunk-anticipation worldgen was
-    // deliberately not ported, so a shaft crossing into an unloaded chunk will force a sync chunk load
-    // via getBlockState — acceptable, but the source of any "borer stutters at chunk borders" reports.
+    // Like the original, a shaft crossing an unloaded chunk obtains its next slice through
+    // getBlockState and can synchronously load that chunk.
     private BlockPos readPos(BlockPos pos, int depth, int i, int j) {
         Direction facing = this.getFacing();
         int w = i - 3;
@@ -302,7 +309,9 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
         if (bs.isAir())
             return true;
         FluidState fs = bs.getFluidState();
-        return !fs.isEmpty();
+        if (!fs.isEmpty())
+            return true;
+        return bs.getBlock() instanceof IgnoredByBorer ignored && ignored.ignoreHardness(world, p);
     }
 
     // --- digging -------------------------------------------------------------
@@ -311,6 +320,7 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
         this.support(world, pos);
         BlockMiningPipe pipeBlock = (BlockMiningPipe) RotaryBlocks.MININGPIPE.get();
         Direction.Axis boreAxis = this.getFacing().getAxis();
+        boolean blocked = false;
         for (int i = 0; i < COLS; i++) {
             for (int j = 0; j < ROWS; j++) {
                 if (!active(i, j))
@@ -322,10 +332,17 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
                     // The borer face gets a full-cube junction cap; the shaft behind gets an axis pipe.
                     BlockState pipe = step == 1 ? pipeBlock.junctionState() : pipeBlock.stateForAxis(boreAxis);
                     world.setBlock(p, pipe, 3);
+                } else {
+                    blocked = true;
                 }
             }
         }
-        step++;
+        NeoForge.EVENT_BUS.post(new BorerDigEvent(this, step, pos.relative(this.getFacing(), step),
+                enchantments.hasEnchantment(Enchantments.SILK_TOUCH)));
+        if (blocked)
+            this.setJammed(true);
+        else
+            step++;
     }
 
     /** Sand/gravel directly above a bored cell is petrified so the tunnel roof doesn't cave in. */
@@ -356,11 +373,35 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
     private boolean dropBlocks(Level world, BlockPos pos, BlockPos p, BlockState bs) {
         if (bs.is(Blocks.BEDROCK) || bs.is(Blocks.END_PORTAL_FRAME))
             return false;
+        if (world instanceof ServerLevel server) {
+            var owner = this.getServerPlacer();
+            if (owner != null && !ReikaPlayerAPI.playerCanBreakAt(server, p, bs, owner))
+                return false;
+        }
         BlockEntity tile = world.getBlockEntity(p);
+        if (tile instanceof RotaryCraftBlockEntity)
+            return false;
         if (tile != null && !(tile instanceof Container))
             return false;
         if (drops && !bs.isAir()) {
-            List<ItemStack> items = Block.getDrops(bs, (ServerLevel) world, p, tile);
+            ItemStack tool = new ItemStack(Items.NETHERITE_PICKAXE);
+            var enchants = world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            int fortune = enchantments.getEnchantment(Enchantments.FORTUNE);
+            if (fortune > 0)
+                tool.enchant(enchants.getOrThrow(Enchantments.FORTUNE), fortune);
+            if (enchantments.hasEnchantment(Enchantments.SILK_TOUCH))
+                tool.enchant(enchants.getOrThrow(Enchantments.SILK_TOUCH), 1);
+            List<ItemStack> items = new ArrayList<>(Block.getDrops(bs, (ServerLevel) world, p, tile, null, tool));
+            if (tile instanceof Container inventory) {
+                for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+                    ItemStack content = inventory.getItem(slot);
+                    if (!content.isEmpty()) {
+                        items.add(content.copy());
+                        inventory.setItem(slot, ItemStack.EMPTY);
+                    }
+                }
+                inventory.setChanged();
+            }
             for (ItemStack is : items) {
                 if (!this.chestCheck(world, is))
                     ReikaItemHelper.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.125, pos.getZ() + 0.5, is);
@@ -439,6 +480,7 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
         NBT.putInt("reqpow", reqpow);
         NBT.putInt("reqtrq", mintorque);
         NBT.putBoolean("drops", drops);
+        NBT.put("enchants", enchantments.saveAdditional());
         long bits = 0;
         for (int i = 0; i < COLS; i++)
             for (int j = 0; j < ROWS; j++)
@@ -456,6 +498,7 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
         mintorque = NBT.getIntOr("reqtrq", 0);
         reqpow = NBT.getIntOr("reqpow", 0);
         drops = NBT.getBooleanOr("drops", true);
+        enchantments.load(NBT.getListOrEmpty("enchants"));
         if (NBT.contains("cut")) {
             long bits = NBT.getLongOr("cut", 0L);
             for (int i = 0; i < COLS; i++)

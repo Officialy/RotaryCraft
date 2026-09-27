@@ -19,9 +19,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
 import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
@@ -36,11 +39,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeConnector, IFluidHandler {
+public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeConnector, HasFluidResourceHandler {
 
     public static final int CAPACITY = 8000;
 
     private final HybridTank tank = new HybridTank("spillway", CAPACITY);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> false,
+            (index, resource) -> resource.getFluid() == Fluids.WATER, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side == Direction.DOWN ? fluidHandler : null;
+    }
     private final Collection<BlockPos> forcedEmpty = new ArrayList<>();
     private BlockArray liquidPool;
     private int activeTick;
@@ -179,15 +190,7 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
         return this.canConnectToPipe(p);
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return from == Direction.DOWN ? tank.drain(maxDrain, doDrain) : FluidStack.EMPTY;
-    }
     //    @Override
     public boolean canDrain(Direction from, Fluid fluid) {
         return from == Direction.DOWN;
@@ -219,41 +222,12 @@ public class BlockEntitySpillway extends RotaryCraftBlockEntity implements PipeC
         return "spillway";
     }
 
-    @Override
-    public int getTanks() {
-        return 1;
-    }
 
-    @Override
-    public FluidStack getFluidInTank(int slot) {
-        return tank.getFluid();
-    }
 
-    @Override
-    public int getTankCapacity(int slot) {
-        return CAPACITY;
-    }
 
-    @Override
-    public boolean isFluidValid(int slot, FluidStack stack) {
-        return false; // no external fill; water only comes from the environment
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0; // not fillable externally
-    }
 
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        if (resource.getFluid() != Fluids.WATER) return FluidStack.EMPTY;
-        return tank.drain(resource.getAmount(), action);
-    }
 
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return tank.drain(maxDrain, action);
-    }
 
     @Override
     public boolean hasAnInventory() {

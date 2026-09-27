@@ -3,7 +3,9 @@ package reika.rotarycraft.auxiliary;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import reika.dragonapi.libraries.ReikaEnchantmentHelper;
@@ -17,6 +19,7 @@ import java.util.*;
 public final class MachineEnchantmentHandler {
 
     private final HashMap<Holder<Enchantment>, Integer> data = new HashMap<>();
+    private final HashMap<ResourceKey<Enchantment>, Integer> levelsByKey = new HashMap<>();
     private final HashSet<ResourceKey<Enchantment>> filters = new HashSet<>();
 
     public MachineEnchantmentHandler addFilter(ResourceKey<Enchantment> id) {
@@ -33,24 +36,21 @@ public final class MachineEnchantmentHandler {
     }
 
     public int getEnchantment(Holder<Enchantment> e) {
-        Integer get = data.get(e);
-        return get != null ? get : 0;
+        return e.unwrapKey().map(this::getEnchantment).orElseGet(() -> data.getOrDefault(e, 0));
     }
 
     public int getEnchantment(ResourceKey<Enchantment> key) {
-        for (Map.Entry<Holder<Enchantment>, Integer> e : data.entrySet()) {
-            if (e.getKey().is(key)) return e.getValue();
-        }
-        return 0;
+        return levelsByKey.getOrDefault(key, 0);
     }
 
     public boolean hasEnchantments() {
-        return !data.isEmpty();
+        return !levelsByKey.isEmpty() || !data.isEmpty();
     }
 
     public boolean setEnchantment(Holder<Enchantment> e, int level) {
         if (this.isEnchantValid(e)) {
             data.put(e, level);
+            e.unwrapKey().ifPresent(key -> levelsByKey.put(key, level));
             return true;
         }
         return false;
@@ -58,14 +58,14 @@ public final class MachineEnchantmentHandler {
 
     public void clear() {
         data.clear();
+        levelsByKey.clear();
     }
 
     public ListTag saveAdditional() {
         ListTag li = new ListTag();
-        for (Map.Entry<Holder<Enchantment>, Integer> e : data.entrySet()) {
+        for (Map.Entry<ResourceKey<Enchantment>, Integer> e : levelsByKey.entrySet()) {
             CompoundTag tag = new CompoundTag();
-            // Persist by registered name; rehydrate by lookup at load time.
-            tag.putString("id", e.getKey().getRegisteredName());
+            tag.putString("id", e.getKey().identifier().toString());
             tag.putInt("lvl", e.getValue());
             li.add(tag);
         }
@@ -73,10 +73,17 @@ public final class MachineEnchantmentHandler {
     }
 
     public void load(ListTag NBT) {
-        data.clear();
-        // 1.21.5: rehydrating a Holder<Enchantment> requires a HolderLookup.Provider; this
-        // method is invoked from BE load paths that don't yet thread a provider through,
-        // so the data is left empty and rebuilt when an item next applies its enchants.
+        this.clear();
+        for (int i = 0; i < NBT.size(); i++) {
+            CompoundTag tag = NBT.getCompoundOrEmpty(i);
+            String id = tag.getStringOr("id", "");
+            int level = tag.getIntOr("lvl", 0);
+            if (level <= 0) continue;
+            Identifier parsed = Identifier.tryParse(id);
+            if (parsed == null) continue;
+            ResourceKey<Enchantment> key = ResourceKey.create(Registries.ENCHANTMENT, parsed);
+            if (filters.isEmpty() || filters.contains(key)) levelsByKey.put(key, level);
+        }
     }
 
     public boolean isEnchantValid(Holder<Enchantment> e) {

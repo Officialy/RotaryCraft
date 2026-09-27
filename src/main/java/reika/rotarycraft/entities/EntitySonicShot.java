@@ -54,7 +54,7 @@ public class EntitySonicShot extends Entity implements IEntityWithComplexSpawn {
         this.noPhysics = true;
     }
 
-    public EntitySonicShot(Level world, BlockEntitySonicBorer tile) {
+    public EntitySonicShot(Level world, BlockEntitySonicBorer tile, int range) {
         super(RotaryEntities.SHOCKWAVE.get(), world);
         this.noPhysics = true;
         BlockPos pos = tile.getBlockPos();
@@ -62,10 +62,9 @@ public class EntitySonicShot extends Entity implements IEntityWithComplexSpawn {
         stepY = tile.ystep;
         stepZ = tile.zstep;
         this.setPos(pos.getX() + 0.5 + stepX, pos.getY() + 0.5 + stepY, pos.getZ() + 0.5 + stepZ);
-        int[] tg = tile.getTargetPosn();
-        targetX = tg[0] + 0.5;
-        targetY = tg[1] + 0.5;
-        targetZ = tg[2] + 0.5;
+        targetX = pos.getX() + stepX * range + 0.5;
+        targetY = pos.getY() + stepY * range + 0.5;
+        targetZ = pos.getZ() + stepZ * range + 0.5;
         this.setDeltaMovement(stepX * SPEED, stepY * SPEED, stepZ * SPEED);
     }
 
@@ -116,7 +115,7 @@ public class EntitySonicShot extends Entity implements IEntityWithComplexSpawn {
         }
         AABB box = new AABB(center).inflate(3);
         for (LivingEntity e : world.getEntitiesOfClass(LivingEntity.class, box)) {
-            e.hurt(world.damageSources().fellOutOfWorld(), 1);
+            e.hurt(world.damageSources().inWall(), 1);
         }
         world.playSound(null, center, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 1F, 1F);
     }

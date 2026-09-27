@@ -21,6 +21,11 @@ import net.minecraft.world.level.Level;
  */
 public interface IgnoredByBorer {
 
+    default boolean ignoreHardness(Level world, BlockPos pos) {
+        int dimension = world.dimension() == Level.NETHER ? -1 : world.dimension() == Level.END ? 1 : 0;
+        return ignoreHardness(world, dimension, pos);
+    }
+
     /**
      * If this block returns true, the Borer will completely ignore the hardness of the block when calculating required torque and power.
      * The return value of this method has no bearing on the drops; if the getDrops() method returns a nonempty list, those items

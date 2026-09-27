@@ -19,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.auxiliary.interfaces.RedstoneUpgradeable;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;

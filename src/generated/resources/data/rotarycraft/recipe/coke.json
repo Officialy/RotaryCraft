@@ -1,13 +1,16 @@
 {
   "type": "rotarycraft:blast_furnace_shapeless",
   "additives": [],
+  "exactCount": false,
   "experience": 0.0,
   "ingredients": [
     "minecraft:coal"
   ],
+  "mainCount": 1,
   "output": {
     "id": "rotarycraft:coke"
   },
+  "requiresEmptyOutput": false,
   "temperature": 400.0,
   "timeMultiplier": 1.0
 }

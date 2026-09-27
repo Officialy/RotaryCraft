@@ -24,7 +24,7 @@ import reika.rotarycraft.registry.RotaryMenus;
 
 public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorktable> {
 
-    private static BlockEntityWorktable table;
+    private final BlockEntityWorktable table;
     //Client
     public ContainerWorktable(int id, Inventory inv, FriendlyByteBuf data) {
         this(id, inv, (BlockEntityWorktable) inv.player.level().getBlockEntity(data.readBlockPos()), inv.player.level(), true);
@@ -68,44 +68,12 @@ public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorkta
 
     @Override
     protected BlockEntityWorktable getRecipe(CraftingContainer craftMatrix, Level world) {
-        return null;//WorktableRecipes.getInstance().findMatchingRecipe(craftMatrix, world);
+        return table.getCraftingResult().isEmpty() ? null : table;
     }
 
     @Override
     protected ItemStack getOutput(BlockEntityWorktable wr) {
-        return ItemStack.EMPTY;//todo wr.isRecycling() ? wr.getRecycling().getResultItem() : wr.getOutput();
-    }
-
-        public void clearContent() {
-
-    }
-
-        public int getContainerSize() {
-        return 0;
-    }
-
-        public boolean isEmpty() {
-        return false;
-    }
-
-        public ItemStack getItem(int p_18941_) {
-        return null;
-    }
-
-        public ItemStack removeItem(int p_18942_, int p_18943_) {
-        return null;
-    }
-
-        public ItemStack removeItemNoUpdate(int p_18951_) {
-        return null;
-    }
-
-        public void setItem(int p_18944_, ItemStack p_18945_) {
-
-    }
-
-        public void setChanged() {
-
+        return wr.getCraftingResult();
     }
 
     @Override

@@ -13,6 +13,7 @@ import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.FractionatorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
@@ -61,6 +62,10 @@ public class RotaryRecipeSerializers {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FermenterRecipe>> FERMENTER =
             RECIPE_SERIALIZERS.register("fermenter",
                     () -> new RecipeSerializer<>(FermenterRecipe.CODEC, FermenterRecipe.STREAM_CODEC));
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FractionatorRecipe>> FRACTIONATOR =
+            RECIPE_SERIALIZERS.register("fractionator",
+                    () -> new RecipeSerializer<>(FractionatorRecipe.CODEC, FractionatorRecipe.STREAM_CODEC));
 
     // 1.21.5: RecipeSerializer is now a record(MapCodec, StreamCodec); inner Serializer classes are gone.
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessBlastFurnaceRecipe>> BLAST_FURNACE_SHAPELESS =

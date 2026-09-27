@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
@@ -162,17 +161,7 @@ public class BlockEntityWetter extends InventoriedPowerLiquidReceiver {
         return from.getAxis().isHorizontal();
     }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction action) {
-        return FluidStack.EMPTY;
-    }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        if (!this.canReceiveFrom(from) || !this.isValidFluid(resource.getFluid()))
-            return 0;
-        return tank.fill(resource, action);
-    }
 
     @Override
     public int getCapacity() {

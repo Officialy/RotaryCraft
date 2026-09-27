@@ -19,6 +19,9 @@ import reika.rotarycraft.models.engine.*;
 import reika.rotarycraft.modinterface.conversion.RenderMagnetic;
 import reika.rotarycraft.modinterface.model.BoilerModel;
 import reika.rotarycraft.modinterface.model.MagneticModel;
+import reika.rotarycraft.modinterface.model.DynamoModel;
+import reika.rotarycraft.modinterface.model.Dynamo2Model;
+import reika.rotarycraft.modinterface.conversion.RenderDynamo;
 import reika.rotarycraft.modinterface.model.SteamTurbineModel;
 import reika.rotarycraft.renders.*;
 import reika.rotarycraft.renders.dm.RenderBeamMirror;
@@ -97,6 +100,8 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation GEARBOX_16 = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "gearbox_16"), "main");
     public static final ModelLayerLocation GEARBOX_BASE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "gearbox_base"), "main");
     public static final ModelLayerLocation MAGNETIC = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "magnetic"), "main");
+    public static final ModelLayerLocation DYNAMO = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "dynamo"), "main");
+    public static final ModelLayerLocation DYNAMO_UPGRADED = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "dynamo_upgraded"), "main");
     public static final ModelLayerLocation SOLAR_TOWER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "solar_tower"), "main");
     public static final ModelLayerLocation BIG_FURNACE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "big_furnace"), "main");
     public static final ModelLayerLocation WORM = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "worm_model"), "main");
@@ -168,6 +173,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.DIAMOND_SHAFT.get(), RenderShaft::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.BEDROCK_SHAFT.get(), RenderShaft::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.MAGNETOSTATIC_ENGINE.get(), RenderMagnetic::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.ROTATIONAL_DYNAMO.get(), RenderDynamo::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SOLAR_TOWER.get(), RenderSolarTower::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.VACUUM.get(), RenderVacuum::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SONICBORER.get(), reika.rotarycraft.renders.dm.RenderSonicBorer::new);
@@ -262,6 +268,8 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(GEARBOX_8, Gearbox8Model::createLayer);
         event.registerLayerDefinition(GEARBOX_16, Gearbox16Model::createLayer);
         event.registerLayerDefinition(MAGNETIC, MagneticModel::createLayer);
+        event.registerLayerDefinition(DYNAMO, DynamoModel::createLayer);
+        event.registerLayerDefinition(DYNAMO_UPGRADED, Dynamo2Model::createLayer);
         event.registerLayerDefinition(SOLAR_TOWER, SolarTowerModel::createLayer);
         event.registerLayerDefinition(BIG_FURNACE, BigFurnaceModel::createLayer);
         event.registerLayerDefinition(GRINDER, GrinderModel::createLayer);

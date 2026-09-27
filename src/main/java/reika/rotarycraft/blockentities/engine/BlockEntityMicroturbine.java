@@ -19,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerMicroTurbine;
 import reika.rotarycraft.registry.*;

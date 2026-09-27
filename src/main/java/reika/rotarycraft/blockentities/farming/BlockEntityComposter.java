@@ -275,14 +275,13 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
 
     @Override
     public ItemStack removeItem(int i, int i1) {
-        ItemStack stack = itemHandler.extractItem(i, i1, false);
-        if (stack.isEmpty()) {
+        if (i < 0 || i >= itemHandler.getSlots()) {
             return ItemStack.EMPTY;
         }
-        if (i == 2 && !ReikaItemHelper.matchStacks(stack, RotaryItems.COMPOST)) {
+        if (i == 2 && !ReikaItemHelper.matchStacks(itemHandler.getStackInSlot(i), RotaryItems.COMPOST)) {
             return ItemStack.EMPTY;
         }
-        return stack;
+        return itemHandler.extractItem(i, i1, false);
     }
 
     @Override
@@ -297,7 +296,7 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
         if (i < 0 || i >= itemHandler.getSlots()) {
             return;
         }
-        if (i == 2 && !ReikaItemHelper.matchStacks(itemStack, RotaryItems.COMPOST)) {
+        if (i == 2 && !itemStack.isEmpty() && !ReikaItemHelper.matchStacks(itemStack, RotaryItems.COMPOST)) {
             return;
         }
         itemHandler.setStackInSlot(i, itemStack);
@@ -321,7 +320,8 @@ public class BlockEntityComposter extends InventoriedRCBlockEntity implements Te
 
     @Override
     public void clearContent() {
-
+        for (int i = 0; i < itemHandler.getSlots(); i++)
+            itemHandler.setStackInSlot(i, ItemStack.EMPTY);
     }
 
     private enum CompostMatter {

@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -142,15 +141,7 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
         return m.isStandardPipe();
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack is) {
         // 1.21.5: SwordItem was collapsed into plain Item + Item.Properties.sword(...). The

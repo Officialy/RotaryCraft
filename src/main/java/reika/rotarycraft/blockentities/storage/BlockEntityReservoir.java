@@ -36,13 +36,17 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.StepTimer;
+import reika.dragonapi.instantiable.storage.FilteredFluidResourceHandler;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.interfaces.blockentity.OpenTopTank;
 import reika.dragonapi.interfaces.blockentity.PlaceNotification;
 import reika.dragonapi.libraries.ReikaFluidHelper;
@@ -69,7 +73,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 
-public class BlockEntityReservoir extends RotaryCraftBlockEntity implements PipeConnector, NBTMachine, BreakAction, AdjacentUpdateWatcher, PlaceNotification, OpenTopTank, MenuProvider {
+public class BlockEntityReservoir extends RotaryCraftBlockEntity implements PipeConnector, NBTMachine, BreakAction, AdjacentUpdateWatcher, PlaceNotification, OpenTopTank, MenuProvider, HasFluidResourceHandler {
 
     public static final int CAPACITY = 64000;
 
@@ -89,19 +93,7 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     private final HybridTank tank = new HybridTank("reservoir", CAPACITY) {
         @Override
         protected void onContentsChanged() {
-            setChanged();
-            if (level != null && !level.isClientSide()) {
-                // 26.1: throttle the sync packet. Old code fired one syncAllData per content
-                // change; with BUCKET pipe transfers that's a packet per tick per filling
-                // reservoir. Now we sync only when the fluid-level bucket changes by >= 1/20
-                // of capacity OR when the fluid type itself changes (e.g. empty → water).
-                int curLevel = this.getFluidLevel();
-                int curBucket = curLevel * 20 / CAPACITY; // 0..20
-                if (curBucket != lastSyncedTankLevel || (curLevel == 0) != (lastSyncedTankLevel == 0)) {
-                    lastSyncedTankLevel = curBucket;
-                    syncAllData(false);
-                }
-            }
+            BlockEntityReservoir.this.onTankChanged();
         }
 
         @Override
@@ -109,6 +101,27 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
             return true; //todo ban specific fluids? blacklist?
         }
     };
+
+    private final HybridTankResourceHandler fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[]{tank}, (index, resource) -> true,
+            (index, resource) -> true, this::onTankChanged);
+    private final ResourceHandler<FluidResource> inputFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> true, (index, resource) -> false);
+    private final ResourceHandler<FluidResource> outputFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> false, (index, resource) -> true);
+
+    private void onTankChanged() {
+        setChanged();
+        if (level != null && !level.isClientSide()) {
+            // Preserve the reservoir's existing coarse visual sync while transactions commit.
+            int currentLevel = tank.getFluidLevel();
+            int currentBucket = currentLevel * 20 / CAPACITY;
+            if (currentBucket != lastSyncedTankLevel || (currentLevel == 0) != (lastSyncedTankLevel == 0)) {
+                lastSyncedTankLevel = currentBucket;
+                syncAllData(false);
+            }
+        }
+    }
 
     public boolean isCovered = false;
     public boolean isCreative;
@@ -516,24 +529,12 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         return false;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction doFill) {
-        if (from == Direction.UP)
-            return 0;
-        return tank.fill(resource, doFill);
-    }
 
 //        @Override
     public FluidStack drain(Direction from, FluidStack resource, boolean doDrain) {
-        return this.canDrain(from, resource) ? tank.drain(resource.getAmount(), doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE) : null;
+        return this.canDrain(from, resource) ? tank.drain(resource.getAmount(), doDrain) : null;
     }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        if (from == Direction.UP)
-            return FluidStack.EMPTY;
-        return tank.drain(maxDrain, doDrain);
-    }
 
     //    @Override
     public boolean canFill(Direction from, Fluid fluid) {
@@ -583,8 +584,11 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         return tank.getFluid();
     }
 
-    public IFluidHandler getFluidHandler() {
-        return tank;
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        if (side == Direction.UP) return null;
+        if (side == Direction.DOWN) return outputFluidView;
+        return side == null ? fluidHandler : inputFluidView;
     }
 	/*
 	@Override

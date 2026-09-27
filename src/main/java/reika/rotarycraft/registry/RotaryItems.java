@@ -81,6 +81,7 @@ public class RotaryItems {
     public static final DeferredItem<Item> TURRET_BASE = reg("turret_base", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> TUNGSTEN_ALLOY_INGOT = reg("tungsten_alloy_ingot", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> TUNGSTEN_INGOT = reg("tungsten_ingot", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> RED_GOLD_INGOT = reg("red_gold_ingot", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> WORM_GEAR = reg("worm_gear", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> HSLA_STEEL_SPRING = reg("hsla_steel_spring", ItemCoil::new);
     public static final DeferredItem<Item> TUNGSTEN_ALLOY_SPRING = reg("tungsten_alloy_spring", ItemCoil::new);
@@ -301,6 +302,8 @@ public class RotaryItems {
     public static final DeferredItem<Item> SILVER_INGOT = reg("silver_ingot", () -> new Item(itemProperties()));
 
     public static final DeferredItem<Item> COMPOST = reg("compost", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> CLEAN_SLUDGE = reg("clean_sludge", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> RED_GOLD_DUST = reg("red_gold_dust", () -> new Item(itemProperties()));
 
     //Fluid Buckets
     public static final DeferredItem<Item> LUBE_BUCKET = reg("lubricant_bucket", () -> new BucketItem(RotaryFluids.LUBRICANT.get(), itemProperties()));

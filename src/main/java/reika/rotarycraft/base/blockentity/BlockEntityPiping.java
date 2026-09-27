@@ -24,7 +24,15 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import reika.dragonapi.instantiable.storage.FilteredFluidResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.BreakAction;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
@@ -33,16 +41,13 @@ import reika.rotarycraft.auxiliary.interfaces.*;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 
-import java.util.HashSet;
 import java.util.Locale;
 
-public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implements RenderableDuct, CachedConnection, BreakAction, PumpablePipe {
+public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implements RenderableDuct, CachedConnection, BreakAction, PumpablePipe, HasFluidResourceHandler {
 
     public static final int UPPRESSURE = 40;
     public static final int HORIZPRESSURE = 20;
     public static final int DOWNPRESSURE = 0;
-    private static final HashSet<Class> nonInteractableClasses = new HashSet();
-    private static final HashSet<Class> interactableClasses = new HashSet();
     private static final int CAPACITY_LIMIT = 1000000000; //1 billion mB to prevent overflow
     private static final int MAXPRESSURE = 2400000;
     /** 26.1 PERF: cache {@link Direction#values()} because every {@code Enum.values()}
@@ -55,6 +60,11 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
      *  Per-BE so concurrent pipes don't clobber each other's scratch. */
     private final BlockPos.MutableBlockPos scratchPos = new BlockPos.MutableBlockPos();
     private final boolean[] interaction = new boolean[6];
+    private final ResourceHandler<FluidResource> fluidHandler = new PipeFluidHandler();
+    private final ResourceHandler<FluidResource> inputFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> true, (index, resource) -> false);
+    private final ResourceHandler<FluidResource> outputFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> false, (index, resource) -> true);
     private final StepTimer flowTimer = new StepTimer(getTickDelay());
     private boolean[] connections = new boolean[6];
     private int connectionDelay = 0;
@@ -129,6 +139,76 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
     public abstract boolean canIntakeFromIFluidHandler(Direction side);
 
     public abstract boolean canOutputToIFluidHandler(Direction side);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        if (side == null) return fluidHandler;
+        boolean input = canIntakeFromIFluidHandler(side);
+        boolean output = canOutputToIFluidHandler(side);
+        return input && output ? fluidHandler : input ? inputFluidView : output ? outputFluidView : null;
+    }
+
+    private final class PipeFluidHandler extends SnapshotJournal<PipeFluidState>
+            implements ResourceHandler<FluidResource> {
+        @Override public int size() { return 1; }
+        @Override public FluidResource getResource(int index) {
+            checkIndex(index);
+            Fluid fluid = getAttributes();
+            return fluid == null || getFluidLevel() <= 0 ? FluidResource.EMPTY : FluidResource.of(fluid);
+        }
+        @Override public long getAmountAsLong(int index) {
+            checkIndex(index);
+            return getFluidLevel();
+        }
+        @Override public long getCapacityAsLong(int index, FluidResource resource) {
+            checkIndex(index);
+            return resource.isEmpty() || isValid(index, resource) ? CAPACITY_LIMIT : 0;
+        }
+        @Override public boolean isValid(int index, FluidResource resource) {
+            checkIndex(index);
+            // Pipes retain only a fluid type. Reject component-bearing resources rather than
+            // silently discarding their components during transfer.
+            return !resource.isEmpty() && resource.equals(FluidResource.of(resource.getFluid()))
+                    && isValidFluid(resource.getFluid());
+        }
+        @Override public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            checkIndex(index);
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            if (amount == 0 || !isValid(index, resource) || !canIntakeFluid(resource.getFluid())) return 0;
+            int inserted = Math.min(amount, CAPACITY_LIMIT - getFluidLevel());
+            if (inserted <= 0) return 0;
+            updateSnapshots(transaction);
+            setFluid(resource.getFluid());
+            addFluid(inserted);
+            return inserted;
+        }
+        @Override public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            checkIndex(index);
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            if (amount == 0 || !resource.equals(getResource(index))) return 0;
+            int extracted = Math.min(amount, getFluidLevel());
+            if (extracted <= 0) return 0;
+            updateSnapshots(transaction);
+            removeLiquid(extracted);
+            if (getFluidLevel() == 0) setFluid(null);
+            return extracted;
+        }
+        @Override protected PipeFluidState createSnapshot() {
+            return new PipeFluidState(getAttributes(), getFluidLevel());
+        }
+        @Override protected void revertToSnapshot(PipeFluidState state) {
+            setFluid(state.fluid());
+            setFluidLevel(state.amount());
+        }
+        @Override protected void onRootCommit(PipeFluidState originalState) {
+            setChanged();
+        }
+        private void checkIndex(int index) {
+            java.util.Objects.checkIndex(index, 1);
+        }
+    }
+
+    private record PipeFluidState(Fluid fluid, int amount) {}
 
     public final boolean canIntakeFluid(Fluid f) {
         if (f == null)
@@ -277,40 +357,23 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         if (id == Blocks.AIR)
             return false;
         BlockEntity te = getAdjacentBlockEntity(side);
-        // 26.1 fix: legacy 1.7 {@code BlockEntityPiping} implemented {@link IFluidHandler}
-        // directly, so the {@code isInteractableTile} {@code instanceof IFluidHandler} check
-        // covered pipe-to-pipe and pipe-to-connector connections "for free". The 26.1 port
-        // exposes the fluid handler through the capability system instead, so the BE class
-        // itself does NOT implement IFluidHandler — leaving every interaction[] slot stuck
-        // at false and the dump/intake paths dead. Restore the intended behaviour: any pipe
-        // or {@link PipeConnector} on a valid connection side is also a valid interaction
-        // target, regardless of the BE's IFluidHandler interfaces.
         if (te instanceof BlockEntityPiping) return true;
         if (te instanceof PipeConnector) return true;
         return this.interactsWithMachines() && this.isInteractableTile(te, side);
     }
 
     private boolean isInteractableTile(BlockEntity te, Direction side) {
-        if (te == null)
-            return false;
         if (te instanceof PipeRenderConnector) {
             return ((PipeRenderConnector) te).canConnectToPipeOnSide(side);
         }
-        if (te instanceof IFluidHandler) {
-            Class c = te.getClass();
-            if (interactableClasses.contains(c))
-                return true;
-            if (nonInteractableClasses.contains(c))
-                return false;
-            String name = c.getSimpleName().toLowerCase(Locale.ENGLISH);
+        if (te != null) {
+            String name = te.getClass().getSimpleName().toLowerCase(Locale.ENGLISH);
             if (name.contains("conduit") || name.contains("fluidduct") || name.contains("pipe") || name.contains("multipart")) {
-                nonInteractableClasses.add(c);
                 return false;
             }
-            interactableClasses.add(c);
-            return true;
         }
-        return false;
+        return level.getCapability(Capabilities.Fluid.BLOCK,
+                worldPosition.relative(side), side.getOpposite()) != null;
     }
 
     public final int getPipeIntake(int otherlevel) {
@@ -355,15 +418,13 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                     PipeDebugLog.event("pipe.dump.PipeConnector.try");
                     Flow flow = pc.getFlowForSide(dir.getOpposite());
                     if (flow.canIntake) {
-                        // 26.1: aggressive transfer into machine tanks (e.g. reservoir).
-                        // Previously bottlenecked at QUARTER of pipe level which was way slower
-                        // than the destination's actual fill capacity.
                         int toadd = this.getPipeOutput(this.getFluidLevel());
                         if (toadd > 0) {
-                            FluidStack fs = new FluidStack(f, toadd);
-                            int added = pc.fillPipe(dir.getOpposite(), fs, IFluidHandler.FluidAction.EXECUTE);
+                            ResourceHandler<FluidResource> target = world.getCapability(
+                                    Capabilities.Fluid.BLOCK, scratchPos, dir.getOpposite());
+                            int added = target == null ? 0 : ResourceHandlerUtil.move(fluidHandler,
+                                    target, resource -> resource.getFluid() == f, toadd, null);
                             if (added > 0) {
-                                this.removeLiquid(added);
                                 PipeDebugLog.event("pipe.dump.PipeConnector.success");
                             } else {
                                 PipeDebugLog.event("pipe.dump.PipeConnector.fillReturnedZero");
@@ -374,21 +435,14 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                     } else {
                         PipeDebugLog.event("pipe.dump.PipeConnector.flowCannotIntake");
                     }
-                } else if (te instanceof IFluidHandler fl && this.canOutputToIFluidHandler(dir)) {
-                    // 26.1 fix: legacy 1.7 pumped pipe contents into adjacent vanilla
-                    // IFluidHandler tanks via {@code fl.fill(dir.getOpposite(), stack, true)}.
-                    // The port had left this branch commented out, so pipes couldn't push fluid
-                    // into anything but a {@link PipeConnector}-implementing BE — vanilla tanks
-                    // and modded machines went unfilled. Re-enabled against the 26.1
-                    // {@code IFluidHandler} surface ({@code fill(FluidStack, FluidAction)} —
-                    // direction is implicit because we resolved the BE via getBlockEntity).
+                } else if (this.canOutputToIFluidHandler(dir)) {
+                    ResourceHandler<FluidResource> target = world.getCapability(Capabilities.Fluid.BLOCK,
+                            scratchPos, dir.getOpposite());
+                    if (target == null) continue;
                     int toadd = this.getPipeOutput(this.getFluidLevel());
                     if (toadd > 0) {
-                        FluidStack stack = new FluidStack(f, toadd);
-                        int added = fl.fill(stack, IFluidHandler.FluidAction.EXECUTE);
-                        if (added > 0) {
-                            this.removeLiquid(added);
-                        }
+                        ResourceHandlerUtil.move(fluidHandler, target,
+                                resource -> resource.getFluid() == f, toadd, null);
                     }
                 }
             }
@@ -444,35 +498,36 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                 } else if (te instanceof PipeConnector pc) {
                     Flow flow = pc.getFlowForSide(dir.getOpposite());
                     if (flow.canOutput) {
-                        FluidStack fs = pc.drainPipe(dir.getOpposite(), Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-                        if (fs != null && !fs.isEmpty()) {
-                            int level = this.getFluidLevel();
-                            // 26.1: aggressive intake from pumps / fluid producers — match the
-                            // dump-aggressive side. The producer's own capacity throttles via
-                            // {@code fs.getAmount()}.
-                            int todrain = this.getPipeIntake(fs.getAmount() - level);
-                            if (todrain > 0) {
-                                if (this.canIntakeFluid(fs.getFluid())) {
-                                    this.addFluid(todrain);
-                                    this.setFluid(fs.getFluid());
-                                    pc.drainPipe(dir.getOpposite(), todrain, IFluidHandler.FluidAction.EXECUTE);
-                                    this.onIntake(te);
-                                }
+                        ResourceHandler<FluidResource> source = world.getCapability(
+                                Capabilities.Fluid.BLOCK, scratchPos, dir.getOpposite());
+                        if (source == null) continue;
+                        for (int slot = 0; slot < source.size(); slot++) {
+                            FluidResource resource = source.getResource(slot);
+                            if (resource.isEmpty() || !this.canIntakeFluid(resource.getFluid())) continue;
+                            int todrain = this.getPipeIntake(source.getAmountAsInt(slot) - this.getFluidLevel());
+                            if (todrain <= 0) continue;
+                            int moved = ResourceHandlerUtil.move(source, fluidHandler,
+                                    candidate -> candidate.equals(resource), todrain, null);
+                            if (moved > 0) {
+                                this.onIntake(te);
+                                break;
                             }
                         }
                     }
-                } else if (te instanceof IFluidHandler fl && this.canIntakeFromIFluidHandler(dir)) {
-                    FluidStack fs = fl.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-                    if (fs != null && !fs.isEmpty()) {
-                        int level = this.getFluidLevel();
-                        int todrain = this.getPipeIntake(fs.getAmount() - level);
-                        if (todrain > 0) {
-                            if (this.canIntakeFluid(fs.getFluid())) {
-                                this.setFluid(fs.getFluid());
-                                this.onIntake(te);
-                                int drained = fl.drain(todrain, IFluidHandler.FluidAction.EXECUTE).getAmount();
-                                this.addFluid(drained);
-                            }
+                } else if (this.canIntakeFromIFluidHandler(dir)) {
+                    ResourceHandler<FluidResource> source = world.getCapability(Capabilities.Fluid.BLOCK,
+                            scratchPos, dir.getOpposite());
+                    if (source == null) continue;
+                    for (int slot = 0; slot < source.size(); slot++) {
+                        FluidResource resource = source.getResource(slot);
+                        if (resource.isEmpty() || !this.canIntakeFluid(resource.getFluid())) continue;
+                        int todrain = this.getPipeIntake(source.getAmountAsInt(slot) - this.getFluidLevel());
+                        if (todrain <= 0) continue;
+                        int moved = ResourceHandlerUtil.move(source, fluidHandler,
+                                candidate -> candidate.equals(resource), todrain, null);
+                        if (moved > 0) {
+                            this.onIntake(te);
+                            break;
                         }
                     }
                 }

@@ -74,7 +74,7 @@
 //import reika.rotarycraft.registry.MachineRegistry;
 //
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-//public class BlockEntityFuelEngine extends BlockEntityIOMachine implements IFluidHandler, PipeConnector, SimpleProvider, PowerGenerator, IPipeConnection, TemperatureTE {
+//public class BlockEntityFuelEngine extends BlockEntityIOMachine implements PipeConnector, SimpleProvider, PowerGenerator, IPipeConnection, TemperatureTE {
 //
 //	public static final int GEN_OMEGA = 256;
 //	public static final int GEN_TORQUE = 2048;

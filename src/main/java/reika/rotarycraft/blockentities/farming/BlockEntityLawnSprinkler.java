@@ -286,9 +286,4 @@ public class BlockEntityLawnSprinkler extends SprinklerBlock {
         return Direction.DOWN;
     }
 
-    // Pure consumer: nothing drains OUT of a sprinkler (PipeConnector contract).
-    @Override
-    public net.neoforged.neoforge.fluids.FluidStack drainPipe(Direction from, int maxDrain, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction action) {
-        return net.neoforged.neoforge.fluids.FluidStack.EMPTY;
-    }
 }

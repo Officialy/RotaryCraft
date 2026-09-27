@@ -18,9 +18,15 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.FilteredFluidResourceHandler;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -30,11 +36,28 @@ import reika.rotarycraft.registry.EngineType;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryFluids;
 
-public class BlockEntityEngineController extends RotaryCraftBlockEntity implements PipeConnector, IFluidHandler {
+public class BlockEntityEngineController extends RotaryCraftBlockEntity implements PipeConnector, HasFluidResourceHandler {
 
     public static final int FUELCAP = 3000;
 
     private final HybridTank tank = new HybridTank("ecu", FUELCAP);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> isSupportedFluid(resource.getFluid()),
+            (index, resource) -> isSupportedFluid(resource.getFluid()), this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        if (side == null) return fluidHandler;
+        return new FilteredFluidResourceHandler(fluidHandler, index -> true,
+                (index, resource) -> this.canFill(side, resource.getFluid()),
+                (index, resource) -> side.getAxis().isVertical()
+                        && this.getAdjacentBlockEntity(side) instanceof BlockEntityEngine);
+    }
+
+    private static boolean isSupportedFluid(Fluid fluid) {
+        return fluid == RotaryFluids.JET_FUEL.get() || fluid == RotaryFluids.ETHANOL.get()
+                || BlockEntityEngine.isAirFluid(fluid);
+    }
 
     public BlockEntityEngineController(BlockPos pos, net.minecraft.world.level.block.state.BlockState state) {
         super(reika.rotarycraft.registry.RotaryBlockEntities.ECU.get(), pos, state);
@@ -187,11 +210,14 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         FluidStack liq = tank.getFluid();
         if (liq.isEmpty())
             return false;
+        Direction side = flip ? Direction.DOWN : Direction.UP;
+        ResourceHandler<FluidResource> target = level.getCapability(Capabilities.Fluid.BLOCK,
+                worldPosition.relative(side), side.getOpposite());
+        if (target == null) return false;
         if (BlockEntityEngine.isAirFluid(liq.getFluid())) {
-            FluidStack move = liq.copyWithAmount(liq.getAmount() / 4 + 1);
-            int added = te.fillPipe(flip ? Direction.UP : Direction.DOWN, move, IFluidHandler.FluidAction.EXECUTE);
-            tank.removeLiquid(added);
-            return added > 0;
+            FluidResource resource = FluidResource.of(liq);
+            return ResourceHandlerUtil.move(fluidHandler, target, resource::equals,
+                    liq.getAmount() / 4 + 1, null) > 0;
         } else {
             Fluid f = te.getEngineType().getFuelType();
             if (f == null || !f.isSame(liq.getFluid()))
@@ -199,10 +225,9 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
             if (te.getFuelLevel() + liq.getAmount() > BlockEntityEngine.FUELCAP)
                 return false;
             int amt = liq.getAmount() / 4 + 1;
-            te.addFuel(amt);
-            tank.removeLiquid(amt);
+            FluidResource resource = FluidResource.of(liq);
+            return ResourceHandlerUtil.move(fluidHandler, target, resource::equals, amt, null) > 0;
         }
-        return true;
     }
 
     @Override
@@ -277,22 +302,8 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         return true;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
-        if (this.canFill(from, resource.getFluid()))
-            return tank.fill(resource, action);
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction action) {
-        return FluidStack.EMPTY;
-    }
 
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return FluidStack.EMPTY;
-    }
 
     public boolean canFill(Direction from, Fluid fluid) {
         //if (fluid.equals(Fluids.LAVA)) Why was THIS here???
@@ -327,37 +338,13 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         return Flow.DUAL;
     }
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
 
 
 

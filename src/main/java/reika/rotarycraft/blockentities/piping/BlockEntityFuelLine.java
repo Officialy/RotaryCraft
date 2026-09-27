@@ -12,6 +12,8 @@ package reika.rotarycraft.blockentities.piping;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -24,6 +26,7 @@ import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryFluids;
+import reika.rotarycraft.registry.RotaryBlocks;
 
 public class BlockEntityFuelLine extends BlockEntityPiping implements PumpablePipe {
 
@@ -35,20 +38,16 @@ public class BlockEntityFuelLine extends BlockEntityPiping implements PumpablePi
     }
 
     private boolean isAcceptableFuel(Fluid f) {
-        if (f.equals(RotaryFluids.JET_FUEL))
+        if (f == null) return false;
+        if (f.isSame(RotaryFluids.JET_FUEL.get()) || f.isSame(RotaryFluids.ETHANOL.get()))
             return true;
-        return f.equals(RotaryFluids.ETHANOL);
-//        if (f.equals(Fluids.getFluid("bioethanol")))
-//            return true;
-//        if (f.equals(Fluids.getFluid("ethanol")))
-//            return true;
-//        if (f.equals(Fluids.getFluid("fuel")))
-//            return true;
-//        if (f.equals(Fluids.getFluid("rocket fuel")))
-//            return true;
-//        if (f.equals(Fluids.getFluid("rc lifbe fuel")))
-//            return true;
-//        return f.equals(Fluids.getFluid("rc lifbe fuel preheat"));
+        Identifier id = BuiltInRegistries.FLUID.getKey(f);
+        if (id == null) return false;
+        String path = id.getPath();
+        if (id.getNamespace().equals("reactorcraft"))
+            return path.equals("lifbe_fuel") || path.equals("lifbe_fuel_preheat");
+        return path.equals("bioethanol") || path.equals("ethanol") || path.equals("fuel")
+                || path.equals("rocket_fuel") || path.equals("turbofuel");
     }
 
     @Override
@@ -118,7 +117,7 @@ public class BlockEntityFuelLine extends BlockEntityPiping implements PumpablePi
 
     @Override
     public boolean isConnectedToNonSelf(Direction dir) {
-        return false;
+        return super.isConnectedToNonSelf(dir);
     }
 
     @Override
@@ -133,7 +132,7 @@ public class BlockEntityFuelLine extends BlockEntityPiping implements PumpablePi
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return RotaryBlocks.FUEL_LINE.get();
     }
 
     @Override
@@ -148,7 +147,7 @@ public class BlockEntityFuelLine extends BlockEntityPiping implements PumpablePi
 
     @Override
     protected String getTEName() {
-        return null;
+        return "fuelline";
     }
 
     @Override

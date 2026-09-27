@@ -121,6 +121,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> GAS_ENGINE = registerMachineBlock("gas_engine", () -> new BlockGasEngine(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DC_ENGINE = registerMachineBlock("dc_engine", () -> new BlockDCEngine(blockProperties().strength(5)));
     public static final DeferredBlock<Block> MAGNETOSTATIC_ENGINE = registerMachineBlock("magnetostatic_engine", () -> new BlockMagnetEngine(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> ROTATIONAL_DYNAMO = registerMachineBlock("rotational_dynamo", () -> new BlockDynamo(blockProperties().strength(5)));
     public static final DeferredBlock<Block> AC_ENGINE = registerMachineBlock("ac_engine", () -> new BlockAcEngine(blockProperties().strength(5)));
     public static final DeferredBlock<Block> JET_ENGINE = registerMachineBlock("jet_engine", () -> new BlockJetEngine(blockProperties().strength(5)));
     public static final DeferredBlock<Block> HYDRO_ENGINE = registerMachineBlock("hydro_engine", () -> new BlockHydroEngine(blockProperties().strength(5)));

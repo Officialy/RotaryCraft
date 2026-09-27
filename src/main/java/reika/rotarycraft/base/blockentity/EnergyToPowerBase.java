@@ -30,12 +30,15 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import org.lwjgl.glfw.GLFW;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.interfaces.blockentity.GuiController;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.interfaces.blockentity.ToggleTile;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
@@ -57,7 +60,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements SimpleProvider, PowerGenerator, GuiController, UpgradeableMachine,
-        IFluidHandler, PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedGearboxable {
+        PipeConnector, TemperatureTE, ToggleTile, NBTMachine, IntegratedGearboxable, HasFluidResourceHandler {
 
     public static final int MAXTEMP = 500;
     public static final int TIERS = 6;
@@ -73,6 +76,15 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
 
     private final StepTimer tempTimer = new StepTimer(20);
     private final HybridTank tank = new HybridTank("energytopower", 24000);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank},
+            (index, resource) -> resource.getFluid() == RotaryFluids.LIQUID_NITROGEN.get(),
+            (index, resource) -> false, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return fluidHandler;
+    }
     protected int storedEnergy;
     protected int baseomega = -1;
     private Direction facingDir;
@@ -511,14 +523,10 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
         return new BlockPos(pos.getX() + write.getStepX(), pos.getY() + write.getStepY(), pos.getZ() + write.getStepZ());
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction fluidaction) {
-        return this.canFill(from, resource.getFluid()) ? tank.fill(resource, fluidaction) : 0;
-    }
 
     //@Override
     public boolean canFill(Direction from, Fluid fluid) {
-        return fluid.equals(RotaryFluids.LIQUID_NITROGEN);
+        return fluid == RotaryFluids.LIQUID_NITROGEN.get();
     }
 
     //    @Override

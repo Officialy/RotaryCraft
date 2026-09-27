@@ -28,12 +28,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.ModList;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.libraries.io.ReikaSoundHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
@@ -57,12 +60,23 @@ import reika.rotarycraft.registry.*;
 import java.util.ArrayList;
 
 //@Strippable(value = {"vazkii.botania.api.mana.IManaReceiver", "reika.chromaticraft.API.Interfaces.Repairable"})
-public class BlockEntityGearbox extends BlockEntity1DTransmitter implements PipeConnector, IFluidHandler, TemperatureTE, NBTMachine {//, IManaReceiver, Repairable {
+public class BlockEntityGearbox extends BlockEntity1DTransmitter implements PipeConnector, TemperatureTE, NBTMachine, HasFluidResourceHandler {//, IManaReceiver, Repairable {
 
     public static final double BEARINGREDUCTION = 0.25;
     public static final double BEARINGINCREASE = 1.0;
     private static final int MAX_DAMAGE = 480;
     private final HybridTank tank = new HybridTank("gear", 24000);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank},
+            (index, resource) -> resource.getFluid() == RotaryFluids.LUBRICANT.get() && !this.isLiving(),
+            (index, resource) -> false, this::setChanged,
+            index -> this.getMaxLubricant());
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side != (isFlipped ? Direction.DOWN : Direction.UP)
+                ? fluidHandler : null;
+    }
     private final StepTimer tempTimer = new StepTimer(20);
     public boolean reduction = true; // Reduction gear if true, accelerator if false
     private int damage = 0;
@@ -601,23 +615,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         return side != (isFlipped ? Direction.DOWN : Direction.UP);
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
-        if (this.canFill(from, resource.getFluid())) {
-            int space = this.getMaxLubricant() - this.getLubricant();
-            if (space > 0) {
-                if (resource.getAmount() > space)
-                    resource = new FluidStack(resource.getFluid(), space);
-                return tank.fill(resource, action);
-            }
-        }
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
     @Override
     public void onEMP() {
@@ -801,43 +799,15 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
         }
     }
 
-    @Override
-    public int getTanks() {
-        return 1;
-    }
 
     
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return new FluidStack(RotaryFluids.LUBRICANT.get(), 0);
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 24000;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
 
     
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
 
     @Override
     public boolean hasAnInventory() {

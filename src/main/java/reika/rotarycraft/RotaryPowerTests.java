@@ -23,7 +23,7 @@ import reika.rotarycraft.registry.RotaryBlocks;
  * the link silently never forms and the test fails with {@code torque == 0} and no explanation.
  * {@link #assertLink} exists so a mis-wired layout says so instead of just reading zero.
  *
- * <p>The arena ({@code rotarycraft:test_arena}) is 9x6x9 with a stone floor at y=0. Chains run
+ * <p>The arena ({@code rotarycraft:test_arena}) is 9x9x9 with a stone floor at y=0. Chains run
  * along +X at {@link #ROW_Y}; several independent chains fit side by side on different z rows,
  * which is how the per-ratio gearbox tests avoid accidentally chaining into each other.
  */

@@ -12,6 +12,8 @@ package reika.rotarycraft.blockentities.level;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -67,8 +69,9 @@ public class BlockEntitySonicBorer extends BlockEntityPowerReceiver implements P
         this.getIOSides(this.getBlockState().getValue(BlockRotaryCraftMachine.FACING));
         this.getPower(false);
         this.updatePressure(world, pos);
-        if (this.canFire(world, pos)) {
-            this.fire(world, pos);
+        int range = this.getFiringRange(world, pos);
+        if (range >= 0) {
+            this.fire(world, range);
             pressure -= FIRE_PRESSURE;
         }
         if (pressure > MAXPRESSURE) {
@@ -84,13 +87,11 @@ public class BlockEntitySonicBorer extends BlockEntityPowerReceiver implements P
         zstep = facing.getStepZ();
     }
 
-    private void fire(Level world, BlockPos pos) {
-        int r = this.getDistanceToSurface(world, pos);
-        if (r < 0)
-            return;
+    private void fire(Level world, int range) {
         if (!world.isClientSide()) {
-            EntitySonicShot e = new EntitySonicShot(world, this);
+            EntitySonicShot e = new EntitySonicShot(world, this, range);
             world.addFreshEntity(e);
+            world.playSound(null, worldPosition, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 1F, 1F);
         }
     }
 
@@ -128,12 +129,15 @@ public class BlockEntitySonicBorer extends BlockEntityPowerReceiver implements P
         return Math.max(ConfigRegistry.SONICBORERRANGE.getValue(), 64);
     }
 
-    private boolean canFire(Level world, BlockPos pos) {
+    private int getFiringRange(Level world, BlockPos pos) {
         if (pressure < FIRE_PRESSURE)
-            return false;
+            return -1;
         if (power < MINPOWER || torque < MINTORQUE)
-            return false;
-        return pos.getY() - this.getDistanceToSurface(world, pos) > world.getMinY() || ystep != -1;
+            return -1;
+        int range = this.getDistanceToSurface(world, pos);
+        if (range < 0 || ystep == -1 && pos.getY() - range <= world.getMinY())
+            return -1;
+        return range;
     }
 
     private int getPressureIncrement() {

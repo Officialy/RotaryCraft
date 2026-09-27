@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
 import reika.rotarycraft.base.blockentity.InventoriedRCFluidReceiver;
@@ -134,10 +133,6 @@ public class BlockEntityDryingBed extends InventoriedRCFluidReceiver {
         return m == MachineRegistry.HOSE || m == MachineRegistry.FUELLINE || m.isStandardPipe();
     }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction action) {
-        return FluidStack.EMPTY;
-    }
 
     @Override
     public int getCapacity() {

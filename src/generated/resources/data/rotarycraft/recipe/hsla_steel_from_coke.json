@@ -1,20 +1,38 @@
 {
   "type": "rotarycraft:blast_furnace_shapeless",
   "additives": [
-    "rotarycraft:coke",
-    "minecraft:gunpowder",
-    "minecraft:sand"
+    {
+      "chance": 1.0,
+      "count": 1,
+      "ingredient": "rotarycraft:coke",
+      "slot": 0
+    },
+    {
+      "chance": 0.018,
+      "count": 1,
+      "ingredient": "minecraft:gunpowder",
+      "slot": 11
+    },
+    {
+      "chance": 0.001,
+      "count": 1,
+      "ingredient": "minecraft:sand",
+      "slot": 14
+    }
   ],
   "bonusChance": 100,
   "bonusMax": 1,
   "bonusMin": 1,
+  "exactCount": false,
   "experience": 0.6,
   "ingredients": [
     "minecraft:iron_ingot"
   ],
+  "mainCount": 1,
   "output": {
     "id": "rotarycraft:hsla_steel_ingot"
   },
+  "requiresEmptyOutput": false,
   "temperature": 600.0,
   "timeMultiplier": 1.0
 }

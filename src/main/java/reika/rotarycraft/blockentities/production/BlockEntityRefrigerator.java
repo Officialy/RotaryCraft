@@ -16,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -33,6 +34,7 @@ import reika.rotarycraft.api.interfaces.RefrigeratorAttachment;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.MultiOperational;
 import reika.rotarycraft.base.blockentity.InventoriedPowerLiquidProducer;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import reika.rotarycraft.registry.*;
 
 import java.util.List;
@@ -63,7 +65,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
 
     public void updateEntity(Level world, BlockPos pos) {
         /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
-//        this.getIOSides(world, pos);
+        read = getBlockState().getValue(BlockRotaryCraftMachine.FACING).getOpposite();
         this.getPower(false);
         timer.setCap(this.getOperationTime());
 
@@ -155,10 +157,11 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
         return m.isStandardPipe();
     }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
+
+
+
+
+
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack is) {
@@ -173,6 +176,26 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
     @Override
     public int getCapacity() {
         return 12000;
+    }
+
+    @Override
+    public boolean hasAnInventory() {
+        return true;
+    }
+
+    @Override
+    public boolean hasATank() {
+        return true;
+    }
+
+    @Override
+    public Block getBlockEntityBlockID() {
+        return RotaryBlocks.REFRIGERATOR.get();
+    }
+
+    @Override
+    protected String getTEName() {
+        return "refrigerator";
     }
 
 

@@ -1,13 +1,16 @@
 {
   "type": "rotarycraft:blast_furnace_shapeless",
   "additives": [],
+  "exactCount": true,
   "experience": 0.0,
   "ingredients": [
     "rotarycraft:hsla_steel_scrap"
   ],
+  "mainCount": 9,
   "output": {
     "id": "rotarycraft:hsla_steel_ingot"
   },
+  "requiresEmptyOutput": false,
   "temperature": 600.0,
   "timeMultiplier": 1.0
 }

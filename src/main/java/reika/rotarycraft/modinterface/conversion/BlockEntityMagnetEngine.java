@@ -148,40 +148,12 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implement
         return 0xff0000;
     }
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
 
-    @Override
-    public  FluidStack getFluidInTank(int tank) {
-        return null;
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public  FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
 
-    @Override
-    public  FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
 
     @Override
     public boolean hasAnInventory() {
@@ -198,10 +170,6 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implement
         return 0;
     }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
 
     //@Override

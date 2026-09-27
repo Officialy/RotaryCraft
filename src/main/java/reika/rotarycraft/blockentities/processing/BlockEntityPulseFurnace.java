@@ -25,10 +25,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.TemperatureEffect.TemperatureCallback;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
@@ -44,7 +47,7 @@ import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerPulseFurnace;
 import reika.rotarycraft.registry.*;
 
-public class BlockEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, DiscreteFunction, ConditionalOperation, TemperatureCallback {
+public class BlockEntityPulseFurnace extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, DiscreteFunction, ConditionalOperation, TemperatureCallback, HasFluidResourceHandler {
 
     public static final int CAPACITY = 3000;
     public static final int MAXFUEL = 8000;
@@ -54,6 +57,19 @@ public class BlockEntityPulseFurnace extends InventoriedPowerReceiver implements
     private final HybridTank fuel = new HybridTank("fuel", MAXFUEL);
     private final HybridTank water = new HybridTank("water", CAPACITY);
     private final HybridTank accel = new HybridTank("accel", MAXFUEL);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {water, fuel, accel},
+            (index, resource) -> switch (index) {
+                case 0 -> resource.getFluid() == Fluids.WATER;
+                case 1 -> resource.getFluid() == RotaryFluids.JET_FUEL.get();
+                case 2 -> resource.getFluid() == RotaryFluids.OXYGEN.get();
+                default -> false;
+            }, (index, resource) -> false, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side.getAxis().isHorizontal() ? fluidHandler : null;
+    }
 
     public int pulseFurnaceCookTime;
     public boolean idle = false;
@@ -344,24 +360,7 @@ public class BlockEntityPulseFurnace extends InventoriedPowerReceiver implements
         return side.getStepY() == 0;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction doFill) {
-        if (from.getStepY() != 0)
-            return 0;
-        Fluid f = resource.getFluid();
-        if (f.isSame(Fluids.WATER))
-            return water.fill(resource, doFill);
-        if (f.isSame(RotaryFluids.JET_FUEL.get()))
-            return fuel.fill(resource, doFill);
-        if (f.isSame(RotaryFluids.OXYGEN.get()))
-            return accel.fill(resource, doFill);
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
     @Override
     public void onEMP() {

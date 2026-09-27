@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "S": "rotarycraft:tungsten_alloy_spring",
+    "S": "rotarycraft:tungsten_alloy_ingot",
     "s": "rotarycraft:tungsten_alloy_rod"
   },
   "pattern": [

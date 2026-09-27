@@ -10,14 +10,17 @@
 package reika.rotarycraft.auxiliary.interfaces;
 
 import net.minecraft.core.Direction;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping;
 import reika.rotarycraft.registry.MachineRegistry;
 
 /**
- * To declare a machine output-only, return 0 for addFluid for all cases.
- * To declare a machine input-only, return 0 for removeFluid for all cases.
+ * Marks a machine that RotaryCraft/ReactorCraft pipes connect to and describes that connection.
+ *
+ * <p>Fluid itself moves through the machine's {@code Capabilities.Fluid.BLOCK} handler
+ * ({@link reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler}); the 1.7.10
+ * {@code fill}/{@code drain} pair this interface used to carry is replaced by that handler.
+ * To declare a machine output-only, give the pipe-facing view no insertable tank; to declare it
+ * input-only, give that view no extractable tank.
  */
 public interface PipeConnector {
 
@@ -30,10 +33,6 @@ public interface PipeConnector {
      * [BLOCK]
      */
     boolean canConnectToPipeOnSide(MachineRegistry m, Direction side);
-
-    int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action);
-
-    FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain);
 
     BlockEntityPiping.Flow getFlowForSide(Direction side);
 }

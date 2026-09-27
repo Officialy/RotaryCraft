@@ -1,0 +1,34 @@
+{
+  "type": "rotarycraft:fractionator",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:blaze_powder",
+      "weight": 1.5
+    },
+    {
+      "ingredient": "rotarycraft:coal_dust",
+      "weight": 1.0
+    },
+    {
+      "ingredient": "minecraft:magma_cream",
+      "weight": 0.75
+    },
+    {
+      "ingredient": "minecraft:pink_dye",
+      "weight": 0.5
+    },
+    {
+      "ingredient": "rotarycraft:netherrack_dust",
+      "weight": 2.0
+    },
+    {
+      "ingredient": "rotarycraft:tar",
+      "weight": 1.5
+    }
+  ],
+  "input_amount": 1000,
+  "input_fluid": "rotarycraft:ethanol_still",
+  "nominal_output": 1000,
+  "output_fluid": "rotarycraft:jet_fuel_still",
+  "solvent": "minecraft:ghast_tear"
+}

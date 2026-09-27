@@ -21,7 +21,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -101,12 +103,15 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
             }
         }
 
-        BlockEntity te = world.getBlockEntity(pos.above());
-        if (te instanceof IFluidHandler ic) {
-            if (output.getFluid() != null) {
-                int amt = ic.fill(output.getFluid(), IFluidHandler.FluidAction.EXECUTE); //direction = down
-                if (amt > 0)
-                    output.removeLiquid(amt);
+        if (!world.isClientSide() && !output.isEmpty()) {
+            var destination = world.getCapability(Capabilities.Fluid.BLOCK, pos.above(), Direction.DOWN);
+            var source = this.getFluidHandler(Direction.UP);
+            if (destination != null && source != null) {
+                try (Transaction transaction = Transaction.openRoot()) {
+                    var moved = ResourceHandlerUtil.moveFirst(source, destination,
+                            resource -> true, output.getFluidLevel(), transaction);
+                    if (moved != null) transaction.commit();
+                }
             }
         }
     }
@@ -209,10 +214,6 @@ public class BlockEntityBoiler extends PoweredLiquidIO implements TemperatureTE,
         return m.isStandardPipe();
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
 
 
     @Override

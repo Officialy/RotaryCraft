@@ -16,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.libraries.level.ReikaBiomeHelper;
@@ -136,45 +135,13 @@ public class BlockEntityAggregator extends PoweredLiquidProducer implements Basi
         return to.getStepY() == 0;
     }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return this.canOutputTo(from) ? tank.drain(maxDrain, doDrain) : FluidStack.EMPTY;
-    }
 
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return tank.drain(maxDrain, action);
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return 0; //a producer never accepts fluid
-    }
 
-    @Override
-    public int getTanks() {
-        return 1;
-    }
 
-    @Override
-    public FluidStack getFluidInTank(int t) {
-        return tank.getFluid();
-    }
 
-    @Override
-    public int getTankCapacity(int t) {
-        return tank.getCapacity();
-    }
 
-    @Override
-    public boolean isFluidValid(int t, FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
-        return 0; //a producer never accepts fluid from pipes
-    }
 
     @Override
     public int getCapacity() {

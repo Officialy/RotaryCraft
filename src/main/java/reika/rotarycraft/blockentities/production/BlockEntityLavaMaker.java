@@ -29,7 +29,7 @@
 //import reika.rotarycraft.registry.MachineRegistry;
 //import reika.rotarycraft.registry.SoundRegistry;
 //
-//public class BlockEntityLavaMaker extends InventoriedPowerLiquidProducer implements IFluidHandler, PipeConnector, TemperatureTE, ConditionalOperation {
+//public class BlockEntityLavaMaker extends InventoriedPowerLiquidProducer implements PipeConnector, TemperatureTE, ConditionalOperation {
 //
 //    public static final int CAPACITY = 64000;
 //

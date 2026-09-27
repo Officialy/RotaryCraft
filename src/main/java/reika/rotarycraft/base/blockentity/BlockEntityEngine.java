@@ -30,10 +30,14 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.minecraft.core.registries.BuiltInRegistries;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.FilteredFluidResourceHandler;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.ParallelTicker;
 import reika.dragonapi.interfaces.blockentity.PartialInventory;
 import reika.dragonapi.interfaces.blockentity.PartialTank;
@@ -56,7 +60,7 @@ import reika.rotarycraft.registry.*;
 
 import java.util.Collection;
 
-public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine implements TemperatureTE, SimpleProvider, PipeConnector, PowerGenerator, PartialInventory, PartialTank, IntegratedGearboxable {
+public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine implements TemperatureTE, SimpleProvider, PipeConnector, PowerGenerator, PartialInventory, PartialTank, IntegratedGearboxable, HasFluidResourceHandler {
 
     /**
      * Water capacity
@@ -75,6 +79,45 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     protected final HybridTank fuel = new HybridTank("enginefuel", FUELCAP);
     protected final HybridTank air = new HybridTank("engineoxygen", 1000);
     protected final HybridTank[] tanks = {water, lubricant, fuel, air};
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            tanks, (index, resource) -> this.acceptsTankFluid(index, resource.getFluid()),
+            (index, resource) -> (index == 1 || index == 2)
+                    && this.acceptsTankFluid(index, resource.getFluid()), this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        if (!(requiresWater || requiresLubricant || requiresFuel || requiresAir)) return null;
+        if (side == null) return fluidHandler;
+        Direction back = this.getBlockState().getValue(BlockRotaryCraftMachine.FACING).getOpposite();
+        if (side != back && side != this.getFuelInputDirection()) return null;
+        if (side == back && !(requiresWater || requiresLubricant)) return null;
+        if (side == this.getFuelInputDirection() && !(requiresFuel || requiresAir)) return null;
+        return new FilteredFluidResourceHandler(fluidHandler,
+                index -> index >= 0 && index < tanks.length && this.isTankRequired(index),
+                (index, resource) -> this.canFill(side, resource.getFluid()),
+                (index, resource) -> false);
+    }
+
+    private boolean isTankRequired(int index) {
+        return switch (index) {
+            case 0 -> requiresWater;
+            case 1 -> requiresLubricant;
+            case 2 -> requiresFuel;
+            case 3 -> requiresAir;
+            default -> false;
+        };
+    }
+
+    private boolean acceptsTankFluid(int index, Fluid fluid) {
+        if (!this.isTankRequired(index)) return false;
+        return switch (index) {
+            case 0 -> fluid == Fluids.WATER;
+            case 1 -> fluid == RotaryFluids.LUBRICANT.get();
+            case 2 -> fluid == type.getFuelType();
+            case 3 -> isAirFluid(fluid) && type.isAirBreathing();
+            default -> false;
+        };
+    }
     protected EngineType type = EngineType.DC;
     protected int backx;
     protected int backz;
@@ -776,47 +819,22 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
         return power;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction doFill) {
-        if (resource == null || resource.isEmpty())
-            return 0;
-        Fluid f = resource.getFluid();
-        if (!this.canFill(from, f))
-            return 0;
-        if (f == Fluids.WATER) {
-            return water.fill(resource, doFill);
-        } else if (f == RotaryFluids.LUBRICANT.get()) {
-            return lubricant.fill(resource, doFill);
-        } else if (isAirFluid(f) && type.isAirBreathing()) {
-            return air.fill(resource, doFill);
-        } else {
-            return fuel.fill(resource, doFill);
-        }
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
     public final boolean canFill(Direction from, Fluid fluid) {
         if (isAirFluid(fluid)) {
-            return type.isAirBreathing() && from == this.getFuelInputDirection();
+            return requiresAir && type.isAirBreathing() && from == this.getFuelInputDirection();
         }
         if (fluid == Fluids.WATER) {
-            int dx = worldPosition.getX() + from.getStepX();
-            int dy = worldPosition.getY() + from.getStepY();
-            int dz = worldPosition.getZ() + from.getStepZ();
-            return dx == backx && dy == worldPosition.getY() && dz == backz;
+            return requiresWater && from == this.getBlockState()
+                    .getValue(BlockRotaryCraftMachine.FACING).getOpposite();
         } else if (fluid == RotaryFluids.LUBRICANT.get()) {
-            int dx = worldPosition.getX() + from.getStepX();
-            int dy = worldPosition.getY() + from.getStepY();
-            int dz = worldPosition.getZ() + from.getStepZ();
-            return dx == backx && dy == worldPosition.getY() && dz == backz;
+            return requiresLubricant && from == this.getBlockState()
+                    .getValue(BlockRotaryCraftMachine.FACING).getOpposite();
         } else if (fluid == RotaryFluids.JET_FUEL.get()) {
-            return from == this.getFuelInputDirection();
+            return requiresFuel && type.isJetFueled() && from == this.getFuelInputDirection();
         } else if (fluid == RotaryFluids.ETHANOL.get()) {
-            return from == this.getFuelInputDirection();
+            return requiresFuel && type.isEthanolFueled() && from == this.getFuelInputDirection();
         }
         return false;
     }

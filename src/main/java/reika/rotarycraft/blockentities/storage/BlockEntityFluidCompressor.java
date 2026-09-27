@@ -19,9 +19,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.FilteredFluidResourceHandler;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.ReikaNBTHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.interfaces.NBTMachine;
@@ -42,11 +46,28 @@ import reika.rotarycraft.registry.RotaryFluids;
  * legacy overpressure-explosion (from filling past capacity as torque drops) is left commented as
  * in the source.
  */
-public class BlockEntityFluidCompressor extends BlockEntityPowerReceiver implements PipeConnector, NBTMachine {
+public class BlockEntityFluidCompressor extends BlockEntityPowerReceiver implements PipeConnector, NBTMachine, HasFluidResourceHandler {
 
     private static final ArrayList<FluidStack> creativeFluids = new ArrayList<>();
 
     private final HybridTank tank = new HybridTank("gastank", 1000000000);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> true,
+            (index, resource) -> true, this::setChanged,
+            (index, resource) -> resource.isEmpty()
+                    ? (tank.isEmpty() ? 0 : this.getCapacity(tank.getActualFluid().getFluid()))
+                    : this.getCapacity(resource.getFluid()));
+    private final ResourceHandler<FluidResource> inputFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> true,
+            (index, resource) -> false);
+    private final ResourceHandler<FluidResource> outputFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> false,
+            (index, resource) -> true);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null ? fluidHandler : side == Direction.UP ? outputFluidView : inputFluidView;
+    }
 
     public static void initCreativeFluids() {
         creativeFluids.clear();
@@ -157,22 +178,7 @@ public class BlockEntityFluidCompressor extends BlockEntityPowerReceiver impleme
         return side == Direction.UP ? Flow.OUTPUT : Flow.INPUT;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        if (from == Direction.UP || resource.isEmpty())
-            return 0; //input from the sides only
-        int toadd = Math.min(resource.getAmount(), this.getCapacity(resource.getFluid()) - tank.getFluidLevel());
-        if (toadd <= 0)
-            return 0;
-        return tank.fill(new FluidStack(resource.getFluid(), toadd), action);
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        if (from != Direction.UP)
-            return FluidStack.EMPTY; //output from the top only
-        return tank.drain(maxDrain, doDrain);
-    }
 
     // ==== persistence ====
 

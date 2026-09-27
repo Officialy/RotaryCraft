@@ -25,7 +25,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.java.ReikaRandomHelper;
@@ -390,17 +389,7 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
         return m.isStandardPipe();
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        if (this.canFill(from, resource.getFluid()))
-            return tank.fill(resource, action);
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
     public int getOperationTime(int stage) {
         return DurationRegistry.EXTRACTOR.getOperationTime(omega, stage);

@@ -16,8 +16,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
@@ -25,9 +28,17 @@ import reika.rotarycraft.registry.MachineRegistry;
 
 import java.util.Locale;
 
-public abstract class BlockEntityFluidCannon extends BlockEntityAimedCannon implements IFluidHandler, PipeConnector { //, IPipeConnection {
+public abstract class BlockEntityFluidCannon extends BlockEntityAimedCannon implements PipeConnector, HasFluidResourceHandler { //, IPipeConnection {
 
     protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH)), this.getCapacity());
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> isValidFluid(resource.getFluid()),
+            (index, resource) -> false, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || canReceiveFrom(side) ? fluidHandler : null;
+    }
 
     public BlockEntityFluidCannon(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -61,12 +72,6 @@ public abstract class BlockEntityFluidCannon extends BlockEntityAimedCannon impl
 
     public abstract boolean isValidFluid(Fluid f);
 
-    @Override
-    public final int fillPipe(Direction from, FluidStack resource, FluidAction doFill) {
-        if (!this.canFill(from, resource.getFluid()))
-            return 0;
-        return tank.fill(resource, doFill);
-    }
 
     public abstract boolean canReceiveFrom(Direction from);
 

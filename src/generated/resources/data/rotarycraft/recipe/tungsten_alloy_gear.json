@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "W": "rotarycraft:tungsten_alloy_spring"
+    "W": "rotarycraft:tungsten_alloy_ingot"
   },
   "pattern": [
     " W ",

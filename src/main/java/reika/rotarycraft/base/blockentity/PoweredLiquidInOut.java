@@ -15,17 +15,37 @@ import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.FilteredFluidResourceHandler;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.java.ReikaStringParser;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import java.util.Locale;
 
 //@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements PipeConnector {//, IPipeConnection {
+public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements PipeConnector, HasFluidResourceHandler {//, IPipeConnection {
 
     protected final HybridTank tank = new HybridTank(ReikaStringParser.stripSpaces(this.getName().toLowerCase(Locale.ENGLISH)), this.getCapacity());
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> this.isValidFluid(resource.getFluid()),
+            (index, resource) -> true, this::setChanged);
+    private final ResourceHandler<FluidResource> inputFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> true,
+            (index, resource) -> false);
+    private final ResourceHandler<FluidResource> outputFluidView = new FilteredFluidResourceHandler(
+            fluidHandler, index -> true, (index, resource) -> false,
+            (index, resource) -> true);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null ? fluidHandler : side == Direction.DOWN ? outputFluidView
+                : this.canReceiveFrom(side) ? inputFluidView : null;
+    }
 
     public PoweredLiquidInOut(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

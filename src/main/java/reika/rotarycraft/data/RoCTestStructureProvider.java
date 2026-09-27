@@ -29,7 +29,7 @@ public class RoCTestStructureProvider implements DataProvider {
 
     public static final Identifier ARENA = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "test_arena");
     private static final int SIZE_XZ = 9;
-    private static final int SIZE_Y = 6;
+    private static final int SIZE_Y = 9;
 
     private final PackOutput output;
 

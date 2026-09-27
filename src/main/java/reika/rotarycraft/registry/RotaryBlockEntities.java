@@ -8,6 +8,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.dragonapi.interfaces.blockentity.HasItemHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.blocks.entity.transmission.BlockGearbox;
 import reika.rotarycraft.blockentities.*;
@@ -20,6 +21,7 @@ import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import reika.rotarycraft.blockentities.decorative.BlockEntityParticleEmitter;
 import reika.rotarycraft.blockentities.engine.*;
+import reika.rotarycraft.modinterface.conversion.TileEntityDynamo;
 import reika.rotarycraft.blockentities.farming.BlockEntityAutoBreeder;
 import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 import reika.rotarycraft.blockentities.farming.BlockEntityGroundHydrator;
@@ -283,6 +285,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityMusicBox::new, RotaryBlocks.MUSIC_BOX.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityMagnetEngine>> MAGNETOSTATIC_ENGINE = BLOCK_ENTITIES.register("magnetostatic_engine", () ->
             new BlockEntityType<>(BlockEntityMagnetEngine::new, RotaryBlocks.MAGNETOSTATIC_ENGINE.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TileEntityDynamo>> ROTATIONAL_DYNAMO = BLOCK_ENTITIES.register("rotational_dynamo", () ->
+            new BlockEntityType<>(TileEntityDynamo::new, RotaryBlocks.ROTATIONAL_DYNAMO.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySolarTower>> SOLAR_TOWER = BLOCK_ENTITIES.register("solar_tower", () ->
             new BlockEntityType<>(BlockEntitySolarTower::new, RotaryBlocks.SOLAR_TOWER.get()));
@@ -443,5 +447,8 @@ public class RotaryBlockEntities {
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK, type,
                 (be, ctx) -> be instanceof HasItemHandler h ? h.getItemHandler() : null);
+        event.registerBlockEntity(
+                Capabilities.Fluid.BLOCK, type,
+                (be, side) -> be instanceof HasFluidResourceHandler h ? h.getFluidHandler(side) : null);
     }
 }

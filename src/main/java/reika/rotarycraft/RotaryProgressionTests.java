@@ -20,7 +20,18 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ShapedBlastFurnaceRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.FractionatorRecipe;
+import reika.rotarycraft.registry.ExtractOres;
+import reika.rotarycraft.registry.ExtractorBonus;
+import reika.rotarycraft.registry.RotaryFluids;
+import reika.rotarycraft.registry.RotaryItems;
 
 /**
  * Progression: the crafting chain from a fresh world to the end-game tiers.
@@ -49,6 +60,9 @@ final class RotaryProgressionTests {
             "bedrock_dust",       // bedrock breaker
             "sawdust",            // grinder / woodcutter
             "hsla_steel_scrap",   // gearbox failure
+            "gold_flakes",        // gold ore extractor
+            "tungsten_flakes",    // iron solution extractor bonus
+            "aluminum_alloy_powder", // lapis/redstone solution extractor bonus
     };
 
     /**
@@ -65,6 +79,7 @@ final class RotaryProgressionTests {
             "hsla_steel_from_charcoal",
             "hsla_steel_plate",
             "hsla_steel_rod",
+            "reservoir",
 
             // --- Tier 2: first power and first transmission
             "dc_engine",
@@ -72,17 +87,31 @@ final class RotaryProgressionTests {
             "hsla_shaft",
             "hsla_steel_gear",
             "hsla_steel_gear_2x",
+            "hsla_steel_gear_4x",
             "hsla_gearbox_2x",
             "bevel_gears",
 
             // --- Tier 3: the early processing machines
             "saw",
             "grinder",
+            "grinder/coal_to_dust",
+            "grinder/netherrack_to_dust",
+            "grinder/soul_sand_to_tar",
             "drillhead_iron",
             "impeller",
             "extractor",
             "friction_heater",
             "fermenter",
+            "centrifuge",
+            "fermenter/yeast",
+            "fermenter/sludge",
+            "centrifuge/clean_sludge",
+            "ethanol_crystals_from_clean_sludge",
+            "rock_melter",
+            "fuel_line",
+            "mixer",
+            "fractionator",
+            "fluid_pipe",
 
             // --- Tier 4: precision parts those machines unlock
             "ball_bearing_block",
@@ -94,6 +123,8 @@ final class RotaryProgressionTests {
             "coil",
 
             // --- Tier 5: the bedrock line
+            "tungsten_ingot_from_smelting",
+            "bedrock_breaker",
             "bedrock_alloy_ingot",
             "bedrock_shaft",
 
@@ -104,34 +135,37 @@ final class RotaryProgressionTests {
             "propeller_blade_down",
             "turbine",
             "diffuser",
+            "ignition_unit",
+            "combustor",
+            "pulse_jet_furnace",
+            "red_gold_dust",
+            "pulse_furnace/red_gold_dust_to_ingot",
+            "ignition_unit",
+            "high_temperature_combustor",
+            "spring_steel_ingot",
+            "tungsten_alloy_ingot",
+            "tungsten_alloy_rod",
+            "tungsten_alloy_shaft_core",
+            "compound_compressor",
+            "compound_turbine",
+            "silicon_dust",
+            "aluminum_alloy_ingot",
+            "microturbine",
+            "jet_engine",
+            "tungsten_alloy_gear",
+            "diamond_gear",
+            "bedrock_alloy_rod",
+            "bedrock_alloy_gear",
+            "bedrock_alloy_gear_2x",
+            "bedrock_alloy_gear_4x",
+            "bedrock_alloy_gear_8x",
+            "bedrock_alloy_gear_16x",
+            "bedrock_gearbox_4x",
     };
 
-    /**
-     * Rungs that are known to be missing, asserted to be <em>still</em> missing so the gap cannot
-     * be forgotten and so whoever closes one is told to promote it into {@link #CHAIN}.
-     *
-     * <p>{@code high_temperature_combustor} is registered as an item but has no recipe: 1.7.10 made
-     * it in the blast furnace at 1100 degrees from steel, redstone, an igniter and <em>red gold
-     * ingots</em> (RotaryRecipes line 953), and the red gold ingot has not been ported yet. The jet
-     * engine consumes the combustor, so the whole jet tier is currently uncraftable.
-     */
+    /** Items with no crafting recipe and no known machine or world source yet. */
     private static final String[] KNOWN_GAPS = {
-            // Registered as an item with no recipe. 1.7.10 made it in the blast furnace at 1100
-            // degrees from steel, redstone, an igniter and *red gold ingots* (RotaryRecipes 953);
-            // the red gold ingot has not been ported, so the whole jet-engine tier is uncraftable.
-            "high_temperature_combustor",
-            // Upstream got aluminium powder from aluminium-ore decomposition, which the port has no
-            // source for yet; this gates the aluminium alloy ingot and everything above it.
-            "aluminum_alloy_powder",
-            // No gear-unit recipes for the bedrock tier, so no bedrock gearbox of any ratio can be
-            // crafted even though the blocks and their gearbox recipes exist.
-            "bedrock_alloy_gear",
-            "bedrock_alloy_gear_16x",
-            // No recipe, and between them these block the tungsten gearbox, the CVT, both compound
-            // turbine parts and -- via the diamond gear -- the bedrock breaker itself.
-            "diamond_gear",
             "tungsten_alloy_spring",
-            "tungsten_flakes",
     };
 
     static void recipeChain(GameTestHelper helper) {
@@ -185,6 +219,27 @@ final class RotaryProgressionTests {
                 }
             }
 
+            // The Fractionator's six solid inputs live in its machine logic rather than in a
+            // crafting recipe. Check them at this rung, before later steps can mask a gap.
+            if (path.equals("fractionator")) {
+                ResourceKey<Recipe<?>> fuelKey = ResourceKey.create(Registries.RECIPE,
+                        Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "fractionator/jet_fuel"));
+                Recipe<?> fuelRecipe = manager.byKey(fuelKey).map(RecipeHolder::value).orElse(null);
+                if (!(fuelRecipe instanceof FractionatorRecipe fuel)) {
+                    missing.add("fractionator/jet_fuel");
+                } else {
+                    for (FractionatorRecipe.WeightedIngredient entry : fuel.getIngredients()) {
+                        boolean available = entry.ingredient().items().anyMatch(itemHolder -> {
+                            Item ingredient = itemHolder.value();
+                            Identifier id = BuiltInRegistries.ITEM.getKey(ingredient);
+                            return !RotaryCraft.MODID.equals(id.getNamespace()) || obtainable.contains(ingredient);
+                        });
+                        if (!available)
+                            outOfOrder.add("fractionator solid has no earlier source: " + entry.ingredient());
+                    }
+                }
+            }
+
             // Its output is available to every later step.
             if (!recordResult(recipe, helper, obtainable))
                 unreadable.add(path + " (" + recipe.getClass().getSimpleName() + ")");
@@ -218,6 +273,45 @@ final class RotaryProgressionTests {
                         + String.join(", ", unexpectedlyPresent));
         helper.assertTrue(outOfOrder.isEmpty(),
                 "progression chain is not self-consistent:\n  " + String.join("\n  ", outOfOrder));
+        for (String path : new String[]{"lava_maker/ethanol_crystals", "lava_maker/clean_sludge"}) {
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                    Identifier.fromNamespaceAndPath(RotaryCraft.MODID, path));
+            Recipe<?> recipe = manager.byKey(key).orElseThrow().value();
+            helper.assertTrue(recipe instanceof LavaMakerRecipe melt
+                            && melt.getFluid().getFluid().isSame(RotaryFluids.ETHANOL.get())
+                            && melt.getFluid().getAmount() == 1000,
+                    path + " must melt to one bucket of ethanol for the fractionator");
+        }
+        for (ExtractOres ore : new ExtractOres[]{ExtractOres.IRON, ExtractOres.GOLD,
+                ExtractOres.LAPIS, ExtractOres.REDSTONE}) {
+            String name = ore.name().toLowerCase(java.util.Locale.ROOT);
+            String[] stages = {"ore_to_dust", "dust_to_slurry", "slurry_to_solution", "solution_to_flakes"};
+            for (int stage = 0; stage < stages.length; stage++) {
+                String path = "extractor/" + name + "_" + stages[stage];
+                ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
+                        Identifier.fromNamespaceAndPath(RotaryCraft.MODID, path));
+                Recipe<?> recipe = manager.byKey(key).orElseThrow().value();
+                int expectedStage = stage;
+                helper.assertTrue(recipe instanceof ExtractorRecipe extract
+                                && extract.getStage() == expectedStage
+                                && extract.getOutput().is(ore.getStageItem(expectedStage)),
+                        path + " must produce its next material stage");
+            }
+        }
+        for (ExtractorBonus bonus : new ExtractorBonus[]{ExtractorBonus.IRON, ExtractorBonus.LAPIS,
+                ExtractorBonus.REDSTONE}) {
+            Item solution = switch (bonus) {
+                case IRON -> ExtractOres.IRON.getSolution();
+                case LAPIS -> ExtractOres.LAPIS.getSolution();
+                case REDSTONE -> ExtractOres.REDSTONE.getSolution();
+                default -> throw new IllegalStateException();
+            };
+            Item expected = bonus == ExtractorBonus.IRON ? RotaryItems.TUNGSTEN_FLAKES.get()
+                    : RotaryItems.ALUMINUM_ALLOY_POWDER.get();
+            helper.assertTrue(ExtractorBonus.getBonusForIngredient(new ItemStack(solution)) == bonus
+                            && bonus.getBonusItem().is(expected),
+                    bonus + " extractor bonus must supply " + BuiltInRegistries.ITEM.getKey(expected));
+        }
         helper.succeed();
     }
 
@@ -250,11 +344,19 @@ final class RotaryProgressionTests {
         ItemStack out = switch (recipe) {
             case ShapelessBlastFurnaceRecipe r -> r.getOutput();
             case ShapedBlastFurnaceRecipe r -> r.getOutput();
+            case PulseFurnaceRecipe r -> r.getOutput();
+            case FermenterRecipe r -> r.getOutput();
+            case GrinderRecipe r -> r.getOutput();
             default -> ItemStack.EMPTY;
         };
         if (!out.isEmpty()) {
             obtainable.add(out.getItem());
             return true;
+        }
+        if (recipe instanceof CentrifugeRecipe r) {
+            for (CentrifugeRecipe.ChancedOutput output : r.getOutputs())
+                obtainable.add(output.stack().create().getItem());
+            return !r.getOutputs().isEmpty() || r.getFluidOutput().isPresent();
         }
         return false;
     }

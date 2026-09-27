@@ -1,15 +1,23 @@
 {
   "type": "rotarycraft:blast_furnace_shapeless",
   "additives": [
-    "rotarycraft:bedrock_dust"
+    {
+      "chance": 1.0,
+      "count": 4,
+      "ingredient": "rotarycraft:bedrock_dust",
+      "slot": 0
+    }
   ],
+  "exactCount": true,
   "experience": 0.0,
   "ingredients": [
     "rotarycraft:hsla_steel_ingot"
   ],
+  "mainCount": 1,
   "output": {
     "id": "rotarycraft:bedrock_alloy_ingot"
   },
+  "requiresEmptyOutput": false,
   "temperature": 1450.0,
   "timeMultiplier": 1.0
 }

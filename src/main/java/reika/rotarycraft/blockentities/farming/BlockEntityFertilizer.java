@@ -28,7 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.MachineEnchantmentHandler;
@@ -227,17 +226,7 @@ public class BlockEntityFertilizer extends InventoriedPowerLiquidReceiver implem
         return from != Direction.DOWN;
     }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction action) {
-        return FluidStack.EMPTY;
-    }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        if (!this.canReceiveFrom(from) || !this.isValidFluid(resource.getFluid()))
-            return 0;
-        return tank.fill(resource, action);
-    }
 
     @Override
     public int getCapacity() {

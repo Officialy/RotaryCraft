@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "L": "rotarycraft:ball_bearing",
-    "S": "rotarycraft:tungsten_alloy_spring"
+    "S": "rotarycraft:tungsten_alloy_ingot"
   },
   "pattern": [
     "LLL",

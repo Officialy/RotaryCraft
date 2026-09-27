@@ -24,9 +24,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
@@ -48,7 +51,7 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
  * along the vertical axis (from above when flipped). Recipes are the data-driven
  * {@link CentrifugeRecipe}s (legacy {@code RecipesCentrifuge}).
  */
-public class BlockEntityCentrifuge extends InventoriedPowerReceiver implements MultiOperational, ConditionalOperation, PipeConnector {
+public class BlockEntityCentrifuge extends InventoriedPowerReceiver implements MultiOperational, ConditionalOperation, PipeConnector, HasFluidResourceHandler {
 
     public static final int CAPACITY = 10000;
 
@@ -58,6 +61,14 @@ public class BlockEntityCentrifuge extends InventoriedPowerReceiver implements M
             setChanged();
         }
     };
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> false,
+            (index, resource) -> true, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side.getAxis().isHorizontal() ? fluidHandler : null;
+    }
 
     private int progressTime;
 
@@ -248,17 +259,7 @@ public class BlockEntityCentrifuge extends InventoriedPowerReceiver implements M
         return side.getStepY() == 0 ? Flow.OUTPUT : Flow.NONE;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        if (this.canDrain(from, null))
-            return tank.drain(maxDrain, doDrain);
-        return FluidStack.EMPTY;
-    }
 
     public boolean canDrain(Direction from, FluidStack fluid) {
         return from.getStepY() == 0 && ReikaFluidHelper.isFluidDrainableFromTank(fluid, tank);

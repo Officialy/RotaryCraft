@@ -18,8 +18,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import reika.dragonapi.instantiable.StepTimer;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
@@ -27,32 +34,74 @@ import reika.rotarycraft.blockentities.piping.BlockEntityPipe;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.SoundRegistry;
 
-public abstract class SprinklerBlock extends RotaryCraftBlockEntity implements PipeConnector, RangedEffect {
+public abstract class SprinklerBlock extends RotaryCraftBlockEntity implements PipeConnector, RangedEffect, HasFluidResourceHandler {
 
     private final StepTimer soundTimer = new StepTimer(40);
     private int liquid;
     private int pressure;
+    private final ResourceHandler<FluidResource> fluidHandler = new WaterHandler();
+
+    private final class WaterHandler extends SnapshotJournal<Integer> implements ResourceHandler<FluidResource> {
+        @Override public int size() { return 1; }
+        @Override public FluidResource getResource(int index) {
+            if (index != 0) throw new IndexOutOfBoundsException(index);
+            return liquid > 0 ? FluidResource.of(Fluids.WATER) : FluidResource.EMPTY;
+        }
+        @Override public long getAmountAsLong(int index) {
+            if (index != 0) throw new IndexOutOfBoundsException(index);
+            return liquid;
+        }
+        @Override public long getCapacityAsLong(int index, FluidResource resource) {
+            if (index != 0) throw new IndexOutOfBoundsException(index);
+            return resource.isEmpty() || isValid(index, resource) ? getCapacity() : 0;
+        }
+        @Override public boolean isValid(int index, FluidResource resource) {
+            if (index != 0) throw new IndexOutOfBoundsException(index);
+            return resource.equals(FluidResource.of(Fluids.WATER));
+        }
+        @Override public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            if (!isValid(index, resource) || amount == 0) return 0;
+            int accepted = Math.min(amount, Math.max(0, getCapacity() - liquid));
+            if (accepted > 0) {
+                updateSnapshots(transaction);
+                liquid += accepted;
+            }
+            return accepted;
+        }
+        @Override public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            if (index != 0) throw new IndexOutOfBoundsException(index);
+            return 0;
+        }
+        @Override protected Integer createSnapshot() { return liquid; }
+        @Override protected void revertToSnapshot(Integer snapshot) { liquid = snapshot; }
+        @Override protected void onRootCommit(Integer originalState) { setChanged(); }
+    }
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side == this.getPipeDirection() ? fluidHandler : null;
+    }
 
     public SprinklerBlock(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
     private void getLiq(Level world, BlockPos pos) {
-        int oldLevel = 0;
+        if (world.isClientSide()) return;
         Direction dir = this.getPipeDirection();
-        int dx = pos.getX() + dir.getStepX();
-        int dy = pos.getY() + dir.getStepY();
-        int dz = pos.getZ() + dir.getStepZ();
-        MachineRegistry m = MachineRegistry.getMachine(world, new BlockPos(dx, dy, dz));
+        BlockPos neighborPos = pos.relative(dir);
+        MachineRegistry m = MachineRegistry.getMachine(world, neighborPos);
         if (m != null && m.isStandardPipe()) {
-            BlockEntityPipe tile = (BlockEntityPipe) world.getBlockEntity(new BlockPos(dx, dy, dz));
+            BlockEntityPipe tile = (BlockEntityPipe) world.getBlockEntity(neighborPos);
             if (tile != null && tile.contains(Fluids.WATER) && tile.getFluidLevel() > 0) {
                 if (liquid < this.getCapacity()) {
-                    oldLevel = tile.getFluidLevel();
                     int toremove = tile.getFluidLevel() / 4 + 1;
                     int toadd = Math.min(toremove, this.getCapacity() - liquid);
-                    tile.removeLiquid(toadd);
-                    liquid = Math.max(liquid + toadd, 0);
+                    var source = world.getCapability(Capabilities.Fluid.BLOCK, neighborPos, dir.getOpposite());
+                    if (source != null) ResourceHandlerUtil.move(source, fluidHandler,
+                            resource -> resource.equals(FluidResource.of(Fluids.WATER)), toadd, null);
                 }
                 pressure = tile.getPressure();
             }
@@ -151,14 +200,6 @@ public abstract class SprinklerBlock extends RotaryCraftBlockEntity implements P
         return side == this.getPipeDirection() && p.isStandardPipe();
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        if (!resource.getFluid().equals(Fluids.WATER))
-            return 0;
-        int toadd = Math.min(resource.getAmount(), this.getCapacity() - liquid);
-        liquid += toadd;
-        return toadd;
-    }
 
     public boolean canFill(Direction side, Fluid f) {
         return f.equals(Fluids.WATER) && side == this.getPipeDirection();

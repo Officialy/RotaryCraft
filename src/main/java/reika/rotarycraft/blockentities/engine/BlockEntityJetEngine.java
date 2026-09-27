@@ -59,7 +59,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.RayTracer;
 import reika.dragonapi.instantiable.StepTimer;
@@ -1137,16 +1136,5 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         return new ContainerJet(containerId, inv, this);
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        // Jet fuel only; only accept from the back-inflow side.
-        if (resource == null || resource.isEmpty()) return 0;
-        if (!resource.getFluid().equals(RotaryFluids.JET_FUEL.get())) return 0;
-        return fuel.fill(resource, action);
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 }

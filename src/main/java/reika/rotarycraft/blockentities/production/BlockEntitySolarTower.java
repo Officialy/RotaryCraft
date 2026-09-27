@@ -23,8 +23,11 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.StepTimer;
 import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
@@ -47,7 +50,7 @@ import reika.rotarycraft.registry.RotaryFluids;
 import java.util.Collection;
 import java.util.List;
 
-public class BlockEntitySolarTower extends BlockEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, SolarPlantBlock {
+public class BlockEntitySolarTower extends BlockEntityIOMachine implements MultiBlockMachine, SimpleProvider, PipeConnector, PowerGenerator, SolarPlantBlock, HasFluidResourceHandler {
 
     public static final int GENOMEGA = 512;
     public static final int GENOMEGA_SODIUM = 4096;
@@ -56,6 +59,14 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
     private final BlockArray solarBlocks = new BlockArray();
     private final StepTimer mirrorTimer = new StepTimer(100);
     private final HybridTank tank = new HybridTank("solar", 4000);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> this.canFill(resource.getFluid()),
+            (index, resource) -> false, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return fluidHandler;
+    }
     private float overallBrightness;
     private int size;
     private int topLocation = -1;
@@ -355,15 +366,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         return true;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
 
     @Override
@@ -434,7 +437,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
 
     //@Override
     public boolean canFill(Fluid fluid) {
-        return fluid.equals(Fluids.WATER) || (fluid.equals(RotaryFluids.SODIUM) && this.canUseSodium());
+        return fluid == Fluids.WATER || (fluid == RotaryFluids.SODIUM.get() && this.canUseSodium());
     }
 
     @Override
@@ -444,6 +447,6 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
 
     @Override
     public boolean hasATank() {
-        return false;
+        return true;
     }
 }

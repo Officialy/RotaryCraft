@@ -6,11 +6,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
 import reika.rotarycraft.base.blockentity.BlockEntityAreaFiller;
@@ -19,9 +23,17 @@ import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 
-public class BlockEntitySpiller extends BlockEntityAreaFiller implements PipeConnector {
+public class BlockEntitySpiller extends BlockEntityAreaFiller implements PipeConnector, HasFluidResourceHandler {
 
     private final HybridTank tank = new HybridTank("flooder", 4000);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {tank}, (index, resource) -> this.canTakeLiquid(resource.getFluid()),
+            (index, resource) -> false, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side != Direction.DOWN ? fluidHandler : null;
+    }
 
     public BlockEntitySpiller(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.SPILLER.get(), pos, state);
@@ -32,8 +44,7 @@ public class BlockEntitySpiller extends BlockEntityAreaFiller implements PipeCon
     }
 
     private boolean canTakeLiquid(Fluid f) {
-//        if (!f.getAttributes().canBePlacedInWorld())
-//            return false;
+        if (f == null || f.defaultFluidState().createLegacyBlock().is(Blocks.AIR)) return false;
         if (tank.isEmpty())
             return true;
         return tank.getActualFluid().getFluid().equals(f);
@@ -86,15 +97,7 @@ public class BlockEntitySpiller extends BlockEntityAreaFiller implements PipeCon
         return this.canConnectToPipe(p) && side != Direction.DOWN;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, IFluidHandler.FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, IFluidHandler.FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
     //@Override
     public boolean canFill(Direction from, Fluid fluid) {
@@ -123,7 +126,7 @@ public class BlockEntitySpiller extends BlockEntityAreaFiller implements PipeCon
 
     @Override
     protected void onBlockPlaced() {
-        tank.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+        tank.drain(1000, true);
     }
 
     @Override

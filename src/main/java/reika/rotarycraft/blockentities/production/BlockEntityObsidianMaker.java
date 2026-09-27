@@ -23,9 +23,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.java.ReikaRandomHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
@@ -44,7 +47,7 @@ import reika.rotarycraft.registry.DurationRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
-public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, IFluidHandler, MultiOperational, ConditionalOperation {
+public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implements TemperatureTE, PipeConnector, MultiOperational, ConditionalOperation, HasFluidResourceHandler {
 
     public static final int CAPACITY = 320 * 1000;
     public static final int MAXTEMP = 1000;
@@ -54,6 +57,16 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
     private static final int MAX_OBSIDIAN_TEMP_0 = 900;
     private final HybridTank lava = new HybridTank("lavamix", CAPACITY);
     private final HybridTank water = new HybridTank("watermix", CAPACITY);
+    private final ResourceHandler<FluidResource> fluidHandler = new HybridTankResourceHandler(
+            new HybridTank[] {lava, water},
+            (index, resource) -> index == 0 ? resource.getFluid() == Fluids.LAVA
+                    : resource.getFluid() == Fluids.WATER,
+            (index, resource) -> false, this::setChanged);
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || side.getAxis().isHorizontal() ? fluidHandler : null;
+    }
     public int mixTime;
     public int temperature;
     public float overred;
@@ -305,15 +318,7 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
         return side.getStepY() == 0;
     }
 
-    @Override
-    public int fillPipe(Direction from, FluidStack resource, FluidAction action) {
-        return 0;
-    }
 
-    @Override
-    public FluidStack drainPipe(Direction from, int maxDrain, FluidAction doDrain) {
-        return FluidStack.EMPTY;
-    }
 
     @Override
     public void addTemperature(int temp) {
@@ -410,50 +415,15 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
         return MAXTEMP;
     }
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        Fluid f = resource.getFluid();
-        if (!this.canFill(f))
-            return 0;
-        if (f.equals(Fluids.WATER))
-            return water.fill(resource, action);
-        if (f.equals(Fluids.LAVA))
-            return lava.fill(resource, action);
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
 
     
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
 
     @Override
     public boolean hasAnInventory() {

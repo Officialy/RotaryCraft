@@ -1,4 +1,4 @@
-// 26.2	2026-08-21T00:58:58.6564591	Model Definitions - rotarycraft
+// 26.2	2026-09-25T14:51:29.3256733	Model Definitions - rotarycraft
 f8a25e5cd83b08aad4c45621a8ece222635e462b assets/rotarycraft/blockstates/aa_gun.json
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
@@ -126,6 +126,7 @@ c793c493df8c93186b481f4241931de2e560352c assets/rotarycraft/blockstates/player_d
 fd3168060c3a1776bca95b8a947599c05b56b80e assets/rotarycraft/blockstates/refrigerator.json
 7b0ac82b5b119fb64b7c94d374fb421b3f47572b assets/rotarycraft/blockstates/reservoir.json
 8f12487bf35b52f7b52217607741ac110a0cd14e assets/rotarycraft/blockstates/rock_melter.json
+d69a5b5c8517ceacf266e2c9f68051a53c51d54e assets/rotarycraft/blockstates/rotational_dynamo.json
 3b8fc5739ddc9d7bccc58aa7774aa2bac21bf848 assets/rotarycraft/blockstates/scalechest.json
 012aa894d1619dc7e809adfe2079462af83a2a1a assets/rotarycraft/blockstates/self_destruct.json
 031850158ac41a517f1c4e4ef07324d3b77e5c53 assets/rotarycraft/blockstates/shield.json
@@ -243,6 +244,7 @@ ce5cd79af19ac604586e5fcdff1c829e63750d02 assets/rotarycraft/items/cave_scanner.j
 63f4f2bce5f2776425c023cefbef8094d378062e assets/rotarycraft/items/chain_drive.json
 a8946e2a0a723cb144aeb16a88b7c33fcab40bb3 assets/rotarycraft/items/chain_link.json
 518ae12925793af25969c24c4a90cf41c6426547 assets/rotarycraft/items/circuit_board.json
+b41912a32295faed9d714f086db5971801fabc11 assets/rotarycraft/items/clean_sludge.json
 e12e685584756551956a0a637a4f28b2e7f24aea assets/rotarycraft/items/clutch.json
 d491234d84aa46faea6bbdc246488738fbe740cc assets/rotarycraft/items/coal_dust.json
 ac353d181a618ad8779ef980a908051417f5e33d assets/rotarycraft/items/coal_flakes.json
@@ -466,10 +468,13 @@ a1f79af4c2724fa5f2b4f7a53e4d3778713a5095 assets/rotarycraft/items/quartz_solutio
 b7b18c71dcb70e46f818e0d5edc5ceaf874878ef assets/rotarycraft/items/redstone_flakes.json
 0a9e4a42a876195a9349fa9bd44d88e94d5c2a21 assets/rotarycraft/items/redstone_slurry.json
 4b7e3dabd1e2a7e5ff8c60a935d8ca3e87ad21c6 assets/rotarycraft/items/redstone_solution.json
+a1c913b5beb79fb2e966545c922044e46b9f73a1 assets/rotarycraft/items/red_gold_dust.json
+b377b654a3a477f141e48c341319a6e7902ec750 assets/rotarycraft/items/red_gold_ingot.json
 ecb12479500176934b3f0ef7904d7b4b2a6b267d assets/rotarycraft/items/refresher.json
 1a66eb3c07f38c8ca5afcbf8fba67102785eace1 assets/rotarycraft/items/refrigerator.json
 8c99b40c97b6c22455cf58847afd30c89f18e442 assets/rotarycraft/items/reservoir.json
 7ca2a0617594ef2e79542d97f93fc101a03a77f2 assets/rotarycraft/items/rock_melter.json
+a7d08a908dcff9223c53cc7fa8811e82d5efbdb6 assets/rotarycraft/items/rotational_dynamo.json
 a675f5a77ab0133e1d7a61bf9335643616fa309d assets/rotarycraft/items/salt.json
 2849a33e29d566f524514177580c01975f0eb3c3 assets/rotarycraft/items/saw.json
 388c5e1aececb36eeee02d97f984c4985bc04f19 assets/rotarycraft/items/sawdust.json
@@ -688,6 +693,7 @@ b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/railgun
 1ee5eb23a14739dfb191491a3d2352c9c37d3aaa assets/rotarycraft/models/block/refrigerator.json
 e1f409274cc63d14cca4c482a1a288ffcbe434b4 assets/rotarycraft/models/block/reservoir.json
 55be5e9ad03439d8964a613979bc1e80003291b7 assets/rotarycraft/models/block/rock_melter.json
+b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/rotational_dynamo.json
 b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/scalechest.json
 418bd5f4f400c17acaa8ab26d1327d1a8db9b655 assets/rotarycraft/models/block/self_destruct.json
 823ae1319e9080608d45b4c178b568097938641d assets/rotarycraft/models/block/shield.json
@@ -771,6 +777,7 @@ fcb74f9b0d8d69e265f51f564c1128da4b30e6bb assets/rotarycraft/models/item/canola_s
 301f6936f79152771ac3f9bae5012e07f65d48a3 assets/rotarycraft/models/item/canola_seed_husks.json
 e9c4ab9c5ef8a685c0030762545afb09c0c6e4eb assets/rotarycraft/models/item/chain_link.json
 3dc72823eaa2c2b4f3d30ab4eb95c951baace611 assets/rotarycraft/models/item/circuit_board.json
+2730bc564c12fd6c04d7911cbb26f499f1c19e4d assets/rotarycraft/models/item/clean_sludge.json
 f05a6ed47a7a8dae287f9c1d6a9798d2434cc64d assets/rotarycraft/models/item/coal_dust.json
 d79b6c06829445576f9baed3ff57a817dc051ca7 assets/rotarycraft/models/item/coal_flakes.json
 65b003a09fb4d5c942c114a4af6e61d68a662106 assets/rotarycraft/models/item/coal_slurry.json
@@ -904,6 +911,8 @@ b8e896db82d62040c127df17b3483a7ccec45643 assets/rotarycraft/models/item/redstone
 4f65bc1e2673fa73c16d9adeeea3b382ec4d9f5a assets/rotarycraft/models/item/redstone_flakes.json
 b472475125d47fe31d0f0703706e65b053280020 assets/rotarycraft/models/item/redstone_slurry.json
 3a092a8b94c1121acaef2d9dcb5cf89c6e103010 assets/rotarycraft/models/item/redstone_solution.json
+8ccfdac10caa1b3d456486d652b4e77edcde7022 assets/rotarycraft/models/item/red_gold_dust.json
+d58378bbe397215fb64ce086bc3349dd77651160 assets/rotarycraft/models/item/red_gold_ingot.json
 881e1b9dbebde7199135966252afdc27f53aa0ed assets/rotarycraft/models/item/salt.json
 c8abedb8a8548bcea27fb9fd06f9aec123d1e518 assets/rotarycraft/models/item/saw.json
 a04ae1224307ad4a685bcf9ba113c2e5d1ae1bf2 assets/rotarycraft/models/item/sawdust.json

@@ -38,7 +38,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
 import reika.dragonapi.libraries.java.ReikaJavaLibrary;
@@ -56,7 +62,7 @@ import reika.rotarycraft.registry.RotaryFluids;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation, IFluidHandler {
+public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements RangedEffect, ConditionalOperation, HasFluidResourceHandler {
 
     public static final int MAXRANGE = Math.max(64, ConfigRegistry.AERORANGE.getValue());
     public static final int CAPACITY = 64;
@@ -64,6 +70,61 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
     private final PotionApplication[] potions = new PotionApplication[9];
     public boolean idle = false;
     private int[] potionLevel = new int[9];
+    private final ResourceHandler<FluidResource> fluidHandler = new PotionFluidInput();
+
+    @Override
+    public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        return side == null || canReceiveFrom(side) ? fluidHandler : null;
+    }
+
+    private final class PotionFluidInput extends SnapshotJournal<PotionFluidState>
+            implements ResourceHandler<FluidResource> {
+        @Override public int size() { return potionLevel.length; }
+        @Override public FluidResource getResource(int index) {
+            java.util.Objects.checkIndex(index, size());
+            // Stored potion effects have no reversible fluid identity after conversion.
+            return FluidResource.EMPTY;
+        }
+        @Override public long getAmountAsLong(int index) {
+            java.util.Objects.checkIndex(index, size());
+            return 0;
+        }
+        @Override public long getCapacityAsLong(int index, FluidResource resource) {
+            java.util.Objects.checkIndex(index, size());
+            return resource.isEmpty() || isValid(index, resource) ? CAPACITY : 0;
+        }
+        @Override public boolean isValid(int index, FluidResource resource) {
+            java.util.Objects.checkIndex(index, size());
+            return !resource.isEmpty() && isValidFluid(resource.getFluid());
+        }
+        @Override public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            java.util.Objects.checkIndex(index, size());
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            if (amount == 0 || !isValid(index, resource) || potionLevel[index] + amount > CAPACITY) return 0;
+            ItemStack poison = new ItemStack(Items.POTION);
+            poison.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.POISON));
+            PotionApplication effect = getEffectFromItem(poison);
+            if (effect == null || !matchEffects(effect, potions[index])) return 0;
+            updateSnapshots(transaction);
+            if (!tryAddPotionToSlot(index, amount, effect)) return 0;
+            return amount;
+        }
+        @Override public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            java.util.Objects.checkIndex(index, size());
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            return 0;
+        }
+        @Override protected PotionFluidState createSnapshot() {
+            return new PotionFluidState(potionLevel.clone(), potions.clone());
+        }
+        @Override protected void revertToSnapshot(PotionFluidState snapshot) {
+            potionLevel = snapshot.levels().clone();
+            System.arraycopy(snapshot.potions(), 0, potions, 0, potions.length);
+        }
+        @Override protected void onRootCommit(PotionFluidState originalState) { setChanged(); }
+    }
+
+    private record PotionFluidState(int[] levels, PotionApplication[] potions) {}
     private int tickcount2 = 0;
 
     public BlockEntityAerosolizer(BlockPos pos, BlockState state) {
@@ -412,57 +473,25 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
 //        return null;
 //    }
 
-    @Override
-    public int getTanks() {
-        return 0;
-    }
 
     
-    @Override
-    public FluidStack getFluidInTank(int tank) {
-        return null;
-    }
 
-    @Override
-    public int getTankCapacity(int tank) {
-        return 0;
-    }
 
-    @Override
-    public boolean isFluidValid(int tank,  FluidStack stack) {
-        return false;
-    }
 
-    @Override
-    public int fill(FluidStack resource, FluidAction action) {
-        return fill(null, resource, action == FluidAction.EXECUTE);
-    }
 
     //@Override
     public int fill(Direction from, FluidStack resource, boolean doFill) {
-        if (doFill && this.canFill(from, resource.getFluid())) {
-            ItemStack poison = new ItemStack(Items.POTION, 1);
-            poison.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.POISON));
-            for (int i = 0; i < 9; i++) {
-                PotionApplication eff = this.getEffectFromItem(poison);
-                if (this.tryAddPotionToSlot(i, resource.getAmount(), eff))
-                    return resource.getAmount();
-            }
+        if (resource.isEmpty() || from != null && !this.canFill(from, resource.getFluid())) return 0;
+        try (Transaction transaction = Transaction.openRoot()) {
+            int inserted = fluidHandler.insert(FluidResource.of(resource), resource.getAmount(), transaction);
+            if (doFill) transaction.commit();
+            return inserted;
         }
-        return 0;
     }
 
     
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action) {
-        return null;
-    }
 
     
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action) {
-        return null;
-    }
 
 //    @Override
 //    public boolean canExtractItem(int i, ItemStack itemstack, int j) {

@@ -13,6 +13,7 @@ import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.LavaMakerRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.ExtractorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.FractionatorRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.FrictionHeaterRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.GrinderRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.PulseFurnaceRecipe;
@@ -43,6 +44,7 @@ public class RotaryRecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<ExtractorRecipe>> EXTRACTOR = RECIPE_TYPES.register("extractor", () -> new RecipeType<ExtractorRecipe>() {});
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<FermenterRecipe>> FERMENTER = RECIPE_TYPES.register("fermenter", () -> new RecipeType<FermenterRecipe>() {});
+    public static final DeferredHolder<RecipeType<?>, RecipeType<FractionatorRecipe>> FRACTIONATOR = RECIPE_TYPES.register("fractionator", () -> new RecipeType<FractionatorRecipe>() {});
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<PulseFurnaceRecipe>> PULSE_FURNACE = RECIPE_TYPES.register("pulse_furnace", () -> new RecipeType<PulseFurnaceRecipe>() {});
 }
