@@ -1,0 +1,19 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "D": "rotarycraft:bedrock_dust",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "output": {
+    "count": 8,
+    "id": "rotarycraft:bedrock_alloy_gear"
+  },
+  "pattern": [
+    "DSD",
+    "SSS",
+    "DSD"
+  ],
+  "temperature": 1000.0,
+  "timeMultiplier": 2.0
+}

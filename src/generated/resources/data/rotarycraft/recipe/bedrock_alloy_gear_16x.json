@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:bedrock_alloy_rod",
+    "G": "rotarycraft:bedrock_alloy_gear_8x",
+    "g": "rotarycraft:bedrock_alloy_gear_2x"
+  },
+  "pattern": [
+    " gB",
+    "BG "
+  ],
+  "result": {
+    "id": "rotarycraft:bedrock_alloy_gear_16x"
+  }
+}

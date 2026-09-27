@@ -1,0 +1,7 @@
+{
+  "type": "rotarycraft:grinder",
+  "input": "minecraft:soul_sand",
+  "output": {
+    "id": "rotarycraft:tar"
+  }
+}

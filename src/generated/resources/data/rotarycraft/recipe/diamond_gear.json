@@ -1,0 +1,19 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "D": "minecraft:diamond",
+    "G": "rotarycraft:tungsten_alloy_gear"
+  },
+  "output": {
+    "count": 6,
+    "id": "rotarycraft:diamond_gear"
+  },
+  "pattern": [
+    " D ",
+    "DGD",
+    " D "
+  ],
+  "temperature": 1400.0,
+  "timeMultiplier": 1.0
+}

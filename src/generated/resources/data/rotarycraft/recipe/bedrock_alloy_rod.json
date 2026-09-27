@@ -1,0 +1,19 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "D": "rotarycraft:bedrock_dust",
+    "S": "rotarycraft:hsla_steel_rod"
+  },
+  "output": {
+    "count": 4,
+    "id": "rotarycraft:bedrock_alloy_rod"
+  },
+  "pattern": [
+    " D ",
+    "DSD",
+    " D "
+  ],
+  "temperature": 1000.0,
+  "timeMultiplier": 2.0
+}

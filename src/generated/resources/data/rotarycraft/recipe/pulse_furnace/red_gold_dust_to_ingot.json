@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:pulse_furnace",
+  "input": "rotarycraft:red_gold_dust",
+  "output": {
+    "id": "rotarycraft:red_gold_ingot"
+  },
+  "temperature": 400.0
+}

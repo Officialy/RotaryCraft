@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "experience": 0.5,
+  "ingredient": "rotarycraft:clean_sludge",
+  "result": {
+    "id": "rotarycraft:ethanol_crystals"
+  }
+}

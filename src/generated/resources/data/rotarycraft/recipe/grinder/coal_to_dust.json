@@ -1,0 +1,7 @@
+{
+  "type": "rotarycraft:grinder",
+  "input": "minecraft:coal",
+  "output": {
+    "id": "rotarycraft:coal_dust"
+  }
+}

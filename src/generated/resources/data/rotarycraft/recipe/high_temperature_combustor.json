@@ -1,0 +1,20 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "G": "rotarycraft:ignition_unit",
+    "I": "rotarycraft:red_gold_ingot",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "output": {
+    "id": "rotarycraft:high_temperature_combustor"
+  },
+  "pattern": [
+    "SIS",
+    "IRI",
+    "SGS"
+  ],
+  "temperature": 1100.0,
+  "timeMultiplier": 1.0
+}

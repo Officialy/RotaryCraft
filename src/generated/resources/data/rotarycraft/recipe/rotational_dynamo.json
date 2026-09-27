@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:power_module",
+    "G": "rotarycraft:hsla_steel_gear",
+    "I": "rotarycraft:hsla_steel_ingot",
+    "R": "minecraft:redstone",
+    "i": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " C ",
+    "GiG",
+    "IRI"
+  ],
+  "result": {
+    "id": "rotarycraft:rotational_dynamo"
+  }
+}

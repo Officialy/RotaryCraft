@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:diamond_rod",
+    "G": "rotarycraft:diamond_gear_4x",
+    "g": "rotarycraft:diamond_gear_2x"
+  },
+  "pattern": [
+    " gB",
+    "BG "
+  ],
+  "result": {
+    "id": "rotarycraft:diamond_gear_8x"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:unstitch",
+      "divisor_x": 16,
+      "divisor_y": 16,
+      "regions": [
+        {
+          "height": 1,
+          "sprite": "rotarycraft:item/red_gold_ingot",
+          "width": 1,
+          "x": 6,
+          "y": 6
+        },
+        {
+          "height": 1,
+          "sprite": "rotarycraft:item/red_gold_dust",
+          "width": 1,
+          "x": 12,
+          "y": 8
+        },
+        {
+          "height": 1,
+          "sprite": "rotarycraft:item/clean_sludge",
+          "width": 1,
+          "x": 0,
+          "y": 12
+        }
+      ],
+      "resource": "rotarycraft:item/legacy_items"
+    }
+  ]
+}

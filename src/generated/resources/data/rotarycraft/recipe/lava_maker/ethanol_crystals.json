@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:lava_maker",
+  "amount": 1000,
+  "energy": 6000,
+  "fluid": "rotarycraft:ethanol_still",
+  "input": "rotarycraft:ethanol_crystals",
+  "temperature": 180
+}
