@@ -72,6 +72,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.List;
@@ -174,6 +175,8 @@ public final class RotaryGameTests {
                 RotaryGameTests::refrigeratorMakesLiquidNitrogen);
         register(event, env, "reservoir_fluid_capability_transactions", 40,
                 RotaryGameTests::reservoirFluidCapabilityTransactions);
+        register(event, env, "aa_gun_ammo_capability", 20,
+                RotaryGameTests::aaGunAmmoCapability);
         register(event, env, "pipe_fills_capability_only_cauldron", 80,
                 RotaryGameTests::pipeFillsCapabilityOnlyCauldron);
         register(event, env, "pipe_fills_pulse_furnace_transactionally", 80,
@@ -371,6 +374,31 @@ public final class RotaryGameTests {
         }
         helper.assertTrue(gearbox.getLubricant() == 0,
                 "aborted gearbox lubrication must roll back");
+        helper.succeed();
+    }
+
+    /** Cannons are 1.7.10 ISidedInventories: automation inserts only valid ammo and never extracts. */
+    private static void aaGunAmmoCapability(GameTestHelper helper) {
+        helper.setBlock(TEST_POS, RotaryBlocks.AA_GUN.get());
+        var items = helper.getLevel().getCapability(Capabilities.Item.BLOCK,
+                helper.absolutePos(TEST_POS), Direction.NORTH);
+        helper.assertTrue(items != null, "AA gun must expose an item capability for ammo automation");
+        try (Transaction tx = Transaction.openRoot()) {
+            helper.assertTrue(items.insert(ItemResource.of(Items.STICK), 16, tx) == 0,
+                    "AA gun must refuse non-ammo items");
+            helper.assertTrue(items.insert(ItemResource.of(Items.GUNPOWDER), 16, tx) == 16,
+                    "AA gun must accept gunpowder ammo");
+            tx.commit();
+        }
+        try (Transaction tx = Transaction.openRoot()) {
+            helper.assertTrue(items.extract(ItemResource.of(Items.GUNPOWDER), 16, tx) == 0,
+                    "automation must not extract ammo from a cannon");
+        }
+        int stored = 0;
+        for (int i = 0; i < items.size(); i++)
+            if (items.getResource(i).is(Items.GUNPOWDER))
+                stored += items.getAmountAsInt(i);
+        helper.assertTrue(stored == 16, "committed ammo should remain in the cannon, found " + stored);
         helper.succeed();
     }
 

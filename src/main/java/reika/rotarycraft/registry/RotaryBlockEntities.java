@@ -1,9 +1,11 @@
 package reika.rotarycraft.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.item.WorldlyContainerWrapper;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -446,7 +448,8 @@ public class RotaryBlockEntities {
             RegisterCapabilitiesEvent event, BlockEntityType<T> type) {
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK, type,
-                (be, ctx) -> be instanceof HasItemHandler h ? h.getItemHandler() : null);
+                (be, side) -> be instanceof HasItemHandler h ? h.getItemHandler()
+                        : be instanceof WorldlyContainer wc ? new WorldlyContainerWrapper(wc, side) : null);
         event.registerBlockEntity(
                 Capabilities.Fluid.BLOCK, type,
                 (be, side) -> be instanceof HasFluidResourceHandler h ? h.getFluidHandler(side) : null);

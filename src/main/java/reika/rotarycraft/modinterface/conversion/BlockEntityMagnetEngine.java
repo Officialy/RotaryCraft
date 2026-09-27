@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
@@ -29,7 +29,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.SoundRegistry;
 
-public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implements IEnergyStorage //Handler because EnderIO uses it
+public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo expose an FE input (Capabilities.Energy.BLOCK) on the facing side; 1.7.10 implemented IEnergyHandler "because EnderIO uses it"
 
     public BlockEntityMagnetEngine(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.MAGNETOSTATIC_ENGINE.get(), pos, state);
@@ -60,7 +60,10 @@ public class BlockEntityMagnetEngine extends EnergyToPowerBase {//todo implement
 
     @Override
     public boolean isValidSupplier(BlockEntity te) {
-        return te instanceof IEnergyStorage;
+        // 1.7.10 accepted any RF handler/provider/storage; the modern equivalent is any block
+        // entity exposing FE on the face that points at this engine.
+        return te != null && level != null && level.getCapability(Capabilities.Energy.BLOCK,
+                te.getBlockPos(), this.getBlockState().getValue(BlockRotaryCraftMachine.FACING).getOpposite()) != null;
     }
 
     @Override

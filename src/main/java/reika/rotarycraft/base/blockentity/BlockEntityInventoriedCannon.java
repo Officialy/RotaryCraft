@@ -13,7 +13,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.Container;
+import net.minecraft.core.Direction;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,18 +22,20 @@ import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.items.IItemHandler;
+import org.jspecify.annotations.Nullable;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
+import reika.dragonapi.interfaces.blockentity.InertIInv;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 
 import java.util.Optional;
 
-// TODO(1.21.9): drop `implements IItemHandler` once the cannon path stops relying on the
-// legacy `te instanceof IItemHandler` resolution and migrates fully to ResourceHandler<ItemResource>.
-// The inner {@link ManagedItemHandler} already implements the new API; the class-level marker
-// is kept only so external code that still uses the legacy interface (auto-feeders etc.) finds it.
-@SuppressWarnings("removal")
-public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCannon implements IItemHandler, Container {
+/**
+ * Ammo-fed cannon inventory. Like 1.7.10's {@code ISidedInventory}, it is a {@link WorldlyContainer}:
+ * automation may insert only what {@link #isItemValid} accepts (nothing for an {@link InertIInv}
+ * cannon), through any face, and may never extract. {@code RotaryBlockEntities} exposes it as an
+ * item capability through NeoForge's {@code WorldlyContainerWrapper}.
+ */
+public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCannon implements WorldlyContainer {
 
     public ManagedItemHandler itemHandler = new ManagedItemHandler(getContainerSize()) {
         @Override
@@ -50,7 +53,6 @@ public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCanno
         itemHandler.setStackInSlot(i, itemstack);
     }
 
-    @Override
     public final ItemStack getStackInSlot(int i) {
         return itemHandler.getStackInSlot(i);
     }
@@ -95,31 +97,51 @@ public abstract class BlockEntityInventoriedCannon extends BlockEntityAimedCanno
         }
     }
 
-    // ==== Shared IItemHandler + Container delegation (subclasses override isItemValid to filter ammo) ====
+    // ==== Slot access delegated to itemHandler (subclasses override isItemValid to filter ammo) ====
 
-    @Override
     public int getSlots() {
         return itemHandler.getSlots();
     }
 
-    @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
         return this.isItemValid(slot, stack) ? itemHandler.insertItem(slot, stack, simulate) : stack;
     }
 
-    @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         return itemHandler.extractItem(slot, amount, simulate);
     }
 
-    @Override
     public int getSlotLimit(int slot) {
         return itemHandler.getSlotLimit(slot);
     }
 
-    @Override
     public boolean isItemValid(int slot, ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public int[] getSlotsForFace(Direction side) {
+        if (this instanceof InertIInv)
+            return new int[0];
+        int[] slots = new int[this.getContainerSize()];
+        for (int i = 0; i < slots.length; i++)
+            slots[i] = i;
+        return slots;
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
+        return !(this instanceof InertIInv) && this.isItemValid(slot, stack);
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return this.isItemValid(slot, stack);
     }
 
     @Override
