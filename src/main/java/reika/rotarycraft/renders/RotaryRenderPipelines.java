@@ -121,6 +121,8 @@ public final class RotaryRenderPipelines {
                     .withUniform("InSampler", UniformType.COMBINED_IMAGE_SAMPLER)
                     .withUniform("HeatPoints", UniformType.UNIFORM_BUFFER)
                     .build())
+            // 26.2 defaulted a pipeline with no colour target to this; 26.3 gives it none.
+            .withColorTargetState(ColorTargetState.DEFAULT)
             .build();
 
     /** Subscribed on the mod event bus by {@code RotaryCraft#RotaryCraft(IEventBus, ...)}. */
