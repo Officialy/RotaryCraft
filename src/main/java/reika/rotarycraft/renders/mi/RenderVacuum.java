@@ -35,7 +35,7 @@ public class RenderVacuum extends RotaryTERenderer<BlockEntityVacuum> {
         // Standard legacy model frame (y+2/z+1, scale(1,-1,-1), +0.5 recentre) — the vacuum is a
         // static, non-directional machine, so no facing rotation.
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         model.renderAll(stack, vc, light, tile, null, 0, 0);
         stack.popPose();
     }

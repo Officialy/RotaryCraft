@@ -48,7 +48,6 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 import reika.dragonapi.interfaces.blockentity.AdjacentUpdateWatcher;
 import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
 import reika.dragonapi.interfaces.blockentity.PlaceNotification;
@@ -765,7 +764,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
                 // Use the block entity as the MenuProvider, which should now provide a BlankContainer-based menu
                 sp.openMenu((MenuProvider) te, pos);
             }
-            ep.swing(InteractionHand.MAIN_HAND, true);
+            ep.swing(InteractionHand.MAIN_HAND, net.minecraft.world.item.component.SwingAnimation.DEFAULT, true);
             return InteractionResult.SUCCESS;
         }
         // 26.1 fix: legacy fall-through used to {@code syncAllData(true)} here, which fires a
@@ -858,7 +857,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             boolean minp = !p.hasNoDirectMinPower();
             boolean mint = !p.hasNoDirectMinTorque();
             boolean mins = !p.hasNoDirectMinSpeed();
-            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
+            if (InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)) {
                 if (minp)
                     li.add(Component.literal(String.format("Minimum Power: %.3f %sW", ReikaMathLibrary.getThousandBase(pow), ReikaEngLibrary.getSIPrefix(pow))));
                 if (mint)
@@ -879,7 +878,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
         if (m.isEngine()) {
             EngineType type = m.getEngineType();
-            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
+            if (InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)) {
                 double power = type.getPower();
                 double speed = type.getSpeed();
                 double torque = type.getTorque();

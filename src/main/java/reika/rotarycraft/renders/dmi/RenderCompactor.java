@@ -36,8 +36,8 @@ public class RenderCompactor extends RotaryTERenderer<BlockEntityCompactor> {
         float yaw = tile.getBlockState().hasProperty(BlockRotaryCraftMachine.FACING)
                 ? tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot() : 0;
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
-        stack.mulPose(Axis.YP.rotationDegrees(yaw));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(yaw));
         // phi drives the press piston (oscillates 0.5..1.5 while working).
         model.renderAll(stack, vc, light, tile, null, tile.phi, 0);
         stack.popPose();

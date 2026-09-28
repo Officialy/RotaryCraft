@@ -40,8 +40,8 @@ public class RenderGrinder extends RotaryTERenderer<BlockEntityGrinder> {
         stack.pushPose();
         float f = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.YP.rotationDegrees(f + 180));
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(f + 180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
 
         VertexConsumer vertexconsumer = bufferSource;
         modelGrinder.renderAll(stack, vertexconsumer, light, tile, null, -tile.phi, 0); //

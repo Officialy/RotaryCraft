@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:bedrock_gearbox_16x"
+        "recipes": "rotarycraft:bedrock_gearbox_16x"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

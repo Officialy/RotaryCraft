@@ -229,7 +229,7 @@ public class FanModel extends RotaryModelBase {
         // Rotating fan blades: pivot at y = 1 block, rotate around Z by phi
         stack.pushPose();
         stack.translate(0.0, 1.0, 0.0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0.0, -1.0, 0.0);
         shape10.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape11.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:lawn_sprinkler"
+        "recipes": "rotarycraft:lawn_sprinkler"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

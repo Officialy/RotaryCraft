@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:engine_upgrade_redstone"
+        "recipes": "rotarycraft:engine_upgrade_redstone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -294,7 +294,7 @@ public class CentrifugeModel extends RotaryModelBase {
                           ArrayList<?> conditions, float phi, float theta) {
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -325,7 +325,7 @@ public class CentrifugeModel extends RotaryModelBase {
         shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape4a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape4b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.YP.rotationDegrees(-phi));
+        stack.rotate(Axis.YP.rotationDegrees(-phi));
     }
 
     @Override

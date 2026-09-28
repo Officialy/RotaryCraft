@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:io_goggles"
+        "recipes": "rotarycraft:io_goggles"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

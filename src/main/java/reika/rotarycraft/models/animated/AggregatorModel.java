@@ -280,7 +280,7 @@ public class AggregatorModel extends RotaryModelBase {
         @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
                           ArrayList<?> conditions, float phi, float theta) {
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -299,7 +299,7 @@ public class AggregatorModel extends RotaryModelBase {
         shape1f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape1g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.YP.rotationDegrees(-phi));
+        stack.rotate(Axis.YP.rotationDegrees(-phi));
 
         shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

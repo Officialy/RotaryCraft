@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:fan"
+        "recipes": "rotarycraft:fan"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

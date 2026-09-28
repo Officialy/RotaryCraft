@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:ground_hydrator"
+        "recipes": "rotarycraft:ground_hydrator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -59,8 +59,8 @@ public class RenderReservoir extends RotaryTERenderer<BlockEntityReservoir> {
     public void renderBlockEntityReservoirAt(PoseStack stack, BlockEntityReservoir tile, VertexConsumer bufferSource, int pPackedLight) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-        stack.mulPose(Axis.YN.rotationDegrees(90.0F));
+        stack.rotate(Axis.ZP.rotationDegrees(180.0F));
+        stack.rotate(Axis.YN.rotationDegrees(90.0F));
         VertexConsumer vertexconsumer = bufferSource;
         if (tile.isInWorld()) {
             for (int i = 2; i < 6; i++) {

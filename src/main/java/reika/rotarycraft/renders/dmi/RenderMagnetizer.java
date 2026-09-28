@@ -36,8 +36,8 @@ public class RenderMagnetizer extends RotaryTERenderer<BlockEntityMagnetizer> {
         // Facing-based Y rotation (original: meta 0=180°, 1=0°, 2=270°, 3=90°, then -90°)
         float yRot = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.YP.rotationDegrees(yRot - 90));
-        stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+        stack.rotate(Axis.YP.rotationDegrees(yRot - 90));
+        stack.rotate(Axis.ZP.rotationDegrees(180.0F));
 
         VertexConsumer vc = bufferSource;
         model.renderAll(stack, vc, light, tile,

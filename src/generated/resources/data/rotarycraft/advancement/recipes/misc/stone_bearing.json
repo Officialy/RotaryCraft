@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:stone_bearing"
+        "recipes": "rotarycraft:stone_bearing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

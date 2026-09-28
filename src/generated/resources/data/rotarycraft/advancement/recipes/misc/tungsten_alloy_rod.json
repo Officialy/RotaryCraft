@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tungsten_alloy_rod"
+        "recipes": "rotarycraft:tungsten_alloy_rod"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

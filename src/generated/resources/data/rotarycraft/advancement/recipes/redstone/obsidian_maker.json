@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:obsidian_maker"
+        "recipes": "rotarycraft:obsidian_maker"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

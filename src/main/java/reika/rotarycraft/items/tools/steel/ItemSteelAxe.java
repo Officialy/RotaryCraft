@@ -21,10 +21,15 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.RotaryItems;
 
-public class ItemSteelAxe extends AxeItem {
+public class ItemSteelAxe extends Item {
 
     public ItemSteelAxe() {
-        super(ToolMaterial.IRON, 5.0F, -3.0F, RotaryItems.itemProperties().durability(600));
+        super(RotaryItems.itemProperties().axe(ToolMaterial.IRON, 5.0F, -3.0F)
+                .durability(600).delayedComponent(net.minecraft.core.component.DataComponents.REPAIRABLE,
+                        context -> new net.minecraft.world.item.enchantment.Repairable(net.minecraft.core.HolderSet.direct(
+                                context.getOrThrow(net.minecraft.resources.ResourceKey.create(
+                                        net.minecraft.core.registries.Registries.ITEM,
+                                        net.minecraft.resources.Identifier.fromNamespaceAndPath("rotarycraft", "hsla_steel_ingot")))))));
         //this.setHarvestLevel("axe", ToolMaterial.IRON.getHarvestLevel());
     }
 

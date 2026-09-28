@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:fertilizer"
+        "recipes": "rotarycraft:fertilizer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

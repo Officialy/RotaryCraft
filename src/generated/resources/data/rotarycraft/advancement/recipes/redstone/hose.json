@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:hose"
+        "recipes": "rotarycraft:hose"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

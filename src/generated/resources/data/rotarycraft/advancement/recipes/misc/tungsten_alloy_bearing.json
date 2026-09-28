@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tungsten_alloy_bearing"
+        "recipes": "rotarycraft:tungsten_alloy_bearing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:power_module"
+        "recipes": "rotarycraft:power_module"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:line_builder"
+        "recipes": "rotarycraft:line_builder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

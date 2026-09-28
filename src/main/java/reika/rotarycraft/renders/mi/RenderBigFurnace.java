@@ -42,7 +42,7 @@ public class RenderBigFurnace extends RotaryTERenderer<BlockEntityLavaSmeltery> 
     public void renderBlockEntityBigFurnaceAt(BlockEntityLavaSmeltery tile, PoseStack stack, VertexConsumer bufferSource, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+        stack.rotate(Axis.ZP.rotationDegrees(180.0F));
 
         modelBigFurnace.renderToBuffer(stack, bufferSource, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.popPose();

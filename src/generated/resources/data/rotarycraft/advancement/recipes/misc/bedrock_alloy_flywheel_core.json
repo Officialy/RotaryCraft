@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:bedrock_alloy_flywheel_core"
+        "recipes": "rotarycraft:bedrock_alloy_flywheel_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

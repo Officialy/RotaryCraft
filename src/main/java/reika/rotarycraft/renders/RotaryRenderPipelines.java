@@ -9,14 +9,14 @@
  ******************************************************************************/
 package reika.rotarycraft.renders;
 
-import com.mojang.blaze3d.pipeline.BindGroupLayout;
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.ColorTargetState;
-import com.mojang.blaze3d.pipeline.DepthStencilState;
-import com.mojang.blaze3d.platform.CompareOp;
-import com.mojang.blaze3d.PrimitiveTopology;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.shaders.UniformType;
+import com.mojang.renderpearl.api.pipeline.BindGroupLayout;
+import com.mojang.renderpearl.api.pipeline.BlendFunction;
+import com.mojang.renderpearl.api.pipeline.ColorTargetState;
+import com.mojang.renderpearl.api.pipeline.DepthStencilState;
+import com.mojang.renderpearl.api.pipeline.CompareOp;
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -51,7 +51,8 @@ public final class RotaryRenderPipelines {
     public static final RenderPipeline NO_DEPTH_FILLED_BOX = RenderPipeline.builder()
             .withLocation("pipeline/rotarycraft_no_depth_filled_box")
             .withBindGroupLayout(BindGroupLayouts.GLOBALS)
-            .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
             .withVertexShader("core/position_color")
             .withFragmentShader("core/position_color")
             .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
@@ -80,7 +81,8 @@ public final class RotaryRenderPipelines {
     public static final RenderPipeline NO_DEPTH_LINES = RenderPipeline.builder()
             .withLocation("pipeline/rotarycraft_no_depth_lines")
             .withBindGroupLayout(BindGroupLayouts.GLOBALS)
-            .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
             .withBindGroupLayout(BindGroupLayouts.FOG)
             .withVertexShader("core/rendertype_lines")
             .withFragmentShader("core/rendertype_lines")
@@ -116,7 +118,7 @@ public final class RotaryRenderPipelines {
             .withVertexShader("core/screenquad")
             .withFragmentShader(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "post/heatripple"))
             .withBindGroupLayout(BindGroupLayout.builder()
-                    .withSampler("InSampler")
+                    .withUniform("InSampler", UniformType.COMBINED_IMAGE_SAMPLER)
                     .withUniform("HeatPoints", UniformType.UNIFORM_BUFFER)
                     .build())
             .build();

@@ -117,7 +117,7 @@ public class LawnSprinklerModel extends RotaryModelBase {
     public void renderAll(PoseStack stack, VertexConsumer tex, int light, BlockEntity te,
                           ArrayList<?> conditions, float phi, float theta) {
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -126,7 +126,7 @@ public class LawnSprinklerModel extends RotaryModelBase {
         shape3c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape3d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape3e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.YP.rotationDegrees(-phi));
+        stack.rotate(Axis.YP.rotationDegrees(-phi));
     }
 
     @Override

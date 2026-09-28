@@ -108,14 +108,14 @@ public class BeamMirrorModel extends RotaryModelBase {
         shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(theta));
+        stack.rotate(Axis.XP.rotationDegrees(theta));
         stack.translate(0, -1, 0);
         shape5d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape5b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape5c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-theta));
+        stack.rotate(Axis.XP.rotationDegrees(-theta));
         stack.translate(0, -1, 0);
 
         double sc = 1-0.725*Math.cos(Math.toRadians(theta))*Math.sin(Math.toRadians(-theta));

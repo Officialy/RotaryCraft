@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:firework"
+        "recipes": "rotarycraft:firework"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

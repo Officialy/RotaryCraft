@@ -102,7 +102,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
             for (int var2 = 0; var2 < 9; ++var2) {
                 ItemStack var3 = craftMatrix.getItem(var2);
                 if (var3 != null)
-                    player.drop(var3, true);
+                    player.drop(var3, true, net.minecraft.util.Prediction.SERVER_ONLY);
             }
         }
     }

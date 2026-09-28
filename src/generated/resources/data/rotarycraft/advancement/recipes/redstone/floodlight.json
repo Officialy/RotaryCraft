@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:floodlight"
+        "recipes": "rotarycraft:floodlight"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

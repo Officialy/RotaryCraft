@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:player_detector"
+        "recipes": "rotarycraft:player_detector"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

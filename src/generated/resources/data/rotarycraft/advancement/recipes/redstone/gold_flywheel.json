@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:gold_flywheel"
+        "recipes": "rotarycraft:gold_flywheel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

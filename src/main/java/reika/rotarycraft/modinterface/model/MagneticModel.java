@@ -651,7 +651,7 @@ public class MagneticModel extends RotaryModelBase {
         shape3o.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 0.9375, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -0.9375, 0);
         shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -664,7 +664,7 @@ public class MagneticModel extends RotaryModelBase {
         shape2h.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2i.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 0.9375, 0);
-        stack.mulPose(Axis.ZN.rotationDegrees(phi));
+        stack.rotate(Axis.ZN.rotationDegrees(phi));
         stack.translate(0, -0.9375, 0);
 
         shape5.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

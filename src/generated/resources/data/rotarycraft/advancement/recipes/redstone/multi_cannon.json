@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:multi_cannon"
+        "recipes": "rotarycraft:multi_cannon"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

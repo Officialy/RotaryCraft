@@ -129,11 +129,11 @@ public class CCTVModel extends RotaryModelBase {
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 0, d1);
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         stack.translate(0, 0, -d1);
         stack.translate(0, 1, 0);
         stack.translate(0, 0, d);
-        stack.mulPose(Axis.XP.rotationDegrees(theta));
+        stack.rotate(Axis.XP.rotationDegrees(theta));
         stack.translate(0, -1, 0);
         stack.translate(0, 0, -d);
         shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -145,10 +145,10 @@ public class CCTVModel extends RotaryModelBase {
         shape6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape7.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-theta));
+        stack.rotate(Axis.XP.rotationDegrees(-theta));
         stack.translate(0, -1, 0);
         stack.translate(0, 0, d1);
-        stack.mulPose(Axis.YP.rotationDegrees(-phi));
+        stack.rotate(Axis.YP.rotationDegrees(-phi));
         stack.translate(0, 0, -d1);
     }
 

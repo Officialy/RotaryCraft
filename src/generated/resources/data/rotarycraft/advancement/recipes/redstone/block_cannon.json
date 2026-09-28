@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:block_cannon"
+        "recipes": "rotarycraft:block_cannon"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -137,12 +137,12 @@ public class DCModel extends RotaryModelBase {
 
         double d = 0.9375;
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -d, 0);
         shape12.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape13.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi));
+        stack.rotate(Axis.XP.rotationDegrees(-phi));
         stack.translate(0, -d, 0);
         shape14.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
     }

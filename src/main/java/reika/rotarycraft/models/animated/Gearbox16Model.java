@@ -366,21 +366,21 @@ public class Gearbox16Model extends GearboxBaseModel {
     protected void renderGears(PoseStack stack, VertexConsumer tex, int light, float phi) {
         stack.pushPose();
         stack.translate(0, 0.8125F, -0.0625F);
-        stack.mulPose(Axis.XP.rotationDegrees(phi * 1.1F));
+        stack.rotate(Axis.XP.rotationDegrees(phi * 1.1F));
         stack.translate(0, -0.8125F, 0.0625F);
         this.render(stack, tex, light, shape34, shape35, shape46, shape47, shape44, shape45);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 0.875F, -0.3125F);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(-phi * 1.25F));
         stack.translate(0, -0.875F, 0.3125F);
         this.render(stack, tex, light, shape41, shape20, shape16, shape37);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1.1875F, 0.25F);
-        stack.mulPose(Axis.XP.rotationDegrees(phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(phi * 1.25F));
         stack.translate(0, -1.1875F, -0.25F);
         this.render(stack, tex, light, shape12, shape13, shape22, shape23);
         stack.popPose();
@@ -388,7 +388,7 @@ public class Gearbox16Model extends GearboxBaseModel {
         stack.pushPose();
         stack.translate(0, 0.0625F, 0.006125F);
         stack.translate(0, 1.092F, -0.224F);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi * 2F));
+        stack.rotate(Axis.XP.rotationDegrees(-phi * 2F));
         stack.translate(0, -1.092F, 0.224F);
         this.render(stack, tex, light, shape21, shape40, shape26, shape27, shape14, shape15);
         stack.popPose();
@@ -396,21 +396,21 @@ public class Gearbox16Model extends GearboxBaseModel {
         stack.pushPose();
         stack.translate(0, 0.015125F, -0.006125F);
         stack.translate(0, 0.9025F, 0.24F);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi * 2F));
+        stack.rotate(Axis.XP.rotationDegrees(-phi * 2F));
         stack.translate(0, -0.9025F, -0.24F);
         this.render(stack, tex, light, shape18, shape19, shape36, shape17, shape30, shape31, shape48, shape49, shape50, shape51);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi * 2F));
+        stack.rotate(Axis.XP.rotationDegrees(phi * 2F));
         stack.translate(0, -1, 0);
         this.render(stack, tex, light, shape24, shape25, shape32, shape33);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         this.render(stack, tex, light, shape38, shape39, shape42, shape43);
         stack.popPose();

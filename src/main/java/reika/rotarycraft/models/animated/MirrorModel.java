@@ -168,21 +168,21 @@ public class MirrorModel extends RotaryModelBase {
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         if (!broken) {
             stack.translate(0, 1, 0);
-            stack.mulPose(Axis.XP.rotationDegrees(theta));
+            stack.rotate(Axis.XP.rotationDegrees(theta));
             stack.translate(0, -1, 0);
             shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape5b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape5c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape5d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             stack.translate(0, 1, 0);
-            stack.mulPose(Axis.XP.rotationDegrees(-theta));
+            stack.rotate(Axis.XP.rotationDegrees(-theta));
             stack.translate(0, -1, 0);
         }
 
@@ -206,7 +206,7 @@ public class MirrorModel extends RotaryModelBase {
 
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.YP.rotationDegrees(-phi));
+        stack.rotate(Axis.YP.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
     }
 

@@ -90,7 +90,7 @@ public class BlockEntityForceField extends BlockEntityProtectionDome implements 
             arrow.setXRot(-90);
             Vec3 m = arrow.getDeltaMovement();
             arrow.setDeltaMovement(0, Math.min(0, m.y), 0);
-            arrow.hurtMarked = true;
+            arrow.syncVelocity = true;
             tickcount = 0;
             return;
         }
@@ -146,7 +146,7 @@ public class BlockEntityForceField extends BlockEntityProtectionDome implements 
         double v = 0.1;
         double my = threat.onGround() ? v * dy / dd : threat.getDeltaMovement().y;
         threat.setDeltaMovement(v * dx / dd, my, v * dz / dd);
-        threat.hurtMarked = true;
+        threat.syncVelocity = true;
     }
 
     @Override

@@ -59,7 +59,7 @@ public class RenderSmokeDetector extends RotaryTERenderer<BlockEntitySmokeDetect
 //            stack.translate(0, 0, 0);
 
             float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
-            stack.mulPose(Axis.YP.rotationDegrees(-f));
+            stack.rotate(Axis.YP.rotationDegrees(-f));
         }
 
         VertexConsumer vertexconsumer = bufferSource;

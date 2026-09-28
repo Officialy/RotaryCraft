@@ -249,7 +249,7 @@ public class RailGunModel extends RotaryModelBase {
         stack.pushPose();
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape7.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -262,7 +262,7 @@ public class RailGunModel extends RotaryModelBase {
         shape7g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(theta));
+        stack.rotate(Axis.XP.rotationDegrees(theta));
         stack.translate(0, -1, 0);
         shape8.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape8a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

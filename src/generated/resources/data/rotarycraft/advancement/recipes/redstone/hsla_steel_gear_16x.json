@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:hsla_steel_gear_16x"
+        "recipes": "rotarycraft:hsla_steel_gear_16x"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

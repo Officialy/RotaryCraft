@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:ball_bearing_block"
+        "recipes": "rotarycraft:ball_bearing_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

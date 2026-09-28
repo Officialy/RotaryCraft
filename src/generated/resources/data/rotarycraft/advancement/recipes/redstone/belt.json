@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:belt"
+        "recipes": "rotarycraft:belt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -240,7 +240,7 @@ public class FreezeGunModel extends RotaryModelBase {
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape8.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape8a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -257,7 +257,7 @@ public class FreezeGunModel extends RotaryModelBase {
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(theta));
+        stack.rotate(Axis.XP.rotationDegrees(theta));
         stack.translate(0, -1, 0);
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape3d.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

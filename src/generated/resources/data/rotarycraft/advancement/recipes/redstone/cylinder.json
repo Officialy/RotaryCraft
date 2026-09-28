@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:cylinder"
+        "recipes": "rotarycraft:cylinder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

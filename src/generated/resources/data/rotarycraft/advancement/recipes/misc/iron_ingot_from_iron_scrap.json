@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:iron_ingot_from_iron_scrap"
+        "recipes": "rotarycraft:iron_ingot_from_iron_scrap"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

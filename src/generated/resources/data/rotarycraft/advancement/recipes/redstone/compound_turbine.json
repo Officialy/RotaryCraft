@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:compound_turbine"
+        "recipes": "rotarycraft:compound_turbine"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

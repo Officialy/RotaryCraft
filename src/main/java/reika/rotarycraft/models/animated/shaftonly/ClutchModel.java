@@ -174,12 +174,12 @@ public class ClutchModel extends RotaryModelBase {
         shape10.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape11.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape12.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape13.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi));
+        stack.rotate(Axis.XP.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
         shape14.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape15.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

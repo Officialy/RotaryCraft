@@ -557,7 +557,7 @@ public class SonicBorerModel extends RotaryModelBase {
 
         double d = 0.9375;
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -d, 0);
         shape1f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape1i.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -574,7 +574,7 @@ public class SonicBorerModel extends RotaryModelBase {
         shape2j.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2k.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(-phi));
+        stack.rotate(Axis.ZP.rotationDegrees(-phi));
         stack.translate(0, -d, 0);
     }
 

@@ -40,16 +40,16 @@ public class RenderBelt extends RotaryTERenderer<BlockEntityBeltHub> {
     private void renderBeltHubAt(BlockEntityBeltHub tile, PoseStack stack, VertexConsumer vc, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         var state = tile.getBlockState();
         var facing = state.hasProperty(BlockRotaryCraftMachine.FACING)
                 ? state.getValue(BlockRotaryCraftMachine.FACING) : net.minecraft.core.Direction.NORTH;
         if (facing.getAxis().isHorizontal()) {
-            stack.mulPose(Axis.YP.rotationDegrees(facing.toYRot() + 90));
+            stack.rotate(Axis.YP.rotationDegrees(facing.toYRot() + 90));
         }
         else {
             // Vertical hubs: legacy meta 4/5 pitched the model over.
-            stack.mulPose(Axis.XP.rotationDegrees(facing == net.minecraft.core.Direction.UP ? 90 : -90));
+            stack.rotate(Axis.XP.rotationDegrees(facing == net.minecraft.core.Direction.UP ? 90 : -90));
         }
         model.renderAll(stack, vc, light, tile, null, tile.phi, 0);
         stack.popPose();

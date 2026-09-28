@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:worm_gear"
+        "recipes": "rotarycraft:worm_gear"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -112,7 +112,7 @@ public class HydroModel extends RotaryModelBase {
         boolean bedrock = (Boolean)conditions.get(1);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape1a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -127,7 +127,7 @@ public class HydroModel extends RotaryModelBase {
         if (fail)
             stack.translate(0, -d, 0);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi));
+        stack.rotate(Axis.XP.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
 
         shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

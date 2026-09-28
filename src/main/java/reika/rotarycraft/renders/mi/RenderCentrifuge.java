@@ -35,9 +35,9 @@ public class RenderCentrifuge extends RotaryTERenderer<BlockEntityCentrifuge> {
         // Standard legacy model frame (translate y+2/z+1, scale(1,-1,-1), +0.5 recentre) — same
         // net transform as the grinder, minus the facing rotation (the centrifuge is vertical).
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         if (tile.isFlipped) {
-            stack.mulPose(Axis.XP.rotationDegrees(180));
+            stack.rotate(Axis.XP.rotationDegrees(180));
             stack.translate(0, -2, 0);
         }
         model.renderAll(stack, vc, light, tile, null, tile.phi, 0);

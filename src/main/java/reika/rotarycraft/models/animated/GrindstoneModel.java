@@ -222,7 +222,7 @@ public class GrindstoneModel extends RotaryModelBase {
         stack.pushPose();
         double d = 0.9375;
         stack.translate(0.0, d, 0.0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0.0, -d, 0.0);
         shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

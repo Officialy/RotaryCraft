@@ -72,11 +72,11 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         }
 
         if (rotationY != 0)
-            stack.mulPose(Axis.YP.rotationDegrees(rotationY));
+            stack.rotate(Axis.YP.rotationDegrees(rotationY));
         if (rotationX != 0)
-            stack.mulPose(Axis.XP.rotationDegrees(rotationX));
+            stack.rotate(Axis.XP.rotationDegrees(rotationX));
         if (rotationZ != 0)
-            stack.mulPose(Axis.ZP.rotationDegrees(rotationZ));
+            stack.rotate(Axis.ZP.rotationDegrees(rotationZ));
 
 
         VertexConsumer vertexconsumer = bufferSource;
@@ -136,9 +136,9 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
             }
 
             stack.translate(dx, dy, dz);
-            stack.mulPose(Axis.XP.rotationDegrees(rx));
-            stack.mulPose(Axis.YP.rotationDegrees(ry));
-            stack.mulPose(Axis.ZP.rotationDegrees(rz));
+            stack.rotate(Axis.XP.rotationDegrees(rx));
+            stack.rotate(Axis.YP.rotationDegrees(ry));
+            stack.rotate(Axis.ZP.rotationDegrees(rz));
             stack.translate(d, 0.28, l);
             stack.scale(scale, scale, scale);
 

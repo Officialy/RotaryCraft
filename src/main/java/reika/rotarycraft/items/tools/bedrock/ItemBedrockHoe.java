@@ -26,10 +26,10 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.RotaryItems;
 
-public class ItemBedrockHoe extends HoeItem {
+public class ItemBedrockHoe extends Item {
 
     public ItemBedrockHoe() {
-        super(ToolMaterial.NETHERITE, 1, 3.0F, RotaryItems.itemProperties());
+        super(RotaryItems.itemProperties().hoe(ToolMaterial.NETHERITE, 1, 3.0F));
 
     }
 

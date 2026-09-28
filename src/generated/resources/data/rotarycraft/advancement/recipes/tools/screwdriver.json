@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:screwdriver"
+        "recipes": "rotarycraft:screwdriver"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

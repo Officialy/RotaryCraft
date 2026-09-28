@@ -115,7 +115,7 @@ public class BlockEntityAirGun extends BlockEntityPowerReceiver implements Range
             BlockPos below = BlockPos.containing(e.getX(), e.getY() - 1, e.getZ());
             if (!world.getBlockState(below).isAir()) {
                 e.setDeltaMovement(new Vec3(vx, 0.5, vz));
-                e.hurtMarked = true;
+                e.syncVelocity = true;
                 flag = true;
             }
         }

@@ -38,11 +38,11 @@ public final class RenderDynamo extends RotaryTERenderer<TileEntityDynamo> {
         Direction facing = dynamo.getBlockState().getValue(BlockRotaryCraftMachine.FACING);
         stack.pushPose();
         stack.translate(0.5, 1.5, 0.5);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         switch (facing) {
-            case UP -> stack.mulPose(Axis.XP.rotationDegrees(90));
-            case DOWN -> stack.mulPose(Axis.XP.rotationDegrees(-90));
-            default -> stack.mulPose(Axis.YP.rotationDegrees(-facing.toYRot() + 90));
+            case UP -> stack.rotate(Axis.XP.rotationDegrees(90));
+            case DOWN -> stack.rotate(Axis.XP.rotationDegrees(-90));
+            default -> stack.rotate(Axis.YP.rotationDegrees(-facing.toYRot() + 90));
         }
         if (dynamo.isUpgraded()) upgraded.renderAll(stack, out, light, dynamo, null, dynamo.phi, 0);
         else standard.renderAll(stack, out, light, dynamo, null, dynamo.phi, 0);

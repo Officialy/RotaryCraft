@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:music_box_disc"
+        "recipes": "rotarycraft:music_box_disc"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

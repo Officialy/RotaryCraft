@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:range_finder"
+        "recipes": "rotarycraft:range_finder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

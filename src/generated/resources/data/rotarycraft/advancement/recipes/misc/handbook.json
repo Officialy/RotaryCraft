@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:handbook"
+        "recipes": "rotarycraft:handbook"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

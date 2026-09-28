@@ -684,7 +684,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         // 26.1 CRITICAL PERF FIX: previously called {@code ReikaNBTHelper.writeFluidToNBT(NBT,
         // new FluidStack(attr, 0))} just to serialise the Fluid TYPE. Spark profiling caught
         // this as ~9% of render-thread CPU because the helper's codec path went through
-        // {@code VanillaRegistries.createLookup()} — which rebuilds the entire biome
+        // {@code VanillaRegistries.createWorldLookup()} — which rebuilds the entire biome
         // generation registry tree per call. The fluid-id needs is one ResourceLocation;
         // codec is overkill. Write the registry key as a plain string (or empty when no
         // fluid present); readSyncTag does the symmetric lookup. The codec helper still has

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:self_destruct"
+        "recipes": "rotarycraft:self_destruct"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

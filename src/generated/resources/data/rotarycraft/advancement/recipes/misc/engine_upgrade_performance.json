@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:engine_upgrade_performance"
+        "recipes": "rotarycraft:engine_upgrade_performance"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

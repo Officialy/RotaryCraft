@@ -32,7 +32,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import org.lwjgl.glfw.GLFW;
+
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.HybridTank;
 import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
@@ -358,7 +358,7 @@ public abstract class EnergyToPowerBase extends BlockEntityIOMachine implements 
         li.add(String.format("Tier %d", tier));
         if (efficient)
             li.add(ChatFormatting.GOLD + "Efficiency Boost");
-        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
+        if (InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)) {
             int torque = this.getGenTorque();
             int speed = ReikaMathLibrary.intpow2(2, getMaxSpeedBase(tier));
             long power = (long) torque * (long) speed;

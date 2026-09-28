@@ -234,7 +234,7 @@ public class SteamModel extends RotaryModelBase {
         shape10.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape12.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape13.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -243,14 +243,14 @@ public class SteamModel extends RotaryModelBase {
         shape16.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape17.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XN.rotationDegrees(phi));
+        stack.rotate(Axis.XN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
 
         double d = 1.28125;
         double d1 = 0.34375;
         double d2 = -0.3125;
         stack.translate(d2, d, d1);
-        stack.mulPose(Axis.XN.rotationDegrees(phi*1.5F));
+        stack.rotate(Axis.XN.rotationDegrees(phi*1.5F));
 //        shape4.offsetRotation(new Vector3f(0, 0, 0));
 //        shape18.offsetRotation(new Vector3f(0, 0, 0));
 //        shape19.offsetRotation(new Vector3f(-1F, 0, 0));
@@ -259,14 +259,14 @@ public class SteamModel extends RotaryModelBase {
         shape18.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape19.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape20.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.XP.rotationDegrees(phi*1.5F));
+        stack.rotate(Axis.XP.rotationDegrees(phi*1.5F));
         stack.translate(-d2, -d, -d1);
 
         d = 1.28125;
         d1 = -0.34375;
         d2 = -0.3125;
         stack.translate(d2, d, d1);
-        stack.mulPose(Axis.XN.rotationDegrees(phi*1.5F));
+        stack.rotate(Axis.XN.rotationDegrees(phi*1.5F));
 //        shape2.offsetRotation(new Vector3f(-1F, 0, 0));
 //        shape11.offsetRotation(new Vector3f(-1F, 0, 0));
 //        shape6.offsetRotation(new Vector3f(0, 0, 0));
@@ -275,7 +275,7 @@ public class SteamModel extends RotaryModelBase {
         shape11.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape6.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape7.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.XP.rotationDegrees(phi*1.5F));
+        stack.rotate(Axis.XP.rotationDegrees(phi*1.5F));
         stack.translate(-d2, -d, -d1);
 
         shape21.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

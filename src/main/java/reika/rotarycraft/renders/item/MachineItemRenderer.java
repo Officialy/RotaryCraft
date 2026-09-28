@@ -61,9 +61,9 @@ public class MachineItemRenderer implements NoDataSpecialModelRenderer {
         // of a normal block item in the slot.
         poseStack.translate(0.5D, 1.5D, 0.5D);
         poseStack.scale(-1.0F, -1.0F, 1.0F);
-        poseStack.mulPose(Axis.YN.rotationDegrees(90F));
+        poseStack.rotate(Axis.YN.rotationDegrees(90F));
         // Submit the model using the renderType derived from the model's texture.
-        collector.submitModel(model, Unit.INSTANCE, poseStack, texture, lightCoords, overlayCoords, outlineColor, null);
+        collector.submitModel(model, Unit.INSTANCE, poseStack, texture, lightCoords, overlayCoords, outlineColor);
         poseStack.popPose();
     }
 

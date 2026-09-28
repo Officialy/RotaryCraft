@@ -73,13 +73,13 @@ public class RenderSplitter extends RotaryTERenderer<BlockEntitySplitter> {
             // which is {@code f + 90} mod 360. The Z-axis 180° flip preserves the engine-
             // style upside-down mounting.
             stack.translate(0.5F, 1.5F, 0.5F);
-            stack.mulPose(Axis.YP.rotationDegrees(f + 90));
-            stack.mulPose(Axis.ZP.rotationDegrees(180));
+            stack.rotate(Axis.YP.rotationDegrees(f + 90));
+            stack.rotate(Axis.ZP.rotationDegrees(180));
         } else {
             // 1.21.5 fix: {@code new Quaternionf(180,0,1,0)} treats args as (x,y,z,w) — a
             // non-normalised quaternion that collapses the item-form model. Use a real Y-axis
             // rotation so the splitter item icon points the right way.
-            stack.mulPose(Axis.YP.rotationDegrees(180F));
+            stack.rotate(Axis.YP.rotationDegrees(180F));
         }
 
 //        if (meta < 4 || (meta >= 8 && meta < 12))

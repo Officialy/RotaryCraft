@@ -61,9 +61,9 @@ import net.minecraft.world.entity.monster.cubemob.Slime;
 //		if (e instanceof Villager) {
 //			params.add(((Villager)e).getProfession());
 //		}
-//		if (e instanceof EnderMan) {
-//			params.add(Block.blockRegistry.getNameForObject(((EnderMan)e).func_146080_bZ()));
-//			params.add(((EnderMan)e).getCarriedBlock());
+//		if (e instanceof Enderman) {
+//			params.add(Block.blockRegistry.getNameForObject(((Enderman)e).func_146080_bZ()));
+//			params.add(((Enderman)e).getCarriedBlock());
 //		}
 //		return params.toArray(new Object[params.size()]);
 //	}

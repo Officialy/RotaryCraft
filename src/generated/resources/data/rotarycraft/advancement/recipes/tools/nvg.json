@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:nvg"
+        "recipes": "rotarycraft:nvg"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

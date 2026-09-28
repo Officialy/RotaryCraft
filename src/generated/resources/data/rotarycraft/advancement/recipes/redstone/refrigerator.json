@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:refrigerator"
+        "recipes": "rotarycraft:refrigerator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

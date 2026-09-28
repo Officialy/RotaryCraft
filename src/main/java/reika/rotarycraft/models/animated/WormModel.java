@@ -457,7 +457,7 @@ public class WormModel extends RotaryModelBase {
         shape11.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi*2));
+        stack.rotate(Axis.XP.rotationDegrees(phi*2));
         stack.translate(0, -1, 0);
         shape13.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape12a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -482,16 +482,16 @@ public class WormModel extends RotaryModelBase {
         shape12a3.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape121.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XN.rotationDegrees(phi*2));
+        stack.rotate(Axis.XN.rotationDegrees(phi*2));
         stack.translate(0, -1, 0);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape12a7.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape12a8.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XN.rotationDegrees(phi));
+        stack.rotate(Axis.XN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
 
         xoff = 0;
@@ -500,18 +500,18 @@ public class WormModel extends RotaryModelBase {
         double b = 1.25;
         double c = -0.125;
         stack.translate(a, b, c);
-        stack.mulPose(Axis.XN.rotationDegrees(phi));
+        stack.rotate(Axis.XN.rotationDegrees(phi));
         shape12a2.setInitialPose(PartPose.rotation(0, 0, 0));
         shape12a5.setInitialPose(PartPose.rotation(0, 0, 0));
         shape12a2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape12a5.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(-a, -b, -c);
 
 
         a = 0.1; b = 1.25; c = -0.125;
         stack.translate(a, b, c);
-        stack.mulPose(Axis.XN.rotationDegrees(phi));
+        stack.rotate(Axis.XN.rotationDegrees(phi));
         shape12a9.setInitialPose(PartPose.rotation(0, 0, 0));
         shape12a4.setInitialPose(PartPose.rotation(0, 0, 0));
         shape12a1.setInitialPose(PartPose.rotation(0, 0, 0));
@@ -520,12 +520,12 @@ public class WormModel extends RotaryModelBase {
         shape12a4.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape12a1.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape12a0.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(-a, -b, -c);
 
         a = -0.03125; b = 1.25; c = 0.1875;
         stack.translate(a, b, c);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         shape12.setInitialPose(PartPose.rotation(0, 0, -3F));
         shape123.setInitialPose(PartPose.rotation(0, 0, -3F));
         shape124.setInitialPose(PartPose.rotation(0, 0, -3F));
@@ -538,7 +538,7 @@ public class WormModel extends RotaryModelBase {
         shape122a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape122b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape122.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.ZN.rotationDegrees(phi));
+        stack.rotate(Axis.ZN.rotationDegrees(phi));
         stack.translate(-a, -b, -c);
 
         shape14.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:highgear"
+        "recipes": "rotarycraft:highgear"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

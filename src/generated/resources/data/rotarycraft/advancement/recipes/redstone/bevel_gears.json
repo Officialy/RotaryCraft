@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:bevel_gears"
+        "recipes": "rotarycraft:bevel_gears"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

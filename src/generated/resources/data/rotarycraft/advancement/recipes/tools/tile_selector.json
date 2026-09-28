@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tile_selector"
+        "recipes": "rotarycraft:tile_selector"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

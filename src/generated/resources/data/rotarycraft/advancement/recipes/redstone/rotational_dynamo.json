@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:rotational_dynamo"
+        "recipes": "rotarycraft:rotational_dynamo"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

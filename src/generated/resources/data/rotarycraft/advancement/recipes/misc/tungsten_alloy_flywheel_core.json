@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tungsten_alloy_flywheel_core"
+        "recipes": "rotarycraft:tungsten_alloy_flywheel_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

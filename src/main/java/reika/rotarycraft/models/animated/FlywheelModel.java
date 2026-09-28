@@ -333,7 +333,7 @@ public class FlywheelModel extends RotaryModelBase {
         // Rotating assembly: pivot at y = 1 block, rotate around X-axis by phi
         stack.pushPose();
         stack.translate(0.0, 1.0, 0.0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0.0, -1.0, 0.0);
         shape1.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

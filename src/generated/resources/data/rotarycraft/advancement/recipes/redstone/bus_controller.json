@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:bus_controller"
+        "recipes": "rotarycraft:bus_controller"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

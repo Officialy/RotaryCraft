@@ -266,7 +266,7 @@ public class Splitter2Model extends RotaryModelBase {
 
         if (!fail) {
             stack.translate(0, 1, 0);
-            stack.mulPose(Axis.ZP.rotationDegrees(-phi));
+            stack.rotate(Axis.ZP.rotationDegrees(-phi));
             stack.translate(0, -1, 0);
             shape23.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape22.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -275,11 +275,11 @@ public class Splitter2Model extends RotaryModelBase {
             shape15.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape14.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             stack.translate(0, 1, 0);
-            stack.mulPose(Axis.ZP.rotationDegrees(phi));
+            stack.rotate(Axis.ZP.rotationDegrees(phi));
             stack.translate(0, -1, 0);
 
             stack.translate(0, 1, 0);
-            stack.mulPose(Axis.XP.rotationDegrees(phi));
+            stack.rotate(Axis.XP.rotationDegrees(phi));
             stack.translate(0, -1, 0);
             shape20.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape21.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -288,11 +288,11 @@ public class Splitter2Model extends RotaryModelBase {
             shape12.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape13.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             stack.translate(0, 1, 0);
-            stack.mulPose(Axis.XP.rotationDegrees(-phi));
+            stack.rotate(Axis.XP.rotationDegrees(-phi));
             stack.translate(0, -1, 0);
 
             stack.translate(0, 1, 0);
-            stack.mulPose(Axis.XP.rotationDegrees(-phi));
+            stack.rotate(Axis.XP.rotationDegrees(-phi));
             stack.translate(0, -1, 0);
             shape12a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape12b.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -302,7 +302,7 @@ public class Splitter2Model extends RotaryModelBase {
             shape17a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape13a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             stack.translate(0, 1, 0);
-            stack.mulPose(Axis.XP.rotationDegrees(phi));
+            stack.rotate(Axis.XP.rotationDegrees(phi));
             stack.translate(0, -1, 0);
         }
 

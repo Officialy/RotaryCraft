@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:hsla_shaft"
+        "recipes": "rotarycraft:hsla_shaft"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

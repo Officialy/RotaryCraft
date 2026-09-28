@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:aa_gun"
+        "recipes": "rotarycraft:aa_gun"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

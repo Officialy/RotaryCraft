@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:power_module_from_silicon"
+        "recipes": "rotarycraft:power_module_from_silicon"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

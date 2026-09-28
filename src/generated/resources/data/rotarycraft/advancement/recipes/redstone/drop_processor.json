@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:drop_processor"
+        "recipes": "rotarycraft:drop_processor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

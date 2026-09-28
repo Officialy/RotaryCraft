@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:magnetizer"
+        "recipes": "rotarycraft:magnetizer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

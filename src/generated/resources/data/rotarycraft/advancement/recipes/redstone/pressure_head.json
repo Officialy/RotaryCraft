@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:pressure_head"
+        "recipes": "rotarycraft:pressure_head"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

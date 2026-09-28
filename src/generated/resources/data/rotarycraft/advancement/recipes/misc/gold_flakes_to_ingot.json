@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:gold_flakes_to_ingot"
+        "recipes": "rotarycraft:gold_flakes_to_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

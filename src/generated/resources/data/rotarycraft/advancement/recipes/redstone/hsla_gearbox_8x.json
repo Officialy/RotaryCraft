@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:hsla_gearbox_8x"
+        "recipes": "rotarycraft:hsla_gearbox_8x"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

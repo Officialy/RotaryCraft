@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:engine_upgrade_afterburner"
+        "recipes": "rotarycraft:engine_upgrade_afterburner"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -394,7 +394,7 @@ public class MultiClutchModel extends RotaryModelBase {
         shape3c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
 
         shape4_r.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -407,11 +407,11 @@ public class MultiClutchModel extends RotaryModelBase {
         shape4_r_u.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(-phi));
+        stack.rotate(Axis.ZP.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
 
         shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -424,11 +424,11 @@ public class MultiClutchModel extends RotaryModelBase {
         shape5_r_u.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi));
+        stack.rotate(Axis.XP.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
 
         shape6_u_r.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -441,7 +441,7 @@ public class MultiClutchModel extends RotaryModelBase {
         shape6_r_r_r.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.YP.rotationDegrees(-phi));
+        stack.rotate(Axis.YP.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
 
         shape7a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

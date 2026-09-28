@@ -49,7 +49,7 @@ public class RenderMirror extends RotaryTERenderer<BlockEntityMirror> {
         int var11 = 1;     //used to rotate the model about metadata
         int var12 = 0;
         if (!tile.isInWorld()) {
-            stack.mulPose(Axis.YP.rotationDegrees(-90));
+            stack.rotate(Axis.YP.rotationDegrees(-90));
         }
         stack.translate(0, var12, 0);
         stack.scale(1, var11, 1);

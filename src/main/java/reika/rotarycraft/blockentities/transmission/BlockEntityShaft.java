@@ -114,7 +114,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
             ei.setDeltaMovement(0.4F + 0.6F * DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat() / 5, DragonAPI.rand.nextFloat() / 5);
             if (world.isClientSide())
                 return;
-            ei.hurtMarked = true;
+            ei.syncVelocity = true;
             if (DragonAPI.rand.nextInt(24) == 0)
                 world.addFreshEntity(ei);
         } else {
@@ -132,7 +132,7 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
             ei.setDeltaMovement(0.4F + 0.6F * DragonAPI.rand.nextFloat() / 5, DragonAPI.rand.nextFloat() / 5, DragonAPI.rand.nextFloat() / 5);
             if (world.isClientSide())
                 return;
-            ei.hurtMarked = true;
+            ei.syncVelocity = true;
             if (DragonAPI.rand.nextInt(24) == 0)
                 world.addFreshEntity(ei);
         }

@@ -1,11 +1,12 @@
 package reika.rotarycraft.data;
 
-import net.minecraft.core.HolderLookup;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.core.registries.MultiRegistryBootstrap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -33,7 +34,6 @@ import reika.rotarycraft.registry.RotaryItems;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * 26.1 recipe data provider for RotaryCraft.
@@ -106,28 +106,21 @@ import java.util.concurrent.CompletableFuture;
  *       legacy used a gear item per material; the port simplified to HSLA+ gears only).</li>
  * </ul>
  */
-public final class RoCRecipeProvider extends RecipeProvider.Runner {
+public final class RoCRecipeProvider {
 
-    public RoCRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries);
+    private RoCRecipeProvider() {
     }
 
-    @Override
-    public String getName() {
-        return "RotaryCraft Recipes";
-    }
-
-    @Override
-    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput out) {
-        return new Recipes(registries, out);
+    public static MultiRegistryBootstrap bootstrap() {
+        return RecipeProvider.asBootstrap(Recipes::new);
     }
 
     private static final class Recipes extends RecipeProvider {
         private final RecipeOutput out;
 
-        Recipes(HolderLookup.Provider registries, RecipeOutput out) {
-            super(registries, out);
-            this.out = out;
+        Recipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+            super(recipes, advancements);
+            this.out = this.output;
         }
 
         @Override

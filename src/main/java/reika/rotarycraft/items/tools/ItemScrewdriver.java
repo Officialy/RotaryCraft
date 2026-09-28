@@ -152,7 +152,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                 BlockEntityFlywheel clicked = (BlockEntityFlywheel) te;
                 level.setBlock(pos, clicked.getBlockState().setValue(BlockRotaryCraftMachine.FACING, direction.getClockWise()), 3);
 
-                context.getPlayer().swing(InteractionHand.MAIN_HAND);
+                context.getPlayer().swing(InteractionHand.MAIN_HAND, net.minecraft.world.item.component.SwingAnimation.DEFAULT, true);
                 return InteractionResult.SUCCESS;
             }
             if (m == MachineRegistry.COOLINGFIN) {
@@ -359,7 +359,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                 // Trigger a {@code syncAllData} so the client sees the new ioside immediately
                 // (the IO renderer reads getReadDirection/getWriteDirection on the client).
                 clicked.syncAllData(true);
-                ep.swing(InteractionHand.MAIN_HAND);
+                ep.swing(InteractionHand.MAIN_HAND, net.minecraft.world.item.component.SwingAnimation.DEFAULT, true);
                 return InteractionResult.SUCCESS;
             }
             int max = m.getNumberDirections();

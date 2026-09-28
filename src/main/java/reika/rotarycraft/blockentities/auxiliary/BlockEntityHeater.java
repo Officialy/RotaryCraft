@@ -135,10 +135,7 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             if (!itemHandler.getStackInSlot(i).isEmpty()) {
                 //ReikaChatHelper.writeInt(BlockEntityFurnace.getItemBurnTime(itemHandler.getStackInSlot(i)));
-                // 1.21.5: ForgeHooks.getBurnTime was replaced by Level#fuelValues() + FuelValues#burnDuration.
-                // We previously fell back to a constant of 4; keep that fallback when level/fuel-values aren't
-                // available (e.g. during early load) but otherwise look up the real burn duration.
-                int heat = level != null ? level.fuelValues().burnDuration(itemHandler.getStackInSlot(i)) : 4;
+                int heat = this.getFuelBurnTime(itemHandler.getStackInSlot(i));
                 if (heat <= 0) heat = 4;
                 if (heat <= maxT && heat > itemheat) {
                     itemheat = heat;
@@ -162,6 +159,27 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
         }
         //ReikaChatHelper.writeInt(itemheat);
         return itemheat;
+    }
+
+    private int getFuelBurnTime(ItemStack stack) {
+        if (!(level instanceof net.minecraft.server.level.ServerLevel serverLevel))
+            return 4;
+        net.minecraft.world.item.component.CookingFuel fuel = stack.get(net.minecraft.core.component.DataComponents.COOKING_FUEL);
+        if (fuel == null)
+            return 4;
+        net.minecraft.world.level.storage.loot.LootContext context =
+                new net.minecraft.world.level.storage.loot.LootContext.Builder(
+                        new net.minecraft.world.level.storage.loot.LootParams.Builder(serverLevel)
+                                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.BLOCK_STATE, getBlockState())
+                                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.BLOCK_ENTITY, this)
+                                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN,
+                                        net.minecraft.world.phys.Vec3.atCenterOf(worldPosition))
+                                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.CONTAINER,
+                                        new net.minecraft.world.SimpleContainer(stack))
+                                .withOptionalParameter(net.neoforged.neoforge.common.loot.NeoForgeLootContextParams.QUERIED_STACK, stack)
+                                .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.CONTAINER_PROCESS))
+                        .create(java.util.Optional.empty());
+        return fuel.burnTime().get(context, 4);
     }
 
     private void transferHeat(Level world, BlockPos pos) {

@@ -36,8 +36,8 @@ public class RenderBedrockBreaker extends RotaryTERenderer<BlockEntityBedrockBre
         stack.pushPose();
         float f = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.YP.rotationDegrees(f + 90));
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(f + 90));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
 
         float grind = tile.isInWorld() ? tile.getGrindFraction() : 0;
         VertexConsumer vertexconsumer = bufferSource;

@@ -21,7 +21,7 @@ import net.minecraft.world.entity.monster.cubemob.Slime;
 //import net.minecraft.world.entity.animal.Squid;
 //import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 //import net.minecraft.world.entity.boss.wither.WitherBoss;
-//import net.minecraft.world.entity.monster.EnderMan;
+//import net.minecraft.world.entity.monster.Enderman;
 //import net.minecraft.world.entity.monster.Ghast;
 //import net.minecraft.world.entity.monster.Slime;
 //import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -86,7 +86,7 @@ import net.minecraft.world.entity.monster.cubemob.Slime;
 //                        color = ChatFormatting.GREEN;
 //                    else
 //                        color = ChatFormatting.WHITE;
-//                    if (ent instanceof EnderMan || ent instanceof Piglin)
+//                    if (ent instanceof Enderman || ent instanceof Piglin)
 //                        color = ChatFormatting.YELLOW;
 //                    if (ent instanceof EnderDragon)
 //                        color = ChatFormatting.DARK_PURPLE;

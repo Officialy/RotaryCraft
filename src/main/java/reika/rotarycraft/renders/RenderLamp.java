@@ -49,15 +49,15 @@ public class RenderLamp extends RotaryTERenderer<BlockEntityFloodlight> {
         stack.pushPose();
 //        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
-        stack.mulPose(Axis.YP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(180));
         Level level = tile.getLevel();
         boolean flag = level != null;
         BlockState blockstate = flag ? tile.getBlockState() : RotaryBlocks.FLOODLIGHT.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
 
         if (tile.isInWorld() && !tile.beammode) {
             float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
-            stack.mulPose(Axis.YP.rotationDegrees(-f));
+            stack.rotate(Axis.YP.rotationDegrees(-f));
         }
 
         // 1.7.10 called renderAll with the model's condition list, not a blanket root render:

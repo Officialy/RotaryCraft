@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:aluminum_alloy_cylinder"
+        "recipes": "rotarycraft:aluminum_alloy_cylinder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

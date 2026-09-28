@@ -554,7 +554,7 @@ public class ElecMotorModel extends RotaryModelBase {
 
         stack.pushPose();
         stack.translate(0, 0.9375, 0);
-        stack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(phi));
+        stack.rotate(com.mojang.math.Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -0.9375, 0);
         shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);
         shape2a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, white);

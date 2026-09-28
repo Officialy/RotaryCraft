@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:angular_transducer"
+        "recipes": "rotarycraft:angular_transducer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

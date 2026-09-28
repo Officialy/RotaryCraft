@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:weather_controller"
+        "recipes": "rotarycraft:weather_controller"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

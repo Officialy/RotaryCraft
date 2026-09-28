@@ -2,36 +2,30 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "conditions": [
-                {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "this",
-                  "predicate": {
-                    "minecraft:entity_type": "minecraft:player"
-                  }
-                }
-              ],
-              "function": "minecraft:copy_components",
-              "include": [
-                "rotarycraft:scale_chest_contents"
-              ],
-              "source": "block_entity"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:copy_components",
+            "condition": {
+              "type": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "minecraft:entity_type": "minecraft:player"
+              }
+            },
+            "include": [
+              "rotarycraft:scale_chest_contents"
+            ],
+            "source": "block_entity"
+          },
           "name": "rotarycraft:scalechest"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "rotarycraft:blocks/scalechest"

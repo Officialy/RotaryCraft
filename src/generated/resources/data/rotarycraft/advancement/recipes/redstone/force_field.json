@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:force_field"
+        "recipes": "rotarycraft:force_field"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

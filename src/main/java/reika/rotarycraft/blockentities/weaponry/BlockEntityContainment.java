@@ -74,7 +74,7 @@ public class BlockEntityContainment extends BlockEntityProtectionDome {
                     double z = e.getDeltaMovement().z();
                     e.setDeltaMovement(x - (dx / dd / 2), y - (dy / dd / 2), z - (dz / dd / 2));
                     if (!world.isClientSide())
-                        e.hurtMarked = true;
+                        e.syncVelocity = true;
                 }
             }
             if (e instanceof EnderDragon && power >= DRAGONPOWER) {

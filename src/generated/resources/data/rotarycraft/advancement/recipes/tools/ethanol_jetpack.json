@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:ethanol_jetpack"
+        "recipes": "rotarycraft:ethanol_jetpack"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

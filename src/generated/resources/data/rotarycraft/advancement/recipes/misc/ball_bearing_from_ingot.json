@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:ball_bearing_from_ingot"
+        "recipes": "rotarycraft:ball_bearing_from_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

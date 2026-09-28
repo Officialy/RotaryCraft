@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:engine_control_unit"
+        "recipes": "rotarycraft:engine_control_unit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

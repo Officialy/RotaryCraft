@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:circuit_board_from_silicon"
+        "recipes": "rotarycraft:circuit_board_from_silicon"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

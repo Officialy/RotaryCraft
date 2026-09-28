@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:blast_furnace"
+        "recipes": "rotarycraft:blast_furnace"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

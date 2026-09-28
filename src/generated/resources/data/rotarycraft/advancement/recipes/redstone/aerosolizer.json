@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:aerosolizer"
+        "recipes": "rotarycraft:aerosolizer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

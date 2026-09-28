@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:stone_flywheel_core"
+        "recipes": "rotarycraft:stone_flywheel_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

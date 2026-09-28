@@ -56,7 +56,7 @@ public class RenderBeamMirror extends RotaryTERenderer<BlockEntityBeamMirror> {
                     case NORTH -> 90;
                     default -> 0; // WEST and any vertical
                 };
-                stack.mulPose(Axis.YP.rotationDegrees(yaw + 90));
+                stack.rotate(Axis.YP.rotationDegrees(yaw + 90));
             }
         }
         VertexConsumer vc = bufferSource;

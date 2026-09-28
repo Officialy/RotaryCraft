@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:dynamometer_ender"
+        "recipes": "rotarycraft:dynamometer_ender"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

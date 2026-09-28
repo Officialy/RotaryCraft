@@ -72,14 +72,14 @@ public class RenderFin extends RotaryTERenderer<BlockEntityCoolingFin> {
 
                 if (isVertical) {
                     // Original: if (meta < 2) { glRotatef(var11, 0, 0, 1); if (meta == 1) glTranslated(0, -2, 0); }
-                    stack.mulPose(Axis.ZP.rotationDegrees(var11));
+                    stack.rotate(Axis.ZP.rotationDegrees(var11));
                     if (facing == Direction.UP) {
                         stack.translate(0, -2, 0);
                     }
                 } else {
                     // Original: glRotatef(90, 1, 0, 0); glRotatef(var11, 0, 0, 1); glTranslated(0, -1, -1);
-                    stack.mulPose(Axis.XP.rotationDegrees(90));
-                    stack.mulPose(Axis.ZP.rotationDegrees(var11));
+                    stack.rotate(Axis.XP.rotationDegrees(90));
+                    stack.rotate(Axis.ZP.rotationDegrees(var11));
                     stack.translate(0, -1, -1);
                 }
             }

@@ -434,7 +434,7 @@ public class AirGunModel extends RotaryModelBase {
 
         double d = 0.9375;
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -d, 0);
         shape6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape6a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -455,7 +455,7 @@ public class AirGunModel extends RotaryModelBase {
         shape7e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape7f.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(-phi));
+        stack.rotate(Axis.ZP.rotationDegrees(-phi));
         stack.translate(0, -d, 0);
     }
 

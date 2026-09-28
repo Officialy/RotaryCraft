@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:diamond_shaft_core"
+        "recipes": "rotarycraft:diamond_shaft_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

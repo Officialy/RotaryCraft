@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tungsten_alloy_shaft_core"
+        "recipes": "rotarycraft:tungsten_alloy_shaft_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

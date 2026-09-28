@@ -85,8 +85,8 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
                 f += 90;
             }
             stack.translate(0.5F, 1.5F, 0.5F);
-            stack.mulPose(Axis.YP.rotationDegrees(-f - 90));
-            stack.mulPose(Axis.ZP.rotationDegrees(180));
+            stack.rotate(Axis.YP.rotationDegrees(-f - 90));
+            stack.rotate(Axis.ZP.rotationDegrees(180));
 //todo            this.prepareShader(tile);
         }
 
@@ -97,7 +97,7 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
             }
             case WIND -> {
                 VertexConsumer vertexconsumer = bufferSource;
-                stack.mulPose(Axis.YP.rotationDegrees(270));
+                stack.rotate(Axis.YP.rotationDegrees(270));
                 windModel.renderAll(stack, vertexconsumer, pPackedLight, tile, null, -tile.phi, 0);
             }
             case STEAM -> {
@@ -307,8 +307,8 @@ public class RenderSEngine extends RotaryTERenderer<BlockEntityEngine> {
                 f += 90;
             }
             stack.translate(0.5F, 1.5F, 0.5F);
-            stack.mulPose(Axis.YP.rotationDegrees(-f - 90));
-            stack.mulPose(Axis.ZP.rotationDegrees(180));
+            stack.rotate(Axis.YP.rotationDegrees(-f - 90));
+            stack.rotate(Axis.ZP.rotationDegrees(180));
         }
 
         // Single additive shell, scaled about the model centre. The legacy code's

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:turbine"
+        "recipes": "rotarycraft:turbine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

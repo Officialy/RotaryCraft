@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:gold_coil"
+        "recipes": "rotarycraft:gold_coil"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

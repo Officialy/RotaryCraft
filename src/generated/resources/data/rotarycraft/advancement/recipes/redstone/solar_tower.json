@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:solar_tower"
+        "recipes": "rotarycraft:solar_tower"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

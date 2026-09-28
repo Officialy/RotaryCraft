@@ -385,7 +385,7 @@ public class PileDriverModel extends RotaryModelBase {
             shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         float f1 = 2.5F;
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi/f1));
+        stack.rotate(Axis.XP.rotationDegrees(phi/f1));
         stack.translate(0, -1, 0);
         shape9.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape9a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -397,7 +397,7 @@ public class PileDriverModel extends RotaryModelBase {
         shape9g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape10.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi/f1));
+        stack.rotate(Axis.XP.rotationDegrees(-phi/f1));
         stack.translate(0, -1, 0);
         if (!on) {
             shape1o.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -410,7 +410,7 @@ public class PileDriverModel extends RotaryModelBase {
             shape1g.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         }
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi/f1));
+        stack.rotate(Axis.XP.rotationDegrees(phi/f1));
         stack.translate(0, -1, 0);
         shape9h.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape10af.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -422,15 +422,15 @@ public class PileDriverModel extends RotaryModelBase {
         shape10u.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape10t.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi/f1));
+        stack.rotate(Axis.XP.rotationDegrees(-phi/f1));
         stack.translate(0, -1, 0);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi));
+        stack.rotate(Axis.XP.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
         shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape3a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

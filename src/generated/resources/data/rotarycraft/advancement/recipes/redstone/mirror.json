@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:mirror"
+        "recipes": "rotarycraft:mirror"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

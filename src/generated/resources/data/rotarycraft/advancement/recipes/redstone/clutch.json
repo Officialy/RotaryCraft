@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:clutch"
+        "recipes": "rotarycraft:clutch"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

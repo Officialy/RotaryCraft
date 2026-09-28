@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:grindstone"
+        "recipes": "rotarycraft:grindstone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

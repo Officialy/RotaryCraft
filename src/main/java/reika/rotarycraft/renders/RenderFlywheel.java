@@ -76,14 +76,14 @@ public class RenderFlywheel extends RotaryTERenderer<BlockEntityFlywheel> {
      */
     private static void setupPose(PoseStack stack, BlockEntityFlywheel tile) {
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.XP.rotationDegrees(180));
+        stack.rotate(Axis.XP.rotationDegrees(180));
         if (!tile.isInWorld())
             return;
         BlockState st = tile.getBlockState();
         if (st != null && st.hasProperty(BlockRotaryCraftMachine.FACING)) {
             Direction facing = st.getValue(BlockRotaryCraftMachine.FACING);
             if (!facing.getAxis().isVertical())
-                stack.mulPose(Axis.YP.rotationDegrees(getModelYaw(facing)));
+                stack.rotate(Axis.YP.rotationDegrees(getModelYaw(facing)));
         }
     }
 

@@ -13,7 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,12 +24,17 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.RotaryItems;
 
-public class ItemSteelShovel extends ShovelItem {
+public class ItemSteelShovel extends Item {
 
     private int index;
 
     public ItemSteelShovel() {
-        super(ToolMaterial.IRON, 1, 1, RotaryItems.itemProperties().durability(600));
+        super(RotaryItems.itemProperties().shovel(ToolMaterial.IRON, 1, 1)
+                .durability(600).delayedComponent(net.minecraft.core.component.DataComponents.REPAIRABLE,
+                        context -> new net.minecraft.world.item.enchantment.Repairable(net.minecraft.core.HolderSet.direct(
+                                context.getOrThrow(net.minecraft.resources.ResourceKey.create(
+                                        net.minecraft.core.registries.Registries.ITEM,
+                                        net.minecraft.resources.Identifier.fromNamespaceAndPath("rotarycraft", "hsla_steel_ingot")))))));
         //this.setHarvestLevel("shovel", ToolMaterial.IRON.getLevel());
     }
 

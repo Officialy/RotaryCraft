@@ -275,7 +275,7 @@ public class SplitterModel extends RotaryModelBase {
         // --- Right shaft: rotate +phi around X axis (pivot at y=1, model coord) ------------
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(xp.rotationDegrees(phi));
+        stack.rotate(xp.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape17.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape20.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -288,7 +288,7 @@ public class SplitterModel extends RotaryModelBase {
         // --- Left shaft: rotate -phi around X axis -----------------------------------------
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(xp.rotationDegrees(-phi));
+        stack.rotate(xp.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
         shape12a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape20a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -301,7 +301,7 @@ public class SplitterModel extends RotaryModelBase {
         // --- Top shaft: rotate +phi around Z axis ------------------------------------------
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(zp.rotationDegrees(phi));
+        stack.rotate(zp.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape15.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape18.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -317,4 +317,3 @@ public class SplitterModel extends RotaryModelBase {
         return TEXTURE_LOCATION;
     }
 }
-

@@ -575,7 +575,7 @@ public class MicroTurbineModel extends RotaryModelBase {
         // Turbine fan: rotate Z at pivot y=1 by phi
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape4.render(stack, tex, LM, OV, COL);
         shape4a.render(stack, tex, LM, OV, COL);
@@ -614,7 +614,7 @@ public class MicroTurbineModel extends RotaryModelBase {
         // Inner turbine: rotate Z at pivot y=1 by phi*2
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi * 2));
+        stack.rotate(Axis.ZP.rotationDegrees(phi * 2));
         stack.translate(0, -1, 0);
         shape10.render(stack, tex, LM, OV, COL);
         shape10a.render(stack, tex, LM, OV, COL);

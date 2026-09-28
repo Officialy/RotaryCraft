@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tungsten_flywheel"
+        "recipes": "rotarycraft:tungsten_flywheel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

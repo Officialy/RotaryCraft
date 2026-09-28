@@ -598,7 +598,7 @@ public class JetModel extends RotaryModelBase {
         double d = 1.0625;
         stack.pushPose();
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi / factor));
+        stack.rotate(Axis.ZP.rotationDegrees(phi / factor));
         stack.translate(0, -d, 0);
 
         shape2.render(stack, tex, LM, OV, color);
@@ -641,7 +641,7 @@ public class JetModel extends RotaryModelBase {
 
         stack.pushPose();
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -d, 0);
         shape2a2.render(stack, tex, LM, OV, color);
         shape2a.render(stack, tex, LM, OV, color);

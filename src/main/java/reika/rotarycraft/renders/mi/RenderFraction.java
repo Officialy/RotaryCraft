@@ -31,7 +31,7 @@ public class RenderFraction extends RotaryTERenderer<BlockEntityFractionator> {
     public void renderBlockEntityFractionatorAt(BlockEntityFractionator tile, PoseStack stack, VertexConsumer bufferSource, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+        stack.rotate(Axis.ZP.rotationDegrees(180.0F));
         model.renderAll(stack, bufferSource, light, tile, null, 0, 0);
         stack.popPose();
     }

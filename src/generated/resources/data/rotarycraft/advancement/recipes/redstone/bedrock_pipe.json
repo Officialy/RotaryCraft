@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:bedrock_pipe"
+        "recipes": "rotarycraft:bedrock_pipe"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

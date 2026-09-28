@@ -55,14 +55,14 @@ public class RenderShaft extends RotaryTERenderer<BlockEntityShaft> {
 
             BlockState blockstate = tile.getLevel() != null ? tile.getBlockState() : RotaryBlocks.DYNAMOMETER.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
             stack.translate(0.5F, 1.5F, 0.5F);
-            stack.mulPose(Axis.ZP.rotationDegrees(180)); // Initial rotation to correct model orientation
+            stack.rotate(Axis.ZP.rotationDegrees(180)); // Initial rotation to correct model orientation
 
             Direction facing = blockstate.getValue(BlockRotaryCraftMachine.FACING);
             if (facing.getAxis().isVertical()) {
                 // No additional rotation needed for vertical shafts as they align with the Y-axis by default
             } else {
                 float f = facing.toYRot();
-                stack.mulPose(Axis.YP.rotationDegrees(-f + 90));
+                stack.rotate(Axis.YP.rotationDegrees(-f + 90));
             }
 
             if (tile.isCross()) {

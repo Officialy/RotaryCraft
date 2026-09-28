@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:wood_flywheel"
+        "recipes": "rotarycraft:wood_flywheel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

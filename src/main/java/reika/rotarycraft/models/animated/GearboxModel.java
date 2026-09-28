@@ -186,21 +186,21 @@ public class GearboxModel extends GearboxBaseModel {
 
         stack.pushPose();
         stack.translate(0, 0.9025F, 0.25F);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(-phi * 1.25F));
         stack.translate(0, -0.9025F, -0.25F);
         this.render(stack, tex, light, shape20, shape21, shape22, shape23, shape16, shape17, shape18, shape19);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(phi * 1.25F));
         stack.translate(0, -1, 0);
         this.render(stack, tex, light, shape26, shape27, shape24, shape25);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         this.render(stack, tex, light, shape14, shape15, shape12, shape13);
         stack.popPose();

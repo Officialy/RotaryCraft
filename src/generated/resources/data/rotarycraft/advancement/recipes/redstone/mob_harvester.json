@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:mob_harvester"
+        "recipes": "rotarycraft:mob_harvester"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

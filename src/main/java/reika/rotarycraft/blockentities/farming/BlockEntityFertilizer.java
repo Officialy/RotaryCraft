@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.DiodeBlock;
-import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RedstoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -124,7 +124,7 @@ public class BlockEntityFertilizer extends InventoriedPowerLiquidReceiver implem
     /** Redstone components must never be force-ticked (legacy exclusion). */
     private boolean canTick(BlockState state) {
         Block b = state.getBlock();
-        return !(b instanceof DiodeBlock || b instanceof RedStoneWireBlock);
+        return !(b instanceof DiodeBlock || b instanceof RedstoneWireBlock);
     }
 
     /** The legacy fertilizables set (crops, saplings, canes, cacti, stems, vines, mycelium), tag-driven. */

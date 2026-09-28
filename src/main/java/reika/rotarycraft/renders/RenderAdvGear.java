@@ -106,13 +106,13 @@ public class RenderAdvGear extends RotaryTERenderer<BlockEntityAdvancedGear> {
     private void renderAt(PoseStack stack, BlockEntityAdvancedGear tile, VertexConsumer tex, int light, RotaryModelBase model) {
         stack.pushPose();
         stack.translate(0.5, 1.5, 0.5);
-        stack.mulPose(Axis.XP.rotationDegrees(180));
+        stack.rotate(Axis.XP.rotationDegrees(180));
         if (tile.isInWorld()) {
             BlockState st = tile.getBlockState();
             if (st != null && st.hasProperty(BlockRotaryCraftMachine.FACING)) {
                 Direction facing = st.getValue(BlockRotaryCraftMachine.FACING);
                 if (!facing.getAxis().isVertical())
-                    stack.mulPose(Axis.YP.rotationDegrees(getModelYaw(facing)));
+                    stack.rotate(Axis.YP.rotationDegrees(getModelYaw(facing)));
             }
         }
         // phi is NOT negated here: unlike RenderShaft/RenderGearbox, the legacy RenderAdvGear

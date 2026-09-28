@@ -277,7 +277,7 @@ public class BeltModel extends RotaryModelBase {
 
         double d = 1;
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -d, 0);
 
         s1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -304,7 +304,7 @@ public class BeltModel extends RotaryModelBase {
         c3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(-phi));
+        stack.rotate(Axis.ZP.rotationDegrees(-phi));
         stack.translate(0, -d, 0);
     }
 

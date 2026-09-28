@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:compressor"
+        "recipes": "rotarycraft:compressor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

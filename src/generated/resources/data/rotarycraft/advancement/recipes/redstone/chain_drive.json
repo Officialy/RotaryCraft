@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:chain_drive"
+        "recipes": "rotarycraft:chain_drive"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

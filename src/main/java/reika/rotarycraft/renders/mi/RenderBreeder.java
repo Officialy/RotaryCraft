@@ -41,7 +41,7 @@ public class RenderBreeder extends RotaryTERenderer<BlockEntityAutoBreeder> {
             return;
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         model.renderAll(stack, vc, light, te, null, te.phi, 0);
         stack.popPose();
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:turret_base"
+        "recipes": "rotarycraft:turret_base"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:lamp"
+        "recipes": "rotarycraft:lamp"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -12,7 +12,6 @@ package reika.rotarycraft.items.tools.bedrock;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
@@ -32,10 +31,10 @@ import reika.rotarycraft.registry.RotaryItems;
 //     ToolMaterial / enchantment data components).
 // The standard axe behaviours (high destroy speed for wood, anti-silk-touch on use, special
 // hurt against EntityEnt) are functional below.
-public class ItemBedrockAxe extends AxeItem {
+public class ItemBedrockAxe extends Item {
 
     public ItemBedrockAxe() {
-        super(ToolMaterial.NETHERITE, 6F, -3.0F, RotaryItems.itemProperties().stacksTo(1));
+        super(RotaryItems.itemProperties().axe(ToolMaterial.NETHERITE, 6F, -3.0F));
     }
 
     @Override

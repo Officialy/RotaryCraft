@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:refresher"
+        "recipes": "rotarycraft:refresher"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

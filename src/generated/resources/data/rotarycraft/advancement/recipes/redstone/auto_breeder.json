@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:auto_breeder"
+        "recipes": "rotarycraft:auto_breeder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

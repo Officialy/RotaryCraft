@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:worktable"
+        "recipes": "rotarycraft:worktable"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

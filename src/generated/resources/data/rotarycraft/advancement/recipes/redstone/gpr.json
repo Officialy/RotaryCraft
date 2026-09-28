@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:gpr"
+        "recipes": "rotarycraft:gpr"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

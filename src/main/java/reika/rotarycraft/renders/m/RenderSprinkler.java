@@ -33,7 +33,7 @@ public class RenderSprinkler extends RotaryTERenderer<BlockEntitySprinkler> {
     private void renderSprinklerAt(BlockEntitySprinkler tile, PoseStack stack, VertexConsumer vc, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         // The head spins while spraying.
         model.renderAll(stack, vc, light, tile, null, tile.phi, 0);
         stack.popPose();

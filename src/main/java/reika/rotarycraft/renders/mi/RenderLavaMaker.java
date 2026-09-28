@@ -33,7 +33,7 @@ public class RenderLavaMaker extends RotaryTERenderer<BlockEntityLavaMaker> {
     private void renderLavaMakerAt(BlockEntityLavaMaker tile, PoseStack stack, VertexConsumer vc, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         model.renderAll(stack, vc, light, tile, null, tile.phi, 0);
         stack.popPose();
     }

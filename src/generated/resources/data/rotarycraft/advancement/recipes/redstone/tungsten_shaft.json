@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tungsten_shaft"
+        "recipes": "rotarycraft:tungsten_shaft"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

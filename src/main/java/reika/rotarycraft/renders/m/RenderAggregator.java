@@ -33,7 +33,7 @@ public class RenderAggregator extends RotaryTERenderer<BlockEntityAggregator> {
     private void renderAggregatorAt(BlockEntityAggregator tile, PoseStack stack, VertexConsumer vc, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         // The condenser drum spins with the input shaft (phi).
         model.renderAll(stack, vc, light, tile, null, -tile.phi, 0);
         stack.popPose();

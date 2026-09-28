@@ -270,7 +270,7 @@ public class DefoliatorModel extends RotaryModelBase {
                           ArrayList<?> conditions, float phi, float theta) {
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         shape3.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape4.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape5.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -297,21 +297,21 @@ public class DefoliatorModel extends RotaryModelBase {
         shape5e.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         for (int i = 0; i < 3; i++) {
-            stack.mulPose(Axis.YP.rotationDegrees(120*i));
+            stack.rotate(Axis.YP.rotationDegrees(120*i));
             shape6.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-            stack.mulPose(Axis.YP.rotationDegrees(60));
+            stack.rotate(Axis.YP.rotationDegrees(60));
             shape6a.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-            stack.mulPose(Axis.YP.rotationDegrees(-60));
-            stack.mulPose(Axis.YP.rotationDegrees(-120*i));
+            stack.rotate(Axis.YP.rotationDegrees(-60));
+            stack.rotate(Axis.YP.rotationDegrees(-120*i));
         }
 
         for (int i = 0; i < 4; i++) {
-            stack.mulPose(Axis.YP.rotationDegrees(45+90*i));
+            stack.rotate(Axis.YP.rotationDegrees(45+90*i));
             shape6c.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-            stack.mulPose(Axis.YP.rotationDegrees(-45-90*i));
+            stack.rotate(Axis.YP.rotationDegrees(-45-90*i));
         }
 
-        stack.mulPose(Axis.YP.rotationDegrees(-phi));
+        stack.rotate(Axis.YP.rotationDegrees(-phi));
     }
 
     @Override

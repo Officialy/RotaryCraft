@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:chain_link"
+        "recipes": "rotarycraft:chain_link"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

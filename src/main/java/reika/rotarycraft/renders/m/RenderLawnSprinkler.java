@@ -33,7 +33,7 @@ public class RenderLawnSprinkler extends RotaryTERenderer<BlockEntityLawnSprinkl
     private void renderLawnSprinklerAt(BlockEntityLawnSprinkler tile, PoseStack stack, VertexConsumer vc, int light) {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         // The head rotates while spraying (phi accelerates/decays client-side).
         model.renderAll(stack, vc, light, tile, null, tile.phi, 0);
         stack.popPose();

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tungsten_alloy_gear_2x"
+        "recipes": "rotarycraft:tungsten_alloy_gear_2x"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

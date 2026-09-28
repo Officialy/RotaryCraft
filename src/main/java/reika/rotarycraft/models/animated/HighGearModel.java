@@ -269,14 +269,14 @@ public class HighGearModel extends RotaryModelBase {
         shape11.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape24.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape25.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape42.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape43.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XN.rotationDegrees(phi));
+        stack.rotate(Axis.XN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
 
         for (double f = 0; f < 0.75; f += 0.125) {
@@ -284,44 +284,44 @@ public class HighGearModel extends RotaryModelBase {
 
             double d = 0.125;
             stack.translate(0, 0.9375, d);
-            stack.mulPose(Axis.XP.rotationDegrees(phi));
+            stack.rotate(Axis.XP.rotationDegrees(phi));
             stack.translate(0, -0.9375, -d);
             shape12c.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape12e.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape12f.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape12g.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             stack.translate(0, 0.9375, d);
-            stack.mulPose(Axis.XN.rotationDegrees(phi));
+            stack.rotate(Axis.XN.rotationDegrees(phi));
             stack.translate(0, -0.9375, -d);
 
             stack.translate(0, 0.9375, -d);
-            stack.mulPose(Axis.XN.rotationDegrees(phi));
+            stack.rotate(Axis.XN.rotationDegrees(phi));
             stack.translate(0, -0.9375, d);
             shape12a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape12.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape12b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape12d.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             stack.translate(0, 0.9375, -d);
-            stack.mulPose(Axis.XP.rotationDegrees(phi));
+            stack.rotate(Axis.XP.rotationDegrees(phi));
             stack.translate(0, -0.9375, d);
 
             d = 0.2875;
             stack.translate(0, 0.9375, -d);
-            stack.mulPose(Axis.XN.rotationDegrees(phi));
+            stack.rotate(Axis.XN.rotationDegrees(phi));
             stack.translate(0, -0.9375, d);
             shape13.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape13c.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             stack.translate(0, 0.9375, -d);
-            stack.mulPose(Axis.XP.rotationDegrees(phi));
+            stack.rotate(Axis.XP.rotationDegrees(phi));
             stack.translate(0, -0.9375, d);
 
             stack.translate(0, 0.9375, d);
-            stack.mulPose(Axis.XP.rotationDegrees(phi));
+            stack.rotate(Axis.XP.rotationDegrees(phi));
             stack.translate(0, -0.9375, -d);
             shape13a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape13b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             stack.translate(0, 0.9375, d);
-            stack.mulPose(Axis.XN.rotationDegrees(phi));
+            stack.rotate(Axis.XN.rotationDegrees(phi));
             stack.translate(0, -0.9375, -d);
 
             stack.translate(-f, 0, 0);

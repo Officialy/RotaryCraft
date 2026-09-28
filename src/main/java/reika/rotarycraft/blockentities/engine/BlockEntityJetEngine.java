@@ -107,7 +107,7 @@ import java.util.Locale;
  * <ul>
  *   <li>{@code entity.motionX/Y/Z = ...} → {@link Entity#setDeltaMovement(double, double, double)}</li>
  *   <li>{@code entity.motionX += ...} → {@link Entity#push(double, double, double)}</li>
- *   <li>{@code entity.velocityChanged = true} → {@code entity.hurtMarked = true}</li>
+ *   <li>{@code entity.velocityChanged = true} → {@code entity.syncVelocity = true}</li>
  *   <li>{@code entity.kill()} → {@link Entity#discard()}</li>
  *   <li>{@code ItemEntity.getEntityItem()} → {@link ItemEntity#getItem()}</li>
  *   <li>{@code world.getBlock(x,y,z)} → {@code level.getBlockState(new BlockPos(x,y,z)).getBlock()}</li>
@@ -331,7 +331,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
                         double pullZ = (pos.getZ() + 0.5D - caught.getZ()) / 20 * mult;
                         caught.push(pullX, pullY, pullZ);
                         if (!world.isClientSide())
-                            caught.hurtMarked = true;
+                            caught.syncVelocity = true;
                     }
                     if (ReikaMathLibrary.py3d(caught.getX() - px, caught.getY() - (pos.getY() + 0.5), caught.getZ() - pz) < 1.2) {
                         this.ingestEntity(world, pos, caught, mult <= 0);
@@ -389,7 +389,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
                 out.setDeltaMovement(dumpvx * 1.5D, 0.15, dumpvz * 1.5D);
                 if (!world.isClientSide()) {
                     world.addFreshEntity(out);
-                    out.hurtMarked = true;
+                    out.syncVelocity = true;
                 }
                 if (this.itemDestroysEngine(is)) {
                     out.discard();
@@ -413,7 +413,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
                 out.setDeltaMovement(dumpvx * 1.5D, 0.15, dumpvz * 1.5D);
                 if (!world.isClientSide()) {
                     world.addFreshEntity(out);
-                    out.hurtMarked = true;
+                    out.syncVelocity = true;
                 }
             }
         } else if (e instanceof LivingEntity le && !(e instanceof Player && immune)) {

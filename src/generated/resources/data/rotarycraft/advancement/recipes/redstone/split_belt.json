@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:split_belt"
+        "recipes": "rotarycraft:split_belt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

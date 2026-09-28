@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:sonic_borer"
+        "recipes": "rotarycraft:sonic_borer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

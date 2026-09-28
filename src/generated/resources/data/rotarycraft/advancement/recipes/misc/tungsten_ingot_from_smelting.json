@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:tungsten_ingot_from_smelting"
+        "recipes": "rotarycraft:tungsten_ingot_from_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

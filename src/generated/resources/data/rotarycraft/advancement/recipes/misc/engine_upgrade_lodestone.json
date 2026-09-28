@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:engine_upgrade_lodestone"
+        "recipes": "rotarycraft:engine_upgrade_lodestone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

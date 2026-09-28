@@ -286,7 +286,7 @@ public class Gearbox8Model extends GearboxBaseModel {
     protected void renderGears(PoseStack stack, VertexConsumer tex, int light, float phi) {
         stack.pushPose();
         stack.translate(0, 0.8125F, -0.0625F);
-        stack.mulPose(Axis.XP.rotationDegrees(phi * 1.1F));
+        stack.rotate(Axis.XP.rotationDegrees(phi * 1.1F));
         stack.translate(0, -0.8125F, 0.0625F);
         this.render(stack, tex, light, shape16, shape37, shape20, shape34, shape35, shape41);
         stack.popPose();
@@ -294,7 +294,7 @@ public class Gearbox8Model extends GearboxBaseModel {
         stack.pushPose();
         stack.translate(0, 0.0625F, 0.006125F);
         stack.translate(0, 1.092F, -0.224F);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(-phi * 1.25F));
         stack.translate(0, -1.092F, 0.224F);
         this.render(stack, tex, light, shape21, shape40, shape26, shape27, shape14, shape15);
         stack.popPose();
@@ -302,21 +302,21 @@ public class Gearbox8Model extends GearboxBaseModel {
         stack.pushPose();
         stack.translate(0, 0.015125F, -0.006125F);
         stack.translate(0, 0.9025F, 0.25F);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(-phi * 1.25F));
         stack.translate(0, -0.9025F, -0.25F);
         this.render(stack, tex, light, shape22, shape36, shape23, shape17, shape18, shape19, shape30, shape31);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(phi * 1.25F));
         stack.translate(0, -1, 0);
         this.render(stack, tex, light, shape24, shape25, shape32, shape33);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         this.render(stack, tex, light, shape12, shape13, shape38, shape39);
         stack.popPose();

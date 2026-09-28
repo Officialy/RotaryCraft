@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:combustor"
+        "recipes": "rotarycraft:combustor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

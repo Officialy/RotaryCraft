@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:scalechest"
+        "recipes": "rotarycraft:scalechest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -214,7 +214,7 @@ public class PumpModel extends RotaryModelBase {
             stack.pushPose();
             double d = 1.1875;
             stack.translate(0.0, d, 0.0);
-            stack.mulPose(Axis.XP.rotationDegrees(phi));
+            stack.rotate(Axis.XP.rotationDegrees(phi));
             stack.translate(0.0, -d, 0.0);
             shape3.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape4.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

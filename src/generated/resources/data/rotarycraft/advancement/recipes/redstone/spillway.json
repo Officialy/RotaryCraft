@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:spillway"
+        "recipes": "rotarycraft:spillway"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

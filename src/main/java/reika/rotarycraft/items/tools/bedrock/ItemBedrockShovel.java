@@ -13,7 +13,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -44,7 +44,7 @@ import java.util.List;
  * </ul>
  */
 @EventBusSubscriber(modid = RotaryCraft.MODID)
-public class ItemBedrockShovel extends ShovelItem {
+public class ItemBedrockShovel extends Item {
 
     /**
      * Drop registrations queued at class-init time. We can't build {@link ItemStack}s during the
@@ -83,7 +83,7 @@ public class ItemBedrockShovel extends ShovelItem {
     }
 
     public ItemBedrockShovel() {
-        super(ToolMaterial.NETHERITE, 4F, -2.8F, RotaryItems.itemProperties().stacksTo(1));
+        super(RotaryItems.itemProperties().shovel(ToolMaterial.NETHERITE, 4F, -2.8F));
     }
 
     private static void queue(Block source, ItemLike extra, float chance) {

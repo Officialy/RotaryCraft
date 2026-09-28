@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:fuel_line"
+        "recipes": "rotarycraft:fuel_line"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

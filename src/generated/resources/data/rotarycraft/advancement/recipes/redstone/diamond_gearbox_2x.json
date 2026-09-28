@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:diamond_gearbox_2x"
+        "recipes": "rotarycraft:diamond_gearbox_2x"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

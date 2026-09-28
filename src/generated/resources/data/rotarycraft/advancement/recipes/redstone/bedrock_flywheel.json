@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:bedrock_flywheel"
+        "recipes": "rotarycraft:bedrock_flywheel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -119,7 +119,7 @@ public class BlockEntityEMP extends BlockEntityPowerReceiver implements RangedEf
             double dd = Math.max(0.5, Math.sqrt(dx * dx + dz * dz));
             double v = Math.max(0, 1.0 - dd / 128.0);
             e.setDeltaMovement(e.getDeltaMovement().add(dx / dd * v, 0.4 * v, dz / dd * v));
-            e.hurtMarked = true;
+            e.syncVelocity = true;
         }
     }
 

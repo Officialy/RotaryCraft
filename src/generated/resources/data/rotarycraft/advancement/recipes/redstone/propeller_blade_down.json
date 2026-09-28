@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:propeller_blade_down"
+        "recipes": "rotarycraft:propeller_blade_down"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

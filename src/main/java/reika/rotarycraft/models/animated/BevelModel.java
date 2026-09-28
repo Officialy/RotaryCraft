@@ -204,7 +204,7 @@ public class BevelModel extends RotaryModelBase {
 //        }
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape14.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape15.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -213,11 +213,11 @@ public class BevelModel extends RotaryModelBase {
         shape22.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape23.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZN.rotationDegrees(phi));
+        stack.rotate(Axis.ZN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XN.rotationDegrees(phi));
+        stack.rotate(Axis.XN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape12.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape13.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -226,7 +226,7 @@ public class BevelModel extends RotaryModelBase {
         shape20.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape21.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
     }
     @Override

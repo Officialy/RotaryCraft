@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:microturbine"
+        "recipes": "rotarycraft:microturbine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

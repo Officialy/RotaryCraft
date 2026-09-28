@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:iron_flakes_to_ingot"
+        "recipes": "rotarycraft:iron_flakes_to_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

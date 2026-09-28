@@ -50,8 +50,8 @@ public class RenderFan extends RotaryTERenderer<BlockEntityFan> {
             case UP -> 0f;
             case DOWN -> 0f;
         };
-        stack.mulPose(Axis.YP.rotationDegrees(yRot));
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(yRot));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         VertexConsumer vertexconsumer = bufferSource;
         fanModel.renderAll(stack, vertexconsumer, packedLight, tile, null, -tile.phi);
         stack.popPose();

@@ -436,7 +436,7 @@ public class CoilModel extends RotaryModelBase {
         shape35.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -484,7 +484,7 @@ public class CoilModel extends RotaryModelBase {
 
         float off = 12.5F;
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(off));
+        stack.rotate(Axis.XP.rotationDegrees(off));
         stack.translate(0, -1, 0);
         shape1.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -530,11 +530,11 @@ public class CoilModel extends RotaryModelBase {
         shape3_m.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape3_n.render(stack, tex, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-off));
+        stack.rotate(Axis.XP.rotationDegrees(-off));
         stack.translate(0, -1, 0);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi));
+        stack.rotate(Axis.XP.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
     }
 

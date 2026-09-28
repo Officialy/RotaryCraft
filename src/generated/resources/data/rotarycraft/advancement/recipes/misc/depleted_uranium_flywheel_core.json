@@ -22,7 +22,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:depleted_uranium_flywheel_core"
+        "recipes": "rotarycraft:depleted_uranium_flywheel_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

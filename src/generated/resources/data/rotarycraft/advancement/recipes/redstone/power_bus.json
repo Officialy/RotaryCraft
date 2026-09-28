@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:power_bus"
+        "recipes": "rotarycraft:power_bus"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

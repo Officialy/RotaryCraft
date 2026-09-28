@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:light_bridge"
+        "recipes": "rotarycraft:light_bridge"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

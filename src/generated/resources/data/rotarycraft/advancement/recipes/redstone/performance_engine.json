@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:performance_engine"
+        "recipes": "rotarycraft:performance_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

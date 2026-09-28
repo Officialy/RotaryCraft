@@ -127,7 +127,7 @@ public class CombustionModel extends RotaryModelBase {
         // Crank rotation: pivot at y=1, X-axis rotation by phi.
         stack.pushPose();
         stack.translate(0.0, 1.0, 0.0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0.0, -1.0, 0.0);
         shape12.render(stack, tex, LM, OV, COL);
         shape13.render(stack, tex, LM, OV, COL);

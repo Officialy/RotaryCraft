@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:air_cannon"
+        "recipes": "rotarycraft:air_cannon"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

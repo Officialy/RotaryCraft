@@ -1,6 +1,7 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 
-#moj_import <minecraft:globals.glsl>
+#include <minecraft:globals.glsl>
 
 // Heat haze over hot machines. Ported from RotaryCraft's 1.7.10 heatripple.frag.
 //
@@ -27,9 +28,9 @@ layout(std140) uniform HeatPoints {
 
 uniform sampler2D InSampler;
 
-in vec2 texCoord;
+layout(location = 0) in vec2 texCoord;
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 void main() {
     // Screen distances are measured x-normalised, matching lib_math.txt's distsq().

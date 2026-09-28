@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:emerald_flakes_to_ingot"
+        "recipes": "rotarycraft:emerald_flakes_to_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

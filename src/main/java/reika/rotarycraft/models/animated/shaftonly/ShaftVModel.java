@@ -157,10 +157,10 @@ public class ShaftVModel extends RotaryModelBase {
     }
 
     public void renderShaft(PoseStack stack, VertexConsumer tex, int packedLightIn, float phi) {
-        stack.mulPose(Axis.YP.rotationDegrees(phi));
+        stack.rotate(Axis.YP.rotationDegrees(phi));
         shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.mulPose(Axis.YN.rotationDegrees(phi));
+        stack.rotate(Axis.YN.rotationDegrees(phi));
     }
 
     @Override

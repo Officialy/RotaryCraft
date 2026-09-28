@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:cooling_fin"
+        "recipes": "rotarycraft:cooling_fin"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

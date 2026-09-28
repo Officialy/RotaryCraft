@@ -121,23 +121,23 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
      */
     private static void setupPose(PoseStack stack, BlockEntityGearbox tile) {
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.XP.rotationDegrees(180));
+        stack.rotate(Axis.XP.rotationDegrees(180));
 
         if (!tile.isInWorld()) {
-            stack.mulPose(Axis.YP.rotationDegrees(-90));
+            stack.rotate(Axis.YP.rotationDegrees(-90));
             return;
         }
 
         Direction facing = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING);
         if (tile.isFlipped) {
             // setupGL's ceiling-mount branch: flip the machine over and drop it back into its block.
-            stack.mulPose(Axis.XP.rotationDegrees(180));
+            stack.rotate(Axis.XP.rotationDegrees(180));
             stack.translate(0, -2, 0);
             // Legacy `metadata > 1`, i.e. the two Z-axis orientations, also needed a half turn.
             if (facing.getAxis() == Direction.Axis.Z)
-                stack.mulPose(Axis.YP.rotationDegrees(180));
+                stack.rotate(Axis.YP.rotationDegrees(180));
         }
-        stack.mulPose(Axis.YP.rotationDegrees(getModelYaw(facing)));
+        stack.rotate(Axis.YP.rotationDegrees(getModelYaw(facing)));
     }
 
     private static PoseStack snapshot(PoseStack from) {
@@ -170,7 +170,7 @@ public class RenderGearbox extends RotaryTERenderer<BlockEntityGearbox> {
             stack.translate(par2, par4, par6);
             float sc = 0.1f;
             stack.scale(sc, sc, sc);
-            stack.mulPose(Axis.YP.rotationDegrees(var11));
+            stack.rotate(Axis.YP.rotationDegrees(var11));
             String s = tile.reduction ? "Torque" : "Speed";
 //            Minecraft.getInstance().font.drawInBatch(s, 0, 0, 0xffffff, false, stack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
             stack.scale(1 / sc, 1 / sc, 1 / sc);

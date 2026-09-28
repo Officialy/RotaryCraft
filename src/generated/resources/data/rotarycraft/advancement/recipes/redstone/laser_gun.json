@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:laser_gun"
+        "recipes": "rotarycraft:laser_gun"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

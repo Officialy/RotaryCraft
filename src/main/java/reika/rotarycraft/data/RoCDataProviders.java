@@ -1,5 +1,7 @@
 package reika.rotarycraft.data;
 
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -30,14 +32,12 @@ public final class RoCDataProviders {
 
     @SubscribeEvent
     public static void onGatherServer(GatherDataEvent.Server event) {
-        // Recipe provider: emits crafting / smelting JSONs under data/rotarycraft/recipe/.
-        // Starter coverage is the HSLA steel base chain + transmission components; extend
-        // RoCRecipeProvider#buildRecipes incrementally.
-        event.createProvider(RoCRecipeProvider::new);
-        // Block loot tables: every machine block drops itself; canola uses crop drops.
-        event.createProvider(RoCLootProvider::new);
-        // Advancements — the modern (data-driven) form of RotaryCraft's achievements.
-        event.createProvider(RoCAdvancementProvider::new);
+        // Recipes, loot tables, and advancements are reloadable registries in 26.3.
+        // The recipe bootstrap also writes recipe unlock advancements into ADVANCEMENT.
+        event.createReloadableRegistryObjects(new RegistrySetBuilder()
+                .add(RoCRecipeProvider.bootstrap())
+                .add(Registries.LOOT_TABLE, new RoCLootProvider())
+                .add(Registries.ADVANCEMENT, new RoCAdvancementProvider()));
         // Empty arena structure template that the in-world game tests run on.
         event.createProvider(RoCTestStructureProvider::new);
         // Tag providers will plug in here too as they're built.

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:landmine"
+        "recipes": "rotarycraft:landmine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -43,7 +43,7 @@ public class RenderSolarTower extends RotaryTERenderer<BlockEntitySolarTower> {
         float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.pushPose();
         stack.translate(0.5F, -0.5F, 0.5F);
-        stack.mulPose(Axis.YP.rotationDegrees(f));
+        stack.rotate(Axis.YP.rotationDegrees(f));
         VertexConsumer vertexconsumer = bufferSource;
         modelSolar.renderToBuffer(stack, vertexconsumer, packetLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.popPose();

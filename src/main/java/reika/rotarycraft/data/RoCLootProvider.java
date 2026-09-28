@@ -1,11 +1,10 @@
 package reika.rotarycraft.data;
 
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.flag.FeatureFlags;
@@ -19,11 +18,11 @@ import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchBlock;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import reika.rotarycraft.base.blocks.CanolaBlock;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryDataComponents;
@@ -32,7 +31,6 @@ import reika.rotarycraft.registry.RotaryItems;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * 26.1 block loot-table data provider for RotaryCraft.
@@ -56,16 +54,16 @@ import java.util.concurrent.CompletableFuture;
  */
 public final class RoCLootProvider extends LootTableProvider {
 
-    public RoCLootProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, Set.of(), List.of(
+    public RoCLootProvider() {
+        super(Set.of(), List.of(
                 new SubProviderEntry(Blocks::new, LootContextParamSets.BLOCK)
-        ), registries);
+        ));
     }
 
     private static final class Blocks extends BlockLootSubProvider {
 
-        Blocks(HolderLookup.Provider registries) {
-            super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
+        Blocks(LootTableSubProvider.Context context) {
+            super(Set.of(), FeatureFlags.REGISTRY.allFlags(), context);
         }
 
         @Override
@@ -74,9 +72,8 @@ public final class RoCLootProvider extends LootTableProvider {
                 Block block = holder.get();
                 if (block instanceof CanolaBlock) {
                     // Legacy BlockCanola dropped only canola seeds; mature plants drop several.
-                    LootItemCondition.Builder isMaxAge = LootItemBlockStatePropertyCondition
-                            .hasBlockStateProperties(block)
-                            .setProperties(StatePropertiesPredicate.Builder.properties()
+                    LootItemCondition.Builder isMaxAge = MatchBlock.blockMatches(this.blocks, block,
+                            StatePropertiesPredicate.Builder.properties()
                                     .hasProperty(CanolaBlock.AGE, CanolaBlock.MAX_AGE));
                     this.add(block, this.createCropDrops(block,
                             RotaryItems.CANOLA_SEEDS.get(),
@@ -99,9 +96,9 @@ public final class RoCLootProvider extends LootTableProvider {
          * none, and the flicker self-destruct passes no block entity at all: both drop a bare chest.
          */
         private LootTable.Builder createScaleChestDrop(Block block) {
-            HolderGetter<EntityType<?>> entityTypes = this.registries.lookupOrThrow(Registries.ENTITY_TYPE);
+            HolderGetter<EntityType<?>> entityTypes = this.output.lookup(Registries.ENTITY_TYPE);
             return LootTable.lootTable().withPool(this.applyExplosionCondition(block, LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(1.0F))
+                    .setRolls(ContextIntProviders.exactly(1))
                     .add(LootItem.lootTableItem(block)
                             .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
                                     .include(RotaryDataComponents.SCALE_CHEST_CONTENTS.get())

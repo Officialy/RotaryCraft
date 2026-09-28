@@ -41,7 +41,7 @@ public class RenderLandmine extends RotaryTERenderer<BlockEntityLandmine> {
 //        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 //        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180F));
+        stack.rotate(Axis.ZP.rotationDegrees(180F));
         if (!tile.isInWorld()) {
             stack.scale(1.5F, 1.5F, 1.5F);
             stack.translate(0, -0.6, 0);

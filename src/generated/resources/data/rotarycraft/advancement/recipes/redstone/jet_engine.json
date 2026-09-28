@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:jet_engine"
+        "recipes": "rotarycraft:jet_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

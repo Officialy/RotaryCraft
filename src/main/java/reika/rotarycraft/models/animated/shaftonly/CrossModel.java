@@ -250,7 +250,7 @@ public class CrossModel extends RotaryModelBase {
 
         double d = 0.25;
         stack.translate(0, 1 + d, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1 - d, 0);
         shape14b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape14b1.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -259,11 +259,11 @@ public class CrossModel extends RotaryModelBase {
         shape14b7.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape14b8.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1 + d, 0);
-        stack.mulPose(Axis.ZN.rotationDegrees(phi));
+        stack.rotate(Axis.ZN.rotationDegrees(phi));
         stack.translate(0, -1 - d, 0);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZN.rotationDegrees(phi));
+        stack.rotate(Axis.ZN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape14.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape14c.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -274,16 +274,16 @@ public class CrossModel extends RotaryModelBase {
         shape14b3.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape14b4.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi2));
+        stack.rotate(Axis.XP.rotationDegrees(phi2));
         stack.translate(0, -1, 0);
         shape13.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape12.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XN.rotationDegrees(phi2));
+        stack.rotate(Axis.XN.rotationDegrees(phi2));
         stack.translate(0, -1, 0);
     }
 

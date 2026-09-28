@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:rock_melter"
+        "recipes": "rotarycraft:rock_melter"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:heat_ray"
+        "recipes": "rotarycraft:heat_ray"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

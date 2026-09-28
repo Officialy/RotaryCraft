@@ -9,9 +9,9 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
-import com.mojang.blaze3d.GpuFormat;
-import com.mojang.blaze3d.buffers.GpuBuffer;
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.GpuFormat;
+import com.mojang.renderpearl.api.buffers.GpuBuffer;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.buffers.Std140Builder;
 import com.mojang.blaze3d.framegraph.FrameGraphBuilder;
 import com.mojang.blaze3d.framegraph.FramePass;
@@ -19,10 +19,10 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import com.mojang.blaze3d.resource.RenderTargetDescriptor;
 import com.mojang.blaze3d.resource.ResourceHandle;
-import com.mojang.blaze3d.systems.CommandEncoder;
-import com.mojang.blaze3d.systems.RenderPass;
+import com.mojang.renderpearl.api.commands.CommandEncoder;
+import com.mojang.renderpearl.api.commands.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.renderpearl.api.textures.FilterMode;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MappableRingBuffer;
@@ -175,7 +175,8 @@ public final class HeatRippleRenderer {
         ResourceHandle<RenderTarget> mainHandle = frame.importExternal("main", main);
         ResourceHandle<RenderTarget> warpedHandle = frame.createInternal(
                 "rotarycraft_warped",
-                new RenderTargetDescriptor(width, height, false, new Vector4f(0, 0, 0, 0), GpuFormat.RGBA8_UNORM));
+                new RenderTargetDescriptor(width, height,
+                        new RenderTargetDescriptor.TextureProperties(new Vector4f(0, 0, 0, 0), GpuFormat.RGBA8_UNORM), null));
 
         FramePass warpPass = frame.addPass("rotarycraft_heatripple_warp");
         warpPass.reads(mainHandle);
@@ -242,11 +243,11 @@ public final class HeatRippleRenderer {
                 () -> "RotaryCraft heat ripple",
                 target.getColorTextureView(),
                 Optional.empty())) {
-            pass.setPipeline(RotaryRenderPipelines.HEAT_RIPPLE);
+            pass.setPipeline(RenderSystem.getCompiledPipeline(RotaryRenderPipelines.HEAT_RIPPLE));
             RenderSystem.bindDefaultUniforms(pass); // Globals, for ScreenSize
             pass.setUniform("HeatPoints", heatUbo.currentBuffer());
             // Clamped + linear: the displaced UV lands between texels and can reach off-screen.
-            pass.bindTexture("InSampler", source.getColorTextureView(),
+            pass.setUniform("InSampler", source.getColorTextureView(),
                     RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR));
             pass.draw(3, 1, 0, 0); // core/screenquad builds the fullscreen triangle from gl_VertexID
         }

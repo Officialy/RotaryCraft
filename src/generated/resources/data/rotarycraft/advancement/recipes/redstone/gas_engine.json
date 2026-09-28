@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:gas_engine"
+        "recipes": "rotarycraft:gas_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

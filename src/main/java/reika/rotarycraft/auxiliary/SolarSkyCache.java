@@ -27,7 +27,7 @@ public class SolarSkyCache {
     }
 
     public boolean canSeeTheSky(Level world, BlockPos pos) {
-        BlockPos key = new BlockPos(pos);//.to2D();
+        BlockPos key = new BlockPos(pos.getX(), 0, pos.getZ());
         Integer cache = data.get(key);
         if (cache != null) {
             return pos.getY() >= cache.intValue();
@@ -38,22 +38,15 @@ public class SolarSkyCache {
     }
 
     private int calculateSkyAccess(Level world, BlockPos pos) {
-        int dy = 256;
-        while (dy > 0 && this.isTransparent(world, new BlockPos(pos.getX(), dy - 1, pos.getZ()))) {
+        int dy = world.getMaxY() + 1;
+        while (dy > world.getMinY() && this.isTransparent(world, new BlockPos(pos.getX(), dy - 1, pos.getZ()))) {
             dy--;
         }
         return dy;
     }
 
     private boolean isTransparent(Level world, BlockPos pos) {
-		/*
-		Block b = world.getBlock(pos);
-		if (b == Blocks.AIR || b.isAir(world, pos))
-			return true;
-		if (MachineRegistry.getMachine(world, pos) == MachineRegistry.MIRROR)
-			;//return false;
-		 */
-        return false;
+        return world.getBlockState(pos).isAir();
     }
 
 }

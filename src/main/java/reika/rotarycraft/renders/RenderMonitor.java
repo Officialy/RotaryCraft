@@ -53,8 +53,8 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
         BlockState state = tile.getBlockState();
         float yaw = state.getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.YP.rotationDegrees(-yaw - 90));
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(-yaw - 90));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
 
         VertexConsumer vc = bufferSource;
         monitorModel.renderAll(stack, vc, light, tile, null, -tile.phi);
@@ -116,11 +116,11 @@ public class RenderMonitor extends RotaryTERenderer<BlockEntityMonitor> {
 
             textStack.translate(0.5F, 0.7F, 0.5F);
             float yaw = (side == 0) ? facingYaw : (facingYaw + 180F);
-            textStack.mulPose(Axis.YP.rotationDegrees(yaw - 90F));
-//            poseStack.mulPose(Axis.YP.rotationDegrees(-facingYaw - 90F));
+            textStack.rotate(Axis.YP.rotationDegrees(yaw - 90F));
+//            poseStack.rotate(Axis.YP.rotationDegrees(-facingYaw - 90F));
 
             textStack.translate(0F, 0F, -0.51F);
-            textStack.mulPose(Axis.ZP.rotationDegrees(180F));
+            textStack.rotate(Axis.ZP.rotationDegrees(180F));
             textStack.scale(scale, scale, scale);
 
             int lineSpacing = font.lineHeight + 2;

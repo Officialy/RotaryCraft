@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:cvt"
+        "recipes": "rotarycraft:cvt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:diamond_bearing"
+        "recipes": "rotarycraft:diamond_bearing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

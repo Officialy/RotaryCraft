@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:smoke_detector"
+        "recipes": "rotarycraft:smoke_detector"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:pulse_jet_furnace"
+        "recipes": "rotarycraft:pulse_jet_furnace"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

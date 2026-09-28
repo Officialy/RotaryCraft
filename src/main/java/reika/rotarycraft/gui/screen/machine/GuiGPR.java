@@ -9,7 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine;
 
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.KeyEvent;
@@ -46,15 +46,15 @@ public class GuiGPR extends NonPoweredMachineScreen<BlockEntityGPR, BlankContain
         if (super.keyPressed(event))
             return true;
         switch (event.key()) {
-            case GLFW.GLFW_KEY_LEFT_BRACKET -> {
+            case InputConstants.KEY_LBRACKET -> {
                 this.sendShift(1);
                 return true;
             }
-            case GLFW.GLFW_KEY_RIGHT_BRACKET -> {
+            case InputConstants.KEY_RBRACKET -> {
                 this.sendShift(-1);
                 return true;
             }
-            case GLFW.GLFW_KEY_BACKSLASH -> {
+            case InputConstants.KEY_BACKSLASH -> {
                 this.sendShift(0);
                 return true;
             }

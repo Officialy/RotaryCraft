@@ -253,7 +253,7 @@ public class WindModel extends RotaryModelBase {
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape8.render(stack, tex, LM, OV, COL);
         shape8a.render(stack, tex, LM, OV, COL);

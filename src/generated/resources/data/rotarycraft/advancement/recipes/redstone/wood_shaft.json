@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:wood_shaft"
+        "recipes": "rotarycraft:wood_shaft"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

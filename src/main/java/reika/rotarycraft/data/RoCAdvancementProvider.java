@@ -8,7 +8,7 @@ import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.ImpossibleTrigger;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 /**
  * Generates {@code data/rotarycraft/advancement/<name>.json} for each {@link RotaryAdvancements}
@@ -38,11 +36,15 @@ import java.util.function.Consumer;
  */
 public class RoCAdvancementProvider extends AdvancementProvider {
 
-    public RoCAdvancementProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries, List.of(new Generator()));
+    public RoCAdvancementProvider() {
+        super(List.of(Generator::new));
     }
 
-    private static final class Generator implements AdvancementSubProvider {
+    private static final class Generator extends AdvancementSubProvider {
+
+        Generator(BootstrapContext<Advancement> output) {
+            super(output);
+        }
 
         private static final Set<RotaryAdvancements> CODE_TRIGGERED = EnumSet.of(
                 RotaryAdvancements.RECYCLE, RotaryAdvancements.JETENGINE, RotaryAdvancements.SUCKEDINTOJET,
@@ -55,7 +57,7 @@ public class RoCAdvancementProvider extends AdvancementProvider {
         private static final RotaryAdvancements ROOT = RotaryAdvancements.MAKESTEEL;
 
         @Override
-        public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> consumer) {
+        public void generate() {
             Map<RotaryAdvancements, AdvancementHolder> built = new EnumMap<>(RotaryAdvancements.class);
             List<RotaryAdvancements> remaining = new ArrayList<>(List.of(RotaryAdvancements.list));
 
@@ -86,20 +88,20 @@ public class RoCAdvancementProvider extends AdvancementProvider {
                     Advancement.Builder b = Advancement.Builder.advancement();
                     if (parent != null)
                         b.parent(parent);
-                    b.display(
-                            displayIcon,
-                            Component.translatable("advancements.rotarycraft." + key + ".title"),
-                            Component.translatable("advancements.rotarycraft." + key + ".description"),
-                            parent == null ? ROOT_BACKGROUND : null,
-                            a.isSpecial ? AdvancementType.CHALLENGE : AdvancementType.TASK,
-                            true, true, false);
+                    Component title = Component.translatable("advancements.rotarycraft." + key + ".title");
+                    Component description = Component.translatable("advancements.rotarycraft." + key + ".description");
+                    AdvancementType type = a.isSpecial ? AdvancementType.CHALLENGE : AdvancementType.TASK;
+                    if (parent == null)
+                        b.rootDisplay(displayIcon.asItem(), title, description, ROOT_BACKGROUND, type, true, true, false);
+                    else
+                        b.display(displayIcon.asItem(), title, description, type, true, true, false);
                     // Code-triggered (or empty-icon) advancements use the impossible criterion;
                     // the rest grant by obtaining the icon item.
                     Criterion<?> crit = (CODE_TRIGGERED.contains(a) || iconEmpty)
                             ? new Criterion<>(CriteriaTriggers.IMPOSSIBLE, new ImpossibleTrigger.TriggerInstance())
                             : InventoryChangeTrigger.TriggerInstance.hasItems(displayIcon);
                     b.addCriterion("trigger", crit);
-                    built.put(a, b.save(consumer, "rotarycraft:" + key));
+                    built.put(a, b.save(this.output, "rotarycraft:" + key));
                     it.remove();
                     progressed = true;
                 }

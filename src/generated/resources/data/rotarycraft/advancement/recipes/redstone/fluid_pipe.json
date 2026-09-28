@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:fluid_pipe"
+        "recipes": "rotarycraft:fluid_pipe"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

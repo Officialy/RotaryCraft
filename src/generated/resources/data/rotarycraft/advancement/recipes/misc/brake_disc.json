@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:brake_disc"
+        "recipes": "rotarycraft:brake_disc"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

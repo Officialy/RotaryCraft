@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:friction_heater"
+        "recipes": "rotarycraft:friction_heater"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

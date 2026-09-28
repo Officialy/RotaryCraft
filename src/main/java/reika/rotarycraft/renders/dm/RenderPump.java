@@ -53,8 +53,8 @@ public class RenderPump extends RotaryTERenderer<BlockEntityPump> {
             case EAST -> -90f;
             case UP, DOWN -> 0f;
         };
-        stack.mulPose(Axis.YP.rotationDegrees(yRot + 90));
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(yRot + 90));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
         VertexConsumer vertexconsumer = bufferSource;
         pumpModel.renderAll(stack, vertexconsumer, packedLight, tile, null, -tile.phi, 0);
         stack.popPose();

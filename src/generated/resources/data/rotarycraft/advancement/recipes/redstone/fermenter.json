@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:fermenter"
+        "recipes": "rotarycraft:fermenter"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

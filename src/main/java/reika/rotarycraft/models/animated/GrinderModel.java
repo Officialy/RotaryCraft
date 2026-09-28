@@ -616,7 +616,7 @@ public class GrinderModel extends RotaryModelBase {
         double yoff = 1.125;
 
         stack.translate(xoff, yoff, 0);
-        stack.mulPose(Axis.ZN.rotationDegrees(phi));
+        stack.rotate(Axis.ZN.rotationDegrees(phi));
         stack.translate(-xoff, -yoff, 0);
         shape2a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -645,12 +645,12 @@ public class GrinderModel extends RotaryModelBase {
         shape22.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape211.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(xoff, yoff, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(-xoff, -yoff, 0);
 
         xoff = 0.25;
         stack.translate(xoff, yoff, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(-xoff, -yoff, 0);
         shape2.zRot = 1.0908F;
         shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -680,11 +680,11 @@ public class GrinderModel extends RotaryModelBase {
         shape2_t.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape2_u.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(xoff, yoff, 0);
-        stack.mulPose(Axis.ZN.rotationDegrees(phi));
+        stack.rotate(Axis.ZN.rotationDegrees(phi));
         stack.translate(-xoff, -yoff, 0);
 
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZP.rotationDegrees(phi));
+        stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         shape23.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape21111.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -693,7 +693,7 @@ public class GrinderModel extends RotaryModelBase {
         shape2111111.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape21111111.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.ZN.rotationDegrees(phi));
+        stack.rotate(Axis.ZN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
     }
     @Override

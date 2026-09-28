@@ -239,7 +239,7 @@ public class Gearbox4Model extends GearboxBaseModel {
         stack.pushPose();
         stack.translate(0, 0.0625F, 0.006125F);
         stack.translate(0, 1.092F, -0.224F);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(-phi * 1.25F));
         stack.translate(0, -1.092F, 0.224F);
         this.render(stack, tex, light, shape20, shape21, shape26, shape27, shape14, shape15);
         stack.popPose();
@@ -247,21 +247,21 @@ public class Gearbox4Model extends GearboxBaseModel {
         stack.pushPose();
         stack.translate(0, 0.015125F, -0.006125F);
         stack.translate(0, 0.9025F, 0.25F);
-        stack.mulPose(Axis.XP.rotationDegrees(-phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(-phi * 1.25F));
         stack.translate(0, -0.9025F, -0.25F);
         this.render(stack, tex, light, shape22, shape23, shape16, shape17, shape18, shape19, shape30, shape31);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi * 1.25F));
+        stack.rotate(Axis.XP.rotationDegrees(phi * 1.25F));
         stack.translate(0, -1, 0);
         this.render(stack, tex, light, shape24, shape25, shape32, shape33);
         stack.popPose();
 
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.mulPose(Axis.XP.rotationDegrees(phi));
+        stack.rotate(Axis.XP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
         this.render(stack, tex, light, shape12, shape13, shape34, shape35);
         stack.popPose();

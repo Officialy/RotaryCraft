@@ -43,12 +43,12 @@ public class RenderMagnetic extends RotaryTERenderer<BlockEntityMagnetEngine> {
         BlockState blockstate = flag ? tile.getBlockState() : RotaryBlocks.MAGNETOSTATIC_ENGINE.get().defaultBlockState().setValue(BlockRotaryCraftMachine.FACING, Direction.SOUTH);
 
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
-        stack.mulPose(Axis.YP.rotationDegrees(180));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(180));
 
         if (tile.isInWorld()) {
             float f = blockstate.getValue(BlockRotaryCraftMachine.FACING).toYRot();
-            stack.mulPose(Axis.YP.rotationDegrees(f));
+            stack.rotate(Axis.YP.rotationDegrees(f));
         }
 
         VertexConsumer vertexconsumer = buffer;

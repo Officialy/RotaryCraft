@@ -34,8 +34,8 @@ public class RenderFriction extends RotaryTERenderer<BlockEntityFurnaceHeater> {
         stack.pushPose();
         float f = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.YP.rotationDegrees(f));
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(f));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
 
         VertexConsumer vertexconsumer = bufferSource;
         model.renderAll(stack, vertexconsumer, light, tile, null, -tile.phi, 0);

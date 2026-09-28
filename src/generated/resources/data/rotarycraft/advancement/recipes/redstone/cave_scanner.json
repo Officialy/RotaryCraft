@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:cave_scanner"
+        "recipes": "rotarycraft:cave_scanner"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

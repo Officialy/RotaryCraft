@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:radar_unit"
+        "recipes": "rotarycraft:radar_unit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

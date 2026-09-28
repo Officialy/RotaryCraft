@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:sonar_unit"
+        "recipes": "rotarycraft:sonar_unit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

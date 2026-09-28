@@ -43,10 +43,10 @@ public class GuiMachineRenderer extends PictureInPictureRenderer<GuiMachineRende
         if (model == null)
             return;
         Minecraft.getInstance().gameRenderer.lighting().setupFor(Lighting.Entry.ENTITY_IN_UI);
-        poseStack.mulPose(Axis.XP.rotationDegrees(state.pitch()));
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.yaw()));
+        poseStack.rotate(Axis.XP.rotationDegrees(state.pitch()));
+        poseStack.rotate(Axis.YP.rotationDegrees(state.yaw()));
         poseStack.translate(0.0F, 1.0F, 0.0F);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+        poseStack.rotate(Axis.ZP.rotationDegrees(180));
         // 26.2: obtain VertexConsumer from the collector's RenderType (no direct bufferSource access).
         // We still use the RenderType to select the pipeline; submitCustomGeometry gives us the VC.
         RenderType rt = RenderTypes.entitySolid(model.getTexture());

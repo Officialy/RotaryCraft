@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "rotarycraft:impeller"
+        "recipes": "rotarycraft:impeller"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

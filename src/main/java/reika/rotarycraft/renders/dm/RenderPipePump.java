@@ -35,8 +35,8 @@ public class RenderPipePump extends RotaryTERenderer<BlockEntityPipePump> {
         stack.pushPose();
         float yaw = tile.getBlockState().getValue(BlockRotaryCraftMachine.FACING).toYRot();
         stack.translate(0.5F, 1.5F, 0.5F);
-        stack.mulPose(Axis.ZP.rotationDegrees(180));
-        stack.mulPose(Axis.YP.rotationDegrees(yaw));
+        stack.rotate(Axis.ZP.rotationDegrees(180));
+        stack.rotate(Axis.YP.rotationDegrees(yaw));
         model.renderAll(stack, vc, light, tile, null, 0, 0);
         stack.popPose();
     }
