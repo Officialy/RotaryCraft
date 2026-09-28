@@ -40,6 +40,6 @@ public final class RoCDataProviders {
                 .add(Registries.ADVANCEMENT, new RoCAdvancementProvider()));
         // Empty arena structure template that the in-world game tests run on.
         event.createProvider(RoCTestStructureProvider::new);
-        // Tag providers will plug in here too as they're built.
+        event.createProvider(RoCBlockTagsProvider::new);
     }
 }
