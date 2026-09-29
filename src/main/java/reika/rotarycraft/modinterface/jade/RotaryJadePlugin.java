@@ -59,7 +59,7 @@ public class RotaryJadePlugin implements IWailaPlugin {
 
     @Override
     public void register(IWailaCommonRegistration registration) {
-        registration.registerBlockDataProvider(RotaryMachineJadeProvider.INSTANCE, BlockBasicMachine.class);
+        registration.registerBlockDataProvider(RotaryMachineJadeProvider.SERVER_DATA, BlockBasicMachine.class);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class RotaryJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(new EngineExtraTooltip(),  BlockBasicMachine.class);
         registration.registerBlockComponent(new ReservoirTooltip(),    BlockBasicMachine.class);
         registration.registerBlockComponent(new GearboxTooltip(),      BlockBasicMachine.class);
-        registration.registerBlockComponent(RotaryMachineJadeProvider.INSTANCE, BlockBasicMachine.class);
+        registration.registerBlockComponent(RotaryMachineJadeProvider.TOOLTIP, BlockBasicMachine.class);
     }
 
     // ------------------------------------------------------------------------------------

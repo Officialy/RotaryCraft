@@ -28,19 +28,44 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
 /** Server-backed status for RotaryCraft machines not covered by the specialized Jade panels. */
-public enum RotaryMachineJadeProvider implements IServerDataProvider<BlockAccessor>, IBlockComponentProvider {
-    INSTANCE;
+public final class RotaryMachineJadeProvider {
+    public static final IServerDataProvider<BlockAccessor> SERVER_DATA = ServerData.INSTANCE;
+    public static final IBlockComponentProvider TOOLTIP = Tooltip.INSTANCE;
 
     private static final Identifier UID = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "machine_state");
     private static final String PREFIX = "rotarycraft_machine_";
 
-    @Override
-    public Identifier getUid() {
-        return UID;
+    private RotaryMachineJadeProvider() {}
+
+    private enum ServerData implements IServerDataProvider<BlockAccessor> {
+        INSTANCE;
+
+        @Override
+        public Identifier getUid() {
+            return UID;
+        }
+
+        @Override
+        public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+            RotaryMachineJadeProvider.appendServerData(data, accessor);
+        }
     }
 
-    @Override
-    public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+    private enum Tooltip implements IBlockComponentProvider {
+        INSTANCE;
+
+        @Override
+        public Identifier getUid() {
+            return UID;
+        }
+
+        @Override
+        public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+            RotaryMachineJadeProvider.appendTooltip(tooltip, accessor, config);
+        }
+    }
+
+    private static void appendServerData(CompoundTag data, BlockAccessor accessor) {
         BlockEntity be = accessor.getBlockEntity();
         if (!(be instanceof RotaryCraftBlockEntity machine)
                 || be instanceof BlockEntityPiping || be instanceof BlockEntityEngine
@@ -102,8 +127,7 @@ public enum RotaryMachineJadeProvider implements IServerDataProvider<BlockAccess
         fluids.add(fluid);
     }
 
-    @Override
-    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+    private static void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         CompoundTag data = accessor.getServerData();
         if (!data.getBooleanOr(key("present"), false))
             return;
