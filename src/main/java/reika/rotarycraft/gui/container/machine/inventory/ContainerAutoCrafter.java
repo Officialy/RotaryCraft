@@ -37,7 +37,12 @@ public class ContainerAutoCrafter extends IOMachineContainer<BlockEntityAutoCraf
         for (int i = 0; i < BlockEntityAutoCrafter.SIZE; i++) {
             int dx = 8 + (i % 9) * 18;
             int dy = i < 9 ? 19 : 81;
-            this.addSlot(ii.slot(i, dx, dy));
+            this.addSlot(new net.neoforged.neoforge.transfer.item.ResourceHandlerSlot(ii, ii::set, i, dx, dy) {
+                @Override
+                public boolean mayPlace(net.minecraft.world.item.ItemStack stack) {
+                    return crafter.isItemValidForSlot(this.getSlotIndex(), stack); //V33a: programmed crafting patterns only
+                }
+            });
             if (te.getMode() != CraftingMode.SUSTAIN)
                 this.addSlot(new ResultSlotItemHandler(ii, i + BlockEntityAutoCrafter.SIZE, dx, dy + 27));
         }

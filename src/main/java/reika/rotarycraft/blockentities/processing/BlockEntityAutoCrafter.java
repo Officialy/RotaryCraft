@@ -109,7 +109,9 @@ public class BlockEntityAutoCrafter extends InventoriedPowerReceiver implements 
 
 	private final MEWorkTracker hasWork = ModList.APPENG.isLoaded() ? new MEWorkTracker() : null;
 
-	private final SlotFilteredItemHandler automationHandler = new SlotFilteredItemHandler(this.getItemHandlerDelegate(), i -> i < SIZE, i -> i >= SIZE);
+	/** V33a canExtractItem(i >= SIZE) and isItemValidForSlot (programmed crafting patterns only, into the pattern slots). */
+	private final SlotFilteredItemHandler automationHandler = new SlotFilteredItemHandler(this.getItemHandlerDelegate(),
+			(i, res) -> this.isItemValidForSlot(i, res.toStack()), i -> i >= SIZE);
 
 	private final ContainerData craftingData = new ContainerData() {
 		@Override

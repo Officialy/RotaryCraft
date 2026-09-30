@@ -173,6 +173,8 @@ final class RotaryProcessingTests {
             var auto = crafter.getAutomationItemHandler();
             try (Transaction tx = Transaction.openRoot()) {
                 helper.assertTrue(auto.extract(0, auto.getResource(0), 1, tx) == 0, "automation must not pull the pattern");
+                helper.assertTrue(auto.insert(1, net.neoforged.neoforge.transfer.item.ItemResource.of(Items.DIRT), 1, tx) == 0,
+                        "automation must not put a non-pattern into a pattern slot");
                 helper.assertTrue(auto.extract(reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.SIZE,
                         auto.getResource(reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.SIZE), 4, tx) == 4, "automation must pull the output");
             }
@@ -204,6 +206,32 @@ final class RotaryProcessingTests {
                 }
                 helper.succeed();
             });
+        });
+    }
+
+    /** The FILTERSETTING round trip: a client-edited setting, serialised and applied server-side, changes what matches. */
+    static void itemFilterSettingsRoundTrip(GameTestHelper helper) {
+        int z = 4;
+        RotaryPowerTests.coil(helper, 2, z, 128, 1 << 20);
+        RotaryPowerTests.place(helper, 3, z, RotaryBlocks.ITEMFILTER.get(), Direction.EAST);
+        var filter = helper.getBlockEntity(RotaryPowerTests.at(3, z), reika.rotarycraft.blockentities.BlockEntityItemFilter.class);
+        filter.itemHandler.setStackInSlot(0, new ItemStack(Items.IRON_INGOT));
+        helper.runAfterDelay(10, () -> {
+            helper.assertTrue(filter.isItemValidForSlot(1, new ItemStack(Items.IRON_INGOT)), "iron must match its own template");
+            var edited = reika.rotarycraft.blockentities.BlockEntityItemFilter.MatchData.createFromNBT(filter.getData().writeToNBT());
+            var itemId = edited.getMainDisplay().get(0);
+            itemId.increment(); //Item ID: Match -> Mismatch
+            var nbt = edited.writeToNBT();
+            nbt.putInt("posX", filter.getBlockPos().getX());
+            nbt.putInt("posY", filter.getBlockPos().getY());
+            nbt.putInt("posZ", filter.getBlockPos().getZ());
+            helper.assertTrue(reika.rotarycraft.registry.PacketRegistry.FILTERSETTING.getCoordinate(nbt).equals(filter.getBlockPos()),
+                    "the packet must address the filter it was sent for");
+            filter.setDataFromClient(nbt);
+            helper.assertTrue(filter.getData().getMainDisplay().get(0).getSetting() == reika.rotarycraft.blockentities.BlockEntityItemFilter.MatchType.MISMATCH,
+                    "the edited setting must survive the round trip");
+            helper.assertTrue(!filter.isItemValidForSlot(1, new ItemStack(Items.IRON_INGOT)), "with Item ID set to Mismatch, iron must no longer match");
+            helper.succeed();
         });
     }
 
