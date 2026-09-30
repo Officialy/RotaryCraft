@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "minefactoryreloaded:biofuel",
+      "required": false
+    },
+    {
+      "id": "industrialforegoing:biofuel",
+      "required": false
+    }
+  ]
+}

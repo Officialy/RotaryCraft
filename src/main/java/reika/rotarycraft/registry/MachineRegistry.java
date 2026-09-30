@@ -255,7 +255,8 @@ public enum MachineRegistry implements TileEnum {
     EXTRACTOR(true, "machine.extractor", RotaryBlocks.EXTRACTOR.get(), BlockEntityExtractor.class),
     DYNAMO("machine.dynamo", RotaryBlocks.ROTATIONAL_DYNAMO.get(), TileEntityDynamo.class, PowerTypes.RF),
     // Append new machines so saved/packet machine indices retain their existing values.
-    PURIFIER(true, "machine.purifier", RotaryBlocks.PURIFIER.get(), BlockEntityPurifier.class);
+    PURIFIER(true, "machine.purifier", RotaryBlocks.PURIFIER.get(), BlockEntityPurifier.class),
+    DISTILLER("machine.distiller", RotaryBlocks.DISTILLER.get(), reika.rotarycraft.blockentities.processing.BlockEntityDistillery.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();

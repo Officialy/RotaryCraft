@@ -5,6 +5,7 @@ import net.minecraft.core.registries.MultiRegistryBootstrap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.*;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.nbt.CompoundTag;
@@ -132,6 +133,7 @@ public final class RoCRecipeProvider {
             lavaMaker();
             compactor();
             purifier();
+            distiller();
             crystallizer();
             wetterAndDrying();
             frictionHeater();
@@ -240,6 +242,25 @@ public final class RoCRecipeProvider {
 
         // Compactor chain: legacy RecipesCompactor. Counts baked at the legacy MEDIUM difficulty
         // (DifficultyEffects.COMPACTOR = 2 per step; charcoal pays 3/2). REQ = 550 MPa / 800 C.
+        private void distiller() {
+            distillery("oil", RoCFluidTagsProvider.OIL, 1, RotaryFluids.LUBRICANT.get(), 6, 2048, 8192);
+            distillery("bioethanol", RoCFluidTagsProvider.BIOETHANOL, 1, RotaryFluids.ETHANOL.get(), 1, 512, 131072);
+            distillery("biofuel", RoCFluidTagsProvider.BIOFUEL, 2, RotaryFluids.ETHANOL.get(), 1, 512, 131072);
+            // V33a RotaryRecipes: panels, glass panes, mixer and iron.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.DISTILLER.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get()).define('G', Blocks.GLASS_PANE)
+                    .define('M', RotaryItems.MIXER.get()).define('g', Items.IRON_INGOT)
+                    .pattern("PGP").pattern("gMg").pattern("PGP")
+                    .unlockedBy("has_mixer", has(RotaryItems.MIXER.get())).save(out);
+        }
+
+        private void distillery(String name, net.minecraft.tags.TagKey<net.minecraft.world.level.material.Fluid> input,
+                int required, net.minecraft.world.level.material.Fluid output, int produced, int torque, long power) {
+            out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft", "distiller/" + name)),
+                    new reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe(input, required,
+                            BuiltInRegistries.FLUID.wrapAsHolder(output), produced, torque, power), null);
+        }
+
         private void purifier() {
             out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft", "purifier/steel")),
                     new PurifierRecipe(Ingredient.of(items.getOrThrow(RoCItemTagsProvider.STEEL_INGOTS)),

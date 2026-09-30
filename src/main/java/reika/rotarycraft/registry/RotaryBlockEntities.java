@@ -177,6 +177,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityDropProcessor::new, RotaryBlocks.DROPS.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySprinkler>> SPRINKLER = BLOCK_ENTITIES.register("sprinkler", () ->
             new BlockEntityType<>(BlockEntitySprinkler::new, RotaryBlocks.SPRINKLER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityDistillery>> DISTILLER = BLOCK_ENTITIES.register("distiller", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityDistillery::new, RotaryBlocks.DISTILLER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityPurifier>> PURIFIER = BLOCK_ENTITIES.register("purifier", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityPurifier::new, RotaryBlocks.PURIFIER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityCompactor>> COMPACTOR = BLOCK_ENTITIES.register("compactor", () ->

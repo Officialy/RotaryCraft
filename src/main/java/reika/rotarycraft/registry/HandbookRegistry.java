@@ -139,7 +139,7 @@ public enum HandbookRegistry implements HandbookEntry {
     PURIFIER(MachineRegistry.PURIFIER),
 //    ENHANCER(MachineRegistry.FUELENHANCER),
 //    MAGNET(MachineRegistry.MAGNETIZER),
-//    DISTILER(MachineRegistry.DISTILLER),
+    DISTILER(MachineRegistry.DISTILLER),
     FURNACE(MachineRegistry.BIGFURNACE),
     //    CRYSTAL(MachineRegistry.CRYSTALLIZER),
     COMPOST(MachineRegistry.COMPOSTER),

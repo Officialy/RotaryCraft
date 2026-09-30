@@ -65,9 +65,9 @@ this suite does not establish end-to-end survival readiness.
 
 ## Remaining machines
 
-The owner's starting report listed 25 missing V33a machines. Purifier is restored in this slice,
-leaving 24 from that report: Bait Box, Bundled Bus, CCTV, Chunk Loader, Compressor, Crafter,
-Defoliator, Display, Distiller, Electric Motor, Flame Turret, Fuel Engine, Fuel Enhancer,
+The owner's starting report listed 25 missing V33a machines. Purifier and Distiller are restored,
+leaving 23 from that report: Bait Box, Bundled Bus, CCTV, Chunk Loader, Compressor, Crafter,
+Defoliator, Display, Electric Motor, Flame Turret, Fuel Engine, Fuel Enhancer,
 Generator, Item Filter, Mob Radar, Pile Driver, Pneumatic Engine, Portal Shaft, Projector,
 Screen, Sonic Weapon, Spy Cam and Terraformer. Audit their pristine source and dependencies
 before selecting the next complete port. Do not stub integrations to enable a compile.
@@ -112,3 +112,31 @@ The solar tests require actual mirror-field generation; creative coils power the
 exchangers. Shared DragonAPI air-exposure checks now treat modelled iron piping according to
 its motion tags and collision shape. All 215 RotaryCraft GameTests and 11 JUnit checks still
 pass, as do the six release builds. See ReactorCraft/PORTING.md for the full coverage boundary.
+
+
+## Distiller and ReactorCraft survival content (2026-09-30)
+
+- Fully ported the Distiller with bottom shaft power, 6000 mB input/output tanks, one complete
+  conversion per six ticks, persisted cadence, sided transactional fluid capabilities, pipe/hose/fuel-line
+  integration, the original two-basin model and fluid volumes, special item renderer, handbook and JEI.
+- Original V33a conversions are reloadable datapack recipes: oil -> lubricant (1:6, 2048 Nm/8192 W),
+  bioethanol -> ethanol (1:1, 512 Nm/131072 W), biofuel -> ethanol (2:1, 512 Nm/131072 W).
+  Input common fluid tags preserve optional mod integration; those foreign fluids are not supplied
+  by the six-mod stack itself. Test-only tag additions stand in for the foreign fluids and never enter
+  release jars. Recipe synchronization and live handbook/JEI views follow the loaded world data.
+- Twelve new Distiller GameTests verify ratios, bottom-only power, torque/power gates, full or
+  incompatible output, capacity limits, insertion/extraction rollback and commit, save/reload,
+  actual hose transfer, survival harvest and recipe network round trips. Real creative coils power them.
+- ReactorCraft now includes all eight decorative fluorite colours with original art, nine-gem
+  compaction/uncrafting, wooden-pickaxe harvest, colour-preserving drops, neutron excitation/light
+  and random-tick decay. The CPU remote is registered, craftable, coil-chargeable and persistent;
+  its menu works independently of client chunk/dimension tracking and validates rod controls against
+  the bound CPU. Temperature links persist dimensions and accept older coordinate-only saves.
+- Verification on the current shared tree: 228/228 RotaryCraft and 49/49 ReactorCraft GameTests.
+  ReactorCraft includes every previously tested reactor type and its sodium solar tower integration.
+  Distiller visuals and the new remote screen still require a real-client visual check.
+
+Release checks for this slice: RotaryCraft and ReactorCraft jars build, with 11 and 5 passing JUnit
+checks. Jar inspection confirms new content and excludes the test-only fluid tag substitutions.
+The shared six-mod build currently stops at the other agent's in-progress ChromatiCraft
+ChromaBlocks reference to PushReaction.BLOCK; a fresh six-mod release set is therefore not yet verified.

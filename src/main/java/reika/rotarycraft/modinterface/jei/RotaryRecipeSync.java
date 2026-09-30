@@ -38,6 +38,7 @@ public final class RotaryRecipeSync {
                 RotaryRecipeTypes.LAVA_MAKER.get(),
                 RotaryRecipeTypes.COMPACTOR.get(),
                 RotaryRecipeTypes.PURIFIER.get(),
+                RotaryRecipeTypes.DISTILLER.get(),
                 RotaryRecipeTypes.WETTER.get(),
                 RotaryRecipeTypes.DRYING_BED.get(),
                 RotaryRecipeTypes.CRYSTALLIZER.get());

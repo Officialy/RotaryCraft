@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:distiller",
+  "input": "c:oil",
+  "input_amount": 1,
+  "min_power": 8192,
+  "min_torque": 2048,
+  "output": "rotarycraft:lubricant_still",
+  "output_amount": 6
+}

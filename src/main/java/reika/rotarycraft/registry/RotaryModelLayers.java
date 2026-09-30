@@ -78,6 +78,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation BELT = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "belt_hub"), "main");
     public static final ModelLayerLocation LAWNSPRINKLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "lawn_sprinkler"), "main");
     public static final ModelLayerLocation FERTILIZER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "fertilizer"), "main");
+    public static final ModelLayerLocation DISTILLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "distiller"), "main");
     public static final ModelLayerLocation CRYSTALLIZER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "crystallizer"), "main");
     public static final ModelLayerLocation AUTOBREEDER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "auto_breeder"), "main");
     public static final ModelLayerLocation SPAWNER_CONTROLLER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "spawner_controller"), "main");
@@ -190,6 +191,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.BELT.get(), reika.rotarycraft.renders.dm.RenderBelt::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.LAWNSPRINKLER.get(), reika.rotarycraft.renders.m.RenderLawnSprinkler::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.FERTILIZER.get(), reika.rotarycraft.renders.mi.RenderFertilizer::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.DISTILLER.get(), reika.rotarycraft.renders.m.RenderDistillery::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.CRYSTALLIZER.get(), reika.rotarycraft.renders.mi.RenderCrystallizer::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.AUTOBREEDER.get(), reika.rotarycraft.renders.mi.RenderBreeder::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.CHAIN.get(), reika.rotarycraft.renders.dm.RenderBelt::new);
@@ -288,6 +290,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(BELT, BeltModel::createLayer);
         event.registerLayerDefinition(LAWNSPRINKLER, LawnSprinklerModel::createLayer);
         event.registerLayerDefinition(FERTILIZER, FertilizerModel::createLayer);
+        event.registerLayerDefinition(DISTILLER, reika.rotarycraft.models.animated.DistilleryModel::createLayer);
         event.registerLayerDefinition(CRYSTALLIZER, CrystallizerModel::createLayer);
         event.registerLayerDefinition(AUTOBREEDER, BreederModel::createLayer);
         event.registerLayerDefinition(SPAWNER_CONTROLLER, SpawnerModel::createLayer);

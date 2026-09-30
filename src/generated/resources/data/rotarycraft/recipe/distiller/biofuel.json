@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:distiller",
+  "input": "c:biofuel",
+  "input_amount": 2,
+  "min_power": 131072,
+  "min_torque": 512,
+  "output": "rotarycraft:ethanol_still",
+  "output_amount": 1
+}

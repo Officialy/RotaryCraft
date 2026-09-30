@@ -142,6 +142,9 @@ public class RoCModelProvider extends ModelProvider {
             if (isPipeShell) {
                 blockModelId = Identifier.fromNamespaceAndPath(RotaryCraft.MODID,
                         "block/pipe/" + BuiltInRegistries.BLOCK.getKey(block).getPath() + "/core");
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockDistillery) {
+                blockModelId = ModelTemplates.CUBE_ALL.create(block,
+                        TextureMapping.cube(new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"))), modelOut);
             } else if (block instanceof BlockBorer) {
                 // Directional drilling machine: drill face out the front, steel sides.
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(

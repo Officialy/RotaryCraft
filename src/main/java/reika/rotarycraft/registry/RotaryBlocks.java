@@ -204,6 +204,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> WOODCUTTER = registerMachineBlock("woodcutter", () -> new BlockWoodcutter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DROPS = registerMachineBlock("drop_processor", () -> new BlockDropProcessor(blockProperties().strength(5)));
     public static final DeferredBlock<Block> SPRINKLER = registerMachineBlock("sprinkler", () -> new BlockSprinkler(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> DISTILLER = registerMachineBlock("distiller", () -> new reika.rotarycraft.base.blocks.entity.BlockDistillery(blockProperties().strength(5)));
     public static final DeferredBlock<Block> PURIFIER = registerMachineBlock("purifier", () -> new BlockPurifier(blockProperties().strength(5)));
     public static final DeferredBlock<Block> COMPACTOR = registerMachineBlock("compactor", () -> new BlockCompactor(blockProperties().strength(5)));
     public static final DeferredBlock<Block> WETTER = registerMachineBlock("wetter", () -> new BlockWetter(blockProperties().strength(5)));

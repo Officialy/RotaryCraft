@@ -215,6 +215,19 @@ public final class RotaryGameTests {
         register(event, env, "processing_centrifuge_separates_items", 60, RotaryProcessingTests::centrifugeSeparatesItems);
         register(event, env, "processing_centrifuge_fluid_transactions", 60, RotaryProcessingTests::centrifugeFluidTransactions);
 
+        register(event, env, "distiller_oil_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 0));
+        register(event, env, "distiller_bioethanol_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 1));
+        register(event, env, "distiller_biofuel_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 2));
+        register(event, env, "distiller_power_and_torque_gates", 80, RotaryDistilleryTests::gates);
+        register(event, env, "distiller_requires_bottom_power", 40, RotaryDistilleryTests::noBottomPower);
+        register(event, env, "distiller_output_backpressure", 80, h -> RotaryDistilleryTests.backpressure(h, false));
+        register(event, env, "distiller_incompatible_output", 80, h -> RotaryDistilleryTests.backpressure(h, true));
+        register(event, env, "distiller_fluid_transactions", 40, RotaryDistilleryTests::transactions);
+        register(event, env, "distiller_save_reload", 40, RotaryDistilleryTests::saveReload);
+        register(event, env, "distiller_hose_to_reservoir", 60, RotaryDistilleryTests::pipes);
+        register(event, env, "distiller_survival_break", 40, RotaryDistilleryTests::survivalBreak);
+        register(event, env, "distiller_recipe_network_roundtrip", 40, RotaryDistilleryTests::recipeRoundTrip);
+
         register(event, env, "purifier_batch", 60, RotaryPurifierTests::batch);
         register(event, env, "purifier_partial_batch", 60, RotaryPurifierTests::partialBatch);
         register(event, env, "purifier_output_backpressure", 60, RotaryPurifierTests::blockedOutput);

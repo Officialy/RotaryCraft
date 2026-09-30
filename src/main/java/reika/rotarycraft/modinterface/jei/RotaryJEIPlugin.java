@@ -79,6 +79,7 @@ public class RotaryJEIPlugin implements IModPlugin {
                 new LavaMaker(gui),
                 new Compactor(gui),
                 new Purifier(gui),
+                new Distiller(gui),
                 new Wetter(gui),
                 new DryingBed(gui),
                 new Crystallizer(gui),
@@ -103,6 +104,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         registration.addRecipeCatalyst(MachineRegistry.LAVAMAKER.getCraftedProduct(), LavaMaker.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.COMPACTOR.getCraftedProduct(), Compactor.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.PURIFIER.getCraftedProduct(), Purifier.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.DISTILLER.getCraftedProduct(), Distiller.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.WETTER.getCraftedProduct(), Wetter.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.DRYING.getCraftedProduct(), DryingBed.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.CRYSTALLIZER.getCraftedProduct(), Crystallizer.TYPE);
@@ -214,6 +216,8 @@ public class RotaryJEIPlugin implements IModPlugin {
                 .map(RecipeHolder::value).toList());
         tracked.accept(Purifier.TYPE, recipes.byType(RotaryRecipeTypes.PURIFIER.get()).stream()
                 .map(RecipeHolder::value).toList());
+        tracked.accept(Distiller.TYPE, recipes.byType(RotaryRecipeTypes.DISTILLER.get()).stream().map(RecipeHolder::value)
+                .filter(recipe -> net.minecraft.core.registries.BuiltInRegistries.FLUID.listElements().anyMatch(fluid -> fluid.is(recipe.input()))).toList());
         tracked.accept(Compactor.TYPE, recipes
                 .byType(RotaryRecipeTypes.COMPACTOR.get()).stream()
                 .map(RecipeHolder::value).toList());
@@ -580,4 +584,22 @@ public class RotaryJEIPlugin implements IModPlugin {
                            Component.literal("Yield scales with pressure and difficulty")));
         }
     }
+    public static final class Distiller implements IRecipeCategory<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe> {
+        public static final RecipeType<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe> TYPE = RecipeType.create(RotaryCraft.MODID, "distiller", reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe.class);
+        private final IDrawable icon;
+        public Distiller(IGuiHelper gui) { icon = gui.createDrawableItemStack(MachineRegistry.DISTILLER.getCraftedProduct()); }
+        @Override public RecipeType<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe> getRecipeType() { return TYPE; }
+        @Override public Component getTitle() { return Component.translatable("machine.distiller"); }
+        @Override public int getWidth() { return 140; }
+        @Override public int getHeight() { return 36; }
+        @Override public IDrawable getIcon() { return icon; }
+        @Override public void setRecipe(IRecipeLayoutBuilder builder, reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe recipe, IFocusGroup focuses) {
+            var input = builder.addSlot(RecipeIngredientRole.INPUT, 1, 9);
+            net.minecraft.core.registries.BuiltInRegistries.FLUID.listElements().filter(fluid -> fluid.is(recipe.input())).forEach(fluid ->
+                    input.addFluidStack(fluid.value(), recipe.inputAmount()));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 118, 9).addFluidStack(recipe.output().value(), recipe.outputAmount())
+                    .addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.literal(recipe.minTorque() + " Nm, " + recipe.minPower() + " W; one conversion per 6 ticks")));
+        }
+    }
+
 }

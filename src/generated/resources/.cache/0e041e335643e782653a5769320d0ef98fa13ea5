@@ -1,4 +1,4 @@
-// 26.3	2026-09-30T13:59:13.9890778	Registries for reloadable
+// 26.3	2026-09-30T18:20:04.9183478	Registries for reloadable
 a916220f301948258d017ef5e577c96901779486 data/rotarycraft/advancement/bedrockbreaker.json
 e9c5dad0ea096423b3acc234f5de7d50f1cda702 data/rotarycraft/advancement/bedrockshaft.json
 6399c44c6527cedc827f8d4c453fe3844c36c5d7 data/rotarycraft/advancement/dumbextractor.json
@@ -136,6 +136,7 @@ c3c1a8b7b4033bf2f18c45bd24b88193d4814f7d data/rotarycraft/advancement/recipes/re
 e27631c410996f963ab70b6c736741dd6c5aef05 data/rotarycraft/advancement/recipes/redstone/diamond_gear_8x.json
 12a1fea3a94d0e617f6b7f9b4c0ce9830f40250d data/rotarycraft/advancement/recipes/redstone/diamond_shaft.json
 abfb039f1875a3652c8614d3baef9e9dac224edf data/rotarycraft/advancement/recipes/redstone/diffuser.json
+2964ba1a102a9340807be9c53b445f743771e31c data/rotarycraft/advancement/recipes/redstone/distiller.json
 493538d5cf30cdc0ae0a4ca25fac665d1f04807c data/rotarycraft/advancement/recipes/redstone/distribution_clutch.json
 c6bbfdc3dd95d1025195b79a15ce764b091a20f1 data/rotarycraft/advancement/recipes/redstone/drop_processor.json
 65dab05ab8d826132a78af121318cefbda8f3344 data/rotarycraft/advancement/recipes/redstone/drying_bed.json
@@ -355,6 +356,7 @@ e8b1de6887581aeaf79d2153a716add58a0032d3 data/rotarycraft/loot_table/blocks/deco
 4e276b86ad2fcd16b5ddfe0a7f3fec7fe271da8f data/rotarycraft/loot_table/blocks/diamond_gearbox_4x.json
 7fe49dbe2d2c207dba214d5d8f528eb2b220f0df data/rotarycraft/loot_table/blocks/diamond_gearbox_8x.json
 ccbc438be808f51b3ed905525c32e6380044f044 data/rotarycraft/loot_table/blocks/diamond_shaft.json
+c244a7630fc1a320a194af145c113f920fa78805 data/rotarycraft/loot_table/blocks/distiller.json
 ba6af88ece4c424ac1f8d4bcbbd6ccc6b29eb23c data/rotarycraft/loot_table/blocks/distribution_clutch.json
 e48cb4726562c973080be8b925b8c4803107acbc data/rotarycraft/loot_table/blocks/drop_processor.json
 9677228e1414d5b3f812c260e35fd02e6adf87a8 data/rotarycraft/loot_table/blocks/drying_bed.json
@@ -581,6 +583,10 @@ e46ebd594a9944a092dbd49788819dbe6ef09ee2 data/rotarycraft/recipe/diamond_rod.jso
 f1f1e556dc03d819084d55c80bd14c6d8bfe47cc data/rotarycraft/recipe/diamond_shaft.json
 f65b13d7f2bce1722f7c5d2c4062c958a87ad26c data/rotarycraft/recipe/diamond_shaft_core.json
 cd5477da60c4524eb88857f857d4f577df432bae data/rotarycraft/recipe/diffuser.json
+61eb53ea708b10af8a5c11ffea85b636bba5c77b data/rotarycraft/recipe/distiller.json
+7029706049ef7843b6df140e9d476d0bf774c88b data/rotarycraft/recipe/distiller/bioethanol.json
+60772b3a27bc9ac5a4bbbe7cd4bfd987ac590278 data/rotarycraft/recipe/distiller/biofuel.json
+d136024e1ab9e0ecae4e8f8d502fa15214d8b55c data/rotarycraft/recipe/distiller/oil.json
 ab4e9afa8a41aa45660adaafce5562ac79b9bad1 data/rotarycraft/recipe/distribution_clutch.json
 ac8f90b8a213bc0727d070cb8a0196dd22b91a2b data/rotarycraft/recipe/drillhead_iron.json
 6650a9572c31d24f063c99dd3f23a56e29833480 data/rotarycraft/recipe/drop_processor.json

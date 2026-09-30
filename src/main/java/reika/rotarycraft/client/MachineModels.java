@@ -111,6 +111,7 @@ public final class MachineModels {
         MODELS.put(MachineRegistry.BIGFURNACE, (modelSet) -> new BigFurnaceModel(modelSet.bakeLayer(RotaryModelLayers.BIG_FURNACE)));
         MODELS.put(MachineRegistry.MAGNETIC, (modelSet) -> new MagneticModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIC)));
         MODELS.put(MachineRegistry.DYNAMO, (modelSet) -> new DynamoModel(modelSet.bakeLayer(RotaryModelLayers.DYNAMO)));
+        MODELS.put(MachineRegistry.DISTILLER, modelSet -> new reika.rotarycraft.models.animated.DistilleryModel(modelSet.bakeLayer(RotaryModelLayers.DISTILLER)));
         MODELS.put(MachineRegistry.CRYSTALLIZER, (modelSet) -> new CrystallizerModel(modelSet.bakeLayer(RotaryModelLayers.CRYSTALLIZER)));
         MODELS.put(MachineRegistry.LAWNSPRINKLER, (modelSet) -> new LawnSprinklerModel(modelSet.bakeLayer(RotaryModelLayers.LAWNSPRINKLER)));
         MODELS.put(MachineRegistry.GRINDSTONE, (modelSet) -> new GrindstoneModel(modelSet.bakeLayer(RotaryModelLayers.GRINDSTONE)));

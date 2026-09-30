@@ -35,6 +35,7 @@ public class RotaryRecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<CentrifugeRecipe>> CENTRIFUGE = RECIPE_TYPES.register("centrifuge", () -> new RecipeType<CentrifugeRecipe>() {});
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<LavaMakerRecipe>> LAVA_MAKER = RECIPE_TYPES.register("lava_maker", () -> new RecipeType<LavaMakerRecipe>() {});
+    public static final DeferredHolder<RecipeType<?>, RecipeType<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe>> DISTILLER = RECIPE_TYPES.register("distiller", () -> new RecipeType<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<PurifierRecipe>> PURIFIER = RECIPE_TYPES.register("purifier", () -> new RecipeType<PurifierRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<CompactorRecipe>> COMPACTOR = RECIPE_TYPES.register("compactor", () -> new RecipeType<CompactorRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<WetterRecipe>> WETTER = RECIPE_TYPES.register("wetter", () -> new RecipeType<WetterRecipe>() {});

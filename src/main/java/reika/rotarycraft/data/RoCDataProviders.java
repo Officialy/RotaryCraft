@@ -42,5 +42,6 @@ public final class RoCDataProviders {
         event.createProvider(RoCTestStructureProvider::new);
         event.createProvider(RoCBlockTagsProvider::new);
         event.createProvider(RoCItemTagsProvider::new);
+        event.createProvider(RoCFluidTagsProvider::new);
     }
 }

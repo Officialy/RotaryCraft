@@ -385,6 +385,9 @@ public final class RotaryDescriptions {
     }
 
     public static String getNotes(HandbookRegistry h, int subpage) {
+        if (h == HandbookRegistry.DISTILER && subpage == 1 && FMLEnvironment.getDist() == Dist.CLIENT)
+            return safeFormat(h, machines.getValueAtNode("machines:distiller" + NOTE_SUFFIX),
+                    reika.rotarycraft.blockentities.processing.BlockEntityDistillery.getValidConversions(net.minecraft.client.Minecraft.getInstance().level));
         subpage--;
         if (!notes.containsKeyV(h, subpage))
             return "";
@@ -546,7 +549,7 @@ public final class RotaryDescriptions {
 //        addNotes(MachineRegistry.SORTING, PowerReceivers.SORTING.getMinPower());
 //        addNotes(MachineRegistry.DEFOLIATOR, PowerReceivers.DEFOLIATOR.getMinPower());
         addNotes(MachineRegistry.BIGFURNACE, PowerReceivers.BIGFURNACE.getMinPower());
-//        addNotes(MachineRegistry.DISTILLER, BlockEntityDistillery.getValidConversions());
+        addNotes(MachineRegistry.DISTILLER, "Conversions require compatible oil, bioethanol or biofuel fluids; see JEI for loaded recipes.");
 //        addNotes(MachineRegistry.CRYSTALLIZER, PowerReceivers.CRYSTALLIZER.getMinPower(), PowerReceivers.CRYSTALLIZER.getMinSpeed());
         addNotes(MachineRegistry.GRINDSTONE, PowerReceivers.GRINDSTONE.getMinPower(), PowerReceivers.GRINDSTONE.getMinTorque());
         addNotes(MachineRegistry.BLOWER, PowerReceivers.BLOWER.getMinPower(), PowerReceivers.BLOWER.getMinSpeed());
