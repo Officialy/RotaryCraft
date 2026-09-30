@@ -1,5 +1,6 @@
 package reika.rotarycraft.blockentities.transmission;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -224,12 +225,9 @@ public class BlockEntityDistributionClutch extends BlockEntityTransmissionMachin
                     omegain = devicein.omega;
                 }
             }
-        } /*else if (te instanceof WorldRift) {
-            WorldRift sr = (WorldRift) te;
-            WorldLocation loc = sr.getLinkTarget();
-            if (loc != null)
-                this.intakePower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);
-        }*/ else {
+        } else if (te instanceof WorldRift sr) {
+            WorldRift.forward(sr, loc -> this.intakePower(loc.getWorld(), loc.pos));
+        } else {
             omega = torque = 0;
         }
 		/*

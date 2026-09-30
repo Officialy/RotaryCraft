@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.transmission;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import com.google.common.collect.HashBiMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -297,6 +298,9 @@ public class BlockEntityBevelGear extends BlockEntity1DTransmitter implements Gu
                     omegain = devicein.omega;
                 }
             }
+        } else if (te instanceof WorldRift sr) {
+            // V33a: read on through a World Rift (restored; the port had dropped this branch).
+            WorldRift.forward(sr, loc -> this.transferPower(loc.getWorld(), loc.pos));
         } else {
 //            RotaryCraft.LOGGER.warn("Bevel @ " + pos + ": " + readPos + " is NOT a provider. Resetting power.");
             omega = 0;

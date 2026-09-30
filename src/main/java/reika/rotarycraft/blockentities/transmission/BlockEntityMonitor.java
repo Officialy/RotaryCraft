@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.transmission;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -107,15 +108,12 @@ public class BlockEntityMonitor extends BlockEntity1DTransmitter {
             }
             omega = omegain;
             torque = torquein;
-        }/* else if (te instanceof WorldRift) {
-            WorldRift sr = (WorldRift) te;
-            WorldLocation loc = sr.getLinkTarget();
-            if (loc != null)
-                this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);
+        } else if (te instanceof WorldRift sr) {
+            WorldRift.forward(sr, loc -> this.transferPower(loc.getWorld(), loc.pos));
         } else {
             omega = torque = 0;
         }
-
+        /*
         if (this.isProvider(te)) {
             this.processTileSimply(te, m, xCoord, yCoord, zCoord);
         } else if (te instanceof SpaceRift) {

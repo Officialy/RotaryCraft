@@ -10,6 +10,8 @@
 package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
+import reika.dragonapi.instantiable.data.immutable.WorldLocation;
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -357,6 +359,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         if (id == Blocks.AIR)
             return false;
         BlockEntity te = getAdjacentBlockEntity(side);
+        if (te instanceof WorldRift) return true;
         if (te instanceof BlockEntityPiping) return true;
         if (te instanceof PipeConnector) return true;
         return this.interactsWithMachines() && this.isInteractableTile(te, side);
@@ -398,6 +401,23 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
             Direction dir = DIRS[i];
             if (interaction[i]) {
                 BlockEntity te = world.getBlockEntity(scratchPos.setWithOffset(pos, dir));
+                Level w = world;
+                BlockPos at = scratchPos;
+
+                // V33a: a World Rift hands the far side's tile over. V33a reassigned the method's world for the
+                // remaining faces too; the target's level is kept to this face here.
+                if (te instanceof WorldRift rift) {
+                    if (world.isClientSide())
+                        continue;
+                    WorldLocation loc = rift.getLinkTarget();
+                    if (loc != null) {
+                        te = rift.getTileEntityFrom(dir);
+                        if (te == null)
+                            continue;
+                        at = te.getBlockPos();
+                        w = te.getLevel();
+                    }
+                }
 
                 if (te instanceof BlockEntityPiping tp) {
                     if (this.hasReciprocalConnectivity(tp, dir) && this.canEmitToPipeOn(dir) && tp.canReceiveFromPipeOn(dir.getOpposite())) {
@@ -420,8 +440,8 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                     if (flow.canIntake) {
                         int toadd = this.getPipeOutput(this.getFluidLevel());
                         if (toadd > 0) {
-                            ResourceHandler<FluidResource> target = world.getCapability(
-                                    Capabilities.Fluid.BLOCK, scratchPos, dir.getOpposite());
+                            ResourceHandler<FluidResource> target = w.getCapability(
+                                    Capabilities.Fluid.BLOCK, at, dir.getOpposite());
                             int added = target == null ? 0 : ResourceHandlerUtil.move(fluidHandler,
                                     target, resource -> resource.getFluid() == f, toadd, null);
                             if (added > 0) {
@@ -436,8 +456,8 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
                         PipeDebugLog.event("pipe.dump.PipeConnector.flowCannotIntake");
                     }
                 } else if (this.canOutputToIFluidHandler(dir)) {
-                    ResourceHandler<FluidResource> target = world.getCapability(Capabilities.Fluid.BLOCK,
-                            scratchPos, dir.getOpposite());
+                    ResourceHandler<FluidResource> target = w.getCapability(Capabilities.Fluid.BLOCK,
+                            at, dir.getOpposite());
                     if (target == null) continue;
                     int toadd = this.getPipeOutput(this.getFluidLevel());
                     if (toadd > 0) {
@@ -464,20 +484,17 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
             if (interaction[i]) {
                 BlockEntity te = world.getBlockEntity(scratchPos.setWithOffset(pos, dir));
 
-//                if (te instanceof WorldRift) {
-//                    if (world.isClientSide())
-//                        continue;
-//                    WorldLocation loc = ((WorldRift) te).getLinkTarget();
-//                    if (loc != null) {
-//                        te = ((WorldRift) te).getBlockEntityFrom(dir);
-//                        if (te == null)
-//                            continue;
-//                        dx = te.getBlockPos().getX();
-//                        dy = te.getBlockPos().getY();
-//                        dz = te.getBlockPos().getZ();
-//                        world = te.getLevel();
-//                    }
-//                }
+                // V33a: draw from the pipe beside the far end of a World Rift.
+                if (te instanceof WorldRift rift) {
+                    if (world.isClientSide())
+                        continue;
+                    WorldLocation loc = rift.getLinkTarget();
+                    if (loc != null) {
+                        te = rift.getTileEntityFrom(dir);
+                        if (te == null)
+                            continue;
+                    }
+                }
 
                 if (te instanceof BlockEntityPiping tp) {
                     if (this.hasReciprocalConnectivity(tp, dir) && this.canReceiveFromPipeOn(dir) && tp.canEmitToPipeOn(dir.getOpposite())) {
@@ -665,9 +682,9 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
         if (m != null && !m.isPipe() && m == m2)
             return true;
         BlockEntity tile = level.getBlockEntity(npos);
-        /*if (tile instanceof WorldRift) {
+        if (tile instanceof WorldRift) {
             return true;
-        }*/
+        }
         if (tile instanceof BlockEntityPiping)
             return this.hasReciprocalConnectivity((BlockEntityPiping) tile, dir);
         else if (tile instanceof PipeConnector pc) {

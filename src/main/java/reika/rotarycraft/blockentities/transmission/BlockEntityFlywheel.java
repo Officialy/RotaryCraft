@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.transmission;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import java.util.Locale;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -271,12 +272,9 @@ public class BlockEntityFlywheel extends BlockEntityTransmissionMachine implemen
                     torquein = devicein.torque;
                 }
             }
-        } /*else if (te instanceof WorldRift) {
-            WorldRift sr = (WorldRift) te;
-            WorldLocation loc = sr.getLinkTarget();
-            if (loc != null)
-                this.process(loc.getWorld(), loc.pos.getX(), loc.pos.getY(), loc.pos.getZ());
-        }*/ else {
+        } else if (te instanceof WorldRift sr) {
+            WorldRift.forward(sr, loc -> this.process(loc.getWorld(), loc.pos));
+        } else {
             //omega = 0;
             //torque = 0;
             //power = 0;

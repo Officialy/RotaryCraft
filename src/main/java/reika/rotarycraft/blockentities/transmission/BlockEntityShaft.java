@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.transmission;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -434,11 +435,8 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
                         readomega[0] = devicein.omega;
                     }
                 }
-//            } else if (te1 instanceof WorldRift) {
-//                WorldRift sr = (WorldRift) te1;
-//                WorldLocation loc = sr.getLinkTarget();
-//                if (loc != null)
-//                    this.crossTransfer(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, true, false);
+            } else if (te1 instanceof WorldRift sr) {
+                WorldRift.forward(sr, loc -> this.crossTransfer(loc.getWorld(), loc.pos, true, false));
             } else {
                 readtorque[0] = 0;
                 readomega[0] = 0;
@@ -484,12 +482,9 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
                         readomega[1] = devicein2.omega;
                     }
                 }
-            } /*else if (te2 instanceof WorldRift) {
-                WorldRift sr = (WorldRift) te2;
-                WorldLocation loc = sr.getLinkTarget();
-                if (loc != null)
-                    this.crossTransfer(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, false, true);
-            }*/ else {
+            } else if (te2 instanceof WorldRift sr) {
+                WorldRift.forward(sr, loc -> this.crossTransfer(loc.getWorld(), loc.pos, false, true));
+            } else {
                 readtorque[1] = 0;
                 readomega[1] = 0;
             }
@@ -573,12 +568,9 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
                     omegain = devicein.omega;
                 }
             }
-        } /*else if (te instanceof WorldRift) {
-            WorldRift sr = (WorldRift) te;
-            WorldLocation loc = sr.getLinkTarget();
-            if (loc != null)
-                this.transferPower(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord, meta);
-        }*/ else {
+        } else if (te instanceof WorldRift sr) {
+            WorldRift.forward(sr, loc -> this.transferPower(loc.getWorld(), loc.pos));
+        } else {
             omega = 0;
             torque = 0;
             power = 0;

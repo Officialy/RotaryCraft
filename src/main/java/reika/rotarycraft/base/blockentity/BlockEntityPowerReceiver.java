@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.base.blockentity;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -227,6 +228,10 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             powerin[0][0] = (long) torquein * (long) omegain;
             powerin[0][1] = torquein;
             powerin[0][2] = omegain;
+        } else if (te instanceof WorldRift sr) {
+            // V33a: read on through a World Rift (restored; the port had dropped this branch).
+            if (!WorldRift.forward(sr, loc -> this.getPower(loc.getWorld(), loc.pos, doubleSided)))
+                torquein = omegain = 0;
         } else {
             torquein = 0;
             omegain = 0;
@@ -298,6 +303,9 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
             powerin[1][0] = (long) torquein * (long) omegain;
             powerin[1][1] = torquein;
             powerin[1][2] = omegain;
+        } else if (te instanceof WorldRift sr) {
+            if (!WorldRift.forward(sr, loc -> this.getPower(loc.getWorld(), loc.pos, doubleSided)))
+                torquein = omegain = 0;
         } else {
             torquein = 0;
             omegain = 0;
@@ -382,6 +390,14 @@ public abstract class BlockEntityPowerReceiver extends BlockEntityIOMachine {
                         torquein = omegain = 0;
                     }
                 }
+            } else if (te1 instanceof WorldRift sr) {
+                // V33a: as it did, this reads through the rift along the current read side, not along 'in'.
+                if (!WorldRift.forward(sr, loc -> this.getPower(loc.getWorld(), loc.pos, false)))
+                    torque = omega = 0;
+                torquein = torque;
+                omegain = omega;
+                omega = torque = 0;
+                power = 0;
             }
             powerin[i][0] = (long) torquein * omegain;
             powerin[i][1] = torquein;

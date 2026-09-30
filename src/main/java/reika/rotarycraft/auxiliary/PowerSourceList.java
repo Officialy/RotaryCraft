@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.auxiliary;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Explosion;
@@ -75,6 +76,11 @@ public class PowerSourceList implements PowerTracker {
                 pwr.addAll(((PowerSourceTracker) tile).getPowerSources(io, caller));
             } else if (tile instanceof PowerGenerator) {
                 pwr.addSource((PowerGenerator) tile);
+            } else if (tile instanceof WorldRift sr) {
+                // V33a: follow the shaft on past the far rift (V33a stayed in this world; the far one is used here).
+                PowerSourceList[] through = new PowerSourceList[1];
+                if (WorldRift.forward(sr, loc -> through[0] = getAllFrom(loc.getWorld(), dir, loc.pos.relative(dir), io, caller)))
+                    return through[0];
             }
             pwr.caller = caller;
 

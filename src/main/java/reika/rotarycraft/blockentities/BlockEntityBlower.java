@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.RegistryAccess;
@@ -117,20 +118,21 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
         if (source instanceof HasItemHandler) {
             BlockEntity target = getAdjacentBlockEntity(dir);
-//            if (target instanceof WorldRift)
-//                target = this.getRelayedTarget(target, dir);
+            if (target instanceof WorldRift)
+                target = this.getRelayedTarget(target, dir);
             if (target != null) {
                 WorldLocation tg = new WorldLocation(target);
 
                 ArrayList<BlockEntity> li = new ArrayList<>();
                 while (target instanceof BlockEntityBlower te) {
                     dir = te.getFacingDir();
-                    target = getAdjacentBlockEntity(dir);
+                    // V33a: the next blower's own neighbour (the port read this blower's, which broke chains).
+                    target = te.getAdjacentBlockEntity(dir);
                     tg = tg.move(dir, 1);
-//                    if (target instanceof WorldRift) {
-//                        target = this.getRelayedTarget(target, dir);
-//                        tg = new WorldLocation(target);
-//                    }
+                    if (target instanceof WorldRift) {
+                        target = this.getRelayedTarget(target, dir);
+                        tg = new WorldLocation(target);
+                    }
 
                     if (li.contains(target))
                         return;
@@ -175,11 +177,11 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
         return 0;
     }
 
-//    private BlockEntity getRelayedTarget(BlockEntity te, Direction dir) {
-//        WorldRift wr = (WorldRift) te;
-//        BlockEntity te2 = wr.getBlockEntityFrom(dir);
-//        return te2 != null ? te2 : te;
-//    }
+    private BlockEntity getRelayedTarget(BlockEntity te, Direction dir) {
+        WorldRift wr = (WorldRift) te;
+        BlockEntity te2 = wr.getTileEntityFrom(dir);
+        return te2 != null ? te2 : te;
+    }
 
     private boolean tryPatternInsertion(HasItemHandler source, BlockEntity target) {
 //        if (InterfaceCache.MEINTERFACE.instanceOf(target)) {

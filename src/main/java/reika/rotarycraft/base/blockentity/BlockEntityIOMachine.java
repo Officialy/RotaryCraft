@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.base.blockentity;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -306,17 +307,24 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
         return wx && wy && wz;
     }
 
+    /**
+     * V33a: whether the tile on {@code dir} -- looking through World Rifts -- is {@code te}'s IO block (its position
+     * plus IO offset, in its own dimension). The port compared against this machine's position instead, which never
+     * matched, so isReadingFrom was always false and isWritingTo had been rewritten as a plain adjacency check that
+     * a rift cannot pass.
+     */
     protected final boolean matchTile(PowerSourceTracker te, Direction dir) {
-        if (dir == null)
+        if (dir == null || !(te instanceof BlockEntity target) || target.getLevel() == null)
             return false;
-        ResourceKey<Level> dim = level.dimension();
-        int tx = worldPosition.getX() + te.getIoOffsetPos().getX();
-        int ty = worldPosition.getY() + te.getIoOffsetPos().getY();
-        int tz = worldPosition.getZ() + te.getIoOffsetPos().getZ();
+        ResourceKey<Level> dim = target.getLevel().dimension();
+        int tx = target.getBlockPos().getX() + te.getIoOffsetPos().getX();
+        int ty = target.getBlockPos().getY() + te.getIoOffsetPos().getY();
+        int tz = target.getBlockPos().getZ() + te.getIoOffsetPos().getZ();
         BlockEntity adjacentBlockEntity = this.getAdjacentBlockEntity(dir);
-        /*while (adjacentBlockEntity instanceof WorldRift) {
-            adjacentBlockEntity = ((WorldRift) adjacentBlockEntity).getTileEntityFrom(dir);
-        }*/
+        // V33a looked straight through World Rifts; bounded, since a rift loop never ended in 1.7.10.
+        for (int i = 0; i < WorldRift.Guard.MAX_DEPTH && adjacentBlockEntity instanceof WorldRift rift; i++) {
+            adjacentBlockEntity = rift.getTileEntityFrom(dir);
+        }
         if (adjacentBlockEntity == null)
             return false;
 //        RotaryCraft.LOGGER.info(adjacentBlockEntity.getBlockPos().getZ() + " " + tz);
@@ -328,19 +336,11 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
     }
 
     public boolean isWritingTo(PowerSourceTracker te) {
-        if (write == null || !(te instanceof BlockEntity))
-            return false;
-        BlockPos targetPos = ((BlockEntity) te).getBlockPos();
-        BlockPos writePos = this.worldPosition.relative(write);
-        return writePos.equals(targetPos);
+        return this.matchTile(te, write);
     }
 
     public final boolean isWritingTo2(PowerSourceTracker te) {
-        if (write2 == null || !(te instanceof BlockEntity))
-            return false;
-        BlockPos targetPos = ((BlockEntity) te).getBlockPos();
-        BlockPos writePos = this.worldPosition.relative(write2);
-        return writePos.equals(targetPos);
+        return this.matchTile(te, write2);
     }
 
     public final boolean isReadingFrom(PowerSourceTracker te) {
@@ -412,6 +412,8 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
                     sp.addPower(tq, om, (long) tq * (long) om, from.getOpposite());
                 }
             }
+        } else if (te instanceof WorldRift rift) {
+            WorldRift.forward(rift, loc -> this.setPower(rift.getTileEntityFrom(from), from, om, tq));
         }
     }
 

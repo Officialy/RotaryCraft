@@ -9,6 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.api.power;
 
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import reika.rotarycraft.api.IOMachine;
 import reika.rotarycraft.api.interfaces.ComplexIO;
 import net.minecraft.core.BlockPos;
@@ -29,13 +30,11 @@ public class PowerTransferHelper {
         int dy = pos.getY() + dir.getStepY();
         int dz = pos.getZ() + dir.getStepZ();
         BlockEntity toCheck = tile.getLevel().getBlockEntity(new BlockPos(dx, dy, dz));
-		/*if (toCheck instanceof WorldRift) {
-			WorldRift sr = (WorldRift)toCheck;
-			WorldLocation loc = sr.getLinkTarget();
-			if (loc != null) {
-				return checkPowerFrom(loc.getBlockEntity(), dir);
-			}
-		}*/
+        if (toCheck instanceof WorldRift sr) {
+            boolean[] found = new boolean[1];
+            if (WorldRift.forward(sr, loc -> found[0] = checkPowerFrom(loc.getBlockEntity(), dir)))
+                return found[0];
+        }
         if (toCheck instanceof PowerGenerator || toCheck instanceof IOMachine) {
             if (toCheck instanceof ComplexIO cio) {
                 int torque = cio.getTorqueToSide(dir.getOpposite());
