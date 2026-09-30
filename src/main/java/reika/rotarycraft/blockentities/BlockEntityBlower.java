@@ -27,6 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 import net.neoforged.api.distmarker.Dist;
 import reika.dragonapi.interfaces.blockentity.HasItemHandler;
+import reika.dragonapi.ModList;
+import reika.dragonapi.modinteract.deepinteract.AEPatternHandling;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.DragonAPI;
 import reika.dragonapi.instantiable.data.immutable.WorldLocation;
@@ -40,34 +42,11 @@ import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class BlockEntityBlower extends BlockEntityPowerReceiver {
-
-    private static Method getPatterns;
-    private static Field dualityField;
-
-//    static {
-//        if (ModList.APPENG.isLoaded()) {
-//            try {
-//                Class c = Class.forName("appeng.helpers.DualityInterface");
-//                getPatterns = c.getDeclaredMethod("getPatterns");
-//                getPatterns.setAccessible(true);
-//
-//                c = InterfaceCache.MEINTERFACE.getClassType();
-//                dualityField = c.getDeclaredField("duality");
-//                dualityField.setAccessible(true);
-//            } catch (Exception e) {
-//                RotaryCraft.LOGGER.error("Could not add Item Pump AE pattern interfacing!");
-//                e.printStackTrace();
-//                ReflectiveFailureTracker.instance.logModReflectiveFailure(ModList.APPENG, e);
-//            }
-//        }
-//    }
 
     public ItemStack[] matchingItems = new ItemStack[18];
     public boolean isWhitelist = false;
@@ -78,12 +57,6 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
     public BlockEntityBlower(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.BLOWER.get(), pos, state);
     }
-
-//    @ModDependent(ModList.APPENG)
-//    public static Container getPatterns(BlockEntity target) throws Exception {
-//        return (Container) getPatterns.invoke(dualityField.get(target));
-//    }
-
 
     @Override
     public MachineRegistry getMachine() {
@@ -151,14 +124,14 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
 
                 InventoryType src = this.getTypeForInventory(source);
 
-                if (target instanceof HasItemHandler) {
-                    InventoryType tgt = this.getTypeForInventory(target);
-                    if (this.tryPatternInsertion((HasItemHandler) source, target)) {
+                // V33a gated this on the target being an IInventory, which the AE interface was; AE2's pattern
+                // provider exposes no HasItemHandler, so the pattern check has to come first.
+                if (this.tryPatternInsertion((HasItemHandler) source, target)) {
 
-                    } else {
-                        //ReikaJavaLibrary.pConsole(map);
-                        this.transferItems(source, target, src, tgt);
-                    }
+                } else if (target instanceof HasItemHandler) {
+                    InventoryType tgt = this.getTypeForInventory(target);
+                    //ReikaJavaLibrary.pConsole(map);
+                    this.transferItems(source, target, src, tgt);
                     //ReikaJavaLibrary.pConsole(map, Dist.DEDICATED_SERVER);
                 } else if (target == null && ConfigRegistry.BLOWERSPILL.getState() && tg.isEmpty()) {
                     this.dumpItems(source, src, tg, from);
@@ -183,22 +156,30 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
         return te2 != null ? te2 : te;
     }
 
+    /**
+     * V33a: blowing encoded patterns into an ME interface loaded them into its pattern slots. The modern holder of
+     * patterns is AE2's pattern provider. V33a added the pattern without taking it out of the source, so the next
+     * tick added another copy; the pattern is moved here instead.
+     */
     private boolean tryPatternInsertion(HasItemHandler source, BlockEntity target) {
-//        if (InterfaceCache.MEINTERFACE.instanceOf(target)) {
-//            for (int i = 0; i < source.getContainerSize(); i++) {
-//                ItemStack is = source.getItem(i);
-//                if (is != null && is.getItem() instanceof ICraftingPatternItem) {
-//                    try {
-//                        Inventory patterns = getPatterns(target);
-//                        if (ReikaInventoryHelper.addToIInv(is, patterns))
-//                            return true;
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        return false;
-//                    }
-//                }
-//            }
-//        }
+        if (!ModList.APPENG.isLoaded() || !AEPatternHandling.isPatternProvider(target))
+            return false;
+        ManagedItemHandler inv = source.getItemHandler();
+        for (int i = 0; i < inv.getSlots(); i++) {
+            ItemStack is = inv.getStackInSlot(i);
+            if (!is.isEmpty() && AEPatternHandling.isPattern(is)) {
+                try {
+                    ItemStack rem = AEPatternHandling.insertIntoPatternProvider(target, is.copyWithCount(1));
+                    if (rem.isEmpty()) {
+                        inv.extractItem(i, 1, false);
+                        return true;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        }
         return false;
     }
 
