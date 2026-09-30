@@ -214,6 +214,9 @@ public final class RotaryGameTests {
         register(event, env, "processing_grinder_stacks_output", 60, RotaryProcessingTests::grinderStacksOutput);
         register(event, env, "processing_autocrafter_request", 120, RotaryProcessingTests::autoCrafterCraftsFromInventoryAbove);
         register(event, env, "processing_item_filter_automation", 60, RotaryProcessingTests::itemFilterGatesAutomation);
+        // Real-ME-network tests; only with AE2 in run-gametest/mods (the normal GameTest runtime has none).
+        if (reika.dragonapi.ModList.APPENG.isLoaded())
+            RotaryAETests.register(event, env);
         register(event, env, "processing_centrifuge_separates_items", 60, RotaryProcessingTests::centrifugeSeparatesItems);
         register(event, env, "processing_centrifuge_fluid_transactions", 60, RotaryProcessingTests::centrifugeFluidTransactions);
 
