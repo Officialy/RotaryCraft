@@ -9,7 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.decorative;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -336,8 +336,8 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         if (getLevel().isClientSide())
             return;
         try {
-            File save = getLevel().getServer().getServerDirectory().toFile();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
-            String name = "musicbox@" + String.format("%d,%d,%d", worldPosition) + ".rcmusic";
+            File save = getLevel().getServer().getWorldPath(LevelResource.ROOT).toFile();
+            String name = "musicbox@" + String.format("%d,%d,%d", worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) + ".rcmusic";
             File dir = new File(save.getPath() + "/RotaryCraft/");
             if (!dir.exists())
                 dir.mkdir();
@@ -372,9 +372,9 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     public boolean hasSavedFile() {
         if (level.isClientSide())
             return false;
-        File save = getLevel().getServer().getServerDirectory().toFile();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
+        File save = getLevel().getServer().getWorldPath(LevelResource.ROOT).toFile();
         String base = save.getPath();
-        String name = "musicbox@" + String.format("%d,%d,%d", worldPosition) + ".rcmusic";
+        String name = "musicbox@" + String.format("%d,%d,%d", worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) + ".rcmusic";
         File f = new File(base + "/RotaryCraft/" + name);
         return f.exists();
     }
@@ -382,9 +382,9 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     public void read() {
         if (level.isClientSide())
             return;
-        File save = getLevel().getServer().getServerDirectory().toFile();//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
+        File save = getLevel().getServer().getWorldPath(LevelResource.ROOT).toFile();
         //ReikaJavaLibrary.pConsole(musicFile);
-        String name = "musicbox@" + String.format("%d,%d,%d", worldPosition) + ".rcmusic";
+        String name = "musicbox@" + String.format("%d,%d,%d", worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()) + ".rcmusic";
         String path = save.getPath() + "/RotaryCraft/" + name;
         this.readFile(path, false);
     }
@@ -475,9 +475,10 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     }
 
     private void deleteFiles(BlockPos pos) {
-        File save = Minecraft.getInstance().gameDirectory;//DimensionManager.getCurrentSaveRootDirectory(); //todo check if this is right
+        if (level.isClientSide()) return;
+        File save = getLevel().getServer().getWorldPath(LevelResource.ROOT).toFile();
         //ReikaJavaLibrary.pConsole(musicFile);
-        String name = "musicbox@" + String.format("%d,%d,%d", pos) + ".rcmusic";
+        String name = "musicbox@" + String.format("%d,%d,%d", pos.getX(), pos.getY(), pos.getZ()) + ".rcmusic";
         File f = new File(save.getPath() + "/RotaryCraft/" + name);
         if (f.exists())
             f.delete();

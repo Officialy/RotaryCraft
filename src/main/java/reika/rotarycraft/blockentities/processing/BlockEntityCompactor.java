@@ -10,14 +10,23 @@
 package reika.rotarycraft.blockentities.processing;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
 
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
+import reika.dragonapi.libraries.level.ReikaWorldHelper;
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.auxiliary.RotaryAux;
+import reika.rotarycraft.registry.ConfigRegistry;
+import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.FrictionHeatable;
 import reika.rotarycraft.auxiliary.interfaces.MultiOperational;
@@ -38,11 +47,8 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
  * coal -> anthracite -> prismane -> lonsdaleite -> diamond (each step needs 550 MPa / 800 C);
  * peripherals: blaze powder -> glowstone, ice -> packed ice (cold!).
  *
- * <p>26.2 port notes: recipes are the data-driven {@link CompactorRecipe} type (legacy
- * RecipesCompactor). The mod-heavy environmental temperature model (biome ambient lookup, adjacent
- * lava/fire/water/ice/snow blocks, nether pressure decay) is reduced to the LavaMaker-style
- * friction-heat + ambient-decay model, with pressure fed by torque exactly as legacy. Overheat
- * and overpressure destroy the machine as upstream.</p>
+ * <p>Recipes are data-driven. Environmental heating, cooling, pressure decay and machine
+ * failures follow V33a, using the shared DragonAPI world helpers.</p>
  */
 public class BlockEntityCompactor extends InventoriedPowerReceiver implements TemperatureTE,
         PressureTE, FrictionHeatable, MultiOperational, ConditionalOperation {
@@ -70,6 +76,7 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
     @Override
     public void updateEntity(Level world, BlockPos pos) {
         super.updateBlockEntity();
+        read = world.getBlockState(pos).getValue(BlockRotaryCraftMachine.FACING).getOpposite();
         this.getPower(false);
 
         envirotick++;
@@ -175,8 +182,10 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
         ItemStack out = itemHandler.getStackInSlot(4);
         if (out.isEmpty())
             itemHandler.setStackInSlot(4, result);
-        else
+        else {
             out.grow(result.getCount());
+            itemHandler.setStackInSlot(4, out);
+        }
         for (int i = 0; i < 4; i++)
             itemHandler.extractItem(i, 1, false);
     }
@@ -199,12 +208,15 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
 
     @Override
     public void updatePressure(Level world, BlockPos pos) {
-        if (pressure > AMBIENT_PRESS)
-            pressure -= Math.max((pressure - AMBIENT_PRESS) / 200, 1);
-        if (pressure < AMBIENT_PRESS)
-            pressure += Math.max((AMBIENT_PRESS - pressure) / 40, 1);
-        if (omega > 0)
+        int ambient = (int) ReikaWorldHelper.getAmbientPressureAt(world, pos, true);
+        if (pressure > ambient)
+            pressure -= Math.max((pressure - ambient) / (world.dimension() == Level.NETHER ? 600 : 200), 1);
+        if (pressure < ambient)
+            pressure += Math.max((ambient - pressure) / 40, 1);
+        if (omega > 0 && torque > 0)
             pressure += (int) (128 * ReikaMathLibrary.logbase(torque, 2));
+        if (pressure >= 0.8 * MAXPRESSURE)
+            RotaryCraft.LOGGER.warn("WARNING: {} is reaching very high pressure!", this);
         if (pressure > MAXPRESSURE)
             this.overpressure(world, pos);
     }
@@ -226,23 +238,45 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
 
     @Override
     public void overpressure(Level world, BlockPos pos) {
+        world.explode(null, pos.getX(), pos.getY(), pos.getZ(), 4F,
+                ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
         pressure = MAXPRESSURE;
-        world.removeBlock(pos, false);
-        world.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 3F, Level.ExplosionInteraction.BLOCK);
     }
 
-    // --- Temperature (friction heat + ambient decay, LavaMaker model) -------
+    // --- Temperature (V33a environmental heating and cooling) ----------------
 
     @Override
     public void updateTemperature(Level world, BlockPos pos) {
-        if (temperature > AMBIENT_TEMP)
-            temperature -= Math.max((temperature - AMBIENT_TEMP) / 200, 1);
-        if (temperature < AMBIENT_TEMP)
-            temperature += Math.max((AMBIENT_TEMP - temperature) / 40, 1);
-        if (temperature > MAXTEMP) {
-            temperature = MAXTEMP;
-            this.overheat(world, pos);
+        int ambient = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
+        if (temperature > ambient)
+            temperature -= Math.max((temperature - ambient) / 200, 1);
+        if (temperature < ambient)
+            temperature += Math.max((ambient - temperature) / 40, 1);
+        if (RotaryAux.isNextToLava(world, pos)) temperature += 4;
+        if (RotaryAux.isNextToFire(world, pos)) temperature += 2;
+        if (ambient == 300) temperature++;
+        for (Direction side : Direction.values()) {
+            if (world.getFluidState(pos.relative(side)).is(FluidTags.WATER) && temperature > 600) {
+                temperature--;
+                if (rand.nextInt(4000) == 0) world.setBlockAndUpdate(pos.relative(side), Blocks.AIR.defaultBlockState());
+                break;
+            }
         }
+        Direction ice = ReikaWorldHelper.checkForAdjBlock(world, pos, Blocks.ICE);
+        if (ice != null && temperature > 0) {
+            temperature -= 2;
+            if (rand.nextInt(200) == 0) world.setBlockAndUpdate(pos.relative(ice), Blocks.WATER.defaultBlockState());
+        }
+        Direction snow = ReikaWorldHelper.checkForAdjBlock(world, pos, Blocks.SNOW_BLOCK);
+        if (snow != null && temperature > -5) {
+            temperature -= 2;
+            // V33a accidentally used the ice direction here; melt the snow that cooled us.
+            if (rand.nextInt(100) == 0) world.setBlockAndUpdate(pos.relative(snow), Blocks.WATER.defaultBlockState());
+        }
+        ReikaWorldHelper.temperatureEnvironment(world, pos, temperature);
+        if (temperature >= 0.9 * MAXTEMP)
+            RotaryCraft.LOGGER.warn("WARNING: {} is reaching very high temperature!", this);
+        if (temperature > MAXTEMP) this.overheat(world, pos);
     }
 
     @Override
@@ -262,7 +296,7 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
 
     @Override
     public int getThermalDamage() {
-        return 0;
+        return temperature / 100;
     }
 
     @Override
@@ -287,24 +321,25 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
 
     @Override
     public boolean allowHeatExtraction() {
-        return true;
+        return false;
     }
 
     @Override
     public void overheat(Level world, BlockPos pos) {
         temperature = MAXTEMP;
-        world.removeBlock(pos, false);
-        world.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 2F, Level.ExplosionInteraction.BLOCK);
+        ReikaWorldHelper.overheat(world, pos.getX(), pos.getY(), pos.getZ(),
+                RotaryItems.HSLA_STEEL_SCRAP.get().getDefaultInstance(), 0, 17, true, 1F, false,
+                ConfigRegistry.BLOCKDAMAGE.getState(), ConfigRegistry.BLOCKDAMAGE.getState() ? 2F : 0F);
     }
 
     @Override
     public void resetAmbientTemperatureTimer() {
-        tempTick = 20;
+        tempTick = 5;
     }
 
     @Override
     public float getMultiplier() {
-        return 1F;
+        return 0.75F;
     }
 
     @Override
@@ -314,7 +349,7 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
 
     @Override
     public void onOverheat(Level world, BlockPos pos) {
-        this.overheat(world, pos);
+        // As in V33a, updateTemperature handles this machine's own failure threshold.
     }
 
     // --- GUI scaling ---------------------------------------------------------
@@ -404,7 +439,7 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
 
     @Override
     public int getRedstoneOverride() {
-        return 0;
+        return canSmelt() ? 0 : 15;
     }
 
     @Override
@@ -435,12 +470,17 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
 
     @Override
     public boolean areConditionsMet() {
-        return !idle;
+        return canSmelt();
     }
 
     @Override
     public String getOperationalStatus() {
-        return this.areConditionsMet() ? "Operational" : "Idle (Check Items)";
+        ItemStack input = itemHandler.getStackInSlot(0);
+        if (input.isEmpty()) return "Missing Items";
+        CompactorRecipe recipe = getRecipe(input);
+        if (recipe != null && temperature < recipe.getReqTemperature()) return "Insufficient Temperature";
+        if (recipe != null && pressure < recipe.getReqPressure()) return "Insufficient Pressure";
+        return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
     }
 
 }

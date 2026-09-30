@@ -199,7 +199,49 @@ public final class RotaryGameTests {
         register(event, env, "scale_chest_unharvested_drops_bare_chest", 40, RotaryStorageTests::unharvestedDropsBareChest);
         register(event, env, "scale_chest_unpowered_stays_shut", 40, RotaryStorageTests::unpoweredChestStaysShut);
 
-        // Broad safety net over every registered machine.
+        register(event, env, "unpowered_drying_stacks_output", 460, RotaryUnpoweredTests::dryingStacksOutput);
+        register(event, env, "unpowered_drying_backpressure", 460, RotaryUnpoweredTests::dryingBackpressure);
+        register(event, env, "unpowered_drying_save_reload", 460, RotaryUnpoweredTests::dryingSaveReload);
+        register(event, env, "unpowered_drying_automation", 40, RotaryUnpoweredTests::dryingAutomation);
+        register(event, env, "unpowered_drying_survival_break", 40, RotaryUnpoweredTests::dryingSurvivalBreak);
+        register(event, env, "unpowered_hydrator_waters_farmland", 160, RotaryUnpoweredTests::hydratorWatersFarmland);
+        register(event, env, "unpowered_hydrator_insufficient_water", 160, RotaryUnpoweredTests::hydratorInsufficientWater);
+
+        register(event, env, "processing_compactor_stacks_output", 60, RotaryProcessingTests::compactorStacksOutput);
+        register(event, env, "processing_compactor_backpressure", 60, RotaryProcessingTests::compactorBackpressure);
+        register(event, env, "processing_compactor_operating_gates", 100, RotaryProcessingTests::compactorGates);
+        register(event, env, "processing_compactor_environment", 40, RotaryProcessingTests::compactorEnvironment);
+        register(event, env, "processing_grinder_stacks_output", 60, RotaryProcessingTests::grinderStacksOutput);
+        register(event, env, "processing_centrifuge_separates_items", 60, RotaryProcessingTests::centrifugeSeparatesItems);
+        register(event, env, "processing_centrifuge_fluid_transactions", 60, RotaryProcessingTests::centrifugeFluidTransactions);
+
+        register(event, env, "purifier_batch", 60, RotaryPurifierTests::batch);
+        register(event, env, "purifier_partial_batch", 60, RotaryPurifierTests::partialBatch);
+        register(event, env, "purifier_output_backpressure", 60, RotaryPurifierTests::blockedOutput);
+        register(event, env, "purifier_operating_gates", 100, RotaryPurifierTests::gates);
+        register(event, env, "purifier_item_transactions", 40, RotaryPurifierTests::transactions);
+        register(event, env, "purifier_save_reload", 40, RotaryPurifierTests::saveReload);
+        register(event, env, "purifier_environment", 40, RotaryPurifierTests::environment);
+        register(event, env, "purifier_menu", 40, RotaryPurifierTests::menu);
+        register(event, env, "purifier_survival_break", 40, RotaryPurifierTests::survivalBreak);
+        register(event, env, "purifier_recipe_network_roundtrip", 40, RotaryPurifierTests::recipeNetworkRoundTrip);
+        register(event, env, "beam_mirror_clears_beam", 40, RotaryWorldMachineTests::mirrorClearsBeam);
+        register(event, env, "music_box_save_read_break", 40, RotaryWorldMachineTests::musicFileSaveReadBreak);
+        register(event, env, "crafting_bulk_disc_shift", 40, RotaryCraftingTests::discShiftCraft);
+        register(event, env, "crafting_bulk_pattern_shift", 40, RotaryCraftingTests::patternShiftCraft);
+        register(event, env, "crafting_bulk_disc_pickup", 40, RotaryCraftingTests::discNormalPickup);
+        register(event, env, "crafting_bulk_full_inventory", 40, RotaryCraftingTests::discFullInventory);
+        register(event, env, "crafting_bulk_partial_inventory", 40, RotaryCraftingTests::discPartialInventory);
+        register(event, env, "crafting_vanilla_shift", 40, RotaryCraftingTests::vanillaShiftCraft);
+        register(event, env, "crafting_bulk_recipe_network", 40, RotaryCraftingTests::bulkRecipeNetwork);
+
+        // Each machine owns an arena: no fixed-capacity sweep can silently omit later entries.
+        for (MachineRegistry machine : MachineRegistry.values()) {
+            register(event, env, "machine_" + machine.name().toLowerCase(java.util.Locale.ROOT) + "_places", 60,
+                    helper -> registeredMachineTicks(helper, machine));
+        }
+
+        // Registry-wide safety net, alongside each machine's isolated tick test.
         register(event, env, "machine_block_entities", 100, RotaryGameTests::machineBlockEntities);
     }
 
@@ -1224,41 +1266,31 @@ public final class RotaryGameTests {
      * {@code ElectriGameTests.machineBlockEntities} does.
      */
     private static void machineBlockEntities(GameTestHelper helper) {
-        // Each machine gets its own slot. Re-placing over a live BlockEntity made vanilla's own
-        // state validation throw, and 2-block spacing keeps neighbours from powering each other.
-        int slot = 0;
         int checked = 0;
-        for (int mi = 0; mi < MachineRegistry.machineList.length; mi++) {
-            MachineRegistry m = MachineRegistry.machineList.get(mi);
-            BlockState state = m.getBlockState();
-            if (state == null || m.getTEClass() == null)
-                continue;
-            BlockPos probe = sweepSlot(slot++);
-            if (probe == null)
-                break; // arena full; the count assertion below still guards coverage
-            helper.setBlock(probe, state);
-            BlockEntity be = helper.getLevel().getBlockEntity(helper.absolutePos(probe));
-            if (be == null)
-                continue; // block carries no BlockEntity of its own
-            helper.assertTrue(m.getTEClass().isInstance(be),
-                    m + " placed a " + be.getClass().getSimpleName()
-                            + ", expected " + m.getTEClass().getSimpleName());
-            helper.assertTrue(be.getType().isValid(helper.getLevel().getBlockState(helper.absolutePos(probe))),
-                    m + "'s BlockEntityType must accept its own registered block state");
+        for (MachineRegistry machine : MachineRegistry.values()) {
+            BlockState state = machine.getBlockState();
+            helper.assertTrue(state != null && machine.getTEClass() != null, machine + " must declare its block and entity");
+            helper.assertTrue(state.hasBlockEntity(), machine + " must place a block entity");
             checked++;
         }
-        helper.assertTrue(checked > 20, "only " + checked + " machines were probed; the sweep is not running");
+        helper.assertTrue(checked == MachineRegistry.machineList.length, "all registered machines must be checked");
         helper.succeed();
     }
 
-    /** 2-spaced grid over the 9x9 arena on two levels: 25 slots per level, 50 in all. */
-    private static BlockPos sweepSlot(int i) {
-        int perLevel = 25;
-        if (i >= perLevel * 2)
-            return null;
-        int y = 1 + (i / perLevel) * 3;
-        int j = i % perLevel;
-        return new BlockPos((j % 5) * 2, y, (j / 5) * 2);
+    private static void registeredMachineTicks(GameTestHelper helper, MachineRegistry machine) {
+        helper.setBlock(TEST_POS, machine.getBlockState());
+        BlockEntity entity = helper.getLevel().getBlockEntity(helper.absolutePos(TEST_POS));
+        helper.assertTrue(entity != null && machine.getTEClass().isInstance(entity),
+                machine + " placed " + (entity == null ? "no block entity" : entity.getClass().getSimpleName())
+                        + ", expected " + machine.getTEClass().getSimpleName());
+        helper.assertTrue(entity.getType().isValid(machine.getBlockState()), machine + " entity type must accept its block");
+        helper.runAfterDelay(20, () -> {
+            helper.assertTrue(helper.getLevel().getBlockEntity(helper.absolutePos(TEST_POS)) == entity,
+                    machine + " must survive twenty world ticks without power or input");
+            helper.assertTrue(((reika.dragonapi.base.BlockEntityBase) entity).getTicksExisted() > 0,
+                    machine + " must execute its block entity lifecycle");
+            helper.succeed();
+        });
     }
 
     /**

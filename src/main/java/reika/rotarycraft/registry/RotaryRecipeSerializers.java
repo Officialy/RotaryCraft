@@ -7,6 +7,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.CompactorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.PurifierRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.BulkShapedRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.CrystallizerRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
@@ -22,6 +24,8 @@ import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
 
 public class RotaryRecipeSerializers {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, RotaryCraft.MODID);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<net.minecraft.world.item.crafting.ShapedRecipe>> BULK_SHAPED =
+            RECIPE_SERIALIZERS.register("bulk_shaped", () -> new RecipeSerializer<>(BulkShapedRecipe.CODEC, BulkShapedRecipe.STREAM_CODEC));
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GrinderRecipe>> GRINDER =
             RECIPE_SERIALIZERS.register("grinder",
@@ -34,6 +38,9 @@ public class RotaryRecipeSerializers {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<LavaMakerRecipe>> LAVA_MAKER =
             RECIPE_SERIALIZERS.register("lava_maker",
                     () -> new RecipeSerializer<>(LavaMakerRecipe.CODEC, LavaMakerRecipe.STREAM_CODEC));
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PurifierRecipe>> PURIFIER =
+            RECIPE_SERIALIZERS.register("purifier", () -> new RecipeSerializer<>(PurifierRecipe.CODEC, PurifierRecipe.STREAM_CODEC));
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CompactorRecipe>> COMPACTOR =
             RECIPE_SERIALIZERS.register("compactor",

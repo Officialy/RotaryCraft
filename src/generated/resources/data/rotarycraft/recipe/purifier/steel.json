@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:purifier",
+  "gunpowder": "minecraft:gunpowder",
+  "gunpowder_consumption": 25,
+  "input": "#c:ingots/steel",
+  "output": "rotarycraft:hsla_steel_ingot",
+  "sand": "minecraft:sand",
+  "sand_consumption": 5,
+  "temperature": 600
+}

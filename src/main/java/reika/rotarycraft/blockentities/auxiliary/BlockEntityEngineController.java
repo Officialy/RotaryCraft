@@ -160,7 +160,7 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
-
+        super.updateEntity();
         if (redstoneTick > 0)
             redstoneTick--;
         int power = redstoneTick == 0 ? world.getBestNeighborSignal(pos) : prevRedstone;

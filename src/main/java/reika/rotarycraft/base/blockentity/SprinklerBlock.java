@@ -118,6 +118,7 @@ public abstract class SprinklerBlock extends RotaryCraftBlockEntity implements P
 
     //@Override
     public final void tick(Level world, BlockPos pos) {
+        super.updateEntity();
         this.getLiq(world, pos);
 
         if (this.canPerformEffects()) { //&& !AtmosphereHandler.isNoAtmo(world, new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()), getType(), false)) { todo atmosphere checking

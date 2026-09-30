@@ -30,7 +30,7 @@ public enum DurationRegistry {
     //    MAGNETIZER(MachineRegistry.MAGNETIZER, 400, 20),
     OBSIDIAN(MachineRegistry.OBSIDIAN, 800, 60),
     PUMP(MachineRegistry.PUMP, 300, 30),
-    //        PURIFIER(MachineRegistry.PURIFIER, 800, 40),
+    PURIFIER(MachineRegistry.PURIFIER, 800, 40),
 //    TERRAFORMER(MachineRegistry.TERRAFORMER, 800, 40),
     WOODCUTTER(MachineRegistry.WOODCUTTER, 40, 4),
     GRINDSTONE(MachineRegistry.GRINDSTONE, 80, 6),

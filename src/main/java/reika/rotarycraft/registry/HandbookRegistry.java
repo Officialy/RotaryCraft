@@ -136,7 +136,7 @@ public enum HandbookRegistry implements HandbookEntry {
     EXTRACTOR(MachineRegistry.EXTRACTOR),
 //    PULSEJET(MachineRegistry.PULSEJET),
 //    COMPACTOR(MachineRegistry.COMPACTOR),
-//    PURIFIER(MachineRegistry.PURIFIER),
+    PURIFIER(MachineRegistry.PURIFIER),
 //    ENHANCER(MachineRegistry.FUELENHANCER),
 //    MAGNET(MachineRegistry.MAGNETIZER),
 //    DISTILER(MachineRegistry.DISTILLER),

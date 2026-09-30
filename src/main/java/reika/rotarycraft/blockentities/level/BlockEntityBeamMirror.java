@@ -112,13 +112,13 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
                 Block b = world.getBlockState(c).getBlock();
                 if (b == Blocks.LIGHT) {
                     //ReikaJavaLibrary.pConsole(Arrays.toString(xyz));
-                    world.setBlock(pos, Blocks.AIR.defaultBlockState(), 0);
+                    world.setBlock(c, Blocks.AIR.defaultBlockState(), 0);
                     world.updateNeighborsAt(c, this.getBlockState().getBlock());
                 }
             }
             light.clear();
             if (r > 0 && world.canSeeSky(pos.above()))
-                light.addLineOfClear(world, new BlockPos(pos.getX() + facingDir.getStepX(), pos.getY(), pos.getZ() + facingDir.getStepZ()), r, facingDir.getStepX(), 0, facingDir.getStepZ());
+                light.addLineOfClear(world, pos, r, facingDir.getStepX(), 0, facingDir.getStepZ());
             lastRange = r;
         }
 
@@ -161,7 +161,7 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
                 if (b instanceof SemiTransparent) {
                     if (((SemiTransparent) b).isOpaque())
                         return i;
-                } else if (b.hasDynamicShape()) //isOpaqueCube())
+                } else if (level.getBlockState(new BlockPos(dx, dy, dz)).isSolidRender())
                     return i;
             }
         }

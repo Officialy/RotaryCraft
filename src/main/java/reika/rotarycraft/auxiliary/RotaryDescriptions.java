@@ -26,6 +26,7 @@ import reika.rotarycraft.blockentities.BlockEntityItemRefresher;
 import reika.rotarycraft.blockentities.BlockEntityPlayerDetector;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
+import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
 import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
 import reika.rotarycraft.blockentities.production.BlockEntityObsidianMaker;
 import reika.rotarycraft.blockentities.production.BlockEntitySolarTower;
@@ -184,10 +185,8 @@ public final class RotaryDescriptions {
 
     /**
      * The XML page texts carry %-format specifiers filled from the registered data
-     * arrays. Several data registrations depend on machines not yet ported (e.g.
-     * the Extractor rates for MODINTERFACE, the friction-heater temperature for
-     * TUNGSTEN), so a mismatch must not kill the resource reload — log it and show
-     * the raw text instead.
+     * arrays. Incomplete page registrations and translations must not kill the
+     * resource reload: log mismatches and keep the raw text available for diagnosis.
      */
     private static String safeFormat(HandbookRegistry h, String text, Object... args) {
         if (text == null)
@@ -444,16 +443,10 @@ public final class RotaryDescriptions {
         addData(HandbookRegistry.SHAFTS, MaterialRegistry.getAllLimitLoadsAsInts());
         addData(HandbookRegistry.FLYWHEELS, Flywheels.getLimitsForDisplay());
 
-        addData(HandbookRegistry.MODINTERFACE);
-        //ReikaMathLibrary.getThousandBase(ReikaRFHelper.getWattsPerRF()),
-        //ReikaEngLibrary.getSIPrefix(ReikaRFHelper.getWattsPerRF()),
-
-        //ReikaMathLibrary.getThousandBase(ReikaBuildCraftHelper.getFuelBucketEnergy()),
-        //ReikaEngLibrary.getSIPrefix(ReikaBuildCraftHelper.getFuelBucketEnergy()),
-
-//todo                BlockEntityExtractor.oreCopy,
-//                BlockEntityExtractor.oreCopyNether,
-//                BlockEntityExtractor.oreCopyRare
+        int wattsPerRF = reika.dragonapi.modinteract.power.ReikaRFHelper.getWattsPerRF();
+        addData(HandbookRegistry.MODINTERFACE, ReikaMathLibrary.getThousandBase(wattsPerRF),
+                ReikaEngLibrary.getSIPrefix(wattsPerRF), BlockEntityExtractor.oreCopy,
+                BlockEntityExtractor.oreCopyNether, BlockEntityExtractor.oreCopyRare);
 
 
 //
@@ -475,7 +468,7 @@ public final class RotaryDescriptions {
 //        addData(MachineRegistry.COMPACTOR, BlockEntityCompactor.REQPRESS, BlockEntityCompactor.REQTEMP);
 //        addData(MachineRegistry.BLASTFURNACE, BlockEntityBlastFurnace.SMELTTEMP, BlockEntityBlastFurnace.BEDROCKTEMP);
 //        addData(MachineRegistry.SCALECHEST, BlockEntityScaleableChest.MAXSIZE);
-//        addData(MachineRegistry.PURIFIER, BlockEntityPurifier.SMELTTEMP);
+        addData(MachineRegistry.PURIFIER, reika.rotarycraft.blockentities.processing.BlockEntityPurifier.SMELTTEMP);
 //        addData(MachineRegistry.GENERATOR, ReikaEUHelper.getWattsPerEU());
 //        addData(MachineRegistry.BELT, ((BlockEntityBeltHub) MachineRegistry.BELT.createTEInstanceForRender(0)).getMaxTorque(), ((BlockEntityBeltHub) MachineRegistry.BELT.createTEInstanceForRender(0)).getMaxSmoothSpeed());
 //        addData(MachineRegistry.CHAIN, ((BlockEntityBeltHub) MachineRegistry.CHAIN.createTEInstanceForRender(0)).getMaxTorque(), ((BlockEntityBeltHub) MachineRegistry.CHAIN.createTEInstanceForRender(0)).getMaxSmoothSpeed());
@@ -526,7 +519,7 @@ public final class RotaryDescriptions {
 //        addNotes(MachineRegistry.MAGNETIZER, PowerReceivers.MAGNETIZER.getMinPower(), PowerReceivers.MAGNETIZER.getMinSpeed());
         addNotes(MachineRegistry.CONTAINMENT, PowerReceivers.CONTAINMENT.getMinPower(), PowerReceivers.CONTAINMENT.getMinPower(), BlockEntityContainment.FALLOFF, BlockEntityContainment.WITHERPOWER, BlockEntityContainment.DRAGONPOWER);
 //        addNotes(MachineRegistry.SCREEN, PowerReceivers.SCREEN.getMinPower(), PowerReceivers.SCREEN.getMinTorque());
-//        addNotes(MachineRegistry.PURIFIER, PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), BlockEntityPurifier.SMELTTEMP);
+        addNotes(MachineRegistry.PURIFIER, PowerReceivers.PURIFIER.getMinPower(), PowerReceivers.PURIFIER.getMinTorque(), reika.rotarycraft.blockentities.processing.BlockEntityPurifier.SMELTTEMP);
 //        addNotes(MachineRegistry.LASERGUN, PowerReceivers.LASERGUN.getMinPower());
         addNotes(MachineRegistry.ITEMCANNON, PowerReceivers.ITEMCANNON.getMinPower(), PowerReceivers.ITEMCANNON.getMinTorque());
 //        addNotes(MachineRegistry.FRICTION, PowerReceivers.FRICTION.getMinPower(), PowerReceivers.FRICTION.getMinTorque());

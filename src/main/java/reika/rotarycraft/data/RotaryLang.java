@@ -73,6 +73,9 @@ public class RotaryLang extends LanguageProvider {
         add("tab.rotarycraft.ores", "RotaryCraft Ore Flakes");
         add("tab.rotarycraft.all", "RotaryCraft (All)");
 
+        add("gui.rotarycraft.purifier_temperature", "%s \u00b0C");
+        add("jei.rotarycraft.purifier_requirements", "Requires %s \u00b0C; up to 5 ingots per batch");
+
         // Jade config translations
         add("config.jade.plugin_rotarycraft.reservoir_fluid", "Reservoir Fluid");
         add("config.jade.plugin_rotarycraft.machine_power", "Machine Power");

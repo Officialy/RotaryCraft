@@ -131,6 +131,7 @@ public final class RoCRecipeProvider {
             centrifuge();
             lavaMaker();
             compactor();
+            purifier();
             crystallizer();
             wetterAndDrying();
             frictionHeater();
@@ -239,6 +240,19 @@ public final class RoCRecipeProvider {
 
         // Compactor chain: legacy RecipesCompactor. Counts baked at the legacy MEDIUM difficulty
         // (DifficultyEffects.COMPACTOR = 2 per step; charcoal pays 3/2). REQ = 550 MPa / 800 C.
+        private void purifier() {
+            out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft", "purifier/steel")),
+                    new PurifierRecipe(Ingredient.of(items.getOrThrow(RoCItemTagsProvider.STEEL_INGOTS)),
+                            Ingredient.of(Items.GUNPOWDER), Ingredient.of(Blocks.SAND),
+                            RotaryItems.HSLA_STEEL_INGOT, 600, 25, 5), null);
+            // V33a RotaryRecipes: "sbs", "prp", "sps".
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.PURIFIER.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get()).define('b', Blocks.IRON_BARS)
+                    .define('p', RotaryItems.HSLA_PLATE.get()).define('r', Items.REDSTONE)
+                    .pattern("sbs").pattern("prp").pattern("sps")
+                    .unlockedBy("has_steel", has(RotaryItems.HSLA_STEEL_INGOT.get())).save(out);
+        }
+
         private void compactor() {
             compact("coal", Ingredient.of(Items.COAL), RotaryItems.ANTHRACITE.get(), 2, 550000, 800);
             compact("charcoal", Ingredient.of(Items.CHARCOAL), RotaryItems.ANTHRACITE.get(), 3, 550000, 800);
@@ -2824,25 +2838,39 @@ public final class RoCRecipeProvider {
                     .pattern("GbG").pattern("SgS").pattern("B B")
                     .unlockedBy("has_hsla_steel_spring", has(RotaryItems.HSLA_STEEL_SPRING.get()))
                     .save(out);
-            // DISK: addSizedRecipe(4, "wRw","RSR","wRw") — 4×BLACK_WOOL + 4×REDSTONE + 1×HSLA → 4 discs.
-            shaped(RecipeCategory.MISC, RotaryItems.DISK.get(), 4)
+            // V33a yields four discs and four patterns. Their stack limits stay one.
+            saveBulk(shaped(RecipeCategory.MISC, RotaryItems.DISK.get())
                     .define('w', Items.WOOL.black())
                     .define('R', Items.REDSTONE)
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
                     .pattern("wRw").pattern("RSR").pattern("wRw")
-                    .unlockedBy("has_black_wool", has(Items.WOOL.black()))
-                    .save(out);
-            // CRAFTPATTERN: addSizedRecipe(4, " S "," B "," S ") — 2×HSLA + 1×BASEPANEL → 4 patterns in
-            // legacy 1.7. In modern Minecraft the craft pattern item has max stack size 1 (component
-            // data per pattern), so a count-4 output crashes vanilla's ItemStackTemplate validation.
-            // Drop the bulk-output and yield a single pattern per craft; balance is identical (just
-            // re-craft three more times for the same 4 patterns) and avoids the warning spam.
-            shaped(RecipeCategory.MISC, RotaryItems.CRAFT_PATTERN.get(), 1)
+                    .unlockedBy("has_black_wool", has(Items.WOOL.black())), RotaryItems.DISK.get(), 4);
+            saveBulk(shaped(RecipeCategory.MISC, RotaryItems.CRAFT_PATTERN.get())
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
                     .define('B', RotaryItems.HSLA_PLATE.get())
                     .pattern(" S ").pattern(" B ").pattern(" S ")
-                    .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get()))
-                    .save(out);
+                    .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get())), RotaryItems.CRAFT_PATTERN.get(), 4);
+        }
+
+        private void saveBulk(ShapedRecipeBuilder builder, ItemLike result, int count) {
+            builder.save(new RecipeOutput() {
+                @Override public net.minecraft.advancements.Advancement.Builder advancement() { return out.advancement(); }
+                @Override public <S> net.minecraft.core.HolderGetter<S> lookup(ResourceKey<? extends net.minecraft.core.Registry<? extends S>> key) {
+                    return out.lookup(key);
+                }
+                @Override public <S> java.util.stream.Stream<net.minecraft.core.Holder.Reference<S>> listContextElements(ResourceKey<? extends net.minecraft.core.Registry<? extends S>> key) {
+                    return out.listContextElements(key);
+                }
+                @Override public void accept(ResourceKey<Recipe<?>> id, Recipe<?> recipe,
+                        net.minecraft.advancements.@Nullable AdvancementHolder advancement,
+                        net.neoforged.neoforge.common.conditions.ICondition... conditions) {
+                    var shaped = (net.minecraft.world.item.crafting.ShapedRecipe) recipe;
+                    var bulk = new BulkShapedRecipe(RecipeBuilder.createCraftingCommonInfo(shaped.showNotification()),
+                            new net.minecraft.world.item.crafting.CraftingRecipe.CraftingBookInfo(shaped.category(), shaped.group()),
+                            shaped.pattern, new ItemStackTemplate(result.asItem()), count);
+                    out.accept(id, bulk, advancement, conditions);
+                }
+            });
         }
 
         // =====================================================================================

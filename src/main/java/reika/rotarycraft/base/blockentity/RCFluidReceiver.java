@@ -134,7 +134,7 @@ public abstract class RCFluidReceiver extends RotaryCraftBlockEntity implements 
         tank.writeToNBT(NBT);
     }
 
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return tank.isEmpty();
     }
 

@@ -78,6 +78,7 @@ public class RotaryJEIPlugin implements IModPlugin {
                 new FractionatorCategory(gui),
                 new LavaMaker(gui),
                 new Compactor(gui),
+                new Purifier(gui),
                 new Wetter(gui),
                 new DryingBed(gui),
                 new Crystallizer(gui),
@@ -101,6 +102,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         registration.addRecipeCatalyst(MachineRegistry.FRACTIONATOR.getCraftedProduct(), FractionatorCategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.LAVAMAKER.getCraftedProduct(), LavaMaker.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.COMPACTOR.getCraftedProduct(), Compactor.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.PURIFIER.getCraftedProduct(), Purifier.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.WETTER.getCraftedProduct(), Wetter.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.DRYING.getCraftedProduct(), DryingBed.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.CRYSTALLIZER.getCraftedProduct(), Crystallizer.TYPE);
@@ -209,6 +211,8 @@ public class RotaryJEIPlugin implements IModPlugin {
 
         tracked.accept(LavaMaker.TYPE, recipes
                 .byType(RotaryRecipeTypes.LAVA_MAKER.get()).stream()
+                .map(RecipeHolder::value).toList());
+        tracked.accept(Purifier.TYPE, recipes.byType(RotaryRecipeTypes.PURIFIER.get()).stream()
                 .map(RecipeHolder::value).toList());
         tracked.accept(Compactor.TYPE, recipes
                 .byType(RotaryRecipeTypes.COMPACTOR.get()).stream()

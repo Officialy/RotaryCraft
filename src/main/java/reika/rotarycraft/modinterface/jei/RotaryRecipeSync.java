@@ -12,6 +12,12 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
 public final class RotaryRecipeSync {
     private RotaryRecipeSync() {}
 
+    /** The same datapack recipes back server processing and client inventory validation. */
+    public static RecipeMap getRecipes(net.minecraft.world.level.Level level) {
+        if (level == null) return null;
+        return level.isClientSide() ? Client.getCurrentRecipes() : level.getServer().getRecipeManager().recipeMap();
+    }
+
     public static void register() {
         NeoForge.EVENT_BUS.addListener(RotaryRecipeSync::onDatapackSync);
         if (FMLEnvironment.getDist() == Dist.CLIENT)
@@ -31,6 +37,7 @@ public final class RotaryRecipeSync {
                 RotaryRecipeTypes.FRACTIONATOR.get(),
                 RotaryRecipeTypes.LAVA_MAKER.get(),
                 RotaryRecipeTypes.COMPACTOR.get(),
+                RotaryRecipeTypes.PURIFIER.get(),
                 RotaryRecipeTypes.WETTER.get(),
                 RotaryRecipeTypes.DRYING_BED.get(),
                 RotaryRecipeTypes.CRYSTALLIZER.get());

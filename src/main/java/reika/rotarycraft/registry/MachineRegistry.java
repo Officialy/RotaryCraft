@@ -47,6 +47,7 @@ import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
 import reika.rotarycraft.blockentities.farming.BlockEntitySprinkler;
 import reika.rotarycraft.blockentities.farming.BlockEntityWoodcutter;
 import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
+import reika.rotarycraft.blockentities.processing.BlockEntityPurifier;
 import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
 import reika.rotarycraft.blockentities.farming.BlockEntityAutoBreeder;
 import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
@@ -179,7 +180,6 @@ public enum MachineRegistry implements TileEnum {
     MAGNETIZER("machine.magnetizer", RotaryBlocks.MAGNETIZER.get(), BlockEntityMagnetizer.class),
     CONTAINMENT("machine.containment", RotaryBlocks.CONTAINMENT.get(), BlockEntityContainment.class),
     //    SCREEN("machine.screen", BlockRotaryCraftMachine.class, BlockEntityScreen.class, "RenderCCTVScreen"),
-//    PURIFIER("machine.purifier", BlockRotaryCraftMachine.class, BlockEntityPurifier.class),
     LASERGUN("machine.lasergun", RotaryBlocks.LASER_GUN.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityLaserGun.class),
     ITEMCANNON("machine.itemcannon", RotaryBlocks.ITEM_CANNON.get(), BlockEntityItemCannon.class),
     LANDMINE("machine.landmine", RotaryBlocks.LANDMINE.get(), BlockEntityLandmine.class),
@@ -253,7 +253,9 @@ public enum MachineRegistry implements TileEnum {
     HYDRO_ENGINE("machine.hydro_engine", RotaryBlocks.HYDRO_ENGINE.get(), BlockEntityHydroEngine.class, EngineType.HYDRO),
     FERMENTER(true, "machine.fermenter", RotaryBlocks.FERMENTER.get(), BlockEntityFermenter.class),
     EXTRACTOR(true, "machine.extractor", RotaryBlocks.EXTRACTOR.get(), BlockEntityExtractor.class),
-    DYNAMO("machine.dynamo", RotaryBlocks.ROTATIONAL_DYNAMO.get(), TileEntityDynamo.class, PowerTypes.RF);
+    DYNAMO("machine.dynamo", RotaryBlocks.ROTATIONAL_DYNAMO.get(), TileEntityDynamo.class, PowerTypes.RF),
+    // Append new machines so saved/packet machine indices retain their existing values.
+    PURIFIER(true, "machine.purifier", RotaryBlocks.PURIFIER.get(), BlockEntityPurifier.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();

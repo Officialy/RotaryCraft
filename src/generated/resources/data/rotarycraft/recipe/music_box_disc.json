@@ -1,17 +1,17 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "rotarycraft:bulk_shaped",
   "key": {
     "R": "minecraft:redstone",
     "S": "rotarycraft:hsla_steel_ingot",
     "w": "minecraft:black_wool"
   },
+  "output_count": 4,
   "pattern": [
     "wRw",
     "RSR",
     "wRw"
   ],
   "result": {
-    "count": 4,
     "id": "rotarycraft:music_box_disc"
   }
 }

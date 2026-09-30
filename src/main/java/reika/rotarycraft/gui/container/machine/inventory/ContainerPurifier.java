@@ -1,60 +1,56 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.gui.container.machine.inventory;
-//
-//import reika.rotarycraft.base.IOMachineMenu;
-//import reika.rotarycraft.blockentities.processing.BlockEntityPurifier;
-//import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.inventory.Slot;
-//
-//public class ContainerPurifier extends IOMachineMenu {
-//    private final BlockEntityPurifier purifier;
-//    private int lastPurifierCookTime;
-//
-//    public ContainerPurifier(Player player, BlockEntityPurifier par2BlockEntityPurifier) {
-//        super(player, par2BlockEntityPurifier);
-//        lastPurifierCookTime = 0;
-//        purifier = par2BlockEntityPurifier;
-//        this.addSlot(new Slot(par2BlockEntityPurifier, 0, 35, 16));
-//        this.addSlot(new Slot(par2BlockEntityPurifier, 7, 53, 16));
-//
-//        for (int i = 0; i < 5; i++)
-//            this.addSlot(new Slot(par2BlockEntityPurifier, i + 1, 8 + i * 18, 52));
-//
-//        this.addSlot(new SlotFurnace(player, par2BlockEntityPurifier, 6, 134, 34));
-//
-//        this.addPlayerInventory(player);
-//    }
-//
-//    /**
-//     * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
-//     */
-//    @Override
-//    public void broadcastChanges() {
-//        super.broadcastChanges();
-//
-//        for (int i = 0; i < crafters.size(); i++) {
-//            ICrafting icrafting = (ICrafting) crafters.get(i);
-//
-//            if (lastPurifierCookTime != purifier.cookTime) {
-//                icrafting.sendProgressBarUpdate(this, 0, purifier.cookTime);
-//            }
-//        }
-//
-//        lastPurifierCookTime = purifier.cookTime;
-//    }
-//
-//    @Override
-//    public void setData(int par1, int par2) {
-//        if (par1 == 0) {
-//            purifier.cookTime = par2;
-//        }
-//    }
-//}
+package reika.rotarycraft.gui.container.machine.inventory;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import reika.rotarycraft.base.IOMachineContainer;
+import reika.rotarycraft.blockentities.processing.BlockEntityPurifier;
+import reika.rotarycraft.registry.RotaryMenus;
+
+/** Original layout with vanilla menu data for networked progress, temperature and power. */
+public class ContainerPurifier extends IOMachineContainer<BlockEntityPurifier> {
+    public ContainerPurifier(int id, Inventory inv, FriendlyByteBuf data) {
+        this(id, inv, (BlockEntityPurifier) inv.player.level().getBlockEntity(data.readBlockPos()));
+    }
+    public ContainerPurifier(int id, Inventory inv, BlockEntityPurifier tile) {
+        super(RotaryMenus.PURIFIER.get(), id, inv, tile);
+        addInputSlot(tile, 0, 35, 16);
+        addInputSlot(tile, 7, 53, 16);
+        for (int i = 0; i < 5; i++) addInputSlot(tile, i + 1, 8 + i * 18, 52);
+        addSlot(new Slot(tile, 6, 134, 34) {
+            @Override public boolean mayPlace(ItemStack stack) { return false; }
+        });
+        addPlayerInventory(inv);
+        addDataSlots(new ContainerData() {
+            @Override public int get(int index) {
+                if (index == 0) return tile.cookTime;
+                if (index == 1) return tile.temperature;
+                if (index < 4) return tile.omega >>> ((index - 2) * 16) & 0xFFFF;
+                if (index < 6) return tile.torque >>> ((index - 4) * 16) & 0xFFFF;
+                return (int) (tile.power >>> ((index - 6) * 16) & 0xFFFF);
+            }
+            @Override public void set(int index, int value) {
+                if (index == 0) tile.cookTime = value;
+                else if (index == 1) tile.temperature = value;
+                else if (index < 4) {
+                    int shift = (index - 2) * 16;
+                    tile.omega = (tile.omega & ~(0xFFFF << shift)) | ((value & 0xFFFF) << shift);
+                } else if (index < 6) {
+                    int shift = (index - 4) * 16;
+                    tile.torque = (tile.torque & ~(0xFFFF << shift)) | ((value & 0xFFFF) << shift);
+                } else {
+                    int shift = (index - 6) * 16;
+                    tile.power = (tile.power & ~(0xFFFFL << shift)) | ((value & 0xFFFFL) << shift);
+                }
+            }
+            @Override public int getCount() { return 10; }
+        });
+    }
+    private void addInputSlot(BlockEntityPurifier tile, int slot, int x, int y) {
+        addSlot(new Slot(tile, slot, x, y) {
+            @Override public boolean mayPlace(ItemStack stack) { return tile.isItemValidForSlot(slot, stack); }
+        });
+    }
+}

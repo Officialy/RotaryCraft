@@ -91,6 +91,7 @@ public class BlockEntityPowerBus extends BlockEntityInventoryIOMachine implement
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        super.updateBlockEntity();
         if (bus == null && this.hasHubCoordinates()) {
             MachineRegistry m = MachineRegistry.getMachine(world, new BlockPos(hubX, hubY, hubZ));
             if (m == MachineRegistry.BUSCONTROLLER) {

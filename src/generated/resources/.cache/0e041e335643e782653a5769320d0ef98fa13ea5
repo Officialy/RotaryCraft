@@ -1,4 +1,4 @@
-// 26.3	2026-09-28T00:46:48.672764	Registries for reloadable
+// 26.3	2026-09-30T13:59:13.9890778	Registries for reloadable
 a916220f301948258d017ef5e577c96901779486 data/rotarycraft/advancement/bedrockbreaker.json
 e9c5dad0ea096423b3acc234f5de7d50f1cda702 data/rotarycraft/advancement/bedrockshaft.json
 6399c44c6527cedc827f8d4c453fe3844c36c5d7 data/rotarycraft/advancement/dumbextractor.json
@@ -219,6 +219,7 @@ ea1d20664c8333a8327768386bcfdc9506a44bbb data/rotarycraft/advancement/recipes/re
 c524e527092ff319c72f44577270b142a9ee06ae data/rotarycraft/advancement/recipes/redstone/propeller_blade_up.json
 6eab43d51e38183ba34d5ac647d715f17c14a7a0 data/rotarycraft/advancement/recipes/redstone/pulse_jet_furnace.json
 b2a15b7c1b14c72633c31c65d9e88a21bca67c05 data/rotarycraft/advancement/recipes/redstone/pump.json
+9b15b1451f76b6d5e05cd0354728746c89493d2d data/rotarycraft/advancement/recipes/redstone/purifier.json
 1bdd255becb4be28b3fe7808e568fdc4e34021d9 data/rotarycraft/advancement/recipes/redstone/radar_unit.json
 d6f2cae205ff341ec40413d4876bbc0ab16d75bf data/rotarycraft/advancement/recipes/redstone/radiator.json
 f4049c0d96e1c14eacbe1a16e1f6c4d5bf9603ca data/rotarycraft/advancement/recipes/redstone/railgun.json
@@ -424,6 +425,7 @@ fc7d69dd030af914718f8fe674cb0bf7009d58af data/rotarycraft/loot_table/blocks/perf
 072590dce5434fa0780b33f3057208d311386445 data/rotarycraft/loot_table/blocks/power_bus.json
 8ba12e520dcbb946c19585a1e49008895b5754ad data/rotarycraft/loot_table/blocks/pulse_jet_furnace.json
 8e59b4eb886abc252b7d89bfc845222ec7826b0d data/rotarycraft/loot_table/blocks/pump.json
+7d9dd628ab1cd215c595b21a3f715d1e311694c7 data/rotarycraft/loot_table/blocks/purifier.json
 ba9fc7a0989ca767b44c01ce8192e3f2c1843472 data/rotarycraft/loot_table/blocks/railgun.json
 7aa65c81c772ae08dd2486d71f049d0ec3c6fe84 data/rotarycraft/loot_table/blocks/refresher.json
 e451b2cdded00d66982828f1deb454d6bda6d915 data/rotarycraft/loot_table/blocks/refrigerator.json
@@ -554,7 +556,7 @@ dc150a5d30548c976e80a4c79562bbe3ae4da355 data/rotarycraft/recipe/compound_compre
 34bde4fa30c8f301ebc211359de9b73baad35c6a data/rotarycraft/recipe/containment.json
 40ded1143cdd01625d1c2d073a5d852de66219c1 data/rotarycraft/recipe/cooling_fin.json
 b8cf5820b936948213fbc4ff269ac4d69293723f data/rotarycraft/recipe/copper_flakes_to_ingot.json
-6a73e09d212632974733e5c6f867947db1319527 data/rotarycraft/recipe/craft_pattern.json
+c8a5875f65c9efe7c7787815826788e0e9856bc5 data/rotarycraft/recipe/craft_pattern.json
 b14faa556f7296af79dabce5cea59befdfcce61c data/rotarycraft/recipe/crystallizer.json
 bf8a8c75f2126267291cbc8cc8ad326b1124f0ce data/rotarycraft/recipe/crystallizer/ethanol.json
 985f52d1750aee9cd5c87892b73451dfdd9288f1 data/rotarycraft/recipe/crystallizer/lava.json
@@ -751,7 +753,7 @@ c49a41b4f9c720b4199d7e738b66d96fa0dd4e3b data/rotarycraft/recipe/mount.json
 09b848862adee97152eef2a6ea869f266adec93e data/rotarycraft/recipe/multi_cannon.json
 61dc78f74d241c2da235eb6b090d749447922ab6 data/rotarycraft/recipe/multi_clutch.json
 e3f736c656fd10abc7459800d0a60c9d097b1e1f data/rotarycraft/recipe/music_box.json
-2a440294136e99babd4d61c062bb191bef9a5b5c data/rotarycraft/recipe/music_box_disc.json
+b379910155e2d561e4342b64cdfbb2e69c6f32b6 data/rotarycraft/recipe/music_box_disc.json
 0bdcef3e2e9221ac9bbeba21d9522fa34db55b14 data/rotarycraft/recipe/nvg.json
 4c9e45fef7eaadee165af61d6665c0e1d0fa5b31 data/rotarycraft/recipe/obsidian_maker.json
 ef5e01728a3bb83610816126c3585a37d584736c data/rotarycraft/recipe/particle.json
@@ -800,6 +802,8 @@ fffb16cf1275d3050db14979f7b40e23ccc01c04 data/rotarycraft/recipe/pulse_furnace/r
 ac36c9f291ae5c57b265d29b734c467a9ff67615 data/rotarycraft/recipe/pulse_furnace/red_gold_dust_to_ingot.json
 62d9f91fe7900c0696fe619614f7cb880f53b0c3 data/rotarycraft/recipe/pulse_jet_furnace.json
 b1f4450839268c5e0aa045d62499b50d20be361c data/rotarycraft/recipe/pump.json
+7c4dabe5e348e8a8aae1173e37c6e6e4dbb6dd33 data/rotarycraft/recipe/purifier.json
+b4e6f3c77e184b6b3b88954d3cfed1f36950ec5f data/rotarycraft/recipe/purifier/steel.json
 dd561366100edc4e7f4bb7bb8966b92671b2f862 data/rotarycraft/recipe/quartz_flakes_to_ingot.json
 1b92d987e902a8bcff55d89d7dc2a003211dfa07 data/rotarycraft/recipe/radar_unit.json
 064bf963a6c39bde3a02c78a53b7ac0a8f0bd7d4 data/rotarycraft/recipe/radiator.json

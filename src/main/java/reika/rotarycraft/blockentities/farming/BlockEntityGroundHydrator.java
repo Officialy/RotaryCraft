@@ -122,6 +122,7 @@ public class BlockEntityGroundHydrator extends RCFluidReceiver {
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        super.updateEntity();
         if (world.isClientSide() || tank.getFluidLevel() < FLUID_PER_BLOCK)
             return;
         if (world.getRandom().nextInt(2) != 0)

@@ -40,3 +40,16 @@ dependencies {
         localRuntime fileTree(dir: 'libs', include: ['*.jar'])
     }
 }
+
+// Test-only foreign steel fixture. This resource source set is never packaged in the release jar.
+// It exercises the real common-tag integration without requiring a third-party steel mod.
+if (gradle.startParameter.taskNames.any { it.toLowerCase(Locale.ROOT).contains('rungametest') }) {
+    sourceSets {
+        gameTestFixtures {
+            resources.srcDir 'src/gametest/resources'
+        }
+    }
+    neoForge.mods.named(project.mod_id) {
+        sourceSet(sourceSets.gameTestFixtures)
+    }
+}

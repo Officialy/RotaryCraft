@@ -61,6 +61,22 @@ public final class RotaryAdditionalJEICategories {
         }
     }
 
+    public static final class Purifier extends MachineCategory<reika.rotarycraft.auxiliary.recipemanagers.PurifierRecipe> {
+        public static final RecipeType<reika.rotarycraft.auxiliary.recipemanagers.PurifierRecipe> TYPE =
+                RecipeType.create(RotaryCraft.MODID, "purifier", reika.rotarycraft.auxiliary.recipemanagers.PurifierRecipe.class);
+        public Purifier(IGuiHelper gui) { super(gui, TYPE, MachineRegistry.PURIFIER, "machine.purifier"); }
+        @Override public int getWidth() { return 144; }
+        @Override public void setRecipe(IRecipeLayoutBuilder builder,
+                reika.rotarycraft.auxiliary.recipemanagers.PurifierRecipe recipe, IFocusGroup focuses) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 9).addIngredients(recipe.input());
+            builder.addSlot(RecipeIngredientRole.INPUT, 28, 9).addIngredients(recipe.gunpowder());
+            builder.addSlot(RecipeIngredientRole.INPUT, 55, 9).addIngredients(recipe.sand());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 113, 9).addItemStack(recipe.getResult())
+                    .addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.translatable(
+                            "jei.rotarycraft.purifier_requirements", recipe.temperature())));
+        }
+    }
+
     public static final class Compactor extends MachineCategory<CompactorRecipe> {
         public static final RecipeType<CompactorRecipe> TYPE =
                 RecipeType.create(RotaryCraft.MODID, "compactor", CompactorRecipe.class);

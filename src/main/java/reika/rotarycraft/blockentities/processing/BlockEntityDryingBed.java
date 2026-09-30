@@ -31,7 +31,7 @@ import reika.rotarycraft.registry.RotaryRecipeTypes;
  * ticks (water -> salt, lava -> gold nugget). Runs on the new unpowered
  * {@link InventoriedRCFluidReceiver} base.
  *
- * <p>26.2 port notes: recipes are the data-driven {@link DryingBedRecipe} (legacy RecipesDryingBed;
+ * <p>26.3 port notes: recipes are the data-driven {@link DryingBedRecipe} (legacy RecipesDryingBed;
  * the oil/honey/chroma mod-fluid entries are gated out).</p>
  */
 public class BlockEntityDryingBed extends InventoriedRCFluidReceiver {
@@ -48,11 +48,13 @@ public class BlockEntityDryingBed extends InventoriedRCFluidReceiver {
 
     @Override
     public void updateEntity(Level world, BlockPos pos) {
+        super.updateEntity();
         if (world.isClientSide())
             return;
         DryingBedRecipe r = tank.isEmpty() ? null : this.getRecipe(tank.getActualFluid().getFluid());
         if (this.canMake(r)) {
             timer++;
+            this.setChanged();
             if (timer >= DRY_TIME) {
                 timer = 0;
                 while (this.canMake(r)) {
@@ -63,6 +65,7 @@ public class BlockEntityDryingBed extends InventoriedRCFluidReceiver {
             }
         }
         else {
+            if (timer != 0) this.setChanged();
             timer = 0;
         }
         progress = timer;
@@ -93,14 +96,27 @@ public class BlockEntityDryingBed extends InventoriedRCFluidReceiver {
         ItemStack slot = itemHandler.getStackInSlot(0);
         if (slot.isEmpty())
             itemHandler.setStackInSlot(0, is);
-        else
+        else {
             slot.grow(is.getCount());
+            itemHandler.setStackInSlot(0, slot);
+        }
         tank.removeLiquid(r.getConsumption());
     }
 
+    @Override
     public boolean canExtractItem(int i, ItemStack is, int s) {
         return true;
     }
+
+    public void addLiquid(Fluid fluid, int amount) {
+        tank.addLiquid(amount, fluid);
+        setChanged();
+    }
+
+    public int getLiquidScaled(int size) { return size * tank.getFluidLevel() / CAPACITY; }
+    public int getProgressScaled(int size) { return size * progress / DRY_TIME; }
+    public Fluid getFluid() { return tank.getActualFluid().getFluid(); }
+    public boolean hasFluid() { return !tank.isEmpty(); }
 
     @Override
     public int getContainerSize() {
@@ -125,7 +141,7 @@ public class BlockEntityDryingBed extends InventoriedRCFluidReceiver {
 
     @Override
     public boolean canReceiveFrom(Direction from) {
-        return true;
+        return from != Direction.DOWN;
     }
 
     @Override
@@ -160,7 +176,7 @@ public class BlockEntityDryingBed extends InventoriedRCFluidReceiver {
 
     @Override
     public boolean hasModelTransparency() {
-        return false;
+        return true;
     }
 
     @Override

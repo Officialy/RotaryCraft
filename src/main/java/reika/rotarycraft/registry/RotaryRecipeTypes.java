@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.recipemanagers.CentrifugeRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.CompactorRecipe;
+import reika.rotarycraft.auxiliary.recipemanagers.PurifierRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.CrystallizerRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
 import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
@@ -34,6 +35,7 @@ public class RotaryRecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<CentrifugeRecipe>> CENTRIFUGE = RECIPE_TYPES.register("centrifuge", () -> new RecipeType<CentrifugeRecipe>() {});
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<LavaMakerRecipe>> LAVA_MAKER = RECIPE_TYPES.register("lava_maker", () -> new RecipeType<LavaMakerRecipe>() {});
+    public static final DeferredHolder<RecipeType<?>, RecipeType<PurifierRecipe>> PURIFIER = RECIPE_TYPES.register("purifier", () -> new RecipeType<PurifierRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<CompactorRecipe>> COMPACTOR = RECIPE_TYPES.register("compactor", () -> new RecipeType<CompactorRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<WetterRecipe>> WETTER = RECIPE_TYPES.register("wetter", () -> new RecipeType<WetterRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<DryingBedRecipe>> DRYING_BED = RECIPE_TYPES.register("drying_bed", () -> new RecipeType<DryingBedRecipe>() {});

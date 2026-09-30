@@ -129,7 +129,7 @@ public class RotaryBlocks {
 
     public static final DeferredBlock<Block> PUMP = registerMachineBlock("pump", () -> new BlockPump(blockProperties().strength(5)));
     public static final DeferredBlock<Block> AEROSOLIZER = registerMachineBlock("aerosolizer", () -> new BlockAerosolizer(blockProperties().strength(5)));
-    public static final DeferredBlock<Block> WINDER = registerMachineBlock("winder", () -> new BlockAerosolizer(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> WINDER = registerMachineBlock("winder", () -> new BlockWinder(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FLOODLIGHT = registerMachineBlock("floodlight", () -> new BlockFloodlight(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DYNAMOMETER = registerMachineBlock("dynamometer", () -> new BlockDynamometer(blockProperties().strength(5)));
     public static final DeferredBlock<Block> MIRROR = registerMachineBlock("mirror", () -> new BlockMirror(blockProperties().strength(5)));
@@ -204,6 +204,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> WOODCUTTER = registerMachineBlock("woodcutter", () -> new BlockWoodcutter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DROPS = registerMachineBlock("drop_processor", () -> new BlockDropProcessor(blockProperties().strength(5)));
     public static final DeferredBlock<Block> SPRINKLER = registerMachineBlock("sprinkler", () -> new BlockSprinkler(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> PURIFIER = registerMachineBlock("purifier", () -> new BlockPurifier(blockProperties().strength(5)));
     public static final DeferredBlock<Block> COMPACTOR = registerMachineBlock("compactor", () -> new BlockCompactor(blockProperties().strength(5)));
     public static final DeferredBlock<Block> WETTER = registerMachineBlock("wetter", () -> new BlockWetter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DRYING = registerMachineBlock("drying_bed", () -> new BlockDryingBed(blockProperties().strength(5)));

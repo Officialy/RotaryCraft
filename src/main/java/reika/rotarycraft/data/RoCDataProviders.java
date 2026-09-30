@@ -41,5 +41,6 @@ public final class RoCDataProviders {
         // Empty arena structure template that the in-world game tests run on.
         event.createProvider(RoCTestStructureProvider::new);
         event.createProvider(RoCBlockTagsProvider::new);
+        event.createProvider(RoCItemTagsProvider::new);
     }
 }
