@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 30,
+  "items": [
+    {
+      "chance": 0.3,
+      "ingredient": "minecraft:snow_block"
+    }
+  ],
+  "min_power": 32768,
+  "source": "rotarycraft:terraformer/taiga",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:snowy_taiga",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 0
+}

@@ -1,0 +1,26 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 21,
+  "items": [
+    {
+      "chance": 0.4,
+      "ingredient": "minecraft:oak_sapling"
+    },
+    {
+      "chance": 0.6,
+      "ingredient": "minecraft:oak_sapling"
+    },
+    {
+      "chance": 0.3,
+      "ingredient": "minecraft:fern"
+    }
+  ],
+  "min_power": 262144,
+  "source": "rotarycraft:terraformer/forest",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:jungle",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 50
+}

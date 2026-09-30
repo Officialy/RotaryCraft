@@ -74,6 +74,7 @@ public class RotaryRecipeSerializers {
             RECIPE_SERIALIZERS.register("fractionator",
                     () -> new RecipeSerializer<>(FractionatorRecipe.CODEC, FractionatorRecipe.STREAM_CODEC));
 
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<reika.rotarycraft.auxiliary.recipemanagers.TerraformingRecipe>> TERRAFORMER = RECIPE_SERIALIZERS.register("terraformer", () -> new RecipeSerializer<>(reika.rotarycraft.auxiliary.recipemanagers.TerraformingRecipe.CODEC, reika.rotarycraft.auxiliary.recipemanagers.TerraformingRecipe.STREAM_CODEC));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe>> DISTILLER =
             RECIPE_SERIALIZERS.register("distiller", () -> new RecipeSerializer<>(reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe.CODEC,
                     reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe.STREAM_CODEC));

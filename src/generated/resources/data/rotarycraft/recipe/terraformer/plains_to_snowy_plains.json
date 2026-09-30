@@ -1,0 +1,22 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 12,
+  "items": [
+    {
+      "chance": 1.0,
+      "ingredient": "minecraft:snow_block"
+    },
+    {
+      "chance": 0.05,
+      "ingredient": "minecraft:oak_sapling"
+    }
+  ],
+  "min_power": 8192,
+  "source": "rotarycraft:terraformer/plains",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:snowy_plains",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 0
+}

@@ -1,4 +1,4 @@
-// 26.3	2026-09-30T18:20:24.7264862	Model Definitions - rotarycraft
+// 26.3	2026-09-30T23:15:00.6674795	Model Definitions - rotarycraft
 f8a25e5cd83b08aad4c45621a8ece222635e462b assets/rotarycraft/blockstates/aa_gun.json
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
@@ -963,3 +963,6 @@ cee4855d4dbaa9b361388eef52cfc73392f2a040 assets/rotarycraft/models/item/turret_b
 ea7eb82068b87fefa3723f371d7addc7788bc14c assets/rotarycraft/models/item/wood_flywheel_core.json
 dcbc5ac2eb7f61fe4e6ca419d5ce8231d096e87f assets/rotarycraft/models/item/worm_gear.json
 66d988dfcc7f58cda4bc7aec8ad5a7e7a9d7bfa1 assets/rotarycraft/models/item/yeast.json
+39189ed1c52625395b2d6fcc355fd073aa58b163 assets/rotarycraft/blockstates/terraformer.json
+b013bf593cff98ec6d4fadd82a42de7ff0202578 assets/rotarycraft/items/terraformer.json
+ba5f9016bbb7c44dce6e844c61a65aeb8875f32a assets/rotarycraft/models/block/terraformer.json

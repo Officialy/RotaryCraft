@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 10,
+  "items": [
+    {
+      "chance": 1.0,
+      "ingredient": "minecraft:ice"
+    }
+  ],
+  "min_power": 32768,
+  "source": "rotarycraft:terraformer/snowy_plains",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:frozen_ocean",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 100
+}

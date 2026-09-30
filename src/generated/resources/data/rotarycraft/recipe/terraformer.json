@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "c": "rotarycraft:circuit_board",
+    "i": "rotarycraft:impeller",
+    "s": "rotarycraft:screen"
+  },
+  "pattern": [
+    "SsS",
+    "ici",
+    "PiP"
+  ],
+  "result": {
+    "id": "rotarycraft:terraformer"
+  }
+}

@@ -65,11 +65,12 @@ this suite does not establish end-to-end survival readiness.
 
 ## Remaining machines
 
-The owner's starting report listed 25 missing V33a machines. Purifier and Distiller are restored,
-leaving 23 from that report: Bait Box, Bundled Bus, CCTV, Chunk Loader, Compressor, Crafter,
+The owner's starting report listed 25 missing V33a machines. Purifier, Distiller, Terraformer
+and the separate AutoCrafting Unit and Item Filter ports are restored, leaving 20 from that report:
+Bait Box, Bundled Bus, CCTV, Chunk Loader, Compressor,
 Defoliator, Display, Electric Motor, Flame Turret, Fuel Engine, Fuel Enhancer,
-Generator, Item Filter, Mob Radar, Pile Driver, Pneumatic Engine, Portal Shaft, Projector,
-Screen, Sonic Weapon, Spy Cam and Terraformer. Audit their pristine source and dependencies
+Generator, Mob Radar, Pile Driver, Pneumatic Engine, Portal Shaft, Projector,
+Screen, Sonic Weapon and Spy Cam. Audit their pristine source and dependencies
 before selecting the next complete port. Do not stub integrations to enable a compile.
 
 ## Validation on 2026-09-30
@@ -140,3 +141,37 @@ Release checks for this slice: RotaryCraft and ReactorCraft jars build, with 11 
 checks. Jar inspection confirms new content and excludes the test-only fluid tag substitutions.
 The shared six-mod build currently stops at the other agent's in-progress ChromatiCraft
 ChromaBlocks reference to PushReaction.BLOCK; a fresh six-mod release set is therefore not yet verified.
+
+
+## Terraformer (2026-09-30)
+
+- Fully ported the Terraformer, original SsS/ici/PiP crafting recipe, steel cube with screen on
+  top, 54 inventory slots, 24000 mB water tank, summative power, redstone gate, cadence, manual
+  menu transfers, original automation restrictions, Tile Selector and handbook entry.
+- All 36 directed V33a biome conversions are generated recipes. Eighteen source-family tags
+  include modern counterparts of child biomes; cold/old-growth taiga and deep/frozen ocean remain
+  separate families. GUI and JEI use synchronized loaded recipes, including power, water and
+  original quantized ItemReq consumption rolls. Duplicate oak requirements are preserved.
+- Modern biome storage uses 4x4 cells. Selection deduplicates cells independently of Y, and each
+  completed cell pays all sixteen original column costs atomically. The entire vertical biome
+  column is changed and vanilla resends affected chunk biomes. Unloaded work waits without loading
+  chunks; queue, terrain footprint, target, inventory, water and cadence persist across saves.
+- With a diamond and biome-block configuration enabled, original topsoil/filler replacement starts
+  at Y=30, followed by registered target-biome feature generation. Feature writes are bounded to
+  selected loaded terrain, honor break permissions and preserve block entities. Climate freezing
+  and melting also apply without a diamond, as in the original environmental path.
+- Neighboring area providers can implement TerraformerAreaProvider for inclusive marker rectangles;
+  a BUILDCRAFT-PORT marker preserves the original IAreaProvider integration contract until a
+  compatible BuildCraft API exists. The bridge is tested independently of BuildCraft installation.
+- Fifty-one functional GameTests cover every conversion using real creative-coil power, resource
+  gates and full-cell atomicity, selector behavior, child biomes, area import, persistence, fluid/item
+  transactions, validated menu actions, manual transfers, soil, freezing, actual tree generation,
+  loaded-area boundaries, survival inventory drops and recipe disk/network codecs.
+- This slice still needs a real-client visual check of the Terraformer menu, biome colours and JEI.
+  Headless tests do not verify real multiplayer biome packet delivery or third-party claim mods.
+
+Validation: 51/51 Terraformer tests and 284/284 full RotaryCraft GameTests pass on the current
+shared tree. Fresh compiler outputs are used because concurrent Gradle runs share incremental
+compiler metadata. RotaryCraft release build and its 11 JUnit checks pass; final jar contents are
+checked separately. Logs: build/terraformer-tests.log, build/terraformer-full-tests.log and
+build/terraformer-release.log. Pending AE2 work is not included in the Terraformer commit.

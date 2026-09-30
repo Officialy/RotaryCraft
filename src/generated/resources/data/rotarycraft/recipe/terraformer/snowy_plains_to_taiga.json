@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 5,
+  "items": [
+    {
+      "chance": 0.4,
+      "ingredient": "minecraft:spruce_sapling"
+    }
+  ],
+  "min_power": 65536,
+  "source": "rotarycraft:terraformer/snowy_plains",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:taiga",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 0
+}

@@ -234,7 +234,7 @@ public enum HandbookRegistry implements HandbookEntry {
     ITEMCANNON(MachineRegistry.ITEMCANNON),
     BUCKETFILLER(MachineRegistry.BUCKETFILLER),
     //    LAMP(MachineRegistry.LAMP),
-//    TERRA(MachineRegistry.TERRAFORMER),
+    TERRA(MachineRegistry.TERRAFORMER),
     LINE(MachineRegistry.LINEBUILDER),
     BEAMMIRROR(MachineRegistry.BEAMMIRROR),
     //    SONICBORER(MachineRegistry.SONICBORER),

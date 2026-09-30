@@ -177,6 +177,7 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(BlockEntityDropProcessor::new, RotaryBlocks.DROPS.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySprinkler>> SPRINKLER = BLOCK_ENTITIES.register("sprinkler", () ->
             new BlockEntityType<>(BlockEntitySprinkler::new, RotaryBlocks.SPRINKLER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityTerraformer>> TERRAFORMER = BLOCK_ENTITIES.register("terraformer", () -> new BlockEntityType<>(BlockEntityTerraformer::new, RotaryBlocks.TERRAFORMER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityDistillery>> DISTILLER = BLOCK_ENTITIES.register("distiller", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityDistillery::new, RotaryBlocks.DISTILLER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityPurifier>> PURIFIER = BLOCK_ENTITIES.register("purifier", () ->
@@ -211,8 +212,8 @@ public class RotaryBlockEntities {
             new BlockEntityType<>(reika.rotarycraft.blockentities.BlockEntityItemFilter::new, RotaryBlocks.ITEMFILTER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter>> CRAFTER = BLOCK_ENTITIES.register("crafter", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter::new, RotaryBlocks.CRAFTER.get()));
-            new BlockEntityType<>(BlockEntitySplitBelt::new, RotaryBlocks.SPLITBELT.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySplitBelt>> SPLITBELT = BLOCK_ENTITIES.register("split_belt", () ->
+            new BlockEntityType<>(BlockEntitySplitBelt::new, RotaryBlocks.SPLITBELT.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityIgniter>> IGNITER = BLOCK_ENTITIES.register("igniter", () ->
             new BlockEntityType<>(BlockEntityIgniter::new, RotaryBlocks.IGNITER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityDistributionClutch>> DISTRIBUTION_CLUTCH = BLOCK_ENTITIES.register("distribution_clutch", () ->

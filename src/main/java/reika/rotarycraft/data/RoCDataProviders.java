@@ -43,5 +43,6 @@ public final class RoCDataProviders {
         event.createProvider(RoCBlockTagsProvider::new);
         event.createProvider(RoCItemTagsProvider::new);
         event.createProvider(RoCFluidTagsProvider::new);
+        event.createProvider(TerraformerBiomeTagsProvider::new);
     }
 }

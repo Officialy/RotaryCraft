@@ -462,11 +462,10 @@ public class HandbookAuxData {
                 // This section relies on MobBait which is not defined.
                 // It will be skipped for now.
             }
-            else if (h == HandbookRegistry.TERRA && subpage == 1) { // TERRA is not a field
-                // This section relies on TileEntityTerraformer, BiomeTransform, ReikaBiomeHelper, ReikaLiquidRenderer, IIcon.
-                // It will be skipped for now.
-            }
             */
+            else if (h == HandbookRegistry.TERRA && subpage == 1) {
+                drawTerraformer(f, ri, dx, dy);
+            }
             else if (h == HandbookRegistry.TIERS) {
                 int maxw = 11;
                 NavigableSet<Long> s = powerData.keySet();
@@ -585,6 +584,35 @@ public class HandbookAuxData {
         }
         catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /** Cycle through the loaded transformation graph, so datapack changes also update the handbook. */
+    private static void drawTerraformer(Font font, GuiGraphicsExtractor graphics, int x, int y) {
+        var level = Minecraft.getInstance().level;
+        if (level == null) return;
+        var recipes = reika.rotarycraft.blockentities.level.BlockEntityTerraformer.getTransformList(level);
+        if (recipes.isEmpty()) return;
+        var recipe = recipes.get((int)((System.currentTimeMillis() / 3000) % recipes.size()));
+        String source = recipe.source().location().getPath().replace("terraformer/", "");
+        int sourceIcon = recipes.stream().filter(r -> r.target().identifier().getPath().equals(source))
+                .mapToInt(r -> r.icon()).findFirst().orElse(0);
+        var atlas = net.minecraft.resources.Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/biomes.png");
+        graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, atlas, x + 45, y + 20,
+                (sourceIcon % 8) * 32, (sourceIcon / 8) * 32, 32, 32, 256, 256);
+        graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, atlas, x + 175, y + 20,
+                (recipe.icon() % 8) * 32, (recipe.icon() / 8) * 32, 32, 32, 256, 256);
+        graphics.text(font, "->", x + 119, y + 33, 0xff404040, false);
+        graphics.text(font, net.minecraft.network.chat.Component.translatable("biome.minecraft." + source), x + 15, y + 5, 0xff404040, false);
+        graphics.text(font, net.minecraft.network.chat.Component.translatable("biome." + recipe.target().identifier().getNamespace() + "." + recipe.target().identifier().getPath()), x + 144, y + 5, 0xff404040, false);
+        graphics.text(font, recipe.minPower() + " W; " + recipe.water() + " mB/column", x + 45, y + 58, 0xff404040, false);
+        for (int n = 0; n < recipe.items().size(); n++) {
+            var cost = recipe.items().get(n);
+            long count = cost.ingredient().items().count();
+            if (count == 0) continue;
+            int index = (int)((System.currentTimeMillis() / 500) % count);
+            var item = cost.ingredient().items().skip(index).findFirst();
+            if (item.isPresent()) api.drawItemStackWithTooltip(graphics, font, new ItemStack(item.get().value()), x + 72 + n * 20, y + 75);
         }
     }
 

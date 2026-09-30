@@ -1,0 +1,26 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 3,
+  "items": [
+    {
+      "chance": 0.125,
+      "ingredient": "minecraft:grass_block"
+    },
+    {
+      "chance": 0.05,
+      "ingredient": "minecraft:oak_sapling"
+    },
+    {
+      "chance": 0.25,
+      "ingredient": "minecraft:short_grass"
+    }
+  ],
+  "min_power": 262144,
+  "source": "rotarycraft:terraformer/mushroom_fields",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:mycelium",
+  "target": "minecraft:windswept_hills",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 0
+}

@@ -1,136 +1,81 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.guis.Machine.Inventory;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import org.lwjgl.opengl.GL11;
-//
-//import net.minecraft.client.gui.Button;
-//import net.minecraft.entity.player.Player;
-//import net.minecraft.world.item.ItemStack;
-//
-//import net.minecraft.world.biome.Biome;
-//import net.neoforged.neoforge.fluids.FluidStack;
-//
-//import reika.dragonapi.instantiable.gui.ImageButton;
-//import reika.dragonapi.libraries.io.ReikaPacketHelper;
-//import reika.dragonapi.libraries.io.ReikaTextureHelper;
-//import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
-//import reika.rotarycraft.RotaryCraft;
-//import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerTerraformer;
-//import reika.rotarycraft.registry.PacketRegistry;
-//import reika.rotarycraft.blockentities.level.BlockEntityTerraformer;
-//
-//public class GuiTerraformer extends GuiPowerOnlyMachine {
-//
-//    BlockEntityTerraformer terra;
-//    private List<Biome> targets;
-//    private int offset = 0;
-//
-//    public GuiTerraformer(Player pl, BlockEntityTerraformer te) {
-//        super(new ContainerTerraformer(pl, te), te);
-//        ep = pl;
-//        terra = te;
-//        imageWidth = 240;
-//        imageHeight = 222;
-//    }
-//
-//    @Override
-//    public void initGui() {
-//        super.initGui();
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//        String = "/Reika/RotaryCraft/Textures/GUI/biomes.png";
-//
-//        targets = new ArrayList(terra.getValidTargetBiomes(terra.getCentralBiome()));
-//
-//        for (int i = 0; i < this.getNumberBiomesOnPage(); i++) {
-//            Biome b = targets.get(i + offset);
-//            addRenderableWidget(new ImageButton(i, j + 8, k + 17 + 39 * i, 32, 32, 32 * (b.biomeID % 8), 32 * (b.biomeID / 8), , b.biomeName, 0xffffff, false, RotaryCraft.class));
-//        }
-//
-//		 ="/Reika/RotaryCraft/Textures/GUI/buttons.png";
-//        addRenderableWidget(new ImageButton(100, j + 11, k + 6, 24, 12, 18, 110, , RotaryCraft.class));
-//        addRenderableWidget(new ImageButton(101, j + 11, k + imageHeight - 14, 24, 12, 42, 110, , RotaryCraft.class));
-//    }
-//
-//    private int getNumberBiomesOnPage() {
-//        return Math.min(targets.size(), 5);
-//    }
-//
-//    @Override
-//    protected void actionPerformed(Button b) {
-//        super.actionPerformed(b);
-//
-//        if (b.id == 100 && offset > 0) {
-//            offset--;
-//        } else if (b.id == 101 && offset < targets.size() - 5) {
-//            offset++;
-//        } else if (b.id < targets.size()) {
-//            Biome biome = targets.get(b.id);
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.TERRAFORMER.ordinal(), terra, biome.biomeID);
-//        }
-//
-//        this.initGui();
-//    }
-//
-//    @Override
-//    protected void drawGuiContainerForegroundLayer(int par2, int par3) {
-//        super.drawGuiContainerForegroundLayer(par2, par3);
-//
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//
-//        Biome from = terra.getCentralBiome();
-//
-//        for (int i = 0; i < this.getNumberBiomesOnPage(); i++) {
-//            Biome to = targets.get(i + offset);
-//            FluidStack liq = terra.getReqLiquidForTransform(from, to);
-//            if (liq != null) {
-//                GL11.glColor4f(1, 1, 1, 1);
-//                ReikaLiquidRenderer.bindFluidTexture(liq.getFluid());
-//                IIcon ico = ReikaLiquidRenderer.getFluidIconSafe(liq.getFluid());
-//                this.drawTexturedModelRectFromIcon(48, 17 + i * 39, ico, 16, 16);
-//                api.drawCenteredStringNoShadow(font, String.format("%d", liq.amount), 56, 21 + i * 39, 0xFF000000);
-//            } else {
-//                api.drawLine(48, 17 + i * 39, 16 + 48, 16 + 17 + i * 39, 0);
-//                api.drawLine(16 + 48, 17 + i * 39, 48, 16 + 17 + i * 39, 0);
-//            }
-//            ArrayList<ItemStack> items = terra.getItemsForTransform(from, to);
-//            if (items != null && !items.isEmpty()) {
-//                int step = (int) ((System.nanoTime() / 500000000) % items.size());
-//                ItemStack is = items.get(step);
-//                api.drawItemStack(itemRender, font, is, 48, 19 + 16 + i * 39);
-//            } else {
-//                api.drawLine(48, 18 + 17 + i * 39, 16 + 48, 18 + 16 + 17 + i * 39, 0);
-//                api.drawLine(16 + 48, 18 + 17 + i * 39, 48, 18 + 16 + 17 + i * 39, 0);
-//            }
-//        }
-//        String = "/Reika/RotaryCraft/Textures/GUI/" + this.getGuiTexture() + ".png";
-//        ReikaTextureHelper.bindTexture(RotaryCraft.class, );
-//    }
-//
-//    @Override
-//    public void extractBackground(PoseStack poseStack,float par1, int par2, int par3) {
-//        super.extractBackground(PoseStack poseStack,par1, par2, par3);
-//
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//    }
-//
-//    @Override
-//    protected String getGuiTexture() {
-//        return "terraformergui";
-//    }
-//
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.gui.screen.machine.inventory;
+
+import java.util.List;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import reika.dragonapi.instantiable.gui.ImagedGuiButton;
+import reika.rotarycraft.RotaryCraft;
+import reika.rotarycraft.auxiliary.recipemanagers.TerraformingRecipe;
+import reika.rotarycraft.base.MachineScreen;
+import reika.rotarycraft.blockentities.level.BlockEntityTerraformer;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerTerraformer;
+
+public class GuiTerraformer extends MachineScreen<BlockEntityTerraformer, ContainerTerraformer> {
+    private List<TerraformingRecipe> targets = List.of();
+    private int offset;
+    public GuiTerraformer(ContainerTerraformer menu, Inventory inventory, Component title) { super(menu, inventory, title, 240, 222); }
+    @Override protected void init() {
+        super.init();
+        targets = menu.tile.getValidTargetBiomes(menu.tile.getCentralBiome());
+        offset = Math.clamp(offset, 0, Math.max(0, targets.size() - 5));
+        Identifier icons = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/biomes.png");
+        for (int row = 0; row < Math.min(5, targets.size() - offset); row++) {
+            var recipe = targets.get(offset + row);
+            String name = Component.translatable("biome." + recipe.target().identifier().getNamespace() + "." + recipe.target().identifier().getPath()).getString();
+            String tip = name + " - " + recipe.minPower() + " W; " + recipe.water() + " mB per column (16 columns/cell)";
+            addRenderableWidget(new ImagedGuiButton(row, leftPos + 8, topPos + 17 + 39 * row, 32, 32,
+                    32 * (recipe.icon() % 8), 32 * (recipe.icon() / 8), icons, tip, 0xffffff, false, button -> {
+                var biome = menu.tile.getLevel().registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(recipe.target());
+                minecraft.gameMode.handleInventoryButtonClick(menu.containerId, menu.tile.getLevel().registryAccess().lookupOrThrow(Registries.BIOME).getId(biome.value()));
+            }));
+        }
+        Identifier buttons = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/buttons.png");
+        var up = addRenderableWidget(new ImagedGuiButton(100, leftPos + 11, topPos + 6, 24, 12, 18, 110, buttons, b -> { offset--; init(); }));
+        var down = addRenderableWidget(new ImagedGuiButton(101, leftPos + 11, topPos + imageHeight - 14, 24, 12, 42, 110, buttons, b -> { offset++; init(); }));
+        up.active = offset > 0; down.active = offset + 5 < targets.size();
+    }
+    @Override protected void containerTick() {
+        super.containerTick();
+        if (!targets.equals(menu.tile.getValidTargetBiomes(menu.tile.getCentralBiome()))) init();
+    }
+    @Override public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partial) {
+        super.extractBackground(graphics, mouseX, mouseY, partial);
+        for (int row = 0; row < Math.min(5, targets.size() - offset); row++) {
+            var recipe = targets.get(offset + row);
+            int x = leftPos + 48, y = topPos + 17 + row * 39;
+            graphics.text(font, recipe.water() == 0 ? "-" : Integer.toString(recipe.water() * 16), x, y + 4, 0xff404040, false);
+            if (!recipe.items().isEmpty()) {
+                int index = (int)((System.currentTimeMillis() / 500) % recipe.items().size());
+                var item = recipe.items().get(index).ingredient().items().findFirst();
+                item.ifPresent(holder -> graphics.item(new ItemStack(holder.value()), x, y + 18));
+            }
+            if (recipe.target().equals(menu.tile.getTarget())) graphics.fill(leftPos + 5, y, leftPos + 7, y + 32, 0xff33cc33);
+        }
+        graphics.text(font, Component.translatable("gui.rotarycraft.terraformer_status", menu.tile.queuedCells, menu.water), leftPos + 72, topPos + 128, 0xff404040, false);
+    }
+    @Override protected void drawPowerTab(GuiGraphicsExtractor graphics, int x, int y) {
+        Identifier texture = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/powertab.png");
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, imageWidth + x, y + 4, 0, 4, 42, imageHeight - 4, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, imageWidth + x + 5, y + 28, 0, 0, (int)menu.tile.getScaledPower(29), 4, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, imageWidth + x + 5, y + 88, 0, 0, (int)menu.tile.getScaledOmega(29), 4, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, imageWidth + x + 5, y + 148, 0, 0, (int)menu.tile.getScaledTorque(29), 4, 256, 256);
+        api.drawCenteredStringNoShadow(graphics, font, "Power:", imageWidth + x + 20, y + 9, 0xff000000);
+        api.drawCenteredStringNoShadow(graphics, font, "Speed:", imageWidth + x + 20, y + 69, 0xff000000);
+        api.drawCenteredStringNoShadow(graphics, font, "Torque:", imageWidth + x + 20, y + 129, 0xff000000);
+    }
+    @Override protected String getGuiTexture() { return "terraformergui"; }
+}

@@ -145,6 +145,8 @@ public class RoCModelProvider extends ModelProvider {
             } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockDistillery) {
                 blockModelId = ModelTemplates.CUBE_ALL.create(block,
                         TextureMapping.cube(new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"))), modelOut);
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockTerraformer) {
+                blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(block, bottomTopMapping("screen", "steel", "steel"), modelOut);
             } else if (block instanceof BlockBorer) {
                 // Directional drilling machine: drill face out the front, steel sides.
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
@@ -214,15 +216,15 @@ public class RoCModelProvider extends ModelProvider {
             } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockItemFilter) {
                 // V33a BlockIMachine ITEMFILTER icons: filter_top on top, steel base, steel_dark sides.
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
+                        block, bottomTopMapping("filter_top", "steel", "steel_dark"), modelOut);
             } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockAutoCrafter) {
                 // V33a BlockIMachine CRAFTER icons: crafter_top on top, steel base, steel_dark sides.
-                        block, bottomTopMapping("filter_top", "steel", "steel_dark"), modelOut);
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
                         block, bottomTopMapping("crafter_top", "steel", "steel_dark"), modelOut);
-                        block, bottomTopMapping("worktable_top", "worktable_bottom", "worktable"), modelOut);
-            } else if (block instanceof BlockGPR) {
             } else if (block instanceof BlockWorktable) {
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
+                        block, bottomTopMapping("worktable_top", "worktable_bottom", "worktable"), modelOut);
+            } else if (block instanceof BlockGPR) {
                 // GPR: biome-variant top textures existed in 1.7.10 via a custom renderer; the static
                 // cube uses the grass top with the metal bottom plate on the base and sides.
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(

@@ -74,6 +74,11 @@ public class RotaryLang extends LanguageProvider {
         add("tab.rotarycraft.ores", "RotaryCraft Ore Flakes");
         add("tab.rotarycraft.all", "RotaryCraft (All)");
 
+        add("machine.terraformer", "Terraformer");
+        add("rcmachinemachine.terraformer", "Terraformer");
+        add("gui.rotarycraft.terraformer_status", "%s cells; %s mB water");
+        add("item.rotarycraft.tile_selector_linked", "Linked selector to machine at %s");
+        add("item.rotarycraft.tile_selector_selected", "Selected biome cell at %s");
         add("gui.rotarycraft.purifier_temperature", "%s \u00b0C");
         add("jei.rotarycraft.purifier_requirements", "Requires %s \u00b0C; up to 5 ingots per batch");
 

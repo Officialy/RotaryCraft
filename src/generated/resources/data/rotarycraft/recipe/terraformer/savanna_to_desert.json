@@ -1,0 +1,26 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 2,
+  "items": [
+    {
+      "chance": 1.0,
+      "ingredient": "minecraft:sand"
+    },
+    {
+      "chance": 0.5,
+      "ingredient": "minecraft:sandstone"
+    },
+    {
+      "chance": 0.1,
+      "ingredient": "minecraft:cactus"
+    }
+  ],
+  "min_power": 65536,
+  "source": "rotarycraft:terraformer/savanna",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:desert",
+  "target_filler": "minecraft:sand",
+  "target_top": "minecraft:sand",
+  "water": 0
+}

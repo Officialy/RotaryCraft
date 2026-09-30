@@ -1,0 +1,12 @@
+{
+  "type": "rotarycraft:terraformer",
+  "items": [],
+  "min_power": 131072,
+  "source": "rotarycraft:terraformer/swamp",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:ocean",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 500
+}

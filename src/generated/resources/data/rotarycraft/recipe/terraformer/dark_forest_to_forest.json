@@ -1,0 +1,22 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 4,
+  "items": [
+    {
+      "chance": 0.5,
+      "ingredient": "minecraft:oak_sapling"
+    },
+    {
+      "chance": 0.2,
+      "ingredient": "minecraft:birch_sapling"
+    }
+  ],
+  "min_power": 32768,
+  "source": "rotarycraft:terraformer/dark_forest",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:forest",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 0
+}

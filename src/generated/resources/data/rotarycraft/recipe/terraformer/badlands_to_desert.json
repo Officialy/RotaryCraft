@@ -1,0 +1,22 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 2,
+  "items": [
+    {
+      "chance": 0.5,
+      "ingredient": "minecraft:sand"
+    },
+    {
+      "chance": 0.1,
+      "ingredient": "minecraft:sandstone"
+    }
+  ],
+  "min_power": 16384,
+  "source": "rotarycraft:terraformer/badlands",
+  "source_filler": "minecraft:terracotta",
+  "source_top": "minecraft:red_sand",
+  "target": "minecraft:desert",
+  "target_filler": "minecraft:sand",
+  "target_top": "minecraft:sand",
+  "water": 0
+}

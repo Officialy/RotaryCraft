@@ -1,0 +1,30 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 14,
+  "items": [
+    {
+      "chance": 1.0,
+      "ingredient": "minecraft:dirt"
+    },
+    {
+      "chance": 1.0,
+      "ingredient": "minecraft:mycelium"
+    },
+    {
+      "chance": 0.9,
+      "ingredient": "minecraft:red_mushroom"
+    },
+    {
+      "chance": 0.9,
+      "ingredient": "minecraft:brown_mushroom"
+    }
+  ],
+  "min_power": 1048576,
+  "source": "rotarycraft:terraformer/ocean",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:mushroom_fields",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:mycelium",
+  "water": 0
+}

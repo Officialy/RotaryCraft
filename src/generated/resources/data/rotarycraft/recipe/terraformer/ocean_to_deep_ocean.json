@@ -1,0 +1,13 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 24,
+  "items": [],
+  "min_power": 1024,
+  "source": "rotarycraft:terraformer/ocean",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:deep_ocean",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 200
+}

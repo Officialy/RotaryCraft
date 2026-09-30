@@ -1,0 +1,30 @@
+{
+  "type": "rotarycraft:terraformer",
+  "icon": 6,
+  "items": [
+    {
+      "chance": 0.1,
+      "ingredient": "minecraft:oak_sapling"
+    },
+    {
+      "chance": 0.05,
+      "ingredient": "minecraft:red_mushroom"
+    },
+    {
+      "chance": 0.15,
+      "ingredient": "minecraft:brown_mushroom"
+    },
+    {
+      "chance": 0.125,
+      "ingredient": "minecraft:grass_block"
+    }
+  ],
+  "min_power": 524288,
+  "source": "rotarycraft:terraformer/ocean",
+  "source_filler": "minecraft:dirt",
+  "source_top": "minecraft:grass_block",
+  "target": "minecraft:swamp",
+  "target_filler": "minecraft:dirt",
+  "target_top": "minecraft:grass_block",
+  "water": 0
+}

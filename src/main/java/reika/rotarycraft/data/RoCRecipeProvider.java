@@ -122,6 +122,7 @@ public final class RoCRecipeProvider {
         Recipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
             super(recipes, advancements);
             this.out = this.output;
+            TerraformerRecipeData.bootstrap(recipes);
         }
 
         @Override
@@ -134,6 +135,12 @@ public final class RoCRecipeProvider {
             compactor();
             purifier();
             distiller();
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.TERRAFORMER.get())
+                    .pattern("SsS").pattern("ici").pattern("PiP")
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get()).define('s', RotaryItems.SCREEN.get())
+                    .define('i', RotaryItems.IMPELLER.get()).define('c', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get())).save(out);
             crystallizer();
             wetterAndDrying();
             frictionHeater();
@@ -2535,13 +2542,6 @@ public final class RoCRecipeProvider {
                     .pattern("SCS").pattern("PcP").pattern("SPS")
                     .unlockedBy("has_circuit_board", has(RotaryItems.CIRCUIT_BOARD.get()))
                     .save(out);
-                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
-                    .save(out);
-            // REFRIGERATOR: "SPS","CcD","pPp" — 2×HSLA + 3×PIPE + 1×DIFFUSER + 1×COMPRESSOR + 1×CONDENSER + 2×BASEPANEL.
-            shaped(RecipeCategory.REDSTONE, RotaryBlocks.REFRIGERATOR.get())
-                    .define('p', RotaryItems.HSLA_PLATE.get())
-                    .define('P', RotaryBlocks.FLUID_PIPE.get())
-                    .define('D', RotaryItems.DIFFUSER.get())
             // BLOWER: addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt() — defaults to 1 —,
             //   "BBB","PIP","BBB") — 6×BASEPANEL + 2×PIPE + 1×IMPELLER.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.BLOWER.get())
@@ -2549,6 +2549,13 @@ public final class RoCRecipeProvider {
                     .define('I', RotaryItems.IMPELLER.get())
                     .define('P', RotaryBlocks.FLUID_PIPE.get())
                     .pattern("BBB").pattern("PIP").pattern("BBB")
+                    .unlockedBy("has_impeller", has(RotaryItems.IMPELLER.get()))
+                    .save(out);
+            // REFRIGERATOR: "SPS","CcD","pPp" — 2×HSLA + 3×PIPE + 1×DIFFUSER + 1×COMPRESSOR + 1×CONDENSER + 2×BASEPANEL.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.REFRIGERATOR.get())
+                    .define('p', RotaryItems.HSLA_PLATE.get())
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .define('D', RotaryItems.DIFFUSER.get())
                     .define('C', RotaryItems.COMPRESSOR.get())
                     .define('c', RotaryItems.CONDENSER.get())
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
@@ -2890,6 +2897,11 @@ public final class RoCRecipeProvider {
                     .define('B', RotaryItems.HSLA_PLATE.get())
                     .pattern(" S ").pattern(" B ").pattern(" S ")
                     .unlockedBy("has_hsla_plate", has(RotaryItems.HSLA_PLATE.get())), RotaryItems.CRAFT_PATTERN.get(), 4);
+            // V33a: a pattern crafted on its own comes back blank (the result carries no recorded recipe).
+            shapeless(RecipeCategory.MISC, RotaryItems.CRAFT_PATTERN.get())
+                    .requires(RotaryItems.CRAFT_PATTERN.get())
+                    .unlockedBy("has_craft_pattern", has(RotaryItems.CRAFT_PATTERN.get()))
+                    .save(out, "rotarycraft:craft_pattern_clear");
         }
 
         private void saveBulk(ShapedRecipeBuilder builder, ItemLike result, int count) {
@@ -2897,11 +2909,6 @@ public final class RoCRecipeProvider {
                 @Override public net.minecraft.advancements.Advancement.Builder advancement() { return out.advancement(); }
                 @Override public <S> net.minecraft.core.HolderGetter<S> lookup(ResourceKey<? extends net.minecraft.core.Registry<? extends S>> key) {
                     return out.lookup(key);
-            // V33a: a pattern crafted on its own comes back blank (the result carries no recorded recipe).
-            shapeless(RecipeCategory.MISC, RotaryItems.CRAFT_PATTERN.get())
-                    .requires(RotaryItems.CRAFT_PATTERN.get())
-                    .unlockedBy("has_craft_pattern", has(RotaryItems.CRAFT_PATTERN.get()))
-                    .save(out, "rotarycraft:craft_pattern_clear");
                 }
                 @Override public <S> java.util.stream.Stream<net.minecraft.core.Holder.Reference<S>> listContextElements(ResourceKey<? extends net.minecraft.core.Registry<? extends S>> key) {
                     return out.listContextElements(key);
