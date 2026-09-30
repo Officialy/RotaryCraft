@@ -160,6 +160,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> PARTICLE = registerMachineBlock("particle", () -> new BlockParticle(blockProperties().strength(5)));
     public static final DeferredBlock<Block> GRINDSTONE = registerMachineBlock("grindstone", () -> new BlockGrindstone(blockProperties().strength(5)));
     public static final DeferredBlock<Block> BLOWER = registerMachineBlock("blower", () -> new BlockBlower(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> CRAFTER = registerMachineBlock("crafter", () -> new reika.rotarycraft.base.blocks.entity.BlockAutoCrafter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> REFRIGERATOR = registerMachineBlock("refrigerator", () -> new BlockRefrigerator(blockProperties().strength(5)));
     public static final DeferredBlock<Block> COMPOSTER = registerMachineBlock("composter", () -> new BlockComposter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FILLER = registerMachineBlock("filler", () -> new BlockFiller(blockProperties().strength(5)));

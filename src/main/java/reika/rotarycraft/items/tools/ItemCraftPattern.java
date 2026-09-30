@@ -42,56 +42,101 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        ItemStack held = player.getItemInHand(hand);
         if (player.isCrouching()) {
-            ReikaItemHelper.setStackTag(this.getDefaultInstance(), null);
+            // V33a: sneak-use wipes the programmed recipe off the held pattern.
+            held.remove(DataComponents.CUSTOM_DATA);
         }
-        else {
-//         todo   player.openMenu(RotaryCraft.getInstance(), GuiRegistry.PATTERN.ordinal(), level, 0, 0, 0);
+        else if (!level.isClientSide()) {
+            player.openMenu(new net.minecraft.world.SimpleMenuProvider(
+                    (id, inv, ep) -> new reika.rotarycraft.gui.container.ContainerCraftingPattern(id, inv, ep),
+                    held.getHoverName()));
         }
-        return InteractionResult.PASS;
+        return InteractionResult.SUCCESS;
     }
 
     // 1.21.5: Item.appendHoverText now has 5 args including TooltipDisplay and Consumer<Component>.
     @Override
     public void appendHoverText(ItemStack is, Item.TooltipContext ctx, TooltipDisplay display, Consumer<Component> li, TooltipFlag flag) {
-        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null) {
+        if (!is.has(DataComponents.CUSTOM_DATA)) {
             li.accept(Component.literal("No Crafting Pattern."));
         }
         else {
-            ItemStack item = this.getResult(is);
-            if (item != null) {
-                li.accept(Component.literal("Crafts "+item.getCount()+" "+item.getDisplayName()));
+            ItemStack item = getResult(is, ctx.registries());
+            if (!item.isEmpty()) {
+                li.accept(Component.literal("Crafts "+item.getCount()+" ").append(item.getHoverName()));
             }
             else {
                 li.accept(Component.literal("Items, No Output."));
             }
         }
-        li.accept(Component.literal("Recipe Mode: "+this.getMode(is).displayName));
+        li.accept(Component.literal("Recipe Mode: "+getMode(is).displayName));
     }
 
+    private static CompoundTag tag(ItemStack is) {
+        return is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+    }
+
+    /** The registries of the running server, for decoding outside a level context; null on a bare client. */
+    @javax.annotation.Nullable
+    private static HolderLookup.Provider currentRegistries() {
+        net.minecraft.server.MinecraftServer server = net.neoforged.neoforge.server.ServerLifecycleHooks.getCurrentServer();
+        return server != null ? server.registryAccess() : null;
+    }
+
+    private static ItemStack decode(CompoundTag tag, @javax.annotation.Nullable HolderLookup.Provider provider) {
+        var ops = provider != null ? provider.createSerializationContext(NbtOps.INSTANCE) : NbtOps.INSTANCE;
+        return ItemStack.CODEC.parse(ops, tag).result().orElse(ItemStack.EMPTY);
+    }
+
+    /** V33a getRecipeOutput: the programmed recipe's output, or EMPTY if none. */
     public static ItemStack getResult(ItemStack is) {
-        // 1.21.5: ItemStack.of(CompoundTag) was removed; deserialisation now goes through
-        // ItemStack.parse(HolderLookup.Provider, Tag). Without ready access to the registry
-        // provider here, return empty until we plumb a provider through.
-        return ItemStack.EMPTY;
+        return getResult(is, currentRegistries());
+    }
+
+    public static ItemStack getResult(ItemStack is, @javax.annotation.Nullable HolderLookup.Provider provider) {
+        CompoundTag nbt = tag(is);
+        if (!nbt.contains("output"))
+            return ItemStack.EMPTY;
+        return decode(nbt.getCompoundOrEmpty("output"), provider).copy();
     }
 
     public static ItemStack[] getItems(ItemStack is) {
-        // 1.21.5: ItemStack.of(CompoundTag) was removed; recipe-pattern decode stubbed
-        // until a HolderLookup.Provider is plumbed through to call ItemStack.parse.
-        return new ItemStack[9];
+        return getItems(is, currentRegistries());
+    }
+
+    /**
+     * V33a: the nine grid inputs (null where empty). If a stored input no longer decodes (its item was removed), the
+     * pattern is cleared and null is returned, as V33a did.
+     */
+    public static ItemStack[] getItems(ItemStack is, @javax.annotation.Nullable HolderLookup.Provider provider) {
+        ItemStack[] items = new ItemStack[9];
+        CompoundTag nbt = tag(is);
+        if (nbt.contains("recipe")) {
+            CompoundTag recipe = nbt.getCompoundOrEmpty("recipe");
+            for (int i = 0; i < 9; i++) {
+                String s = "slot"+i;
+                if (recipe.contains(s)) {
+                    CompoundTag t = recipe.getCompoundOrEmpty(s);
+                    ItemStack in = decode(t, provider);
+                    if (in.isEmpty() && !t.isEmpty()) { //item no longer exists, clear the pattern
+                        is.remove(DataComponents.CUSTOM_DATA);
+                        return null;
+                    }
+                    items[i] = in.isEmpty() ? null : in;
+                }
+            }
+        }
+        return items;
     }
 
     public static int getStackInputLimit(ItemStack is) {
-        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null) {
-            int amt = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("stacklimit", 0);
-            return amt > 0 ? amt : 64;
-        }
-        return 64;
+        int amt = tag(is).getIntOr("stacklimit", 0);
+        return amt > 0 ? amt : 64;
     }
 
     private static void resetNBT(ItemStack is) {
-        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null) {
+        if (is.has(DataComponents.CUSTOM_DATA)) {
             ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("output"));
             ReikaItemHelper.updateStackTag(is, __T__ -> __T__.remove("recipe"));
         }
@@ -103,10 +148,8 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
         RecipeMode mode = getMode(is);
         resetNBT(is);
         setMode(is, mode);
-        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
-            ReikaItemHelper.setStackTag(is, new CompoundTag());
         ItemStack out = mode.getRecipe(ic, world);
-        boolean valid = out != null;
+        boolean valid = out != null && !out.isEmpty();
         CompoundTag recipe = new CompoundTag();
         // 1.21.5: ItemStack.save(CompoundTag) was removed; serialisation now goes through
         // ItemStack.save(HolderLookup.Provider, Tag). Persist via ItemStack.CODEC encode
@@ -144,17 +187,17 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
     }*/
 
     public static RecipeMode getMode(ItemStack is) {
-        return is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? RecipeMode.list[is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("mode", 0)] : RecipeMode.CRAFTING;
+        return RecipeMode.list[Mth.clamp(tag(is).getIntOr("mode", 0), 0, RecipeMode.list.length-1)];
     }
 
     public static void setMode(ItemStack is, RecipeMode md) {
-        if (!RotaryItems.CRAFT_PATTERN.get().equals(is)) //todo check equals
+        if (!is.is(RotaryItems.CRAFT_PATTERN.get()))
             return;
         ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("mode", md.ordinal()));
     }
 
     public static void changeStackLimit(ItemStack is, int change) {
-        if (!RotaryItems.CRAFT_PATTERN.get().equals(is)) //todo check equals
+        if (!is.is(RotaryItems.CRAFT_PATTERN.get()))
             return;
         int limit = getStackInputLimit(is);
         ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("stacklimit", Mth.clamp(limit+change, 1, 64)));

@@ -58,7 +58,8 @@ public class PacketHandlerCore implements PacketHandler {
      */
     private static final EnumSet<PacketRegistry> NO_TILE_NEEDED = EnumSet.of(
             PacketRegistry.FERTILIZER, PacketRegistry.FRIDGEBREAK, PacketRegistry.GRAVELGUN,
-            PacketRegistry.MUSICPARTICLE, PacketRegistry.SLIDE, PacketRegistry.SPARKLOC);
+            PacketRegistry.MUSICPARTICLE, PacketRegistry.SLIDE, PacketRegistry.SPARKLOC,
+            PacketRegistry.CRAFTPATTERNMODE, PacketRegistry.CRAFTPATTERNLIMIT);
 
     protected PacketRegistry pack;
 
@@ -496,30 +497,33 @@ public class PacketHandlerCore implements PacketHandler {
                     BlockEntityGPR gpr = (BlockEntityGPR) te;
                     int direction = data[0];
                     gpr.shift(gpr.getGuiDirection(), direction);
-                    break;
+                    break;*/
                 case CRAFTERCRAFT:
-                    ((BlockEntityAutoCrafter) te).triggerCraftingCycle(data[0]);
+                    ((reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter) te).triggerCraftingCycle(data[0]);
                     break;
                 case CRAFTERTHRESH:
-                    ((BlockEntityAutoCrafter) te).setThreshold(data[0], data[1]);
+                    ((reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter) te).setThreshold(data[0], data[1]);
                     break;
                 case CRAFTERMODE:
-                    ((BlockEntityAutoCrafter) te).incrementMode();
-                    break;*/
+                    ((reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter) te).incrementMode();
+                    break;
                 case POWERSYNC:
                     BlockEntityIOMachine io = (BlockEntityIOMachine) te;
                     io.torque = data[0];
                     io.omega = data[1];
                     io.power = ReikaJavaLibrary.buildLong(data[2], data[3]);
                     break;
-                /*case AFTERBURN:
-                    ((BlockEntityJetEngine) te).setBurnerActive(data[0] > 0);
-                    break;
                 case CRAFTPATTERNMODE:
-                    ItemCraftPattern.setMode(ep.getCurrentEquippedItem(), RecipeMode.list[data[0]]);
+                    reika.rotarycraft.items.tools.ItemCraftPattern.setMode(ep.getMainHandItem(),
+                            reika.rotarycraft.items.tools.ItemCraftPattern.RecipeMode.list[data[0]]);
+                    if (ep.containerMenu instanceof reika.rotarycraft.gui.container.ContainerCraftingPattern cp)
+                        cp.clearRecipe();
                     break;
                 case CRAFTPATTERNLIMIT:
-                    ItemCraftPattern.changeStackLimit(ep.getCurrentEquippedItem(), data[0]);
+                    reika.rotarycraft.items.tools.ItemCraftPattern.changeStackLimit(ep.getMainHandItem(), data[0]);
+                    break;
+                /*case AFTERBURN:
+                    ((BlockEntityJetEngine) te).setBurnerActive(data[0] > 0);
                     break;
                 case FILTERSETTING:
                     MatchData dat = MatchData.createFromNBT(NBT);

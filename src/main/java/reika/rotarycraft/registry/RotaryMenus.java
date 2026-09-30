@@ -48,6 +48,7 @@ public interface RotaryMenus {
 //    Supplier<MenuType<ContainerHeater>> HEATER = register("heater",     () -> IForgeMenuType.create(new ContainerHeater.Factory()));
 
     Supplier<MenuType<ContainerHandCraft>> HAND_CRAFT = register("hand_craft", ContainerHandCraft::new);
+    Supplier<MenuType<reika.rotarycraft.gui.container.ContainerCraftingPattern>> CRAFTING_PATTERN = register("crafting_pattern", reika.rotarycraft.gui.container.ContainerCraftingPattern::new);
 
     Supplier<MenuType<SteamContainer>> STEAM_ENGINE = register("steam_engine", SteamContainer::new);
     Supplier<MenuType<BlankContainer<BlockEntityBevelGear>>> BEVEL = register("bevel", (id, inv, data) -> {
@@ -77,6 +78,7 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerCrystallizer>> CRYSTALLIZER = register("crystallizer", ContainerCrystallizer::new);
     Supplier<MenuType<ContainerAutoBreeder>> AUTOBREEDER = register("auto_breeder", ContainerAutoBreeder::new);
     Supplier<MenuType<ContainerIgniter>> IGNITER = register("igniter", ContainerIgniter::new);
+    Supplier<MenuType<reika.rotarycraft.gui.container.machine.inventory.ContainerAutoCrafter>> CRAFTER = register("crafter", reika.rotarycraft.gui.container.machine.inventory.ContainerAutoCrafter::new);
     Supplier<MenuType<ContainerFractionator>> FRACTIONATOR = register("fractionator", ContainerFractionator::new);
     Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);
 

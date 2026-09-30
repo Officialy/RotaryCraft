@@ -96,6 +96,8 @@ public class RotaryCraft extends DragonAPIMod {
         RotaryGameTests.TEST_INSTANCE_TYPES.register(modEventBus);
         // Expose machine inventories (and tanks) as standard NeoForge block capabilities.
         modEventBus.addListener(RotaryBlockEntities::registerCapabilities);
+        // V33a TileEntityAutoCrafter was an AE grid host; AE2 sees it through DragonAPI's grid-node-host capability.
+        reika.dragonapi.modinteract.AEHooks.registerGridHost(RotaryBlockEntities.CRAFTER);
         RotaryRecipeSync.register();
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
             modEventBus.addListener(this::clientSetup);
@@ -219,6 +221,7 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.WINDER.get(), WinderScreen::new);
         event.register(RotaryMenus.BIG_FURNACE.get(), GuiBigFurnace::new);
         event.register(RotaryMenus.HAND_CRAFT.get(), GuiHandCraft::new);
+        event.register(RotaryMenus.CRAFTING_PATTERN.get(), reika.rotarycraft.gui.screen.GuiCraftingPattern::new);
         event.register(RotaryMenus.MUSIC.get(), GuiMusic::new);
         event.register(RotaryMenus.GRINDER.get(), GuiGrinder::new);
         event.register(RotaryMenus.CENTRIFUGE.get(), GuiCentrifuge::new);
@@ -235,6 +238,7 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.CRYSTALLIZER.get(), GuiCrystallizer::new);
         event.register(RotaryMenus.AUTOBREEDER.get(), GuiAutoBreeder::new);
         event.register(RotaryMenus.IGNITER.get(), GuiIgniter::new);
+        event.register(RotaryMenus.CRAFTER.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiAutoCrafter::new);
         event.register(RotaryMenus.FRACTIONATOR.get(), GuiFractionator::new);
         event.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
         event.register(RotaryMenus.MICRO_TURBINE.get(), GuiMicroTurbine::new);

@@ -208,6 +208,8 @@ public class RotaryBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAutoBreeder>> AUTOBREEDER = BLOCK_ENTITIES.register("auto_breeder", () ->
             new BlockEntityType<>(BlockEntityAutoBreeder::new, RotaryBlocks.AUTOBREEDER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySplitBelt>> SPLITBELT = BLOCK_ENTITIES.register("split_belt", () ->
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter>> CRAFTER = BLOCK_ENTITIES.register("crafter", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter::new, RotaryBlocks.CRAFTER.get()));
             new BlockEntityType<>(BlockEntitySplitBelt::new, RotaryBlocks.SPLITBELT.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityIgniter>> IGNITER = BLOCK_ENTITIES.register("igniter", () ->
             new BlockEntityType<>(BlockEntityIgniter::new, RotaryBlocks.IGNITER.get()));
@@ -452,7 +454,7 @@ public class RotaryBlockEntities {
             RegisterCapabilitiesEvent event, BlockEntityType<T> type) {
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK, type,
-                (be, side) -> be instanceof HasItemHandler h ? h.getItemHandler()
+                (be, side) -> be instanceof HasItemHandler h ? h.getAutomationItemHandler()
                         : be instanceof WorldlyContainer wc ? new WorldlyContainerWrapper(wc, side) : null);
         event.registerBlockEntity(
                 Capabilities.Fluid.BLOCK, type,

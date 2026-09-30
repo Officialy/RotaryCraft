@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "rotarycraft:craft_pattern"
+  ],
+  "result": {
+    "id": "rotarycraft:craft_pattern"
+  }
+}

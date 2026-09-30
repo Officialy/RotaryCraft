@@ -314,14 +314,15 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
                     clicked.suckIfFull = !clicked.suckIfFull;
                 return InteractionResult.SUCCESS;
             }
+*/
             if (m == MachineRegistry.CRAFTER) {
-                BlockEntityAutoCrafter clicked = (BlockEntityAutoCrafter) te;
+                reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter clicked = (reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter) te;
                 if (ep.isShiftKeyDown()) {
                     clicked.incrementMode();
-                    ReikaChatHelper.sendChatToPlayer(ep, "Mode is now " + clicked.getMode().label);
+                    ep.sendSystemMessage(net.minecraft.network.chat.Component.literal("Mode is now " + clicked.getMode().label));
                 }
                 return InteractionResult.SUCCESS;
-            }*/
+            }
             if (m == MachineRegistry.GEARBOX) {
                 if (ep.isShiftKeyDown()) {
                     BlockEntityGearbox clicked = (BlockEntityGearbox) level.getBlockEntity(pos);

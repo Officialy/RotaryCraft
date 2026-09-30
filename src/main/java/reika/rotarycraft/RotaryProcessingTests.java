@@ -129,6 +129,57 @@ final class RotaryProcessingTests {
         helper.succeed();
     }
 
+    /** A Craft Pattern programmed with {@code grid} (row-major 3x3, null = empty) exactly as the pattern GUI would. */
+    static ItemStack programmedPattern(GameTestHelper helper, net.minecraft.world.item.Item... grid) {
+        var dummy = new net.minecraft.world.inventory.AbstractContainerMenu(null, 0) {
+            @Override public ItemStack quickMoveStack(net.minecraft.world.entity.player.Player p, int i) { return ItemStack.EMPTY; }
+            @Override public boolean stillValid(net.minecraft.world.entity.player.Player p) { return true; }
+        };
+        var ic = new net.minecraft.world.inventory.TransientCraftingContainer(dummy, 3, 3);
+        for (int i = 0; i < grid.length; i++)
+            if (grid[i] != null) ic.setItem(i, new ItemStack(grid[i]));
+        ItemStack pattern = new ItemStack(RotaryItems.CRAFT_PATTERN.get());
+        reika.rotarycraft.items.tools.ItemCraftPattern.setRecipe(pattern, ic, helper.getLevel());
+        return pattern;
+    }
+
+    /** V33a AutoCrafter, request mode: a pattern crafts from the inventory above into its output slot; automation can't take the pattern. */
+    static void autoCrafterCraftsFromInventoryAbove(GameTestHelper helper) {
+        int z = 4;
+        RotaryPowerTests.coil(helper, 2, z, 128, 1 << 20);
+        RotaryPowerTests.place(helper, 3, z, RotaryBlocks.CRAFTER.get(), Direction.EAST);
+        BlockPos chestPos = RotaryPowerTests.at(3, z).above();
+        helper.setBlock(chestPos, Blocks.CHEST);
+        var chest = helper.getBlockEntity(chestPos, net.minecraft.world.level.block.entity.ChestBlockEntity.class);
+        chest.setItem(0, new ItemStack(Items.OAK_PLANKS, 3));
+        var crafter = helper.getBlockEntity(RotaryPowerTests.at(3, z), reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.class);
+
+        ItemStack pattern = programmedPattern(helper, null, Items.OAK_PLANKS, null, null, Items.OAK_PLANKS, null, null, null, null);
+        helper.assertTrue(reika.rotarycraft.items.tools.ItemCraftPattern.getResult(pattern).is(Items.STICK)
+                && reika.rotarycraft.items.tools.ItemCraftPattern.getResult(pattern).getCount() == 4, "the programmed pattern must decode its stick output, got " + reika.rotarycraft.items.tools.ItemCraftPattern.getResult(pattern));
+        helper.assertTrue(crafter.isItemValidForSlot(0, pattern), "a programmed crafting pattern must be accepted");
+        helper.assertTrue(!crafter.isItemValidForSlot(0, new ItemStack(RotaryItems.CRAFT_PATTERN.get())), "a blank pattern must be rejected");
+        crafter.itemHandler.setStackInSlot(0, pattern);
+
+        helper.runAfterDelay(60, () -> { //the ingredient source is re-read every 50 ticks
+            helper.assertTrue(crafter.power >= crafter.MINPOWER, "crafter must be powered, has " + crafter.power);
+            crafter.triggerCraftingCycle(0);
+            ItemStack out = crafter.itemHandler.getStackInSlot(reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.SIZE);
+            helper.assertTrue(out.is(Items.STICK) && out.getCount() == 4, "one request must craft four sticks, got " + out);
+            helper.assertTrue(chest.getItem(0).getCount() == 1, "two planks must be drawn from the chest above, left " + chest.getItem(0));
+            crafter.triggerCraftingCycle(0);
+            helper.assertTrue(crafter.itemHandler.getStackInSlot(reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.SIZE).getCount() == 4,
+                    "a request with one plank left must not craft");
+            var auto = crafter.getAutomationItemHandler();
+            try (Transaction tx = Transaction.openRoot()) {
+                helper.assertTrue(auto.extract(0, auto.getResource(0), 1, tx) == 0, "automation must not pull the pattern");
+                helper.assertTrue(auto.extract(reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.SIZE,
+                        auto.getResource(reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.SIZE), 4, tx) == 4, "automation must pull the output");
+            }
+            helper.succeed();
+        });
+    }
+
     private static BlockEntityCentrifuge centrifuge(GameTestHelper helper) {
         BlockPos coilPos = new BlockPos(3, 1, 4);
         helper.setBlock(coilPos.west(), Blocks.REDSTONE_BLOCK);

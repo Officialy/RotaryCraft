@@ -30,6 +30,7 @@ public class RotaryLang extends LanguageProvider {
     // omitted (their prettified per-tier name is more informative than the original shared label).
     private static final Map<String, String> NAME_OVERRIDES = Map.ofEntries(
             Map.entry("borer", "Boring Machine"),
+            Map.entry("crafter", "AutoCrafting Unit"),
             Map.entry("scalechest", "Scaleable Chest"),
             Map.entry("aa_gun", "AA Gun"),
             Map.entry("bypass", "Bypass Pipe"),
@@ -113,7 +114,9 @@ public class RotaryLang extends LanguageProvider {
         // auto-generated BlockItems, which inherit their block's translation key — registering
         // them again would emit a duplicate-key warning, so they're skipped here).
         RotaryItems.ITEMS.getEntries().forEach(holder ->
-                addItem(holder, "debug".equals(holder.getId().getPath()) ? "Magic Wand" : prettify(holder.getId().getPath())));
+                addItem(holder, "debug".equals(holder.getId().getPath()) ? "Magic Wand"
+                        : "craft_pattern".equals(holder.getId().getPath()) ? "Crafting Pattern" //V33a item.craftpattern
+                        : prettify(holder.getId().getPath())));
 
         addAdvancements();
     }

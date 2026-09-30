@@ -212,6 +212,7 @@ public final class RotaryGameTests {
         register(event, env, "processing_compactor_operating_gates", 100, RotaryProcessingTests::compactorGates);
         register(event, env, "processing_compactor_environment", 40, RotaryProcessingTests::compactorEnvironment);
         register(event, env, "processing_grinder_stacks_output", 60, RotaryProcessingTests::grinderStacksOutput);
+        register(event, env, "processing_autocrafter_request", 120, RotaryProcessingTests::autoCrafterCraftsFromInventoryAbove);
         register(event, env, "processing_centrifuge_separates_items", 60, RotaryProcessingTests::centrifugeSeparatesItems);
         register(event, env, "processing_centrifuge_fluid_transactions", 60, RotaryProcessingTests::centrifugeFluidTransactions);
 
@@ -1319,7 +1320,7 @@ public final class RotaryGameTests {
         });
     }
 
-    private static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> env,
+    static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> env,
                                  String name, int maxTicks, Consumer<GameTestHelper> body) {
         Identifier id = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, name);
         TestData<Holder<TestEnvironmentDefinition<?>>> data =

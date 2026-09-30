@@ -232,7 +232,7 @@ public enum MachineRegistry implements TileEnum {
     //    PORTALSHAFT("machine.portalshaft", BlockRotaryCraftMachine.class, BlockEntityPortalShaft.class, "RenderPortalShaft"),
     REFRIGERATOR(true, "machine.refrigerator", RotaryBlocks.REFRIGERATOR.get(), BlockEntityRefrigerator.class),
     GASTANK("machine.gastank", RotaryBlocks.GASTANK.get(), reika.rotarycraft.blockentities.storage.BlockEntityFluidCompressor.class),
-//    CRAFTER("machine.crafter", BlockRotaryCraftMachine.class, BlockEntityAutoCrafter.class),
+    CRAFTER(true, "machine.crafter", RotaryBlocks.CRAFTER.get(), reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.class),
     COMPOSTER("machine.composter", RotaryBlocks.COMPOSTER.get(), BlockEntityComposter.class),
     ANTIAIR("machine.antiair", RotaryBlocks.AA_GUN.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityAAGun.class),
     PIPEPUMP("machine.pipepump", RotaryBlocks.PIPEPUMP.get(), BlockEntityPipePump.class),
@@ -982,7 +982,7 @@ public enum MachineRegistry implements TileEnum {
                     HSLA_SHAFT,
                     TUNGSTEN_SHAFT,
                     DIAMOND_SHAFT,
-                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, FERMENTER, GRINDER, COMPACTOR, BORER, PUMP, EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, BLASTFURNACE, MOBHARVESTER, MAGNETIZER, FRICTION, MIRROR, SOLARTOWER, COOLINGFIN, WORKTABLE, DYNAMO, MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT, VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, CRYSTALLIZER, BLOWER, REFRIGERATOR, /*CRAFTER,*/ COMPOSTER, CENTRIFUGE, PIPEPUMP, DRYING, WETTER ->
+                    BEDROCK_SHAFT, BEVELGEARS, SPLITTER, GEARBOX, DYNAMOMETER, FERMENTER, GRINDER, COMPACTOR, BORER, PUMP, EXTRACTOR, FAN, FRACTIONATOR, WOODCUTTER, SPAWNERCONTROLLER, HEATER, HEATRAY, ECU, WINDER, CVT, WORMGEAR, BLASTFURNACE, MOBHARVESTER, MAGNETIZER, FRICTION, MIRROR, SOLARTOWER, COOLINGFIN, WORKTABLE, DYNAMO, MULTICLUTCH, SORTING,FERTILIZER, MAGNETIC, LAVAMAKER, AGGREGATOR, FILLINGSTATION, BELT, VANDEGRAFF, BUSCONTROLLER, POWERBUS, BIGFURNACE, CRYSTALLIZER, BLOWER, REFRIGERATOR, CRAFTER, COMPOSTER, CENTRIFUGE, PIPEPUMP, DRYING, WETTER ->
                     true;
             default -> false;
         };
@@ -1000,7 +1000,7 @@ public enum MachineRegistry implements TileEnum {
                     MAGNETIZER, FRICTION, COOLINGFIN, WORKTABLE,
                             MULTICLUTCH, SORTING, FERTILIZER, AGGREGATOR,
                     FILLINGSTATION, BELT, VANDEGRAFF, BUSCONTROLLER,
-                    POWERBUS, BLOWER, REFRIGERATOR, CENTRIFUGE/*, CRAFTER*/,
+                    POWERBUS, BLOWER, REFRIGERATOR, CENTRIFUGE, CRAFTER,
                     PIPEPUMP, DRYING, WETTER  -> true;
             default -> false;
         };

@@ -213,6 +213,10 @@ public class RoCModelProvider extends ModelProvider {
                         block, orientableMapping("ferm_front", "ferm_side", "ferm_side"), modelOut);
             } else if (block instanceof BlockWorktable) {
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockAutoCrafter) {
+                // V33a BlockIMachine CRAFTER icons: crafter_top on top, steel base, steel_dark sides.
+                blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
+                        block, bottomTopMapping("crafter_top", "steel", "steel_dark"), modelOut);
                         block, bottomTopMapping("worktable_top", "worktable_bottom", "worktable"), modelOut);
             } else if (block instanceof BlockGPR) {
                 // GPR: biome-variant top textures existed in 1.7.10 via a custom renderer; the static
