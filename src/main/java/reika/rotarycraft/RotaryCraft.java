@@ -98,6 +98,7 @@ public class RotaryCraft extends DragonAPIMod {
         modEventBus.addListener(RotaryBlockEntities::registerCapabilities);
         // V33a TileEntityAutoCrafter was an AE grid host; AE2 sees it through DragonAPI's grid-node-host capability.
         reika.dragonapi.modinteract.AEHooks.registerGridHost(RotaryBlockEntities.CRAFTER);
+        reika.dragonapi.modinteract.AEHooks.registerGridHost(RotaryBlockEntities.ITEMFILTER);
         RotaryRecipeSync.register();
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
             modEventBus.addListener(this::clientSetup);
@@ -237,9 +238,10 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.POWERBUS.get(), GuiPowerBus::new);
         event.register(RotaryMenus.CRYSTALLIZER.get(), GuiCrystallizer::new);
         event.register(RotaryMenus.AUTOBREEDER.get(), GuiAutoBreeder::new);
-        event.register(RotaryMenus.IGNITER.get(), GuiIgniter::new);
         event.register(RotaryMenus.CRAFTER.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiAutoCrafter::new);
         event.register(RotaryMenus.FRACTIONATOR.get(), GuiFractionator::new);
+        event.register(RotaryMenus.ITEMFILTER.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiItemFilter::new);
+        event.register(RotaryMenus.IGNITER.get(), GuiIgniter::new);
         event.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
         event.register(RotaryMenus.MICRO_TURBINE.get(), GuiMicroTurbine::new);
         event.register(RotaryMenus.BLAST_FURNACE.get(), GuiBlastFurnace::new);

@@ -241,7 +241,7 @@ public enum MachineRegistry implements TileEnum {
     DRYING("machine.drying", RotaryBlocks.DRYING.get(), BlockEntityDryingBed.class),
     WETTER("machine.wetter", RotaryBlocks.WETTER.get(), BlockEntityWetter.class),
     DROPS("machine.drops", RotaryBlocks.DROPS.get(), BlockEntityDropProcessor.class),
-//    ITEMFILTER("machine.itemfilter", BlockRotaryCraftMachine.class, BlockEntityItemFilter.class),
+    ITEMFILTER(true, "machine.itemfilter", RotaryBlocks.ITEMFILTER.get(), reika.rotarycraft.blockentities.BlockEntityItemFilter.class),
     HYDRATOR("machine.hydrator", RotaryBlocks.HYDRATOR.get(), BlockEntityGroundHydrator.class),
     FILLER("machine.filler", RotaryBlocks.FILLER.get(), BlockEntityBlockFiller.class),
     GATLING("machine.gatling", RotaryBlocks.MULTI_CANNON.get(), reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityMultiCannon.class),

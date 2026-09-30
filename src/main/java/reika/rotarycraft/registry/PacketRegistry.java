@@ -107,7 +107,7 @@ public enum PacketRegistry {
 
     public BlockPos getCoordinate(CompoundTag NBT) {
         if (this == PacketRegistry.FILTERSETTING) {
-            return new BlockPos(NBT.getIntOr("getY", 0), NBT.getIntOr("getY()", 0), NBT.getIntOr("posZ", 0));
+            return new BlockPos(NBT.getIntOr("posX", 0), NBT.getIntOr("posY", 0), NBT.getIntOr("posZ", 0));
         }
         return null;
     }

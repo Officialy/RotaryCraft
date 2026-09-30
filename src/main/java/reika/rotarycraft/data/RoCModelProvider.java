@@ -211,14 +211,18 @@ public class RoCModelProvider extends ModelProvider {
                 // legacy static-face fermenter: steel sides, ferm_front / ferm_back, ferm_side top
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
                         block, orientableMapping("ferm_front", "ferm_side", "ferm_side"), modelOut);
-            } else if (block instanceof BlockWorktable) {
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockItemFilter) {
+                // V33a BlockIMachine ITEMFILTER icons: filter_top on top, steel base, steel_dark sides.
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
             } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockAutoCrafter) {
                 // V33a BlockIMachine CRAFTER icons: crafter_top on top, steel base, steel_dark sides.
+                        block, bottomTopMapping("filter_top", "steel", "steel_dark"), modelOut);
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
                         block, bottomTopMapping("crafter_top", "steel", "steel_dark"), modelOut);
                         block, bottomTopMapping("worktable_top", "worktable_bottom", "worktable"), modelOut);
             } else if (block instanceof BlockGPR) {
+            } else if (block instanceof BlockWorktable) {
+                blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
                 // GPR: biome-variant top textures existed in 1.7.10 via a custom renderer; the static
                 // cube uses the grass top with the metal bottom plate on the base and sides.
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(

@@ -2516,13 +2516,16 @@ public final class RoCRecipeProvider {
                     .pattern("S S").pattern("sBs").pattern("ppp")
                     .unlockedBy("has_hsla_shaft", has(RotaryItems.HSLA_SHAFT.get()))
                     .save(out);
-            // BLOWER: addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt() — defaults to 1 —,
-            //   "BBB","PIP","BBB") — 6×BASEPANEL + 2×PIPE + 1×IMPELLER.
-            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BLOWER.get())
-                    .define('B', RotaryItems.HSLA_PLATE.get())
-                    .define('I', RotaryItems.IMPELLER.get())
-                    .define('P', RotaryBlocks.FLUID_PIPE.get())
-                    .pattern("BBB").pattern("PIP").pattern("BBB")
+            // ITEMFILTER (V33a RotaryRecipes): "sSs","CCC","PRP" — steel, screen, circuit boards, base panels, redstone.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.ITEMFILTER.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('S', RotaryItems.SCREEN.get())
+                    .define('C', RotaryItems.CIRCUIT_BOARD.get())
+                    .define('R', Items.REDSTONE)
+                    .define('P', RotaryItems.HSLA_PLATE.get())
+                    .pattern("sSs").pattern("CCC").pattern("PRP")
+                    .unlockedBy("has_circuit_board", has(RotaryItems.CIRCUIT_BOARD.get()))
+                    .save(out);
             // CRAFTER (V33a RotaryRecipes): "SCS","PcP","SPS" — steel, crafting table, base panels, circuit board.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.CRAFTER.get())
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
@@ -2539,6 +2542,13 @@ public final class RoCRecipeProvider {
                     .define('p', RotaryItems.HSLA_PLATE.get())
                     .define('P', RotaryBlocks.FLUID_PIPE.get())
                     .define('D', RotaryItems.DIFFUSER.get())
+            // BLOWER: addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt() — defaults to 1 —,
+            //   "BBB","PIP","BBB") — 6×BASEPANEL + 2×PIPE + 1×IMPELLER.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BLOWER.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get())
+                    .define('I', RotaryItems.IMPELLER.get())
+                    .define('P', RotaryBlocks.FLUID_PIPE.get())
+                    .pattern("BBB").pattern("PIP").pattern("BBB")
                     .define('C', RotaryItems.COMPRESSOR.get())
                     .define('c', RotaryItems.CONDENSER.get())
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())

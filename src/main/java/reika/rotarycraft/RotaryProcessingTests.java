@@ -180,6 +180,33 @@ final class RotaryProcessingTests {
         });
     }
 
+    /** V33a Item Filter: automation may only insert template matches (not blacklisted) into the filtered slot, and only empty that slot. */
+    static void itemFilterGatesAutomation(GameTestHelper helper) {
+        int z = 4;
+        RotaryPowerTests.coil(helper, 2, z, 128, 1 << 20);
+        RotaryPowerTests.place(helper, 3, z, RotaryBlocks.ITEMFILTER.get(), Direction.EAST);
+        var filter = helper.getBlockEntity(RotaryPowerTests.at(3, z), reika.rotarycraft.blockentities.BlockEntityItemFilter.class);
+        filter.itemHandler.setStackInSlot(0, new ItemStack(Items.IRON_INGOT));
+        helper.runAfterDelay(10, () -> {
+            helper.assertTrue(filter.power >= filter.MINPOWER, "filter must be powered, has " + filter.power);
+            helper.assertTrue(filter.getData() != null, "the template must build match data");
+            var auto = filter.getAutomationItemHandler();
+            try (Transaction tx = Transaction.openRoot()) {
+                helper.assertTrue(auto.insert(net.neoforged.neoforge.transfer.item.ItemResource.of(Items.GOLD_INGOT), 4, tx) == 0, "a non-matching item must be refused");
+                helper.assertTrue(auto.insert(0, net.neoforged.neoforge.transfer.item.ItemResource.of(Items.IRON_INGOT), 1, tx) == 0, "automation must not reach the template slot");
+                helper.assertTrue(auto.insert(net.neoforged.neoforge.transfer.item.ItemResource.of(Items.IRON_INGOT), 4, tx) == 4, "a matching item must enter the filtered slot");
+                helper.assertTrue(auto.extract(0, auto.getResource(0), 1, tx) == 0, "automation must not take the template");
+            }
+            filter.itemHandler.setStackInSlot(2, new ItemStack(Items.IRON_INGOT));
+            helper.runAfterDelay(2, () -> {
+                try (Transaction tx = Transaction.openRoot()) {
+                    helper.assertTrue(auto.insert(net.neoforged.neoforge.transfer.item.ItemResource.of(Items.IRON_INGOT), 4, tx) == 0, "a blacklisted item must be refused");
+                }
+                helper.succeed();
+            });
+        });
+    }
+
     private static BlockEntityCentrifuge centrifuge(GameTestHelper helper) {
         BlockPos coilPos = new BlockPos(3, 1, 4);
         helper.setBlock(coilPos.west(), Blocks.REDSTONE_BLOCK);

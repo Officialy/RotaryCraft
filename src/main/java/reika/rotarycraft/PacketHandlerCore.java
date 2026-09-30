@@ -79,7 +79,7 @@ public class PacketHandlerCore implements PacketHandler {
         double dy = 0;
         double dz = 0;
         boolean readinglong;
-        CompoundTag NBT;
+        CompoundTag NBT = null;
         String stringdata = null;
         UUID id = null;
         try {
@@ -498,6 +498,9 @@ public class PacketHandlerCore implements PacketHandler {
                     int direction = data[0];
                     gpr.shift(gpr.getGuiDirection(), direction);
                     break;*/
+                case FILTERSETTING:
+                    ((reika.rotarycraft.blockentities.BlockEntityItemFilter) te).setDataFromClient(NBT);
+                    break;
                 case CRAFTERCRAFT:
                     ((reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter) te).triggerCraftingCycle(data[0]);
                     break;
@@ -524,10 +527,6 @@ public class PacketHandlerCore implements PacketHandler {
                     break;
                 /*case AFTERBURN:
                     ((BlockEntityJetEngine) te).setBurnerActive(data[0] > 0);
-                    break;
-                case FILTERSETTING:
-                    MatchData dat = MatchData.createFromNBT(NBT);
-                    ((BlockEntityItemFilter) te).setData(dat);
                     break;
                 case SPRINKLER:
                     ((BlockEntitySprinkler) te).doParticle(world, data[0], data[1], data[2], data[3] > 0);
