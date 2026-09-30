@@ -64,6 +64,12 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase
 
   public abstract MachineRegistry getMachine();
 
+  /** 1.7.10: a ChromatiCraft Tile Accelerator's extra ticks run only on the machines that allow them. */
+  @Override
+  public final boolean allowTickAcceleration() {
+    return this.getMachine().allowsAcceleration();
+  }
+
   public final MachineRegistry getMachine(Direction dir) {
     BlockEntity te = getAdjacentBlockEntity(dir);
     return te instanceof RotaryCraftBlockEntity ? ((RotaryCraftBlockEntity) te).getMachine() : null;

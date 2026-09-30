@@ -856,7 +856,7 @@ public enum MachineRegistry implements TileEnum {
 
     public boolean allowsAcceleration() {
         return switch (this) {
-            case /*BLASTFURNACE, DRYING,*/ COMPOSTER/*, HYDRATOR*/ -> true;
+            case BLASTFURNACE, DRYING, COMPOSTER, HYDRATOR -> true;
             default -> false;
         };
     }
