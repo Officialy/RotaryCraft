@@ -16,6 +16,11 @@ public interface SodiumSolarUpgrades {
 
 	interface SodiumSolarReceiver extends SodiumSolarUpgrades {
 
+		/** Cold sodium supplied by the integration, without making RotaryCraft depend on that mod. */
+		default net.minecraft.world.level.material.Fluid getSodiumFluid() {
+			return reika.rotarycraft.registry.RotaryFluids.SODIUM.get();
+		}
+
 		void tick(int mirrorCount, float totalBrightness);
 
 		int getTemperature();

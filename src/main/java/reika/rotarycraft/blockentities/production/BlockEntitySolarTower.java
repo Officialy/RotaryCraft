@@ -136,7 +136,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
         if (level.getBlockState(worldPosition.below()).getBlock() == Blocks.AIR || MachineRegistry.getMachine(level, worldPosition.below()) != this.getMachine()) {
             //ReikaJavaLibrary.pConsole("TOWER: "+this.getTowerHeight()+";  SIZE: "+this.getArraySize());
             BlockPos c = plant.getPrimaryTower();
-            if (c != null && worldPosition.equals(new BlockPos(worldPosition.getX(), 0, worldPosition.getZ()))) //c.to2D()
+            if (c != null && c.equals(new BlockPos(worldPosition.getX(), 0, worldPosition.getZ())))
                 this.generatePower(level, worldPosition);
             else
                 power = omega = torque = 0;
@@ -191,7 +191,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
             torque = 0;
         }
         power = (long) omega * (long) torque;
-        if (tank.getActualFluid().getFluid() == RotaryFluids.SODIUM.get()) {
+        if (this.isSodium(tank.getActualFluid().getFluid())) {
             amt = (int) Math.max(1, amt * power / ((double) GENOMEGA_SODIUM * MAXTORQUE_SODIUM));
         }
         currentConsumption = amt;
@@ -221,7 +221,7 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
     }
 
     public int getConsumedFluid() {
-        boolean sodium = tank.getActualFluid().getFluid() == RotaryFluids.SODIUM.get();
+        boolean sodium = this.isSodium(tank.getActualFluid().getFluid());
         int p = ReikaMathLibrary.logbase2(power);
         if (sodium)
             p = Math.max(1, p);
@@ -296,26 +296,21 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
     }
 
     private void getTowerWater(Level world, BlockPos pos) {
-        int lvl = tank.getFluidLevel();
-        Fluid f = tank.getActualFluid().getFluid();
         int cy = pos.getY() + 1;
         while (MachineRegistry.getMachine(world, new BlockPos(pos.getX(), cy, pos.getZ())) == MachineRegistry.SOLARTOWER) {
             BlockEntitySolarTower tile = (BlockEntitySolarTower) world.getBlockEntity(new BlockPos(pos.getX(), cy, pos.getZ()));
-            Fluid f2 = tile.tank.getActualFluid().getFluid();
-            if (f == null && f2 != null)
-                f = f2;
-            if (f.equals(f2)) {
-                lvl += tile.tank.getFluidLevel();
-                tile.tank.empty();
+            if (!tile.tank.isEmpty() && (tank.isEmpty() || tank.getActualFluid().getFluid() == tile.tank.getActualFluid().getFluid())) {
+                int amount = Math.min(tank.getRemainingSpace(), tile.tank.getFluidLevel());
+                tank.addLiquid(amount, tile.tank.getActualFluid().getFluid());
+                tile.tank.removeLiquid(amount);
             }
             cy++;
         }
-        tank.setContents(lvl, f);
     }
 
     @Override
     public Block getBlockEntityBlockID() {
-        return null;
+        return reika.rotarycraft.registry.RotaryBlocks.SOLAR_TOWER.get();
     }
 
     @Override
@@ -437,7 +432,13 @@ public class BlockEntitySolarTower extends BlockEntityIOMachine implements Multi
 
     //@Override
     public boolean canFill(Fluid fluid) {
-        return fluid == Fluids.WATER || (fluid == RotaryFluids.SODIUM.get() && this.canUseSodium());
+        return fluid == Fluids.WATER || (this.isSodium(fluid) && this.canUseSodium());
+    }
+
+    private boolean isSodium(Fluid fluid) {
+        if (fluid == RotaryFluids.SODIUM.get()) return true;
+        BlockEntity receiver = level.getBlockEntity(new BlockPos(worldPosition.getX(), this.getTopOfTower() + 1, worldPosition.getZ()));
+        return receiver instanceof SodiumSolarReceiver solar && fluid == solar.getSodiumFluid();
     }
 
     @Override

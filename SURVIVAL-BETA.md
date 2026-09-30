@@ -98,3 +98,17 @@ before selecting the next complete port. Do not stub integrations to enable a co
 Use identical six-mod jars and local TerraBlender 26.3.0.0.7-local.1 on server and clients.
 Keep c2me off the server. DH is optional and client-only. ChromatiCraft implementation remains
 for the separate later agent; its existing port is built for stack compatibility only.
+
+
+## ReactorCraft reactor-type verification (2026-09-30)
+
+ReactorCraft now passes 34 required GameTests covering all six generating types, including its
+sodium solar tower integration. RotaryCraft solar plant discovery, primary-column selection,
+nearest-tower mirror aiming, legacy light weighting and safe invalidation were restored from the
+original source. Tower fluid pooling retains capacity and the receiver interface now identifies
+the integration's cold sodium, allowing ReactorCraft's return loop to feed the tower.
+
+The solar tests require actual mirror-field generation; creative coils power the auxiliary
+exchangers. Shared DragonAPI air-exposure checks now treat modelled iron piping according to
+its motion tags and collision shape. All 215 RotaryCraft GameTests and 11 JUnit checks still
+pass, as do the six release builds. See ReactorCraft/PORTING.md for the full coverage boundary.

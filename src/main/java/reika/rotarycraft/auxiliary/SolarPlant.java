@@ -10,17 +10,20 @@
 package reika.rotarycraft.auxiliary;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import reika.dragonapi.instantiable.data.maps.ValueSortedMap;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
-import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.interfaces.SolarPlantBlock;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
+import reika.rotarycraft.blockentities.production.BlockEntitySolarTower;
+import reika.rotarycraft.registry.RotaryBlocks;
 
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -54,41 +57,41 @@ public class SolarPlant {
 
     public static SolarPlant build(Level world, BlockPos pos) {
         SolarPlant p = new SolarPlant();
-        HashMap<Block, Block> blocks = new HashMap<>();
-//        blocks.recursiveAdd(world, pos, RotaryBlocks.SOLAR.get());
         HashMap<BlockPos, ImmutablePair<Integer, Integer>> towerLocations = new HashMap<>();
         ArrayList<BlockPos> li = new ArrayList<>();
-//        while (blocks.size() > 0) {
-//            BlockPos c = blocks.getNextAndMoveOn();
-//            SolarPlantBlock b = (SolarPlantBlock) world.getBlockEntity(c);
-//            b.setPlant(p);
-//            MachineRegistry m = MachineRegistry.getMachine(world, c);
-//            if (m == MachineRegistry.MIRROR) {
-//                li.add(c);
-//            } else if (m == MachineRegistry.SOLARTOWER) {
-//                ImmutablePair<Integer, Integer> get = towerLocations.get(c.to2D());
-//                int val1 = get != null ? get.left.intValue() : Integer.MAX_VALUE;
-//                int val2 = get != null ? get.right.intValue() : Integer.MIN_VALUE;
-//                val1 = Math.min(val1, c.getY());
-//                val2 = Math.max(val2, c.getY());
-//                towerLocations.put(c.to2D(), new ImmutablePair<>(val1, val2));
-//            }
-//        }
+        // The legacy SOLAR block held both machine types; the modern port gives each its own block.
+        ArrayDeque<BlockPos> pending = new ArrayDeque<>();
+        HashSet<BlockPos> visited = new HashSet<>();
+        pending.add(pos.immutable());
+        while (!pending.isEmpty()) {
+            BlockPos c = pending.removeFirst();
+            if (!visited.add(c) || !world.hasChunkAt(c)) continue;
+            BlockEntity tile = world.getBlockEntity(c);
+            if (!(tile instanceof SolarPlantBlock b)) continue;
+            b.setPlant(p);
+            if (tile instanceof BlockEntityMirror) {
+                li.add(c);
+            } else if (tile instanceof BlockEntitySolarTower) {
+                BlockPos column = new BlockPos(c.getX(), 0, c.getZ());
+                ImmutablePair<Integer, Integer> range = towerLocations.get(column);
+                towerLocations.put(column, new ImmutablePair<>(
+                        Math.min(range == null ? Integer.MAX_VALUE : range.left, c.getY()),
+                        Math.max(range == null ? Integer.MIN_VALUE : range.right, c.getY())));
+            }
+            for (Direction direction : Direction.values()) pending.add(c.relative(direction));
+        }
         for (BlockPos c : towerLocations.keySet()) {
             ImmutablePair<Integer, Integer> ys = towerLocations.get(c);
             int dy = ys.left;
             int h = 0;
-//            while (MachineRegistry.getMachine(world, new BlockPos(c.getX(), dy, c.getZ())) == MachineRegistry.SOLARTOWER && dy <= ys.left + MAX_TOWER_HEIGHT) {
-//                dy++;
-//
-//                if (ReikaWorldHelper.checkForAdjBlock(world, new BlockPos(c.getX(), dy, c.getZ()), MachineRegistry.MIRROR.getBlockState().getBlock()) != null) {
-//                    h = 0;
-//                }
-//
-//                h++;
-//            }
-//            SolarTower s = new SolarTower(c, h, ys.left, ys.right);
-//            p.towers.put(c, s);
+            while (world.getBlockEntity(new BlockPos(c.getX(), dy, c.getZ())) instanceof BlockEntitySolarTower
+                    && dy <= ys.left + MAX_TOWER_HEIGHT) {
+                dy++;
+                if (ReikaWorldHelper.checkForAdjBlock(world, new BlockPos(c.getX(), dy, c.getZ()), RotaryBlocks.MIRROR.get()) != null)
+                    h = 0;
+                h++;
+            }
+            p.towers.put(c, new SolarTower(c, h, ys.left, ys.right));
         }
         for (BlockPos c : li) {
             p.addMirror(c, getClosestTower(c, towerLocations.keySet()));
@@ -102,7 +105,7 @@ public class SolarPlant {
         double dist = Double.POSITIVE_INFINITY;
         BlockPos closest = null;
         for (BlockPos c2 : locs) {
-            double dd = ReikaMathLibrary.py3d(c);
+            double dd = c.distSqr(c2);
             if (dd < dist) {
                 dist = dd;
                 closest = c2;
@@ -158,10 +161,12 @@ public class SolarPlant {
         if (towers.isEmpty())
             return null;
         BlockPos c = mirrors.get(te.getBlockPos());
+        if (c == null || !towers.containsKey(c)) return null;
         return c.offset(0, towers.get(c).topBlock, 0);
     }
 
     public float getOverallBrightness(Level world) {
+        if (mirrors.isEmpty()) return 0;
         float f = 0;
         for (BlockPos c : mirrors.keySet()) {
             BlockEntity te = world.getBlockEntity(c);
@@ -179,7 +184,8 @@ public class SolarPlant {
             return 0;
         //if (world.hasNoSky)
         //    return 0;
-        double sun = ReikaWorldHelper.getSunIntensity(world, true, 0);//todo * PlanetDimensionHandler.getSunIntensity(world);
+        double sun = ReikaWorldHelper.getSunIntensity(world, true, 0) * 0.8F + 0.2F;
+        // MOD-PORT: PlanetDimensionHandler can scale this when supported planet dimensions land.
         if (sun > 0.21) {
             return (int) (15 * sun);
         }
@@ -203,13 +209,11 @@ public class SolarPlant {
 
     public void invalidate(Level world) {
         for (BlockPos c : mirrors.keySet()) {
-            SolarPlantBlock b = (SolarPlantBlock) world.getBlockEntity(c);
-            b.setPlant(null);
+            if (world.getBlockEntity(c) instanceof SolarPlantBlock b) b.setPlant(null);
         }
         for (SolarTower s : towers.values()) {
             for (int y = s.bottomBlock; y <= s.topBlock; y++) {
-                SolarPlantBlock b = (SolarPlantBlock) world.getBlockEntity(s.location.offset(0, y, 0));
-                b.setPlant(null);
+                if (world.getBlockEntity(s.location.offset(0, y, 0)) instanceof SolarPlantBlock b) b.setPlant(null);
             }
         }
         towers.clear();
