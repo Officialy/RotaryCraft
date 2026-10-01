@@ -115,8 +115,8 @@ public enum HandbookRegistry implements HandbookEntry {
     MOTOR(MachineRegistry.ELECTRICMOTOR),
     STEAMTURB(MachineRegistry.STEAMTURBINE),
     PNEUMATIC(MachineRegistry.PNEUENGINE),
-    FUELENGINE(MachineRegistry.FUELENGINE),
 */
+    FUELENGINE(MachineRegistry.FUELENGINE),
     //---------------------MACHINES--------------------//
     PRODMACHINEDESC("Production Machines", "Production"),
     //    BLAST(MachineRegistry.BLASTFURNACE),

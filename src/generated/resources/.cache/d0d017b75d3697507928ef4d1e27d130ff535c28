@@ -1,6 +1,7 @@
-// 26.3	2026-10-01T16:23:59.663377	Tags for minecraft:fluid mod id rotarycraft
+// 26.3	2026-10-01T19:19:21.6964206	Tags for minecraft:fluid mod id rotarycraft
 0682f0b5bacb3ad68209f887bd64787cddf86604 data/c/tags/fluid/bioethanol.json
 8583a6c219ea791a15c9cc1f6294067b364194a6 data/c/tags/fluid/biofuel.json
 462bc6a0a1474ecebcfadfc5467cf3d42f2ffd7d data/c/tags/fluid/fuel.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/c/tags/fluid/kerosene.json
 7773e4cfae62bfa46d09dfa8d7eefa4ced275925 data/c/tags/fluid/oil.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/c/tags/fluid/turbofuel.json

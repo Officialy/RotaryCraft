@@ -1,85 +1,42 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.modinterface;
-//
-//import net.minecraft.world.level.block.entity.BlockEntity;
-//import org.lwjgl.opengl.GL11;
-//import reika.rotarycraft.auxiliary.IORenderer;
-//import reika.rotarycraft.base.RotaryTERenderer;
-//import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
-//
-//public class RenderFuelEngine extends RotaryTERenderer
-//{
-//
-//	private ModelFuelEngine FuelModel = new ModelFuelEngine();
-//	//private ModelFuelEngineV FuelModelV = new ModelFuelEngineV();
-//
-//	@Override
-//	protected String getTextureSubfolder() {
-//		return "Converter/";
-//	}
-//
-//	/**
-//	 * Renders the BlockEntity for the position.
-//	 */
-//	public void renderBlockEntityFuelEngineAt(BlockEntityFuelEngine tile, PoseStack stack, MultiBufferSource bufferSource, int light)
-//	{
-//		int var9;
-//
-//		if (!tile.isInWorld())
-//			var9 = 0;
-//		else
-//			var9 = tile.getBlockMetadata();
-//
-//		ModelFuelEngine var14;
-//		var14 = FuelModel;
-//
-//		this.bindTextureByName("/Reika/RotaryCraft/Textures/BlockEntityTex/Converter/fuelenginetex.png");
-//
-//		this.setupGL(tile, par2, par4, par6);
-//
-//		int var11 = 0;
-//		float var13;
-//		switch(var9) {
-//			case 2:
-//				var11 = -90;
-//				break;
-//			case 0:
-//				var11 = 180;
-//				break;
-//			case 1:
-//				var11 = 0;
-//				break;
-//			case 3:
-//				var11 = 90;
-//				break;
-//		}
-//
-//		stack.mulPose((float)var11+90, 0.0F, 1.0F, 0.0F);
-//		var14.renderAll(tile, null, tile.phi, 0);
-//
-//		this.closeGL(tile);
-//	}
-//
-//	@Override
-//	public void renderBlockEntityAt(BlockEntity tile, PoseStack stack, MultiBufferSource bufferSource, int light)
-//	{
-//		if (this.doRenderModel((RotaryCraftBlockEntity)tile))
-//			this.renderBlockEntityFuelEngineAt((BlockEntityFuelEngine)tile, par2, par4, par6, par8);
-//		if (((RotaryCraftBlockEntity) tile).isInWorld() && MinecraftForgeClient.getRenderPass() == 1) {
-//			IORenderer.renderIO(tile, par2, par4, par6);
-//		}
-//	}
-//
-//	@Override
-//	public String getImageFileName(RenderFetcher te) {
-//		return "fuelenginetex.png";
-//	}
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.modinterface;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import reika.rotarycraft.base.RotaryTERenderer;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.modinterface.model.FuelEngineModel;
+import reika.rotarycraft.registry.RotaryModelLayers;
+
+public final class RenderFuelEngine extends RotaryTERenderer<TileEntityFuelEngine> {
+    private final FuelEngineModel model;
+    public RenderFuelEngine(BlockEntityRendererProvider.Context context) { model = new FuelEngineModel(context.bakeLayer(RotaryModelLayers.FUEL_ENGINE)); }
+    @Override protected Identifier getSubmitTexture(BlockEntity tile) { return FuelEngineModel.TEXTURE_LOCATION; }
+    @Override protected boolean useEntityCutout() { return true; }
+    @Override protected void renderModel(PoseStack stack, BlockEntity tile, VertexConsumer out, int light) {
+        if (!(tile instanceof TileEntityFuelEngine engine)) return;
+        stack.pushPose(); stack.translate(.5, 1.5, .5); stack.scale(1, -1, -1);
+        float rotation = switch (engine.getBlockState().getValue(BlockRotaryCraftMachine.FACING)) {
+            case WEST -> 270; case EAST -> 90; case NORTH -> 0; default -> 180;
+        };
+        if (engine.isFlipped) {
+            stack.rotate(Axis.XP.rotationDegrees(180)); stack.translate(0, -2, 0);
+            if (engine.getBlockState().getValue(BlockRotaryCraftMachine.FACING).getAxis() == net.minecraft.core.Direction.Axis.Z)
+                stack.rotate(Axis.YP.rotationDegrees(180));
+        }
+        stack.rotate(Axis.YP.rotationDegrees(rotation));
+        model.renderAll(stack, out, light, engine, null, engine.phi, 0); stack.popPose();
+    }
+}

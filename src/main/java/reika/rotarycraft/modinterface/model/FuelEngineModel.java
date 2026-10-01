@@ -23,7 +23,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class FuelEngineModel extends RotaryModelBase {
 
-    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/engine/steamtex.png");
+    public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/converter/fuelenginetex.png");
 
     private final ModelPart shape1;
     private final ModelPart shape1a;
@@ -324,10 +324,20 @@ public class FuelEngineModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        for (ModelPart part : new ModelPart[]{shape1, shape1a, shape1b, shape1c, shape2, shape3, shape4, shape4a, shape5, shape5c, shape4b, shape4c, shape7, shape8, shape9, shape9a, shape10, shape10a, shape10b, shape10c, shape11, shape10d, shape10e, shape10f, shape10g, shape5i, shape5j}) part.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        rotateParts(stack, tex, packedLightIn, .9375F, phi, shape6k, shape6j);
+        rotateParts(stack, tex, packedLightIn, .875F, phi, shape5b1, shape5e1);
+        rotateParts(stack, tex, packedLightIn, 1.075F, -phi, shape5d2, shape5g2);
+        rotateParts(stack, tex, packedLightIn, 1.3F, phi, shape5f3, shape5h3);
 
     }
 
+    private static void rotateParts(PoseStack stack, VertexConsumer out, int light, float pivot, float angle, ModelPart... parts) {
+        stack.pushPose(); stack.translate(0, pivot, 0);
+        stack.rotate(com.mojang.math.Axis.ZP.rotationDegrees(angle)); stack.translate(0, -pivot, 0);
+        for (var part : parts) part.render(stack, out, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.popPose();
+    }
     @Override
     public Identifier getTexture() {
         return TEXTURE_LOCATION;

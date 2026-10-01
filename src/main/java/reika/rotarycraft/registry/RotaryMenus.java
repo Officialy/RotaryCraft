@@ -70,6 +70,7 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerLavaMaker>> LAVAMAKER = register("rock_melter", ContainerLavaMaker::new);
     Supplier<MenuType<ContainerDropProcessor>> DROPS = register("drop_processor", ContainerDropProcessor::new);
     Supplier<MenuType<ContainerTerraformer>> TERRAFORMER = register("terraformer", ContainerTerraformer::new);
+    Supplier<MenuType<reika.rotarycraft.gui.container.machine.inventory.ContainerFuelEngine>> FUEL_ENGINE = register("fuel_engine", reika.rotarycraft.gui.container.machine.inventory.ContainerFuelEngine::new);
     Supplier<MenuType<reika.rotarycraft.gui.container.machine.inventory.ContainerFuelEnhancer>> FUEL_ENHANCER = register("fuel_enhancer", reika.rotarycraft.gui.container.machine.inventory.ContainerFuelEnhancer::new);
     Supplier<MenuType<ContainerPurifier>> PURIFIER = register("purifier", ContainerPurifier::new);
     Supplier<MenuType<ContainerCompactor>> COMPACTOR = register("compactor", ContainerCompactor::new);

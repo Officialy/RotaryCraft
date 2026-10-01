@@ -79,6 +79,15 @@ public class RotaryLang extends LanguageProvider {
         add("gui.rotarycraft.terraformer_status", "%s cells; %s mB water");
         add("item.rotarycraft.tile_selector_linked", "Linked selector to machine at %s");
         add("item.rotarycraft.tile_selector_selected", "Selected biome cell at %s");
+        add("gui.rotarycraft.fuel_engine.fuel", "Fuel: %s / 24000 mB");
+        add("gui.rotarycraft.fuel_engine.water", "Water: %s / 24000 mB");
+        add("gui.rotarycraft.fuel_engine.lubricant", "Lubricant: %s / 24000 mB");
+        add("gui.rotarycraft.fuel_engine.temperature", "Temperature: %s°C");
+        add("gui.rotarycraft.fuel_engine.duration", "Remaining fuel: %s min %s sec");
+        add("tooltip.rotarycraft.fuel_engine.power", "Power: %s %sW");
+        add("tooltip.rotarycraft.fuel_engine.torque", "Torque: %s %sNm");
+        add("tooltip.rotarycraft.fuel_engine.speed", "Speed: %s %srad/s");
+        add("tooltip.rotarycraft.fuel_engine.shift", "Hold Shift for power data");
         add("jei.rotarycraft.fuel_enhancer_power", "Requires 16384 W and 16384 rad/s; rate rises by 1 for each 4x speed");
         add("jei.rotarycraft.fuel_enhancer_consumption", "%s%% chance to consume one of each catalyst per conversion");
         add("gui.rotarycraft.purifier_temperature", "%s \u00b0C");

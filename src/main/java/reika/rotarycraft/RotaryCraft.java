@@ -231,6 +231,7 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.LAVAMAKER.get(), GuiLavaMaker::new);
         event.register(RotaryMenus.DROPS.get(), GuiDropProcessor::new);
         event.register(RotaryMenus.COMPACTOR.get(), GuiCompactor::new);
+        event.register(RotaryMenus.FUEL_ENGINE.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiFuelEngine::new);
         event.register(RotaryMenus.FUEL_ENHANCER.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiFuelEnhancer::new);
         event.register(RotaryMenus.PURIFIER.get(), GuiPurifier::new);
         event.register(RotaryMenus.TERRAFORMER.get(), GuiTerraformer::new);

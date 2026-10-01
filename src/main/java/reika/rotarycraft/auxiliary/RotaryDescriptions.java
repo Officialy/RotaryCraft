@@ -542,7 +542,7 @@ public final class RotaryDescriptions {
 //				BlockEntityElectricMotor.Tier.HIGH.inputVoltage, BlockEntityElectricMotor.Tier.HIGH.inputCurrent, BlockEntityElectricMotor.Tier.HIGH.outputTorque, BlockEntityElectricMotor.Tier.HIGH.outputSpeed, BlockEntityElectricMotor.Tier.HIGH.getPowerForDisplay()
 //				);
 //        addNotes(MachineRegistry.AGGREGATOR, PowerReceivers.AGGREGATOR.getMinPower(), PowerReceivers.AGGREGATOR.getMinSpeed());
-//        addNotes(MachineRegistry.FUELENGINE, BlockEntityFuelEngine.GEN_TORQUE, BlockEntityFuelEngine.GEN_OMEGA, BlockEntityFuelEngine.GEN_TORQUE * BlockEntityFuelEngine.GEN_OMEGA);
+        addNotes(MachineRegistry.FUELENGINE, reika.rotarycraft.modinterface.TileEntityFuelEngine.GEN_TORQUE, reika.rotarycraft.modinterface.TileEntityFuelEngine.GEN_OMEGA, reika.rotarycraft.modinterface.TileEntityFuelEngine.GEN_TORQUE * reika.rotarycraft.modinterface.TileEntityFuelEngine.GEN_OMEGA);
 //        addNotes(MachineRegistry.AIRGUN, PowerReceivers.AIRGUN.getMinPower(), PowerReceivers.AIRGUN.getMinTorque());
 //        addNotes(MachineRegistry.SONICBORER, PowerReceivers.SONICBORER.getMinPower(), PowerReceivers.SONICBORER.getMinTorque());
 //        addNotes(MachineRegistry.FILLINGSTATION, PowerReceivers.FILLINGSTATION.getMinPower());

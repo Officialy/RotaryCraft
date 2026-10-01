@@ -123,6 +123,7 @@
   "block.rotarycraft.freeze_gun": "Freeze Gun",
   "block.rotarycraft.friction_boiler": "Friction Boiler",
   "block.rotarycraft.friction_heater": "Friction Heater",
+  "block.rotarycraft.fuel_engine": "Fuel Engine",
   "block.rotarycraft.fuel_enhancer": "Fuel Enhancer",
   "block.rotarycraft.fuel_line": "Fuel Line",
   "block.rotarycraft.gas_engine": "Gas Engine",
@@ -236,6 +237,11 @@
   "config.jade.plugin_rotarycraft.machine_state": "Machine State",
   "config.jade.plugin_rotarycraft.pipe_info": "Pipe Info",
   "config.jade.plugin_rotarycraft.reservoir_fluid": "Reservoir Fluid",
+  "gui.rotarycraft.fuel_engine.duration": "Remaining fuel: %s min %s sec",
+  "gui.rotarycraft.fuel_engine.fuel": "Fuel: %s / 24000 mB",
+  "gui.rotarycraft.fuel_engine.lubricant": "Lubricant: %s / 24000 mB",
+  "gui.rotarycraft.fuel_engine.temperature": "Temperature: %s°C",
+  "gui.rotarycraft.fuel_engine.water": "Water: %s / 24000 mB",
   "gui.rotarycraft.purifier_temperature": "%s °C",
   "gui.rotarycraft.terraformer_status": "%s cells; %s mB water",
   "item.rotarycraft.aluminum_alloy_cylinder": "Aluminum Alloy Cylinder",
@@ -486,5 +492,9 @@
   "tab.rotarycraft.all": "RotaryCraft (All)",
   "tab.rotarycraft.ores": "RotaryCraft Ore Flakes",
   "tab.rotarycraft.tools": "RotaryCraft Tools",
-  "tab.rotarycraft.transmission": "RotaryCraft Transmission"
+  "tab.rotarycraft.transmission": "RotaryCraft Transmission",
+  "tooltip.rotarycraft.fuel_engine.power": "Power: %s %sW",
+  "tooltip.rotarycraft.fuel_engine.shift": "Hold Shift for power data",
+  "tooltip.rotarycraft.fuel_engine.speed": "Speed: %s %srad/s",
+  "tooltip.rotarycraft.fuel_engine.torque": "Torque: %s %sNm"
 }

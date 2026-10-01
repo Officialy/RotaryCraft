@@ -39,6 +39,7 @@ public class BlockEntityFuelLine extends BlockEntityPiping implements PumpablePi
 
     private boolean isAcceptableFuel(Fluid f) {
         if (f == null) return false;
+        if (reika.rotarycraft.modinterface.TileEntityFuelEngine.isValidFuel(f)) return true;
         if (f.isSame(RotaryFluids.JET_FUEL.get()) || f.isSame(RotaryFluids.ETHANOL.get()))
             return true;
         Identifier id = BuiltInRegistries.FLUID.getKey(f);

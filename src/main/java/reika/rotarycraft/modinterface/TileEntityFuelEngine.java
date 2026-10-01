@@ -1,505 +1,199 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.modinterface;
-//
-//import java.util.Collection;
-//
-//import net.minecraft.core.BlockPos;
-//import net.minecraft.core.Direction;
-//import net.minecraft.nbt.CompoundTag;
-//import net.minecraft.world.level.block.entity.BlockEntity;//import net.minecraft.world.World;
-//import net.minecraft.world.level.Explosion;
-//import net.minecraft.world.level.Level;
-//import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraft.world.level.material.Fluid;
-//import net.minecraft.world.level.material.Fluids;
-//import net.neoforged.api.distmarker.Dist;
-//import net.neoforged.neoforge.common.util.Direction;
-//import net.neoforged.neoforge.fluids.Fluid;
-//import net.neoforged.neoforge.fluids.FluidRegistry;
-//import net.neoforged.neoforge.fluids.FluidStack;
-//import net.neoforged.neoforge.fluids.FluidTankInfo;
-//import net.neoforged.neoforge.fluids.IFluidHandler;
-//
-//import reika.dragonapi.asm.APIStripper.Strippable;
-//import reika.dragonapi.instantiable.HybridTank;
-//import reika.dragonapi.instantiable.StepTimer;
-//import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-//import reika.dragonapi.libraries.registry.ReikaParticleHelper;
-//import reika.dragonapi.libraries.World.ReikaWorldHelper;
-//import reika.dragonapi.libraries.level.ReikaWorldHelper;
-//import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-//import reika.dragonapi.libraries.registry.ReikaParticleHelper;
-//import reika.dragonapi.modinteract.AtmosphereHandler;
-//import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-//import reika.dragonapi.instantiable.HybridTank;
-//import reika.dragonapi.instantiable.StepTimer;
-//import reika.rotarycraft.api.Power.PowerGenerator;
-//import reika.rotarycraft.api.Power.ShaftMerger;
-//import reika.rotarycraft.auxiliary.PowerSourceList;
-//import reika.rotarycraft.auxiliary.RotaryAux;
-//import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
-//import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
-//import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
-//import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
-//import reika.rotarycraft.api.power.ShaftMerger;
-//import reika.rotarycraft.auxiliary.PowerSourceList;
-//import reika.rotarycraft.auxiliary.RotaryAux;
-//import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
-//import reika.rotarycraft.base.blockentity.BlockEntityPiping;
-//import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
-//import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
-//import reika.rotarycraft.registry.EngineType.EngineClass;
-//import reika.rotarycraft.registry.MachineRegistry;
-//import reika.rotarycraft.registry.RotaryFluids;
-//import reika.rotarycraft.registry.SoundRegistry;
-//import reika.rotarycraft.blockentities.Auxiliary.BlockEntityEngineController;
-//
-//import buildcraft.api.transport.IPipeConnection;
-//import buildcraft.api.transport.IPipeTile.PipeType;
-//import cpw.mods.fml.relauncher.Side;
-//import cpw.mods.fml.relauncher.SideOnly;
-//import reika.rotarycraft.api.power.PowerGenerator;
-//import reika.rotarycraft.auxiliary.interfaces.PipeConnector;
-//import reika.rotarycraft.auxiliary.interfaces.SimpleProvider;
-//import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
-//import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
-//import reika.rotarycraft.registry.MachineRegistry;
-//
-//@Strippable(value = {"buildcraft.api.transport.IPipeConnection"})
-//public class BlockEntityFuelEngine extends BlockEntityIOMachine implements PipeConnector, SimpleProvider, PowerGenerator, IPipeConnection, TemperatureTE {
-//
-//	public static final int GEN_OMEGA = 256;
-//	public static final int GEN_TORQUE = 2048;
-//
-//	private int temperature;
-//
-//	public static final int CAPACITY = 24000;
-//	public static final int MAXTEMP = 750;
-//
-//	private final HybridTank tank = new HybridTank("fuelengine", CAPACITY);
-//	private final HybridTank watertank = new HybridTank("waterfuelengine", CAPACITY);
-//	private final HybridTank lubetank = new HybridTank("lubefuelengine", CAPACITY);
-//
-//	private StepTimer fuelTimer = new StepTimer(36); //30 min a bucket
-//	private StepTimer soundTick = new StepTimer(40);
-//	private StepTimer tempTimer = new StepTimer(20);
-//
-//	private boolean canEmitPower(Level world, int x, int y, int z) {
-//		if (tank.isEmpty())
-//			return false;
-//		if (AtmosphereHandler.isNoAtmo(world, x, y+1, z, blockType, true))
-//			return false;
-//		if (lubetank.isEmpty())
-//			return false;
-//		if (this.hasECU()) {
-//			BlockEntityEngineController te = this.getECU();
-//			return te.canProducePower();
-//		}
-//		return true;
-//	}
-//
-//	private boolean hasECU() {
-//		return this.getMachine(isFlipped ? Direction.UP : Direction.DOWN) == MachineRegistry.ECU;
-//	}
-//
-//	private BlockEntityEngineController getECU() {
-//		return (BlockEntityEngineController)this.getAdjacentTileEntity(isFlipped ? Direction.UP : Direction.DOWN);
-//	}
-//	private void updateSpeed(int maxspeed, boolean revup) {
-//		if (revup) {
-//			if (omega < maxspeed) {
-//				//ReikaJavaLibrary.pConsole(omega+"->"+(omega+2*(int)(ReikaMathLibrary.logbase(maxspeed, 2))), Dist.DEDICATED_SERVER);
-//				omega += 4*(int) ReikaMathLibrary.logbase(maxspeed, 2);
-//				tank.removeLiquid(1); //more fuel burn while spinning up
-//				if (omega > maxspeed)
-//					omega = maxspeed;
-//			}
-//		}
-//		else {
-//			if (omega > 0) {
-//				//ReikaJavaLibrary.pConsole(omega+"->"+(omega-omega/128-1), Dist.DEDICATED_SERVER);
-//				omega -= omega/256+1;
-//				//soundtick = 2000;
-//			}
-//		}
-//	}
-//
-//	private int getFuelDuration(Level world, BlockPos pos) {
-//		if (this.hasECU()) {
-//			BlockEntityEngineController te = this.getECU();
-//			return 36*te.getFuelMultiplier(EngineClass.PISTON);
-//		}
-//		return 36;
-//	}
-//
-//	@Override
-//	public void updateEntity(Level world, BlockPos pos) {
-//		super.updateEntity();
-//		this.getIOSides(world, pos);
-//		fuelTimer.setCap(this.getFuelDuration(world, pos));
-//		int genomega = this.getGenOmega();
-//		tempTimer.update();
-//		if (tempTimer.checkCap()) {
-//			this.updateTemperature(world, pos);
-//		}
-//		if (this.canEmitPower(world, x, y, z)) {
-//			fuelTimer.update();
-//			if (fuelTimer.checkCap()) {
-//				tank.removeLiquid(this.getConsumedFuel());
-//			}
-//			torque = GEN_TORQUE;
-//			if (this.hasECU()) {
-//				BlockEntityEngineController te = this.getECU();
-//				genomega *= te.getSpeedMultiplier();
-//			}
-//		}
-//		else {
-//			genomega = 0;
-//			if (omega == 0) {
-//				torque = 0;
-//			}
-//		}
-//		this.updateSpeed(genomega, genomega >= omega);
-//		power = omega*torque;
-//		soundTick.update();
-//		if (power > 0) {
-//			this.makeSmoke(world, pos);
-//			if (soundTick.checkCap()) {
-//				SoundRegistry.DIESEL.playSoundAtBlock(world, pos, RotaryAux.isMuffled(this) ? 0.3F : 1F, 0.4F);
-//			}
-//			if (world.getGameTime()%32 == 0)
-//				lubetank.removeLiquid(1);
-//		}
-//	}
-//
-//	private int getConsumedFuel() {
-//		return 4; //was 2
-//	}
-//
-//	private int getGenOmega() {
-//		return temperature <= 450 ? GEN_OMEGA : Math.max(16, GEN_OMEGA+450-temperature);
-//	}
-//
-//	private void makeSmoke(Level world, int x, int y, int z, int meta) {
-//		if (isFlipped)
-//			y -= 0.5;
-//		switch(meta) {
-//			case 0:
-//				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.6875, y+0.9375, z+0.0625);
-//				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.6875, y+0.9375, z+0.9375);
-//				break;
-//			case 1:
-//				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.3175, y+0.9375, z+0.0625);
-//				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.3175, y+0.9375, z+0.9375);
-//				break;
-//			case 2:
-//				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.0625, y+0.9375, z+0.6875);
-//				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.9375, y+0.9375, z+0.6875);
-//				break;
-//			case 3:
-//				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.0625, y+0.9375, z+0.3175);
-//				ReikaParticleHelper.SMOKE.spawnAt(world, x+0.9375, y+0.9375, z+0.3175);
-//				break;
-//		}
-//	}
-//
-//	private void getIOSides(Level world, int x, int y, int z, int meta) {
-//		switch(meta) {
-//			case 0:
-//				write = Direction.WEST;
-//				break;
-//			case 1:
-//				write = Direction.EAST;
-//				break;
-//			case 2:
-//				write = Direction.NORTH;
-//				break;
-//			case 3:
-//				write = Direction.SOUTH;
-//				break;
-//		}
-//	}
-//
-//	@Override
-//	public boolean canProvidePower() {
-//		return !tank.isEmpty();
-//	}
-//
-//	@Override
-//	public PowerSourceList getPowerSources(PowerSourceTracker io, ShaftMerger caller) {
-//		return new PowerSourceList().addSource(this);
-//	}
-//
-//	@Override
-//	protected void animateWithTick(Level world, BlockPos pos) {
-//		if (!this.isInWorld()) {
-//			phi = 0;
-//			return;
-//		}
-//		phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega+1, 2), 1.05);
-//	}
-//
-//	@Override
-//	public MachineRegistry getMachine() {
-//		return MachineRegistry.FUELENGINE;
-//	}
-//
-//	@Override
-//	public boolean hasModelTransparency() {
-//		return false;
-//	}
-//
-//	@Override
-//	public int getRedstoneOverride() {
-//		return 15*tank.getLevel()/tank.getCapacity();
-//	}
-//
-//	@Override
-//	public int fill(Direction from, FluidStack resource, FluidAction doFill) {
-//		Fluid f = resource.getFluid();
-//		if (this.canFill(from, f)) {
-//			if (f.equals(RotaryFluids.LUBRICANT.get()))
-//				return lubetank.fill(resource, doFill);
-//			else if (f.equals(FluidRegistry.getFluid("fuel")))
-//				return tank.fill(resource, doFill);
-//			else if (f.equals(Fluids.WATER))
-//				return watertank.fill(resource, doFill);
-//		}
-//		return 0;
-//	}
-//
-//	@Override
-//	public FluidStack drain(Direction from, FluidStack resource, boolean doDrain) {
-//		return null;
-//	}
-//
-//	@Override
-//	public FluidStack drain(Direction from, int maxDrain, boolean doDrain) {
-//		return null;
-//	}
-//
-//	@Override
-//	public boolean canFill(Direction from, Fluid f) {
-//		return switch (from) {
-//			case UP -> isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
-//			case DOWN -> !isFlipped && f.equals(FluidRegistry.getFluid("fuel"));
-//			case EAST, NORTH, SOUTH, WEST -> f.equals(RotaryFluids.LUBRICANT.get()) || f.equals(Fluids.WATER);
-//			default -> false;
-//		};
-//	}
-//
-//	@Override
-//	public boolean canDrain(Direction from, Fluid fluid) {
-//		return false;
-//	}
-//
-//	@Override
-//	public FluidTankInfo[] getTankInfo(Direction from) {
-//		return new FluidTankInfo[]{tank.getInfo(), watertank.getInfo(), lubetank.getInfo()};
-//	}
-//
-//	@Override
-//	public long getMaxPower() {
-//		return power;
-//	}
-//
-//	@Override
-//	public long getCurrentPower() {
-//		return power;
-//	}
-//
-//	@Override
-//	protected void writeSyncTag(CompoundTag NBT)
-//	{
-//		super.writeSyncTag(NBT);
-//
-//		tank.saveAdditional(NBT);
-//		watertank.saveAdditional(NBT);
-//		lubetank.saveAdditional(NBT);
-//
-//		NBT.putInt("temp", temperature);
-//	}
-//
-//	@Override
-//	protected void readSyncTag(CompoundTag NBT)
-//	{
-//		super.readSyncTag(NBT);
-//
-//		tank.load(NBT);
-//		watertank.load(NBT);
-//		lubetank.load(NBT);
-//
-//		temperature = NBT.getIntOr("temp", 0);
-//	}
-//
-//	@Override
-//	public ConnectOverride overridePipeConnection(PipeType type, Direction with) {
-//		return type == PipeType.FLUID && with != Direction.DOWN ? ConnectOverride.CONNECT : ConnectOverride.DEFAULT;
-//	}
-//
-//	public int getFuelLevel() {
-//		return tank.getLevel();
-//	}
-//
-//	public int getWaterLevel() {
-//		return watertank.getLevel();
-//	}
-//
-//	public int getLubeLevel() {
-//		return lubetank.getLevel();
-//	}
-//
-//	public void addFuel(int amt) {
-//		tank.addLiquid(amt, FluidRegistry.getFluid("fuel"));
-//	}
-//
-//	public void removeFuel(int amt) {
-//		tank.removeLiquid(amt);
-//	}
-//
-//	public void addWater(int amt) {
-//		watertank.addLiquid(amt, Fluids.WATER);
-//	}
-//
-//	public void addLube(int amt) {
-//		lubetank.addLiquid(amt, RotaryFluids.LUBRICANT.get());
-//	}
-//
-//	@Override
-//	public int getEmittingX() {
-//		return xCoord+write.offsetX;
-//	}
-//
-//	@Override
-//	public int getEmittingY() {
-//		return yCoord+write.offsetY;
-//	}
-//
-//	@Override
-//	public int getEmittingZ() {
-//		return zCoord+write.offsetZ;
-//	}
-//
-//	@Override
-//	public void updateTemperature(Level world, BlockPos pos) {
-//		int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
-//		int dT = temperature-Tamb;
-//
-//		if (dT > 0) {
-//			temperature--;
-//			int c = (temperature-Tamb)/100;
-//			if (!watertank.isEmpty()) {
-//				temperature -= c;
-//				watertank.removeLiquid(20);
-//			}
-//		}
-//
-//		if (power > 0) {
-//			temperature += 5;
-//		}
-//
-//		if (temperature > MAXTEMP)
-//			this.overheat(world, pos);
-//	}
-//
-//	@Override
-//	public void addTemperature(int temp) {
-//		temperature += temp;
-//	}
-//
-//	@Override
-//	public int getTemperature() {
-//		return temperature;
-//	}
-//
-//	@Override
-//	public int getThermalDamage() {
-//		return 0;
-//	}
-//
-//	@Override
-//	public void overheat(Level world, int x, int y, int z) {
-//		world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-//		if (!world.isClientSide()) {
-//			world.explode(null, x+0.5, y+0.5, z+0.5, 4, true, Level.ExplosionInteraction.BLOCK);
-//			world.explode(null, x+0.5, y+0.5, z+0.5, 8, true, Level.ExplosionInteraction.BLOCK);
-//		}
-//	}
-//
-//	@Override
-//	public boolean canBeCooledWithFins() {
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean allowHeatExtraction() {
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean allowExternalHeating() {
-//		return false;
-//	}
-//
-//	public void setTemperature(int temp) {
-//		temperature = temp;
-//	}
-//
-//	@Override
-//	public void getAllOutputs(Collection<BlockEntity> c, Direction dir) {
-//		c.add(this.getAdjacentBlockEntity(write));
-//	}
-//
-//	@SideOnly(Dist.CLIENT)
-//	public int getFuelScaled(int a) {
-//		return tank.getLevel() * a / tank.getCapacity();
-//	}
-//
-//	@SideOnly(Dist.CLIENT)
-//	public int getWaterScaled(int a) {
-//		return watertank.getLevel() * a / watertank.getCapacity();
-//	}
-//
-//	@SideOnly(Dist.CLIENT)
-//	public int getLubricantScaled(int a) {
-//		return lubetank.getLevel() * a / lubetank.getCapacity();
-//	}
-//
-//	@SideOnly(Dist.CLIENT)
-//	public int getTemperatureScaled(int a) {
-//		return temperature * a / MAXTEMP;
-//	}
-//
-//	public int getFuelDuration() {
-//		return tank.getLevel()*fuelTimer.getCap()/this.getConsumedFuel()/20;
-//	}
-//
-//	@Override
-//	public int getMaxTemperature() {
-//		return MAXTEMP;
-//	}
-//
-//	@Override
-//	public final boolean canConnectToPipe(MachineRegistry m) {
-//		return m.isStandardPipe() || m == MachineRegistry.HOSE || m == MachineRegistry.FUELLINE;
-//	}
-//
-//	@Override
-//	public final boolean canConnectToPipeOnSide(MachineRegistry p, Direction side) {
-//		return this.canConnectToPipe(p) && this.getFlowForSide(side) == BlockEntityPiping.Flow.INPUT;
-//	}
-//
-//	@Override
-//	public BlockEntityPiping.Flow getFlowForSide(Direction side) {
-//		return side == (isFlipped ? Direction.DOWN : Direction.UP) ? BlockEntityPiping.Flow.NONE : BlockEntityPiping.Flow.INPUT;
-//	}
-//
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.modinterface;
+
+import java.util.Collection;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import reika.dragonapi.instantiable.HybridTank;
+import reika.dragonapi.instantiable.StepTimer;
+import reika.dragonapi.instantiable.storage.FilteredFluidResourceHandler;
+import reika.dragonapi.instantiable.storage.HybridTankResourceHandler;
+import reika.dragonapi.interfaces.blockentity.HasFluidResourceHandler;
+import reika.dragonapi.libraries.level.ReikaWorldHelper;
+import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
+import reika.dragonapi.modinteract.AtmosphereHandler;
+import reika.rotarycraft.api.power.PowerGenerator;
+import reika.rotarycraft.api.power.ShaftMerger;
+import reika.rotarycraft.auxiliary.PowerSourceList;
+import reika.rotarycraft.auxiliary.RotaryAux;
+import reika.rotarycraft.auxiliary.interfaces.*;
+import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
+import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.blockentities.auxiliary.BlockEntityEngineController;
+import reika.rotarycraft.data.RoCFluidTagsProvider;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerFuelEngine;
+import reika.rotarycraft.registry.*;
+
+/** V33a's three-tank petroleum engine, including ECU throttling, inertia and overheating. */
+public final class TileEntityFuelEngine extends BlockEntityIOMachine implements HasFluidResourceHandler,
+        PipeConnector, SimpleProvider, PowerGenerator, TemperatureTE {
+    public static final int GEN_OMEGA = 256, GEN_TORQUE = 2048, CAPACITY = 24000, MAXTEMP = 750;
+    private int temperature;
+    private final HybridTank tank = new HybridTank("fuelengine", CAPACITY);
+    private final HybridTank water = new HybridTank("waterfuelengine", CAPACITY);
+    private final HybridTank lube = new HybridTank("lubefuelengine", CAPACITY);
+    private final StepTimer fuelTimer = new StepTimer(36), soundTimer = new StepTimer(40), tempTimer = new StepTimer(20);
+    private final ResourceHandler<FluidResource> fluids = new HybridTankResourceHandler(new HybridTank[]{tank, water, lube},
+            (index, fluid) -> switch (index) {
+                case 0 -> isValidFuel(fluid.getFluid());
+                case 1 -> fluid.getFluid() == Fluids.WATER;
+                default -> fluid.getFluid() == RotaryFluids.LUBRICANT.get();
+            }, (index, fluid) -> false, this::setChanged);
+    public TileEntityFuelEngine(BlockPos pos, BlockState state) { super(RotaryBlockEntities.FUEL_ENGINE.get(), pos, state); }
+    @Override public ResourceHandler<FluidResource> getFluidHandler(Direction side) {
+        if (side == null) return fluids;
+        return new FilteredFluidResourceHandler(fluids, index -> true,
+                (index, fluid) -> index == 0 ? side == fuelSide() : side.getAxis().isHorizontal(), (index, fluid) -> false);
+    }
+    private Direction fuelSide() { return isFlipped ? Direction.UP : Direction.DOWN; }
+    public static boolean isValidFuel(Fluid fluid) {
+        return fluid != null && (BuiltInRegistries.FLUID.wrapAsHolder(fluid).is(RoCFluidTagsProvider.FUEL)
+                || BuiltInRegistries.FLUID.wrapAsHolder(fluid).is(RoCFluidTagsProvider.TURBOFUEL));
+    }
+    public boolean isUsingTurbofuel() { return !tank.isEmpty() && BuiltInRegistries.FLUID.wrapAsHolder(tank.getActualFluid().getFluid()).is(RoCFluidTagsProvider.TURBOFUEL); }
+    public BlockEntityEngineController getController() {
+        return level != null && getAdjacentBlockEntity(fuelSide()) instanceof BlockEntityEngineController ecu ? ecu : null;
+    }
+    private boolean canEmitPower(Level world, BlockPos pos) {
+        var ecu = getController();
+        return !tank.isEmpty() && !lube.isEmpty() && !AtmosphereHandler.isNoAtmo(world, pos.above(), getBlockState().getBlock(), true)
+                && (ecu == null || ecu.canProducePower());
+    }
+    public int getFuelInterval() {
+        var ecu = getController();
+        int interval = 36 * (ecu == null ? 1 : ecu.getFuelMultiplier(EngineType.EngineClass.PISTON));
+        // Preserve V33a's integer expression: 5/2 is evaluated before multiplying.
+        return isUsingTurbofuel() ? interval * (5 / 2) : interval;
+    }
+    public int getGenOmega() { return temperature <= 450 ? GEN_OMEGA : Math.max(16, GEN_OMEGA + 450 - temperature); }
+    public void updateEntity(Level world, BlockPos pos) {
+        super.updateBlockEntity();
+        write = getBlockState().getValue(BlockRotaryCraftMachine.FACING);
+        if (world.isClientSide()) { if (power > 0) smoke(world, pos); return; }
+        fuelTimer.setCap(getFuelInterval());
+        int target = getGenOmega();
+        tempTimer.update();
+        if (tempTimer.checkCap()) { updateTemperature(world, pos); if (isRemoved()) return; }
+        if (canEmitPower(world, pos)) {
+            fuelTimer.update();
+            if (fuelTimer.checkCap()) tank.removeLiquid(4);
+            torque = GEN_TORQUE;
+            var ecu = getController();
+            if (ecu != null) target *= ecu.getSpeedMultiplier();
+        } else { target = 0; if (omega == 0) torque = 0; }
+        if (target >= omega && omega < target) {
+            omega = Math.min(target, omega + 4 * (int)ReikaMathLibrary.logbase(target, 2));
+            tank.removeLiquid(1);
+        } else if (target < omega && omega > 0) omega -= omega / 256 + 1;
+        power = (long)omega * torque;
+        soundTimer.update();
+        if (power > 0) {
+            if (soundTimer.checkCap()) SoundRegistry.DIESEL.playSoundAtBlock(world, pos, RotaryAux.isMuffled(this) ? .3F : 1F, .4F);
+            if (world.getGameTime() % 32 == 0) lube.removeLiquid(1);
+        }
+        setChanged();
+    }
+    private void smoke(Level world, BlockPos pos) {
+        Direction facing = getBlockState().getValue(BlockRotaryCraftMachine.FACING);
+        double y = pos.getY() + .9375 - (isFlipped ? .5 : 0);
+        for (double across : new double[]{.0625, .9375}) {
+            double x = facing.getAxis() == Direction.Axis.X ? (facing == Direction.WEST ? .6875 : .3175) : across;
+            double z = facing.getAxis() == Direction.Axis.Z ? (facing == Direction.NORTH ? .6875 : .3175) : across;
+            world.addParticle(ParticleTypes.SMOKE, pos.getX() + x, y, pos.getZ() + z, 0, 0, 0);
+        }
+    }
+    @Override protected void animateWithTick(Level world, BlockPos pos) {
+        if (!isInWorld()) { phi = 0; return; }
+        phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
+    }
+    @Override public void updateTemperature(Level world, BlockPos pos) {
+        if (world.isClientSide()) return;
+        int ambient = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
+        if (temperature > ambient) {
+            temperature--;
+            if (!water.isEmpty()) { temperature -= (temperature - ambient) / 100; water.removeLiquid(20); }
+        }
+        if (power > 0) temperature += 5;
+        if (temperature > MAXTEMP) overheat(world, pos);
+        setChanged();
+    }
+    @Override public void overheat(Level world, BlockPos pos) {
+        if (world.isClientSide()) return;
+        world.removeBlock(pos, false);
+        world.explode(null, pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5, 4, true, Level.ExplosionInteraction.BLOCK);
+        world.explode(null, pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5, 8, true, Level.ExplosionInteraction.BLOCK);
+    }
+    public int getFuelLevel() { return tank.getFluidLevel(); }
+    public int getWaterLevel() { return water.getFluidLevel(); }
+    public int getLubeLevel() { return lube.getFluidLevel(); }
+    public void addFuel(int amount, Fluid fluid) { if (isValidFuel(fluid)) { tank.addLiquid(amount, fluid); setChanged(); } }
+    public void removeFuel(int amount) { tank.removeLiquid(amount); setChanged(); }
+    public void addWater(int amount) { water.addLiquid(amount, Fluids.WATER); setChanged(); }
+    public void addLube(int amount) { lube.addLiquid(amount, RotaryFluids.LUBRICANT.get()); setChanged(); }
+    public int getFuelDuration() { return getFuelLevel() * getFuelInterval() / 4 / 20; }
+    public int getFuelScaled(int height) { return getFuelLevel() * height / CAPACITY; }
+    public int getWaterScaled(int height) { return getWaterLevel() * height / CAPACITY; }
+    public int getLubricantScaled(int height) { return getLubeLevel() * height / CAPACITY; }
+    public int getTemperatureScaled(int height) { return temperature * height / MAXTEMP; }
+    @Override public int getTemperature() { return temperature; }
+    @Override public void addTemperature(int amount) { setTemperature(temperature + amount); }
+    @Override public void setTemperature(int value) { temperature = value; setChanged(); }
+    @Override public int getMaxTemperature() { return MAXTEMP; }
+    @Override public int getThermalDamage() { return 0; }
+    @Override public boolean canBeCooledWithFins() { return false; }
+    @Override public boolean allowExternalHeating() { return false; }
+    @Override public boolean allowHeatExtraction() { return false; }
+    @Override public int getAmbientTemperature() { return level == null ? 0 : ReikaWorldHelper.getAmbientTemperatureAt(level, worldPosition); }
+    @Override public long getMaxPower() { return power; }
+    @Override public long getCurrentPower() { return power; }
+    @Override public BlockPos getEmittingPos(BlockPos pos) { return pos.relative(getBlockState().getValue(BlockRotaryCraftMachine.FACING)); }
+    @Override public boolean canProvidePower() { return !tank.isEmpty(); }
+    @Override public PowerSourceList getPowerSources(PowerSourceTracker tracker, ShaftMerger caller) { return new PowerSourceList().addSource(this); }
+    @Override public void getAllOutputs(Collection<BlockEntity> outputs, Direction side) { outputs.add(getAdjacentBlockEntity(getBlockState().getValue(BlockRotaryCraftMachine.FACING))); }
+    @Override public boolean canConnectToPipe(MachineRegistry pipe) { return pipe.isStandardPipe() || pipe == MachineRegistry.HOSE || pipe == MachineRegistry.FUELLINE; }
+    @Override public boolean canConnectToPipeOnSide(MachineRegistry pipe, Direction side) { return canConnectToPipe(pipe) && getFlowForSide(side) == Flow.INPUT; }
+    @Override public Flow getFlowForSide(Direction side) { return side == fuelSide().getOpposite() ? Flow.NONE : Flow.INPUT; }
+    // BUILDCRAFT-PORT: modern BuildCraft pipes use the sided fluid capability above; the legacy
+    // IPipeConnection FLUID override is restored by its adapter when that API is available.
+    @Override public MachineRegistry getMachine() { return MachineRegistry.FUELENGINE; }
+    @Override public Block getBlockEntityBlockID() { return RotaryBlocks.FUEL_ENGINE.get(); }
+    @Override protected String getTEName() { return "Fuel Engine"; }
+    @Override public boolean hasAnInventory() { return false; }
+    @Override public boolean hasATank() { return true; }
+    @Override public boolean hasModelTransparency() { return false; }
+    @Override public int getRedstoneOverride() { return 15 * getFuelLevel() / CAPACITY; }
+    @Override public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) { return new ContainerFuelEngine(id, inv, this); }
+    @Override protected void writeSyncTag(CompoundTag tag) {
+        super.writeSyncTag(tag); tank.writeToNBT(tag); water.writeToNBT(tag); lube.writeToNBT(tag);
+        tag.putInt("temp", temperature); tag.putInt("fuelTick", fuelTimer.getTick());
+        tag.putInt("soundTick", soundTimer.getTick()); tag.putInt("tempTick", tempTimer.getTick());
+    }
+    @Override protected void readSyncTag(CompoundTag tag) {
+        super.readSyncTag(tag); tank.readFromNBT(tag); water.readFromNBT(tag); lube.readFromNBT(tag);
+        temperature = tag.getIntOr("temp", 0); fuelTimer.setTick(Math.max(0, tag.getIntOr("fuelTick", 0)));
+        soundTimer.setTick(Math.max(0, tag.getIntOr("soundTick", 0))); tempTimer.setTick(Math.max(0, tag.getIntOr("tempTick", 0)));
+    }
+}

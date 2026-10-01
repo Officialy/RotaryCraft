@@ -33,6 +33,7 @@ import reika.rotarycraft.base.blockentity.BlockEntityEngine;
 import reika.rotarycraft.base.blockentity.BlockEntityPiping.Flow;
 import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.registry.EngineType;
+import reika.rotarycraft.modinterface.TileEntityFuelEngine;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryFluids;
 
@@ -51,12 +52,13 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         return new FilteredFluidResourceHandler(fluidHandler, index -> true,
                 (index, resource) -> this.canFill(side, resource.getFluid()),
                 (index, resource) -> side.getAxis().isVertical()
-                        && this.getAdjacentBlockEntity(side) instanceof BlockEntityEngine);
+                        && (this.getAdjacentBlockEntity(side) instanceof BlockEntityEngine
+                        || this.getAdjacentBlockEntity(side) instanceof TileEntityFuelEngine));
     }
 
     private static boolean isSupportedFluid(Fluid fluid) {
         return fluid == RotaryFluids.JET_FUEL.get() || fluid == RotaryFluids.ETHANOL.get()
-                || BlockEntityEngine.isAirFluid(fluid);
+                || BlockEntityEngine.isAirFluid(fluid) || TileEntityFuelEngine.isValidFuel(fluid);
     }
 
     public BlockEntityEngineController(BlockPos pos, net.minecraft.world.level.block.state.BlockState state) {
@@ -179,30 +181,22 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         if (world.getBlockEntity(pos.above()) instanceof BlockEntityEngine engUp)
             if (this.transferToEngine(engUp, false))
                 return;
-//        if (MachineRegistry.getMachine(world, x, y + 1, z) == MachineRegistry.FUELENGINE)
-//            if (this.transferToFuelEngine((BlockEntityFuelEngine) world.getBlockEntity(x, y + 1, z), false))
-//                return;
+        if (world.getBlockEntity(pos.above()) instanceof TileEntityFuelEngine engineUp && transferToFuelEngine(engineUp, false)) return;
 
         if (world.getBlockEntity(pos.below()) instanceof BlockEntityEngine engDown)
             if (this.transferToEngine(engDown, true))
                 return;
-//        if (MachineRegistry.getMachine(world, x, y - 1, z) == MachineRegistry.FUELENGINE)
-//            if (this.transferToFuelEngine((BlockEntityFuelEngine) world.getBlockEntity(x, y - 1, z), true))
-//                return;
+        if (world.getBlockEntity(pos.below()) instanceof TileEntityFuelEngine engineDown && transferToFuelEngine(engineDown, true)) return;
     }
 
-//    private boolean transferToFuelEngine(BlockEntityFuelEngine te, boolean flip) {
-//        if (te.isFlipped != flip)
-//            return false;
-//        FluidStack liq = tank.getFluid();
-//        int toadd = Math.min(liq.amount / 4 + 1, BlockEntityFuelEngine.CAPACITY - te.getFuelLevel());
-//        if (toadd > 0) {
-//            te.addFuel(toadd);
-//            tank.removeLiquid(toadd);
-//            return true;
-//        }
-//        return false;
-//    }
+    private boolean transferToFuelEngine(TileEntityFuelEngine engine, boolean flip) {
+        if (engine.isFlipped != flip || tank.isEmpty() || !TileEntityFuelEngine.isValidFuel(tank.getActualFluid().getFluid())) return false;
+        Direction side = flip ? Direction.DOWN : Direction.UP;
+        var target = level.getCapability(Capabilities.Fluid.BLOCK, worldPosition.relative(side), side.getOpposite());
+        if (target == null) return false;
+        var resource = FluidResource.of(tank.getFluid());
+        return ResourceHandlerUtil.move(fluidHandler, target, resource::equals, tank.getFluidLevel() / 4 + 1, null) > 0;
+    }
 
     private boolean transferToEngine(BlockEntityEngine te, boolean flip) {
         if (te.isFlipped != flip)
@@ -312,15 +306,14 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         if (te instanceof BlockEntityEngine) {
             BlockEntityEngine eng = (BlockEntityEngine) te;
             return eng.getEngineType() != EngineType.STEAM && eng.getEngineType().burnsFuel() && fluid.isSame(eng.getEngineType().getFuelType());
-        } //else if (te instanceof BlockEntityFuelEngine) {
-        //return fluid.equals(Fluids.getFluid("fuel"));
-        //}
+        } else if (te instanceof TileEntityFuelEngine) {
+            return TileEntityFuelEngine.isValidFuel(fluid);
+        }
         if (fluid.isSame(RotaryFluids.JET_FUEL.get()))
             return true;
         if (fluid.isSame(RotaryFluids.ETHANOL.get()))
             return true;
-//        if (fluid.equals(Fluids.getFluid("fuel")))
-//            return true;
+        if (TileEntityFuelEngine.isValidFuel(fluid)) return true;
         if (fluid.isSame(RotaryFluids.OXYGEN.get()))
             return true;
         return false;//fluid.equals(Fluids.getFluid("oxygen"));

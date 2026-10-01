@@ -136,6 +136,7 @@ public final class RoCRecipeProvider {
             purifier();
             distiller();
             fuelEnhancer();
+            fuelEngine();
             chunkLoader();
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.TERRAFORMER.get())
                     .pattern("SsS").pattern("ici").pattern("PiP")
@@ -259,6 +260,16 @@ public final class RoCRecipeProvider {
                     .define('G', RotaryItems.BEDROCK_ALLOY_GEAR_16x.get())
                     .pattern("sSs").pattern("BSB").pattern("PGP")
                     .unlockedBy("has_bedrock_shaft", has(RotaryBlocks.BEDROCK_SHAFT.get())).save(out);
+        }
+
+        private void fuelEngine() {
+            // V33a RotaryRecipes: aluminum cylinders, tungsten, tungsten 8:1 unit, steel 2:1 unit, shaft core, panels, impeller.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FUEL_ENGINE.get())
+                    .define('C', RotaryItems.ALUMINUM_ALLOY_CYLINDER.get()).define('G', RotaryItems.TUNGSTEN_INGOT.get())
+                    .define('g', RotaryItems.TUNGSTEN_ALLOY_GEAR_8x.get()).define('f', RotaryItems.HSLA_STEEL_GEAR_2x.get())
+                    .define('s', RotaryItems.HSLA_SHAFT_CORE.get()).define('b', RotaryItems.HSLA_PLATE.get()).define('I', RotaryItems.IMPELLER.get())
+                    .pattern("CGC").pattern("fgs").pattern("bIb")
+                    .unlockedBy("has_tungsten_gear", has(RotaryItems.TUNGSTEN_ALLOY_GEAR_8x.get())).save(out);
         }
 
         private void fuelEnhancer() {

@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/fuel_engine",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "fuelengine"
+    }
+  }
+}

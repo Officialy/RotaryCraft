@@ -225,6 +225,7 @@ public final class RotaryGameTests {
         RotarySurvivalTagTests.register(event, env);
         RotaryChunkLoaderTests.register(event, env);
         RotaryFuelEnhancerTests.register(event, env);
+        RotaryFuelEngineTests.register(event, env);
 
         register(event, env, "distiller_oil_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 0));
         register(event, env, "distiller_bioethanol_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 1));
@@ -918,8 +919,10 @@ public final class RotaryGameTests {
         BlockEntityFuelLine line = helper.getBlockEntity(linePos, BlockEntityFuelLine.class);
         helper.assertTrue(line.isValidFluid(RotaryFluids.JET_FUEL.get())
                         && line.isValidFluid(RotaryFluids.ETHANOL.get())
-                        && !line.isValidFluid(Fluids.WATER),
-                "fuel line must accept the original fuels and reject water");
+                        && !line.isValidFluid(Fluids.LAVA)
+                        && line.isValidFluid(Fluids.WATER) == BuiltInRegistries.FLUID.wrapAsHolder(Fluids.WATER)
+                                .is(reika.rotarycraft.data.RoCFluidTagsProvider.FUEL),
+                "fuel line must accept the original fuels and explicitly tagged petroleum fixtures, while rejecting unrelated fluids");
         machine.addLiquid(1000);
         for (int i = 0; i < 6; i++) {
             Item solid = recipe.getIngredients().get(5 - i).ingredient().items().findFirst().orElseThrow().value();

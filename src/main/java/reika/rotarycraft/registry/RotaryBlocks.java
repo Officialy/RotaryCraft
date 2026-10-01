@@ -208,6 +208,7 @@ public class RotaryBlocks {
     public static final DeferredBlock<Block> DROPS = registerMachineBlock("drop_processor", () -> new BlockDropProcessor(blockProperties().strength(5)));
     public static final DeferredBlock<Block> SPRINKLER = registerMachineBlock("sprinkler", () -> new BlockSprinkler(blockProperties().strength(5)));
     public static final DeferredBlock<Block> TERRAFORMER = registerMachineBlock("terraformer", () -> new reika.rotarycraft.base.blocks.entity.BlockTerraformer(blockProperties().strength(5)));
+    public static final DeferredBlock<Block> FUEL_ENGINE = registerMachineBlock("fuel_engine", () -> new reika.rotarycraft.base.blocks.entity.BlockFuelEngine(blockProperties().strength(5)));
     public static final DeferredBlock<Block> FUEL_ENHANCER = registerMachineBlock("fuel_enhancer", () -> new reika.rotarycraft.base.blocks.entity.BlockFuelConverter(blockProperties().strength(5)));
     public static final DeferredBlock<Block> DISTILLER = registerMachineBlock("distiller", () -> new reika.rotarycraft.base.blocks.entity.BlockDistillery(blockProperties().strength(5)));
     public static final DeferredBlock<Block> PURIFIER = registerMachineBlock("purifier", () -> new BlockPurifier(blockProperties().strength(5)));

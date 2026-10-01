@@ -31,7 +31,7 @@ Updated 2026-10-01. Target: NeoForge 26.3.0.26-beta, Java 25.
 
 ## GameTest coverage
 
-The suite registers one isolated placement/type/lifecycle test for each of the 138 active
+The suite registers one isolated placement/type/lifecycle test for each of the 139 active
 MachineRegistry entries, plus a registry-wide invariant. Variants account for some entries;
 this count is not a count of distinct V33a machines. Tests tick real placed blocks rather than
 calling processing methods with fabricated power. Creative coils supply deterministic shaft
@@ -249,3 +249,46 @@ Jar inspection verifies the machine, its generated recipes/models/loot/mining ta
 of every Fuel Enhancer fixture. Logs are `build/fuel-enhancer-final-validation.log` and
 `build/fuel-enhancer-datagen.log`. This slice still needs client visual and multiplayer checks
 for the new machine, and a real foreign-fuel integration test.
+
+
+## Fuel Engine port (2026-10-01)
+
+The Fuel Engine is ported against V33a's source: 256 rad/s and 2048 Nm (524288 W),
+three independent 24000 mB tanks, eight-tick cold startup, 1 mB startup consumption,
+4 mB per 36 firing ticks and 1 mB lubricant per 32 powered world ticks. Loss of fuel,
+lubricant, atmosphere or ECU permission coasts down rather than instantly stopping.
+All five ECU settings control speed and piston efficiency. Turbofuel retains V33a's
+integer `5/2` expression, doubling the firing interval; it does not become a 2.5x bonus.
+
+- Fuel enters beneath the engine (above when flipped); water and lubricant enter horizontally.
+  Tank extraction is denied. Transaction rollback, mixed-fluid rejection, partial-capacity
+  ECU transfer and full-bucket backpressure preserve fluids. Fuel lines accept the same common
+  fuel tags as the engine. Real fuel lines, water pipes and hoses feed a powered engine in tests.
+- Restore the original ECU transfer path, including ceiling-mounted engines and redstone
+  sample hysteresis. Placement beneath a solid ceiling with open space below flips the engine.
+- Thermal checks run every 20 ticks: water assists cooling, speed drops above 450 C with a
+  16 rad/s floor, and exceeding 750 C removes the engine and dispatches strength-4 and strength-8
+  fire/block explosions. The explosion test intercepts the two actual start events so adjacent
+  GameTest structures remain isolated; blast damage and fire spread are not measured by it.
+- Register the original aluminum-cylinder/tungsten-gear survival recipe, loot, motion and
+  pickaxe tags, four-gauge menu, player inventory transfers, handbook notes, shift tooltip,
+  original fuel-engine texture, animated crank/pistons, item renderer, smoke and diesel sound.
+  Save/load preserves all three tanks, mechanical state, flipping and timer phase; a running
+  engine resumes its next fuel burn at the saved phase without repaying cold-start fuel.
+- DragonAPI exposes position-specific atmosphere/combustion/density/damage queries on the
+  NeoForge event bus. Vacuum and restored atmosphere are tested. Advanced Rocketry and
+  Galacticraft adapters remain explicitly marked for their absent modern APIs. Common
+  `c:fuel` and `c:turbofuel` tags preserve external fuel integration without inventing fuel.
+  Satisforestry's absent modern API adapter remains marked; its fluid must opt into turbofuel.
+  The water/ethanol substitutions are test-only resources, excluded from release jars.
+
+Validation: 43 Fuel Engine functional tests plus its registry placement test bring the full
+suite to 379/379 RotaryCraft GameTests. All 11 JUnit checks and the release build pass.
+Datagen and release-jar inspection verify the recipe, models, loot and tags. Logs:
+`build/fuel-engine-datagen.log` and `build/fuel-engine-final-validation.log`.
+
+Seventeen machines remain from the owner's original missing list: Bait Box, Bundled Bus,
+CCTV, Compressor, Defoliator, Display, Electric Motor, Flame Turret, Generator, Mob Radar,
+Pile Driver, Pneumatic Engine, Portal Shaft, Projector, Screen, Sonic Weapon and Spy Cam.
+Client visual/sound checks, real client/server joining, release-jar play and third-party
+fuel/space-mod adapters are not established by the headless checks.

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "rotarycraft:aluminum_alloy_cylinder",
+    "G": "rotarycraft:tungsten_ingot",
+    "I": "rotarycraft:impeller",
+    "b": "rotarycraft:hsla_steel_plate",
+    "f": "rotarycraft:hsla_steel_gear_2x",
+    "g": "rotarycraft:tungsten_alloy_gear_8x",
+    "s": "rotarycraft:hsla_steel_shaft_core"
+  },
+  "pattern": [
+    "CGC",
+    "fgs",
+    "bIb"
+  ],
+  "result": {
+    "id": "rotarycraft:fuel_engine"
+  }
+}
