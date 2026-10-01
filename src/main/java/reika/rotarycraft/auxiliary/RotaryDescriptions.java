@@ -504,7 +504,7 @@ public final class RotaryDescriptions {
 //        addNotes(MachineRegistry.SPAWNERCONTROLLER, PowerReceivers.SPAWNERCONTROLLER.getMinPower(), BlockEntitySpawnerController.BASEDELAY);
 //        addNotes(MachineRegistry.VACUUM, PowerReceivers.VACUUM.getMinPower(), BlockEntityVacuum.FALLOFF);
 //        addNotes(MachineRegistry.WOODCUTTER, PowerReceivers.WOODCUTTER.getMinPower(), PowerReceivers.WOODCUTTER.getMinTorque());
-//        addNotes(MachineRegistry.MOBRADAR, PowerReceivers.MOBRADAR.getMinPower(), PowerReceivers.MOBRADAR.getMinPower(), BlockEntityMobRadar.FALLOFF);
+        addNotes(MachineRegistry.MOBRADAR, PowerReceivers.MOBRADAR.getMinPower(), PowerReceivers.MOBRADAR.getMinPower(), reika.rotarycraft.blockentities.surveying.BlockEntityMobRadar.FALLOFF);
         addNotes(MachineRegistry.TNTCANNON, PowerReceivers.TNTCANNON.getMinPower(), PowerReceivers.TNTCANNON.getMinTorque());
 //        int fudge = BlockEntitySonicWeapon.fudge;
 //        addNotes(MachineRegistry.SONICWEAPON, PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), BlockEntitySonicWeapon.FALLOFF, BlockEntitySonicWeapon.EYEDAMAGE / fudge, BlockEntitySonicWeapon.BRAINDAMAGE / fudge, BlockEntitySonicWeapon.LUNGDAMAGE / fudge, BlockEntitySonicWeapon.LETHALVOLUME / fudge);

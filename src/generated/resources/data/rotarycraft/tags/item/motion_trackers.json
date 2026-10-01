@@ -1,0 +1,8 @@
+{
+  "values": [
+    {
+      "id": "rotarycraft:motion_tracker",
+      "required": false
+    }
+  ]
+}

@@ -30,6 +30,7 @@ public interface RotaryMenus {
     }
 
     Supplier<MenuType<WinderContainer>> WINDER = register("winder", WinderContainer::new);
+    Supplier<MenuType<ContainerMobRadar>> MOB_RADAR = register("mob_radar", ContainerMobRadar::new);
 
     Supplier<MenuType<GearboxContainer>> GEARBOX = register("gearbox", GearboxContainer::new);
 

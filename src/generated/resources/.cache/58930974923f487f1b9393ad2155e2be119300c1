@@ -1,4 +1,4 @@
-// 26.3	2026-10-01T15:35:46.8949677	Tags for minecraft:item mod id rotarycraft
+// 26.3	2026-10-01T21:12:23.6664188	Tags for minecraft:item mod id rotarycraft
 7d8156626076e44ca10a04ded074cd01bc2b5286 data/c/tags/item/coke.json
 a63983c60e6b0acaf2fe580776525b7bac54e991 data/c/tags/item/dusts.json
 07d36df2c8c26f4d1a2fac212e9a0c8c15426d74 data/c/tags/item/dusts/aluminum.json
@@ -39,3 +39,4 @@ b7ceef54368bf5d8ca344bc4cb41563f5dc73e29 data/minecraft/tags/item/swords.json
 4d2b5c677bbe563a7343978e1acf0fdfc4eb2037 data/rotarycraft/tags/item/dusts/bedrock.json
 b5c6781ac766bb269cad48810fda77b70381d5b7 data/rotarycraft/tags/item/ingots/bedrock_alloy.json
 5fd1a001e1f63add71af82c50d2963f584531bc2 data/rotarycraft/tags/item/ingots/tungsten_alloy.json
+53194020524e98aed2b6d23ae91e5942bbb33fac data/rotarycraft/tags/item/motion_trackers.json

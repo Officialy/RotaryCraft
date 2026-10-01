@@ -80,6 +80,7 @@ public class RotaryLang extends LanguageProvider {
         add("item.rotarycraft.tile_selector_linked", "Linked selector to machine at %s");
         add("item.rotarycraft.tile_selector_selected", "Selected biome cell at %s");
         add("gui.rotarycraft.fuel_engine.fuel", "Fuel: %s / 24000 mB");
+        add("gui.rotarycraft.mob_radar.range", "%s m");
         add("gui.rotarycraft.fuel_engine.water", "Water: %s / 24000 mB");
         add("gui.rotarycraft.fuel_engine.lubricant", "Lubricant: %s / 24000 mB");
         add("gui.rotarycraft.fuel_engine.temperature", "Temperature: %s°C");

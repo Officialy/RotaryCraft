@@ -1,4 +1,4 @@
-// 26.3	2026-10-01T19:19:21.6984238	Registries for reloadable
+// 26.3	2026-10-01T21:12:23.6539173	Registries for reloadable
 a916220f301948258d017ef5e577c96901779486 data/rotarycraft/advancement/bedrockbreaker.json
 e9c5dad0ea096423b3acc234f5de7d50f1cda702 data/rotarycraft/advancement/bedrockshaft.json
 6399c44c6527cedc827f8d4c453fe3844c36c5d7 data/rotarycraft/advancement/dumbextractor.json
@@ -209,6 +209,7 @@ f8d74b90dd96c585aeaebcd83949304a31abec8e data/rotarycraft/advancement/recipes/re
 cf875e23749f790e83193798e61f4c3c31897081 data/rotarycraft/advancement/recipes/redstone/mirror.json
 943e5f2354a7d880b4790ab1f8d13677ea2b56b2 data/rotarycraft/advancement/recipes/redstone/mixer.json
 e29365bfef214c8faea6b91487c3cc068315eb23 data/rotarycraft/advancement/recipes/redstone/mob_harvester.json
+434d7321c4d712382b51c25d381e51e79037421d data/rotarycraft/advancement/recipes/redstone/mob_radar.json
 797e51c17b8dfdf5509703086cf5f10eafb560bc data/rotarycraft/advancement/recipes/redstone/mount.json
 7e5f7d6b57b38fe4e1dffe650b0b8037f94fa181 data/rotarycraft/advancement/recipes/redstone/multi_cannon.json
 fe9fb4ca4d0804769a45fe3b8dc7094f7e5f0242 data/rotarycraft/advancement/recipes/redstone/multi_clutch.json
@@ -428,6 +429,7 @@ a9ba15881ceacf6626dd4faecf2b65b66fc2aeed data/rotarycraft/loot_table/blocks/magn
 a550f69eb2b576c3a165efde04497f1da348455d data/rotarycraft/loot_table/blocks/miningpipe.json
 5dbe91758b0a81ace296ab53d8651f98185632ce data/rotarycraft/loot_table/blocks/mirror.json
 816f17ad16f92ccfbe30ef0f059f19f2d6342845 data/rotarycraft/loot_table/blocks/mob_harvester.json
+ed9b60e611c6770d41550ac667f264c8fbb9b6f1 data/rotarycraft/loot_table/blocks/mob_radar.json
 1e415afb86a45b5a3ed839fda1339c1a32d74f97 data/rotarycraft/loot_table/blocks/multi_cannon.json
 f0ba4b92bdd5fc0c7b8966c92bb4b9d805d7bff2 data/rotarycraft/loot_table/blocks/multi_clutch.json
 847351addd88c5853016471a4c733d9390945d58 data/rotarycraft/loot_table/blocks/music_box.json
@@ -776,6 +778,7 @@ af8783a4e5c69307afa5729bf188c0e799c2cbca data/rotarycraft/recipe/mirror.json
 aabd7eee2bb646c2fb3e76214256e7a42a0cfbc4 data/rotarycraft/recipe/mirror_panel.json
 aca8deef006dd2496184e004f1763625f289cf24 data/rotarycraft/recipe/mixer.json
 6c12095b04f97b83c5660d2172f31a867512c873 data/rotarycraft/recipe/mob_harvester.json
+43d0db5ae5e52eca1638294ccea11ae9c1102a83 data/rotarycraft/recipe/mob_radar.json
 c49a41b4f9c720b4199d7e738b66d96fa0dd4e3b data/rotarycraft/recipe/mount.json
 09b848862adee97152eef2a6ea869f266adec93e data/rotarycraft/recipe/multi_cannon.json
 61dc78f74d241c2da235eb6b090d749447922ab6 data/rotarycraft/recipe/multi_clutch.json

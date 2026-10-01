@@ -1,6 +1,7 @@
 {
   "values": [
     "rotarycraft:chunk_loader",
+    "rotarycraft:mob_radar",
     "rotarycraft:gpr",
     "rotarycraft:wood_flywheel",
     "rotarycraft:stone_flywheel",

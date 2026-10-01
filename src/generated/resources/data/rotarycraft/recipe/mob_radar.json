@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "c": "rotarycraft:circuit_board",
+    "g": "rotarycraft:hsla_steel_gear_2x",
+    "p": "rotarycraft:hsla_steel_plate",
+    "r": "rotarycraft:radar_unit",
+    "s": "rotarycraft:screen"
+  },
+  "pattern": [
+    " rs",
+    " g ",
+    "pcp"
+  ],
+  "result": {
+    "id": "rotarycraft:mob_radar"
+  }
+}

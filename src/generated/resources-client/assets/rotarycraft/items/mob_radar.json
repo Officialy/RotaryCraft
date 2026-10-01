@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/mob_radar",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "mobradar"
+    }
+  }
+}

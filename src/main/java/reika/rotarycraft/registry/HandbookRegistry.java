@@ -207,7 +207,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
     SURVMACHINEDESC("Surveying Machines", "Surveying"),
     //    GPR(MachineRegistry.GPR),
-//    RADAR(MachineRegistry.MOBRADAR),
+    RADAR(MachineRegistry.MOBRADAR),
     SCANNER(MachineRegistry.CAVESCANNER),
 //    CCTV(MachineRegistry.CCTV),
 //    SPYCAM(MachineRegistry.SPYCAM),

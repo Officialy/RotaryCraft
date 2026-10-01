@@ -328,3 +328,41 @@ all three jetpack chest-armor tags and exclusion of foreign-fluid fixtures. Logs
 build/filling-station-datagen.log, build/filling-station-focused.log and
 build/filling-station-final-validation.log. Client visuals and a real networked join remain
 unverified by this headless suite. Deploy the updated RotaryCraft and DragonAPI jars together.
+
+## Mob Radar and ElectriCraft cable sprites (2026-10-01)
+
+Ported V33a's Mob Radar with real bottom-only shaft input, the 8192 W / eight-block base
+range, 1024 W per additional block and 256-block cap. Retain the original integer range
+behavior: without power it still scans its own column. The square scan now covers the
+modern world's entire height, including negative Y and above 255. Player, animal and
+hostile filters remain independent; selected RadarJammer entities activate static and
+jamming clears on the next scan after removal, filtering or the API returning false.
+
+- Register the original radar-unit/screen/steel-gear/plate/circuit shaped recipe, loot,
+  pickaxe and motion-blocking tags, handbook notes, menu, original radar model/texture,
+  antenna animation and original GUI icons. Restore the three-quarter block shape.
+- Sync immutable contact snapshots containing entity IDs, positions, icons and colors.
+  A client can display server contacts beyond its normal entity tracking distance.
+  Save/load retains filters and ownership; live entity references refresh after loading.
+- Restore the owner's through-wall HUD geometry and off-screen rendering. The actual
+  Motion Tracker item remains an unported dependency, preserved behind MOTION-PORT and
+  the optional rotarycraft:motion_trackers tag. A compass exercises this integration
+  only in GameTests and is excluded from release jars. The ordinary radar GUI is usable
+  without that tool. DragonAPI now classifies Monster rather than all Mob entities as
+  hostile and restores V33a's exact mob colors and cached subclass shades.
+- ElectriCraft's RF cable renderer requests electricraft:blocks/rf and rf_end. Add a
+  datagen block-atlas source for the original plural textures/blocks directory, also
+  making legacy wire and battery sprites available. Preserve the existing 20-frame
+  animations; their metadata was already valid.
+
+Validation: 30 new radar functional tests plus registry placement bring RotaryCraft to
+446/446 GameTests; 11/11 JUnit checks pass. ElectriCraft passes 13/13 GameTests. Both
+release builds and datagen pass. Jar inspection verifies radar data, mining/motion tags,
+original assets, optional tracker tag, fixture exclusion and ElectriCraft's atlas source
+with intact RF animations. Logs: build/mob-radar-datagen.log, build/mob-radar-focused.log
+and build/mob-radar-final-validation.log. Client rendering and real network joins remain
+unverified by the headless suite. Deploy matching DragonAPI, RotaryCraft and ElectriCraft jars.
+
+Sixteen machines remain from the owner's original missing list: Bait Box, Bundled Bus,
+CCTV, Compressor, Defoliator, Display, Electric Motor, Flame Turret, Generator, Pile Driver,
+Pneumatic Engine, Portal Shaft, Projector, Screen, Sonic Weapon and Spy Cam.

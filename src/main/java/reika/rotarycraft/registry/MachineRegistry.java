@@ -260,7 +260,8 @@ public enum MachineRegistry implements TileEnum {
     TERRAFORMER(true, "machine.terraformer", RotaryBlocks.TERRAFORMER.get(), reika.rotarycraft.blockentities.level.BlockEntityTerraformer.class),
     CHUNKLOADER("machine.chunkloader", RotaryBlocks.CHUNK_LOADER.get(), reika.rotarycraft.blockentities.BlockEntityChunkLoader.class),
     FUELENHANCER(true, "machine.fuelenhancer", RotaryBlocks.FUEL_ENHANCER.get(), reika.rotarycraft.blockentities.processing.BlockEntityFuelConverter.class),
-    FUELENGINE(true, "machine.fuelengine", RotaryBlocks.FUEL_ENGINE.get(), reika.rotarycraft.modinterface.TileEntityFuelEngine.class);
+    FUELENGINE(true, "machine.fuelengine", RotaryBlocks.FUEL_ENGINE.get(), reika.rotarycraft.modinterface.TileEntityFuelEngine.class),
+    MOBRADAR(true, "machine.mobradar", RotaryBlocks.MOB_RADAR.get(), reika.rotarycraft.blockentities.surveying.BlockEntityMobRadar.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
@@ -554,8 +555,8 @@ public enum MachineRegistry implements TileEnum {
 //            return 0.375F;
         if (this == PLAYERDETECTOR)
             return 0.6875F;
-//        if (this == MOBRADAR)
-//            return 0.75F;
+        if (this == MOBRADAR)
+            return 0.75F;
         if (this == WINDER)
             return 0.8125F;
         if (this == TNTCANNON)

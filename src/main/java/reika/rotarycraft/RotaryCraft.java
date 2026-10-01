@@ -259,6 +259,7 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.AEROSOLIZER.get(), GuiAerosolizer::new);
         event.register(RotaryMenus.PULSE_FURNACE.get(), GuiPulseFurnace::new);
         event.register(RotaryMenus.FILLING_STATION.get(), GuiFillingStation::new);
+        event.register(RotaryMenus.MOB_RADAR.get(), reika.rotarycraft.gui.screen.machine.GuiMobRadar::new);
     }
 
     @Override

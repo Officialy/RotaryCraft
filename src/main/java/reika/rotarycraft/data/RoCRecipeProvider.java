@@ -137,6 +137,11 @@ public final class RoCRecipeProvider {
             distiller();
             fuelEnhancer();
             fuelEngine();
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.MOB_RADAR.get())
+                    .define('r', RotaryItems.RADAR_UNIT.get()).define('s', RotaryItems.SCREEN.get())
+                    .define('g', RotaryItems.HSLA_STEEL_GEAR_2x.get()).define('p', RotaryItems.HSLA_PLATE.get())
+                    .define('c', RotaryItems.CIRCUIT_BOARD.get()).pattern(" rs").pattern(" g ").pattern("pcp")
+                    .unlockedBy("has_radar_unit", has(RotaryItems.RADAR_UNIT.get())).save(out);
             chunkLoader();
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.TERRAFORMER.get())
                     .pattern("SsS").pattern("ici").pattern("PiP")
