@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 1.0,
+      "output": {
+        "id": "rotarycraft:mod_aluminum_flakes"
+      }
+    }
+  ],
+  "input": "rotarycraft:mod_sodalite_solution",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_sodalite_flakes"
+  },
+  "priority": 10,
+  "stage": 3
+}

@@ -1,0 +1,9 @@
+{
+  "values": [
+    "rotarycraft:mod_fz_dark_iron_product",
+    {
+      "id": "#c:ingots/dark_iron",
+      "required": false
+    }
+  ]
+}

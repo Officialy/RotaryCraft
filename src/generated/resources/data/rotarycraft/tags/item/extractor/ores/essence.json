@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/essence",
+      "required": false
+    },
+    {
+      "id": "#c:ores/nether_essence",
+      "required": false
+    },
+    {
+      "id": "#c:ores/end_essence",
+      "required": false
+    }
+  ]
+}

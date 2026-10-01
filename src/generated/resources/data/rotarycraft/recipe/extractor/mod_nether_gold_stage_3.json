@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.125,
+      "output": {
+        "id": "rotarycraft:silver_flakes"
+      }
+    }
+  ],
+  "input": "rotarycraft:mod_nether_gold_solution",
+  "ore_duplication_chance": 0.8,
+  "output": {
+    "id": "rotarycraft:mod_nether_gold_flakes"
+  },
+  "priority": 20,
+  "stage": 3
+}

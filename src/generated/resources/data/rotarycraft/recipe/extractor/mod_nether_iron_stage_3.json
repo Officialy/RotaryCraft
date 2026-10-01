@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.05,
+      "output": {
+        "id": "rotarycraft:tungsten_flakes"
+      }
+    }
+  ],
+  "input": "rotarycraft:mod_nether_iron_solution",
+  "ore_duplication_chance": 0.8,
+  "output": {
+    "id": "rotarycraft:mod_nether_iron_flakes"
+  },
+  "priority": 20,
+  "stage": 3
+}

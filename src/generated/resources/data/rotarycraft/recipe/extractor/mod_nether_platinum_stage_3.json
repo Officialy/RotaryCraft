@@ -1,0 +1,19 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.125,
+      "output": {
+        "id": "rotarycraft:mod_iridium_flakes"
+      },
+      "required_ore": "rotarycraft:extractor/ores/iridium"
+    }
+  ],
+  "input": "rotarycraft:mod_nether_platinum_solution",
+  "ore_duplication_chance": 0.9,
+  "output": {
+    "id": "rotarycraft:mod_nether_platinum_flakes"
+  },
+  "priority": 20,
+  "stage": 3
+}

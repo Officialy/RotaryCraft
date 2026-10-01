@@ -24,6 +24,10 @@ import reika.rotarycraft.auxiliary.recipemanagers.ShapelessBlastFurnaceRecipe;
 
 public class RotaryRecipeSerializers {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, RotaryCraft.MODID);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<net.minecraft.world.item.crafting.SmeltingRecipe>> TAGGED_SMELTING =
+            RECIPE_SERIALIZERS.register("tagged_smelting", () -> new RecipeSerializer<>(
+                    reika.rotarycraft.auxiliary.recipemanagers.TaggedSmeltingRecipe.CODEC,
+                    reika.rotarycraft.auxiliary.recipemanagers.TaggedSmeltingRecipe.STREAM_CODEC));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<net.minecraft.world.item.crafting.ShapedRecipe>> BULK_SHAPED =
             RECIPE_SERIALIZERS.register("bulk_shaped", () -> new RecipeSerializer<>(BulkShapedRecipe.CODEC, BulkShapedRecipe.STREAM_CODEC));
 

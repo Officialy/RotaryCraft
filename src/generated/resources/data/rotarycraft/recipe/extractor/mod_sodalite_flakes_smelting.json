@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.5,
+  "ingredient": "rotarycraft:mod_sodalite_flakes",
+  "result": {
+    "id": "rotarycraft:mod_sodalite_product"
+  },
+  "result_tag": "c:dyes/blue"
+}

@@ -1,0 +1,11 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_apatite_flakes",
+  "result": {
+    "count": 3,
+    "id": "rotarycraft:mod_apatite_product"
+  },
+  "result_tag": "c:gems/apatite"
+}

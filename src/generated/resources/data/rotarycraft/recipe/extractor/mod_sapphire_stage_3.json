@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.0625,
+      "output": {
+        "id": "rotarycraft:mod_aluminum_flakes"
+      }
+    }
+  ],
+  "input": "rotarycraft:mod_sapphire_solution",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_sapphire_flakes"
+  },
+  "priority": 10,
+  "stage": 3
+}

@@ -503,7 +503,7 @@ public class RotaryJEIPlugin implements IModPlugin {
 
         @Override public RecipeType<ExtractorRecipe> getRecipeType() { return TYPE; }
         @Override public Component getTitle() { return Component.translatable("machine.extractor"); }
-        @Override public int getWidth()  { return 76; }
+        @Override public int getWidth()  { return 103; }
         @Override public int getHeight() { return 36; }
         @Override public IDrawable getIcon() { return icon; }
 
@@ -517,7 +517,12 @@ public class RotaryJEIPlugin implements IModPlugin {
                        tooltip.add(Component.literal("Stage " + (recipe.getStage() + 1) + "/4"));
                        recipe.getDuplicationChance().ifPresent(chance -> tooltip.add(Component.translatable(
                                "tooltip.rotarycraft.extractor.duplication", Math.round(chance * 100))));
+                       recipe.getOreDuplicationChance().ifPresent(chance -> tooltip.add(Component.translatable(
+                               "tooltip.rotarycraft.extractor.duplication", Math.round(chance * 100))));
                    });
+            recipe.getAvailableBonus().ifPresent(bonus -> builder.addSlot(RecipeIngredientRole.OUTPUT, 85, 9)
+                    .addItemStack(bonus.output().create()).addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.translatable(
+                            "tooltip.rotarycraft.extractor.bonus", Math.round(bonus.chance() * 100)))));
         }
     }
 

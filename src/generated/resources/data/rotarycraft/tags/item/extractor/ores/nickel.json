@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/nickel",
+      "required": false
+    },
+    {
+      "id": "#c:ores/pentlandite",
+      "required": false
+    }
+  ]
+}

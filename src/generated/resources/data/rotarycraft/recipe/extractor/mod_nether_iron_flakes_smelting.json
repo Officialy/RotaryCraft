@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_nether_iron_flakes",
+  "result": {
+    "id": "minecraft:iron_ingot"
+  },
+  "result_tag": "c:ingots/iron"
+}

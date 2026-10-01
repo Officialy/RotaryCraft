@@ -1,0 +1,19 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.01,
+      "output": {
+        "id": "rotarycraft:mod_iridium_flakes"
+      },
+      "required_ore": "rotarycraft:extractor/ores/iridium"
+    }
+  ],
+  "input": "rotarycraft:mod_silver_solution",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_silver_flakes"
+  },
+  "priority": 10,
+  "stage": 3
+}

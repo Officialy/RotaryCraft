@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#rotarycraft:extractor/ores/infused_fire",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_infused_fire_dust"
+  },
+  "priority": 10,
+  "stage": 0
+}

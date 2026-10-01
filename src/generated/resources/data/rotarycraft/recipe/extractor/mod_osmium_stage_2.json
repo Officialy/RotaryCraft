@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:mod_osmium_slurry",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_osmium_solution"
+  },
+  "priority": 10,
+  "stage": 2
+}

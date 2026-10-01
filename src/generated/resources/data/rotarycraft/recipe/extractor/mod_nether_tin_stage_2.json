@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:mod_nether_tin_slurry",
+  "ore_duplication_chance": 0.8,
+  "output": {
+    "id": "rotarycraft:mod_nether_tin_solution"
+  },
+  "priority": 20,
+  "stage": 2
+}

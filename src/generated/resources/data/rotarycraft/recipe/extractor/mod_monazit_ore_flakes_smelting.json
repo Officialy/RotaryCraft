@@ -1,0 +1,11 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_monazit_ore_flakes",
+  "result": {
+    "count": 4,
+    "id": "rotarycraft:mod_monazit_ore_product"
+  },
+  "result_tag": "c:items/forcicium_item"
+}

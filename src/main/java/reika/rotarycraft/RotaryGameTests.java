@@ -229,6 +229,7 @@ public final class RotaryGameTests {
         RotaryFillingStationTests.register(event, env);
         RotaryMobRadarTests.register(event, env);
         RotaryExtractorBalanceTests.register(event, env);
+        RotaryModExtractorTests.register(event, env);
 
         register(event, env, "distiller_oil_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 0));
         register(event, env, "distiller_bioethanol_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 1));

@@ -114,6 +114,8 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
             return ReikaRandomHelper.doWithChance(recipe.getDuplicationChance().get()) ? 2 : 1;
         if (bedrock && stage == 0)
             return 2;
+        if (recipe.getOreDuplicationChance().isPresent())
+            return ReikaRandomHelper.doWithChance(recipe.getOreDuplicationChance().get()) ? 2 : 1;
         if (ore != null) {
             if (ore.isRare()) {
                 return ReikaRandomHelper.doWithChance(oreCopyRare / 100D) ? 2 : 1;
@@ -136,7 +138,7 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
                     itemHandler.setStackInSlot(i, out);
                     itemHandler.setStackInSlot(i + 3, ItemStack.EMPTY);
                 } else if (in.getCount() < in.getMaxStackSize()) {
-                    if (ReikaItemHelper.matchStacks(in, out)) {
+                    if (ItemStack.isSameItemSameComponents(in, out)) {
                         int amt = Math.min(out.getCount(), in.getMaxStackSize() - in.getCount());
                         amt = Math.min(amt, this.getNumberConsecutiveOperations(i));
                         if (amt > 0) {
@@ -243,56 +245,46 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
         if (i == 0 && !bedrock && drillTime <= 0 && ConfigRegistry.EXTRACTORMAINTAIN.getState())
             return false;
 
-        if ((i == 1 || i == 2) && tank.isEmpty())
+        if ((i == 1 || i == 2) && tank.getFluidAmount() < 125)
             return false;
 
         ItemStack in = itemHandler.getStackInSlot(i);
         if (in.isEmpty())
             return false;
-        ItemStack chained = itemHandler.getStackInSlot(i + 4);
-        if (!chained.isEmpty() && chained.getCount() + 1 >= chained.getMaxStackSize())
+        ExtractorRecipe recipe = this.getExtractionRecipe(i, in);
+        if (recipe == null)
             return false;
-        ItemStack bonusSlot = itemHandler.getStackInSlot(8);
-        if (!bonusSlot.isEmpty()) {
-            if (bonusSlot.getCount() + 1 > bonusSlot.getMaxStackSize())
-                return false;
-            ItemStack solution = itemHandler.getStackInSlot(3);
-            if (!solution.isEmpty()) {
-                ExtractorBonus bonus = ExtractorBonus.getBonusForIngredient(solution);
-                if (bonus != null) {
-                    ItemStack out = bonus.getBonusItem();
-                    if (!ReikaItemHelper.matchStacks(out, bonusSlot))
-                        return false;
-                }
-            }
+        if (i == 3) {
+            var bonus = this.getBonus(recipe, in);
+            if (bonus != null && !this.canFit(8, bonus.output().create())) return false;
         }
+        ItemStack itemstack = recipe.getOutput();
+        int maximumCopies = recipe.getDuplicationChance().map(chance -> chance > 0 ? 2 : 1)
+                .orElse(bedrock && i == 0 || recipe.getOreDuplicationChance().orElse(.5) > 0 ? 2 : 1);
+        itemstack.setCount(itemstack.getCount() * maximumCopies);
+        return this.canFit(i + 4, itemstack);
+    }
 
-        ItemStack itemstack = this.getExtractionResult(i, in);
-        if (itemstack.isEmpty())
-            return false;
-        ItemStack out = itemHandler.getStackInSlot(i + 4);
+    private boolean canFit(int slot, ItemStack itemstack) {
+        ItemStack out = itemHandler.getStackInSlot(slot);
+        int limit = Math.min(this.getInventoryStackLimit(), itemstack.getMaxStackSize());
+        if (itemstack.getCount() > limit) return false;
         if (out.isEmpty())
             return true;
         if (!ItemStack.isSameItemSameComponents(out, itemstack))
             return false;
-        if (out.getCount() < this.getInventoryStackLimit() && out.getCount() < out.getMaxStackSize())
-            return true;
-        return out.getCount() < itemstack.getMaxStackSize();
+        return out.getCount() + itemstack.getCount() <= limit;
     }
 
-    private ItemStack getExtractionResult(int stage, ItemStack in) {
-        ExtractorRecipe recipe = this.getExtractionRecipe(stage, in);
-        return recipe != null ? recipe.getOutput() : ItemStack.EMPTY;
-    }
-
-    private ExtractorRecipe getExtractionRecipe(int stage, ItemStack in) {
-        if (level == null || level.getServer() == null)
+    public ExtractorRecipe getExtractionRecipe(int stage, ItemStack in) {
+        var recipes = reika.rotarycraft.modinterface.jei.RotaryRecipeSync.getRecipes(level);
+        if (recipes == null || in.isEmpty())
             return null;
-        for (RecipeHolder<ExtractorRecipe> h : level.getServer().getRecipeManager().recipeMap().byType(RotaryRecipeTypes.EXTRACTOR.get())) {
-            if (h.value().matches(stage, in))
-                return h.value();
-        }
-        return null;
+        return recipes.byType(RotaryRecipeTypes.EXTRACTOR.get()).stream()
+                .filter(h -> h.value().matches(stage, in))
+                .sorted(java.util.Comparator.<RecipeHolder<ExtractorRecipe>>comparingInt(h -> h.value().getPriority()).reversed()
+                        .thenComparing(h -> h.id().identifier().toString()))
+                .map(RecipeHolder::value).findFirst().orElse(null);
     }
 
     private void processItem(int i) {
@@ -308,7 +300,7 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
             ItemStack make = itemstack.copy();
             make.setCount(make.getCount() * num);
             itemHandler.setStackInSlot(i + 4, make);
-        } else if (ReikaItemHelper.matchStacks(out, itemstack)) {
+        } else if (ItemStack.isSameItemSameComponents(out, itemstack)) {
             out.setCount(out.getCount() + itemstack.getCount() * num);
             itemHandler.setStackInSlot(i + 4, out);
         }
@@ -317,7 +309,7 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
             drillTime--;
         }
         if (i == 3) {
-            this.bonusItems(in);
+            this.bonusItems(recipe, in);
         }
 
         in.shrink(1);
@@ -326,14 +318,21 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
             tank.removeLiquid(125);
     }
 
-    private void bonusItems(ItemStack is) {
-        ExtractorBonus e = ExtractorBonus.getBonusForIngredient(is);
-        if (e != null && e.doBonus()) {
-            ItemStack bonus = e.getBonusItem();
+    private reika.rotarycraft.auxiliary.recipemanagers.ExtractorBonusOutput getBonus(ExtractorRecipe recipe, ItemStack in) {
+        if (!recipe.getBonuses().isEmpty()) return recipe.getAvailableBonus().orElse(null);
+        ExtractorBonus legacy = ExtractorBonus.getBonusForIngredient(in);
+        return legacy == null ? null : new reika.rotarycraft.auxiliary.recipemanagers.ExtractorBonusOutput(
+                net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(legacy.getBonusItem()), legacy.getProbability(), java.util.Optional.empty());
+    }
+
+    private void bonusItems(ExtractorRecipe recipe, ItemStack is) {
+        var e = this.getBonus(recipe, is);
+        if (e != null && ReikaRandomHelper.doWithChance(e.chance())) {
+            ItemStack bonus = e.output().create();
             ItemStack slot = itemHandler.getStackInSlot(8);
             if (slot.isEmpty())
                 itemHandler.setStackInSlot(8, bonus);
-            else if (ReikaItemHelper.matchStacks(slot, bonus) && slot.getCount() + bonus.getCount() <= slot.getMaxStackSize()) {
+            else if (ItemStack.isSameItemSameComponents(slot, bonus) && slot.getCount() + bonus.getCount() <= slot.getMaxStackSize()) {
                 slot.setCount(slot.getCount() + bonus.getCount());
                 itemHandler.setStackInSlot(8, slot);
             }
@@ -365,9 +364,9 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
         if (slot > 3 && slot < 9)
             return false;
         if (slot == 0)
-            return is.is(Tags.Items.ORES) || is.is(Tags.Items.RAW_MATERIALS_IRON);
+            return this.getExtractionRecipe(0, is) != null;
         if (slot >= 1 && slot <= 3)
-            return ExtractOres.getStage(is) == slot - 1;
+            return this.getExtractionRecipe(slot, is) != null;
         if (slot == 9)
             return !bedrock && ConfigRegistry.EXTRACTORMAINTAIN.getState() && is.is(RotaryItems.HSLA_DRILL.get());
         return false;

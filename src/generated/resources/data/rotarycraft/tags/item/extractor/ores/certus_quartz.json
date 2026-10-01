@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/certus_quartz",
+      "required": false
+    },
+    {
+      "id": "#c:ores/certus_quartz_charged",
+      "required": false
+    },
+    {
+      "id": "#c:ores/charged_certus_quartz",
+      "required": false
+    }
+  ]
+}

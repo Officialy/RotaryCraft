@@ -1,5 +1,10 @@
 {
   "values": [
+    "rotarycraft:mod_aluminum_product",
+    {
+      "id": "#c:ingots/aluminium",
+      "required": false
+    },
     "rotarycraft:aluminum_alloy_ingot"
   ]
 }

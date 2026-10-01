@@ -26,6 +26,7 @@ public final class RotaryRecipeSync {
 
     private static void onDatapackSync(OnDatapackSyncEvent event) {
         event.sendRecipes(
+                net.minecraft.world.item.crafting.RecipeType.SMELTING,
                 RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get(),
                 RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get(),
                 RotaryRecipeTypes.PULSE_FURNACE.get(),

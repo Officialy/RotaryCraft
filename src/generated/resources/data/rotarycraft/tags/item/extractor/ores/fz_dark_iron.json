@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/fz_dark_iron",
+      "required": false
+    },
+    {
+      "id": "#c:ores/dark_iron",
+      "required": false
+    }
+  ]
+}

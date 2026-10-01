@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/thorium",
+      "required": false
+    },
+    {
+      "id": "#c:ores/thorite",
+      "required": false
+    },
+    {
+      "id": "#c:ores/thorianite",
+      "required": false
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 {
   "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.125,
+      "output": {
+        "id": "rotarycraft:aluminum_alloy_powder"
+      }
+    }
+  ],
   "input": "rotarycraft:lapis_solution",
   "output": {
     "id": "rotarycraft:lapis_flakes"

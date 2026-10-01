@@ -23,6 +23,24 @@ public class RoCItemTagsProvider extends ItemTagsProvider {
         super(output, lookup, RotaryCraft.MODID);
     }
     @Override protected void addTags(HolderLookup.Provider lookup) {
+        // Optional nested tags keep every family loadable with or without a particular ore mod.
+        for (var ore : reika.rotarycraft.registry.ModExtractOres.values()) {
+            var input = tag(ore.inputTag());
+            for (var alias : ore.oreTags()) {
+                tag(alias);
+                input.addOptionalTag(alias);
+            }
+            if (ore == reika.rotarycraft.registry.ModExtractOres.COPPER)
+                for (var alias : ore.oreTags()) if (!alias.equals(common("ores/copper"))) tag(common("ores/copper")).addOptionalTag(alias);
+            add(common(ore.productTag), ore.product());
+            tag(common(ore.productTag.split("/")[0])).addTag(common(ore.productTag));
+        }
+        for (String material : java.util.List.of("force", "mimichite", "essence")) tag(common("ores/nether_" + material));
+        // Common spelling/material aliases feed the canonical output tag without creating cycles.
+        tag(common("ingots/aluminum")).addOptionalTag(common("ingots/aluminium"));
+        tag(common("ingots/fz_dark_iron")).addOptionalTag(common("ingots/dark_iron"));
+        tag(common("ingots/chrome")).addOptionalTag(common("ingots/chromium"));
+        tag(common("gems/certus_quartz")).addOptionalTag(common("crystals/certus_quartz"));
         // HSLA is deliberately not interchangeable with ordinary steel (HSLADICT defaults off).
         // A datapack may opt in; keeping this tag empty also lets the purifier load without other mods.
         tag(STEEL_INGOTS);

@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.5,
+  "ingredient": "rotarycraft:mod_nether_coal_flakes",
+  "result": {
+    "id": "minecraft:coal"
+  },
+  "result_tag": "c:items/coal"
+}

@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.5,
+      "output": {
+        "id": "rotarycraft:mod_platinum_flakes"
+      }
+    }
+  ],
+  "input": "rotarycraft:mod_iridium_solution",
+  "ore_duplication_chance": 0.9,
+  "output": {
+    "id": "rotarycraft:mod_iridium_flakes"
+  },
+  "priority": 10,
+  "stage": 3
+}

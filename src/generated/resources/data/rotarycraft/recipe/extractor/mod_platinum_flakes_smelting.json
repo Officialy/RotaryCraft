@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "rotarycraft:mod_platinum_flakes",
+  "result": {
+    "id": "rotarycraft:mod_platinum_product"
+  },
+  "result_tag": "c:ingots/platinum"
+}

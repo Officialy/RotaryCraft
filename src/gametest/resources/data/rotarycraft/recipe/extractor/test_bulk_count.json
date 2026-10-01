@@ -1,0 +1,8 @@
+{
+  "type": "rotarycraft:extractor",
+  "stage": 0,
+  "input": "#rotarycraft:test_ores/bulk",
+  "duplication_chance": 0,
+  "priority": 100,
+  "output": {"id": "rotarycraft:mod_tin_dust", "count": 2}
+}

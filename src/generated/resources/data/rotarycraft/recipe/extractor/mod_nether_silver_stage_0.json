@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#rotarycraft:extractor/ores/nether_silver",
+  "ore_duplication_chance": 0.8,
+  "output": {
+    "id": "rotarycraft:mod_nether_silver_dust"
+  },
+  "priority": 20,
+  "stage": 0
+}

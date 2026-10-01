@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/platinum",
+      "required": false
+    },
+    {
+      "id": "#c:ores/cooperite",
+      "required": false
+    }
+  ]
+}

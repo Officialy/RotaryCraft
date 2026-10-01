@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_ardite_flakes",
+  "result": {
+    "id": "rotarycraft:mod_ardite_product"
+  },
+  "result_tag": "c:ingots/ardite"
+}

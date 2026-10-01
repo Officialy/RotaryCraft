@@ -404,3 +404,40 @@ Validation: 466/466 required RotaryCraft GameTests and 11/11 JUnit tests pass; s
 datagen and the release build succeed. The packaged jar contains all 40 extractor recipes,
 the four explicit raw rates, three raw-item model/texture mappings, both counted smelting
 recipes and their advancements. The GameTest-only tracker fixture is excluded from the jar.
+
+## Tagged modded and custom extractor ores (2026-10-01)
+
+Restore the complete V33a 90-family ModOreList catalog through common item tags. Modern
+copper reuses its vanilla chain; the other 89 families receive all four intermediate items,
+356 extractor recipes, 89 counted furnace conversions and the original unmodified sprite
+cells. Three additional crushing recipes preserve the Nether Force/Mimichite/Essence
+metadata variants. Ordinary/rare/catalog-Nether rates are 50/90/80% at each original stage,
+with rare taking precedence and the bedrock guarantee retained. Raw iron stays at 23%.
+
+Generated final-stage bonus tables restore the V33a secondary products, including coal's
+pitchblende/uranium alternatives and mineral/metal bonuses. Common ore-tag availability
+replaces mod-ID gates. Preserve the original reciprocal-integer bonus rolls (including
+pyrite's effective 50% and monazit's one-in-six), rather than silently changing the declared
+probabilities into different behavior. JEI displays the rates and selected secondary product.
+
+Modded flake smelts prefer a non-RotaryCraft item in the matching common product tag,
+ordered by registry ID, with the original RotaryCraft product as fallback. Counts and XP
+come from V33a. ElectriCraft and ReactorCraft now publish their actual ores in common
+block/item tags and their corresponding material tags, so they join these chains directly.
+
+Custom families use four reusable extract items carrying a persistent/networked
+extract_family component. Datapacks define tagged input, component-sensitive following
+stages, names, colors, rates, counts, bonuses and smelting products. Loaded/synchronized
+recipes drive both GUI and automation validation. Priority resolves overlapping tags
+deterministically. Component-aware merging prevents cross-family conversion; primary and
+secondary output counts reserve full space, and washing/leaching require the full 125 mB.
+See EXTRACTOR-TAGS.md for every tag mapping and five complete custom recipe examples.
+
+Validation: 104 new tests cover every original family through creative-coil-powered complete
+extraction and a real furnace, two isolated custom families, persistence, codecs, overlapping
+tags, original Nether variants, exact-fit outputs, bonus gating and water backpressure.
+Full suites pass: RotaryCraft 570/570, ElectriCraft 13/13 and ReactorCraft 49/49 GameTests;
+RotaryCraft JUnit 11/11. Server/client datagen and all three release builds succeed. Jar
+inspection confirms 399 extractor recipes, the original model/sprite references, 89 counted
+tagged smelts, the unchanged raw rates and exclusion of GameTest-only fixture recipes/tags.
+Logs: build/mod-ore-datagen-final.log and build/mod-ore-final-validation.log.

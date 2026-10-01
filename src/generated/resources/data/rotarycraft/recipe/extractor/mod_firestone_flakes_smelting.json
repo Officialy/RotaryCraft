@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "rotarycraft:mod_firestone_flakes",
+  "result": {
+    "id": "rotarycraft:mod_firestone_product"
+  },
+  "result_tag": "c:shards/firestone"
+}

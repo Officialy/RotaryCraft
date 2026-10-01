@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#rotarycraft:extractor/ores/nether_lapis",
+  "ore_duplication_chance": 0.8,
+  "output": {
+    "id": "rotarycraft:mod_nether_lapis_dust"
+  },
+  "priority": 20,
+  "stage": 0
+}

@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#rotarycraft:extractor/ores/cadmium",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_cadmium_dust"
+  },
+  "priority": 10,
+  "stage": 0
+}

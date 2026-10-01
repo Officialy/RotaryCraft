@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/nether_green_sapphire",
+      "required": false
+    },
+    {
+      "id": "#c:ores/nether_peridot",
+      "required": false
+    }
+  ]
+}

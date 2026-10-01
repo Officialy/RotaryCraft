@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "rotarycraft:mod_sunstone_flakes",
+  "result": {
+    "id": "rotarycraft:mod_sunstone_product"
+  },
+  "result_tag": "c:gems/sunstone"
+}

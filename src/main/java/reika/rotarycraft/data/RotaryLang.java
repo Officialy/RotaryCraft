@@ -82,6 +82,7 @@ public class RotaryLang extends LanguageProvider {
         add("gui.rotarycraft.fuel_engine.fuel", "Fuel: %s / 24000 mB");
         add("gui.rotarycraft.mob_radar.range", "%s m");
         add("tooltip.rotarycraft.extractor.duplication", "Duplication chance: %s%% per stage");
+        add("tooltip.rotarycraft.extractor.bonus", "Secondary product chance: %s%%");
         add("gui.rotarycraft.fuel_engine.water", "Water: %s / 24000 mB");
         add("gui.rotarycraft.fuel_engine.lubricant", "Lubricant: %s / 24000 mB");
         add("gui.rotarycraft.fuel_engine.temperature", "Temperature: %s°C");
@@ -134,7 +135,8 @@ public class RotaryLang extends LanguageProvider {
         RotaryItems.ITEMS.getEntries().forEach(holder ->
                 addItem(holder, "debug".equals(holder.getId().getPath()) ? "Magic Wand"
                         : "craft_pattern".equals(holder.getId().getPath()) ? "Crafting Pattern" //V33a item.craftpattern
-                        : prettify(holder.getId().getPath())));
+                          : reika.rotarycraft.registry.ModExtractOres.itemName(holder.get()) != null
+                          ? reika.rotarycraft.registry.ModExtractOres.itemName(holder.get()) : prettify(holder.getId().getPath())));
 
         addAdvancements();
     }

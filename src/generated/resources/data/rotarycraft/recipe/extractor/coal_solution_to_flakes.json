@@ -1,5 +1,27 @@
 {
   "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.0625,
+      "output": {
+        "id": "rotarycraft:mod_pitchblende_flakes"
+      },
+      "required_ore": "rotarycraft:extractor/ores/pitchblende"
+    },
+    {
+      "chance": 0.0625,
+      "output": {
+        "id": "rotarycraft:mod_uranium_flakes"
+      },
+      "required_ore": "rotarycraft:extractor/ores/uranium"
+    },
+    {
+      "chance": 0.0625,
+      "output": {
+        "id": "minecraft:gunpowder"
+      }
+    }
+  ],
   "input": "rotarycraft:coal_solution",
   "output": {
     "id": "rotarycraft:coal_flakes"

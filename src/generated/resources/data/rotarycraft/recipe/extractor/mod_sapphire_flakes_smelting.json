@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_sapphire_flakes",
+  "result": {
+    "id": "rotarycraft:mod_sapphire_product"
+  },
+  "result_tag": "c:gems/sapphire"
+}

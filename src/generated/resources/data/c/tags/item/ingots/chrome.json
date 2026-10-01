@@ -1,0 +1,9 @@
+{
+  "values": [
+    "rotarycraft:mod_chromite_product",
+    {
+      "id": "#c:ingots/chromium",
+      "required": false
+    }
+  ]
+}

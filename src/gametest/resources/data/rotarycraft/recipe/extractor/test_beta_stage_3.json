@@ -1,0 +1,43 @@
+{
+  "type": "rotarycraft:extractor",
+  "stage": 3,
+  "input": {
+    "neoforge:ingredient_type": "neoforge:components",
+    "items": "rotarycraft:custom_ore_solution",
+    "components": {
+      "rotarycraft:extract_family": "rotarycraft:beta"
+    }
+  },
+  "duplication_chance": 0,
+  "priority": 100,
+  "output": {
+    "id": "rotarycraft:custom_ore_flakes",
+    "components": {
+      "rotarycraft:extract_family": "rotarycraft:beta",
+      "minecraft:custom_name": {
+        "text": "Beta Flakes"
+      },
+      "minecraft:custom_model_data": {
+        "colors": [
+          13386354
+        ]
+      }
+    }
+  },
+  "bonuses": [
+    {
+      "output": {
+        "id": "minecraft:diamond"
+      },
+      "chance": 1,
+      "required_ore": "rotarycraft:missing_test_ore"
+    },
+    {
+      "output": {
+        "id": "minecraft:gunpowder",
+        "count": 2
+      },
+      "chance": 1
+    }
+  ]
+}

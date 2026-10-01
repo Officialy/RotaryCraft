@@ -1,0 +1,9 @@
+{
+  "values": [
+    "rotarycraft:mod_certus_quartz_product",
+    {
+      "id": "#c:crystals/certus_quartz",
+      "required": false
+    }
+  ]
+}

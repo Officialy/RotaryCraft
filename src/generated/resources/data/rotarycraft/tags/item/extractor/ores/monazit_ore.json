@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/monazit",
+      "required": false
+    },
+    {
+      "id": "#c:ores/monazite",
+      "required": false
+    },
+    {
+      "id": "#c:ores/monazit_ore",
+      "required": false
+    }
+  ]
+}

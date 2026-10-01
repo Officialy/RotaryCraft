@@ -1,0 +1,11 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_infused_fire_flakes",
+  "result": {
+    "count": 2,
+    "id": "rotarycraft:mod_infused_fire_product"
+  },
+  "result_tag": "c:shards/fire"
+}

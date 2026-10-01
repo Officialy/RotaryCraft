@@ -426,6 +426,24 @@ public final class RoCRecipeProvider {
                 extract(n + "_slurry_to_solution", 2, Ingredient.of(ore.getSlurry()), ore.getSolution());
                 extract(n + "_solution_to_flakes", 3, Ingredient.of(ore.getSolution()), ore.getFlakes());
             }
+            for (var ore : reika.rotarycraft.registry.ModExtractOres.values()) {
+                if (ore == reika.rotarycraft.registry.ModExtractOres.COPPER) continue; // modern vanilla copper, including tagged aliases
+                for (int stage = 0; stage < 4; stage++) {
+                    var recipe = new ExtractorRecipe(stage, stage == 0 ? tag(ore.inputTag()) : Ingredient.of(ore.stage(stage - 1)),
+                            new ItemStackTemplate(ore.stage(stage)), Optional.empty(), Optional.of(ore.duplicationChance()),
+                            ore.isNether() ? 20 : 10, stage == 3 ? ModExtractorRecipeData.bonuses(ore.name()) : List.of());
+                    out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft",
+                            "extractor/mod_" + ore.path + "_stage_" + stage)), recipe, null);
+                }
+            }
+            // Legacy metadata variants for Force/Mimichite and Magic Crops' Nether Essence ore.
+            // Only crushing was richer; subsequent stages shared the ordinary family intermediates.
+            for (var ore : List.of(reika.rotarycraft.registry.ModExtractOres.FORCE,
+                    reika.rotarycraft.registry.ModExtractOres.MIMICHITE, reika.rotarycraft.registry.ModExtractOres.ESSENCE))
+                out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft",
+                        "extractor/mod_nether_" + ore.path + "_stage_0")),
+                        new ExtractorRecipe(0, tag(reika.rotarycraft.registry.ModExtractOres.common("ores/nether_" + ore.path)),
+                                new ItemStackTemplate(ore.stage(0)), Optional.empty(), Optional.of(.8), 20, List.of()), null);
             // Owner-requested 26.3 raw-iron balance: Fortune III averages 2.2 raw / ore.
             // 2.2 * (1 + p)^4 <= 1.5^4 gives p <= 0.231645; round down to 23%.
             // Distinct intermediates prevent mixing this route into the 50% ore chain.
@@ -441,7 +459,8 @@ public final class RoCRecipeProvider {
 
         private void extract(String name, int stage, Ingredient input, Item output) {
             ExtractorRecipe recipe =
-                    new ExtractorRecipe(stage, input, new ItemStackTemplate(output));
+                    new ExtractorRecipe(stage, input, new ItemStackTemplate(output), Optional.empty(), Optional.empty(), 0,
+                            stage == 3 ? ModExtractorRecipeData.bonuses(name.substring(0, name.indexOf('_')).toUpperCase(Locale.ROOT)) : List.of());
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
                     Identifier.fromNamespaceAndPath("rotarycraft", "extractor/" + name));
             out.accept(key, recipe, null);
@@ -460,6 +479,15 @@ public final class RoCRecipeProvider {
             cookFlakes("emerald_flakes", RotaryItems.EMERALD_FLAKES.get(), Items.EMERALD, 1F);
             cookFlakes("quartz_flakes", RotaryItems.QUARTZ_FLAKES.get(), Items.QUARTZ, 1F);
             cookFlakes("silver_flakes", RotaryItems.SILVER_FLAKES.get(), RotaryItems.SILVER_INGOT.get(), 1F);
+            for (var ore : reika.rotarycraft.registry.ModExtractOres.values()) {
+                if (ore == reika.rotarycraft.registry.ModExtractOres.COPPER) continue;
+                var recipe = new TaggedSmeltingRecipe(new Recipe.CommonInfo(true),
+                        new net.minecraft.world.item.crafting.AbstractCookingRecipe.CookingBookInfo(CookingBookCategory.MISC, ""),
+                        Ingredient.of(ore.stage(3)), new ItemStackTemplate(ore.product(), ore.dropCount), ore.experience(), 200,
+                        reika.rotarycraft.registry.ModExtractOres.common(ore.productTag));
+                out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft",
+                        "extractor/mod_" + ore.path + "_flakes_smelting")), recipe, null);
+            }
         }
 
         private void cookFlakes(String name, Item flake, Item ingot, float xp) {

@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#rotarycraft:extractor/ores/fz_dark_iron",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_fz_dark_iron_dust"
+  },
+  "priority": 10,
+  "stage": 0
+}

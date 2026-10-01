@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:components",
+    "items": "rotarycraft:custom_ore_flakes",
+    "components": {
+      "rotarycraft:extract_family": "rotarycraft:alpha"
+    }
+  },
+  "result": {
+    "id": "minecraft:emerald",
+    "count": 2
+  },
+  "experience": 0.8,
+  "cookingtime": 200
+}

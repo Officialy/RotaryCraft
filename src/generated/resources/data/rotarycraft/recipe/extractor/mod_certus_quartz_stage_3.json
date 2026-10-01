@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.5,
+      "output": {
+        "id": "rotarycraft:quartz_flakes"
+      }
+    }
+  ],
+  "input": "rotarycraft:mod_certus_quartz_solution",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_certus_quartz_flakes"
+  },
+  "priority": 10,
+  "stage": 3
+}

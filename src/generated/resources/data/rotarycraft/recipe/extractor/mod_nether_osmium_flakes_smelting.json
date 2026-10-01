@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_nether_osmium_flakes",
+  "result": {
+    "id": "rotarycraft:mod_osmium_product"
+  },
+  "result_tag": "c:ingots/osmium"
+}

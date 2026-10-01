@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.5,
+      "output": {
+        "id": "rotarycraft:mod_sulfur_flakes"
+      }
+    }
+  ],
+  "input": "rotarycraft:mod_pyrite_solution",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_pyrite_flakes"
+  },
+  "priority": 10,
+  "stage": 3
+}

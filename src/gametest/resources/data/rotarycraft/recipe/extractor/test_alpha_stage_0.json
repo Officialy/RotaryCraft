@@ -1,0 +1,21 @@
+{
+  "type": "rotarycraft:extractor",
+  "stage": 0,
+  "input": "#rotarycraft:test_ores/alpha",
+  "duplication_chance": 0,
+  "priority": 100,
+  "output": {
+    "id": "rotarycraft:custom_ore_dust",
+    "components": {
+      "rotarycraft:extract_family": "rotarycraft:alpha",
+      "minecraft:custom_name": {
+        "text": "Alpha Dust"
+      },
+      "minecraft:custom_model_data": {
+        "colors": [
+          7523394
+        ]
+      }
+    }
+  }
+}

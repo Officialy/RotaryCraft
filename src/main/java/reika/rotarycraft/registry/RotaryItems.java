@@ -264,6 +264,11 @@ public class RotaryItems {
     public static final DeferredItem<Item> RAW_IRON_DUST = reg("raw_iron_dust", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> RAW_IRON_SLURRY = reg("raw_iron_slurry", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> RAW_IRON_SOLUTION = reg("raw_iron_solution", () -> new Item(itemProperties()));
+    // Component-bearing intermediates allow datapacks to define additional families without new registry entries.
+    public static final DeferredItem<Item> CUSTOM_ORE_DUST = reg("custom_ore_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> CUSTOM_ORE_SLURRY = reg("custom_ore_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> CUSTOM_ORE_SOLUTION = reg("custom_ore_solution", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> CUSTOM_ORE_FLAKES = reg("custom_ore_flakes", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> IRON_DUST = reg("iron_dust", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> GOLD_DUST = reg("gold_dust", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> REDSTONE_DUST = reg("redstone_dust", () -> new Item(itemProperties()));
@@ -343,6 +348,8 @@ public class RotaryItems {
 //            return true;
 //        return false;
 //    }
+
+    static { ModExtractOres.registerItems(); }
 
     public static int getArmorType(Item i) {
         if (i == BEDROCK_ALLOY_BOOTS.get()) {

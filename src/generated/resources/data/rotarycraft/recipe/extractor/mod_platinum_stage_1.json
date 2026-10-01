@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "rotarycraft:mod_platinum_dust",
+  "ore_duplication_chance": 0.9,
+  "output": {
+    "id": "rotarycraft:mod_platinum_slurry"
+  },
+  "priority": 10,
+  "stage": 1
+}

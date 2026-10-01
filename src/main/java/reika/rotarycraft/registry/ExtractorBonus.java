@@ -50,6 +50,8 @@ public enum ExtractorBonus {
         return DragonAPI.rand.nextFloat() < probability;
     }
 
+    public double getProbability() { return probability; }
+
     /** Looks up the bonus for a solution-stage item (the input of the final stage). */
     public static ExtractorBonus getBonusForIngredient(ItemStack is) {
         if (is.is(RotaryItems.RAW_IRON_SOLUTION.get())) return IRON;

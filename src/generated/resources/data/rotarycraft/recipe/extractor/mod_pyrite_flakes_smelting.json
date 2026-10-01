@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_pyrite_flakes",
+  "result": {
+    "id": "rotarycraft:mod_pyrite_product"
+  },
+  "result_tag": "c:dusts/pyrite"
+}

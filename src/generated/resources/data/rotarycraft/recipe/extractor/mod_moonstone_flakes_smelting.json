@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "rotarycraft:mod_moonstone_flakes",
+  "result": {
+    "id": "rotarycraft:mod_moonstone_product"
+  },
+  "result_tag": "c:gems/moonstone"
+}

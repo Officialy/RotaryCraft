@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_nether_silver_flakes",
+  "result": {
+    "id": "rotarycraft:silver_ingot"
+  },
+  "result_tag": "c:ingots/silver"
+}

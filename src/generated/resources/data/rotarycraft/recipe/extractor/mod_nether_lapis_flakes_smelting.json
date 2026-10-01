@@ -1,0 +1,11 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "rotarycraft:mod_nether_lapis_flakes",
+  "result": {
+    "count": 6,
+    "id": "minecraft:lapis_lazuli"
+  },
+  "result_tag": "c:dyes/blue"
+}

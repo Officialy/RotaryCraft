@@ -1,0 +1,19 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.16666666666666666,
+      "output": {
+        "id": "rotarycraft:mod_thorium_flakes"
+      },
+      "required_ore": "rotarycraft:extractor/ores/thorium"
+    }
+  ],
+  "input": "rotarycraft:mod_monazit_ore_solution",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_monazit_ore_flakes"
+  },
+  "priority": 10,
+  "stage": 3
+}

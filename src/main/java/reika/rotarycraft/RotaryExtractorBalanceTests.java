@@ -105,7 +105,8 @@ final class RotaryExtractorBalanceTests {
     }
     private static void legacy(GameTestHelper h) {
         for (var holder : h.getLevel().getServer().getRecipeManager().recipeMap().byType(RotaryRecipeTypes.EXTRACTOR.get()))
-            if (!holder.id().identifier().getPath().startsWith("extractor/raw_iron_"))
+            if (java.util.Arrays.stream(ExtractOres.oreList).anyMatch(ore -> holder.id().identifier().getPath()
+                    .startsWith("extractor/" + ore.name().toLowerCase(java.util.Locale.ROOT) + "_")))
                 h.assertTrue(holder.value().getDuplicationChance().isEmpty(), "existing ore recipes must keep normal/rare/Nether/bedrock behavior");
         h.succeed();
     }

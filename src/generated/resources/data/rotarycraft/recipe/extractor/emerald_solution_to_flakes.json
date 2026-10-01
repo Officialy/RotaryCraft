@@ -1,5 +1,13 @@
 {
   "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.1,
+      "output": {
+        "id": "rotarycraft:mod_ruby_flakes"
+      }
+    }
+  ],
   "input": "rotarycraft:emerald_solution",
   "output": {
     "id": "rotarycraft:emerald_flakes"

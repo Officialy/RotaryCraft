@@ -1,0 +1,18 @@
+{
+  "type": "rotarycraft:extractor",
+  "bonuses": [
+    {
+      "chance": 0.125,
+      "output": {
+        "id": "rotarycraft:mod_nickel_flakes"
+      }
+    }
+  ],
+  "input": "rotarycraft:mod_cobalt_solution",
+  "ore_duplication_chance": 0.5,
+  "output": {
+    "id": "rotarycraft:mod_cobalt_flakes"
+  },
+  "priority": 10,
+  "stage": 3
+}

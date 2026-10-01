@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/endium",
+      "required": false
+    },
+    {
+      "id": "#c:ores/hee_endium",
+      "required": false
+    }
+  ]
+}

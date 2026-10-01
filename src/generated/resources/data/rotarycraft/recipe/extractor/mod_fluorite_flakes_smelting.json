@@ -1,0 +1,11 @@
+{
+  "type": "rotarycraft:tagged_smelting",
+  "cookingtime": 200,
+  "experience": 0.5,
+  "ingredient": "rotarycraft:mod_fluorite_flakes",
+  "result": {
+    "count": 6,
+    "id": "rotarycraft:mod_fluorite_product"
+  },
+  "result_tag": "c:gems/fluorite"
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#c:ores/nikolite",
+      "required": false
+    },
+    {
+      "id": "#c:ores/electrotine",
+      "required": false
+    }
+  ]
+}

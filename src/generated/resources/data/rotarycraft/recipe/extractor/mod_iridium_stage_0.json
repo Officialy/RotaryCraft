@@ -1,0 +1,10 @@
+{
+  "type": "rotarycraft:extractor",
+  "input": "#rotarycraft:extractor/ores/iridium",
+  "ore_duplication_chance": 0.9,
+  "output": {
+    "id": "rotarycraft:mod_iridium_dust"
+  },
+  "priority": 10,
+  "stage": 0
+}
