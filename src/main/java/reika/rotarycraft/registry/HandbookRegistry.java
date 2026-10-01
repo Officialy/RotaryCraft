@@ -243,7 +243,7 @@ public enum HandbookRegistry implements HandbookEntry {
     BLOWER(MachineRegistry.BLOWER),
     //    GASTANK(MachineRegistry.GASTANK),
 //    CRAFTER(MachineRegistry.CRAFTER),
-//    CHUNKLOADER(MachineRegistry.CHUNKLOADER),
+    CHUNKLOADER(MachineRegistry.CHUNKLOADER),
     FILLER(MachineRegistry.FILLER),
     SPILLWAY(MachineRegistry.SPILLWAY),
 //    BUNDLEDBUS(MachineRegistry.BUNDLEDBUS),

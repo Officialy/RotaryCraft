@@ -135,6 +135,7 @@ public final class RoCRecipeProvider {
             compactor();
             purifier();
             distiller();
+            chunkLoader();
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.TERRAFORMER.get())
                     .pattern("SsS").pattern("ici").pattern("PiP")
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get()).define('s', RotaryItems.SCREEN.get())
@@ -249,6 +250,16 @@ public final class RoCRecipeProvider {
 
         // Compactor chain: legacy RecipesCompactor. Counts baked at the legacy MEDIUM difficulty
         // (DifficultyEffects.COMPACTOR = 2 per step; charcoal pays 3/2). REQ = 550 MPa / 800 C.
+        private void chunkLoader() {
+            // Original RotaryRecipes: nether stars, bedrock shafts, steel, panels and 16:1 bedrock gear unit.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.CHUNK_LOADER.get())
+                    .define('s', Items.NETHER_STAR).define('S', RotaryBlocks.BEDROCK_SHAFT.get())
+                    .define('B', RotaryItems.HSLA_STEEL_INGOT.get()).define('P', RotaryItems.HSLA_PLATE.get())
+                    .define('G', RotaryItems.BEDROCK_ALLOY_GEAR_16x.get())
+                    .pattern("sSs").pattern("BSB").pattern("PGP")
+                    .unlockedBy("has_bedrock_shaft", has(RotaryBlocks.BEDROCK_SHAFT.get())).save(out);
+        }
+
         private void distiller() {
             distillery("oil", RoCFluidTagsProvider.OIL, 1, RotaryFluids.LUBRICANT.get(), 6, 2048, 8192);
             distillery("bioethanol", RoCFluidTagsProvider.BIOETHANOL, 1, RotaryFluids.ETHANOL.get(), 1, 512, 131072);

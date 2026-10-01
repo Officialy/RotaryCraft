@@ -142,7 +142,8 @@ public class RoCModelProvider extends ModelProvider {
             if (isPipeShell) {
                 blockModelId = Identifier.fromNamespaceAndPath(RotaryCraft.MODID,
                         "block/pipe/" + BuiltInRegistries.BLOCK.getKey(block).getPath() + "/core");
-            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockDistillery) {
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockDistillery
+                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockChunkLoader) {
                 blockModelId = ModelTemplates.CUBE_ALL.create(block,
                         TextureMapping.cube(new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/steel"))), modelOut);
             } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockTerraformer) {

@@ -62,6 +62,9 @@ public class RotaryBlockEntities {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, RotaryCraft.MODID);
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.BlockEntityChunkLoader>> CHUNK_LOADER = BLOCK_ENTITIES.register("chunk_loader", () ->
+            new BlockEntityType<>(reika.rotarycraft.blockentities.BlockEntityChunkLoader::new, RotaryBlocks.CHUNK_LOADER.get()));
+
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityShaft>> WOOD_SHAFT = BLOCK_ENTITIES.register("wood_shaft", () ->
             new BlockEntityType<>((pPos, pState) -> new BlockEntityShaft(MaterialRegistry.WOOD, pPos, pState), RotaryBlocks.WOOD_SHAFT.get()));
 

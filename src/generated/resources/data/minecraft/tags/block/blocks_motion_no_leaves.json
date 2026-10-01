@@ -1,5 +1,6 @@
 {
   "values": [
+    "rotarycraft:chunk_loader",
     "rotarycraft:gpr",
     "rotarycraft:wood_flywheel",
     "rotarycraft:stone_flywheel",
@@ -121,6 +122,8 @@
     "rotarycraft:particle",
     "rotarycraft:grindstone",
     "rotarycraft:blower",
+    "rotarycraft:item_filter",
+    "rotarycraft:crafter",
     "rotarycraft:refrigerator",
     "rotarycraft:composter",
     "rotarycraft:filler",

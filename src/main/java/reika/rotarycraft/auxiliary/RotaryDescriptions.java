@@ -561,7 +561,7 @@ public final class RotaryDescriptions {
 //        addNotes(MachineRegistry.PIPEPUMP, PowerReceivers.PIPEPUMP.getMinPower(), PowerReceivers.PIPEPUMP.getMinSpeed());
 //        addNotes(MachineRegistry.CENTRIFUGE, PowerReceivers.CENTRIFUGE.getMinPower(), PowerReceivers.CENTRIFUGE.getMinSpeed());
 //        addNotes(MachineRegistry.WETTER, PowerReceivers.WETTER.getMinPower(), PowerReceivers.WETTER.getMinSpeed());
-//        addNotes(MachineRegistry.CHUNKLOADER, PowerReceivers.CHUNKLOADER.getMinSpeed(), BlockEntityChunkLoader.BASE_RADIUS, PowerReceivers.CHUNKLOADER.getMinSpeed(), BlockEntityChunkLoader.FALLOFF);
+        addNotes(MachineRegistry.CHUNKLOADER, PowerReceivers.CHUNKLOADER.getMinSpeed(), reika.rotarycraft.blockentities.BlockEntityChunkLoader.BASE_RADIUS, PowerReceivers.CHUNKLOADER.getMinSpeed(), reika.rotarycraft.blockentities.BlockEntityChunkLoader.FALLOFF);
 //        addNotes(MachineRegistry.DROPS, PowerReceivers.DROPS.getMinPower(), PowerReceivers.DROPS.getMinTorque());
         addNotes(MachineRegistry.SPILLER, PowerReceivers.SPILLER.getMinPower());
         addNotes(MachineRegistry.FILLER, PowerReceivers.FILLER.getMinPower());

@@ -222,6 +222,8 @@ public final class RotaryGameTests {
         register(event, env, "processing_centrifuge_fluid_transactions", 60, RotaryProcessingTests::centrifugeFluidTransactions);
 
         RotaryTerraformerTests.register(event, env);
+        RotarySurvivalTagTests.register(event, env);
+        RotaryChunkLoaderTests.register(event, env);
 
         register(event, env, "distiller_oil_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 0));
         register(event, env, "distiller_bioethanol_ratio", 120, h -> RotaryDistilleryTests.conversion(h, 1));

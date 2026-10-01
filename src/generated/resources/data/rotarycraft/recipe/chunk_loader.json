@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_ingot",
+    "G": "rotarycraft:bedrock_alloy_gear_16x",
+    "P": "rotarycraft:hsla_steel_plate",
+    "S": "rotarycraft:bedrock_shaft",
+    "s": "minecraft:nether_star"
+  },
+  "pattern": [
+    "sSs",
+    "BSB",
+    "PGP"
+  ],
+  "result": {
+    "id": "rotarycraft:chunk_loader"
+  }
+}

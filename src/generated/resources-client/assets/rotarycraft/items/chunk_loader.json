@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:block/chunk_loader",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "chunkloader"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # RotaryCraft survival beta ledger — Minecraft 26.3
 
-Updated 2026-09-30. Target: NeoForge 26.3.0.26-beta, Java 25.
+Updated 2026-10-01. Target: NeoForge 26.3.0.26-beta, Java 25.
 
 ## This slice
 
@@ -31,7 +31,7 @@ Updated 2026-09-30. Target: NeoForge 26.3.0.26-beta, Java 25.
 
 ## GameTest coverage
 
-The suite registers one isolated placement/type/lifecycle test for each of the 134 active
+The suite registers one isolated placement/type/lifecycle test for each of the 137 active
 MachineRegistry entries, plus a registry-wide invariant. Variants account for some entries;
 this count is not a count of distinct V33a machines. Tests tick real placed blocks rather than
 calling processing methods with fabricated power. Creative coils supply deterministic shaft
@@ -66,8 +66,9 @@ this suite does not establish end-to-end survival readiness.
 ## Remaining machines
 
 The owner's starting report listed 25 missing V33a machines. Purifier, Distiller, Terraformer
-and the separate AutoCrafting Unit and Item Filter ports are restored, leaving 20 from that report:
-Bait Box, Bundled Bus, CCTV, Chunk Loader, Compressor,
+and the separate AutoCrafting Unit and Item Filter ports, plus Chunk Loader, are restored,
+leaving 19 from that report:
+Bait Box, Bundled Bus, CCTV, Compressor,
 Defoliator, Display, Electric Motor, Flame Turret, Fuel Engine, Fuel Enhancer,
 Generator, Mob Radar, Pile Driver, Pneumatic Engine, Portal Shaft, Projector,
 Screen, Sonic Weapon and Spy Cam. Audit their pristine source and dependencies
@@ -175,3 +176,36 @@ shared tree. Fresh compiler outputs are used because concurrent Gradle runs shar
 compiler metadata. RotaryCraft release build and its 11 JUnit checks pass; final jar contents are
 checked separately. Logs: build/terraformer-tests.log, build/terraformer-full-tests.log and
 build/terraformer-release.log. Pending AE2 work is not included in the Terraformer commit.
+
+
+## Chunk Loader and survival tags (2026-10-01)
+
+- Fully ported the Chunk Loader: original bottom input, 2097152 rad/s speed threshold,
+  zero base radius, one additional chunk of radius per 524288 W above the baseline, and
+  configured enable/radius gates. The radius calculation retains long power and clamps
+  inactive ranges to zero. Machine indices remain stable by appending CHUNKLOADER.
+- Persistent NeoForge tickets belong to the machine position. Power changes reconcile the
+  square, contraction releases outer chunks, overlapping loaders keep separate ownership,
+  and any server-side removal releases tickets. DragonAPI restore validation now rebuilds
+  its ownership cache so first-tick power loss also releases restored tickets. Runtime
+  ownership caches clear at server shutdown while saved tickets remain on disk.
+- Restored original bedrock-shaft/nether-star/16:1-bedrock-gear crafting, generated loot,
+  block/item model definitions, rotating model, rising star/ender-pearl particles, handbook
+  and notes. Render and particle code compile against the 26.3 client APIs; visuals still
+  need an in-game client check.
+- Audited block and item tags: machines and pipes receive pickaxe mining speed, and HSLA/
+  bedrock tools, shears, armor, jetpacks, spring boots and goggles receive their equipment
+  categories. Vanilla enchantment tag inheritance now recognizes those categories.
+- Restored material tags for source-defined aluminum alloy/aluminum powder, silver,
+  netherrack, soul-sand tar, coal, salt, sawdust, silicon, compost, coke and canola seeds;
+  added pure tungsten compatibility and hardened-glass block/item tags. HSLA remains
+  separate from ordinary steel and tungsten alloy remains separate from pure tungsten.
+  No new harvest-tier restrictions are imposed on pipes or machine-specific drop rules.
+- Ten Chunk Loader functional tests use real creative coils and inspect NeoForge ticket
+  ownership independently of DragonAPI's cache. Five tag tests check live tag membership,
+  actual pickaxe mining speed, equipment/enchantment inheritance, material distinctions
+  and hardened-glass block/item parity. Registry-wide placement covers the new loader too.
+- Validation: 301/301 RotaryCraft GameTests, 11/11 JUnit checks and the RotaryCraft release
+  build passed. A final focused tag run covers the aluminum source-parity additions. Jar
+  inspection confirms machine classes, generated recipe/model/mining/tool tags and excludes
+  the foreign-steel/fluid GameTest substitutions.

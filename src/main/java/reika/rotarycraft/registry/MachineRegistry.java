@@ -257,7 +257,8 @@ public enum MachineRegistry implements TileEnum {
     // Append new machines so saved/packet machine indices retain their existing values.
     PURIFIER(true, "machine.purifier", RotaryBlocks.PURIFIER.get(), BlockEntityPurifier.class),
     DISTILLER("machine.distiller", RotaryBlocks.DISTILLER.get(), reika.rotarycraft.blockentities.processing.BlockEntityDistillery.class),
-    TERRAFORMER(true, "machine.terraformer", RotaryBlocks.TERRAFORMER.get(), reika.rotarycraft.blockentities.level.BlockEntityTerraformer.class);
+    TERRAFORMER(true, "machine.terraformer", RotaryBlocks.TERRAFORMER.get(), reika.rotarycraft.blockentities.level.BlockEntityTerraformer.class),
+    CHUNKLOADER("machine.chunkloader", RotaryBlocks.CHUNK_LOADER.get(), reika.rotarycraft.blockentities.BlockEntityChunkLoader.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
@@ -881,8 +882,8 @@ public enum MachineRegistry implements TileEnum {
 //            return !RotaryConfig.COMMON.ALLOWEMP.get();
 //        if (this == LIGHTBRIDGE)
 //            return !RotaryConfig.COMMON.ALLOWLIGHTBRIDGE.get();
-//        if (this == CHUNKLOADER)
-//            return !RotaryConfig.COMMON.ALLOWCHUNKLOADER.get();
+        if (this == CHUNKLOADER)
+            return !ConfigRegistry.ALLOWCHUNKLOADER.getState();
         if (this == SPILLER)
             return ConfigRegistry.SPILLERRANGE.getValue() == 0;
         if (this.isModConversionEngine())
