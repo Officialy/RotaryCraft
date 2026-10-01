@@ -260,6 +260,10 @@ public class RotaryItems {
     public static final DeferredItem<Item> DIAMOND_FLAKES = reg("diamond_flakes", () -> new Item(itemProperties()));
 
     //Extractor ore-processing chain (dust -> slurry -> solution -> flakes per ore; see ExtractOres)
+    // Separate intermediates retain raw iron's lower duplication rate through all four stages.
+    public static final DeferredItem<Item> RAW_IRON_DUST = reg("raw_iron_dust", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> RAW_IRON_SLURRY = reg("raw_iron_slurry", () -> new Item(itemProperties()));
+    public static final DeferredItem<Item> RAW_IRON_SOLUTION = reg("raw_iron_solution", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> IRON_DUST = reg("iron_dust", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> GOLD_DUST = reg("gold_dust", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> REDSTONE_DUST = reg("redstone_dust", () -> new Item(itemProperties()));

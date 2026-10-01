@@ -1,4 +1,4 @@
-// 26.3	2026-10-01T21:12:39.8604057	Model Definitions - rotarycraft
+// 26.3	2026-10-01T22:01:31.5226529	Model Definitions - rotarycraft
 f8a25e5cd83b08aad4c45621a8ece222635e462b assets/rotarycraft/blockstates/aa_gun.json
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
@@ -481,6 +481,9 @@ a1f79af4c2724fa5f2b4f7a53e4d3778713a5095 assets/rotarycraft/items/quartz_solutio
 86652f66e9824cd644c9651e5f93a0dc63ca4ab5 assets/rotarycraft/items/railgun_accelerator.json
 35898f670ad5aa8c0ab02b15fda2097fcda0ae37 assets/rotarycraft/items/railgun_ammo.json
 3e110baac62a34f6052adcf2cf1437f865137c2c assets/rotarycraft/items/range_finder.json
+29cc25117922f40b35e9f4b7e6befa40289b1ba4 assets/rotarycraft/items/raw_iron_dust.json
+e0e7aa4d9dc0ac9422e1906cd00abeaca8996bf5 assets/rotarycraft/items/raw_iron_slurry.json
+7c9abe51adf4acbff6d84f6829da562b59931522 assets/rotarycraft/items/raw_iron_solution.json
 0260ed8cf508480e45fe3e0c50128f5183fb5c8c assets/rotarycraft/items/redstone_dust.json
 b7b18c71dcb70e46f818e0d5edc5ceaf874878ef assets/rotarycraft/items/redstone_flakes.json
 0a9e4a42a876195a9349fa9bd44d88e94d5c2a21 assets/rotarycraft/items/redstone_slurry.json
@@ -934,6 +937,9 @@ cf7e40fd5e6a0501f17921fc2abf5854817cb88a assets/rotarycraft/models/item/radiator
 fef4f4543efb674f1891177823ad8d8b6752cf8f assets/rotarycraft/models/item/railgun_accelerator.json
 8b96e99f9bcce3e51cdff519f0ef984b87f52a88 assets/rotarycraft/models/item/railgun_ammo.json
 9f815a757deb462fcbbf854a5312850a8fbcd014 assets/rotarycraft/models/item/range_finder.json
+f9a363c9856d00bbb9584cdafb0e22388446ae5d assets/rotarycraft/models/item/raw_iron_dust.json
+1b124adac39c233eb89268032cfbb304ceb4ef64 assets/rotarycraft/models/item/raw_iron_slurry.json
+427850b3573f123dd0a27ce47794f6048f11bed8 assets/rotarycraft/models/item/raw_iron_solution.json
 b8e896db82d62040c127df17b3483a7ccec45643 assets/rotarycraft/models/item/redstone_dust.json
 4f65bc1e2673fa73c16d9adeeea3b382ec4d9f5a assets/rotarycraft/models/item/redstone_flakes.json
 b472475125d47fe31d0f0703706e65b053280020 assets/rotarycraft/models/item/redstone_slurry.json

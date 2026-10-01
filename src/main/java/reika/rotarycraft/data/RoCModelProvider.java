@@ -321,10 +321,18 @@ public class RoCModelProvider extends ModelProvider {
             // assets/<modid>/models/item/<name>.json (parent=item/generated, layer0=item/<name>).
             Identifier itemModelId = ModelTemplates.FLAT_ITEM.create(
                     ModelLocationUtils.getModelLocation(item),
-                    TextureMapping.layer0(item),
+                    rawIronTexture(item),
                     modelOut);
             itemModelOut.accept(item, ItemModelUtils.plainModel(itemModelId));
         });
+    }
+
+    /** Raw-route intermediates use the original iron sprites, with separate item identities. */
+    private static TextureMapping rawIronTexture(Item item) {
+        Item textureItem = item == RotaryItems.RAW_IRON_DUST.get() ? RotaryItems.IRON_DUST.get()
+                : item == RotaryItems.RAW_IRON_SLURRY.get() ? RotaryItems.IRON_SLURRY.get()
+                : item == RotaryItems.RAW_IRON_SOLUTION.get() ? RotaryItems.IRON_SOLUTION.get() : item;
+        return TextureMapping.layer0(textureItem);
     }
 
     /**

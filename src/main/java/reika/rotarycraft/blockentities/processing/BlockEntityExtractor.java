@@ -108,7 +108,10 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
         return true;
     }
 
-    private int getSmeltNumber(int stage, ExtractOres ore, ItemStack is) {
+    private int getSmeltNumber(int stage, ExtractOres ore, ItemStack is, ExtractorRecipe recipe) {
+        // Raw-material rates take precedence over the bedrock drill, preserving ore's advantage.
+        if (recipe.getDuplicationChance().isPresent())
+            return ReikaRandomHelper.doWithChance(recipe.getDuplicationChance().get()) ? 2 : 1;
         if (bedrock && stage == 0)
             return 2;
         if (ore != null) {
@@ -138,6 +141,7 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
                         amt = Math.min(amt, this.getNumberConsecutiveOperations(i));
                         if (amt > 0) {
                             in.setCount(in.getCount() + amt);
+                            itemHandler.setStackInSlot(i, in);
                             ReikaInventoryHelper.decrStack(i + 3, itemHandler, amt);
                         }
                     }
@@ -277,29 +281,36 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
     }
 
     private ItemStack getExtractionResult(int stage, ItemStack in) {
+        ExtractorRecipe recipe = this.getExtractionRecipe(stage, in);
+        return recipe != null ? recipe.getOutput() : ItemStack.EMPTY;
+    }
+
+    private ExtractorRecipe getExtractionRecipe(int stage, ItemStack in) {
         if (level == null || level.getServer() == null)
-            return ItemStack.EMPTY;
+            return null;
         for (RecipeHolder<ExtractorRecipe> h : level.getServer().getRecipeManager().recipeMap().byType(RotaryRecipeTypes.EXTRACTOR.get())) {
             if (h.value().matches(stage, in))
-                return h.value().getOutput();
+                return h.value();
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
     private void processItem(int i) {
         ItemStack in = itemHandler.getStackInSlot(i);
-        ItemStack itemstack = this.getExtractionResult(i, in);
-        if (itemstack.isEmpty())
+        ExtractorRecipe recipe = this.getExtractionRecipe(i, in);
+        if (recipe == null)
             return;
+        ItemStack itemstack = recipe.getOutput();
         ExtractOres ore = i == 0 ? ExtractOres.getByOreBlock(in) : ExtractOres.getByStageItem(in);
-        int num = this.getSmeltNumber(i, ore, in);
+        int num = this.getSmeltNumber(i, ore, in, recipe);
         ItemStack out = itemHandler.getStackInSlot(i + 4);
         if (out.isEmpty()) {
             ItemStack make = itemstack.copy();
             make.setCount(make.getCount() * num);
             itemHandler.setStackInSlot(i + 4, make);
         } else if (ReikaItemHelper.matchStacks(out, itemstack)) {
-            out.setCount(out.getCount() + num);
+            out.setCount(out.getCount() + itemstack.getCount() * num);
+            itemHandler.setStackInSlot(i + 4, out);
         }
 
         if (i == 0 && !bedrock && drillTime > 0 && ConfigRegistry.EXTRACTORMAINTAIN.getState()) {
@@ -310,6 +321,7 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
         }
 
         in.shrink(1);
+        itemHandler.setStackInSlot(i, in);
         if (i == 1 || i == 2)
             tank.removeLiquid(125);
     }
@@ -321,8 +333,10 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
             ItemStack slot = itemHandler.getStackInSlot(8);
             if (slot.isEmpty())
                 itemHandler.setStackInSlot(8, bonus);
-            else if (ReikaItemHelper.matchStacks(slot, bonus) && slot.getCount() + bonus.getCount() <= slot.getMaxStackSize())
+            else if (ReikaItemHelper.matchStacks(slot, bonus) && slot.getCount() + bonus.getCount() <= slot.getMaxStackSize()) {
                 slot.setCount(slot.getCount() + bonus.getCount());
+                itemHandler.setStackInSlot(8, slot);
+            }
         }
     }
 
@@ -351,7 +365,7 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
         if (slot > 3 && slot < 9)
             return false;
         if (slot == 0)
-            return is.is(Tags.Items.ORES);
+            return is.is(Tags.Items.ORES) || is.is(Tags.Items.RAW_MATERIALS_IRON);
         if (slot >= 1 && slot <= 3)
             return ExtractOres.getStage(is) == slot - 1;
         if (slot == 9)

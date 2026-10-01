@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_redstone_flakes": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:redstone_flakes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "rotarycraft:redstone_flakes_to_ingot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_redstone_flakes"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:redstone_flakes_to_ingot"
+    ]
+  }
+}

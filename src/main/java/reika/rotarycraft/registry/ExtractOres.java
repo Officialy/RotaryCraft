@@ -104,6 +104,8 @@ public enum ExtractOres {
 
     /** The ore whose chain the given item belongs to, with the stage it sits at, or null. */
     public static ExtractOres getByStageItem(ItemStack is) {
+        if (is.is(RotaryItems.RAW_IRON_DUST.get()) || is.is(RotaryItems.RAW_IRON_SLURRY.get()) || is.is(RotaryItems.RAW_IRON_SOLUTION.get()))
+            return IRON;
         for (ExtractOres ore : oreList) {
             for (int stage = 0; stage < 4; stage++) {
                 if (is.is(ore.getStageItem(stage)))
@@ -122,6 +124,9 @@ public enum ExtractOres {
     }
 
     public static int getStage(ItemStack is) {
+        if (is.is(RotaryItems.RAW_IRON_DUST.get())) return 0;
+        if (is.is(RotaryItems.RAW_IRON_SLURRY.get())) return 1;
+        if (is.is(RotaryItems.RAW_IRON_SOLUTION.get())) return 2;
         for (ExtractOres ore : oreList) {
             for (int stage = 0; stage < 4; stage++) {
                 if (is.is(ore.getStageItem(stage)))

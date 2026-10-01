@@ -1,0 +1,9 @@
+{
+  "type": "rotarycraft:extractor",
+  "duplication_chance": 0.23,
+  "input": "#c:raw_materials/iron",
+  "output": {
+    "id": "rotarycraft:raw_iron_dust"
+  },
+  "stage": 0
+}

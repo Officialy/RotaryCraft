@@ -366,3 +366,41 @@ unverified by the headless suite. Deploy matching DragonAPI, RotaryCraft and Ele
 Sixteen machines remain from the owner's original missing list: Bait Box, Bundled Bus,
 CCTV, Compressor, Defoliator, Display, Electric Motor, Flame Turret, Generator, Pile Driver,
 Pneumatic Engine, Portal Shaft, Projector, Screen, Sonic Weapon and Spy Cam.
+
+## Raw iron extraction and restored flake smelting (2026-10-01)
+
+Owner-requested raw-iron support uses a lower duplication chance throughout the four-stage
+chain. The generated 26.3 iron loot table uses the ore_drops Fortune formula: Fortune III
+has equiprobable multipliers 1, 1, 2, 3, 4, averaging 2.2 raw iron per ore. Original normal
+ore extraction averages 1.5^4 = 5.0625 flakes/ingots. Equal yield would require each raw
+stage's chance to be (5.0625/2.2)^(1/4)-1 = 0.2316451155; round down to 23%.
+Raw processing averages 1.23^4 = 2.28886641 ingots per raw iron, or 5.035506102 per original
+ore with Fortune III. Ore remains slightly better on average, and increasingly better with
+lower Fortune. This balance reference is vanilla Fortune III, not higher modded levels.
+
+- The input recipe uses c:raw_materials/iron. Separate raw_iron_dust, raw_iron_slurry and
+  raw_iron_solution preserve the lower rate across all stages and save/load; their generated
+  models reuse the original iron textures. The final output is ordinary iron flakes.
+  Raw solutions retain the original tungsten bonus. Every raw recipe explicitly stores
+  duplication_chance: 0.23; JSON and network sync preserve it, and JEI displays the rate.
+- Explicit recipe rates override bedrock guaranteed crushing. Normal iron ore retains
+  50% duplication at each stage and its guaranteed first-stage bedrock bonus, averaging
+  6.75 with that upgrade. Existing rare/Nether ore recipes retain their original behavior.
+- Restore V33a addFurnace(): one redstone flake -> four redstone dust at 0.5 XP; one lapis
+  flake -> six lapis lazuli at 0.6 XP. Both use 200-tick furnace recipes and advancements.
+- Functional tests exposed missing inventory write-backs in the extractor: ManagedItemHandler
+  returns copies, so shrinking an input or growing an existing stack did not persist.
+  Consumption, interstage merging, stacked outputs and stacked bonuses now write back to
+  the handler, preventing repeated extraction from unconsumed inputs and item loss.
+
+Twenty new tests cover balance through Fortune 0-III, legacy defaults, input/stage gates,
+recipe JSON/network sync, actual power and all raw stages, the complete raw chain, bedrock
+behavior, save/load, inventory conservation, restored recipe counts/XP, real furnaces and
+multi-item output backpressure. Logs: build/raw-iron-datagen.log,
+build/raw-iron-client-datagen.log, build/raw-iron-focused.log and
+build/raw-iron-final-validation.log.
+
+Validation: 466/466 required RotaryCraft GameTests and 11/11 JUnit tests pass; server/client
+datagen and the release build succeed. The packaged jar contains all 40 extractor recipes,
+the four explicit raw rates, three raw-item model/texture mappings, both counted smelting
+recipes and their advancements. The GameTest-only tracker fixture is excluded from the jar.

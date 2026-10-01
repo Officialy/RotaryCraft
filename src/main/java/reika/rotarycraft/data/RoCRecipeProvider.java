@@ -426,6 +426,17 @@ public final class RoCRecipeProvider {
                 extract(n + "_slurry_to_solution", 2, Ingredient.of(ore.getSlurry()), ore.getSolution());
                 extract(n + "_solution_to_flakes", 3, Ingredient.of(ore.getSolution()), ore.getFlakes());
             }
+            // Owner-requested 26.3 raw-iron balance: Fortune III averages 2.2 raw / ore.
+            // 2.2 * (1 + p)^4 <= 1.5^4 gives p <= 0.231645; round down to 23%.
+            // Distinct intermediates prevent mixing this route into the 50% ore chain.
+            var stages = List.of(RotaryItems.RAW_IRON_DUST.get(), RotaryItems.RAW_IRON_SLURRY.get(),
+                    RotaryItems.RAW_IRON_SOLUTION.get(), RotaryItems.IRON_FLAKES.get());
+            for (int stage = 0; stage < 4; stage++) {
+                Ingredient input = stage == 0 ? tag(net.neoforged.neoforge.common.Tags.Items.RAW_MATERIALS_IRON)
+                        : Ingredient.of(stages.get(stage - 1));
+                out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft", "extractor/raw_iron_stage_" + stage)),
+                        new ExtractorRecipe(stage, input, new ItemStackTemplate(stages.get(stage)), Optional.of(.23)), null);
+            }
         }
 
         private void extract(String name, int stage, Ingredient input, Item output) {
@@ -442,6 +453,9 @@ public final class RoCRecipeProvider {
             cookFlakes("iron_flakes", RotaryItems.IRON_FLAKES.get(), Items.IRON_INGOT, 0.7F);
             cookFlakes("gold_flakes", RotaryItems.GOLD_FLAKES.get(), Items.GOLD_INGOT, 1F);
             cookFlakes("copper_flakes", RotaryItems.COPPER_FLAKES.get(), Items.COPPER_INGOT, 0.7F);
+            // V33a addFurnace(): one redstone flake -> 4 dust; one lapis flake -> 6 dye.
+            cookFlakes("redstone_flakes", RotaryItems.REDSTONE_FLAKES.get(), Items.REDSTONE, 4, 0.5F);
+            cookFlakes("lapis_flakes", RotaryItems.LAPIS_FLAKES.get(), Items.LAPIS_LAZULI, 6, 0.6F);
             cookFlakes("diamond_flakes", RotaryItems.DIAMOND_FLAKES.get(), Items.DIAMOND, 1F);
             cookFlakes("emerald_flakes", RotaryItems.EMERALD_FLAKES.get(), Items.EMERALD, 1F);
             cookFlakes("quartz_flakes", RotaryItems.QUARTZ_FLAKES.get(), Items.QUARTZ, 1F);
@@ -449,7 +463,12 @@ public final class RoCRecipeProvider {
         }
 
         private void cookFlakes(String name, Item flake, Item ingot, float xp) {
-            SimpleCookingRecipeBuilder.smelting(Ingredient.of(flake), RecipeCategory.MISC, CookingBookCategory.MISC, ingot, xp, 200)
+            cookFlakes(name, flake, ingot, 1, xp);
+        }
+
+        private void cookFlakes(String name, Item flake, Item product, int count, float xp) {
+            SimpleCookingRecipeBuilder.smelting(Ingredient.of(flake), RecipeCategory.MISC, CookingBookCategory.MISC,
+                            new ItemStackTemplate(product, count), xp, 200)
                     .unlockedBy("has_" + name, has(flake))
                     .save(out, "rotarycraft:" + name + "_to_ingot");
         }

@@ -513,8 +513,11 @@ public class RotaryJEIPlugin implements IModPlugin {
                    .addIngredients(recipe.getInput());
             builder.addSlot(RecipeIngredientRole.OUTPUT, 58, 9)
                    .addItemStack(recipe.getOutput())
-                   .addRichTooltipCallback((view, tooltip) -> tooltip.add(
-                           Component.literal("Stage " + (recipe.getStage() + 1) + "/4")));
+                   .addRichTooltipCallback((view, tooltip) -> {
+                       tooltip.add(Component.literal("Stage " + (recipe.getStage() + 1) + "/4"));
+                       recipe.getDuplicationChance().ifPresent(chance -> tooltip.add(Component.translatable(
+                               "tooltip.rotarycraft.extractor.duplication", Math.round(chance * 100))));
+                   });
         }
     }
 
