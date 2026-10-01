@@ -181,6 +181,7 @@ public class RotaryBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntitySprinkler>> SPRINKLER = BLOCK_ENTITIES.register("sprinkler", () ->
             new BlockEntityType<>(BlockEntitySprinkler::new, RotaryBlocks.SPRINKLER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityTerraformer>> TERRAFORMER = BLOCK_ENTITIES.register("terraformer", () -> new BlockEntityType<>(BlockEntityTerraformer::new, RotaryBlocks.TERRAFORMER.get()));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityFuelConverter>> FUEL_ENHANCER = BLOCK_ENTITIES.register("fuel_enhancer", () -> new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityFuelConverter::new, RotaryBlocks.FUEL_ENHANCER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityDistillery>> DISTILLER = BLOCK_ENTITIES.register("distiller", () ->
             new BlockEntityType<>(reika.rotarycraft.blockentities.processing.BlockEntityDistillery::new, RotaryBlocks.DISTILLER.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<reika.rotarycraft.blockentities.processing.BlockEntityPurifier>> PURIFIER = BLOCK_ENTITIES.register("purifier", () ->

@@ -79,6 +79,8 @@ public class RotaryRecipeSerializers {
             RECIPE_SERIALIZERS.register("distiller", () -> new RecipeSerializer<>(reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe.CODEC,
                     reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe.STREAM_CODEC));
 
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe>> FUEL_ENHANCER = RECIPE_SERIALIZERS.register("fuel_enhancer", () -> new RecipeSerializer<>(reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe.CODEC, reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe.STREAM_CODEC));
+
     // 1.21.5: RecipeSerializer is now a record(MapCodec, StreamCodec); inner Serializer classes are gone.
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessBlastFurnaceRecipe>> BLAST_FURNACE_SHAPELESS =
             RECIPE_SERIALIZERS.register("blast_furnace_shapeless",

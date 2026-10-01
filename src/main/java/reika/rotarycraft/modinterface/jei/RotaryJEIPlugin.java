@@ -79,7 +79,7 @@ public class RotaryJEIPlugin implements IModPlugin {
                 new LavaMaker(gui),
                 new Compactor(gui),
                 new Purifier(gui),
-                new Distiller(gui),
+                new Distiller(gui), new FuelEnhancer(gui),
                 new TerraformerJEICategory(gui),
                 new Wetter(gui),
                 new DryingBed(gui),
@@ -106,6 +106,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         registration.addRecipeCatalyst(MachineRegistry.COMPACTOR.getCraftedProduct(), Compactor.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.PURIFIER.getCraftedProduct(), Purifier.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.DISTILLER.getCraftedProduct(), Distiller.TYPE);
+        registration.addRecipeCatalyst(MachineRegistry.FUELENHANCER.getCraftedProduct(), FuelEnhancer.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.TERRAFORMER.getCraftedProduct(), TerraformerJEICategory.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.WETTER.getCraftedProduct(), Wetter.TYPE);
         registration.addRecipeCatalyst(MachineRegistry.DRYING.getCraftedProduct(), DryingBed.TYPE);
@@ -219,6 +220,8 @@ public class RotaryJEIPlugin implements IModPlugin {
         tracked.accept(Purifier.TYPE, recipes.byType(RotaryRecipeTypes.PURIFIER.get()).stream()
                 .map(RecipeHolder::value).toList());
         tracked.accept(TerraformerJEICategory.TYPE, recipes.byType(RotaryRecipeTypes.TERRAFORMER.get()).stream().map(RecipeHolder::value).toList());
+        tracked.accept(FuelEnhancer.TYPE, recipes.byType(RotaryRecipeTypes.FUEL_ENHANCER.get()).stream().map(RecipeHolder::value)
+                .filter(recipe -> net.minecraft.core.registries.BuiltInRegistries.FLUID.listElements().anyMatch(fluid -> fluid.is(recipe.input()))).toList());
         tracked.accept(Distiller.TYPE, recipes.byType(RotaryRecipeTypes.DISTILLER.get()).stream().map(RecipeHolder::value)
                 .filter(recipe -> net.minecraft.core.registries.BuiltInRegistries.FLUID.listElements().anyMatch(fluid -> fluid.is(recipe.input()))).toList());
         tracked.accept(Compactor.TYPE, recipes
@@ -587,6 +590,29 @@ public class RotaryJEIPlugin implements IModPlugin {
                            Component.literal("Yield scales with pressure and difficulty")));
         }
     }
+    public static final class FuelEnhancer implements IRecipeCategory<reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe> {
+        public static final RecipeType<reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe> TYPE = RecipeType.create(RotaryCraft.MODID, "fuel_enhancer", reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe.class);
+        private final IDrawable icon;
+        public FuelEnhancer(IGuiHelper gui) { icon = gui.createDrawableItemStack(MachineRegistry.FUELENHANCER.getCraftedProduct()); }
+        @Override public RecipeType<reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe> getRecipeType() { return TYPE; }
+        @Override public Component getTitle() { return Component.translatable("machine.fuelenhancer"); }
+        @Override public int getWidth() { return 170; }
+        @Override public int getHeight() { return 58; }
+        @Override public IDrawable getIcon() { return icon; }
+        @Override public void setRecipe(IRecipeLayoutBuilder builder, reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe recipe, IFocusGroup focuses) {
+            var input = builder.addSlot(RecipeIngredientRole.INPUT, 1, 1);
+            net.minecraft.core.registries.BuiltInRegistries.FLUID.listElements().filter(fluid -> fluid.is(recipe.input())).forEach(fluid -> input.addFluidStack(fluid.value(), recipe.fluidRatio() * recipe.speedFactor()));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 150, 1).addFluidStack(recipe.output().value(), recipe.speedFactor())
+                    .addRichTooltipCallback((view, tooltip) -> {
+                        tooltip.add(Component.translatable("jei.rotarycraft.fuel_enhancer_power"));
+                        if (!recipe.getCondition().isEmpty()) tooltip.add(Component.literal(recipe.getCondition()));
+                    });
+            for (int n = 0; n < recipe.ingredients().size(); n++)
+                builder.addSlot(RecipeIngredientRole.INPUT, 1 + 18 * n, 35).add(recipe.ingredients().get(n))
+                        .addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.translatable("jei.rotarycraft.fuel_enhancer_consumption", String.format(java.util.Locale.ROOT, "%.4f", recipe.itemConsumptionChance() * 100))));
+        }
+    }
+
     public static final class Distiller implements IRecipeCategory<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe> {
         public static final RecipeType<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe> TYPE = RecipeType.create(RotaryCraft.MODID, "distiller", reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe.class);
         private final IDrawable icon;

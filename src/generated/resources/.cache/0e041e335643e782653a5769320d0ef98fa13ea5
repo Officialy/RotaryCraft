@@ -1,4 +1,4 @@
-// 26.3	2026-10-01T15:30:22.6257135	Registries for reloadable
+// 26.3	2026-10-01T16:23:59.6731027	Registries for reloadable
 a916220f301948258d017ef5e577c96901779486 data/rotarycraft/advancement/bedrockbreaker.json
 e9c5dad0ea096423b3acc234f5de7d50f1cda702 data/rotarycraft/advancement/bedrockshaft.json
 6399c44c6527cedc827f8d4c453fe3844c36c5d7 data/rotarycraft/advancement/dumbextractor.json
@@ -161,6 +161,7 @@ b13df4423970be7e9d69919b07bee4b02be18cc5 data/rotarycraft/advancement/recipes/re
 ec40d4c6bcf4eae03670f3c2358b73003cda3633 data/rotarycraft/advancement/recipes/redstone/freeze_gun.json
 0547531714501ec6984248d0dae71b4b2de1be22 data/rotarycraft/advancement/recipes/redstone/friction_boiler.json
 98d2d2a22fb8be1e74a397ee0d71f8f8eb004699 data/rotarycraft/advancement/recipes/redstone/friction_heater.json
+f5d326952cdbe4ce7038f9020fa7d48fcdfc3d4f data/rotarycraft/advancement/recipes/redstone/fuel_enhancer.json
 3c256caf4bac85c11df637dd0e67811cf6f9e337 data/rotarycraft/advancement/recipes/redstone/fuel_line.json
 80dcf5d77a2050375b9be5f00622c2f32ee272c1 data/rotarycraft/advancement/recipes/redstone/gas_engine.json
 85c413de2b334c8ce94b548aec04660e9b6bfb35 data/rotarycraft/advancement/recipes/redstone/gas_tank.json
@@ -384,6 +385,7 @@ be65d9177e36c61f7af71a94344b3d534faafe83 data/rotarycraft/loot_table/blocks/frac
 b2c7a1b92663b23be1450f39919e1582a64d8c3f data/rotarycraft/loot_table/blocks/freeze_gun.json
 f0ed74bccb2e1677282fba5628ea032a2ee36e3f data/rotarycraft/loot_table/blocks/friction_boiler.json
 960f96f036325d1460f538fb371855e686a0ee73 data/rotarycraft/loot_table/blocks/friction_heater.json
+5ba746c4eec2bdbc2b54e3663b051b862719449b data/rotarycraft/loot_table/blocks/fuel_enhancer.json
 c7226af77e6130ca87f5f3e7fb01eb1e18743280 data/rotarycraft/loot_table/blocks/fuel_line.json
 4a651318836d7177bbd034d91a9ac5a286cb4868 data/rotarycraft/loot_table/blocks/gas_engine.json
 3a74b46439c6246714fe05c04fc6fda99bd34cac data/rotarycraft/loot_table/blocks/gas_tank.json
@@ -670,6 +672,9 @@ e205b49023bd5f554df5bf27fd460a5f032d0d8f data/rotarycraft/recipe/fluid_pipe.json
 b039f7f5497d9bd0c51190aaa0d3fe6b34ea3d45 data/rotarycraft/recipe/friction_boiler.json
 9f83b8863e8162505c8d1b2db6b6508a6f0814ed data/rotarycraft/recipe/friction_heater.json
 47abf00e244bc394899f9632d65e6481b88f6e5a data/rotarycraft/recipe/friction_heater/hsla_steel_from_scrap.json
+61a04190bed48486ab5a2983fa3e0284059bd5b2 data/rotarycraft/recipe/fuel_enhancer.json
+dcbdca825109286c05f683d89b054b096a56e16b data/rotarycraft/recipe/fuel_enhancer/fuel.json
+3c5e2cd84a85892a549c300a3838dd073f0ea93a data/rotarycraft/recipe/fuel_enhancer/kerosene.json
 4261e4095604a2ff8b006ab5eb59ef4a9d5a3422 data/rotarycraft/recipe/fuel_line.json
 9699f936cf20a0e90aee257ee6ab94f3480cb398 data/rotarycraft/recipe/gas_engine.json
 461ca5859a75c77b2988592bcbd029df1ff15105 data/rotarycraft/recipe/gas_tank.json

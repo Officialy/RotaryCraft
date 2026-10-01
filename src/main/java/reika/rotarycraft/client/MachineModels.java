@@ -112,6 +112,7 @@ public final class MachineModels {
         MODELS.put(MachineRegistry.MAGNETIC, (modelSet) -> new MagneticModel(modelSet.bakeLayer(RotaryModelLayers.MAGNETIC)));
         MODELS.put(MachineRegistry.DYNAMO, (modelSet) -> new DynamoModel(modelSet.bakeLayer(RotaryModelLayers.DYNAMO)));
         MODELS.put(MachineRegistry.CHUNKLOADER, modelSet -> new reika.rotarycraft.models.animated.ChunkLoaderModel(modelSet.bakeLayer(RotaryModelLayers.CHUNK_LOADER)));
+        MODELS.put(MachineRegistry.FUELENHANCER, modelSet -> new reika.rotarycraft.modinterface.model.FuelConverterModel(modelSet.bakeLayer(RotaryModelLayers.FUEL_ENHANCER)));
         MODELS.put(MachineRegistry.DISTILLER, modelSet -> new reika.rotarycraft.models.animated.DistilleryModel(modelSet.bakeLayer(RotaryModelLayers.DISTILLER)));
         MODELS.put(MachineRegistry.CRYSTALLIZER, (modelSet) -> new CrystallizerModel(modelSet.bakeLayer(RotaryModelLayers.CRYSTALLIZER)));
         MODELS.put(MachineRegistry.LAWNSPRINKLER, (modelSet) -> new LawnSprinklerModel(modelSet.bakeLayer(RotaryModelLayers.LAWNSPRINKLER)));

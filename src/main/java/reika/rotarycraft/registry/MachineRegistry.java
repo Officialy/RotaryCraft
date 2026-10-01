@@ -258,7 +258,8 @@ public enum MachineRegistry implements TileEnum {
     PURIFIER(true, "machine.purifier", RotaryBlocks.PURIFIER.get(), BlockEntityPurifier.class),
     DISTILLER("machine.distiller", RotaryBlocks.DISTILLER.get(), reika.rotarycraft.blockentities.processing.BlockEntityDistillery.class),
     TERRAFORMER(true, "machine.terraformer", RotaryBlocks.TERRAFORMER.get(), reika.rotarycraft.blockentities.level.BlockEntityTerraformer.class),
-    CHUNKLOADER("machine.chunkloader", RotaryBlocks.CHUNK_LOADER.get(), reika.rotarycraft.blockentities.BlockEntityChunkLoader.class);
+    CHUNKLOADER("machine.chunkloader", RotaryBlocks.CHUNK_LOADER.get(), reika.rotarycraft.blockentities.BlockEntityChunkLoader.class),
+    FUELENHANCER(true, "machine.fuelenhancer", RotaryBlocks.FUEL_ENHANCER.get(), reika.rotarycraft.blockentities.processing.BlockEntityFuelConverter.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();

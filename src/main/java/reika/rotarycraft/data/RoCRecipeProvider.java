@@ -135,6 +135,7 @@ public final class RoCRecipeProvider {
             compactor();
             purifier();
             distiller();
+            fuelEnhancer();
             chunkLoader();
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.TERRAFORMER.get())
                     .pattern("SsS").pattern("ici").pattern("PiP")
@@ -258,6 +259,21 @@ public final class RoCRecipeProvider {
                     .define('G', RotaryItems.BEDROCK_ALLOY_GEAR_16x.get())
                     .pattern("sSs").pattern("BSB").pattern("PGP")
                     .unlockedBy("has_bedrock_shaft", has(RotaryBlocks.BEDROCK_SHAFT.get())).save(out);
+        }
+
+        private void fuelEnhancer() {
+            var catalysts = java.util.List.of(Ingredient.of(Items.BLAZE_POWDER), Ingredient.of(RotaryItems.NETHERRACK_DUST.get()),
+                    Ingredient.of(RotaryItems.TAR.get()), Ingredient.of(Items.MAGMA_CREAM), Ingredient.of(Items.DYE.pink()));
+            for (String name : java.util.List.of("fuel", "kerosene"))
+                out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft", "fuel_enhancer/" + name)),
+                        new reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe(name.equals("fuel") ? RoCFluidTagsProvider.FUEL : RoCFluidTagsProvider.KEROSENE,
+                                BuiltInRegistries.FLUID.wrapAsHolder(RotaryFluids.JET_FUEL.get()), 1, 4, name.equals("fuel") ? .015 : .01, catalysts, ""), null);
+            // V33a RotaryRecipes: panels, glass panes, mixer and gold.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FUEL_ENHANCER.get())
+                    .define('P', RotaryItems.HSLA_PLATE.get()).define('G', Blocks.GLASS_PANE)
+                    .define('M', RotaryItems.MIXER.get()).define('g', Items.GOLD_INGOT)
+                    .pattern("PGP").pattern("gMg").pattern("PGP")
+                    .unlockedBy("has_mixer", has(RotaryItems.MIXER.get())).save(out);
         }
 
         private void distiller() {

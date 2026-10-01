@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "buildcraftenergy:fuel",
+      "required": false
+    },
+    {
+      "id": "buildcraft:fuel",
+      "required": false
+    }
+  ]
+}

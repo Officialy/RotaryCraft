@@ -236,7 +236,15 @@ public class FuelConverterModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        root.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        for (var part : java.util.List.of(shape1, shape1a, shape1b, shape1c, shape3, shape3a, shape3b, shape3c, p, p1, p5, p3, p2, p8, p7, p6))
+            part.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.pushPose();
+        stack.translate(0, 1, 0);
+        stack.rotate(com.mojang.math.Axis.YP.rotationDegrees(phi));
+        stack.translate(0, -1, 0);
+        for (var part : java.util.List.of(shape2, shape2a, shape1d, shape1e, shape1f, shape1g, shape1h, shape1i))
+            part.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        stack.popPose();
 
     }
 

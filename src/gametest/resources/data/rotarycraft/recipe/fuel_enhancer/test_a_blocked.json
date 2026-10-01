@@ -1,0 +1,1 @@
+{"type":"rotarycraft:fuel_enhancer","input":"rotarycraft:enhancer_test","output":"rotarycraft:jet_fuel_still","speed_factor":2,"fluid_ratio":3,"consumption_multiplier":0,"ingredients":["rotarycraft:tar","rotarycraft:tar"],"condition_description":"Test-only conditional recipe"}

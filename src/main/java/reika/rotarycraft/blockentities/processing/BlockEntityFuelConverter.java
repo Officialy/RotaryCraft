@@ -1,276 +1,81 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.blockentities.processing;
-//
-//import net.minecraft.core.BlockPos;
-//import net.minecraft.world.item.ItemStack;
-//import net.minecraft.world.level.Level;
-//import net.neoforged.neoforge.common.util.EnumHelper;
-//import reika.dragonapi.instantiable.ItemMatch;
-//import reika.dragonapi.libraries.ReikaInventoryHelper;
-//import reika.dragonapi.libraries.java.ReikaRandomHelper;
-//import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-//import reika.rotarycraft.auxiliary.RotaryItems;
-//import reika.rotarycraft.registry.DifficultyEffects;
-//import reika.rotarycraft.registry.MachineRegistry;
-//
-//import java.util.ArrayList;
-//import java.util.Collection;
-//import java.util.HashMap;
-//
-//
-//public class BlockEntityFuelConverter extends InventoriedPoweredLiquidIO {
-//
-//    public static final int CAPACITY = 5 * FluidContainerRegistry.BUCKET_VOLUME;
-//
-//    public static Conversions getConversionByItem(ItemStack is) {
-//        for (int i = 0; i < Conversions.list.length; i++) {
-//            Conversions c = Conversions.list[i];
-//            if (c.isValidItem(is)) {
-//                return c;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    protected void animateWithTick(Level world, BlockPos pos) {
-//        if (!this.isInWorld()) {
-//            phi = 0;
-//            return;
-//        }
-//        phi += ReikaMathLibrary.doubpow(ReikaMathLibrary.logbase(omega + 1, 2), 1.05);
-//    }
-//
-//    @Override
-//    public MachineRegistry getMachine() {
-//        return MachineRegistry.FUELENHANCER;
-//    }
-//
-//    @Override
-//    public boolean hasModelTransparency() {
-//        return true;
-//    }
-//
-//    @Override
-//    public int getRedstoneOverride() {
-//        if (input.isEmpty())
-//            return 15;
-//        if (output.isFull())
-//            return 15;
-//        return 0;
-//    }
-//
-//    @Override
-//    public void updateEntity(Level world, BlockPos pos) {
-//        super.updateBlockEntity();
-//        tickcount++;
-//        this.getPowerBelow();
-//
-//        //ReikaJavaLibrary.pConsole(input+":"+output);
-//
-//        //ReikaJavaLibrary.pConsoleOnlyIn("BC: "+this.getBCFuel()+"    JET: "+this.getJetFuel(), Dist.CLIENT);
-//
-//        if (power < MINPOWER)
-//            return;
-//        if (omega < MINSPEED)
-//            return;
-//        if (world.isClientSide())
-//            return;
-//
-//        Conversions c = this.getConversion();
-//        if (c != null && this.getInputLevel() >= c.fluidRatio * c.speedFactor && this.hasItems(c) && output.canTakeIn(c.speedFactor)) {
-//            input.removeLiquid(c.fluidRatio * c.speedFactor);
-//            output.addLiquid(c.speedFactor, c.output);
-//            this.consumeItems(c);
-//        }
-//    }
-//
-//    private Conversions getConversion() {
-//        return !input.isEmpty() ? Conversions.conversionMap.get(input.getActualFluid().getName()) : null;
-//    }
-//
-//    private boolean hasItems(Conversions c) {
-//        for (int i = 0; i < c.ingredients.length; i++) {
-//            if (!ReikaInventoryHelper.checkForItemStack(c.ingredients[i], inv)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-//
-//    private void consumeItems(Conversions c) {
-//        for (int i = 0; i < c.ingredients.length; i++) {
-//            if (ReikaRandomHelper.doWithChance(c.itemConsumptionChance))
-//                ReikaInventoryHelper.decrStack(ReikaInventoryHelper.locateInInventory(c.ingredients[i], inv), inv);
-//        }
-//    }
-//
-//    @Override
-//    public int getContainerSize() {
-//        return 9;
-//    }
-//
-//    @Override
-//    public boolean isItemValidForSlot(int slot, ItemStack is) {
-//        return getConversionByItem(is) != null;
-//    }
-//
-//    public double getLiquidModelOffset(boolean in) {
-//        return in ? 10 / 16D : 1 / 16D;
-//    }
-//
-//    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean canConnectToPipe(MachineRegistry m) {
-//        return m == MachineRegistry.FUELLINE || m.isStandardPipe();
-//    }
-//
-//    public Fluid getInputFluidType() {
-//        return input.getActualFluid();
-//    }
-//
-//    public Fluid getOutputFluidType() {
-//        return output.getActualFluid();
-//    }
-//
-//    @Override
-//    public Fluid getInputFluid() {
-//        return null;
-//    }
-//
-//    @Override
-//    public boolean isValidFluid(Fluid f) {
-//        return Conversions.conversionMap.get(f.getName()) != null;
-//    }
-//
-//    @Override
-//    public boolean canOutputTo(Direction to) {
-//        return to.getStepY() == 0;
-//    }
-//
-//    @Override
-//    public boolean canReceiveFrom(Direction from) {
-//        return from == Direction.UP;
-//    }
-//
-//    @Override
-//    public int getCapacity() {
-//        return CAPACITY;
-//    }
-//
-//    @Override
-//    public boolean canIntakeFromPipe(MachineRegistry p) {
-//        return p.isStandardPipe();
-//    }
-//
-//    @Override
-//    public boolean canOutputToPipe(MachineRegistry p) {
-//        return p == MachineRegistry.FUELLINE;
-//    }
-//
-//    public enum Conversions {
-//        BCFUEL("fuel", "rc jet fuel", 2, 4, DifficultyEffects.CONSUMEFRAC.getChance() / 32D / 100D * 8, new ItemMatch(Items.blaze_powder), new ItemMatch(RotaryItems.netherrackdust), new ItemMatch(RotaryItems.tar), new ItemMatch(Items.magma_cream)),
-//        KEROSENE("kerosene", "rc jet fuel", 2, 4, DifficultyEffects.CONSUMEFRAC.getChance() / 32D / 100D * 8, new ItemMatch(Items.blaze_powder), new ItemMatch(RotaryItems.netherrackdust), new ItemMatch(RotaryItems.tar), new ItemMatch(Items.magma_cream)),
-//        ;
-//
-//        private static final HashMap<String, Conversions> conversionMap = new HashMap();
-//        private static final HashMap<String, Conversions> conversionOutputMap = new HashMap();
-//        public static Conversions[] list = values();
-//
-//        static {
-//            for (int i = 0; i < list.length; i++) {
-//                Conversions c = list[i];
-//                if (c.input != null && c.output != null) {
-//                    conversionMap.put(c.input.getName(), c);
-//                    conversionOutputMap.put(c.output.getName(), c);
-//                }
-//            }
-//        }
-//
-//        public final Fluid input;
-//        public final Fluid output;
-//        public final int speedFactor;
-//        public final int fluidRatio;
-//        public final double itemConsumptionChance;
-//        private final ItemMatch[] ingredients;
-//
-//        Conversions(String in, String out, int sp, int r, double f, ItemMatch... items) {
-//            input = Fluids.getFluid(in);
-//            output = Fluids.getFluid(out);
-//
-//            speedFactor = sp;
-//            fluidRatio = r;
-//
-//            itemConsumptionChance = f;
-//
-//            ingredients = items;
-//        }
-//
-//        public static void addRecipe(String name, String in, String out, int speed, int fluidRatio, double itemConsumeChance, ItemMatch... items) {
-//            Conversions c = EnumHelper.addEnum(Conversions.class, name.toUpperCase(), new Class[]{String.class, String.class, int.class, int.class, double.class, ItemMatch[].class}, new Object[]{in, out, speed, fluidRatio, itemConsumeChance, items});
-//            conversionMap.put(in, c);
-//            conversionOutputMap.put(out, c);
-//            list = values();
-//        }
-//
-//        public static Collection<Conversions> getByInput(ItemStack is) {
-//            Collection<Conversions> li = new ArrayList<>();
-//            for (Conversions c : conversionMap.values()) {
-//                if (c.isValidItem(is))
-//                    li.add(c);
-//            }
-//            return li;
-//        }
-//
-//        public static Collection<Conversions> getByInput(Fluid f) {
-//            Collection<Conversions> li = new ArrayList<>();
-//            for (Conversions c : conversionMap.values()) {
-//                if (c.input == f)
-//                    li.add(c);
-//            }
-//            return li;
-//        }
-//
-//        public static Collection<Conversions> getByOutput(Fluid f) {
-//            Collection<Conversions> li = new ArrayList<>();
-//            for (Conversions c : conversionMap.values()) {
-//                if (c.output == f)
-//                    li.add(c);
-//            }
-//            return li;
-//        }
-//
-//        public boolean isValid() {
-//            return input != null && output != null;
-//        }
-//
-//        public boolean isValidItem(ItemStack is) {
-//            for (int i = 0; i < ingredients.length; i++) {
-//                if (ingredients[i].match(is))
-//                    return true;
-//            }
-//            return false;
-//        }
-//
-//
-//        public Collection<ItemStack> getIngredientsForDisplay() {
-//            Collection<ItemStack> c = new ArrayList<>();
-//            for (ItemMatch m : ingredients) {
-//                c.add(m.getCycledItem());
-//            }
-//            return c;
-//        }
-//    }
-//
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ *
+ * Copyright 2017
+ *
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
+package reika.rotarycraft.blockentities.processing;
+
+import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.*;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.*;
+import reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe;
+import reika.rotarycraft.base.blockentity.InventoriedPoweredLiquidIO;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerFuelEnhancer;
+import reika.rotarycraft.modinterface.jei.RotaryRecipeSync;
+import reika.rotarycraft.registry.*;
+
+/** V33a fuel enhancer: bottom shaft input, five catalysts and two 5000 mB tanks. */
+public class BlockEntityFuelConverter extends InventoriedPoweredLiquidIO {
+    public static final int CAPACITY = 5000;
+    public BlockEntityFuelConverter(BlockPos pos, BlockState state) { super(RotaryBlockEntities.FUEL_ENHANCER.get(), pos, state); }
+    public static List<FuelEnhancerRecipe> getAllRecipes(Level level) {
+        var recipes = RotaryRecipeSync.getRecipes(level);
+        return recipes == null ? List.of() : recipes.byType(RotaryRecipeTypes.FUEL_ENHANCER.get()).stream().map(holder -> holder.value()).toList();
+    }
+    public static List<FuelEnhancerRecipe> getByInput(Level level, ItemStack item) { return getAllRecipes(level).stream().filter(r -> r.isValidItem(item)).toList(); }
+    public static List<FuelEnhancerRecipe> getByInput(Level level, Fluid fluid) { return getAllRecipes(level).stream().filter(r -> r.accepts(fluid)).toList(); }
+    public static List<FuelEnhancerRecipe> getByOutput(Level level, Fluid fluid) { return getAllRecipes(level).stream().filter(r -> r.output().value() == fluid).toList(); }
+    public int getSpeedBoost() { return omega < MINSPEED ? 0 : 1 + (31 - Integer.numberOfLeadingZeros(omega / MINSPEED)) / 2; }
+    @Override public void updateEntity(Level world, BlockPos pos) {
+        super.updateBlockEntity();
+        if (world.isClientSide()) return;
+        getPowerBelow();
+        if (power < MINPOWER || omega < MINSPEED || input.isEmpty()) return;
+        var inventory = java.util.stream.IntStream.range(0, getContainerSize()).mapToObj(this::getItem).toList();
+        for (var recipe : getByInput(world, input.getActualFluid().getFluid())) {
+            long speed = (long)getSpeedBoost() * recipe.speedFactor(), cost = speed * recipe.fluidRatio();
+            if (cost > input.getFluidLevel() || speed > CAPACITY || !output.canTakeIn(recipe.output().value(), (int)speed) || !recipe.isUsable(this)) continue;
+            int[] slots = recipe.findIngredients(inventory);
+            if (slots == null) continue;
+            input.removeLiquid((int)cost);
+            output.addLiquid((int)speed, recipe.output().value());
+            for (int slot : slots) if (world.getRandom().nextDouble() < recipe.itemConsumptionChance()) removeItem(slot, 1);
+            setChanged();
+            // The base lifecycle sends tank/power deltas every five ticks; menu slots sync separately.
+            break;
+        }
+    }
+    @Override protected void animateWithTick(Level world, BlockPos pos) {
+        if (!isInWorld()) phi = 0;
+        else phi += Math.pow(Math.log(omega + 1D) / Math.log(2), 1.05);
+    }
+    @Override public int getContainerSize() { return 9; }
+    @Override public boolean isItemValidForSlot(int slot, ItemStack item) { return !getByInput(level, item).isEmpty(); }
+    @Override public boolean canExtractItem(int slot, ItemStack item) { return false; }
+    @Override public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) { return new ContainerFuelEnhancer(id, inventory, this); }
+    @Override public boolean isValidFluid(Fluid fluid) { return !getByInput(level, fluid).isEmpty(); }
+    @Override public Fluid getInputFluid() { return input.isEmpty() ? Fluids.EMPTY : input.getActualFluid().getFluid(); }
+    @Override public boolean canConnectToPipe(MachineRegistry pipe) { return pipe == MachineRegistry.FUELLINE || pipe.isStandardPipe(); }
+    @Override public boolean canIntakeFromPipe(MachineRegistry pipe) { return canConnectToPipe(pipe); }
+    @Override public boolean canOutputToPipe(MachineRegistry pipe) { return pipe == MachineRegistry.FUELLINE; }
+    @Override public boolean canOutputTo(Direction side) { return side.getAxis().isHorizontal(); }
+    @Override public boolean canReceiveFrom(Direction side) { return side == Direction.UP; }
+    @Override public boolean hasATank() { return true; }
+    @Override public int getCapacity() { return CAPACITY; }
+    @Override protected String getTEName() { return "Fuel Enhancer"; }
+    @Override public net.minecraft.world.level.block.Block getBlockEntityBlockID() { return RotaryBlocks.FUEL_ENHANCER.get(); }
+    @Override public MachineRegistry getMachine() { return MachineRegistry.FUELENHANCER; }
+    @Override public boolean hasModelTransparency() { return true; }
+    @Override public int getRedstoneOverride() { return input.isEmpty() || output.isFull() ? 15 : 0; }
+    public double getLiquidModelOffset(boolean in) { return (in ? 10 : 1) / 16D; }
+}

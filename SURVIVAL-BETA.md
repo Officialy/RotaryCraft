@@ -31,7 +31,7 @@ Updated 2026-10-01. Target: NeoForge 26.3.0.26-beta, Java 25.
 
 ## GameTest coverage
 
-The suite registers one isolated placement/type/lifecycle test for each of the 137 active
+The suite registers one isolated placement/type/lifecycle test for each of the 138 active
 MachineRegistry entries, plus a registry-wide invariant. Variants account for some entries;
 this count is not a count of distinct V33a machines. Tests tick real placed blocks rather than
 calling processing methods with fabricated power. Creative coils supply deterministic shaft
@@ -66,10 +66,10 @@ this suite does not establish end-to-end survival readiness.
 ## Remaining machines
 
 The owner's starting report listed 25 missing V33a machines. Purifier, Distiller, Terraformer
-and the separate AutoCrafting Unit and Item Filter ports, plus Chunk Loader, are restored,
-leaving 19 from that report:
+and the separate AutoCrafting Unit and Item Filter ports, plus Chunk Loader and Fuel Enhancer,
+are restored, leaving 18 from that report:
 Bait Box, Bundled Bus, CCTV, Compressor,
-Defoliator, Display, Electric Motor, Flame Turret, Fuel Engine, Fuel Enhancer,
+Defoliator, Display, Electric Motor, Flame Turret, Fuel Engine,
 Generator, Mob Radar, Pile Driver, Pneumatic Engine, Portal Shaft, Projector,
 Screen, Sonic Weapon and Spy Cam. Audit their pristine source and dependencies
 before selecting the next complete port. Do not stub integrations to enable a compile.
@@ -209,3 +209,43 @@ build/terraformer-release.log. Pending AE2 work is not included in the Terraform
   build passed. A final focused tag run covers the aluminum source-parity additions. Jar
   inspection confirms machine classes, generated recipe/model/mining/tool tags and excludes
   the foreign-steel/fluid GameTest substitutions.
+
+## Fuel Enhancer (2026-10-01)
+
+- Fully ported against the actual V33a `upstream/master` source rather than the older commented
+  reference. The machine requires blaze powder, netherrack dust, tar, magma cream and pink dye.
+  Bottom power must supply at least 16384 W and 16384 rad/s. Both tanks hold 5000 mB.
+- Original petroleum-fuel and kerosene conversions are reloadable recipes. At minimum speed,
+  each tick converts 4 mB into 1 mB of jet fuel. The output multiplier is
+  `1 + floor(log2(omega / 16384)) / 2`, with integer division of the logarithm by two.
+  Each catalyst is independently consumed once per conversion, irrespective of speed boost.
+  Original difficulty multipliers remain live: normal difficulty gives 0.375% consumption
+  per catalyst for petroleum fuel and 0.25% for kerosene.
+- Common `c:fuel` and `c:kerosene` fluid tags provide the foreign-fluid integration boundary.
+  The fuel tag includes optional BuildCraft IDs; kerosene is empty until an integration or
+  datapack supplies a registered fluid. RotaryCraft does not invent or register those fuels.
+  JEI shows only conversions whose input tag has a loaded fluid. Optional programmatic
+  usability conditions and descriptions are retained on loaded recipe objects.
+- Fluid input is top-only; output is horizontal and output pipe routing is fuel-line-only.
+  All nine inventory slots accept recipe catalysts from every side. Automated extraction is
+  denied, while manual retrieval and shift-click work. Fixed-size inventory storage keeps
+  its capability identity and the loading caller's registry context. Vanilla Container reads
+  expose the live stack, preventing hopper merge loss; transactional reads remain snapshots.
+- Restored original gold/panel/glass-pane/mixer crafting, generated loot and block/item models,
+  machine mining/motion tags, handbook notes, compact nine-slot GUI, full-width power sync,
+  rotating paddles and the original stacked fluid basins. The block exposes the original
+  comparator signal for empty input or full output. Machine indices stay stable by appending
+  FUELENHANCER. Tank/power synchronization uses the shared periodic delta channel.
+- Thirty-three functional GameTests cover both fuels, all five missing-catalyst gates, speed
+  thresholds through Integer.MAX_VALUE, consecutive-tick cadence, power directions, whole-batch
+  backpressure, incompatible output, fluid/item rollback and commit, real hopper insertion and
+  extraction denial, detached loading, menu transfers and high power bits, actual comparator
+  output, real fuel-line extraction, any-removal inventory drops, original crafting, recipe
+  disk/network codecs, overlapping catalyst matching and conditional/zero/guaranteed consumption.
+  Foreign-fluid substitutions and deterministic custom recipes exist only in GameTest resources.
+
+Validation: 335/335 full RotaryCraft GameTests and 11/11 JUnit checks pass; release build passes.
+Jar inspection verifies the machine, its generated recipes/models/loot/mining tags and exclusion
+of every Fuel Enhancer fixture. Logs are `build/fuel-enhancer-final-validation.log` and
+`build/fuel-enhancer-datagen.log`. This slice still needs client visual and multiplayer checks
+for the new machine, and a real foreign-fuel integration test.

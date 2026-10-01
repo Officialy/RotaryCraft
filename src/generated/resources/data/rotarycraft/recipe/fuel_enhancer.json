@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass_pane",
+    "M": "rotarycraft:mixer",
+    "P": "rotarycraft:hsla_steel_plate",
+    "g": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    "PGP",
+    "gMg",
+    "PGP"
+  ],
+  "result": {
+    "id": "rotarycraft:fuel_enhancer"
+  }
+}

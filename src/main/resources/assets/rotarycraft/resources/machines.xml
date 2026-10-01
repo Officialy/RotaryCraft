@@ -851,8 +851,10 @@
         <desc>
             The fuel enhancer can take standard petroleum fuel, like that used by Combustion Engines, and then purify
             and refine it further, ultimately producing jet fuel. Note that the purification process causes an fourfold
-            decrease in fuel volume, and that the machine still needs magma cream, blaze powder, netherrack dust, and
-            tar.
+            decrease in fuel volume, and that the machine still needs magma cream, blaze powder, netherrack dust,
+            tar, and pink dye. Kerosene is also accepted. Conversion recipes use the common fuel and kerosene fluid
+            tags. At minimum speed it converts 4 mB into 1 mB every tick; each fourfold increase in shaft speed
+            adds another 1 mB to the per-tick output. Each catalyst has its own consumption chance per conversion.
         </desc>
         <note>
             Required Power: %dW

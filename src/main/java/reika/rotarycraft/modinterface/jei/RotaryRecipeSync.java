@@ -39,6 +39,7 @@ public final class RotaryRecipeSync {
                 RotaryRecipeTypes.COMPACTOR.get(),
                 RotaryRecipeTypes.PURIFIER.get(),
                 RotaryRecipeTypes.DISTILLER.get(),
+                RotaryRecipeTypes.FUEL_ENHANCER.get(),
                 RotaryRecipeTypes.TERRAFORMER.get(),
                 RotaryRecipeTypes.WETTER.get(),
                 RotaryRecipeTypes.DRYING_BED.get(),

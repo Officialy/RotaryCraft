@@ -1,4 +1,4 @@
-// 26.3	2026-10-01T15:30:39.1211051	Model Definitions - rotarycraft
+// 26.3	2026-10-01T16:24:16.1607492	Model Definitions - rotarycraft
 f8a25e5cd83b08aad4c45621a8ece222635e462b assets/rotarycraft/blockstates/aa_gun.json
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
@@ -76,6 +76,7 @@ ce644a38542a8edb13dfee6d50d839654c97a673 assets/rotarycraft/blockstates/fraction
 6608590ba2f2c8a9faad651fe69712aa4e57c09a assets/rotarycraft/blockstates/freeze_gun.json
 262cd2c68724728effad23ffa275dbb8072f22a5 assets/rotarycraft/blockstates/friction_boiler.json
 bf1aed626af984a13d2f0bdf1945867a4e434a80 assets/rotarycraft/blockstates/friction_heater.json
+30acf4ce75ec1363fd785b03239f4a08c9123807 assets/rotarycraft/blockstates/fuel_enhancer.json
 189463abdf80052a16fc7e70bbd8617fd39aea3b assets/rotarycraft/blockstates/gas_engine.json
 bd4de8e46f95167f0ac64b38d15330e48ca96610 assets/rotarycraft/blockstates/gas_tank.json
 e3fd5219f83a89b49245229a8c1882b217b44503 assets/rotarycraft/blockstates/gold_flywheel.json
@@ -339,6 +340,7 @@ f1b157be958baf9f5132860487af4bb437d6b9e2 assets/rotarycraft/items/fractionator.j
 2ff14463130bb2a506c3f64eb24271e51c2c9437 assets/rotarycraft/items/freeze_gun.json
 065a78e6573f489727fc657b6120d361d8fa2475 assets/rotarycraft/items/friction_boiler.json
 e7dc426c31ce925d395acdb253537e68187367ce assets/rotarycraft/items/friction_heater.json
+e910a29f76b65929d96c79f51f2c9b8516aa81f4 assets/rotarycraft/items/fuel_enhancer.json
 1f46c32c07d1b9cb35c620df8224ec9db49a8ff4 assets/rotarycraft/items/fuel_line.json
 fbe65febbd7834bbcecf014db9d36cdc4b12c16c assets/rotarycraft/items/gas_engine.json
 aa5f3f6134b7ed3297a21b632ee79aa90e0558ef assets/rotarycraft/items/gas_tank.json
@@ -655,6 +657,7 @@ b2a34cf4d00c2ab0f30bbaa40db08e4304c8de35 assets/rotarycraft/models/block/fractio
 b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/freeze_gun.json
 7f53f1a724e9b44d2407a036fc66d53902da7899 assets/rotarycraft/models/block/friction_boiler.json
 282be9ebd6abc548464ccf5404f0973a55c32295 assets/rotarycraft/models/block/friction_heater.json
+b9f952153dfca17b0f1dba26604aa20585c45a11 assets/rotarycraft/models/block/fuel_enhancer.json
 eb7b48c7fe20a79f3f85d89287f5248b1e65932a assets/rotarycraft/models/block/gas_engine.json
 b13a836daa0b539dc7e10d6296ccb802db1e7595 assets/rotarycraft/models/block/gas_tank.json
 5712113874cdb75e63e3346ec2065db21ac3a12b assets/rotarycraft/models/block/gold_flywheel.json

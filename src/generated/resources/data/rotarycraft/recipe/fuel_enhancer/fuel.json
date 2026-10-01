@@ -1,0 +1,15 @@
+{
+  "type": "rotarycraft:fuel_enhancer",
+  "consumption_multiplier": 0.015,
+  "fluid_ratio": 4,
+  "ingredients": [
+    "minecraft:blaze_powder",
+    "rotarycraft:netherrack_dust",
+    "rotarycraft:tar",
+    "minecraft:magma_cream",
+    "minecraft:pink_dye"
+  ],
+  "input": "c:fuel",
+  "output": "rotarycraft:jet_fuel_still",
+  "speed_factor": 1
+}

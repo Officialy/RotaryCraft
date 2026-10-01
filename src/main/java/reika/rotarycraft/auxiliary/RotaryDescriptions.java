@@ -532,7 +532,7 @@ public final class RotaryDescriptions {
 //        addNotes(MachineRegistry.LAMP, BlockEntityLamp.MAXRANGE);
 //        addNotes(MachineRegistry.ECU, BlockEntityEngineController.getSettingsAsString());
 //        addNotes(MachineRegistry.BLASTFURNACE, BlockEntityBlastFurnace.SMELT_XP);
-//        addNotes(MachineRegistry.FUELENHANCER, PowerReceivers.FUELENHANCER.getMinPower(), PowerReceivers.FUELENHANCER.getMinSpeed());
+        addNotes(MachineRegistry.FUELENHANCER, PowerReceivers.FUELENHANCER.getMinPower(), PowerReceivers.FUELENHANCER.getMinSpeed());
 //        addNotes(MachineRegistry.ARROWGUN, PowerReceivers.ARROWGUN.getMinPower(), PowerReceivers.ARROWGUN.getMinTorque());
 //        addNotes(MachineRegistry.STEAMTURBINE, BlockEntitySteam.GEN_OMEGA, BlockEntitySteam.MAX_TORQUE);
 //        addNotes(MachineRegistry.FERTILIZER, PowerReceivers.FERTILIZER.getMinPower());

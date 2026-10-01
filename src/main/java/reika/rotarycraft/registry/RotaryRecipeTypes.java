@@ -37,6 +37,7 @@ public class RotaryRecipeTypes {
     public static final DeferredHolder<RecipeType<?>, RecipeType<LavaMakerRecipe>> LAVA_MAKER = RECIPE_TYPES.register("lava_maker", () -> new RecipeType<LavaMakerRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<reika.rotarycraft.auxiliary.recipemanagers.TerraformingRecipe>> TERRAFORMER = RECIPE_TYPES.register("terraformer", () -> new RecipeType<reika.rotarycraft.auxiliary.recipemanagers.TerraformingRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe>> DISTILLER = RECIPE_TYPES.register("distiller", () -> new RecipeType<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe>() {});
+    public static final DeferredHolder<RecipeType<?>, RecipeType<reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe>> FUEL_ENHANCER = RECIPE_TYPES.register("fuel_enhancer", () -> new RecipeType<reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<PurifierRecipe>> PURIFIER = RECIPE_TYPES.register("purifier", () -> new RecipeType<PurifierRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<CompactorRecipe>> COMPACTOR = RECIPE_TYPES.register("compactor", () -> new RecipeType<CompactorRecipe>() {});
     public static final DeferredHolder<RecipeType<?>, RecipeType<WetterRecipe>> WETTER = RECIPE_TYPES.register("wetter", () -> new RecipeType<WetterRecipe>() {});
