@@ -53,6 +53,7 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
         //	meta += 4;
         //return RotaryItems.GEARUPGRADE.getStackOfMetadata(meta);
         ItemStack is = RotaryItems.INTEGRATED_GEARBOX.get().getDefaultInstance();
+        ReikaItemHelper.updateStackTag(is, tag -> tag.putInt("ratio", Math.abs(ratio)));
         if (f != null) {
             ItemIntegratedGearbox i = (ItemIntegratedGearbox) is.getItem();
             i.addFluid(is, f, i.getCapacity(is));
@@ -102,7 +103,7 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
                 pTooltipComponents.accept(Component.translatable("tooltip.integratedgearbox.speedmode"));
             } else {
                 pTooltipComponents.accept(Component.translatable("tooltip.integratedgearbox.requiresfill"));
-                if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null) {
+                if (this.getCurrentFillLevel(is) > 0) {
                     int amt = this.getCurrentFillLevel(is);
                     Fluid f = this.getCurrentFluid(is);
                     pTooltipComponents.accept(Component.literal("Is " + (amt * 100F / this.getCapacity(is))).append("%" + Component.translatable("tooltip.integratedgearbox.filled") + new FluidStack(f, amt)));
@@ -114,14 +115,11 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
     }
 
     @Override
-    public boolean isValidFluid(FluidStack f, ItemStack is) {
-        return is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? f.equals(ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag())) : this.isValidFluid(f);
-    }
-
-    private boolean isValidFluid(FluidStack f) {
-        if (f.equals(RotaryFluids.LIQUID_NITROGEN.get()))
-            return true;
-        return f.equals(RotaryFluids.LUBRICANT.get());
+    public boolean isValidFluid(FluidStack fluid, ItemStack stack) {
+        if (fluid == null || fluid.isEmpty()) return false;
+        Fluid current = getCurrentFluid(stack);
+        return (current == null || current == fluid.getFluid())
+                && (fluid.getFluid() == RotaryFluids.LIQUID_NITROGEN.get() || fluid.getFluid() == RotaryFluids.LUBRICANT.get());
     }
 
     @Override
@@ -135,26 +133,14 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
     }
 
     @Override
-    public int addFluid(ItemStack is) {
-        return 0;
-    }
-
-    //@Override
-    public int addFluid(ItemStack is, FluidStack f, int amt) {
-        int liq = 0;
-        if (!this.isValidFluid(f)) {
-            return 0;
-        }
-        ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(), f);
-        liq = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("lvl", 0);
-        if (!f.equals(ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()))) {
-            return 0;
-        }
-
-        final int toadd = Math.min(amt, this.getCapacity(is) - liq);
-        final int fLiq = liq;
-        ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("lvl", fLiq + toadd));
-        return toadd;
+    public int addFluid(ItemStack stack, FluidStack fluid, int amount) {
+        if (amount <= 0 || !isValidFluid(fluid, stack)) return 0;
+        int added = Math.min(amount, Math.max(0, getCapacity(stack) - getCurrentFillLevel(stack)));
+        if (added > 0) ReikaItemHelper.updateStackTag(stack, tag -> {
+            tag.putInt("lvl", getCurrentFillLevel(stack) + added);
+            ReikaNBTHelper.writeFluidToNBT(tag, new FluidStack(fluid.getFluid(), 1));
+        });
+        return added;
     }
 
     @Override
@@ -167,8 +153,10 @@ public class ItemIntegratedGearbox extends ItemRotaryTool implements Fillable {
     }
 
     @Override
-    public Fluid getCurrentFluid(ItemStack is) {
-        return is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? ReikaNBTHelper.getFluidFromNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()).getFluid() : null;
+    public Fluid getCurrentFluid(ItemStack stack) {
+        if (getCurrentFillLevel(stack) <= 0) return null;
+        FluidStack fluid = ReikaNBTHelper.getFluidFromNBT(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag());
+        return fluid.isEmpty() ? null : fluid.getFluid();
     }
 
 }

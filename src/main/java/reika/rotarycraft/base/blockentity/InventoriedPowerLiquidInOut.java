@@ -11,140 +11,79 @@ package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.util.ProblemReporter;
-import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.storage.TagValueInput;
-import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.*;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
-import reika.dragonapi.libraries.ReikaInventoryHelper;
+import reika.dragonapi.interfaces.blockentity.HasItemHandler;
 
-import java.util.Optional;
-
-public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut implements Container {
-
-    protected ManagedItemHandler itemHandler = new ManagedItemHandler(getContainerSize()) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
+/** Inventoried single-tank machine, with separate manual and automation permissions. */
+public abstract class InventoriedPowerLiquidInOut extends PoweredLiquidInOut implements WorldlyContainer, HasItemHandler {
+    private final class MachineItemHandler extends ManagedItemHandler {
+        private MachineItemHandler() { super(getContainerSize()); }
+        private ItemStack getLiveStack(int slot) { return stacks.get(slot); }
+        @Override public boolean isValid(int slot, ItemResource item) { return isItemValidForSlot(slot, item.toStack()); }
+        @Override protected int getCapacity(int slot, ItemResource item) { return Math.min(64, super.getCapacity(slot, item)); }
+        @Override protected void onContentsChanged(int slot) { setChanged(); }
+        @Override public void deserialize(ValueInput input) {
+            var loaded = input.read(VALUE_IO_KEY, codec);
+            for (int slot = 0; slot < getContainerSize(); slot++)
+                stacks.set(slot, loaded.isPresent() && slot < loaded.get().size() ? loaded.get().get(slot) : ItemStack.EMPTY);
+        }
+    }
+    private final MachineItemHandler items = new MachineItemHandler();
+    protected final ManagedItemHandler itemHandler = items;
+    private final ResourceHandler<ItemResource> automation = new DelegatingResourceHandler<>(() -> items) {
+        @Override public int extract(int slot, ItemResource item, int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonEmptyNonNegative(item, amount);
+            java.util.Objects.checkIndex(slot, size());
+            return canExtractItem(slot, item.toStack()) ? super.extract(slot, item, amount, transaction) : 0;
+        }
+        @Override public int extract(ItemResource item, int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonEmptyNonNegative(item, amount);
+            int extracted = 0;
+            for (int slot = 0; slot < size() && extracted < amount; slot++) extracted += extract(slot, item, amount - extracted, transaction);
+            return extracted;
         }
     };
-
-    public InventoriedPowerLiquidInOut(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
-    }
-    public final ItemStack getStackInSlot(int slot) {
-        return itemHandler.getStackInSlot(slot);
-    }
-
-    public final void setInventorySlotContents(int slot, ItemStack is) {
-        itemHandler.setStackInSlot(slot, is);
-    }
-    public void openInventory() {
-    }
-
-    public void closeInventory() {
-    }
-
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    public abstract boolean isItemValidForSlot(int slot, ItemStack is);
-
-    public final ItemStack decrStackSize(int par1, int par2) {
-        return ReikaInventoryHelper.decrStackSize(itemHandler, par1, par2);
-    }
-
-//    public final ItemStack getStackInSlotOnClosing(int par1) {
-//        return ReikaInventoryHelper.getStackInSlotOnClosing(this, par1);
-//    }
-
-//    public int[] getAccessibleSlotsFromSide(int var1) {
-//        if (this instanceof InertIInv)
-//            return new int[0];
-//        return ReikaInventoryHelper.getWholeInventoryForISided(this);
-//    }
-
-    public boolean canInsertItem(int i, ItemStack is, int side) {
-
-        return this.isItemValidForSlot(i, is);
-    }
-
-    public boolean isUseableByPlayer(Player var1) {
-        //todo return this.isPlayerAccessible(var1);
-        return true;
-    }
-
-    @Override
-    public boolean hasModelTransparency() {
-        return false;
-    }
-
-    // 1.21.5: serializeNBT/load were replaced by saveAdditional/loadAdditional (ValueOutput/ValueInput).
-    @Override
-    protected void saveAdditional(ValueOutput output) {
+    protected InventoriedPowerLiquidInOut(BlockEntityType<?> type, BlockPos pos, BlockState state) { super(type, pos, state); }
+    public final ItemStack getStackInSlot(int slot) { return items.getStackInSlot(slot); }
+    public final void setInventorySlotContents(int slot, ItemStack stack) { items.setStackInSlot(slot, stack); }
+    public final ItemStack decrStackSize(int slot, int amount) { return removeItem(slot, amount); }
+    public int getInventoryStackLimit() { return 64; }
+    @Override public final ManagedItemHandler getItemHandler() { return items; }
+    @Override public final ResourceHandler<ItemResource> getAutomationItemHandler() { return automation; }
+    // Vanilla Container users (notably hoppers) mutate this stack and then call setChanged().
+    // ManagedItemHandler's public snapshot API remains unchanged for transactional clients.
+    @Override public final ItemStack getItem(int slot) { return items.getLiveStack(slot); }
+    @Override public final ItemStack removeItem(int slot, int amount) { return items.extractItem(slot, amount, false); }
+    @Override public final ItemStack removeItemNoUpdate(int slot) { return removeItem(slot, getItem(slot).getCount()); }
+    @Override public final void setItem(int slot, ItemStack item) { items.setStackInSlot(slot, item.copyWithCount(Math.min(item.getCount(), Math.min(64, item.getMaxStackSize())))); }
+    @Override public final boolean isEmpty() { for (int i = 0; i < getContainerSize(); i++) if (!getItem(i).isEmpty()) return false; return true; }
+    @Override public final void clearContent() { for (int i = 0; i < getContainerSize(); i++) items.setStackInSlot(i, ItemStack.EMPTY); }
+    @Override public final boolean stillValid(Player player) { return isPlayerAccessible(player); }
+    @Override public final boolean canPlaceItem(int slot, ItemStack item) { return isItemValidForSlot(slot, item); }
+    @Override public final int[] getSlotsForFace(Direction side) { return java.util.stream.IntStream.range(0, getContainerSize()).toArray(); }
+    @Override public final boolean canPlaceItemThroughFace(int slot, ItemStack item, Direction side) { return isItemValidForSlot(slot, item); }
+    @Override public final boolean canTakeItemThroughFace(int slot, ItemStack item, Direction side) { return canExtractItem(slot, item); }
+    public abstract boolean isItemValidForSlot(int slot, ItemStack item);
+    public abstract boolean canExtractItem(int slot, ItemStack item);
+    @Override public final boolean hasAnInventory() { return true; }
+    @Override public final boolean hasATank() { return true; }
+    @Override protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        TagValueOutput nested = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess());
-        itemHandler.serialize(nested);
-        output.store("ItemsRaw", CompoundTag.CODEC, nested.buildResult());
+        items.serialize(output.child("Inventory"));
     }
-
-    @Override
-    protected void loadAdditional(ValueInput input) {
+    @Override protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        itemHandler = new ManagedItemHandler(getContainerSize()) {
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();
-            }
-        };
-        Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
-        if (raw.isPresent()) {
-            ValueInput nested = TagValueInput.create(ProblemReporter.DISCARDING, this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
-            itemHandler.deserialize(nested);
-        }
+        // Keep the handler identity and the caller's registry context, including detached loads.
+        items.deserialize(input.child("Inventory").orElseGet(() -> input.childOrEmpty("ItemsRaw")));
     }
-
-    @Override
-    public int getCapacity() {
-        return 0;
-    }
-
-    @Override
-    public Fluid getInputFluid() {
-        return null;
-    }
-
-    @Override
-    public boolean canReceiveFrom(Direction from) {
-        return false;
-    }
-
-    /**
-     * A more accurate way of checking if the machine has an inventory than just instanceof Container.
-     */
-    @Override
-    public boolean hasAnInventory() {
-        return false;
-    }
-
-    /**
-     * A more accurate way of checking if the machine interfaces with pipes than just instanceof IFluidHandler.
-     */
-    @Override
-    public boolean hasATank() {
-        return false;
-    }
-
 }

@@ -12,6 +12,7 @@ import reika.rotarycraft.RotaryCraft;
 
 /** Common integration tags preserve V33a's oil/bioethanol/biofuel names without requiring those mods. */
 public class RoCFluidTagsProvider extends FluidTagsProvider {
+    public static final TagKey<Fluid> ROCKET_FUEL = common("rocket_fuel");
     public static final TagKey<Fluid> FUEL = common("fuel");
     public static final TagKey<Fluid> TURBOFUEL = common("turbofuel");
     public static final TagKey<Fluid> KEROSENE = common("kerosene");
@@ -25,6 +26,7 @@ public class RoCFluidTagsProvider extends FluidTagsProvider {
         tag(FUEL).addOptional(key("buildcraftenergy", "fuel")).addOptional(key("buildcraft", "fuel"));
         // SATISFORESTRY-PORT: its modern fluid registration opts into this tag; preserve the V33a turbofuel bonus.
         tag(TURBOFUEL);
+        tag(ROCKET_FUEL); // Optional rocket-fuel integrations opt in through this tag.
         tag(KEROSENE); // Optional integrations supply their registered kerosene fluids through this common tag.
         tag(OIL).addOptional(key("buildcraftenergy", "oil")).addOptional(key("buildcraft", "oil"));
         tag(BIOETHANOL).addOptional(key("forestry", "bioethanol"));

@@ -78,13 +78,8 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
 	}*/
 
     public void use(ItemStack is, int amount) {
-        int newFuel = this.getFuel(is) - amount;
-        if (newFuel < 0)
-            newFuel = 0;
-
-        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() == null)
-            ReikaItemHelper.setStackTag(is, new CompoundTag());
-        this.setFuel(is, this.getCurrentFluid(is).defaultFluidState(), newFuel);
+        if (amount <= 0) return;
+        this.setFuel(is, this.getCurrentFluid(is), Math.max(0, this.getFuel(is) - amount));
     }
 
 //    todo @Override
@@ -281,17 +276,13 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
     }
 
     @Override
-    public boolean isValidFluid(FluidStack f, ItemStack is) {
-        Fluid f2 = this.getCurrentFluid(is);
-        if (f2 != null && !f.equals(f2))
-            return false;
-        if (f.getFluid().equals(RotaryFluids.JET_FUEL.get()))
-            return true;
-//     todo   if (f.equals(Fluids.getFluid("rocket fuel")))
-//            return true;
-        if (f.getFluid().equals(RotaryFluids.ETHANOL.get()))
-            return !ConfigRegistry.JETFUELPACK.getState();
-        return false;
+    public boolean isValidFluid(FluidStack fluid, ItemStack stack) {
+        if (fluid == null || fluid.isEmpty()) return false;
+        Fluid current = this.getCurrentFluid(stack);
+        if (current != null && current != fluid.getFluid()) return false;
+        return fluid.getFluid() == RotaryFluids.JET_FUEL.get()
+                || fluid.is(reika.rotarycraft.data.RoCFluidTagsProvider.ROCKET_FUEL)
+                || fluid.getFluid() == RotaryFluids.ETHANOL.get() && !ConfigRegistry.JETFUELPACK.getState();
     }
 	/*
 	@Override
@@ -314,49 +305,30 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
         return this.getFuel(is);
     }
 
-    private void setFuel(ItemStack is, FluidState f, int amt) {
-        ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("fuel", amt));
-        if (amt > 0) {
-            ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(), new FluidStack(f.getType(), 0));
-        } else {
-            ReikaNBTHelper.writeFluidToNBT(is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag(), null);
-        }
+    private void setFuel(ItemStack stack, Fluid fluid, int amount) {
+        ReikaItemHelper.updateStackTag(stack, tag -> {
+            tag.putInt("fuel", amount);
+            if (amount > 0) ReikaNBTHelper.writeFluidToNBT(tag, new FluidStack(fluid, 1));
+            else tag.remove("fluid");
+        });
+    }
+
+    /** Convenience for callers supplying a bucket of jet fuel. */
+    public int addFluid(ItemStack stack) {
+        return addFluid(stack, new FluidStack(RotaryFluids.JET_FUEL.get(), 1000), 1000);
     }
 
     @Override
-    public int addFluid(ItemStack is) {
-        // Called by the filling station to top the pack up; adds jet fuel up to capacity and
-        // returns how much was actually added (the station drains that from its tank).
-        int cap = this.getCapacity(is);
-        int cur = this.getCurrentFillLevel(is);
-        if (cur >= cap)
-            return 0;
-        int add = Math.min(cap - cur, 1000);
-        this.setFuel(is, RotaryFluids.JET_FUEL.get().defaultFluidState(), cur + add);
-        return add;
+    public int addFluid(ItemStack stack, FluidStack fluid, int amount) {
+        if (amount <= 0 || !isValidFluid(fluid, stack)) return 0;
+        int added = Math.min(amount, Math.max(0, getCapacity(stack) - getCurrentFillLevel(stack)));
+        if (added > 0) setFuel(stack, fluid.getFluid(), getCurrentFillLevel(stack) + added);
+        return added;
     }
 
-//    @Override
-    public int addFluid(ItemStack is, FluidState f, int amt) { //todo add fluid for jetpack
-        if (f == null || !this.isValidFluid(new FluidStack(f.getType(), 0), is))
-            return 0;
-        CompoundTag nbt = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (nbt == null) {
-            ReikaItemHelper.setStackTag(is, new CompoundTag());
-            this.setFuel(is, f, amt);
-            return amt;
-        } else {
-            int cap = this.getCapacity(is);
-            int cur = nbt.getIntOr("fuel", 0);
-            int sum = cur + amt;
-            if (sum > cap) {
-                this.setFuel(is, f, cap);
-                return cap - cur;
-            } else {
-                this.setFuel(is, f, sum);
-                return amt;
-            }
-        }
+    /** Retains the worktable's fluid-state call contract. */
+    public int addFluid(ItemStack stack, FluidState fluid, int amount) {
+        return fluid == null ? 0 : addFluid(stack, new FluidStack(fluid.getType(), 1), amount);
     }
 
     @Override
@@ -397,11 +369,11 @@ public class ItemJetPack extends ItemRotaryArmor implements Fillable {
     }
 
     @Override
-    public Fluid getCurrentFluid(ItemStack is) {
-        // The pack only ever runs on jet fuel; the NBT just tracks the amount ("fuel"), so the
-        // fluid is implied rather than serialized (the previous NBT round-trip never wrote it,
-        // which reset the pack to empty every tick).
-        return this.getCurrentFillLevel(is) > 0 ? RotaryFluids.JET_FUEL.get() : null;
+    public Fluid getCurrentFluid(ItemStack stack) {
+        if (getCurrentFillLevel(stack) <= 0) return null;
+        FluidStack stored = ReikaNBTHelper.getFluidFromNBT(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag());
+        // Earlier port builds wrote only the fuel amount. Preserve those existing packs.
+        return stored.isEmpty() ? RotaryFluids.JET_FUEL.get() : stored.getFluid();
     }
 
     public boolean isJetFueled(ItemStack is) {

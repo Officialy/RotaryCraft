@@ -292,3 +292,39 @@ CCTV, Compressor, Defoliator, Display, Electric Motor, Flame Turret, Generator, 
 Pile Driver, Pneumatic Engine, Portal Shaft, Projector, Screen, Sonic Weapon and Spy Cam.
 Client visual/sound checks, real client/server joining, release-jar play and third-party
 fuel/space-mod adapters are not established by the headless checks.
+
+## Filling Station survival fix (2026-10-01)
+
+The reported inability to insert a jetpack came from the single-tank inventory base lacking
+HasItemHandler. CoreContainer consequently omitted all four machine slots. The base now
+provides a complete live Container bridge, transactional item capabilities, separate manual
+and automated extraction permissions, and stable inventory identity across detached loads.
+Legacy ItemsRaw saves remain readable with the loading caller's registry context.
+
+- Mouse insertion/retrieval and shift-click from either player inventory or the worn chest
+  slot work. DragonAPI's ArmorSlot accepts nonempty armor in its correct equipment slot.
+  Active packs remain manually retrievable; automation extracts only finished output.
+- Restore horizontal shaft input, the 1024 W gate, and V33a's 4 * floor(log2(omega)) mB/tick
+  fill rate. Transfers are bounded by available tank fluid and remaining item capacity.
+  Full items output even when the tank is empty; occupied outputs retain the active item.
+- Restore ethanol crystals at 1000 mB each and general filled-container draining, including
+  transactional empty-container remainders and whole-container tank backpressure. Fluid enters
+  through every side except the bottom, which is extraction-only.
+- Restore explicit fluid/amount arguments to Fillable. Jetpacks and integrated gear upgrades
+  compare fluid identity and persist actual fluid type along with quantity. Packs retain ethanol,
+  reject mixing, consume their final fuel safely and preserve upgrades. Amount-only legacy
+  jetpacks retain their previous implied jet fuel. Integrated gears preserve their ratio and
+  lubricant/nitrogen mode. The generated c:rocket_fuel tag preserves optional fuel integration.
+- Thirty-six functional tests cover GUI clicks, inventory/armor transfers, all four shaft
+  directions, all three jetpacks, speed/power gates, the last tank millibuckets, crystals,
+  general buckets, backpressure, mixed fuels, both gear fluids, stack limits, comparators,
+  fluid/item rollback and commit, real hoppers, detached and legacy saves, legacy packs,
+  upgrade-preserving consumption, invalid API requests, rocket-fuel tagging, and exactly-once
+  survival/command-removal drops. The foreign rocket-fuel substitution is test-only.
+
+Validation: 415/415 full RotaryCraft GameTests and 11/11 JUnit checks pass; datagen and release
+build pass. Jar inspection verifies the station recipe/models/loot, machine mining/motion tags,
+all three jetpack chest-armor tags and exclusion of foreign-fluid fixtures. Logs are
+build/filling-station-datagen.log, build/filling-station-focused.log and
+build/filling-station-final-validation.log. Client visuals and a real networked join remain
+unverified by this headless suite. Deploy the updated RotaryCraft and DragonAPI jars together.

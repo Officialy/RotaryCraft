@@ -36,7 +36,7 @@ public class GuiFillingStation extends GuiPowerOnlyMachine<BlockEntityFillingSta
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
 
-        if (!fillingStation.isEmpty()) {
+        if (fillingStation.getFluidLevel() > 0) {
             int h = fillingStation.getLiquidScaled(66);
             graphics.fill(j + 82, k + 87 - h, j + 94, k + 87, FUEL_COLOR);
         }

@@ -98,7 +98,7 @@ public abstract class PoweredLiquidInOut extends PoweredLiquidBase implements Pi
         tank.writeToNBT(tag);
     }
 
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return tank.isEmpty();
     }
 

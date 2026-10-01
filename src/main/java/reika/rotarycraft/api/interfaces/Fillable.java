@@ -34,9 +34,10 @@ public interface Fillable {
     int getCurrentFillLevel(ItemStack is);
 
     /**
-     * This adds fluid to the item and returns how much was successfully added.
+     * Adds at most {@code amount} millibuckets of the supplied fluid and returns the amount
+     * accepted. The caller owns the source and must bound the request by its available fluid.
      */
-    int addFluid(ItemStack is);
+    int addFluid(ItemStack is, FluidStack fluid, int amount);
 
     boolean isFull(ItemStack is);
 
