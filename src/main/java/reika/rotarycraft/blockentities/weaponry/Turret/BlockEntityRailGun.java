@@ -135,7 +135,7 @@ public class BlockEntityRailGun extends BlockEntityInventoriedCannon {
         if (slot < 0)
             return;
         ReikaInventoryHelper.decrStack(slot, itemHandler);
-        int pw = Math.max(1, (int) ReikaMathLibrary.logbase2(Math.max(1, torque)));
+        int pw = Math.max(1, ReikaMathLibrary.logbase2(Math.max(1, torque)));
         BlockPos vpos = BlockPos.containing(xyz[0], xyz[1], xyz[2]);
         world.addFreshEntity(new EntityRailGunShot(world, worldPosition, vpos, this, pw));
     }

@@ -311,7 +311,7 @@ public class BlockEntityGearbox extends BlockEntity1DTransmitter implements Pipe
             if (tank.isEmpty()) {
                 if (!world.isClientSide() && damage < MAX_DAMAGE && DragonAPI.rand.nextInt(40) == 0 && this.tickcount >= 100) {
                     damage++;
-//                    RotaryAdvancements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
+            reika.rotarycraft.registry.RotaryAdvancements.DAMAGEGEARS.triggerAchievement(this.getPlacer());
                 }
                 if (DragonAPI.rand.nextDouble() * DragonAPI.rand.nextDouble() > this.getDamagedPowerFactor()) {
                     if (type.material.isFlammable() && !world.isClientSide())

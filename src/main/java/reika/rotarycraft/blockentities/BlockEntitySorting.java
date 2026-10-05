@@ -332,36 +332,30 @@ public class BlockEntitySorting extends BlockEntityPowerReceiver {
 
     }
 
-    private static class EntityItemCallback implements ItemCallback {
-
-        private final ItemEntity item;
-
-        private EntityItemCallback(ItemEntity ei) {
-            item = ei;
-        }
+    private record EntityItemCallback(ItemEntity item) implements ItemCallback {
 
         @Override
-        public void destroy() {
-            // 1.21.5: Entity#kill() now requires a ServerLevel argument.
-            if (item.level() instanceof ServerLevel sl) item.kill(sl);
-        }
-		/*
-		@Override
-		public int getSize() {
-			return item.getEntityItem().getCount();
-		}
+            public void destroy() {
+                // 1.21.5: Entity#kill() now requires a ServerLevel argument.
+                if (item.level() instanceof ServerLevel sl) item.kill(sl);
+            }
+            /*
+            @Override
+            public int getSize() {
+                return item.getEntityItem().getCount();
+            }
 
-		@Override
-		public void incrementSize(int amt) {
-			item.getEntityItem().getCount() += amt;
-		}
-		 */
+            @Override
+            public void incrementSize(int amt) {
+                item.getEntityItem().getCount() += amt;
+            }
+             */
 
-        @Override
-        public ItemStack getStack() {
-            return item.getItem();
+            @Override
+            public ItemStack getStack() {
+                return item.getItem();
+            }
         }
-    }
 
     private static class InventoryItemCallback implements ItemCallback {
 

@@ -1,12 +1,10 @@
 package reika.rotarycraft.blockentities;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.nbt.CompoundTag;
+import reika.dragonapi.base.OneSlotMachine;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -20,7 +18,7 @@ import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.SoundRegistry;
 
-public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implements RangedEffect {
+public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implements RangedEffect, OneSlotMachine {
 
     public int  soundDelay = -1;
     private int unwindTick = 0;
@@ -37,14 +35,16 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     /* --------------------------------------------------------------------- */
     /*  State helpers                                                        */
     /* --------------------------------------------------------------------- */
+    public boolean checkValidCoil() { return hasCoil(); }
+
     public boolean isAlarming()        { return isAlarm; }
     public boolean lowBattery()        {
-        return hasCoil() && itemHandler.getStackInSlot(0).getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("power", 0) <= 8;
+        return hasCoil() && getCharge(itemHandler.getStackInSlot(0)) <= 8;
     }
     public int     getRange()          {
         if (!hasCoil()) return 0;
-        int dmg = itemHandler.getStackInSlot(0).getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("power", 0);
-        int val = (int) ReikaMathLibrary.logbase(dmg * dmg, 2);
+        int dmg = getCharge(itemHandler.getStackInSlot(0));
+        int val = (int) ReikaMathLibrary.logbase((long) dmg * dmg, 2);
         return Math.min(val, 8);
     }
 
@@ -54,6 +54,7 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     @Override
     public void updateEntity(Level world, BlockPos pos) {
         /* 26.1-lifecycle */ super.updateEntity(); // 26.1: drive BlockEntityBase lifecycle (ticksExisted++, onFirstTick → recompute/sync). Without this, BE never ages and onFirstTick never fires.
+        if (world.isClientSide()) return;
         tickcount++;
         unwindTick++;
 
@@ -76,9 +77,6 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
         if (tickcount >= soundDelay && soundDelay != -1) {
             tickcount = 0;
             SoundRegistry.SMOKE.playSoundAtBlock(world, pos, 0.1F, 1);
-            world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(),
-                    SoundEvents.AMETHYST_BLOCK_CHIME,
-                    SoundSource.BLOCKS, 1, 1, false);
         }
     }
 
@@ -127,6 +125,14 @@ public class BlockEntitySmokeDetector extends BlockEntitySpringPowered implement
     /* --------------------------------------------------------------------- */
     /*  Misc overrides                                                       */
     /* --------------------------------------------------------------------- */
+    @Override protected void writeSyncTag(CompoundTag tag) {
+        super.writeSyncTag(tag); tag.putBoolean("alarm", isAlarm); tag.putBoolean("lowBattery", isLowBatt);
+        tag.putInt("unwindTick", unwindTick); tag.putInt("soundDelay", soundDelay);
+    }
+    @Override protected void readSyncTag(CompoundTag tag) {
+        super.readSyncTag(tag); isAlarm = tag.getBooleanOr("alarm", false); isLowBatt = tag.getBooleanOr("lowBattery", false);
+        unwindTick = Math.clamp(tag.getIntOr("unwindTick", 0), 0, 19199); soundDelay = tag.getIntOr("soundDelay", -1);
+    }
     @Override protected void animateWithTick(Level level, BlockPos pos) {}
     @Override public boolean hasModelTransparency()    { return false; }
     @Override public Block getBlockEntityBlockID()     { return RotaryBlocks.SMOKE_DETECTOR.get(); }

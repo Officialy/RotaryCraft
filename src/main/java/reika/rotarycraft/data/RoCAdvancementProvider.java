@@ -6,8 +6,6 @@ import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.ImpossibleTrigger;
-import net.minecraft.advancements.triggers.InventoryChangeTrigger;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
@@ -30,7 +28,7 @@ import java.util.Set;
 /**
  * Generates {@code data/rotarycraft/advancement/<name>.json} for each {@link RotaryAdvancements}
  * entry. "Obtain X" advancements use an inventory_changed (has-item) criterion so they grant
- * naturally; "do X" advancements (the {@link #CODE_TRIGGERED} set) use an impossible criterion and
+ * naturally; "do X" advancements (the gameplay-triggered set) use an impossible criterion and
  * are granted from code via {@link RotaryAdvancements#triggerAchievement}. The single root is
  * MAKESTEEL; dependency-less entries hang off it so the whole set forms one tab.
  */
@@ -46,10 +44,12 @@ public class RoCAdvancementProvider extends AdvancementProvider {
             super(output);
         }
 
-        private static final Set<RotaryAdvancements> CODE_TRIGGERED = EnumSet.of(
-                RotaryAdvancements.RECYCLE, RotaryAdvancements.JETENGINE, RotaryAdvancements.SUCKEDINTOJET,
-                RotaryAdvancements.JETCHICKEN, RotaryAdvancements.JETFAIL, RotaryAdvancements.FLOODLIGHT,
-                RotaryAdvancements.LANDMINE, RotaryAdvancements.OVERPRESSURE, RotaryAdvancements.STEAMENGINE);
+        // Only actual item milestones use inventory criteria. Actions keep their gameplay hooks;
+        // possessing a handbook, engine, spawner or end-portal icon never proves the action happened.
+        private static final Set<RotaryAdvancements> ITEM_MILESTONES = EnumSet.of(
+                RotaryAdvancements.FAILSTEEL, RotaryAdvancements.WORKTABLE, RotaryAdvancements.PCB,
+                RotaryAdvancements.MAKERAILGUN, RotaryAdvancements.STEELSHAFT, RotaryAdvancements.CVT,
+                RotaryAdvancements.BEDROCKSHAFT, RotaryAdvancements.DIAMONDGEARS);
 
         private static final Identifier ROOT_BACKGROUND =
                 Identifier.fromNamespaceAndPath("minecraft", "textures/block/iron_block.png");
@@ -79,11 +79,10 @@ public class RoCAdvancementProvider extends AdvancementProvider {
                     }
 
                     String key = a.name().toLowerCase(Locale.ENGLISH);
-                    // A few machine blocks resolve asItem() to AIR at datagen; fall back to a
-                    // non-empty icon so the DisplayInfo / has-item criterion stays valid.
                     Item icon = a.getIconItem();
-                    boolean iconEmpty = icon == null || icon == Items.AIR;
-                    ItemLike displayIcon = iconEmpty ? Items.IRON_INGOT : icon;
+                    if (icon == null || icon == Items.AIR)
+                        throw new IllegalStateException("Missing RotaryCraft advancement icon: " + a);
+                    ItemLike displayIcon = icon;
 
                     Advancement.Builder b = Advancement.Builder.advancement();
                     if (parent != null)
@@ -95,17 +94,15 @@ public class RoCAdvancementProvider extends AdvancementProvider {
                         b.rootDisplay(displayIcon.asItem(), title, description, ROOT_BACKGROUND, type, true, true, false);
                     else
                         b.display(displayIcon.asItem(), title, description, type, true, true, false);
-                    // Code-triggered (or empty-icon) advancements use the impossible criterion;
-                    // the rest grant by obtaining the icon item.
-                    Criterion<?> crit = (CODE_TRIGGERED.contains(a) || iconEmpty)
+                    Criterion<?> crit = !ITEM_MILESTONES.contains(a)
                             ? new Criterion<>(CriteriaTriggers.IMPOSSIBLE, new ImpossibleTrigger.TriggerInstance())
-                            : InventoryChangeTrigger.TriggerInstance.hasItems(displayIcon);
+                            : RoCAdvancementsEnabled.hasItem(displayIcon);
                     b.addCriterion("trigger", crit);
                     built.put(a, b.save(this.output, "rotarycraft:" + key));
                     it.remove();
                     progressed = true;
                 }
-                if (!progressed) break; // guard against a broken dependency cycle
+                if (!progressed) throw new IllegalStateException("Cyclic RotaryCraft advancement parents: " + remaining);
             }
         }
     }

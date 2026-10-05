@@ -151,10 +151,8 @@ public class BlockEntityFertilizer extends InventoriedPowerLiquidReceiver implem
     public boolean isValidFertilizer(ItemStack is) {
         if (is.getItem() == Items.BONE_MEAL)
             return true;
-        if (is.getItem() == RotaryItems.COMPOST.get())
-            return true;
+        return is.getItem() == RotaryItems.COMPOST.get();
         // FORESTRY-PORT: forestry fertilizer.
-        return false;
     }
 
     public boolean hasFertilizer() {

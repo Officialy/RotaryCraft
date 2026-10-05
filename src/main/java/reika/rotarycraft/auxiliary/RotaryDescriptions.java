@@ -507,7 +507,11 @@ public final class RotaryDescriptions {
         addNotes(MachineRegistry.MOBRADAR, PowerReceivers.MOBRADAR.getMinPower(), PowerReceivers.MOBRADAR.getMinPower(), reika.rotarycraft.blockentities.surveying.BlockEntityMobRadar.FALLOFF);
         addNotes(MachineRegistry.TNTCANNON, PowerReceivers.TNTCANNON.getMinPower(), PowerReceivers.TNTCANNON.getMinTorque());
 //        int fudge = BlockEntitySonicWeapon.fudge;
-//        addNotes(MachineRegistry.SONICWEAPON, PowerReceivers.SONICWEAPON.getMinPower(), PowerReceivers.SONICWEAPON.getMinPower(), BlockEntitySonicWeapon.FALLOFF, BlockEntitySonicWeapon.EYEDAMAGE / fudge, BlockEntitySonicWeapon.BRAINDAMAGE / fudge, BlockEntitySonicWeapon.LUNGDAMAGE / fudge, BlockEntitySonicWeapon.LETHALVOLUME / fudge);
+        addNotes(MachineRegistry.SONICWEAPON, PowerReceivers.SONICWEAPON.getMinPower(), 16,
+                reika.rotarycraft.blockentities.weaponry.BlockEntitySonicWeapon.EYEDAMAGE,
+                reika.rotarycraft.blockentities.weaponry.BlockEntitySonicWeapon.BRAINDAMAGE,
+                reika.rotarycraft.blockentities.weaponry.BlockEntitySonicWeapon.LUNGDAMAGE,
+                reika.rotarycraft.blockentities.weaponry.BlockEntitySonicWeapon.LETHALVOLUME);
 //        addNotes(MachineRegistry.FORCEFIELD, PowerReceivers.FORCEFIELD.getMinPower(), PowerReceivers.FORCEFIELD.getMinPower(), BlockEntityForceField.FALLOFF);
         addNotes(MachineRegistry.MUSICBOX, BlockEntityMusicBox.LOOPPOWER);
         addNotes(MachineRegistry.MOBHARVESTER, PowerReceivers.MOBHARVESTER.getMinPower(), PowerReceivers.MOBHARVESTER.getMinPower() * 2);
@@ -547,7 +551,7 @@ public final class RotaryDescriptions {
 //        addNotes(MachineRegistry.SONICBORER, PowerReceivers.SONICBORER.getMinPower(), PowerReceivers.SONICBORER.getMinTorque());
 //        addNotes(MachineRegistry.FILLINGSTATION, PowerReceivers.FILLINGSTATION.getMinPower());
 //        addNotes(MachineRegistry.SORTING, PowerReceivers.SORTING.getMinPower());
-//        addNotes(MachineRegistry.DEFOLIATOR, PowerReceivers.DEFOLIATOR.getMinPower());
+        addNotes(MachineRegistry.DEFOLIATOR, PowerReceivers.DEFOLIATOR.getMinPower());
         addNotes(MachineRegistry.BIGFURNACE, PowerReceivers.BIGFURNACE.getMinPower());
         addNotes(MachineRegistry.DISTILLER, "Conversions require compatible oil, bioethanol or biofuel fluids; see JEI for loaded recipes.");
 //        addNotes(MachineRegistry.CRYSTALLIZER, PowerReceivers.CRYSTALLIZER.getMinPower(), PowerReceivers.CRYSTALLIZER.getMinSpeed());

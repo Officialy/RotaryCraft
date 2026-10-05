@@ -120,6 +120,12 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.HSLA_STEEL_SPRING.get());
             event.accept(RotaryItems.TUNGSTEN_ALLOY_SPRING.get());
             event.accept(RotaryItems.BEDROCK_ALLOY_SPRING.get());
+            for (var spring : java.util.List.of(RotaryItems.HSLA_STEEL_SPRING, RotaryItems.BEDROCK_ALLOY_SPRING)) {
+                for (int charge = 1; charge <= 32000; charge *= 2) {
+                    var stack = new ItemStack(spring.get()); reika.rotarycraft.items.ItemCoil.setCharge(stack, charge); event.accept(stack);
+                }
+                var stack = new ItemStack(spring.get()); reika.rotarycraft.items.ItemCoil.setCharge(stack, 30000); event.accept(stack);
+            }
             event.accept(RotaryItems.HEAT_RAY_BARREL.get());
             event.accept(RotaryItems.HEAT_RAY_CORE.get());
             event.accept(RotaryItems.BELT.get());
@@ -276,6 +282,7 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.TILE_SELECTOR.get());
             event.accept(RotaryItems.HANDHELD_CRAFTING_TABLE.get());
             event.accept(RotaryItems.ULTRASOUND.get());
+            ItemStack motion = new ItemStack(RotaryItems.MOTION.get()); motion.setDamageValue(32000); event.accept(motion);
             event.accept(RotaryItems.SCREWDRIVER.get());
             event.accept(RotaryItems.HANDBOOK.get());
             event.accept(RotaryItems.INTEGRATED_GEARBOX.get());

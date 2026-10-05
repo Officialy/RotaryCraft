@@ -9,13 +9,7 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
@@ -422,7 +416,7 @@ public class BlockEntityItemFilter extends InventoriedPowerReceiver implements M
 			if (is.getItem() != itemID || is.getDamageValue() != metadata)
 				return false;
 			CompoundTag n = getComponentNBT(is, provider);
-			return n == null ? nbt == null : n.equals(nbt);
+			return Objects.equals(n, nbt);
 		}
 
 		private Collection<String> calcClasses(Item item) {
@@ -765,8 +759,7 @@ public class BlockEntityItemFilter extends InventoriedPowerReceiver implements M
 					if (doCheckNBT == MatchType.MISMATCH)
 						return true;
 				}
-				if (nbt != null && isNBT != null && !this.tryMatchNBT(isNBT, nbt, matchNBT))
-					return false;
+                return nbt == null || isNBT == null || this.tryMatchNBT(isNBT, nbt, matchNBT);
 			}
 			return true;
 		}

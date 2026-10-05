@@ -317,6 +317,8 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
     // --- digging -------------------------------------------------------------
 
     private void dig(Level world, BlockPos pos) {
+        if (step == 1)
+            reika.rotarycraft.registry.RotaryAdvancements.BORER.triggerAchievement(this.getPlacer());
         this.support(world, pos);
         BlockMiningPipe pipeBlock = (BlockMiningPipe) RotaryBlocks.MININGPIPE.get();
         Direction.Axis boreAxis = this.getFacing().getAxis();
@@ -371,6 +373,9 @@ public class BlockEntityBorer extends BlockEntityBeamMachine implements Enchanta
 
     /** Break {@code p}, routing drops to an adjacent chest or the world. Returns false to skip it. */
     private boolean dropBlocks(Level world, BlockPos pos, BlockPos p, BlockState bs) {
+        var blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(bs.getBlock());
+        if (blockId.getNamespace().equals("twilightforest") && blockId.getPath().startsWith("mazestone"))
+            reika.rotarycraft.registry.RotaryAdvancements.CUTKNOT.triggerAchievement(this.getPlacer());
         if (bs.is(Blocks.BEDROCK) || bs.is(Blocks.END_PORTAL_FRAME))
             return false;
         if (world instanceof ServerLevel server) {

@@ -36,9 +36,9 @@ public abstract class GuiPowerOnlyMachine<E extends RotaryCraftBlockEntity, T ex
         stack.blit(RenderPipelines.GUI_TEXTURED, POWER_ONLY, imageWidth + var5, var6 + 4, 0, 4, 42, 24, 256, 256);
         stack.blit(RenderPipelines.GUI_TEXTURED, POWER_ONLY, imageWidth + var5, var6 + 4 + 23, 0, 157, 42, 6, 256, 256);
 
-        long frac = (pwr.power * 29L) / pwr.MINPOWER;
-        if (frac > 29)
-            frac = 29;
+        // Clamp before scaling: high-torque machines can exceed Long.MAX_VALUE / 29.
+        int frac = pwr.power <= 0 ? 0 : pwr.MINPOWER <= 0 || pwr.power >= pwr.MINPOWER ? 29
+                : (int)(29D * pwr.power / pwr.MINPOWER);
         stack.blit(RenderPipelines.GUI_TEXTURED, POWER_ONLY, imageWidth + var5 + 5, imageHeight + var6 - 53 - (imageHeight - 75), 0, 0, (int) frac, 4, 256, 256);
 
         ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, minecraft.font, "Power:", imageWidth + var5 + 20, var6 + 9, 0xff000000);

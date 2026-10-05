@@ -31,44 +31,14 @@ import reika.rotarycraft.auxiliary.ModDependency;
 import reika.rotarycraft.auxiliary.interfaces.*;
 import reika.rotarycraft.base.blockentity.*;
 import reika.rotarycraft.blockentities.*;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityCoolingFin;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityPipePump;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityFurnaceHeater;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
+import reika.rotarycraft.blockentities.auxiliary.*;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import reika.rotarycraft.blockentities.decorative.BlockEntityParticleEmitter;
 import reika.rotarycraft.blockentities.engine.*;
-import reika.rotarycraft.blockentities.farming.BlockEntityComposter;
-import reika.rotarycraft.blockentities.farming.BlockEntityGroundHydrator;
-import reika.rotarycraft.blockentities.farming.BlockEntityFan;
-import reika.rotarycraft.blockentities.farming.BlockEntityMobHarvester;
-import reika.rotarycraft.blockentities.farming.BlockEntitySprinkler;
-import reika.rotarycraft.blockentities.farming.BlockEntityWoodcutter;
-import reika.rotarycraft.blockentities.processing.BlockEntityCompactor;
-import reika.rotarycraft.blockentities.processing.BlockEntityPurifier;
-import reika.rotarycraft.blockentities.processing.BlockEntityDropProcessor;
-import reika.rotarycraft.blockentities.farming.BlockEntityAutoBreeder;
-import reika.rotarycraft.blockentities.processing.BlockEntityCrystallizer;
-import reika.rotarycraft.blockentities.farming.BlockEntityFertilizer;
-import reika.rotarycraft.blockentities.farming.BlockEntityLawnSprinkler;
-import reika.rotarycraft.blockentities.transmission.BlockEntityBeltHub;
-import reika.rotarycraft.blockentities.transmission.BlockEntitySplitBelt;
-import reika.rotarycraft.blockentities.transmission.BlockEntityChainDrive;
-import reika.rotarycraft.blockentities.auxiliary.BlockEntityEngineController;
-import reika.rotarycraft.blockentities.farming.BlockEntitySpawnerController;
-import reika.rotarycraft.blockentities.processing.BlockEntityWetter;
-import reika.rotarycraft.blockentities.processing.BlockEntityDryingBed;
+import reika.rotarycraft.blockentities.farming.*;
 import reika.rotarycraft.blockentities.level.*;
 import reika.rotarycraft.blockentities.piping.*;
-import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
-import reika.rotarycraft.blockentities.processing.BlockEntityLavaMaker;
-import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
-import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
-import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
-import reika.rotarycraft.blockentities.processing.BlockEntityMagnetizer;
-import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
+import reika.rotarycraft.blockentities.processing.*;
 import reika.rotarycraft.blockentities.production.*;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest;
@@ -82,7 +52,6 @@ import reika.rotarycraft.modinterface.conversion.BlockEntitySteam;
 import reika.rotarycraft.modinterface.conversion.TileEntityDynamo;
 
 import java.util.Locale;
-import java.util.function.Function;
 
 /**
  * ONLY ADD NEW MACHINES TO THE BOTTOM OF THIS LIST
@@ -261,7 +230,9 @@ public enum MachineRegistry implements TileEnum {
     CHUNKLOADER("machine.chunkloader", RotaryBlocks.CHUNK_LOADER.get(), reika.rotarycraft.blockentities.BlockEntityChunkLoader.class),
     FUELENHANCER(true, "machine.fuelenhancer", RotaryBlocks.FUEL_ENHANCER.get(), reika.rotarycraft.blockentities.processing.BlockEntityFuelConverter.class),
     FUELENGINE(true, "machine.fuelengine", RotaryBlocks.FUEL_ENGINE.get(), reika.rotarycraft.modinterface.TileEntityFuelEngine.class),
-    MOBRADAR(true, "machine.mobradar", RotaryBlocks.MOB_RADAR.get(), reika.rotarycraft.blockentities.surveying.BlockEntityMobRadar.class);
+    MOBRADAR(true, "machine.mobradar", RotaryBlocks.MOB_RADAR.get(), reika.rotarycraft.blockentities.surveying.BlockEntityMobRadar.class),
+    SONICWEAPON(true, "machine.sonicweapon", RotaryBlocks.SONIC_WEAPON.get(), reika.rotarycraft.blockentities.weaponry.BlockEntitySonicWeapon.class),
+    DEFOLIATOR(true, "machine.defoliator", RotaryBlocks.DEFOLIATOR.get(), reika.rotarycraft.blockentities.level.BlockEntityDefoliator.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
@@ -579,8 +550,8 @@ public enum MachineRegistry implements TileEnum {
 //            return 0.5F;
 //        if (this == FERTILIZER)
 //            return 0.875F;
-//        if (this == DEFOLIATOR)
-//            return 0.625F;
+        if (this == DEFOLIATOR)
+            return 0.625F;
 //        if (this == LAWNSPRINKLER)
 //            return 0.75F;
         if (this == GRINDSTONE)

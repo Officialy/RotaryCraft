@@ -57,7 +57,7 @@ public class PacketHandlerCore implements PacketHandler {
      * dereferences the tile, so a null one means its machine is gone and the packet is dropped.
      */
     private static final EnumSet<PacketRegistry> NO_TILE_NEEDED = EnumSet.of(
-            PacketRegistry.FERTILIZER, PacketRegistry.FRIDGEBREAK, PacketRegistry.GRAVELGUN,
+            PacketRegistry.FERTILIZER, PacketRegistry.FRIDGEBREAK, PacketRegistry.GRAVELGUN, PacketRegistry.DEFOLIATOR,
             PacketRegistry.MUSICPARTICLE, PacketRegistry.SLIDE, PacketRegistry.SPARKLOC,
             PacketRegistry.CRAFTPATTERNMODE, PacketRegistry.CRAFTPATTERNLIMIT);
 
@@ -355,14 +355,15 @@ public class PacketHandlerCore implements PacketHandler {
                         ((BlockEntityTNTCannon) cannon).selectedFuse = data[4];
                     }
                     break;
-                }/*
-                case SONICPITCH:
-                    ((BlockEntitySonicWeapon) te).setpitch = longdata;
+                }
+                case SONICPITCH, SONICVOLUME: {
+                    if (te instanceof reika.rotarycraft.blockentities.weaponry.BlockEntitySonicWeapon sonic
+                            && ep.containerMenu instanceof reika.rotarycraft.gui.container.machine.ContainerSonic menu
+                            && menu.tile == sonic)
+                        menu.setValue(ep, pack == PacketRegistry.SONICPITCH, longdata);
                     break;
-                case SONICVOLUME:
-                    ((BlockEntitySonicWeapon) te).setvolume = longdata;
-                    break;
-                case FORCE:
+                }
+                /*case FORCE:
                     ((BlockEntityForceField) te).setRange = data[0];
                     break;*/
                 case CHEST: {
@@ -415,9 +416,12 @@ public class PacketHandlerCore implements PacketHandler {
 //                    ((BlockEntityVacuum) te).spawnXP();
 //                    break;
                 case WINDERTOGGLE:
-                    BlockEntityWinder winder = (BlockEntityWinder) te;
-                    winder.winding = !winder.winding;
-                    winder.iotick = 512;
+                    if (!world.isClientSide() && te instanceof BlockEntityWinder winder
+                            && ep.containerMenu instanceof reika.rotarycraft.gui.container.machine.inventory.WinderContainer menu
+                            && menu.tile == winder && menu.stillValid(ep)) {
+                        winder.winding = !winder.winding; winder.iotick = 512;
+                        winder.setChanged(); winder.syncAllData(false);
+                    }
                     break;
 //                case PROJECTOR:
 //                    ((BlockEntityProjector) te).cycleInv();
@@ -490,9 +494,10 @@ public class PacketHandlerCore implements PacketHandler {
                 case BLOWEROREDICT:
                     ((BlockEntityBlower) te).useOreDict = !((BlockEntityBlower) te).useOreDict;
                     break;
-//                case DEFOLIATOR:
-//                    ((BlockEntityDefoliator) te).onBlockBreak(world, data[0], data[1], data[2]);
-//                    break;
+                case DEFOLIATOR:
+                    if (world.isClientSide())
+                        reika.rotarycraft.blockentities.level.BlockEntityDefoliator.onBlockBreak(world, new BlockPos(data[0], data[1], data[2]));
+                    break;
                /* case GPR:
                     BlockEntityGPR gpr = (BlockEntityGPR) te;
                     int direction = data[0];

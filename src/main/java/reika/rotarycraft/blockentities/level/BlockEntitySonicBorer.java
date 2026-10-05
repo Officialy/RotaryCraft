@@ -58,9 +58,7 @@ public class BlockEntitySonicBorer extends BlockEntityPowerReceiver implements P
             return true;
         if (bs.getDestroySpeed(world, pos) < 0) // unbreakable (bedrock, etc.)
             return false;
-        if (b instanceof LiquidBlock)
-            return false;
-        return true;
+        return !(b instanceof LiquidBlock);
     }
 
     @Override

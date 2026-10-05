@@ -429,7 +429,7 @@
         </desc>
         <note>
             Required Power: %dW
-            Range = 8+(Power-%d)/%d m
+            Range = %d m
             Blindness at: %d W/m^2
             Confusion at: %d W/m^2
             Drowning at: %d W/m^2

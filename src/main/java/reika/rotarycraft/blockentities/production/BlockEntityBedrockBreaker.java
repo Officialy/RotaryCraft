@@ -72,6 +72,9 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
         if (power < MINPOWER || torque < MINTORQUE)
             return;
 
+        if (!world.isClientSide() && this.getOperationTime() <= 1)
+            reika.rotarycraft.registry.RotaryAdvancements.INSTANTBED.triggerAchievement(this.getPlacer());
+
         if (!world.isClientSide() && tickcount >= this.getOperationTime()) {
             this.process(world, facing);
             tickcount = 0;
@@ -103,9 +106,7 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
             return false;
         // never punch through the lowest bedrock layer (the void floor) unless the pack
         // owner has explicitly enabled it — legacy guarded y==0, which is getMinY() now
-        if (head.getY() <= world.getMinY() && !ConfigRegistry.VOIDHOLE.getState())
-            return false;
-        return true;
+        return head.getY() > world.getMinY() || ConfigRegistry.VOIDHOLE.getState();
     }
 
     private void grind(Level world, BlockPos head, Direction facing) {
@@ -130,6 +131,7 @@ public class BlockEntityBedrockBreaker extends InventoriedPowerReceiver implemen
                     ItemStack dust = ReikaItemHelper.getSizedItemStack(RotaryItems.BEDROCK_DUST.get().getDefaultInstance(), this.getNumberDust(slice));
                     world.removeBlock(head, false);
                     this.outputDust(world, dust);
+                    reika.rotarycraft.registry.RotaryAdvancements.BEDROCKBREAKER.triggerAchievement(this.getPlacer());
                 }
             }
         } else if (b != Blocks.AIR.defaultBlockState().getBlock() && !state.isAir()

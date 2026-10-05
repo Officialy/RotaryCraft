@@ -113,6 +113,7 @@ public final class RotaryGameTests {
         Holder<TestEnvironmentDefinition<?>> env = event.registerEnvironment(
                 Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "default"),
                 new TestEnvironmentDefinition.AllOf(List.of()));
+        RotaryAdvancementTests.register(event, env);
 
         register(event, env, "fermenter_places", 40,
                 h -> placesAndTicks(h, RotaryBlocks.FERMENTER.get(), BlockEntityFermenter.class));
@@ -228,6 +229,9 @@ public final class RotaryGameTests {
         RotaryFuelEngineTests.register(event, env);
         RotaryFillingStationTests.register(event, env);
         RotaryMobRadarTests.register(event, env);
+        RotarySonicWeaponTests.register(event, env);
+        RotaryDefoliatorTests.register(event, env);
+        RotaryMotionTrackerTests.register(event, env);
         RotaryExtractorBalanceTests.register(event, env);
         RotaryModExtractorTests.register(event, env);
 
@@ -685,7 +689,7 @@ public final class RotaryGameTests {
         for (String id : new String[]{"reactorcraft:alloy", "reactorcraft:uranium_processor",
                 "reactorcraft:isotope_centrifuge", "reactorcraft:processor/uf6",
                 "reactorcraft:processor/lifbe", "reactorcraft:centrifuge/uf6"}) {
-            helper.assertTrue(recipes.byKey(net.minecraft.resources.ResourceKey.<Recipe<?>>create(
+            helper.assertTrue(recipes.byKey(net.minecraft.resources.ResourceKey.create(
                     Registries.RECIPE, Identifier.parse(id))).isPresent(), id + " did not load");
         }
         helper.succeed();
@@ -897,7 +901,7 @@ public final class RotaryGameTests {
     }
 
     private static void fractionatorProducesJetFuel(GameTestHelper helper) {
-        var key = net.minecraft.resources.ResourceKey.<Recipe<?>>create(Registries.RECIPE,
+        var key = net.minecraft.resources.ResourceKey.create(Registries.RECIPE,
                 Identifier.parse("rotarycraft:fractionator/jet_fuel"));
         Recipe<?> loaded = helper.getLevel().getServer().getRecipeManager().byKey(key).orElseThrow().value();
         helper.assertTrue(loaded instanceof FractionatorRecipe,
@@ -1311,7 +1315,7 @@ public final class RotaryGameTests {
     private static void registeredMachineTicks(GameTestHelper helper, MachineRegistry machine) {
         helper.setBlock(TEST_POS, machine.getBlockState());
         BlockEntity entity = helper.getLevel().getBlockEntity(helper.absolutePos(TEST_POS));
-        helper.assertTrue(entity != null && machine.getTEClass().isInstance(entity),
+        helper.assertTrue(machine.getTEClass().isInstance(entity),
                 machine + " placed " + (entity == null ? "no block entity" : entity.getClass().getSimpleName())
                         + ", expected " + machine.getTEClass().getSimpleName());
         helper.assertTrue(entity.getType().isValid(machine.getBlockState()), machine + " entity type must accept its block");

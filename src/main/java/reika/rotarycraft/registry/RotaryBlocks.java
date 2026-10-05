@@ -26,6 +26,8 @@ public class RotaryBlocks {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(RotaryCraft.MODID);
 
     public static final DeferredBlock<Block> CHUNK_LOADER = registerMachineBlock("chunk_loader", () -> new BlockChunkLoader(blockProperties()));
+    public static final DeferredBlock<Block> SONIC_WEAPON = registerMachineBlock("sonic_weapon", () -> new reika.rotarycraft.base.blocks.entity.BlockSonicWeapon(blockProperties()));
+    public static final DeferredBlock<Block> DEFOLIATOR = registerMachineBlock("defoliator", () -> new reika.rotarycraft.base.blocks.entity.BlockDefoliator(blockProperties()));
     public static final DeferredBlock<Block> MOB_RADAR = registerMachineBlock("mob_radar", () -> new BlockMobRadar(blockProperties()));
     public static final DeferredBlock<Block> GPR = registerMachineBlock("gpr", () -> new BlockGPR(blockProperties().strength(20)));
     // 1.7.10 had ONE flywheel block whose material lived in the TE, set from the placed item's

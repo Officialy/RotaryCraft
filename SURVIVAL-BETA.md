@@ -441,3 +441,140 @@ RotaryCraft JUnit 11/11. Server/client datagen and all three release builds succ
 inspection confirms 399 extractor recipes, the original model/sprite references, 89 counted
 tagged smelts, the unchanged raw rates and exclusion of GameTest-only fixture recipes/tags.
 Logs: build/mod-ore-datagen-final.log and build/mod-ore-final-validation.log.
+
+## Sonic Weapon, Motion Tracker and spring charging (2026-10-05)
+
+Restore the full V33a Sonic Weapon as an active 26.3 machine: real six-face summative
+power, original 262144 W gate, torque-limited long volume and speed-limited long pitch,
+fixed 16-block scan, inverse-square blindness/brain/lung/lethal effects, helmet/creative
+protection, hostile confusion, animal navigation, hidden silverfish host restoration/XP,
+and original sound cadence. The upstream frequency switch is disabled and breakBrick()
+contains no behavior; preserve its constants and that source behavior without inventing
+terrain destruction. Exact torque 262144 produces 99999999 volume after source integer
+rounding; lethal at the center requires torque 262145. Source handbook range text was
+stale: replace the old power formula with the actual fixed range in all six existing
+localized Sonic entries while retaining their other text.
+
+Register the block/entity/menu/handbook/model layer, native submit renderer and original
+SonicWeaponModel, item rendering, volume GUI and long-value packets. Server controls require
+the matching active menu, valid machine and nearby player. Datagen writes the exact
+psp/sts/psp HSLA-plate/sonar/turbine recipe, loot, unlock, models and mining/motion tags.
+
+Restore the Motion Tracker's half-block samples along a 128 m ray through walls, 32 m
+ordinary-mob limit, longer Wither/Dragon detection, original category colors and attack
+warnings, configurable chat clearing and one charge per scan (including creative).
+Keep scan deduplication local to the viewer and entity UUID instead of retaining the
+legacy item-singleton last-name/distance cache. Preserve stack components while consuming
+charge. Restore sprite144 byte-for-pixel from upstream Textures/Items/items.png, the exact
+sonar/radar/screen/HSLA recipe and charged creative entry. Publish the actual registered
+tracker in the motion_trackers tag; Mob Radar HUD requires its owner and a tracker in the
+original 36 main inventory slots, including an uncharged tracker. Replace the obsolete
+GameTest-only compass fixture with the real item in radar tests; no such fixture is shipped.
+
+Repair the real charging path instead of supplying fabricated tool charge:
+- Springs carry per-stack DAMAGE charge (0..32000); preserve/migrate the previous energy tag,
+  names and other data. Restore standard stiffness1/power-scale1 and bedrock stiffness16/
+  power-scale4 with unbreakability, source creative charge variants and honest tooltips.
+- Winder reads its one configured face across all six orientations, charges upward to
+  torque/stiffness capacity at the original speed cadence, retains standard spring break
+  probability, and unwinds at original 8 Nm/1024 rad/s or bedrock 32 Nm/4096 rad/s for
+  20/320 ticks per charge. Write every changed stack back, stop depleted output, provide
+  the real menu slot/shift-click, spring-only one-item transactional ports, bottom extraction,
+  survival drops, mode save/sync and guarded mode packets.
+- Worktable swaps the spring's actual charge with the tool's previous charge, outputs both
+  original component-bearing stacks in slots9/10, retains ChargeableTool.setCharged support,
+  and requires exactly two valid inputs with clear outputs.
+- Both shared inventory bases serialize through the caller's ValueInput/ValueOutput registry
+  context and retain fixed-size handler identity on load. This restores detached loading
+  without invalidating live inventory views.
+- Shared spring-powered discharge now actually decrements the copied spring. Expected lifetime
+  handles empty/creative inputs and clamps overflow. Smoke Detector reads the real spring
+  charge for low-battery/range, discharges only on the server, retains original alarms and
+  sound cadence, and saves/syncs its alarm and discharge state. Remove the invented extra
+  amethyst sound; use the source smoke alarm.
+
+Validation: 658/658 required RotaryCraft GameTests and 11/11 JUnit checks pass; the release
+build succeeds on Minecraft26.3/NeoForge26.3.0.26-beta. The two new suites contribute37
+Sonic and37 Motion/charging tests, including the complete powered Winder -> Worktable ->
+live scan path. Initial fixture failures were corrected (south-facing redstone placement,
+resource-copy ordering and obsolete compass tag). Distant boss tests explicitly load full
+chunk neighborhoods, wait for entity visibility, and release their tickets/entities afterward;
+a 6000-tick fixture timeout accommodates the headless server's fast ticks and asynchronous IO.
+Server/client datagen succeeded on retry; an initial extra-iron feature-holder serialization
+failure did not recur. The shared one-slot screen's two texture identifiers now point to the
+actual original screen resources, fixing the Winder power tab. Logs: build/sonic-focused-2.log,
+build/motion-focused.log, build/motion-range-2.log, build/sonic-motion-final.log and
+build/sonic-motion-release.log. Final jar inspection verifies the new classes, recipe/model/
+loot resources, original Sonic assets and exact V33a tracker pixels, actual tracker/mining/
+motion tags, and Winder screen assets. Twenty test-only resources are absent;102 shared
+fixture tag paths contain only the production files. Headless checks do not establish live
+client visual acceptance or a real multiplayer join.
+
+Fifteen machines remain from the owner's original missing list: Bait Box, Bundled Bus,
+CCTV, Compressor, Defoliator, Display, Electric Motor, Flame Turret, Generator, Pile Driver,
+Pneumatic Engine, Portal Shaft, Projector, Screen and Spy Cam. ChromatiCraft was excluded
+from this work as requested.
+
+
+## Defoliator full 26.3 port (2026-10-05)
+
+Restore the complete V33a Defoliator: bottom-only shaft input, 16384 W gate, original
+2*floor(sqrt(omega)) random probes, 8*log2(torque) range capped at 128, and a 4000 mB tank.
+Both poison and chlorine work through horizontal standard/bedrock pipes. Each successful
+vegetation removal costs exactly 1 mB, retains native fortune-zero loot and break feedback,
+and gives nearby living entities (including survival players) Poison IV for 50 ticks plus
+0.5 generic damage in the original block cube expanded by 3.
+
+The defoliator_targets block tag replaces removed material tests and the old mod-wood
+lookup: native log/leaf/sapling tags, optional common wood tags, and datagen classification
+of modern vegetation/vine/cactus/cane/bamboo classes, including RotaryCraft canola. Packs
+can extend this tag. Keep permission checks under the real/offline placer's identity; an
+unowned machine uses a stable RotaryCraft fake identity. Recheck block state after the
+protection event so a canceled/replaced target cannot consume chemical or yield stale loot.
+
+Potion conversion retains the source base-poison identity (ordinary bottles, including
+custom-effect/component-bearing stacks; long/strong/splash/lingering variants are invalid),
+1000 mB per potion and one returned glass bottle. Preserve V33a insertion into either slot
+and bottle extraction from either slot, while conversion only reads slot 0 and returns to
+slot 1. Add loss prevention: reserve compatible chemical capacity and returned-bottle space
+before consuming the input. Full tanks, chlorine, full bottles or an obstructed return slot
+leave every item and fluid intact. Unpowered conversion and real hopper input/output work.
+
+Use PoweredLiquidReceiver with a native two-slot ResourceHandler inventory composition;
+this preserves the source tank semantics without the legacy inventory base's conflicting
+Container.isEmpty(). Keep inventory/fluid capability identities through detached registry-
+aware loads, transactional rollback/commit, unrestricted manual removal and bottle-only
+automated extraction. Spill and clear both slots on any server removal, exactly once.
+
+Register the block/entity/menu/handbook, original DefoliatorModel, 26.3 submit renderer,
+item model and GUI. Restore the source 0.625 block height and original rendering transform.
+Menu data carries actual fluid level and all 64 power bits; shift-click and survival
+right-click are exercised. Clamp the shared power-only GUI bar before scaling to avoid
+long overflow. Datagen supplies the exact V33a P P/SPS/BIB recipe (standard pipes, HSLA
+ingots, base panels, impeller), unlock, loot, mining/motion tags, models and tooltip text.
+The existing GUI and model textures match upstream V33a byte-for-byte.
+
+Repair the original malformed effect packet: supply all 3 target-coordinate ints, preserve
+the 64-block radius around the destroyed target, and render client-only without requiring
+a block entity at that now-air position or a loaded distant machine. Keep the 343-particle
+7x7x7 spread and original outset 2 (positions +/-2.5 around each block center); the legacy
+redstone green component 20 saturates the modern RGB24 green channel.
+
+Validation: the final target-centered packet version passes 719/719 required RotaryCraft
+GameTests and 11/11 JUnit checks, and the release build succeeds. This slice adds 60
+Defoliator checks, including ownership and integrated hopper conversion. Server/client
+datagen passed. Release inspection verifies 15 required classes/resources, the exact recipe,
+native special item model, tooltip, mining/motion tags and byte-identical V33a GUI/model
+textures. All 20 test-only resource paths are absent; all 102 shared fixture paths contain
+only production resources. Logs: build/defoliator-datagen.log, build/defoliator-focused-5.log,
+build/defoliator-full.log and build/defoliator-final.log. Artifact details:
+build/defoliator-artifact-verification.json.
+The deprecated native player helper is always creative; the new survival fixtures use
+native survival players, NeoForge configureMockConnection and markClientLoaded, remove
+players afterward, and route interaction through ServerPlayerGameMode.useItemOn.
+Live client visual acceptance and real multiplayer joins remain unverified.
+
+Fourteen machines remain from the owner's original missing list: Bait Box, Bundled Bus,
+CCTV, Compressor, Display, Electric Motor, Flame Turret, Generator, Pile Driver, Pneumatic
+Engine, Portal Shaft, Projector, Screen and Spy Cam. No ChromatiCraft files or tasks were
+part of this slice.

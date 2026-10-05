@@ -54,8 +54,8 @@ final class RotaryWorldMachineTests {
         machine.read();
         helper.assertTrue(machine.getNotesInChannel(0).size() == 1, "saved channel must reload");
         var restored = machine.getNotesInChannel(0).get(0);
-        helper.assertTrue(restored.pitch == note.pitch && restored.length == note.length
-                && restored.voice == note.voice, "saved note must retain pitch, length and instrument");
+        helper.assertTrue(restored.pitch() == note.pitch() && restored.length() == note.length()
+                && restored.voice() == note.voice(), "saved note must retain pitch, length and instrument");
         helper.getLevel().destroyBlock(helper.absolutePos(pos), true);
         helper.assertTrue(!machine.hasSavedFile(), "breaking a music box on a dedicated server must remove its score file");
         helper.succeed();

@@ -175,9 +175,7 @@ public class BlockEntityPipe extends BlockEntityPiping implements TemperatureTE,
             return false;
         if (f == RotaryFluids.LUBRICANT.get())
             return false;
-        if (f == RotaryFluids.ETHANOL.get())
-            return false;
-        return true;
+        return f != RotaryFluids.ETHANOL.get();
     }
 
     @Override

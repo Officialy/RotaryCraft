@@ -36,7 +36,10 @@ public class ContainerFermenter extends IOMachineContainer<BlockEntityFermenter>
         // original 1.7 ContainerFermenter / fermentergui.png.
         this.addSlot(te.itemHandler.slot(0, 55, 17));
         this.addSlot(te.itemHandler.slot(1, 55, 53));
-        this.addSlot(new ResultSlotItemHandler(te.itemHandler, 2, 116, 35));
+        this.addSlot(new ResultSlotItemHandler(te.itemHandler, 2, 116, 35, stack -> {
+            if (stack.is(reika.rotarycraft.registry.RotaryItems.YEAST.get()))
+                reika.rotarycraft.registry.RotaryAdvancements.MAKEYEAST.triggerAchievement(inv.player);
+        }));
 
         this.addPlayerInventory(inv);
     }

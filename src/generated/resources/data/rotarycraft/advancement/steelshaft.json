@@ -5,9 +5,12 @@
       "conditions": {
         "items": [
           {
-            "items": "rotarycraft:hsla_steel_rod"
+            "items": "rotarycraft:hsla_shaft"
           }
-        ]
+        ],
+        "player": {
+          "type": "rotarycraft:advancements_enabled"
+        }
       },
       "trigger": "minecraft:inventory_changed"
     }
@@ -17,7 +20,7 @@
       "translate": "advancements.rotarycraft.steelshaft.description"
     },
     "icon": {
-      "id": "rotarycraft:hsla_steel_rod"
+      "id": "rotarycraft:hsla_shaft"
     },
     "title": {
       "translate": "advancements.rotarycraft.steelshaft.title"

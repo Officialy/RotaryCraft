@@ -500,9 +500,9 @@ public class BlockEntityAdvancedGear extends BlockEntity1DTransmitter implements
             double rx = ReikaRandomHelper.getRandomPlusMinus(pos.getX(), r);
             double ry = ReikaRandomHelper.getRandomPlusMinus(pos.getY(), r);
             double rz = ReikaRandomHelper.getRandomPlusMinus(pos.getZ(), r);
-            world.explode(null, rx, ry, rz, 8, ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.BLOCK); //todo Explosioninteraction
+            world.explode(null, rx, ry, rz, 8, Level.ExplosionInteraction.BLOCK); //todo Explosioninteraction
         }
-        world.explode(null, pos.getX(), pos.getY(), pos.getZ(), pow, ConfigRegistry.BLOCKDAMAGE.getState() ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.BLOCK);
+        world.explode(null, pos.getX(), pos.getY(), pos.getZ(), pow, Level.ExplosionInteraction.BLOCK);
     }
 
     private void destroy(Level world, BlockPos pos) {

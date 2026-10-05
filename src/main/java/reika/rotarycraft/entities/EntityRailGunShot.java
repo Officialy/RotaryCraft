@@ -60,6 +60,12 @@ public class EntityRailGunShot extends EntityTurretShot {
     @Override
     protected void applyAttackEffectsToEntity(Level world, Entity el) {
         el.hurt(this.getDamageSource(), this.getAttackDamage());
+        if (el instanceof LivingEntity living && living.getHealth() <= 0) {
+            if (living instanceof net.minecraft.world.entity.boss.enderdragon.EnderDragon && gun != null)
+                reika.rotarycraft.registry.RotaryAdvancements.RAILDRAGON.triggerAchievement(gun.getPlacer());
+            if (living instanceof net.minecraft.world.entity.player.Player player)
+                reika.rotarycraft.registry.RotaryAdvancements.RAILKILLED.triggerAchievement(player);
+        }
     }
 
     @Override

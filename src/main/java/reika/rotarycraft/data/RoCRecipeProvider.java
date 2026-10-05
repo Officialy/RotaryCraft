@@ -142,6 +142,17 @@ public final class RoCRecipeProvider {
                     .define('g', RotaryItems.HSLA_STEEL_GEAR_2x.get()).define('p', RotaryItems.HSLA_PLATE.get())
                     .define('c', RotaryItems.CIRCUIT_BOARD.get()).pattern(" rs").pattern(" g ").pattern("pcp")
                     .unlockedBy("has_radar_unit", has(RotaryItems.RADAR_UNIT.get())).save(out);
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.SONIC_WEAPON.get())
+                    .pattern("psp").pattern("sts").pattern("psp")
+                    .define('p', RotaryItems.HSLA_PLATE.get()).define('s', RotaryItems.SONAR_UNIT.get())
+                    .define('t', RotaryItems.TURBINE.get())
+                    .unlockedBy("has_sonar_unit", has(RotaryItems.SONAR_UNIT.get())).save(out);
+            // V33a: standard pipes, HSLA ingots, base panels and the impeller.
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.DEFOLIATOR.get())
+                    .pattern("P P").pattern("SPS").pattern("BIB")
+                    .define('P', RotaryBlocks.FLUID_PIPE.get()).define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('B', RotaryItems.HSLA_PLATE.get()).define('I', RotaryItems.IMPELLER.get())
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get())).save(out);
             chunkLoader();
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.TERRAFORMER.get())
                     .pattern("SsS").pattern("ici").pattern("PiP")
@@ -2769,6 +2780,15 @@ public final class RoCRecipeProvider {
                     .save(out);
 
             // SCREWDRIVER (legacy line 580): "I  "," S ","  W" — 1×HSLA + 1×STICK + 1×PLANK.
+            // V33a RotaryRecipes line 1101: dispenser, gears, chest, steel and the configurable gate.
+            shaped(RecipeCategory.TOOLS, RotaryItems.GRAVELGUN.get())
+                    .define('d', Items.DISPENSER).define('g', RotaryItems.HSLA_STEEL_GEAR.get())
+                    .define('c', Items.CHEST).define('s', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('a', reika.rotarycraft.RotaryCraft.config.getGravelGunGatingIngredient(
+                            this.output.lookup(Registries.ITEM), RotaryItems.HSLA_STEEL_INGOT.get()))
+                    .pattern(" d ").pattern("gcg").pattern("sas")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get())).save(out);
+
             shaped(RecipeCategory.TOOLS, RotaryItems.SCREWDRIVER.get())
                     .define('S', Items.STICK)
                     .define('I', RotaryItems.HSLA_STEEL_INGOT.get())
@@ -2898,6 +2918,11 @@ public final class RoCRecipeProvider {
                     .pattern(" n ").pattern("scs").pattern(" s ")
                     .unlockedBy("has_sonar_unit", has(RotaryItems.SONAR_UNIT.get()))
                     .save(out);
+            shaped(RecipeCategory.TOOLS, RotaryItems.MOTION.get())
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get()).define('c', RotaryItems.SCREEN.get())
+                    .define('n', RotaryItems.SONAR_UNIT.get()).define('r', RotaryItems.RADAR_UNIT.get())
+                    .pattern(" nr").pattern("scs").pattern(" s ")
+                    .unlockedBy("has_radar_unit", has(RotaryItems.RADAR_UNIT.get())).save(out);
             // RANGEFINDER: " e ","rGr","sss" — 1×ENDER_PEARL + 2×REDSTONE + 1×GLOWSTONE + 3×HSLA.
             shaped(RecipeCategory.TOOLS, RotaryItems.RANGE_FINDER.get())
                     .define('G', Items.GLOWSTONE)

@@ -14,7 +14,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,7 +23,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -34,7 +32,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
@@ -771,24 +768,18 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
 
     }
 
-    public static final class PotionFluidEffect implements FluidEffect {
+    public record PotionFluidEffect(int duration, int level, Holder<MobEffect> potion) implements FluidEffect {
 
-        public final int duration;
-        public final int level;
-        public final Holder<MobEffect> potion;
+            public PotionFluidEffect(Holder<MobEffect> p, int l, int d) {
+                this(d, l, p);
+            }
 
-        public PotionFluidEffect(Holder<MobEffect> p, int l, int d) {
-            potion = p;
-            level = l;
-            duration = d;
+            @Override
+            public void applyEffect(LivingEntity e) {
+                e.addEffect(new MobEffectInstance(potion, duration, level));
+            }
+
         }
-
-        @Override
-        public void applyEffect(LivingEntity e) {
-            e.addEffect(new MobEffectInstance(potion, duration, level));
-        }
-
-    }
 
     public static class EthanolEffect implements FluidEffect {
 

@@ -58,16 +58,25 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
 
         // OUTPUT SLOTS - FIXED: Use the output inventory instead of internal inventory
         // Slot 10: center output - use outputInv slot 0
-        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 0, 148, 35));
+        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 0, 148, 35, stack -> {
+            if (stack.is(RotaryItems.HSLA_STEEL_INGOT.get()))
+                reika.rotarycraft.registry.RotaryAdvancements.MAKESTEEL.triggerAchievement(playerInv.player);
+        }));
 
         // Slot 11: lower additive (still internal inventory)
         this.addSlot(ii.slot(slot++, 26, 54));
 
         // Slot 12: upper output - use outputInv slot 1
-        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 1, 148, 17));
+        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 1, 148, 17, stack -> {
+            if (stack.is(RotaryItems.HSLA_STEEL_INGOT.get()))
+                reika.rotarycraft.registry.RotaryAdvancements.MAKESTEEL.triggerAchievement(playerInv.player);
+        }));
 
         // Slot 13: lower output - use outputInv slot 2
-        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 2, 148, 53));
+        this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 2, 148, 53, stack -> {
+            if (stack.is(RotaryItems.HSLA_STEEL_INGOT.get()))
+                reika.rotarycraft.registry.RotaryAdvancements.MAKESTEEL.triggerAchievement(playerInv.player);
+        }));
 
         // Slot 14: upper additive (still internal inventory)
         this.addSlot(ii.slot(slot++, 26, 16));
@@ -99,7 +108,7 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
     public void clicked(int slotId, int button, ContainerInput ContainerInput, Player player) {
         if (slotId >= 0 && slotId < blast.getContainerSize()) {
             Slot slot = this.slots.get(slotId);
-            if (slot instanceof Slot && ContainerInput == ContainerInput.CLONE && button == 2) { // middle-click
+            if (slot instanceof Slot && ContainerInput == net.minecraft.world.inventory.ContainerInput.CLONE && button == 2) { // middle-click
                 //blast.lockedSlots[slotId] = !blast.lockedSlots[slotId];
                 blast.syncAllData(false);
                 return; // cancel further handling â€“ avoids creative-mode dupes
@@ -107,14 +116,7 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
         }
         super.clicked(slotId, button, ContainerInput, player);
 
-        /* Achievement hook â€“ kept for parity, commented until achievements re-added
-        if (slotId == 10 || slotId == 12 || slotId == 13) {
-            ItemStack stack = this.slots.get(slotId).getItem();
-            if (ReikaItemHelper.matchStacks(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), stack)) {
-                // RotaryAchievements.MAKESTEEL.triggerAchievement(player);
-            }
-        }
-        */
+
     }
 
     /* --------------------------------------------------------------------- */
@@ -153,7 +155,7 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
             // achievement check on successful extraction
             if ((index == 10 || index == 12 || index == 13) &&
                     ReikaItemHelper.matchStacks(RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance(), original)) {
-                // RotaryAchievements.MAKESTEEL.triggerAchievement(player);
+                reika.rotarycraft.registry.RotaryAdvancements.MAKESTEEL.triggerAchievement(player);
             }
         }
         return original;

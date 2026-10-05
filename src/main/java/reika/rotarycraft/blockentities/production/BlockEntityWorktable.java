@@ -392,14 +392,11 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
             return true;
         if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("lvl", 0) > 0)
             return true;
-        if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("ench"))
-            return true;
+        return is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("ench");
 //        if (ir == RotaryItems.MACHINE) {
 //            MachineRegistry r = MachineRegistry.machineList.get(is.getItemDamage());
 //            return !r.isUncraftable();
 //        }
-
-        return false;
     }
 
     private void uncraft() {
@@ -444,34 +441,29 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     }
 
     private void chargeTools() {
-        int coilslot = ReikaInventoryHelper.locateInInventory(RotaryItems.HSLA_STEEL_SPRING.get(), itemHandler);
-        if (coilslot == -1)
-            coilslot = ReikaInventoryHelper.locateInInventory(RotaryItems.BEDROCK_ALLOY_SPRING.get(), itemHandler);
-        Item toolid = this.getTool();
-        int toolslot = ReikaInventoryHelper.locateInInventory(toolid, itemHandler);
-
-        if (toolslot != -1 && coilslot != -1 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
-            Item coilid = itemHandler.getStackInSlot(coilslot).getItem();
-            int coilmeta = 5;//todo coil current level itemHandler[coilslot].getItemDamage();
-            ItemStack tool = itemHandler.getStackInSlot(toolslot);
-            if (toolid instanceof ChargeableTool) {
-                int newcoilcharge = ((ChargeableTool) toolid).setCharged(tool, coilmeta, coilid == RotaryItems.BEDROCK_ALLOY_SPRING.get());
-                ItemStack newcoil = new ItemStack(coilid, 1); //todo add coil charge tag
-                itemHandler.setStackInSlot(toolslot, ItemStack.EMPTY);
-                itemHandler.setStackInSlot(coilslot, ItemStack.EMPTY);
-                itemHandler.setStackInSlot(9, tool.copy());
-                itemHandler.setStackInSlot(10, newcoil);
-            } else {
-                ItemStack newtool = new ItemStack(toolid, 1);
-                CompoundTag tag = tool.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? tool.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy() : null;
-                ReikaItemHelper.setStackTag(newtool, tag);
-                ItemStack newcoil = new ItemStack(coilid, 1); //todo add coil charge tag
-                itemHandler.setStackInSlot(toolslot, ItemStack.EMPTY);
-                itemHandler.setStackInSlot(coilslot, ItemStack.EMPTY);
-                itemHandler.setStackInSlot(9, newtool);
-                itemHandler.setStackInSlot(10, newcoil);
+        Item toolid = getTool();
+        if (toolid == null) return;
+        int toolslot = -1, coilslot = -1, occupied = 0;
+        for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+            ItemStack stack = itemHandler.getStackInSlot(slot);
+            if (stack.isEmpty()) continue;
+            occupied++;
+            if (slot < 9 && stack.getCount() == 1) {
+                if (stack.is(toolid)) toolslot = slot;
+                if (stack.is(RotaryItems.HSLA_STEEL_SPRING.get()) || stack.is(RotaryItems.BEDROCK_ALLOY_SPRING.get())) coilslot = slot;
             }
         }
+        if (occupied != 2 || toolslot < 0 || coilslot < 0 || !isReadyToCraft()) return;
+        ItemStack tool = itemHandler.getStackInSlot(toolslot).copy(), coil = itemHandler.getStackInSlot(coilslot).copy();
+        int charge = reika.rotarycraft.items.ItemCoil.getCharge(coil), previous;
+        if (toolid instanceof ChargeableTool external) previous = external.setCharged(tool, charge, coil.is(RotaryItems.BEDROCK_ALLOY_SPRING.get()));
+        else { previous = tool.getDamageValue(); tool.setDamageValue(charge); }
+        reika.rotarycraft.items.ItemCoil.setCharge(coil, previous);
+        itemHandler.setStackInSlot(toolslot, ItemStack.EMPTY);
+        itemHandler.setStackInSlot(coilslot, ItemStack.EMPTY);
+        itemHandler.setStackInSlot(9, tool);
+        itemHandler.setStackInSlot(10, coil);
+        setChanged();
     }
 
     private Item getTool() {
@@ -497,8 +489,8 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
         if (jetslot != -1 && plateslot != -1 && plateslot < 9 && jetslot < 9 && ReikaInventoryHelper.hasNEmptyStacks(itemHandler, 17)) {
             ItemStack jet = itemHandler.getStackInSlot(jetslot);
             ItemStack plate = itemHandler.getStackInSlot(plateslot);
-            CompoundTag tag1 = plate.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? (CompoundTag) plate.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy() : null;
-            CompoundTag tag2 = jet.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? (CompoundTag) jet.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy() : null;
+            CompoundTag tag1 = plate.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? plate.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy() : null;
+            CompoundTag tag2 = jet.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag() != null ? jet.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().copy() : null;
             itemHandler.setStackInSlot(jetslot, ItemStack.EMPTY);
             itemHandler.setStackInSlot(plateslot, ItemStack.EMPTY);
             ItemStack is = (bed ? RotaryItems.BEDROCK_ALLOY_PACK.get().getDefaultInstance() : RotaryItems.HSLA_STEEL_PACK.get().getDefaultInstance());
@@ -678,7 +670,7 @@ public class BlockEntityWorktable extends InventoriedRCBlockEntity implements Cr
     public void breakBlock() {
         if (this.hasRedstoneUpgrade()) {
             ReikaItemHelper.dropItem(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, RotaryItems.UPGRADE.get().getDefaultInstance());
-            ;//.getStackOfMetadata(Upgrades.REDSTONE.ordinal()));
+            //.getStackOfMetadata(Upgrades.REDSTONE.ordinal()));
         }
     }
 

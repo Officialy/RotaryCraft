@@ -110,8 +110,7 @@ public class ItemScrewdriver extends ItemRotaryTool //implements IToolWrench, IS
         // if (ReikaPlayerAPI.isFakeOrNotInteractable(ep, new BlockPos(ep.position()), 8))
         //    return return InteractionResult.FAIL;;
 
-        if (te instanceof RotaryCraftBlockEntity) {
-            RotaryCraftBlockEntity t = (RotaryCraftBlockEntity) te;
+        if (te instanceof RotaryCraftBlockEntity t) {
             direction = t.getBlockState().getValue(BlockRotaryCraftMachine.FACING);
         }
         if (te instanceof BlockEntityIOMachine) {

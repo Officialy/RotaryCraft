@@ -56,6 +56,7 @@ public class BlockEntitySprinkler extends SprinklerBlock {
     @Override
     protected void performEffects(Level world, BlockPos pos) {
         if (!world.isClientSide()) {
+            reika.rotarycraft.registry.RotaryAdvancements.SPRINKLER.triggerAchievement(this.getPlacer());
             this.hydrate(world, pos);
             // REACTOR-PORT: legacy 1/2400 EntityRadiation clean() sweep when ReactorCraft is loaded.
         }

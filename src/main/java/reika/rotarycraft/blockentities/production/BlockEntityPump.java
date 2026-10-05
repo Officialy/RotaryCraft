@@ -189,8 +189,8 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
             if (power / MINPOWER >= 4096)
                 mult *= 2;
         }
-//        if (f.equals(Fluids.WATER))
-//            RotaryAdvancements.PUMP.triggerAchievement(this.getPlacer());
+        if (f.equals(Fluids.WATER))
+            reika.rotarycraft.registry.RotaryAdvancements.PUMP.triggerAchievement(this.getPlacer());
         duplicationAmount = (int) (mult * ConfigRegistry.FREEWATER.getFloat());
         tank.addLiquid(fs.getAmount() * mult, f);
         world.updateNeighborsAt(loc, world.getBlockState(loc).getBlock());

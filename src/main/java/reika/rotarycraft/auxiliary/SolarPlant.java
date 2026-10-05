@@ -225,38 +225,24 @@ public class SolarPlant {
         return te.getLevel().canSeeSky(te.getBlockPos().above()) && this.isHighestMirror(te);
     }
 
-    private static class SolarTower implements Comparable<SolarTower> {
-
-        /**
-         * 2D only
-         */
-        private final BlockPos location;
-
-        /**
-         * Effective since tower blocks with a mirror >= their y coordinate do not count
-         */
-        private final int effectiveHeight;
-        private final int bottomBlock;
-        private final int topBlock;
-
-        private SolarTower(BlockPos c, int h, int bottom, int top) {
-            location = c;
-            effectiveHeight = h;
-            bottomBlock = bottom;
-            topBlock = top;
-        }
+    /**
+     * @param location        2D only
+     * @param effectiveHeight Effective since tower blocks with a mirror >= their y coordinate do not count
+     */
+    private record SolarTower(BlockPos location, int effectiveHeight, int bottomBlock,
+                              int topBlock) implements Comparable<SolarTower> {
 
         @Override
-        public int hashCode() {
-            return location.hashCode() | (effectiveHeight << 24);
-        }
+            public int hashCode() {
+                return location.hashCode() | (effectiveHeight << 24);
+            }
 
-        @Override
-        public int compareTo(SolarTower o) {
-            int ret = -Integer.compare(effectiveHeight, o.effectiveHeight); //to put bigger at the beginning
-            return ret != 0 ? ret : Integer.compare(this.hashCode(), o.hashCode());
-        }
+            @Override
+            public int compareTo(SolarTower o) {
+                int ret = -Integer.compare(effectiveHeight, o.effectiveHeight); //to put bigger at the beginning
+                return ret != 0 ? ret : Integer.compare(this.hashCode(), o.hashCode());
+            }
 
-    }
+        }
 
 }

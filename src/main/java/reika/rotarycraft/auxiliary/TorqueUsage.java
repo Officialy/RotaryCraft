@@ -42,8 +42,7 @@ public class TorqueUsage {
             return;
         pathCache.add(loc);
 
-        if (tile instanceof BlockEntityTransmissionMachine) { //true if the considered tile is a Transmission tile and is getting power from an already examined block
-            BlockEntityIOMachine io = (BlockEntityIOMachine) tile;
+        if (tile instanceof BlockEntityTransmissionMachine io) { //true if the considered tile is a Transmission tile and is getting power from an already examined block
             if (tile instanceof BlockEntitySplitter spl) { //check if splitter
                 if (!spl.isSplitting()) { //check if merge mode or split mode (true if in merge mode)
                     BlockEntity write = spl.getWriteBlockEntity();

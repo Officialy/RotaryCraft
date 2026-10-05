@@ -59,6 +59,26 @@ public class RotaryConfig extends ControlledConfig {
         return this.getGatedMaterial(item, obj);
     }
 
+    /** Resolves the recipe gate without constructing stacks before 26.3 components are bound. */
+    public net.minecraft.world.item.crafting.Ingredient getGravelGunGatingIngredient(
+            net.minecraft.core.HolderGetter<net.minecraft.world.item.Item> items,
+            net.minecraft.world.level.ItemLike fallback) {
+        String configured = gravelGate.getData();
+        if (configured == null || configured.isBlank())
+            return net.minecraft.world.item.crafting.Ingredient.of(fallback);
+        try {
+            Object material = BlastGate.valueOf(configured.toUpperCase(java.util.Locale.ROOT)).getItem();
+            if (material instanceof net.minecraft.world.level.ItemLike item)
+                return net.minecraft.world.item.crafting.Ingredient.of(item);
+            if (material instanceof String ore)
+                return net.minecraft.world.item.crafting.Ingredient.of(items.getOrThrow(ReikaItemHelper.getOreTag(ore)));
+            throw new IllegalArgumentException("Unsupported gate material: " + material);
+        } catch (IllegalArgumentException exception) {
+            RotaryCraft.LOGGER.error("Invalid Gravel Gun gating material '{}'; using {}", configured, fallback, exception);
+            return net.minecraft.world.item.crafting.Ingredient.of(fallback);
+        }
+    }
+
     private ItemStack getGatedMaterial(String item, ItemStack obj) {
         BlastGate g = null;
         try {
@@ -70,10 +90,18 @@ public class RotaryConfig extends ControlledConfig {
             RotaryCraft.LOGGER.error("Gating material '" + item + "' is invalid.");
             return obj;
         } else {
-            ItemStack ret = ReikaItemHelper.parseItem(g.getItem());
-            if (ret == null) {
-                RotaryCraft.LOGGER.error("Selected gating material " + g + " could not be found; either the item does not exist or its mods have not yet loaded.");
+            Object material = g.getItem();
+            if (material instanceof net.minecraft.world.level.ItemLike selected)
+                return new ItemStack(selected);
+            if (material instanceof String ore) {
+                var tag = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(ReikaItemHelper.getOreTag(ore));
+                var selected = tag.stream().flatMap(net.minecraft.core.HolderSet.Named::stream)
+                        .map(net.minecraft.core.Holder::value)
+                        .sorted(java.util.Comparator.comparing(value -> net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(value).toString()))
+                        .findFirst();
+                if (selected.isPresent()) return new ItemStack(selected.get());
             }
+            RotaryCraft.LOGGER.error("Selected gating material {} could not be found; its item tag may be empty or its mod absent.", g);
         }
         return obj;
     }

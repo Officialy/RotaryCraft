@@ -142,10 +142,11 @@ public class RotaryItems {
     public static final DeferredItem<Item> INDUCTIVE_BLEND = reg("inductive_blend", () -> new Item(itemProperties()));
 //    public static final DeferredItem<Item> ENDERIUM = reg("enderium", () -> new Item(itemProperties()));
 
-    //public static final DeferredItem<Item> MOTION = reg("motion", ItemMotionTracker::new);
+    public static final DeferredItem<Item> MOTION = reg("motion_tracker", reika.rotarycraft.items.tools.charged.ItemMotionTracker::new);
     //public static final DeferredItem<Item> VACUUM = reg("vacuum", ItemVacuum::new);
     //public static final DeferredItem<Item> STUNGUN = reg("stun_gun", ItemStunGun::new);
-    //public static final DeferredItem<Item> GRAVELGUN = reg("gravel_gun", ItemGravelGun::new);
+    public static final DeferredItem<reika.rotarycraft.items.tools.charged.ItemGravelGun> GRAVELGUN =
+            reg("gravel_gun", reika.rotarycraft.items.tools.charged.ItemGravelGun::new);
     //public static final DeferredItem<Item> FIREBALL = reg("fire_launcher", ItemFireballLauncher::new);
     //public static final DeferredItem<Item> CHARGED_GRAFTER = reg("chargedgrafter", ItemChargedGrafter::new, ModList.FORESTRY);
     public static final DeferredItem<Item> CRAFT_PATTERN = reg("craft_pattern", () -> new ItemCraftPattern(itemProperties().stacksTo(16)));

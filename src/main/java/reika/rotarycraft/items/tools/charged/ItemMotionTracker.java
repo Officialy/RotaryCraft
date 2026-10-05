@@ -1,133 +1,101 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.items.tools.charged;
-//
-//import net.minecraft.ChatFormatting;
-import net.minecraft.world.entity.monster.cubemob.Slime;
-//import net.minecraft.world.InteractionHand;
-//import net.minecraft.world.InteractionResult;
-//import net.minecraft.world.entity.LivingEntity;
-//import net.minecraft.world.entity.Mob;
-//import net.minecraft.world.entity.ai.navigation.PathNavigation;
-//import net.minecraft.world.entity.ambient.Bat;
-//import net.minecraft.world.entity.animal.Animal;
-//import net.minecraft.world.entity.animal.Squid;
-//import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-//import net.minecraft.world.entity.boss.wither.WitherBoss;
-//import net.minecraft.world.entity.monster.Enderman;
-//import net.minecraft.world.entity.monster.Ghast;
-//import net.minecraft.world.entity.monster.Slime;
-//import net.minecraft.world.entity.monster.piglin.Piglin;
-//import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.item.ItemStack;
-//import net.minecraft.world.level.Level;
-//import net.minecraft.world.level.pathfinder.Path;
-//import net.minecraft.world.phys.AABB;
-//import net.minecraft.world.phys.Vec3;
-//import reika.dragonapi.libraries.io.ReikaChatHelper;
-//import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
-//import reika.rotarycraft.base.ItemChargedTool;
-//
-//
-//import java.util.List;
-//
-//public class ItemMotionTracker extends ItemChargedTool {
-//
-//    public int rendertick = 0;
-//    public List inrange;
-//
-//    double lastdist;
-//    String lastmobname;
-//
-//    public ItemMotionTracker() {
-//        super();
-//    }
-//
-//    //todo add noCharge();
-//    @Override
-//    public InteractionResult use(Level world, Player ep, InteractionHand hand) {
-//        this.warnCharge(this.getDefaultInstance());
-//        if (RotaryConfig.COMMON.CLEARCHAT.getState())
-//            ReikaChatHelper.clearChat(); //clr
-//        rendertick = 512;
-//        for (float i = 1; i <= 128; i += 0.5) {
-//            Vec3 look = ep.getLookAngle();
-//            double dx = ep.getY();
-//            double dy = ep.getY() + ep.getEyeHeight();
-//            double dz = ep.getZ();
-//            ReikaChatHelper.writeString(String.format("%.3f", look.x()) + " " + String.format("%.3f", look.y()) + " " + String.format("%.3f", look.z()));
-//            look.xCoord *= i;
-//            look.yCoord *= i;
-//            look.zCoord *= i;
-//            AABB fov = new AABB(dx + look.x() - 0.5, dy + look.y() - 0.5, dz + look.z() - 0.5, dx + look.x() + 0.5, dy + look.y() + 0.5, dz + look.z() + 0.5);
-//            List infov = world.getEntities(LivingEntity.class, fov);
-//            if (infov.size() > 0) {
-//                String mob;
-//                if (infov.size() > 1)
-//                    mob = "Mobs";
-//                else
-//                    mob = "Mob";
-//                //ReikaChatHelper.write(infov.size()+String.format(" %s", mob)+" Detected:");
-//                for (int k = 0; k < infov.size(); k++) {
-//                    LivingEntity ent = (LivingEntity) infov.get(k);
-//                    double dist = ReikaMathLibrary.py3d(dx - ent.getY(), dy - ent.getY() - ent.getEyeHeight(), dz - ent.getZ());
-//                    ChatFormatting color;
-//                    String mobname = ent.getName().getString();
-//                    if (ent instanceof Mob || ent instanceof Slime || ent instanceof Ghast)
-//                        color = ChatFormatting.RED;
-//                    else if (ent instanceof Animal || ent instanceof Bat || ent instanceof Squid)
-//                        color = ChatFormatting.GREEN;
-//                    else
-//                        color = ChatFormatting.WHITE;
-//                    if (ent instanceof Enderman || ent instanceof Piglin)
-//                        color = ChatFormatting.YELLOW;
-//                    if (ent instanceof EnderDragon)
-//                        color = ChatFormatting.DARK_PURPLE;
-//                    if (ent instanceof WitherBoss)
-//                        color = ChatFormatting.DARK_GRAY;
-//                    if (!(ent instanceof Player) && (dist <= 32 || ent instanceof WitherBoss || ent instanceof EnderDragon) && !(lastmobname == mobname && dist == lastdist)) {
-//                        ReikaChatHelper.write(color + mobname + ChatFormatting.WHITE + String.format(" %.2f", dist - 1) + "m away.");
-//                        if (ent instanceof EnderDragon) {
-//                            EnderDragon ed = (EnderDragon) ent;
-//                            if (ReikaMathLibrary.approxr(ed.getTarget().getX(), ep.getY(), 4))
-//                                if (ReikaMathLibrary.approxr(ed.getTarget().getY(), ep.getY(), 4))
-//                                    if (ReikaMathLibrary.approxr(ed.getTarget().getZ(), ep.getZ(), 4))
-//                                        ReikaChatHelper.writeFormattedString("Dragon is Attacking!", ChatFormatting.RED);
-//                        } else if (ent instanceof Mob) {
-//                            Mob em = (Mob) ent;
-//                            Path path = em.getNavigation().getPath();
-//                            if (em.getTarget() == ep || em.getTarget() == ep)
-//                                ReikaChatHelper.writeFormattedString("Mob is Attacking!", ChatFormatting.RED);
-//                        }
-//                    }
-//					/*double[] vel = ReikaPhysicsHelper.cartesianToPolar(ent.motionX, ent.motionY, ent.motionZ);
-//					ReikaChatHelper.write(String.format(" %.2f", vel[0])+"  "+String.format(" %.2f", vel[1])+"  "+String.format(" %.2f", vel[2]));
-//					ReikaChatHelper.write("�4"+String.format(" %.2f", ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz)[0])+"  "+String.format(" %.2f", ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz)[1])+"  "+String.format(" %.2f", ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz)[2]));
-//					if (vel[1] == ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz)[1]) {
-//						if (vel[2] == ReikaPhysicsHelper.cartesianToPolar(dx, dy, dz)[2]) {
-//							if (ent instanceof EntityDragon || ent instanceof EntityWither)
-//								color = "�4";
-//							else if (ent instanceof EntityMob)
-//								color = "�e";
-//							else
-//								color = "�f";
-//							ReikaChatHelper.write(String.format("%s", color)+"Mob is approaching you!");
-//						}
-//					}*/
-//
-//                    lastmobname = mobname;
-//                    lastdist = dist;
-//                }
-//            }
-//        }
-//        return InteractionResult.SUCCESS;
-//    }
-//
-//}
+/*******************************************************************************
+ * @author Reika Kalseki
+ * Copyright 2017
+ * All rights reserved. Distribution requires the owner's explicit prior permission.
+ ******************************************************************************/
+package reika.rotarycraft.items.tools.charged;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.UUID;
+import java.util.function.Consumer;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.squid.Squid;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Enderman;
+import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import reika.dragonapi.libraries.ReikaEntityHelper;
+import reika.dragonapi.libraries.io.ReikaChatHelper;
+import reika.rotarycraft.base.ItemChargedTool;
+import reika.rotarycraft.registry.ConfigRegistry;
+import reika.rotarycraft.registry.RotaryItems;
+
+/** V33a half-block ray samples, through-wall contacts, boss range and one charge per scan. */
+public final class ItemMotionTracker extends ItemChargedTool {
+    public ItemMotionTracker() {
+        super(RotaryItems.itemProperties().component(DataComponents.MAX_DAMAGE, 32001).component(DataComponents.DAMAGE, 0));
+    }
+    @Override public InteractionResult use(Level world, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand); int charge = stack.getDamageValue();
+        if (world.isClientSide()) return charge > 0 ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+        if (ConfigRegistry.CLEARCHAT.getState() && player instanceof ServerPlayer server) ReikaChatHelper.clearChat(server);
+        if (charge <= 0) {
+            player.sendSystemMessage(Component.translatable("message.rotarycraft.tool_charge_depleted")); return InteractionResult.FAIL;
+        }
+        if (charge == 2 || charge == 4 || charge == 16 || charge == 32)
+            player.sendSystemMessage(Component.translatable(charge == 2 ? "message.rotarycraft.motion_tracker.very_low" : "message.rotarycraft.motion_tracker.low", charge));
+        for (Contact contact : scan(world, player)) {
+            player.sendSystemMessage(Component.translatable("message.rotarycraft.motion_tracker.contact",
+                    contact.name().copy().withStyle(contact.color()), String.format(java.util.Locale.ROOT, "%.2f", contact.distance() - 1)));
+            if (contact.attacking()) player.sendSystemMessage(Component.translatable(contact.dragon()
+                    ? "message.rotarycraft.motion_tracker.dragon_attacking" : "message.rotarycraft.motion_tracker.mob_attacking").withStyle(ChatFormatting.RED));
+        }
+        stack.setDamageValue(charge - 1);
+        return InteractionResult.SUCCESS;
+    }
+    public List<Contact> scan(Level world, Player viewer) {
+        Vec3 origin = viewer.getEyePosition(), look = viewer.getLookAngle();
+        var contacts = new ArrayList<Contact>(); var seen = new HashSet<UUID>();
+        for (double distance = 1; distance <= 128; distance += .5) {
+            Vec3 sample = origin.add(look.scale(distance));
+            for (LivingEntity entity : world.getEntitiesOfClass(LivingEntity.class, new AABB(sample, sample).inflate(.5))) {
+                if (entity instanceof Player) continue;
+                double actual = origin.distanceTo(entity.getEyePosition());
+                boolean dragon = entity instanceof EnderDragon;
+                if (actual > 32 && !dragon && !(entity instanceof WitherBoss) || !seen.add(entity.getUUID())) continue;
+                contacts.add(new Contact(entity.getUUID(), entity.getDisplayName(), actual, getContactColor(entity), isAttacking(entity, viewer), dragon));
+            }
+        }
+        return List.copyOf(contacts);
+    }
+    public static ChatFormatting getContactColor(LivingEntity entity) {
+        if (entity instanceof EnderDragon) return ChatFormatting.DARK_PURPLE;
+        if (entity instanceof WitherBoss) return ChatFormatting.DARK_GRAY;
+        if (entity instanceof Enderman || entity instanceof ZombifiedPiglin) return ChatFormatting.YELLOW;
+        if (ReikaEntityHelper.isHostile(entity)) return ChatFormatting.RED;
+        if (entity instanceof Animal || entity instanceof Bat || entity instanceof Squid) return ChatFormatting.GREEN;
+        return ChatFormatting.WHITE;
+    }
+    private static boolean isAttacking(LivingEntity entity, Player viewer) {
+        if (entity instanceof EnderDragon dragon) {
+            Vec3 target = dragon.getPhaseManager().getCurrentPhase().getFlyTargetLocation();
+            return target != null && Math.abs(target.x - viewer.getX()) <= 4 && Math.abs(target.y - viewer.getY()) <= 4 && Math.abs(target.z - viewer.getZ()) <= 4;
+        }
+        return entity instanceof Monster mob && (mob.getTarget() == viewer || mob.getLastHurtByMob() == viewer);
+    }
+    @Override public boolean isBarVisible(ItemStack stack) { return false; }
+    @Override public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> lines, TooltipFlag flag) {
+        super.appendHoverText(stack, context, display, lines, flag);
+        lines.accept(Component.translatable("tooltip.rotarycraft.motion_tracker.charge", stack.getDamageValue()));
+    }
+    public record Contact(UUID entityId, Component name, double distance, ChatFormatting color, boolean attacking, boolean dragon) {}
+}

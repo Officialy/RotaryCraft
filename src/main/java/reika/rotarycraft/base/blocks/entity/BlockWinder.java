@@ -22,6 +22,7 @@ public class BlockWinder extends BlockBasicMachine {
 
     public BlockWinder(Properties properties) {
         super(properties.noOcclusion());
+        hasVerticalPlacement = true;
     }
 
     

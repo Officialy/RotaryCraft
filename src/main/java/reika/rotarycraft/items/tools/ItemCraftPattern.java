@@ -203,7 +203,7 @@ public class ItemCraftPattern  extends ItemRotaryTool {// implements SpriteRende
         ReikaItemHelper.updateStackTag(is, __T__ -> __T__.putInt("stacklimit", Mth.clamp(limit+change, 1, 64)));
     }
 
-    public static enum RecipeMode {
+    public enum RecipeMode {
         CRAFTING("Crafting Recipe", new ItemStack(Blocks.CRAFTING_TABLE)),
         WORKTABLE("Worktable Recipe", MachineRegistry.WORKTABLE.getBlockState().getBlock().asItem().getDefaultInstance()),
         BLASTFURN("Blast Furnace Crafting", MachineRegistry.BLASTFURNACE.getBlockState().getBlock().asItem().getDefaultInstance());

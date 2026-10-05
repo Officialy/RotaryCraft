@@ -330,7 +330,7 @@
 		</desc>
 		<note>
 			Potencia requerida: %dW
-			Rango = 8+(Potencia-%d)/%d m
+			Rango = %d m
 			Ceguera a: %d W/m^2
 			Confusion a: %d W/m^2
 			Ahogamiento a: %d W/m^2

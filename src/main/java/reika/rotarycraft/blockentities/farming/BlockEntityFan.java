@@ -153,15 +153,15 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
                if (DragonAPI.rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, new BlockPos(editx, edity, editz)))
                    world.setBlock(new BlockPos(editx, edity, editz), Blocks.FIRE.defaultBlockState(), 3);
 
-               editx = 1 * a + pos.getX() + i * facing.getStepX();
+               editx = a + pos.getX() + i * facing.getStepX();
                edity = pos.getY() + i * facing.getStepY();
-               editz = 1 * b + pos.getZ() + i * facing.getStepZ();
+               editz = b + pos.getZ() + i * facing.getStepZ();
                if (DragonAPI.rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, new BlockPos(editx, edity, editz)))
                    world.setBlock(new BlockPos(editx, edity, editz), Blocks.FIRE.defaultBlockState(), 3);
 
-               editx = 1 * a + pos.getX() + i * facing.getStepX();
+               editx = a + pos.getX() + i * facing.getStepX();
                edity = 2 + pos.getY() + i * facing.getStepY();
-               editz = 1 * b + pos.getZ() + i * facing.getStepZ();
+               editz = b + pos.getZ() + i * facing.getStepZ();
                if (DragonAPI.rand.nextInt(60) == 0 && ReikaWorldHelper.softBlocks(world, new BlockPos(editx, edity, editz)))
                    world.setBlock(new BlockPos(editx, edity, editz), Blocks.FIRE.defaultBlockState(), 3);
            }
@@ -264,8 +264,7 @@ public class BlockEntityFan extends BlockEntityBeamMachine implements RangedEffe
    }
 
    private boolean canBlowEntity(Entity e) {
-       if (e instanceof CustomFanEntity) {
-           CustomFanEntity c = (CustomFanEntity) e;
+       if (e instanceof CustomFanEntity c) {
            if (c.getBlowPower() > power)
                return false;
            Vec3 motion = e.getDeltaMovement();

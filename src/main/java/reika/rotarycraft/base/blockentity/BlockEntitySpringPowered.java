@@ -10,15 +10,14 @@
 package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.DragonAPI;
 import reika.rotarycraft.api.interfaces.TensionStorage;
+import reika.rotarycraft.items.ItemCoil;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 
 public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity implements ConditionalOperation {
@@ -42,7 +41,9 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
     }
 
     public int getExpectedCoilLife() {
-        return this.getUnwindTime() * itemHandler.getStackInSlot(this.getCoilSlot()).getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("energy", 0);
+        if (isCreative || DragonAPI.debugtest) return Integer.MAX_VALUE;
+        if (!hasCoil()) return 0;
+        return Math.clamp((long)getUnwindTime() * getCharge(itemHandler.getStackInSlot(getCoilSlot())), 0, Integer.MAX_VALUE);
     }
 
 
@@ -52,7 +53,7 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
 
 
     public final boolean canExtractItem(int i, ItemStack itemstack, int j) {
-        return itemstack.getDamageValue() == 0 && i == this.getCoilSlot();
+        return getCharge(itemstack) == 0 && i == this.getCoilSlot();
     }
 
     public int getCoilSlot() {
@@ -63,11 +64,15 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
         ItemStack in = itemHandler.getStackInSlot(this.getCoilSlot());
         if (isCreative)
             return in;
-        // 1.21.5: ItemStack(Item, int, CompoundTag) ctor was removed (NBT is now per-component).
-        // Use copyWithCount + custom-data attach so the discharged stack carries any persistent
-        // component state forward. For springs we don't actually need the NBT to follow, so a plain
-        // copy-with-count is the correct behaviour.
-        return in.copyWithCount(in.getCount());
+        ItemStack discharged = in.copy();
+        if (discharged.getItem() instanceof ItemCoil)
+            ItemCoil.setCharge(discharged, ItemCoil.getCharge(in) - 1);
+        else discharged.setDamageValue(Math.max(0, in.getDamageValue() - 1));
+        return discharged;
+    }
+
+    protected static int getCharge(ItemStack stack) {
+        return stack.getItem() instanceof ItemCoil ? ItemCoil.getCharge(stack) : stack.getDamageValue();
     }
 
     protected final boolean hasCoil() {
@@ -79,7 +84,7 @@ public abstract class BlockEntitySpringPowered extends InventoriedRCBlockEntity 
         if (is.isEmpty())
             return false;
         Item i = is.getItem();
-        return is.getDamageValue() > 0 && i instanceof TensionStorage;
+        return getCharge(is) > 0 && i instanceof TensionStorage;
     }
 
     @Override

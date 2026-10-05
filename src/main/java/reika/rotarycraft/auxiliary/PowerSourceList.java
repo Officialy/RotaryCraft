@@ -237,24 +237,18 @@ public class PowerSourceList implements PowerTracker {
         return isBedrock;
     }
 
-    private static class PowerWrapper {
-
-        private final PowerGenerator generator;
-
-        private PowerWrapper(PowerGenerator gen) {
-            generator = gen;
-        }
+    private record PowerWrapper(PowerGenerator generator) {
 
         @Override
-        public int hashCode() {
-            return new WorldLocation((BlockEntity) generator).hashCode();
-        }
+            public int hashCode() {
+                return new WorldLocation((BlockEntity) generator).hashCode();
+            }
 
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof PowerWrapper && new WorldLocation((BlockEntity) ((PowerWrapper) o).generator).equals(new WorldLocation((BlockEntity) generator));
-        }
+            @Override
+            public boolean equals(Object o) {
+                return o instanceof PowerWrapper && new WorldLocation((BlockEntity) ((PowerWrapper) o).generator).equals(new WorldLocation((BlockEntity) generator));
+            }
 
-    }
+        }
 
 }

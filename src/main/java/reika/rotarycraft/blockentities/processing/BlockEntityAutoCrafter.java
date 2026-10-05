@@ -526,10 +526,9 @@ public class BlockEntityAutoCrafter extends InventoriedPowerReceiver implements 
 			return false;
 		if (this.isLoopable(out, req))
 			return false;
-		if (out.getItem().getClass().getName().equals("ItemReactorCondensator")) //to be safe, since these tend to glitch
-			return false;
-		return true;
-	}
+        //to be safe, since these tend to glitch
+        return !out.getItem().getClass().getName().equals("ItemReactorCondensator");
+    }
 
 	private boolean isLoopable(ItemStack out, Collection<ItemStack> req) {
 		KeyedItemStack kout = this.key(out);

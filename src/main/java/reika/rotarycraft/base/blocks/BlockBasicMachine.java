@@ -265,8 +265,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             }
         }
 
-        if (te instanceof BlockEntityAdvancedGear) {
-            BlockEntityAdvancedGear tile = (BlockEntityAdvancedGear) te;
+        if (te instanceof BlockEntityAdvancedGear tile) {
             if (tile.getGearType().isLubricated() && is.getCount() == 1
                     && ReikaItemHelper.matchStacks(is, RotaryItems.LUBE_BUCKET)
                     && this.insertBucket(tile, RotaryFluids.LUBRICANT.get(), level, ep, pHand, new ItemStack(Items.BUCKET))) {
@@ -762,7 +761,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         if (te != null && RotaryAux.hasGui(level, pos, ep) && te.isPlayerAccessible(ep)) {
             if (!level.isClientSide() && ep instanceof ServerPlayer sp) {
                 // Use the block entity as the MenuProvider, which should now provide a BlankContainer-based menu
-                sp.openMenu((MenuProvider) te, pos);
+                sp.openMenu(te, pos);
             }
             ep.swing(InteractionHand.MAIN_HAND, net.minecraft.world.item.component.SwingAnimation.DEFAULT, true);
             return InteractionResult.SUCCESS;

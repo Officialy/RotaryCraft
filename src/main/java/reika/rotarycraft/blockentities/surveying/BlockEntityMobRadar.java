@@ -60,7 +60,6 @@ public class BlockEntityMobRadar extends BlockEntityPowerReceiver implements Gui
     }
     public boolean canShowHud(Player viewer) {
         if (viewer == null || getPlacerID() == null || !getPlacerID().equals(viewer.getUUID())) return false;
-        // MOTION-PORT: tag forward-references the original motion tracker until its port lands.
         for (int slot = 0; slot < 36; slot++) if (viewer.getInventory().getItem(slot).is(RoCItemTagsProvider.MOTION_TRACKERS)) return true;
         return false;
     }

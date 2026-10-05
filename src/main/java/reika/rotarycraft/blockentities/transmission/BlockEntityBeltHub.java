@@ -167,8 +167,7 @@ public class BlockEntityBeltHub extends BlockEntityPowerReceiver implements Powe
             return false;
 
         BlockEntity te = world.getBlockEntity(pos);
-        if (te instanceof BlockEntityBeltHub) {
-            BlockEntityBeltHub tb = (BlockEntityBeltHub) te;
+        if (te instanceof BlockEntityBeltHub tb) {
             if (tb.isEmitting == isEmitting)
                 return false;
             if (!this.areInSamePlane(tb))
@@ -397,8 +396,7 @@ public class BlockEntityBeltHub extends BlockEntityPowerReceiver implements Powe
     public final void getOutputs(Collection<BlockEntity> c, Direction dir) {
         if (otherEnd != null) {
             BlockEntity te = level.getBlockEntity(otherEnd);
-            if (te instanceof BlockEntityBeltHub) {
-                BlockEntityBeltHub belt = (BlockEntityBeltHub) te;
+            if (te instanceof BlockEntityBeltHub belt) {
                 if (belt.write != null)
                     c.add(belt.getAdjacentBlockEntity(belt.write));
                 if (belt.write2 != null)

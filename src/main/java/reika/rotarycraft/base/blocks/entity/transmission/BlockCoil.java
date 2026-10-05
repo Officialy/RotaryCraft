@@ -6,11 +6,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-// 1.21.5: net.neoforged.common.property.Properties removed; use vanilla BlockStateProperties instead.
 import reika.rotarycraft.base.blocks.BlockBasicMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 
-import javax.annotation.Nullable;
+// 1.21.5: net.neoforged.common.property.Properties removed; use vanilla BlockStateProperties instead.
 
 public class BlockCoil extends BlockBasicMachine {
     public BlockCoil(Properties properties) {

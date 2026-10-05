@@ -201,8 +201,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
                     }
                 }
             }
-            if (te instanceof XPProducer) {
-                XPProducer xpm = (XPProducer) te;
+            if (te instanceof XPProducer xpm) {
                 experience += xpm.getXP();
                 xpm.clearXP();
             }
@@ -228,7 +227,7 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
             if (ent.tickCount > 5) {
                 //Vec3 i2vac = ReikaVectorHelper.getVec2Pt(ent.getY, ent.getY(), ent.posZ, x+0.5, y+0.5, z+0.5);
                 //if (ReikaWorldHelper.canBlockSee(world, pos, ent.getY, ent.getY(), ent.posZ, this.getRange()+2)) {
-                if (true || ReikaWorldHelper.canBlockSee(world, pos.getX(), pos.getY(), pos.getZ(), ent.getX(), ent.getY(), ent.getZ(), this.getRange() + 2)) {
+                if (true) {
                     double dx = (worldPosition.getX() + 0.5 - ent.getX());
                     double dy = (worldPosition.getY() + 0.5 - ent.getY());
                     double dz = (worldPosition.getZ() + 0.5 - ent.getZ());

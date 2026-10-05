@@ -2,14 +2,7 @@
   "parent": "rotarycraft:makeyeast",
   "criteria": {
     "trigger": {
-      "conditions": {
-        "items": [
-          {
-            "items": "rotarycraft:jet_fuel_bucket"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+      "trigger": "minecraft:impossible"
     }
   },
   "display": {

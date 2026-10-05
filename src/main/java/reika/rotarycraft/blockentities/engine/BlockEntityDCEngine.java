@@ -63,9 +63,9 @@ public class BlockEntityDCEngine extends BlockEntityEngine implements RedstoneUp
     @Override
     protected void affectSurroundings(Level world, BlockPos pos) {
         if (!world.isClientSide()) {
-//            if (getAdjacentBlockEntity(write) instanceof BlockEntityExtractor) {
-//                RotaryAdvancements.DUMBEXTRACTOR.triggerAchievement(this.getPlacer());
-//            }
+            if (getAdjacentBlockEntity(write) instanceof reika.rotarycraft.blockentities.processing.BlockEntityExtractor) {
+                reika.rotarycraft.registry.RotaryAdvancements.DUMBEXTRACTOR.triggerAchievement(this.getPlacer());
+            }
         }
     }
 

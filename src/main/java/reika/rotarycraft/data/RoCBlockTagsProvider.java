@@ -18,12 +18,31 @@ import reika.rotarycraft.registry.RotaryBlocks;
  */
 public class RoCBlockTagsProvider extends BlockTagsProvider {
 
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> DEFOLIATOR_TARGETS =
+            net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "defoliator_targets"));
+
     public RoCBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup) {
         super(output, lookup, RotaryCraft.MODID);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        // V33a plant/vine/cactus materials and vanilla/mod wood families, now extensible data.
+        var decay = tag(DEFOLIATOR_TARGETS).addTag(BlockTags.LOGS).addTag(BlockTags.LEAVES).addTag(BlockTags.SAPLINGS);
+        decay.addOptionalTag(common("logs")).addOptionalTag(common("leaves")).addOptionalTag(common("saplings"));
+        for (var block : net.minecraft.core.registries.BuiltInRegistries.BLOCK) {
+            if (block instanceof net.minecraft.world.level.block.VegetationBlock
+                    || block instanceof net.minecraft.world.level.block.GrowingPlantBlock
+                    || block instanceof net.minecraft.world.level.block.VineBlock
+                    || block instanceof net.minecraft.world.level.block.CactusBlock
+                    || block instanceof net.minecraft.world.level.block.SugarCaneBlock
+                    || block instanceof net.minecraft.world.level.block.BambooStalkBlock
+                    || block instanceof net.minecraft.world.level.block.ChorusPlantBlock
+                    || block instanceof net.minecraft.world.level.block.ChorusFlowerBlock
+                    || block instanceof net.minecraft.world.level.block.HangingMossBlock)
+                decay.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
+        }
         var motionTag = tag(BlockTags.BLOCKS_MOTION_NO_LEAVES);
         var leafTag = tag(BlockTags.LEAVES);
         var washedTag = tag(BlockTags.WASHED_AWAY_BY_FLUIDS);

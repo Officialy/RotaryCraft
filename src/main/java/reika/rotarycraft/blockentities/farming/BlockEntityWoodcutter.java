@@ -487,23 +487,19 @@ public class BlockEntityWoodcutter extends InventoriedPowerReceiver implements E
         return this.areConditionsMet();
     }
 
-    /** Cut leaves before logs (legacy LeafPrioritizer), tag-driven. */
-    private static class LeafPrioritizer implements Comparator<BlockPos> {
-
-        private final Level world;
-
-        private LeafPrioritizer(Level world) {
-            this.world = world;
-        }
+    /**
+     * Cut leaves before logs (legacy LeafPrioritizer), tag-driven.
+     */
+        private record LeafPrioritizer(Level world) implements Comparator<BlockPos> {
 
         @Override
-        public int compare(BlockPos b1, BlockPos b2) {
-            boolean l1 = world.getBlockState(b1).is(BlockTags.LEAVES);
-            boolean l2 = world.getBlockState(b2).is(BlockTags.LEAVES);
-            if (l1 == l2)
-                return 0;
-            return l1 ? -1 : 1;
-        }
+            public int compare(BlockPos b1, BlockPos b2) {
+                boolean l1 = world.getBlockState(b1).is(BlockTags.LEAVES);
+                boolean l2 = world.getBlockState(b2).is(BlockTags.LEAVES);
+                if (l1 == l2)
+                    return 0;
+                return l1 ? -1 : 1;
+            }
 
-    }
+        }
 }

@@ -10,27 +10,24 @@
 package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.TagValueInput;
-import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.util.ProblemReporter;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 
-import java.util.Optional;
 
 public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver {
 
     public ManagedItemHandler itemHandler = new ManagedItemHandler(getContainerSize()) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
+        @Override protected void onContentsChanged(int slot) { setChanged(); }
+        @Override public void deserialize(ValueInput input) {
+            var loaded = input.read(VALUE_IO_KEY, codec);
+            for (int slot = 0; slot < getContainerSize(); slot++)
+                stacks.set(slot, loaded.isPresent() && slot < loaded.get().size() ? loaded.get().get(slot) : ItemStack.EMPTY);
         }
     };
 
@@ -88,25 +85,14 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        TagValueOutput nested = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess());
-        itemHandler.serialize(nested);
-        output.store("ItemsRaw", CompoundTag.CODEC, nested.buildResult());
+        itemHandler.serialize(output.child("ItemsRaw"));
     }
 
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        itemHandler = new ManagedItemHandler(getContainerSize()) {
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();
-            }
-        };
-        Optional<CompoundTag> raw = input.read("ItemsRaw", CompoundTag.CODEC);
-        if (raw.isPresent()) {
-            ValueInput nested = TagValueInput.create(ProblemReporter.DISCARDING, this.level == null ? RegistryAccess.EMPTY : this.level.registryAccess(), raw.get());
-            itemHandler.deserialize(nested);
-        }
+        // The child retains the loading caller's registry context even before the entity has a level.
+        itemHandler.deserialize(input.childOrEmpty("ItemsRaw"));
     }
 
     public abstract int getContainerSize();

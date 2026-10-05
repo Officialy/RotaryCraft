@@ -173,11 +173,11 @@ final class RotaryMobRadarTests {
     private static void hud(GameTestHelper h) {
         var radar = radar(h); var owner = h.makeMockPlayer(GameType.SURVIVAL); radar.setPlacer(owner);
         h.assertTrue(!radar.canShowHud(owner), "HUD requires tracker");
-        owner.getInventory().setItem(9, new ItemStack(Items.COMPASS));
-        h.assertTrue(radar.canShowHud(owner), "GameTest-only tagged compass exercises the tracker integration in main inventory");
-        var other = h.makeMockPlayer(GameType.SURVIVAL); other.getInventory().setItem(9, new ItemStack(Items.COMPASS));
+        owner.getInventory().setItem(9, new ItemStack(RotaryItems.MOTION.get()));
+        h.assertTrue(radar.canShowHud(owner), "Registered Motion Tracker unlocks the owner HUD through the actual item tag");
+        var other = h.makeMockPlayer(GameType.SURVIVAL); other.getInventory().setItem(9, new ItemStack(RotaryItems.MOTION.get()));
         h.assertTrue(!radar.canShowHud(other), "tracker must not reveal another player's radar HUD");
-        owner.getInventory().setItem(9, ItemStack.EMPTY); owner.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(Items.COMPASS));
+        owner.getInventory().setItem(9, ItemStack.EMPTY); owner.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(RotaryItems.MOTION.get()));
         h.assertTrue(!radar.canShowHud(owner), "V33a HUD requires main inventory rather than offhand"); h.succeed();
     }
     private static void menu(GameTestHelper h) {

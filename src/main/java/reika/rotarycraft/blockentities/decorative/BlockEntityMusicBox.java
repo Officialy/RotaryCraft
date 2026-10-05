@@ -14,7 +14,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -27,9 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.level.NoteBlockEvent;
 
 import reika.dragonapi.instantiable.MusicScore;
 import reika.dragonapi.instantiable.MusicScore.NoteData;
@@ -607,150 +603,141 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         }
     }
 
-    public static final class Note {
+    /**
+     * @param pitch Standard MC notation
+     */
+    public record Note(NoteLength length, int pitch, Instrument voice) {
 
-        private static final String[] notes = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"};
-        public final NoteLength length;
-        /**
-         * Standard MC notation
-         */
-        public final int pitch;
-        public final Instrument voice;
-
-        public Note(NoteLength length, int pitch, Instrument voice) {
-            this.length = length;
-            this.pitch = pitch;
-            this.voice = voice;
-        }
+            private static final String[] notes = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"};
 
         public static String getNoteName(int pitch) {
-            return notes[pitch % 12];
-        }
+                return notes[pitch % 12];
+            }
 
-        private static Note getFromSerialString(String s) {
-            if (s.equals("-"))
-                return null;
-            String[] sgs = s.split(":");
-            int l1 = Integer.parseInt(sgs[0]);
-            int note = Integer.parseInt(sgs[1]);
-            int i1 = Integer.parseInt(sgs[2]);
-            return new Note(NoteLength.values()[l1], note, Instrument.values()[i1]);
-        }
+            private static Note getFromSerialString(String s) {
+                if (s.equals("-"))
+                    return null;
+                String[] sgs = s.split(":");
+                int l1 = Integer.parseInt(sgs[0]);
+                int note = Integer.parseInt(sgs[1]);
+                int i1 = Integer.parseInt(sgs[2]);
+                return new Note(NoteLength.values()[l1], note, Instrument.values()[i1]);
+            }
 
-        public static Note load(CompoundTag NBT) {
-            int length = NBT.getIntOr("len", 0);
-            int pitch = NBT.getIntOr("pch", 0);
-            int voice = NBT.getIntOr("vc", 0);
-            return new Note(NoteLength.values()[length], pitch, Instrument.values()[voice]);
-        }
+            public static Note load(CompoundTag NBT) {
+                int length = NBT.getIntOr("len", 0);
+                int pitch = NBT.getIntOr("pch", 0);
+                int voice = NBT.getIntOr("vc", 0);
+                return new Note(NoteLength.values()[length], pitch, Instrument.values()[voice]);
+            }
 
-        public static int getPitch(ReikaMusicHelper.MusicKey k) {
-            return k.ordinal() - ReikaMusicHelper.MusicKey.F2.ordinal();
-        }
+            public static int getPitch(ReikaMusicHelper.MusicKey k) {
+                return k.ordinal() - ReikaMusicHelper.MusicKey.F2.ordinal();
+            }
 
-        public static Note getFromMusicScore(MusicScore.Note n) {
-            Instrument i = Instrument.getFromVoiceAndPitch(n);
-            ReikaMusicHelper.MusicKey key = n.key;
-            key = key.getInterval(-12);
-            if (i == Instrument.BASS)
-                key = key.getOctave().getOctave().getOctave();
-            int pitch = getPitch(key);
-            while (pitch > 48)
-                pitch -= 12;
-            return new Note(NoteLength.getByTickLength(n.length / 8), pitch, i);
-        }
+            public static Note getFromMusicScore(MusicScore.Note n) {
+                Instrument i = Instrument.getFromVoiceAndPitch(n);
+                ReikaMusicHelper.MusicKey key = n.key;
+                key = key.getInterval(-12);
+                if (i == Instrument.BASS)
+                    key = key.getOctave().getOctave().getOctave();
+                int pitch = getPitch(key);
+                while (pitch > 48)
+                    pitch -= 12;
+                return new Note(NoteLength.getByTickLength(n.length / 8), pitch, i);
+            }
 
-        public String getName() {
-            return notes[pitch % 12];
-        }
+            public String getName() {
+                return notes[pitch % 12];
+            }
 
-        public int getTickLength() {
-            return length.tickLength;
-        }
+            public int getTickLength() {
+                return length.tickLength;
+            }
 
-        public boolean isRest() {
-            return pitch < 0;
-        }
+            public boolean isRest() {
+                return pitch < 0;
+            }
 
-        public Note getRest() {
-            return new Note(length, -1, voice);
-        }
+            public Note getRest() {
+                return new Note(length, -1, voice);
+            }
 
-        public void play(BlockEntityMusicBox te) {
-            this.play(te.level, te.worldPosition);
-        }
+            public void play(BlockEntityMusicBox te) {
+                this.play(te.level, te.worldPosition);
+            }
 
-        public void play(Level world, BlockPos pos) {
-            if (this.isRest())
-                return;
+            public void play(Level world, BlockPos pos) {
+                if (this.isRest())
+                    return;
 
-            String pit;
-            float pitch = (float) Math.pow(2.0D, (this.pitch - 24) / 12.0D);
-            float volume = 200 / 100F;
-            if (pitch < 0.5F) {
-                pitch *= 2F;
-                pit = "low";
-            } else if (pitch > 2F) {
-                pitch *= 0.25F;
-                pit = "hi";
-            } else
-                pit = "";
-            switch (voice) {
-                case GUITAR -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit).playSoundAtBlock(world, pos, volume, pitch);
-                case BASS -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit).playSoundAtBlock(world, pos, volume, pitch);
-                case PLING -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit).playSoundAtBlock(world, pos, volume, pitch);
-                case BASSDRUM -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_BASEDRUM.value(), SoundSource.BLOCKS, volume, pitch, false);
-                case SNARE -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_SNARE.value(), SoundSource.BLOCKS, volume, pitch, false);
-                case CLAVE -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.BLOCKS, volume, pitch, false);
-                default -> {
+                String pit;
+                float pitch = (float) Math.pow(2.0D, (this.pitch - 24) / 12.0D);
+                float volume = 200 / 100F;
+                if (pitch < 0.5F) {
+                    pitch *= 2F;
+                    pit = "low";
+                } else if (pitch > 2F) {
+                    pitch *= 0.25F;
+                    pit = "hi";
+                } else
+                    pit = "";
+                switch (voice) {
+                    case GUITAR -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.HARP, pit).playSoundAtBlock(world, pos, volume, pitch);
+                    case BASS -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.BASS, pit).playSoundAtBlock(world, pos, volume, pitch);
+                    case PLING -> SoundRegistry.getNoteFromVoiceAndPitch(SoundRegistry.PLING, pit).playSoundAtBlock(world, pos, volume, pitch);
+                    case BASSDRUM -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_BASEDRUM.value(), SoundSource.BLOCKS, volume, pitch, false);
+                    case SNARE -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_SNARE.value(), SoundSource.BLOCKS, volume, pitch, false);
+                    case CLAVE -> world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.BLOCKS, volume, pitch, false);
+                    default -> {
+                    }
                 }
             }
-        }
 
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof Note n) {
-                return n.length == length && n.pitch == pitch && n.voice == voice;
+            @Override
+            public boolean equals(Object o) {
+                if (o instanceof Note n) {
+                    return n.length == length && n.pitch == pitch && n.voice == voice;
+                }
+                return false;
             }
-            return false;
-        }
 
-        @Override
-        public String toString() {
-            if (this.isRest()) {
-                return ReikaStringParser.capFirstChar(length.name()) + " Rest";
+            @Override
+            public String toString() {
+                if (this.isRest()) {
+                    return ReikaStringParser.capFirstChar(length.name()) + " Rest";
+                }
+                String sb = voice +
+                        " plays " +
+                        pitch +
+                        " for " +
+                        length;
+                return sb;
             }
-            String sb = voice +
-                    " plays " +
-                    pitch +
-                    " for " +
-                    length;
-            return sb;
-        }
 
-        public String toSerialString() {
-            String sb = length.ordinal() +
-                    ":" +
-                    pitch +
-                    ":" +
-                    voice.ordinal();
-            return sb;
-        }
+            public String toSerialString() {
+                String sb = length.ordinal() +
+                        ":" +
+                        pitch +
+                        ":" +
+                        voice.ordinal();
+                return sb;
+            }
 
-        public CompoundTag saveAdditional() {
-            CompoundTag NBT = new CompoundTag();
-            NBT.putInt("len", length.ordinal());
-            NBT.putInt("pch", pitch);
-            NBT.putInt("vc", voice.ordinal());
-            //ReikaJavaLibrary.pConsole(this+":"+NBT, Dist.DEDICATED_SERVER);
-            return NBT;
-        }
+            public CompoundTag saveAdditional() {
+                CompoundTag NBT = new CompoundTag();
+                NBT.putInt("len", length.ordinal());
+                NBT.putInt("pch", pitch);
+                NBT.putInt("vc", voice.ordinal());
+                //ReikaJavaLibrary.pConsole(this+":"+NBT, Dist.DEDICATED_SERVER);
+                return NBT;
+            }
 
-        public ReikaMusicHelper.MusicKey getMusicKey() {
-            return ReikaMusicHelper.MusicKey.getByIndex(ReikaMusicHelper.MusicKey.F2.ordinal() + pitch);
-        }
+            public ReikaMusicHelper.MusicKey getMusicKey() {
+                return ReikaMusicHelper.MusicKey.getByIndex(ReikaMusicHelper.MusicKey.F2.ordinal() + pitch);
+            }
 
-    }
+        }
 
     @Override
     public Component getDisplayName() {

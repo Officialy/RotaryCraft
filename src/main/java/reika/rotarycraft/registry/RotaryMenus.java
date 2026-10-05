@@ -30,6 +30,8 @@ public interface RotaryMenus {
     }
 
     Supplier<MenuType<WinderContainer>> WINDER = register("winder", WinderContainer::new);
+    Supplier<MenuType<ContainerSonic>> SONIC_WEAPON = register("sonic_weapon", ContainerSonic::new);
+    Supplier<MenuType<ContainerDefoliator>> DEFOLIATOR = register("defoliator", ContainerDefoliator::new);
     Supplier<MenuType<ContainerMobRadar>> MOB_RADAR = register("mob_radar", ContainerMobRadar::new);
 
     Supplier<MenuType<GearboxContainer>> GEARBOX = register("gearbox", GearboxContainer::new);
@@ -83,8 +85,8 @@ public interface RotaryMenus {
     Supplier<MenuType<ContainerAutoBreeder>> AUTOBREEDER = register("auto_breeder", ContainerAutoBreeder::new);
     Supplier<MenuType<reika.rotarycraft.gui.container.machine.inventory.ContainerItemFilter>> ITEMFILTER = register("item_filter", reika.rotarycraft.gui.container.machine.inventory.ContainerItemFilter::new);
     Supplier<MenuType<reika.rotarycraft.gui.container.machine.inventory.ContainerAutoCrafter>> CRAFTER = register("crafter", reika.rotarycraft.gui.container.machine.inventory.ContainerAutoCrafter::new);
-    Supplier<MenuType<ContainerFractionator>> FRACTIONATOR = register("fractionator", ContainerFractionator::new);
     Supplier<MenuType<ContainerIgniter>> IGNITER = register("igniter", ContainerIgniter::new);
+    Supplier<MenuType<ContainerFractionator>> FRACTIONATOR = register("fractionator", ContainerFractionator::new);
     Supplier<MenuType<ContainerWorktable>> WORKTABLE = register("worktable", ContainerWorktable::new);
 
     Supplier<MenuType<ContainerBlastFurnace>> BLAST_FURNACE = register("blast_furnace", ContainerBlastFurnace::new);

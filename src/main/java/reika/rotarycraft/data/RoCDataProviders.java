@@ -32,6 +32,9 @@ public final class RoCDataProviders {
 
     @SubscribeEvent
     public static void onGatherServer(GatherDataEvent.Server event) {
+        event.createWorldRegistryObjects(RoCWorldGenProvider.buildRegistrySet());
+        event.createProvider(RoCWorldGenProvider::new);
+        event.createProvider(RoCLootModifierProvider::new);
         // Recipes, loot tables, and advancements are reloadable registries in 26.3.
         // The recipe bootstrap also writes recipe unlock advancements into ADVANCEMENT.
         event.createReloadableRegistryObjects(new RegistrySetBuilder()

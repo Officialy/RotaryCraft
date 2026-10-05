@@ -1,6 +1,8 @@
 {
   "values": [
     "rotarycraft:chunk_loader",
+    "rotarycraft:sonic_weapon",
+    "rotarycraft:defoliator",
     "rotarycraft:mob_radar",
     "rotarycraft:gpr",
     "rotarycraft:wood_flywheel",

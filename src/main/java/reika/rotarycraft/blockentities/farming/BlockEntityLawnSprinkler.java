@@ -99,6 +99,7 @@ public class BlockEntityLawnSprinkler extends SprinklerBlock {
     @Override
     protected void performEffects(Level world, BlockPos pos) {
         if (!world.isClientSide()) {
+            reika.rotarycraft.registry.RotaryAdvancements.SPRINKLER.triggerAchievement(this.getPlacer());
             for (int k = 0; k < 3; k++) {
                 this.accelerateGrowth(world, pos);
                 this.extinguishFire(world, pos);

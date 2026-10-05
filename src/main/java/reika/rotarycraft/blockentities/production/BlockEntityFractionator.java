@@ -259,8 +259,7 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         // ~31 mB ethanol per cycle) aren't gated on a full litre being present.
         int ethanolCost = (int) Math.max(1, recipe.getInputAmount()
                 * DifficultyEffects.CONSUMEFRAC.getChance());
-        if (input.getFluidLevel() < ethanolCost) return false;
-        return true;
+        return input.getFluidLevel() >= ethanolCost;
     }
 
     private void runRecipe(FractionatorRecipe recipe) {
@@ -278,6 +277,7 @@ public class BlockEntityFractionator extends PoweredLiquidIO implements Containe
         int produced = (int) (produceBase * getYieldRatio());
         output.addLiquid(Math.max(1, produced), recipe.getOutputFluid());
         consumeIngredientsWeighted(recipe);
+        reika.rotarycraft.registry.RotaryAdvancements.JETFUEL.triggerAchievement(this.getPlacer());
         // The ghast tear is a solvent requirement, not a consumed ingredient in the 1.7 machine.
     }
 

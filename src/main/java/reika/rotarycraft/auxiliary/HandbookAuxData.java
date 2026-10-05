@@ -120,13 +120,13 @@ public class HandbookAuxData {
             List<ItemStack> out = h.getCrafting();
             if (out == null || out.size() <= 0)
                 return;
-            api.drawCustomRecipes(ri, f, out, (Collection<Recipe<?>>) getWorktable(), dx+72-18, dy+18, dx-1620, dy+32);
+            api.drawCustomRecipes(ri, f, out, getWorktable(), dx+72-18, dy+18, dx-1620, dy+32);
         }
         else if (h.isCrafting()) {
             List<ItemStack> out = h.getCrafting();
             if (out == null || out.size() <= 0)
                 return;
-            api.drawCustomRecipes(ri, f, out, (Collection<Recipe<?>>) getWorktable(), dx+72, dy+18, dx+162, dy+32);
+            api.drawCustomRecipes(ri, f, out, getWorktable(), dx+72, dy+18, dx+162, dy+32);
         }
         else if (h.isSmelting()) {
             ItemStack out = h.getSmelting();
@@ -154,7 +154,7 @@ public class HandbookAuxData {
             if (k == 0) {
                 ItemStack out = RotaryItems.JETPACK.get().getDefaultInstance();
                 // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
-                List<Recipe<?>> li = Collections.<Recipe<?>>emptyList();
+                List<Recipe<?>> li = Collections.emptyList();
                 api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
             }
             else if (k == 1) {
@@ -200,7 +200,7 @@ public class HandbookAuxData {
             if (k == 0) {
                 ItemStack out = RotaryItems.JUMP.get().getDefaultInstance();
                 // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
-                List<Recipe<?>> li = Collections.<Recipe<?>>emptyList();
+                List<Recipe<?>> li = Collections.emptyList();
                 api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
             }
             else {
@@ -288,7 +288,7 @@ public class HandbookAuxData {
         }
         else if (h == HandbookRegistry.RAILGUNAMMO) {
             // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
-            List<Recipe<?>> li = Collections.<Recipe<?>>emptyList();
+            List<Recipe<?>> li = Collections.emptyList();
             api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
         }
         else if (h == HandbookRegistry.BEDTOOLS) {
@@ -338,8 +338,8 @@ public class HandbookAuxData {
         else if (h == HandbookRegistry.ALLOYING) {
             // This section relies on outdated RecipesBlastFurnace and BlastFurnacePattern.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.<ShapedBlastFurnaceRecipe>emptyList();
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.<ShapelessBlastFurnaceRecipe>emptyList();
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);
@@ -361,8 +361,8 @@ public class HandbookAuxData {
         else if (h == HandbookRegistry.COKE) {
             // This section relies on outdated RecipesBlastFurnace and BlastRecipe.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.<ShapedBlastFurnaceRecipe>emptyList();
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.<ShapelessBlastFurnaceRecipe>emptyList();
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);
@@ -385,8 +385,8 @@ public class HandbookAuxData {
             ItemStack is = RotaryItems.HSLA_STEEL_INGOT.get().getDefaultInstance();
             // This section relies on outdated RecipesBlastFurnace and BlastRecipe.
             // It will be replaced with a call to drawBlastFurnaceRecipe if a suitable recipe is found.
-            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.<ShapedBlastFurnaceRecipe>emptyList();
-            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.<ShapelessBlastFurnaceRecipe>emptyList();
+            List<ShapedBlastFurnaceRecipe> shapedRecipes = Collections.emptyList();
+            List<ShapelessBlastFurnaceRecipe> shapelessRecipes = Collections.emptyList();
 
             List<Recipe<?>> allRecipes = new ArrayList<>();
             allRecipes.addAll(shapedRecipes);

@@ -1,63 +1,21 @@
-///*******************************************************************************
-// * @author Reika Kalseki
-// *
-// * Copyright 2017
-// *
-// * All rights reserved.
-// * Distribution of the software in any form is only allowed with
-// * explicit, prior permission from the owner.
-// ******************************************************************************/
-//package reika.rotarycraft.guis.Machine.Inventory;
-//
-//import net.minecraft.entity.player.Player;
-//
-//import reika.rotarycraft.base.GuiPowerOnlyMachine;
-//import reika.rotarycraft.gui.container.Machine.Inventory.ContainerDefoliator;
-//import reika.rotarycraft.blockentities.level.BlockEntityDefoliator;
-//
-//public class GuiDefoliator extends GuiPowerOnlyMachine {
-//    private final BlockEntityDefoliator tile;
-//    int x;
-//    int y;
-//
-//    public GuiDefoliator(Player p5ep, BlockEntityDefoliator te) {
-//        super(new ContainerDefoliator(p5ep, te), te);
-//        tile = te;
-//        imageWidth = 176;
-//        imageHeight = 166;
-//        ep = p5ep;
-//    }
-//
-//    @Override
-//    protected void drawGuiContainerForegroundLayer(int a, int b) {
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//        super.drawGuiContainerForegroundLayer(a, b);
-//        int x = api.getMouseRealX();
-//        int y = api.getMouseRealY();
-//        if (api.isMouseInBox(j + 133, j + 150, k + 16, k + 69)) {
-//            int lvl = tile.getLevel();
-//            String sg = String.format("Poison: %d/%d", lvl, BlockEntityDefoliator.CAPACITY);
-//            api.drawTooltipAt(font, sg, x - j, y - k);
-//        }
-//    }
-//
-//    /**
-//     * Draw the background layer for the GuiContainer (everything behind the items)
-//     */
-//    @Override
-//    public void extractBackground(PoseStack poseStack, float par1, int par2, int par3) {
-//        super.extractBackground(PoseStack poseStack, par1, par2, par3);
-//
-//        int j = (width - imageWidth) / 2;
-//        int k = (height - imageHeight) / 2;
-//        int i1 = tile.getPoisonScaled(52);
-//        ScreenUtils.drawTexturedModalRect(j + 134, k + 69 - i1, 177, 69 - i1, 16, i1);
-//
-//    }
-//
-//    @Override
-//    protected String getGuiTexture() {
-//        return "defoliatorgui";
-//    }
-//}
+package reika.rotarycraft.gui.screen.machine.inventory;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import reika.rotarycraft.base.GuiPowerOnlyMachine;
+import reika.rotarycraft.blockentities.level.BlockEntityDefoliator;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerDefoliator;
+public final class GuiDefoliator extends GuiPowerOnlyMachine<BlockEntityDefoliator, ContainerDefoliator> {
+    public GuiDefoliator(ContainerDefoliator menu, Inventory inventory, Component title) { super(menu, inventory, title, 176, 166); }
+    @Override protected String getGuiTexture() { return "defoliatorgui"; }
+    @Override public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partial) {
+        super.extractBackground(graphics, mouseX, mouseY, partial); int size = menu.getFluidLevel() * 52 / BlockEntityDefoliator.CAPACITY;
+        graphics.blit(RenderPipelines.GUI_TEXTURED, getTextureIdentifier(), leftPos + 134, topPos + 69 - size, 177, 69 - size, 16, size, 256, 256);
+    }
+    @Override protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractLabels(graphics, mouseX, mouseY);
+        if (mouseX >= leftPos + 133 && mouseX <= leftPos + 150 && mouseY >= topPos + 16 && mouseY <= topPos + 69)
+            graphics.setTooltipForNextFrame(font, Component.translatable("gui.rotarycraft.defoliator.poison", menu.getFluidLevel(), BlockEntityDefoliator.CAPACITY), mouseX, mouseY);
+    }
+}

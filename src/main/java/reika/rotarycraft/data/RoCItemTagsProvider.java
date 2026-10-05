@@ -44,8 +44,7 @@ public class RoCItemTagsProvider extends ItemTagsProvider {
         // HSLA is deliberately not interchangeable with ordinary steel (HSLADICT defaults off).
         // A datapack may opt in; keeping this tag empty also lets the purifier load without other mods.
         tag(STEEL_INGOTS);
-        // MOTION-PORT: the charged ItemMotionTracker port registers this item and enables the owner HUD.
-        tag(MOTION_TRACKERS).addOptional(net.minecraft.resources.ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "motion_tracker")));
+        tag(MOTION_TRACKERS).add(RotaryItems.MOTION.getKey());
         add(ItemTags.PICKAXES, RotaryItems.HSLA_STEEL_PICKAXE.get(), RotaryItems.BEDROCK_ALLOY_PICK.get());
         add(ItemTags.AXES, RotaryItems.HSLA_STEEL_AXE.get(), RotaryItems.BEDROCK_ALLOY_AXE.get());
         add(ItemTags.SHOVELS, RotaryItems.HSLA_STEEL_SHOVEL.get(), RotaryItems.BEDROCK_ALLOY_SHOVEL.get());

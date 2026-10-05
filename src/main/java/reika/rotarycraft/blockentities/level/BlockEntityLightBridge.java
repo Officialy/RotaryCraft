@@ -31,8 +31,8 @@ import reika.rotarycraft.registry.RotaryBlocks;
  * The Light Bridge extends a walkable bridge of solid light blocks straight out in front of itself,
  * as long as it is powered and the space directly above it is brightly lit (light level ≥ 13 — so a
  * sunlit or otherwise well-lit emitter). The bridge grows one block per tick up to a power-scaled
- * range and retracts the moment the light or power is lost. 1.7.10-faithful; the public
- * {@code LightBridgePowerLossEvent} is not fired (API-PORT: the event class is not in this build).
+ * range and retracts the moment the light or power is lost, posting the original public
+ * {@code LightBridgePowerLossEvent} before retraction.
  */
 public class BlockEntityLightBridge extends BlockEntityBeamMachine implements RangedEffect, BreakAction {
 
@@ -72,7 +72,8 @@ public class BlockEntityLightBridge extends BlockEntityBeamMachine implements Ra
                 }
             }
         } else {
-            // API-PORT: legacy posted MinecraftForge.EVENT_BUS.post(new LightBridgePowerLossEvent(this)).
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(
+                    new reika.rotarycraft.api.event.LightBridgePowerLossEvent(this));
             this.lightsOut(world, pos);
         }
     }
@@ -86,8 +87,11 @@ public class BlockEntityLightBridge extends BlockEntityBeamMachine implements Ra
         animtick = 0;
         for (int i = 1; i < this.getMaxRange(); i++) {
             BlockPos p = pos.relative(facing, i);
-            if (world.getBlockState(p).is(RotaryBlocks.BRIDGE.get()))
-                world.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
+            if (world.getBlockState(p).is(RotaryBlocks.BRIDGE.get())
+                    && world.setBlock(p, Blocks.AIR.defaultBlockState(), 3)) {
+                if (world instanceof net.minecraft.server.level.ServerLevel server)
+                    reika.rotarycraft.auxiliary.LightBridgeFallTracker.supportRemoved(server, p);
+            }
         }
     }
 

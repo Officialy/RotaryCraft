@@ -9,7 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.transmission;
 
-import reika.dragonapi.interfaces.blockentity.WorldRift;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,12 +22,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import reika.dragonapi.DragonAPI;
+import reika.dragonapi.interfaces.blockentity.WorldRift;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
+import reika.rotarycraft.api.event.ShaftFailureEvent;
 import reika.rotarycraft.api.interfaces.ComplexIO;
 import reika.rotarycraft.api.power.ShaftMerger;
 import reika.rotarycraft.api.power.ShaftPowerEmitter;
-import reika.rotarycraft.api.event.ShaftFailureEvent;
 import reika.rotarycraft.auxiliary.PowerSourceList;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
@@ -520,16 +520,14 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
 
         this.inverted = false; // Reset before checking
         if (this.isProvider(te)) {
-            if (te instanceof BlockEntityBevelGear) {
-                BlockEntityBevelGear gear = (BlockEntityBevelGear) te;
+            if (te instanceof BlockEntityBevelGear gear) {
                 if (gear.getWriteDirection() == read.getOpposite()) {
                     this.copyStandardPower(te);
                     if (gear.isInverting()) {
                         this.inverted = true;
                     }
                 }
-            } else if (te instanceof BlockEntityShaft) {
-                BlockEntityShaft devicein = (BlockEntityShaft) te;
+            } else if (te instanceof BlockEntityShaft devicein) {
                 if (devicein.isCross()) {
                     this.readFromCross(devicein);
                     return;
@@ -587,10 +585,10 @@ public class BlockEntityShaft extends BlockEntity1DTransmitter {
             this.testFailure();
 
         if (omega >= 32000000 && !failed) {
-//            RotaryAdvancements.MRADS32.triggerAchievement(this.getPlacer());
+            reika.rotarycraft.registry.RotaryAdvancements.MRADS32.triggerAchievement(this.getPlacer());
         }
         if (power >= 1000000000 && !failed) {
-//            RotaryAdvancements.GIGAWATT.triggerAchievement(this.getPlacer());
+            reika.rotarycraft.registry.RotaryAdvancements.GIGAWATT.triggerAchievement(this.getPlacer());
         }
     }
 

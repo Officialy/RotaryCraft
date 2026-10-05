@@ -208,7 +208,7 @@ public class BlockEntityFireworkMachine extends InventoriedPowerReceiver impleme
 
     @Override
     public int getOperationTime() {
-        return Math.max(4, 300 - (int) (16 * reika.dragonapi.libraries.mathsci.ReikaMathLibrary.logbase2(Math.max(1, omega))));
+        return Math.max(4, 300 - (16 * reika.dragonapi.libraries.mathsci.ReikaMathLibrary.logbase2(Math.max(1, omega))));
     }
 
     @Override

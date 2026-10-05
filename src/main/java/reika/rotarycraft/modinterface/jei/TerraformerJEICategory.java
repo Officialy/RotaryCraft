@@ -32,7 +32,7 @@ public class TerraformerJEICategory implements IRecipeCategory<TerraformingRecip
             builder.addSlot(RecipeIngredientRole.INPUT, 2 + n * 20, 42).addIngredients(cost.ingredient())
                     .addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.literal(cost.chance() == 0 ? "Required catalyst; never consumed" : "Required catalyst; consumed once in " + Math.max(1, (int)(1F / cost.chance())) + " per-column rolls")));
         }
-        if (recipe.water() > 0) builder.addSlot(RecipeIngredientRole.INPUT, 190, 42).addFluidStack(Fluids.WATER, recipe.water() * 16);
+        if (recipe.water() > 0) builder.addSlot(RecipeIngredientRole.INPUT, 190, 42).addFluidStack(Fluids.WATER, recipe.water() * 16L);
     }
     @Override public void draw(TerraformingRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;

@@ -609,7 +609,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         @Override public IDrawable getIcon() { return icon; }
         @Override public void setRecipe(IRecipeLayoutBuilder builder, reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe recipe, IFocusGroup focuses) {
             var input = builder.addSlot(RecipeIngredientRole.INPUT, 1, 1);
-            net.minecraft.core.registries.BuiltInRegistries.FLUID.listElements().filter(fluid -> fluid.is(recipe.input())).forEach(fluid -> input.addFluidStack(fluid.value(), recipe.fluidRatio() * recipe.speedFactor()));
+            net.minecraft.core.registries.BuiltInRegistries.FLUID.listElements().filter(fluid -> fluid.is(recipe.input())).forEach(fluid -> input.addFluidStack(fluid.value(), (long) recipe.fluidRatio() * recipe.speedFactor()));
             builder.addSlot(RecipeIngredientRole.OUTPUT, 150, 1).addFluidStack(recipe.output().value(), recipe.speedFactor())
                     .addRichTooltipCallback((view, tooltip) -> {
                         tooltip.add(Component.translatable("jei.rotarycraft.fuel_enhancer_power"));

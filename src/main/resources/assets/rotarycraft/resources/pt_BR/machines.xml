@@ -333,7 +333,7 @@
 		</desc>
 		<note>
 			Potência Necessária: %dW
-			Área = 8+(Potência-%d)/%d m
+			Área = %d m
 			Cegueira em: %d W/m^2
 			Confusão em: %d W/m^2
 			Afogamento em: %d W/m^2

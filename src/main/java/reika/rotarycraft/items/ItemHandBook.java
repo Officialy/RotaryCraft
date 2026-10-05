@@ -25,6 +25,8 @@ public class ItemHandBook extends ItemRotaryTool {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (!level.isClientSide())
+            reika.rotarycraft.registry.RotaryAdvancements.RCUSEBOOK.triggerAchievement(player);
         if (level.isClientSide() && hand.equals(InteractionHand.MAIN_HAND)) {
             reika.rotarycraft.client.ClientScreens.openHandbook(player, level);
         }

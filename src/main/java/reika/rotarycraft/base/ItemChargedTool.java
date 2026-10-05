@@ -23,7 +23,11 @@ import reika.rotarycraft.registry.RotaryItems;
 public abstract class ItemChargedTool extends ItemRotaryTool {
 
     public ItemChargedTool() {
-        super(RotaryItems.itemProperties());
+        this(RotaryItems.itemProperties());
+    }
+
+    protected ItemChargedTool(Properties properties) {
+        super(properties);
     }
 
     @Override

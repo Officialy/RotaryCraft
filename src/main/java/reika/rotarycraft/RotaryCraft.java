@@ -120,6 +120,8 @@ public class RotaryCraft extends DragonAPIMod {
 
         LOGGER.info("RotaryCraft:" + " Creating Items!");
         RotaryItems.ITEMS.register(modEventBus);
+        RotaryLootConditions.CONDITIONS.register(modEventBus);
+        reika.rotarycraft.data.RoCWorldGenProvider.TYPES.register(modEventBus);
         RotaryBlocks.ITEMS.register(modEventBus);
         RotaryDataComponents.COMPONENTS.register(modEventBus);
 
@@ -242,9 +244,9 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.CRYSTALLIZER.get(), GuiCrystallizer::new);
         event.register(RotaryMenus.AUTOBREEDER.get(), GuiAutoBreeder::new);
         event.register(RotaryMenus.CRAFTER.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiAutoCrafter::new);
-        event.register(RotaryMenus.FRACTIONATOR.get(), GuiFractionator::new);
         event.register(RotaryMenus.ITEMFILTER.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiItemFilter::new);
         event.register(RotaryMenus.IGNITER.get(), GuiIgniter::new);
+        event.register(RotaryMenus.FRACTIONATOR.get(), GuiFractionator::new);
         event.register(RotaryMenus.GAS_ENGINE.get(), GuiEthanol::new);
         event.register(RotaryMenus.MICRO_TURBINE.get(), GuiMicroTurbine::new);
         event.register(RotaryMenus.BLAST_FURNACE.get(), GuiBlastFurnace::new);
@@ -259,6 +261,8 @@ public class RotaryCraft extends DragonAPIMod {
         event.register(RotaryMenus.AEROSOLIZER.get(), GuiAerosolizer::new);
         event.register(RotaryMenus.PULSE_FURNACE.get(), GuiPulseFurnace::new);
         event.register(RotaryMenus.FILLING_STATION.get(), GuiFillingStation::new);
+        event.register(RotaryMenus.SONIC_WEAPON.get(), reika.rotarycraft.gui.screen.machine.GuiSonic::new);
+        event.register(RotaryMenus.DEFOLIATOR.get(), reika.rotarycraft.gui.screen.machine.inventory.GuiDefoliator::new);
         event.register(RotaryMenus.MOB_RADAR.get(), reika.rotarycraft.gui.screen.machine.GuiMobRadar::new);
     }
 

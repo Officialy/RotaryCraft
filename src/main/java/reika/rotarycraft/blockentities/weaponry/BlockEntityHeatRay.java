@@ -152,7 +152,7 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
                     world.explode(null, pos.getX(), pos.getY(), pos.getZ(), 5F, true, Level.ExplosionInteraction.BLOCK);
                     NeoForge.EVENT_BUS.post(new HeatRayNetherDetonationEvent(world, pos));
                     if (world.dimension() == Level.NETHER && range >= 500) {
-//                        RotaryAdvancements.NETHERHEATRAY.triggerAchievement(te.getPlacer());
+            reika.rotarycraft.registry.RotaryAdvancements.NETHERHEATRAY.triggerAchievement(te.getPlacer());
                     }
                 }
                 return true;
@@ -337,30 +337,24 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
 
     }
 
-    private static class BlockChangeLaserEffect implements LaserEffect {
+    private record BlockChangeLaserEffect(BlockKey replacement) implements LaserEffect {
 
-        private final BlockKey replacement;
-
-        private BlockChangeLaserEffect(Block bk) {
-            this(new BlockKey(bk));
-        }
-
-        private BlockChangeLaserEffect(BlockKey bk) {
-            replacement = bk;
-        }
+            private BlockChangeLaserEffect(Block bk) {
+                this(new BlockKey(bk));
+            }
 
         @Override
-        public boolean doEffect(Level world, BlockPos pos, long power, int range, int tickcount, BlockEntityHeatRay te) {
-            replacement.place(world, pos);
-            return true;
-        }
+            public boolean doEffect(Level world, BlockPos pos, long power, int range, int tickcount, BlockEntityHeatRay te) {
+                replacement.place(world, pos);
+                return true;
+            }
 
-        @Override
-        public int getDelayTick(Block b, long surplus, int dist) {
-            return (int) Math.min(Integer.MAX_VALUE, (4L * dist) / surplus);
-        }
+            @Override
+            public int getDelayTick(Block b, long surplus, int dist) {
+                return (int) Math.min(Integer.MAX_VALUE, (4L * dist) / surplus);
+            }
 
-    }
+        }
 
     private static class IgnitionLaserEffect implements LaserEffect {
 
@@ -377,41 +371,35 @@ public class BlockEntityHeatRay extends BlockEntityBeamMachine implements Ranged
 
     }
 
-    private static class MeltLaserEffect implements LaserEffect {
-
-        private final Fluid fluid;
-
-        private MeltLaserEffect(Fluid f) {
-            fluid = f;
-        }
+    private record MeltLaserEffect(Fluid fluid) implements LaserEffect {
 
         @Override
-        public boolean doEffect(Level world, BlockPos pos, long power, int range, int tickcount, BlockEntityHeatRay te) {
-            world.setBlock(pos, this.getBlockState(), 0, 3);
-//            world.getBlockState(pos).getBlock().onNeighborBlockChange(world, pos, Blocks.AIR);
-            if (fluid == Fluids.LAVA)
-                world.addParticle(ParticleTypes.LAVA, pos.getX() + DragonAPI.rand.nextFloat(), pos.getY() + DragonAPI.rand.nextFloat(), pos.getZ() + DragonAPI.rand.nextFloat(), 0, 0, 0);
-//            world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), "DragonAPI.rand.fizz", 0.5F, 2.6F + (DragonAPI.rand.nextFloat() - DragonAPI.rand.nextFloat()) * 0.8F);
-            return false;
-        }
+            public boolean doEffect(Level world, BlockPos pos, long power, int range, int tickcount, BlockEntityHeatRay te) {
+                world.setBlock(pos, this.getBlockState(), 0, 3);
+    //            world.getBlockState(pos).getBlock().onNeighborBlockChange(world, pos, Blocks.AIR);
+                if (fluid == Fluids.LAVA)
+                    world.addParticle(ParticleTypes.LAVA, pos.getX() + DragonAPI.rand.nextFloat(), pos.getY() + DragonAPI.rand.nextFloat(), pos.getZ() + DragonAPI.rand.nextFloat(), 0, 0, 0);
+    //            world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), "DragonAPI.rand.fizz", 0.5F, 2.6F + (DragonAPI.rand.nextFloat() - DragonAPI.rand.nextFloat()) * 0.8F);
+                return false;
+            }
 
-        private BlockState getBlockState() {
-            if (fluid == Fluids.WATER)
-                return Blocks.WATER.defaultBlockState();
-            if (fluid == Fluids.LAVA)
-                return Blocks.LAVA.defaultBlockState();
-            return fluid.defaultFluidState().createLegacyBlock();
-        }
+            private BlockState getBlockState() {
+                if (fluid == Fluids.WATER)
+                    return Blocks.WATER.defaultBlockState();
+                if (fluid == Fluids.LAVA)
+                    return Blocks.LAVA.defaultBlockState();
+                return fluid.defaultFluidState().createLegacyBlock();
+            }
 
-        @Override
-        public int getDelayTick(Block b, long surplus, int dist) {
-            int d = 2;
-            if (fluid == Fluids.WATER)
-                d = 8;
-            return (int) Math.min(Integer.MAX_VALUE, (4L * dist / (d * surplus)));
-        }
+            @Override
+            public int getDelayTick(Block b, long surplus, int dist) {
+                int d = 2;
+                if (fluid == Fluids.WATER)
+                    d = 8;
+                return (int) Math.min(Integer.MAX_VALUE, (4L * dist / (d * surplus)));
+            }
 
-    }
+        }
 
     private static class DeletionLaserEffect implements LaserEffect {
 

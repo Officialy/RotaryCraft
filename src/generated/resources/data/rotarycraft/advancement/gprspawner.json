@@ -2,14 +2,7 @@
   "parent": "rotarycraft:gpr",
   "criteria": {
     "trigger": {
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:spawner"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+      "trigger": "minecraft:impossible"
     }
   },
   "display": {

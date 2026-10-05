@@ -91,20 +91,17 @@ public class ItemMeter extends ItemRotaryTool {
             }
         }
 
-        if (tile instanceof ThermalTile) {
-            ThermalTile th = (ThermalTile) tile;
+        if (tile instanceof ThermalTile th) {
             this.sendMessage(ep, String.format("%s %s: %s", name, Variables.TEMPERATURE, RotaryAux.formatTemperature(th.getTemperature())));
             return InteractionResult.SUCCESS;
         }
 
-        if (tile instanceof PressureTile) {
-            PressureTile th = (PressureTile) tile;
+        if (tile instanceof PressureTile th) {
             this.sendMessage(ep, String.format("%s %s: %s", name, Variables.PRESSURE, RotaryAux.formatPressure(th.getPressure())));
             return InteractionResult.SUCCESS;
         }
 
-        if (tile instanceof RangedEffect) {
-            RangedEffect te = (RangedEffect) tile;
+        if (tile instanceof RangedEffect te) {
             this.sendMessage(ep, Variables.RANGE + ": " + RotaryAux.formatDistance(te.getRange()) + "; " + "Max Range: " + RotaryAux.formatDistance(te.getMaxRange()));
             return InteractionResult.SUCCESS;
         }
@@ -114,8 +111,7 @@ public class ItemMeter extends ItemRotaryTool {
             return InteractionResult.SUCCESS;
         }
 
-        if (tile instanceof IntegratedGearboxable) {
-            IntegratedGearboxable te = (IntegratedGearboxable) tile;
+        if (tile instanceof IntegratedGearboxable te) {
             int ratio = te.getIntegratedGear();
             if (ratio != 0) {
                 this.sendMessage(ep, "Integrated Gearbox: " + Math.abs(ratio) + " x, " + (ratio > 0 ? "Torque" : "Speed"));
@@ -129,8 +125,7 @@ public class ItemMeter extends ItemRotaryTool {
             return InteractionResult.SUCCESS;
         }
 
-        if (tile instanceof BlockEntityEngine) {
-            BlockEntityEngine te = (BlockEntityEngine) tile;
+        if (tile instanceof BlockEntityEngine te) {
             world.updateNeighborsAt(tile.getBlockPos(), te.getTEBlock());
             long power = te.power;
             this.sendMessage(ep, String.format("%s producing %s", name, RotaryAux.formatPowerIO(te)));
@@ -175,8 +170,7 @@ public class ItemMeter extends ItemRotaryTool {
             return InteractionResult.SUCCESS;
         }
 
-        if (tile instanceof BlockEntityPowerReceiver) {
-            BlockEntityPowerReceiver te = (BlockEntityPowerReceiver) tile;
+        if (tile instanceof BlockEntityPowerReceiver te) {
             long power = te.power;
             this.sendMessage(ep, String.format("%s receiving %s", name, RotaryAux.formatPowerIO(te)));
             if (power < te.MINPOWER)
@@ -250,22 +244,19 @@ public class ItemMeter extends ItemRotaryTool {
                 this.sendMessage(ep, String.format("%s is upgraded.", te.getName()));
                 return InteractionResult.SUCCESS;
             }
-        } else if (tile instanceof BlockEntityTransmissionMachine) {
-            BlockEntityTransmissionMachine te = (BlockEntityTransmissionMachine) tile;
+        } else if (tile instanceof BlockEntityTransmissionMachine te) {
             this.sendMessage(ep, String.format("%s transmitting %s", name, RotaryAux.formatPowerIO(te)));
             return InteractionResult.SUCCESS;
         }
 
-        if (tile instanceof RCToModConverter) {
-            RCToModConverter te = (RCToModConverter) tile;
+        if (tile instanceof RCToModConverter te) {
             int units = te.getGeneratedUnitsPerTick();
             String unit = te.getUnitDisplay();
             this.sendMessage(ep, String.format("Generating %d %s/t", units, unit));
             return InteractionResult.SUCCESS;
         }
 
-        if (tile instanceof EnergyToPowerBase) {
-            EnergyToPowerBase te = (EnergyToPowerBase) tile;
+        if (tile instanceof EnergyToPowerBase te) {
             int units = te.getConsumedUnitsPerTick();
             String unit = te.getUnitDisplay();
             this.sendMessage(ep, String.format("%s Outputting %s", name, RotaryAux.formatPowerIO(te)));
@@ -273,8 +264,7 @@ public class ItemMeter extends ItemRotaryTool {
             return InteractionResult.SUCCESS;
         }
 
-        if (tile instanceof BlockEntityPiping) {
-            BlockEntityPiping te = (BlockEntityPiping) tile;
+        if (tile instanceof BlockEntityPiping te) {
             Fluid f = te.getAttributes();
             if (f != null) {
                 this.sendMessage(ep, String.format("Pipe has %s of %s", RotaryAux.formatLiquidAmount(te.getFluidLevel()), BuiltInRegistries.FLUID.getKey(f).getNamespace()));
@@ -285,8 +275,7 @@ public class ItemMeter extends ItemRotaryTool {
             }
         }
 
-        if (tile instanceof BlockEntitySpringPowered) {
-            BlockEntitySpringPowered te = (BlockEntitySpringPowered) tile;
+        if (tile instanceof BlockEntitySpringPowered te) {
             this.sendMessage(ep, String.format("Remaining charge: %.2fs", te.getExpectedCoilLife() / 20D));
             return InteractionResult.SUCCESS;
         }

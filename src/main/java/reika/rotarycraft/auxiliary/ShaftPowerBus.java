@@ -30,11 +30,10 @@ public class ShaftPowerBus {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Power Bus Receiving " + this.getInputTorque() + " Nm @ " + this.getSpeed() + " rad/s\n");
-        sb.append(this.getInputPower() + "W is being split to " + this.getTotalOutputSides() + " devices\n");
-        sb.append("(Power per side is " + this.getInputPower() / this.getTotalOutputSides() + "W)");
-        return sb.toString();
+        String sb = "Power Bus Receiving " + this.getInputTorque() + " Nm @ " + this.getSpeed() + " rad/s\n" +
+                this.getInputPower() + "W is being split to " + this.getTotalOutputSides() + " devices\n" +
+                "(Power per side is " + this.getInputPower() / this.getTotalOutputSides() + "W)";
+        return sb;
     }
 
     public void removeBlock(BlockEntityPowerBus bus) {

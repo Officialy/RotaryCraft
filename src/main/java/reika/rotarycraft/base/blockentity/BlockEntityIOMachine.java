@@ -378,20 +378,18 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
     }
 
     private void setPower(BlockEntity te, Direction from, int om, int tq) {
-        if (te instanceof SimpleShaftPowerReceiver) {
+        if (te instanceof SimpleShaftPowerReceiver sp) {
             if (this.isBlacklistedReceiver(te)) {
                 if (omega > 0 && torque > 0)
                     this.affectBlacklistedReceiver(te);
             } else {
-                SimpleShaftPowerReceiver sp = (SimpleShaftPowerReceiver) te;
                 sp.setPowered(sp.canReadFrom(from.getOpposite()) && tq > 0 && om > 0);
             }
-        } else if (te instanceof ShaftPowerReceiver) {
+        } else if (te instanceof ShaftPowerReceiver sp) {
             if (this.isBlacklistedReceiver(te)) {
                 if (omega > 0 && torque > 0)
                     this.affectBlacklistedReceiver(te);
             } else {
-                ShaftPowerReceiver sp = (ShaftPowerReceiver) te;
                 if (sp.isReceiving() && sp.canReadFrom(from.getOpposite())) {
                     sp.setOmega(om);
                     sp.setTorque(tq);
@@ -402,12 +400,11 @@ public abstract class BlockEntityIOMachine extends RotaryCraftBlockEntity implem
                     sp.setPower(0);
                 }
             }
-        } else if (te instanceof AdvancedShaftPowerReceiver) {
+        } else if (te instanceof AdvancedShaftPowerReceiver sp) {
             if (this.isBlacklistedReceiver(te)) {
                 if (omega > 0 && torque > 0)
                     this.affectBlacklistedReceiver(te);
             } else {
-                AdvancedShaftPowerReceiver sp = (AdvancedShaftPowerReceiver) te;
                 if (sp.canReadFrom(from.getOpposite())) {
                     sp.addPower(tq, om, (long) tq * (long) om, from.getOpposite());
                 }

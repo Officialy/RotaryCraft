@@ -1,4 +1,4 @@
-// 26.3	2026-10-01T22:46:49.5351738	Tags for minecraft:item mod id rotarycraft
+// 26.3	2026-10-04T20:55:11.113544	Tags for minecraft:item mod id rotarycraft
 7d8156626076e44ca10a04ded074cd01bc2b5286 data/c/tags/item/coke.json
 1a040c03b2d622646af84c4b705606a79139464a data/c/tags/item/drops.json
 f386a8bb7fde27610eb48e0032f8cd6988277f6d data/c/tags/item/drops/magma.json
@@ -320,4 +320,4 @@ decc603aa69cb6362aa19dcd66a0eae4951c4caa data/rotarycraft/tags/item/extractor/or
 299a8cfea503c5dd9accf0d61e606ca5995dae15 data/rotarycraft/tags/item/extractor/ores/zinc.json
 b5c6781ac766bb269cad48810fda77b70381d5b7 data/rotarycraft/tags/item/ingots/bedrock_alloy.json
 5fd1a001e1f63add71af82c50d2963f584531bc2 data/rotarycraft/tags/item/ingots/tungsten_alloy.json
-53194020524e98aed2b6d23ae91e5942bbb33fac data/rotarycraft/tags/item/motion_trackers.json
+80a7f766146ce59a004b5080bc68ed2d19b8e0cd data/rotarycraft/tags/item/motion_trackers.json

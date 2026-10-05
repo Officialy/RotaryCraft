@@ -210,17 +210,7 @@ public class BlockEntityBlockCannon extends BlockEntityLaunchCannon {
         return 0;
     }
 
-    private static class BlockToFire {
-
-        private final ItemStack referenceItem;
-        private final BlockKey toFire;
-        private final int inventorySlot;
-
-        private BlockToFire(ItemStack is, BlockKey bk, int s) {
-            referenceItem = is;
-            toFire = bk;
-            inventorySlot = s;
-        }
+    private record BlockToFire(ItemStack referenceItem, BlockKey toFire, int inventorySlot) {
 
     }
 

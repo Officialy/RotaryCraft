@@ -34,13 +34,7 @@ public class TutorialTracker {
 //
 //    }
 
-    private static class Hint {
-
-        public final String text;
-
-        private Hint(String s) {
-            text = s;
-        }
+    private record Hint(String text) {
 
     }
 

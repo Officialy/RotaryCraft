@@ -2,14 +2,7 @@
   "parent": "rotarycraft:gprspawner",
   "criteria": {
     "trigger": {
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:end_portal_frame"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+      "trigger": "minecraft:impossible"
     }
   },
   "display": {

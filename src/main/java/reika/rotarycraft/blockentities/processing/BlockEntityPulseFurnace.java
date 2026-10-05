@@ -462,10 +462,10 @@ public class BlockEntityPulseFurnace extends InventoriedPowerReceiver implements
         return fuel.isEmpty() ? "No Fuel" : this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
     }
 
-    // The 1.7.10 version triggered the PULSEFIRE achievement here; achievements (and getPlacer)
-    // aren't ported, and the fire-starting itself is handled by temperatureEnvironment above.
     @Override
     public void onApplyTemperature(Level world, BlockPos pos, int temperature) {
+        if (!world.isClientSide() && world.getBlockState(pos).is(Blocks.FIRE))
+            reika.rotarycraft.registry.RotaryAdvancements.PULSEFIRE.triggerAchievement(this.getPlacer());
     }
 
     @Override

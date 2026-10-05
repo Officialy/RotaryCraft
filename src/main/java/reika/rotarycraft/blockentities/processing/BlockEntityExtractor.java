@@ -205,6 +205,7 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
                 itemHandler.setStackInSlot(9, ItemStack.EMPTY);
             }
         }
+        boolean allStages = true;
         for (int i = 0; i < 4; i++) {
             boolean flag1 = false;
 
@@ -212,9 +213,12 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
             for (int k = 0; k < n; k++)
                 flag1 |= this.doOperation(n > 1, i);
 
+            allStages &= flag1;
             if (flag1)
                 this.setChanged();
         }
+        if (allStages)
+            reika.rotarycraft.registry.RotaryAdvancements.INSANITY.triggerAchievement(this.getPlacer());
     }
 
     @Override
@@ -310,6 +314,10 @@ public class BlockEntityExtractor extends InventoriedPowerLiquidReceiver impleme
         }
         if (i == 3) {
             this.bonusItems(recipe, in);
+            reika.rotarycraft.registry.RotaryAdvancements.EXTRACTOR.triggerAchievement(this.getPlacer());
+            var modOre = reika.rotarycraft.registry.ModExtractOres.forStage(in.getItem());
+            if (ore != null && ore.isRare() || modOre != null && modOre.rarity.equals("RARE"))
+                reika.rotarycraft.registry.RotaryAdvancements.RAREEXTRACT.triggerAchievement(this.getPlacer());
         }
 
         in.shrink(1);

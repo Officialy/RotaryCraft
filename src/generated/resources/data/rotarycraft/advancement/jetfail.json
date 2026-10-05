@@ -10,7 +10,7 @@
       "translate": "advancements.rotarycraft.jetfail.description"
     },
     "icon": {
-      "id": "minecraft:iron_ingot"
+      "id": "minecraft:flint_and_steel"
     },
     "title": {
       "translate": "advancements.rotarycraft.jetfail.title"

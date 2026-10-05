@@ -56,7 +56,8 @@ public final class RoCLootProvider extends LootTableProvider {
 
     public RoCLootProvider() {
         super(Set.of(), List.of(
-                new SubProviderEntry(Blocks::new, LootContextParamSets.BLOCK)
+                new SubProviderEntry(Blocks::new, LootContextParamSets.BLOCK),
+                new SubProviderEntry(RoCChestLoot::new, LootContextParamSets.CHEST)
         ));
     }
 

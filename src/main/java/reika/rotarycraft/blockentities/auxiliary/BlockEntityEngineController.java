@@ -186,7 +186,8 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         if (world.getBlockEntity(pos.below()) instanceof BlockEntityEngine engDown)
             if (this.transferToEngine(engDown, true))
                 return;
-        if (world.getBlockEntity(pos.below()) instanceof TileEntityFuelEngine engineDown && transferToFuelEngine(engineDown, true)) return;
+        if (world.getBlockEntity(pos.below()) instanceof TileEntityFuelEngine engineDown && transferToFuelEngine(engineDown, true)) {
+        }
     }
 
     private boolean transferToFuelEngine(TileEntityFuelEngine engine, boolean flip) {
@@ -303,8 +304,7 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         //if (fluid.equals(Fluids.LAVA)) Why was THIS here???
         //	return true;
         BlockEntity te = getAdjacentBlockEntity(from);
-        if (te instanceof BlockEntityEngine) {
-            BlockEntityEngine eng = (BlockEntityEngine) te;
+        if (te instanceof BlockEntityEngine eng) {
             return eng.getEngineType() != EngineType.STEAM && eng.getEngineType().burnsFuel() && fluid.isSame(eng.getEngineType().getFuelType());
         } else if (te instanceof TileEntityFuelEngine) {
             return TileEntityFuelEngine.isValidFuel(fluid);
@@ -314,9 +314,7 @@ public class BlockEntityEngineController extends RotaryCraftBlockEntity implemen
         if (fluid.isSame(RotaryFluids.ETHANOL.get()))
             return true;
         if (TileEntityFuelEngine.isValidFuel(fluid)) return true;
-        if (fluid.isSame(RotaryFluids.OXYGEN.get()))
-            return true;
-        return false;//fluid.equals(Fluids.getFluid("oxygen"));
+        return fluid.isSame(RotaryFluids.OXYGEN.get());//fluid.equals(Fluids.getFluid("oxygen"));
     }
 
 
