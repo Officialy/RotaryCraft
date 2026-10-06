@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.rendertype.LayeringTransform;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
+import reika.dragonapi.extras.shader.IrisCompat;
 
 /**
  * 26.1: registers custom {@link RenderPipeline}s used by RotaryCraft renderers.
@@ -134,6 +135,10 @@ public final class RotaryRenderPipelines {
         event.registerPipeline(NO_DEPTH_FILLED_BOX);
         event.registerPipeline(NO_DEPTH_LINES);
         event.registerPipeline(HEAT_RIPPLE);
+        // The overlays are drawn in the world, so a shader pack's Iris needs a program for each (matched on vertex
+        // format) and they stay out of its shadow map. HEAT_RIPPLE runs after Iris composites, so it is never swapped.
+        IrisCompat.assignWithoutShadow(NO_DEPTH_FILLED_BOX, "BASIC");
+        IrisCompat.assignWithoutShadow(NO_DEPTH_LINES, "LINES");
     }
 
     /** Touching this class loads the static initializers (RT registration); call from client setup. */
