@@ -108,7 +108,7 @@ public enum PowerReceivers {
     GATLING(1, 1024, 65536),
     FLAMETURRET(1, 512, 32768),
     BUNDLEDBUS(1024),
-    PILEDRIVER;
+    PILEDRIVER(80000, 1, 16384);
 
     public static final PowerReceivers[] list = values();
     private final int minT;

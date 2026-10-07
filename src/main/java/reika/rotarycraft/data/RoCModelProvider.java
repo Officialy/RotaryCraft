@@ -142,7 +142,8 @@ public class RoCModelProvider extends ModelProvider {
             if (isPipeShell) {
                 blockModelId = Identifier.fromNamespaceAndPath(RotaryCraft.MODID,
                         "block/pipe/" + BuiltInRegistries.BLOCK.getKey(block).getPath() + "/core");
-            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockDefoliator
+            } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockPileDriver
+                    || block instanceof reika.rotarycraft.base.blocks.entity.BlockDefoliator
                     || block instanceof reika.rotarycraft.base.blocks.entity.BlockSonicWeapon
                     || block instanceof reika.rotarycraft.base.blocks.entity.BlockMobRadar
                     || block instanceof reika.rotarycraft.base.blocks.entity.BlockFuelEngine
@@ -247,7 +248,7 @@ public class RoCModelProvider extends ModelProvider {
                         block, bottomTopMapping("gpr/gpr_top_grass", "gpr/gpr_bottom", "gpr/gpr_bottom"), modelOut);
             } else if (block instanceof BlockMiningPipe) {
                 // Tunnel lining left by the borer. Its id is "miningpipe" but the texture is minepipe.png;
-                // all four SHAPE states share one cube model (the legacy render was cube-ish too).
+                // Shape dispatch below restores the three inset bars and the distinct hammer tip.
                 var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/minepipe"));
                 blockModelId = ModelTemplates.CUBE_ALL.create(
                         block,
@@ -286,7 +287,17 @@ public class RoCModelProvider extends ModelProvider {
             //    so rotation is moot).
             if (!isPipeShell) {
                 MultiVariantGenerator gen;
-                if (block instanceof BlockRotaryCraftMachine) {
+                if (block instanceof BlockMiningPipe) {
+                    Identifier bit = ModelTemplates.CUBE_ALL.create(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/miningpipe_bit"),
+                            TextureMapping.cube(new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/minepipe2"))), modelOut);
+                    var shapes = PropertyDispatch.initial(BlockMiningPipe.SHAPE);
+                    for (var shape : BlockMiningPipe.Shape.values()) {
+                        Identifier id = shape.axis() == null ? (shape == BlockMiningPipe.Shape.PILE_DRIVER ? bit : blockModelId)
+                                : miningPipeBar(shape.axis(), modelOut);
+                        shapes.select(shape, singleVariant(id));
+                    }
+                    gen = MultiVariantGenerator.dispatch(block).with(shapes);
+                } else if (block instanceof BlockRotaryCraftMachine) {
                     gen = MultiVariantGenerator.dispatch(block, single)
                             .with(sixWayFacingDispatch(BlockStateProperties.FACING));
                 } else {
@@ -330,6 +341,9 @@ public class RoCModelProvider extends ModelProvider {
             // already emitted in the block pass — ModelProvider's ItemInfoCollector rejects
             // duplicate keys (e.g. `canola_seeds` exists both as a Block and as a separate Item).
             if (blockItemsHandled.contains(item)) return;
+            if (item instanceof reika.rotarycraft.items.ItemSpawner) {
+                itemModelOut.accept(item, ItemModelUtils.plainModel(Identifier.fromNamespaceAndPath("minecraft", "block/spawner"))); return;
+            }
             // assets/<modid>/models/item/<name>.json (parent=item/generated, layer0=item/<name>).
             Identifier itemModelId = ModelTemplates.FLAT_ITEM.create(
                     ModelLocationUtils.getModelLocation(item),
@@ -339,6 +353,21 @@ public class RoCModelProvider extends ModelProvider {
                     ? ItemModelUtils.tintedModel(itemModelId, new net.minecraft.client.color.item.CustomModelDataSource(0, 0xffffff))
                     : ItemModelUtils.plainModel(itemModelId));
         });
+    }
+
+    /** V33a bars occupy 0.33..0.67 on the two axes perpendicular to the tunnel. */
+    private static Identifier miningPipeBar(Direction.Axis axis, BiConsumer<Identifier, ModelInstance> output) {
+        Identifier id = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "block/miningpipe_axis_" + axis.getName());
+        output.accept(id, () -> {
+            var json = new com.google.gson.JsonObject(); json.addProperty("parent", "minecraft:block/block");
+            var textures = new com.google.gson.JsonObject(); textures.addProperty("all", "rotarycraft:block/minepipe"); textures.addProperty("particle", "#all"); json.add("textures", textures);
+            var element = new com.google.gson.JsonObject(); var from = new com.google.gson.JsonArray(); var to = new com.google.gson.JsonArray();
+            for (Direction.Axis dimension : Direction.Axis.values()) { from.add(dimension == axis ? 0 : 5.28); to.add(dimension == axis ? 16 : 10.72); }
+            element.add("from", from); element.add("to", to); var faces = new com.google.gson.JsonObject();
+            for (Direction side : Direction.values()) { var face = new com.google.gson.JsonObject(); face.addProperty("texture", "#all"); faces.add(side.getName(), face); }
+            element.add("faces", faces); var elements = new com.google.gson.JsonArray(); elements.add(element); json.add("elements", elements); return json;
+        });
+        return id;
     }
 
     /** Raw-route intermediates use the original iron sprites, with separate item identities. */

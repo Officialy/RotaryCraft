@@ -20,6 +20,8 @@ public class RotaryItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(RotaryCraft.MODID);
 
+    public static final DeferredItem<ItemSpawner> SPAWNER = reg("spawner", ItemSpawner::new);
+
     // 1.21.5: Item.Properties requires setId() before Item.<init> (it dereferences props.id via
     // effectiveDescriptionId()). We stash the ResourceKey in a ThreadLocal while each entry's
     // factory runs, and replace `itemProperties()` with `itemProperties()` which reads it.

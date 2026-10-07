@@ -464,7 +464,7 @@ public final class RotaryDescriptions {
         addData(HandbookRegistry.BEARINGS, (int) (BlockEntityGearbox.BEARINGREDUCTION * 100) + "%", (int) (BlockEntityGearbox.BEARINGINCREASE * 100) + "%");
 //
 //        addData(MachineRegistry.BORER, BlockEntityBorer.DIGPOWER * 10, BlockEntityBorer.OBSIDIANTORQUE);
-//        addData(MachineRegistry.PILEDRIVER, BlockEntityPileDriver.BASEPOWER);
+        addData(MachineRegistry.PILEDRIVER, reika.rotarycraft.blockentities.level.BlockEntityPileDriver.BASEPOWER);
 //        addData(MachineRegistry.EXTRACTOR, PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinSpeed(2));
         addData(MachineRegistry.RESERVOIR, BlockEntityReservoir.CAPACITY / FluidType.BUCKET_VOLUME);
 //        addData(MachineRegistry.FAN, PowerReceivers.FAN.getMinPower(), BlockEntityFan.MAXPOWER);
@@ -484,7 +484,7 @@ public final class RotaryDescriptions {
 //        addNotes(MachineRegistry.GRINDER, PowerReceivers.GRINDER.getMinPower(), PowerReceivers.GRINDER.getMinTorque());
         addNotes(MachineRegistry.FLOODLIGHT, PowerReceivers.FLOODLIGHT.getMinPower());
         addNotes(MachineRegistry.HEATRAY, PowerReceivers.HEATRAY.getMinPower(), PowerReceivers.HEATRAY.getMinPower(), BlockEntityHeatRay.FALLOFF);
-//        addNotes(MachineRegistry.PILEDRIVER, BlockEntityPileDriver.BASEPOWER, PowerReceivers.PILEDRIVER.getMinTorque());
+        addNotes(MachineRegistry.PILEDRIVER, reika.rotarycraft.blockentities.level.BlockEntityPileDriver.BASEPOWER, PowerReceivers.PILEDRIVER.getMinTorque());
         addNotes(MachineRegistry.AEROSOLIZER, PowerReceivers.AEROSOLIZER.getMinPower());
 //        addNotes(MachineRegistry.LIGHTBRIDGE, PowerReceivers.LIGHTBRIDGE.getMinPower(), PowerReceivers.LIGHTBRIDGE.getMinPower() / RotaryConfig.COMMON.BRIDGERANGE.getValue());
 //        addNotes(MachineRegistry.EXTRACTOR, PowerReceivers.EXTRACTOR.getMinPower(0), PowerReceivers.EXTRACTOR.getMinPower(1), PowerReceivers.EXTRACTOR.getMinPower(2), PowerReceivers.EXTRACTOR.getMinPower(3), PowerReceivers.EXTRACTOR.getMinTorque(0), PowerReceivers.EXTRACTOR.getMinTorque(3), PowerReceivers.EXTRACTOR.getMinSpeed(1), PowerReceivers.EXTRACTOR.getMinSpeed(2));

@@ -18,6 +18,9 @@ import reika.rotarycraft.registry.RotaryBlocks;
  */
 public class RoCBlockTagsProvider extends BlockTagsProvider {
 
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> PILE_DRIVER_FRAGILE =
+            net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "pile_driver_fragile"));
     public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> DEFOLIATOR_TARGETS =
             net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK,
                     net.minecraft.resources.Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "defoliator_targets"));
@@ -28,6 +31,14 @@ public class RoCBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        var fragile = tag(PILE_DRIVER_FRAGILE).addTag(BlockTags.SAPLINGS);
+        for (var block : new net.minecraft.world.level.block.Block[]{net.minecraft.world.level.block.Blocks.GLASS, net.minecraft.world.level.block.Blocks.GLASS_PANE,
+                net.minecraft.world.level.block.Blocks.GLOWSTONE, net.minecraft.world.level.block.Blocks.CACTUS, net.minecraft.world.level.block.Blocks.SUGAR_CANE,
+                net.minecraft.world.level.block.Blocks.VINE, net.minecraft.world.level.block.Blocks.LILY_PAD, net.minecraft.world.level.block.Blocks.SHORT_GRASS,
+                net.minecraft.world.level.block.Blocks.FERN, net.minecraft.world.level.block.Blocks.DEAD_BUSH}) fragile.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
+        for (var block : net.minecraft.core.registries.BuiltInRegistries.BLOCK)
+            if (block instanceof net.minecraft.world.level.block.FlowerPotBlock || block instanceof net.minecraft.world.level.block.AbstractSkullBlock)
+                fragile.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
         // V33a plant/vine/cactus materials and vanilla/mod wood families, now extensible data.
         var decay = tag(DEFOLIATOR_TARGETS).addTag(BlockTags.LOGS).addTag(BlockTags.LEAVES).addTag(BlockTags.SAPLINGS);
         decay.addOptionalTag(common("logs")).addOptionalTag(common("leaves")).addOptionalTag(common("saplings"));

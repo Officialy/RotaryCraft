@@ -115,6 +115,7 @@ public final class MachineModels {
         MODELS.put(MachineRegistry.FUELENHANCER, modelSet -> new reika.rotarycraft.modinterface.model.FuelConverterModel(modelSet.bakeLayer(RotaryModelLayers.FUEL_ENHANCER)));
         MODELS.put(MachineRegistry.FUELENGINE, modelSet -> new FuelEngineModel(modelSet.bakeLayer(RotaryModelLayers.FUEL_ENGINE)));
         MODELS.put(MachineRegistry.SONICWEAPON, modelSet -> new reika.rotarycraft.models.SonicWeaponModel(modelSet.bakeLayer(RotaryModelLayers.SONIC_WEAPON)));
+        MODELS.put(MachineRegistry.PILEDRIVER, modelSet -> new reika.rotarycraft.models.animated.PileDriverModel(modelSet.bakeLayer(RotaryModelLayers.PILE_DRIVER)));
         MODELS.put(MachineRegistry.DEFOLIATOR, modelSet -> new reika.rotarycraft.models.animated.DefoliatorModel(modelSet.bakeLayer(RotaryModelLayers.DEFOLIATOR)));
         MODELS.put(MachineRegistry.MOBRADAR, modelSet -> new reika.rotarycraft.models.animated.RadarModel(modelSet.bakeLayer(RotaryModelLayers.MOB_RADAR)));
         MODELS.put(MachineRegistry.DISTILLER, modelSet -> new reika.rotarycraft.models.animated.DistilleryModel(modelSet.bakeLayer(RotaryModelLayers.DISTILLER)));

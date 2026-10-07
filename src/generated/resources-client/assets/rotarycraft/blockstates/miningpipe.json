@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "shape=axis_x": {
+      "model": "rotarycraft:block/miningpipe_axis_x"
+    },
+    "shape=axis_y": {
+      "model": "rotarycraft:block/miningpipe_axis_y"
+    },
+    "shape=axis_z": {
+      "model": "rotarycraft:block/miningpipe_axis_z"
+    },
+    "shape=junction": {
       "model": "rotarycraft:block/miningpipe"
+    },
+    "shape=pile_driver": {
+      "model": "rotarycraft:block/miningpipe_bit"
     }
   }
 }

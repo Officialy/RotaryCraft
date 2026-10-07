@@ -30,6 +30,7 @@ public class RotaryLang extends LanguageProvider {
     // omitted (their prettified per-tier name is more informative than the original shared label).
     private static final Map<String, String> NAME_OVERRIDES = Map.ofEntries(
             Map.entry("borer", "Boring Machine"),
+            Map.entry("piledriver", "Pile Driver"),
             Map.entry("crafter", "AutoCrafting Unit"),
             Map.entry("scalechest", "Scaleable Chest"),
             Map.entry("aa_gun", "AA Gun"),
@@ -83,6 +84,18 @@ public class RotaryLang extends LanguageProvider {
         add("gui.rotarycraft.mob_radar.range", "%s m");
         add("gui.rotarycraft.sonic_weapon.volume", "Volume:");
         add("gui.rotarycraft.defoliator.poison", "Poison: %s/%s");
+        add("message.rotarycraft.spawner.no_type", "Spawner has no type set!");
+        add("message.rotarycraft.spawner.dimension", "%s cannot be placed in dimension %s!");
+        add("tooltip.rotarycraft.spawner.no_entity", "No entity data");
+        add("tooltip.rotarycraft.spawner.type", "Spawns %s");
+        add("tooltip.rotarycraft.spawner.defaults", "Default spawn parameters");
+        add("tooltip.rotarycraft.spawner.shift", "Hold LSHIFT for spawner parameters");
+        add("tooltip.rotarycraft.spawner.MinSpawnDelay", "Min Delay: %s ticks");
+        add("tooltip.rotarycraft.spawner.MaxSpawnDelay", "Max Delay: %s ticks");
+        add("tooltip.rotarycraft.spawner.MaxNearbyEntities", "Max Near Mobs: %s");
+        add("tooltip.rotarycraft.spawner.SpawnCount", "Spawn Count: %s");
+        add("tooltip.rotarycraft.spawner.SpawnRange", "Spawn Range: %sm");
+        add("tooltip.rotarycraft.spawner.RequiredPlayerRange", "Activation Range: %sm");
         add("message.rotarycraft.motion_tracker.contact", "%s %sm away.");
         add("message.rotarycraft.motion_tracker.mob_attacking", "Mob is Attacking!");
         add("message.rotarycraft.motion_tracker.dragon_attacking", "Dragon is Attacking!");
@@ -143,6 +156,7 @@ public class RotaryLang extends LanguageProvider {
         // them again would emit a duplicate-key warning, so they're skipped here).
         RotaryItems.ITEMS.getEntries().forEach(holder ->
                 addItem(holder, "debug".equals(holder.getId().getPath()) ? "Magic Wand"
+                        : "spawner".equals(holder.getId().getPath()) ? "Monster Spawner"
                         : "craft_pattern".equals(holder.getId().getPath()) ? "Crafting Pattern" //V33a item.craftpattern
                           : reika.rotarycraft.registry.ModExtractOres.itemName(holder.get()) != null
                           ? reika.rotarycraft.registry.ModExtractOres.itemName(holder.get()) : prettify(holder.getId().getPath())));

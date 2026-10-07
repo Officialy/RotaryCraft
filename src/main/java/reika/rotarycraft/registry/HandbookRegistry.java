@@ -222,7 +222,7 @@ public enum HandbookRegistry implements HandbookEntry {
 
     UTILMACHINEDESC("Utility Machines", "Utility"),
     FLOODLIGHT(MachineRegistry.FLOODLIGHT),
-    //    PILEDRIVER(MachineRegistry.PILEDRIVER),
+    PILEDRIVER(MachineRegistry.PILEDRIVER),
     AEROSOL(MachineRegistry.AEROSOLIZER),
     //    LIGHTBRID(MachineRegistry.LIGHTBRIDGE),
     RESERVOIR(MachineRegistry.RESERVOIR),

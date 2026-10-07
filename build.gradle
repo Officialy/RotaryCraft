@@ -53,3 +53,13 @@ if (gradle.startParameter.taskNames.any { it.toLowerCase(Locale.ROOT).contains('
         sourceSet(sourceSets.gameTestFixtures)
     }
 }
+
+// Optional native GeoStrata parity run; no production dependency on the companion mod.
+// gradlew :RotaryCraft:runGameTest -PpileDriverGeoTests -PgameTestSelector=rotarycraft:piledriver_*
+if (project.hasProperty('pileDriverGeoTests')) {
+    evaluationDependsOn(':GeoStrata')
+    dependencies { runtimeOnly project(':GeoStrata') }
+    neoForge.mods {
+        geostrata { sourceSet project(':GeoStrata').sourceSets.main }
+    }
+}

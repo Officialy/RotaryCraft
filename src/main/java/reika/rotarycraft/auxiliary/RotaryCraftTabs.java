@@ -81,6 +81,8 @@ public class RotaryCraftTabs {
 
     @SubscribeEvent
     public static void onBuildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTab() == ROTARYCRAFT.get() || event.getTab() == ROTARYCRAFT_ALL.get())
+            for (var type : reika.rotarycraft.items.ItemSpawner.creativeTypes()) event.accept(reika.rotarycraft.items.ItemSpawner.typed(type));
         if (event.getTab() == ROTARYCRAFT.get()) {
             event.accept(RotaryBlocks.ROTATIONAL_DYNAMO.get());
             event.accept(RotaryItems.IRON_SCRAP.get());
@@ -342,6 +344,7 @@ public class RotaryCraftTabs {
             // Every registered item.
             for (var holder : RotaryItems.ITEMS.getEntries()) {
                 var item = holder.get();
+                if (item instanceof reika.rotarycraft.items.ItemSpawner) continue; // Typed variants were already added.
                 if (seen.add(item)) {
                     event.accept(item);
                 }

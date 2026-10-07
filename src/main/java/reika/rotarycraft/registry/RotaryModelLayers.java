@@ -81,6 +81,7 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation CHUNK_LOADER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "chunk_loader"), "main");
     public static final ModelLayerLocation FUEL_ENGINE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "fuel_engine"), "main");
     public static final ModelLayerLocation SONIC_WEAPON = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "sonic_weapon"), "main");
+    public static final ModelLayerLocation PILE_DRIVER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "piledriver"), "main");
     public static final ModelLayerLocation DEFOLIATOR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "defoliator"), "main");
     public static final ModelLayerLocation MOB_RADAR = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "mob_radar"), "main");
     public static final ModelLayerLocation FUEL_ENHANCER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "fuel_enhancer"), "main");
@@ -200,6 +201,7 @@ public class RotaryModelLayers {
         event.registerBlockEntityRenderer(RotaryBlockEntities.CHUNK_LOADER.get(), reika.rotarycraft.renders.m.RenderChunkLoader::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.FUEL_ENGINE.get(), reika.rotarycraft.modinterface.RenderFuelEngine::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.SONIC_WEAPON.get(), reika.rotarycraft.renders.m.RenderSonic::new);
+        event.registerBlockEntityRenderer(RotaryBlockEntities.PILEDRIVER.get(), reika.rotarycraft.renders.dm.RenderPileDriver::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.DEFOLIATOR.get(), reika.rotarycraft.renders.mi.RenderDefoliator::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.MOB_RADAR.get(), reika.rotarycraft.renders.m.RenderMobRadar::new);
         event.registerBlockEntityRenderer(RotaryBlockEntities.FUEL_ENHANCER.get(), reika.rotarycraft.renders.m.RenderFuelConverter::new);
@@ -305,6 +307,7 @@ public class RotaryModelLayers {
         event.registerLayerDefinition(CHUNK_LOADER, reika.rotarycraft.models.animated.ChunkLoaderModel::createLayer);
         event.registerLayerDefinition(FUEL_ENGINE, reika.rotarycraft.modinterface.model.FuelEngineModel::createLayer);
         event.registerLayerDefinition(SONIC_WEAPON, reika.rotarycraft.models.SonicWeaponModel::createLayer);
+        event.registerLayerDefinition(PILE_DRIVER, reika.rotarycraft.models.animated.PileDriverModel::createLayer);
         event.registerLayerDefinition(DEFOLIATOR, reika.rotarycraft.models.animated.DefoliatorModel::createLayer);
         event.registerLayerDefinition(MOB_RADAR, reika.rotarycraft.models.animated.RadarModel::createLayer);
         event.registerLayerDefinition(FUEL_ENHANCER, reika.rotarycraft.modinterface.model.FuelConverterModel::createLayer);

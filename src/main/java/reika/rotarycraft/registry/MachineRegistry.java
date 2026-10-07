@@ -232,7 +232,8 @@ public enum MachineRegistry implements TileEnum {
     FUELENGINE(true, "machine.fuelengine", RotaryBlocks.FUEL_ENGINE.get(), reika.rotarycraft.modinterface.TileEntityFuelEngine.class),
     MOBRADAR(true, "machine.mobradar", RotaryBlocks.MOB_RADAR.get(), reika.rotarycraft.blockentities.surveying.BlockEntityMobRadar.class),
     SONICWEAPON(true, "machine.sonicweapon", RotaryBlocks.SONIC_WEAPON.get(), reika.rotarycraft.blockentities.weaponry.BlockEntitySonicWeapon.class),
-    DEFOLIATOR(true, "machine.defoliator", RotaryBlocks.DEFOLIATOR.get(), reika.rotarycraft.blockentities.level.BlockEntityDefoliator.class);
+    DEFOLIATOR(true, "machine.defoliator", RotaryBlocks.DEFOLIATOR.get(), reika.rotarycraft.blockentities.level.BlockEntityDefoliator.class),
+    PILEDRIVER(true, "machine.piledriver", RotaryBlocks.PILEDRIVER.get(), reika.rotarycraft.blockentities.level.BlockEntityPileDriver.class);
 
     public static final ImmutableArray<MachineRegistry> machineList = new ImmutableArray<>(values());
     public static final BlockMap<MachineRegistry> machineMappings = new BlockMap<>();
@@ -712,7 +713,7 @@ public enum MachineRegistry implements TileEnum {
 
     public boolean is2Sided() {
         return switch (this) {
-            case /*PILEDRIVER, GPR, */PUMP, GRINDSTONE -> true;
+            case PILEDRIVER, /*GPR, */PUMP, GRINDSTONE -> true;
             default -> false;
         };
     }

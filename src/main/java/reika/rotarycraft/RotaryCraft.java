@@ -90,6 +90,7 @@ public class RotaryCraft extends DragonAPIMod {
         config.initProps();
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(PileDriverRules::register);
         // In-world game tests: bind the test instances when NeoForge fires the registration event,
         // and register their (network-synced) codec type so the login handshake can serialise them.
         modEventBus.addListener(RotaryGameTests::onRegisterGameTests);

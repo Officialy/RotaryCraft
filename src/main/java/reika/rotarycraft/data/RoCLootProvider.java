@@ -82,7 +82,7 @@ public final class RoCLootProvider extends LootTableProvider {
                             isMaxAge));
                 } else if (block == RotaryBlocks.SCALECHEST.get()) {
                     this.add(block, this.createScaleChestDrop(block));
-                } else if (block.asItem() == Items.AIR) {
+                } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockMiningPipe || block.asItem() == Items.AIR) {
                     // Item-less blocks (bedrock, bedrock slice, fluid blocks) drop nothing.
                     this.add(block, noDrop());
                 } else {

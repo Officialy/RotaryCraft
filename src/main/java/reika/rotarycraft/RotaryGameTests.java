@@ -237,6 +237,7 @@ public final class RotaryGameTests {
         RotaryMobRadarTests.register(event, env);
         RotarySonicWeaponTests.register(event, env);
         RotaryDefoliatorTests.register(event, env);
+        RotaryPileDriverTests.register(event, env);
         RotaryMotionTrackerTests.register(event, env);
         RotaryExtractorBalanceTests.register(event, env);
         RotaryModExtractorTests.register(event, env);

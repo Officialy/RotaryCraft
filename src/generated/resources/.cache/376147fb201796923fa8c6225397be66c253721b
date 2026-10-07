@@ -1,11 +1,12 @@
-// 26.3	2026-10-05T12:31:31.3517663	Tags for minecraft:block mod id rotarycraft
+// 26.3	2026-10-05T16:08:05.3382224	Tags for minecraft:block mod id rotarycraft
 bff9a6a04c277f7a4b6541f415f15850fd0eae97 data/c/tags/block/glass_blocks.json
 ce33fe8e60b6faaf22fc500f726a3496944ae405 data/c/tags/block/glass_blocks/hardened.json
 4c5dda38b438bb999673b335b0f5139e7d1d260f data/c/tags/block/glass_panes.json
 f46edbca2bd30544818e12791e1f27e939bc1faf data/c/tags/block/glass_panes/hardened.json
 c88a3ee435fbdd0297e27ead04b98d7cdbe78f14 data/c/tags/block/storage_blocks/hsla.json
-dca0cd2223a6a5add724179c20d817fb5505c1f9 data/minecraft/tags/block/blocks_motion_no_leaves.json
+ec2eb9dd388042dbfced2b895bea36acbb5486b1 data/minecraft/tags/block/blocks_motion_no_leaves.json
 35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/minecraft/tags/block/leaves.json
-c658f3c1a5ead51ab5b6df6c2c5354118ff35e04 data/minecraft/tags/block/mineable/pickaxe.json
+606b2d9e35170ae39458b1b148c133cf96cd2285 data/minecraft/tags/block/mineable/pickaxe.json
 5f4f6db7ba74047c173fea91fc233993ebfbad98 data/minecraft/tags/block/washed_away_by_fluids.json
 063835a4798b950acb33523b63e75e5547f7e213 data/rotarycraft/tags/block/defoliator_targets.json
+0187254394e95836359b0ba835e1ccb23af428f7 data/rotarycraft/tags/block/pile_driver_fragile.json

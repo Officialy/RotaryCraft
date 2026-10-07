@@ -578,3 +578,64 @@ Fourteen machines remain from the owner's original missing list: Bait Box, Bundl
 CCTV, Compressor, Display, Electric Motor, Flame Turret, Generator, Pile Driver, Pneumatic
 Engine, Portal Shaft, Projector, Screen and Spy Cam. No ChromatiCraft files or tasks were
 part of this slice.
+
+
+## 2026-10-05 - Full Pile Driver and recovered spawner port
+
+Port BlockEntityPileDriver fully from V33a, activate its block/entity/handbook and existing
+PileDriverModel, and supply the native 26.3 submit renderer and machine item model. The two
+opposing shaft inputs select the stronger source (they do not sum torque); require 80000 Nm
+and 16384 W per lifted meter. Preserve the strict lift timer, descent/retraction phases,
+air-column skipping, minimum one-tick cadence, original 21-cell footprint (four corners
+excluded), conversions and repeated impacts. The original hit table starts at zero, so
+obsidian takes six strikes. Use long arithmetic for depth/power and high-power timing.
+Keep all original phase fields in native save/sync; partial sync preserves transient hit
+progress, and replacement states cannot inherit a stale counter. Hit counters remain
+transient across actual world reloads, matching V33a.
+
+Keep weak-block damage up to four layers below the impact, the five-block shockwave cube,
+ice-to-water plus ice loot, web-to-string, native falling-block state, hanging-entity damage,
+24-particle liquid bursts, impact notification, bounce, crushing and 150-tick/amplifier-10
+nausea for noncreative players. Native frame damage ejects the displayed item first and
+breaks the empty frame on another hit. Apply owner permission and state revalidation to
+main, secondary, shockwave, hanging and hammer mutations. Retracting tips cannot erase a
+replacement or advance their phase through protection. Use native world minimum height and
+loaded-chunk checks; protected waterlogged solids do not count as a cleared liquid plane.
+
+Generate impact rules as a reloadable NeoForge block data map: 350 entries, including all
+340 original GeoStrata rock/shape combinations behind mod-loaded conditions. Preserve
+rock-to-own-cobble conversions, positive hit counts and shale/limestone weak-layer rules.
+The optional -PpileDriverGeoTests run loads the actual GeoStrata source set and checks every
+combination, with no production dependency on GeoStrata. No invented rock or recipe data.
+
+Fully port DragonAPI's original ItemSpawner behavior into RotaryCraft's recovered-spawner
+item: type-only recovery, optional custom spawn parameters, original randomized delay,
+28 typed creative variants, survival/creative placement and consumption, source soft-block
+placement, native collision/protection rollback and localized shift tooltips. Generate the
+end-only dragon and three Twilight Forest boss dimension restrictions as a synced entity
+data map. Twilight Forest runtime integration is not exercised in this slice.
+
+Restore mining-pipe metadata 4 as the full-cube pile_driver shape with minepipe2 texture,
+distinct from the preserved borer junction. Generate the three inset bar models and empty
+loot; restore zero hardness/resistance, nonocclusion and original X/Z hand-break cleanup
+(+/-64), with protection/revalidation and loaded-chunk guards. Retain the excavation-star
+range/spread methods behind a CHROMA-PORT marker; no ChromatiCraft files were edited.
+
+Datagen supplies exact PGP/gFg/PDP crafting (four base panels, 8x HSLA gearing, two HSLA
+shaft rods, tungsten alloy flywheel core and iron drill), unlock, machine loot, impact maps,
+fragile/mining/motion tags, models and lang. The piletex model artwork matches upstream
+V33a byte-for-byte; retain the existing mono 44100 Hz spatial piledriver sound asset.
+
+Validation: 797/797 full RotaryCraft GameTests and 11/11 JUnit checks pass on the final
+source, as does the release build. This slice adds 77 Pile Driver/spawner/pipe checks;
+with the 17 actual GeoStrata rock tests, 94/94 targeted acceptance checks pass. Native
+server/client datagen succeeds. Release inspection verifies 27 required classes/resources,
+source recipe, models, 350 impact rules, all 340 optional rock profiles and fixture isolation:
+20 test-only paths absent; 102 shared fixture paths contain production resources only.
+Logs: build/piledriver-datagen-final.log, build/piledriver-final-acceptance.log and
+build/piledriver-final.log. Artifact evidence: build/piledriver-artifact-verification.json.
+Live client visual acceptance and real multiplayer joins remain unverified.
+
+Thirteen machines remain from the owner's original missing list: Bait Box, Bundled Bus,
+CCTV, Compressor, Display, Electric Motor, Flame Turret, Generator, Pneumatic Engine,
+Portal Shaft, Projector, Screen and Spy Cam. No ChromatiCraft tasks were run in this slice.

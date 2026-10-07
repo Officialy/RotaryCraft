@@ -158,6 +158,12 @@ public final class RoCRecipeProvider {
                     .define('P', RotaryBlocks.FLUID_PIPE.get()).define('S', RotaryItems.HSLA_STEEL_INGOT.get())
                     .define('B', RotaryItems.HSLA_PLATE.get()).define('I', RotaryItems.IMPELLER.get())
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get())).save(out);
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.PILEDRIVER.get())
+                    .pattern("PGP").pattern("gFg").pattern("PDP")
+                    .define('P', RotaryItems.HSLA_PLATE.get()).define('G', RotaryItems.HSLA_STEEL_GEAR_8x.get())
+                    .define('g', RotaryItems.HSLA_SHAFT.get()).define('F', RotaryItems.TUNGSTEN_ALLOY_FLYWHEEL_CORE.get())
+                    .define('D', RotaryItems.DRILLHEAD_IRON.get())
+                    .unlockedBy("has_drill", has(RotaryItems.DRILLHEAD_IRON.get())).save(out);
             chunkLoader();
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.TERRAFORMER.get())
                     .pattern("SsS").pattern("ici").pattern("PiP")
