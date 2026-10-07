@@ -88,8 +88,10 @@ public abstract class IORenderer {
 
             if (teb instanceof BlockEntitySplitter ts) {
                 if (ts.isSplitting()) {
-                    renderOut(matrixStack, collector, ts.getWriteDirection().getStepX(),  par4, ts.getWriteDirection().getStepZ(),  ts.iotick);
-                    renderOut(matrixStack, collector, ts.getWriteDirection2().getStepX(), par4, ts.getWriteDirection2().getStepZ(), ts.iotick);
+                    if (ts.getWriteDirection() != null)
+                        renderOut(matrixStack, collector, ts.getWriteDirection().getStepX(),  par4, ts.getWriteDirection().getStepZ(),  ts.iotick);
+                    if (ts.getWriteDirection2() != null)
+                        renderOut(matrixStack, collector, ts.getWriteDirection2().getStepX(), par4, ts.getWriteDirection2().getStepZ(), ts.iotick);
                     if (ts.getReadDirection() != null)
                         renderIn(matrixStack, collector, ts.getReadDirection().getStepX(), par4, ts.getReadDirection().getStepZ(), ts.iotick);
                 } else {
@@ -239,21 +241,14 @@ public abstract class IORenderer {
 
         final float x0 = ox - EXPAND, y0 = oy - EXPAND, z0 = oz - EXPAND;
         final float x1 = ox + 1 + EXPAND, y1 = oy + 1 + EXPAND, z1 = oz + 1 + EXPAND;
-        // Filled translucent body.
-        // 26.1 fix: was using {@code RenderTypes.debugFilledBox()} which has
-        // {@code CompareOp.LESS_THAN_OR_EQUAL} depth state — so when an IO cube sat behind the
-        // host block from the camera's perspective (most commonly the W/N neighbour cubes when
-        // the player is on the E/S side), the block model occluded it and the user couldn't
-        // see those faces. Switch to our {@link reika.rotarycraft.renders.RotaryRenderPipelines#NO_DEPTH_FILLED_BOX_TYPE}
-        // which is the same pipeline with the depth test relaxed to {@code ALWAYS_PASS}, so
-        // the box draws regardless of what's in front of it.
-        collector.submitCustomGeometry(stack, RotaryRenderPipelines.NO_DEPTH_FILLED_BOX_TYPE,
+        // Filled translucent body. 1.7.10 drew these inside a TESR with the depth test on and
+        // GL_CULL_FACE enabled, so a box is hidden by whatever stands in front of it and shows
+        // only its outward faces; the port had switched to always-pass depth with no culling,
+        // which drew every box through walls. RotaryRenderPipelines.IO_BOX restores the original.
+        collector.submitCustomGeometry(stack, RotaryRenderPipelines.IO_BOX_TYPE,
                 (pose, buffer) -> emitCube(pose, buffer, x0, y0, z0, x1, y1, z1, fillRgba));
-        // Opaque wireframe — 12 edges. Use our {@code NO_DEPTH_LINES_TYPE} so the wireframe
-        // mirrors the fill in being visible regardless of camera angle (vanilla
-        // {@code RenderTypes.lines} is still depth-tested and would cull edges that sit
-        // behind the host block from the camera's perspective).
-        collector.submitCustomGeometry(stack, RotaryRenderPipelines.NO_DEPTH_LINES_TYPE,
+        // Opaque wireframe, 12 edges, depth-tested like the body.
+        collector.submitCustomGeometry(stack, RotaryRenderPipelines.IO_LINES_TYPE,
                 (pose, buffer) -> emitCubeEdges(pose, buffer, x0, y0, z0, x1, y1, z1, outlineRgba));
     }
 

@@ -151,6 +151,7 @@ public final class RotaryGameTests {
         register(event, env, "blast_furnace_lava_rock_heat", 40, RotaryGameTests::blastFurnaceLavaRockHeat);
         register(event, env, "blast_furnace_bedrock_pickaxe", 120, RotaryGameTests::blastFurnaceBedrockPickaxe);
         register(event, env, "blast_furnace_bedrock_armor", 120, RotaryGameTests::blastFurnaceBedrockArmor);
+        register(event, env, "splitter_mode_change_updates_directions", 20, RotaryGameTests::splitterModeChangeUpdatesDirections);
         register(event, env, "reactor_entry_recipes_load", 40, RotaryGameTests::reactorEntryRecipesLoad);
         register(event, env, "reactor_centrifuge_accepts_rotary_power", 60,
                 RotaryGameTests::reactorCentrifugeAcceptsRotaryPower);
@@ -728,6 +729,27 @@ public final class RotaryGameTests {
                 helper.assertTrue(output.getEnchantments().getLevel(lookup.getOrThrow(entry.getKey())) == entry.getValue(),
                         "crafted chestplate is missing " + entry.getKey() + " " + entry.getValue() + ": " + output.getEnchantments());
         }).thenSucceed();
+    }
+
+    /**
+     * The client rendered a splitter between a synced merge-to-split change and its next tick, with
+     * split mode but no second output direction (IORenderer NPE). Mode changes now re-derive the
+     * directions at once.
+     */
+    private static void splitterModeChangeUpdatesDirections(GameTestHelper helper) {
+        helper.setBlock(TEST_POS, RotaryBlocks.SPLITTER.get());
+        var splitter = helper.getBlockEntity(TEST_POS,
+                reika.rotarycraft.blockentities.transmission.BlockEntitySplitter.class);
+        for (int orientation = 0; orientation < 8; orientation++) {
+            splitter.setIoside(orientation);
+            helper.assertTrue(!splitter.isSplitting() && splitter.getWriteDirection() != null,
+                    "merge orientation " + orientation + " must have its output at once");
+            splitter.setSplitting(true);
+            helper.assertTrue(splitter.isSplitting() && splitter.getWriteDirection() != null
+                            && splitter.getWriteDirection2() != null,
+                    "split orientation " + orientation + " must have both outputs before any tick");
+        }
+        helper.succeed();
     }
 
     /** GeoStrata's molten lava rock below the furnace is a lava heat source (EnvironmentalHeatSource). */

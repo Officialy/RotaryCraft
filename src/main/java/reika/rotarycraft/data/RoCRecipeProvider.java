@@ -751,6 +751,9 @@ public final class RoCRecipeProvider {
         // were mod-gated; the sickle and efficiency upgrade wait on unported items (ItemSickleBase,
         // the water plate).
         // =====================================================================================
+        /** DifficultyEffects.PIPECRAFT at the default difficulty (ConfigRegistry.DIFFICULTY = 2). */
+        private static final int PIPECRAFT = 16;
+
         private void blastTools() {
             Ingredient bedIngot = Ingredient.of(RotaryItems.BEDROCK_ALLOY_INGOT.get());
             Ingredient shaft = Ingredient.of(RotaryItems.HSLA_SHAFT.get());
@@ -948,7 +951,7 @@ public final class RoCRecipeProvider {
             // MaterialRegistry.getShaftUnitItem(WOOD)=STICK, getShaftUnitItem(STONE) defaults to
             // HSLA_INGOT in the current port; we replace with vanilla stone for the recipe.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.WOOD_SHAFT.get(), 8)
-                    .define('B', Items.OAK_PLANKS)
+                    .define('B', ItemTags.PLANKS)
                     .define('S', Items.STICK)
                     .pattern("BSB").pattern("BBB")
                     .unlockedBy("has_stick", has(Items.STICK))
@@ -1520,7 +1523,7 @@ public final class RoCRecipeProvider {
         private void utilityMachines() {
             // FAN (RotaryRecipes 675): "WWW","WIW","#s#" — planks frame, impeller, base panel, shaft.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.FAN.get())
-                    .define('W', Items.OAK_PLANKS)
+                    .define('W', ItemTags.PLANKS)
                     .define('I', RotaryItems.IMPELLER.get())
                     .define('#', RotaryItems.HSLA_PLATE.get())
                     .define('s', RotaryItems.HSLA_SHAFT.get())
@@ -2137,12 +2140,17 @@ public final class RoCRecipeProvider {
             // around a vanilla crafting table + iron tool bits. Without this recipe the
             // entire RotaryCraft progression starts blocked since some recipes (Handbook
             // item, etc.) want to be crafted on the Worktable.
+            // WORKTABLE (RotaryRecipes.getWorktableIngredients): "aCb","SBS","crd" round a brick block;
+            // with GATEWORK off the gate slots a/b are empty and c/d are stone slabs (1.7.10
+            // stone_slab meta 0, today's smooth stone slab).
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.WORKTABLE.get())
-                    .define('W', Items.OAK_PLANKS)
                     .define('C', Items.CRAFTING_TABLE)
-                    .define('I', Items.IRON_INGOT)
-                    .pattern("WIW").pattern("ICI").pattern("WIW")
-                    .unlockedBy("has_crafting_table", has(Items.CRAFTING_TABLE))
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
+                    .define('B', Items.BRICKS)
+                    .define('L', Items.SMOOTH_STONE_SLAB)
+                    .define('r', Items.REDSTONE)
+                    .pattern(" C ").pattern("SBS").pattern("LrL")
+                    .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
             // STEAM_ENGINE: "ccc","CIs","PGP" — 3×COBBLE + 1×CONDENSER + 1×IMPELLER + 1×SHAFT
@@ -2856,27 +2864,28 @@ public final class RoCRecipeProvider {
                     .save(out);
 
             // --- Pipe / hose / fuel-line / bedpipe ---
-            // addSizedCrafting(DifficultyEffects.PIPECRAFT.getInt(), ...) defaults to 1 output.
+            // addSized(Ore)Crafting(DifficultyEffects.PIPECRAFT.getInt(), ...): PIPECRAFT is
+            // 32/16/8 for easy/medium/hard, 16 at the default difficulty (2).
             // Legacy gates the layout on ConfigRegistry.ROTATEHOSE — using the non-rotated default.
-            shaped(RecipeCategory.REDSTONE, RotaryBlocks.HOSE.get())
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.HOSE.get(), PIPECRAFT)
                     .define('G', Items.GLASS)
-                    .define('W', Items.OAK_PLANKS)
+                    .define('W', ItemTags.PLANKS)
                     .pattern("WGW").pattern("WGW").pattern("WGW")
-                    .unlockedBy("has_planks", has(Items.OAK_PLANKS))
+                    .unlockedBy("has_planks", has(ItemTags.PLANKS))
                     .save(out);
-            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FLUID_PIPE.get())
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FLUID_PIPE.get(), PIPECRAFT)
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
                     .define('G', Items.GLASS)
                     .pattern("SGS").pattern("SGS").pattern("SGS")
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
-            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FUEL_LINE.get())
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.FUEL_LINE.get(), PIPECRAFT)
                     .define('O', Items.OBSIDIAN)
                     .define('G', Items.GLASS)
                     .pattern("OGO").pattern("OGO").pattern("OGO")
                     .unlockedBy("has_obsidian", has(Items.OBSIDIAN))
                     .save(out);
-            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BEDROCK_PIPE.get())
+            shaped(RecipeCategory.REDSTONE, RotaryBlocks.BEDROCK_PIPE.get(), PIPECRAFT)
                     .define('B', RotaryItems.BEDROCK_ALLOY_INGOT.get())
                     .define('G', RotaryBlocks.BLASTGLASS.get())
                     .pattern("BGB").pattern("BGB").pattern("BGB")
@@ -2923,16 +2932,23 @@ public final class RoCRecipeProvider {
             shaped(RecipeCategory.TOOLS, RotaryItems.SCREWDRIVER.get())
                     .define('S', Items.STICK)
                     .define('I', RotaryItems.HSLA_STEEL_INGOT.get())
-                    .define('W', Items.OAK_PLANKS)
+                    .define('W', ItemTags.PLANKS)
                     .pattern("I  ").pattern(" S ").pattern("  W")
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
+            shaped(RecipeCategory.TOOLS, RotaryItems.SCREWDRIVER.get())
+                    .define('S', Items.STICK)
+                    .define('I', Items.IRON_INGOT)
+                    .define('W', ItemTags.PLANKS)
+                    .pattern("I  ").pattern(" S ").pattern("  W")
+                    .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+                    .save(out, "rotarycraft:screwdriver_iron");
             // METER (ANGULAR_TRANSDUCER): " W ","WEW","SSS" — 2×PLANK + 1×REDSTONE + 3×HSLA.
             //   Legacy 'I' key is unused in the pattern; preserved for fidelity.
             shaped(RecipeCategory.TOOLS, RotaryItems.ANGULAR_TRANSDUCER.get())
                     .define('S', RotaryItems.HSLA_STEEL_INGOT.get())
                     .define('E', Items.REDSTONE)
-                    .define('W', Items.OAK_PLANKS)
+                    .define('W', ItemTags.PLANKS)
                     .pattern(" W ").pattern("WEW").pattern("SSS")
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);

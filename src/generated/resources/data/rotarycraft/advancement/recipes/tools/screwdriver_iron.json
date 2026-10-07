@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_hsla_ingot": {
+    "has_iron_ingot": {
       "conditions": {
         "items": [
           {
-            "items": "rotarycraft:hsla_steel_ingot"
+            "items": "minecraft:iron_ingot"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "rotarycraft:worktable"
+        "recipes": "rotarycraft:screwdriver_iron"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_hsla_ingot"
+      "has_iron_ingot"
     ]
   ],
   "rewards": {
     "recipes": [
-      "rotarycraft:worktable"
+      "rotarycraft:screwdriver_iron"
     ]
   }
 }

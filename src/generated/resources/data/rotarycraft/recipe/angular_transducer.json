@@ -4,7 +4,7 @@
   "key": {
     "E": "minecraft:redstone",
     "S": "rotarycraft:hsla_steel_ingot",
-    "W": "minecraft:oak_planks"
+    "W": "#minecraft:planks"
   },
   "pattern": [
     " W ",

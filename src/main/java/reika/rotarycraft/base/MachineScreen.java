@@ -123,7 +123,9 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
 //        else if (tile instanceof BlockEntityScaleableChest)
 //            font.draw(tile.getMultiValuedName(), 8, 6, 4210752);
 //        else
-        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, minecraft.font, tile.getName(), imageWidth / 2, 5, 0xFF404040);
+        // 1.7.10 drew tile.getMultiValuedName(), the machine's translated name; getName() is the
+        // internal BE id (e.g. "blast_furnace"). The block carries the translated machine name.
+        ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, minecraft.font, tile.getBlockState().getBlock().getName().getString(), imageWidth / 2, 5, 0xFF404040);
 
         if (tile instanceof Container && this.labelInventory()) {
             int dx = this.inventoryLabelLeft() ? 8 : imageWidth - 58;

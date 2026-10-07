@@ -212,6 +212,16 @@ public class RoCModelProvider extends ModelProvider {
                         block,
                         new TextureMapping().put(TextureSlot.ALL, tex).put(TextureSlot.PARTICLE, tex),
                         modelOut);
+            } else if (block == reika.rotarycraft.registry.RotaryBlocks.HSLA_STEEL_BLOCK.get()
+                    || block == reika.rotarycraft.registry.RotaryBlocks.COKE.get()) {
+                // 1.7.10 BlockDeco icons: the steel block (meta 0) is "steel", the coke block (meta 5)
+                // "coke". The cube_all fallback pointed at block/<id>.png, which does not exist.
+                var tex = new Material(Identifier.fromNamespaceAndPath(RotaryCraft.MODID,
+                        block == reika.rotarycraft.registry.RotaryBlocks.COKE.get() ? "block/coke" : "block/steel"));
+                blockModelId = ModelTemplates.CUBE_ALL.create(
+                        block,
+                        new TextureMapping().put(TextureSlot.ALL, tex).put(TextureSlot.PARTICLE, tex),
+                        modelOut);
             } else if (block instanceof BlockBlastFurnace) {
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
                         block, orientableMapping("blastfurn_front", "blastfurn_side", "blastfurn_side"), modelOut);

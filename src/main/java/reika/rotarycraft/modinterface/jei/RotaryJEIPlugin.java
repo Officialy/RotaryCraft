@@ -317,7 +317,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<ShapedBlastFurnaceRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.blastfurnace"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.BLASTFURNACE.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return BLAST_WIDTH; }
         @Override public int getHeight() { return BLAST_GUI_HEIGHT; }
         @Override public IDrawable getIcon() { return icon; }
@@ -362,7 +362,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<ShapelessBlastFurnaceRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.blastfurnace"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.BLASTFURNACE.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return BLAST_WIDTH; }
         // The GUI plus up to three additive lines and the bonus line.
         @Override public int getHeight() { return BLAST_GUI_HEIGHT + 2 + 4 * LINE; }
@@ -458,7 +458,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<PulseFurnaceRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.pulsejet"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.PULSEJET.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return 76; }
         @Override public int getHeight() { return 36; }
         @Override public IDrawable getIcon() { return icon; }
@@ -491,7 +491,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<GrinderJEIRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.grinder"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.GRINDER.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return 76; }
         @Override public int getHeight() { return 36; }
         @Override public IDrawable getIcon() { return icon; }
@@ -526,7 +526,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<CentrifugeRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.centrifuge"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.CENTRIFUGE.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return 130; }
         @Override public int getHeight() { return 54; }
         @Override public IDrawable getIcon() { return icon; }
@@ -567,7 +567,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<FrictionHeaterRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.friction"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.FRICTION.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return 76; }
         @Override public int getHeight() { return 36; }
         @Override public IDrawable getIcon() { return icon; }
@@ -598,7 +598,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<ExtractorRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.extractor"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.EXTRACTOR.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return 103; }
         @Override public int getHeight() { return 36; }
         @Override public IDrawable getIcon() { return icon; }
@@ -637,7 +637,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<FermenterRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.fermenter"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.FERMENTER.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return 98; }
         @Override public int getHeight() { return 36; }
         @Override public IDrawable getIcon() { return icon; }
@@ -668,7 +668,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         }
 
         @Override public RecipeType<FractionatorRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.fractionator"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.FRACTIONATOR.getCraftedProduct().getHoverName(); }
         @Override public int getWidth()  { return 150; }
         @Override public int getHeight() { return 40; }
         @Override public IDrawable getIcon() { return icon; }
@@ -699,7 +699,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         private final IDrawable icon;
         public FuelEnhancer(IGuiHelper gui) { icon = gui.createDrawableItemStack(MachineRegistry.FUELENHANCER.getCraftedProduct()); }
         @Override public RecipeType<reika.rotarycraft.auxiliary.recipemanagers.FuelEnhancerRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.fuelenhancer"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.FUELENHANCER.getCraftedProduct().getHoverName(); }
         @Override public int getWidth() { return 170; }
         @Override public int getHeight() { return 58; }
         @Override public IDrawable getIcon() { return icon; }
@@ -722,7 +722,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         private final IDrawable icon;
         public Distiller(IGuiHelper gui) { icon = gui.createDrawableItemStack(MachineRegistry.DISTILLER.getCraftedProduct()); }
         @Override public RecipeType<reika.rotarycraft.auxiliary.recipemanagers.DistilleryRecipe> getRecipeType() { return TYPE; }
-        @Override public Component getTitle() { return Component.translatable("machine.distiller"); }
+        @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.DISTILLER.getCraftedProduct().getHoverName(); }
         @Override public int getWidth() { return 140; }
         @Override public int getHeight() { return 36; }
         @Override public IDrawable getIcon() { return icon; }

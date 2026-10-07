@@ -2,14 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
+    "B": "minecraft:bricks",
     "C": "minecraft:crafting_table",
-    "I": "minecraft:iron_ingot",
-    "W": "minecraft:oak_planks"
+    "L": "minecraft:smooth_stone_slab",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "r": "minecraft:redstone"
   },
   "pattern": [
-    "WIW",
-    "ICI",
-    "WIW"
+    " C ",
+    "SBS",
+    "LrL"
   ],
   "result": {
     "id": "rotarycraft:worktable"

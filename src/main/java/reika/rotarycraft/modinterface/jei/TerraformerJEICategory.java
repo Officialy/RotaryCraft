@@ -22,7 +22,7 @@ public class TerraformerJEICategory implements IRecipeCategory<TerraformingRecip
     private final IDrawable icon;
     public TerraformerJEICategory(IGuiHelper gui) { icon = gui.createDrawableItemStack(MachineRegistry.TERRAFORMER.getCraftedProduct()); }
     @Override public RecipeType<TerraformingRecipe> getRecipeType() { return TYPE; }
-    @Override public Component getTitle() { return Component.translatable("machine.terraformer"); }
+    @Override public Component getTitle() { return reika.rotarycraft.registry.MachineRegistry.TERRAFORMER.getCraftedProduct().getHoverName(); }
     @Override public int getWidth() { return 210; }
     @Override public int getHeight() { return 64; }
     @Override public IDrawable getIcon() { return icon; }

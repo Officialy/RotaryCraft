@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "I": "rotarycraft:hsla_steel_ingot",
+    "I": "minecraft:iron_ingot",
     "S": "minecraft:stick",
     "W": "#minecraft:planks"
   },

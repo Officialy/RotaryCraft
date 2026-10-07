@@ -4,7 +4,7 @@
   "key": {
     "#": "rotarycraft:hsla_steel_plate",
     "I": "rotarycraft:impeller",
-    "W": "minecraft:oak_planks",
+    "W": "#minecraft:planks",
     "s": "rotarycraft:hsla_steel_rod"
   },
   "pattern": [

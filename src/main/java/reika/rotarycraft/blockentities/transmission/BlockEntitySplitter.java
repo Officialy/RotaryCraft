@@ -151,7 +151,18 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
         if (side < 0 || side >= 16) return;
         ioside = side;
         iosideInitialised = true;
+        refreshIOSides();
         setChanged();
+    }
+
+    /**
+     * Re-derives the read/write directions from {@link #ioside} at once. In 1.7.10 they came from
+     * block metadata, so they could never lag the mode; here they were only refreshed on tick, and a
+     * frame rendered between a synced split/merge change and the next tick saw split mode with no
+     * second output direction (IORenderer NPE).
+     */
+    private void refreshIOSides() {
+        this.getIOSides(level, worldPosition, ioside);
     }
 
     /** Toggle between merge and split modes while preserving orientation. */
@@ -159,6 +170,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
         // ioside layout: low 3 bits = orientation, bit 3 (value 8) = split-mode flag.
         ioside = (ioside & 7) | (split ? 8 : 0);
         iosideInitialised = true;
+        refreshIOSides();
         setChanged();
     }
 
@@ -718,6 +730,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
         bedrock = tag.getBooleanOr("bedrock", false);
         ioside = tag.getIntOr("ioside", 0);
         iosideInitialised = tag.getBooleanOr("iosideInit", false);
+        refreshIOSides();
     }
 
     @Override

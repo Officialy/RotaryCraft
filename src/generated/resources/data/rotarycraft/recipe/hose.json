@@ -3,7 +3,7 @@
   "category": "redstone",
   "key": {
     "G": "minecraft:glass",
-    "W": "minecraft:oak_planks"
+    "W": "#minecraft:planks"
   },
   "pattern": [
     "WGW",
@@ -11,6 +11,7 @@
     "WGW"
   ],
   "result": {
+    "count": 16,
     "id": "rotarycraft:hose"
   }
 }

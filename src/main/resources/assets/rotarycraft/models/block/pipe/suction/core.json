@@ -1,4 +1,5 @@
 {
+  "parent": "minecraft:block/block",
   "credit": "RotaryCraft suction shell \u2014 hollow frame, vertical edges split to multipart",
   "textures": {
     "particle": "minecraft:block/nether_bricks",

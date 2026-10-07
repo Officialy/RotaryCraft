@@ -100,6 +100,53 @@ public final class RotaryRenderPipelines {
     );
 
     /**
+     * IORenderer's box body as 1.7.10 drew it: translucent, depth-tested (hidden behind whatever is
+     * in front) and back-face culled (GL_CULL_FACE on), so only a box's outward faces show.
+     */
+    public static final RenderPipeline IO_BOX = RenderPipeline.builder()
+            .withLocation("pipeline/rotarycraft_io_box")
+            .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+            .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+            .withVertexShader("core/position_color")
+            .withFragmentShader("core/position_color")
+            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
+            .withDepthStencilState(new DepthStencilState(DepthStencilState.DEFAULT.depthTest(), false))
+            .withCull(true)
+            .build();
+
+    public static final RenderType IO_BOX_TYPE = RenderType.create(
+            "rotarycraft_io_box",
+            RenderSetup.builder(IO_BOX)
+                    .sortOnUpload()
+                    .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
+                    .createRenderSetup()
+    );
+
+    /** IORenderer's box outline: the original's GL_LINE_LOOPs, depth-tested like the body. */
+    public static final RenderPipeline IO_LINES = RenderPipeline.builder()
+            .withLocation("pipeline/rotarycraft_io_lines")
+            .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+            .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
+            .withBindGroupLayout(BindGroupLayouts.FOG)
+            .withVertexShader("core/rendertype_lines")
+            .withFragmentShader("core/rendertype_lines")
+            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+            .withCull(false)
+            .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR_NORMAL_LINE_WIDTH)
+            .withPrimitiveTopology(PrimitiveTopology.LINES)
+            .withDepthStencilState(new DepthStencilState(DepthStencilState.DEFAULT.depthTest(), false))
+            .build();
+
+    public static final RenderType IO_LINES_TYPE = RenderType.create(
+            "rotarycraft_io_lines",
+            RenderSetup.builder(IO_LINES).createRenderSetup()
+    );
+
+    /**
      * The heat-haze pass, driven by {@link reika.rotarycraft.auxiliary.HeatRippleRenderer}: reads the
      * scene and writes it back displaced around each hot machine.
      *
@@ -134,11 +181,15 @@ public final class RotaryRenderPipelines {
     private static void onRegisterPipelines(RegisterRenderPipelinesEvent event) {
         event.registerPipeline(NO_DEPTH_FILLED_BOX);
         event.registerPipeline(NO_DEPTH_LINES);
+        event.registerPipeline(IO_BOX);
+        event.registerPipeline(IO_LINES);
         event.registerPipeline(HEAT_RIPPLE);
         // The overlays are drawn in the world, so a shader pack's Iris needs a program for each (matched on vertex
         // format) and they stay out of its shadow map. HEAT_RIPPLE runs after Iris composites, so it is never swapped.
         IrisCompat.assignWithoutShadow(NO_DEPTH_FILLED_BOX, "BASIC");
         IrisCompat.assignWithoutShadow(NO_DEPTH_LINES, "LINES");
+        IrisCompat.assignWithoutShadow(IO_BOX, "BASIC");
+        IrisCompat.assignWithoutShadow(IO_LINES, "LINES");
     }
 
     /** Touching this class loads the static initializers (RT registration); call from client setup. */
