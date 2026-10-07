@@ -531,14 +531,9 @@ public class HandbookAuxData {
                     int max = Math.min(di+36, MachineRegistry.machineList.length);
                     for (int i = di; i < max; i++) {
                         MachineRegistry m = MachineRegistry.machineList.get(i);
-                        // m.getCraftedProduct() is not a method
-                        ItemStack is = new ItemStack(Items.REDSTONE); // Placeholder
-                        // m.hasSubdivisions(), getNumberSubtypes(), getSubType() are not methods
-                        // if (m.hasSubdivisions()) {
-                        //     int meta = m.getNumberSubtypes();
-                        //     int time = (int)(System.currentTimeMillis()/1600)%meta;
-                        //     is = m.getSubType(time);
-                        // }
+                        //1.7.10 cycled the metadata subtypes of a subdivided machine here; every subtype (each
+                        //shaft material, engine, gearbox ratio) is its own MachineRegistry entry now
+                        ItemStack is = m.getCraftedProduct();
                         int r = (i-di)/12;
                         int c = i%12;
                         int x = dx+c*18+10;
@@ -547,9 +542,7 @@ public class HandbookAuxData {
                         if (api.isMouseInBox(x, x+17, y, y+17, mouseX, mouseY)) { // Added mouseX, mouseY
                             int k = 0;
                             for (LuaMethod cur : li) {
-                                // m.getTEClass() is not a method
-                                // if (cur.isDocumented() && cur.isClassInstanceOf(m.getTEClass())) {
-                                if (cur.isDocumented()) { // Simplified condition
+                                if (cur.isDocumented() && cur.isClassInstanceOf(m.getTEClass())) {
                                     //ReikaRenderHelper.disableLighting();
                                     String s = cur.getReturnType().displayName+" "+cur.displayName+"("+cur.getArgsAsString()+")";
                                     ri.text(f, s, dx+11, dy+88+k*10, 0xFFFFFFFF); // Changed f.draw to ri.drawString

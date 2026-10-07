@@ -506,6 +506,9 @@ public class PacketHandlerCore implements PacketHandler {
                 case FILTERSETTING:
                     ((reika.rotarycraft.blockentities.BlockEntityItemFilter) te).setDataFromClient(NBT);
                     break;
+                case BLOWERMETA:
+                    ((BlockEntityBlower) te).checkMeta = !((BlockEntityBlower) te).checkMeta;
+                    break;
                 case CRAFTERCRAFT:
                     ((reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter) te).triggerCraftingCycle(data[0]);
                     break;

@@ -51,6 +51,8 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
     public ItemStack[] matchingItems = new ItemStack[18];
     public boolean isWhitelist = false;
     public boolean useOreDict = true;
+    /** 1.7.10 "check metadata": this port keeps item variants in the damage value, so it compares that. */
+    public boolean checkMeta = false;
     public boolean checkNBT = false;
     private Direction facing;
 
@@ -290,6 +292,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
         super.writeSyncTag(NBT);
 
         NBT.putBoolean("ore", useOreDict);
+        NBT.putBoolean("metac", checkMeta);
         NBT.putBoolean("cnbt", checkNBT);
         NBT.putBoolean("white", isWhitelist);
 
@@ -317,6 +320,7 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
         super.readSyncTag(NBT);
 
         isWhitelist = NBT.getBooleanOr("white", false);
+        checkMeta = NBT.getBooleanOr("metac", false);
         checkNBT = NBT.getBooleanOr("cnbt", false);
         useOreDict = NBT.getBooleanOr("ore", false);
 
@@ -361,8 +365,8 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
     }
 
     private boolean doStacksMatch(ItemStack is, ItemStack is1) {
-//        if (checkMeta && is.getItemDamage() != is1.getItemDamage())
-//            return false;
+        if (checkMeta && is.getDamageValue() != is1.getDamageValue())
+            return false;
         if (checkNBT && !ItemStack.isSameItemSameComponents(is, is1))
             return false;
         if (ReikaItemHelper.matchStacks(is, is1))

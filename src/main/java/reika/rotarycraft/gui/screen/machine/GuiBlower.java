@@ -28,20 +28,20 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
     private final BlockEntityBlower tile;
     private final boolean[] controls;
 
-    // Item metadata no longer exists in modern Minecraft, so the legacy "check metadata"
-    // toggle is dropped; the surviving filters keep their original buttons.png texture rows.
-    private static final PacketRegistry[] PACKETS = {PacketRegistry.BLOWERWHITELIST, PacketRegistry.BLOWERNBT, PacketRegistry.BLOWEROREDICT};
-    private static final int[] TEX_V = {54, 90, 108};
+    // 1.7.10 order and texture rows (54 + 18*i). "Metadata" compares the damage value, where this port keeps item variants.
+    private static final PacketRegistry[] PACKETS = {PacketRegistry.BLOWERWHITELIST, PacketRegistry.BLOWERMETA, PacketRegistry.BLOWERNBT, PacketRegistry.BLOWEROREDICT};
+    private static final int[] TEX_V = {54, 72, 90, 108};
 
     public GuiBlower(BlowerContainer container, Inventory inv, Component title) {
         super(container, inv, title, 176, 192);
         tile = (BlockEntityBlower) inv.player.level().getBlockEntity(container.tile.getBlockPos());
         inventory = inv;
 
-        controls = new boolean[3];
+        controls = new boolean[4];
         controls[0] = tile.isWhitelist;
-        controls[1] = tile.checkNBT;
-        controls[2] = !tile.useOreDict;
+        controls[1] = tile.checkMeta;
+        controls[2] = tile.checkNBT;
+        controls[3] = !tile.useOreDict;
     }
 
     @Override
@@ -89,10 +89,13 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
             api.drawTooltipAt(stack, font, controls[0] ? "Whitelist" : "Blacklist", pX - j + 50, pY - k);
         }
         if (api.isMouseInBox(j + 25 + 36, j + 43 + 36, k + 64, k + 82, pX, pY)) {
-            api.drawTooltipAt(stack, font, controls[1] ? "Use NBT" : "Ignore NBT", pX - j + 80, pY - k);
+            api.drawTooltipAt(stack, font, controls[1] ? "Use Metadata" : "Ignore Metadata", pX - j + 80, pY - k);
         }
         if (api.isMouseInBox(j + 25 + 36 * 2, j + 43 + 36 * 2, k + 64, k + 82, pX, pY)) {
-            api.drawTooltipAt(stack, font, controls[2] ? "Match Exact" : "Use Ore Dictionary", pX - j, pY - k);
+            api.drawTooltipAt(stack, font, controls[2] ? "Use NBT" : "Ignore NBT", pX - j, pY - k);
+        }
+        if (api.isMouseInBox(j + 25 + 36 * 3, j + 43 + 36 * 3, k + 64, k + 82, pX, pY)) {
+            api.drawTooltipAt(stack, font, controls[3] ? "Match Exact" : "Use Ore Dictionary", pX - j, pY - k);
         }
     }
 

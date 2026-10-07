@@ -226,6 +226,9 @@ public final class RotaryGameTests {
         if (reika.dragonapi.ModList.APPENG.isLoaded())
             RotaryAETests.register(event, env);
         register(event, env, "processing_centrifuge_separates_items", 60, RotaryProcessingTests::centrifugeSeparatesItems);
+        // CC: Tweaked peripheral tests; the family run (TestInstance/run/mods) carries the CC jar.
+        if (reika.dragonapi.ModList.COMPUTERCRAFT.isLoaded())
+            RotaryCCTests.register(event, env);
         register(event, env, "processing_centrifuge_fluid_transactions", 60, RotaryProcessingTests::centrifugeFluidTransactions);
 
         RotaryTerraformerTests.register(event, env);

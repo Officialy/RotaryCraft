@@ -1018,8 +1018,8 @@ public enum HandbookRegistry implements HandbookEntry {
 //            return ReikaItemHelper.whiteWool.asItemStack();
         if (this == INTERDIM)
             return new ItemStack(Blocks.NETHER_PORTAL);
-//        if (this == COMPUTERCRAFT)
-//            return RotaryItems.PCB;
+        if (this == COMPUTERCRAFT)
+            return RotaryItems.CIRCUIT_BOARD.get().getDefaultInstance(); //1.7.10 ItemStacks.pcb
 //        if (this == TRANSFER)
 //            return RotaryItems.GEARUNIT;
         if (this == ENGINES)

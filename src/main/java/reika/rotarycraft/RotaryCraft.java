@@ -101,6 +101,8 @@ public class RotaryCraft extends DragonAPIMod {
         reika.dragonapi.modinteract.AEHooks.registerGridHost(RotaryBlockEntities.CRAFTER);
         reika.dragonapi.modinteract.AEHooks.registerGridHost(RotaryBlockEntities.ITEMFILTER);
         RotaryRecipeSync.register();
+        // 1.7.10 CommonProxy: the ComputerCraft peripheral methods (DragonAPI CCHooks exposes them to computers).
+        reika.dragonapi.modinteract.lua.LuaMethod.registerMethods("reika.rotarycraft.modinterface.lua");
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
             modEventBus.addListener(this::clientSetup);
             modEventBus.addListener(this::registerScreens);

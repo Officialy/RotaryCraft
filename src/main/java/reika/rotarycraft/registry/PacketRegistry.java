@@ -61,6 +61,7 @@ public enum PacketRegistry {
     POWERBUS(1),
     PARTICLES(1),
     BLOWERWHITELIST(),
+    BLOWERMETA(),
     BLOWERNBT(),
     BLOWEROREDICT(),
     DEFOLIATOR(3),
