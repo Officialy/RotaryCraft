@@ -1,0 +1,24 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "E": "rotarycraft:tungsten_alloy_ingot",
+    "R": "rotarycraft:bedrock_alloy_gear",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "output": {
+    "components": {
+      "minecraft:custom_data": {
+        "upgradeType": "upgrade.tier5"
+      }
+    },
+    "id": "rotarycraft:engine_upgrade"
+  },
+  "pattern": [
+    "SES",
+    "ERE",
+    "SES"
+  ],
+  "temperature": 1800.0,
+  "timeMultiplier": 8.0
+}

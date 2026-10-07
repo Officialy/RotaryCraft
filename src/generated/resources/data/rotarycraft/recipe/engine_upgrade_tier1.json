@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": "rotarycraft:ethanol_crystals",
+    "G": "rotarycraft:impeller",
+    "R": "minecraft:redstone",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "g": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    "gRg",
+    "RER",
+    "SGS"
+  ],
+  "result": {
+    "components": {
+      "minecraft:custom_data": {
+        "upgradeType": "upgrade.tier1"
+      }
+    },
+    "id": "rotarycraft:engine_upgrade"
+  }
+}

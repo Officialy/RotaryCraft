@@ -1,0 +1,20 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "B": "rotarycraft:bedrock_dust",
+    "C": "rotarycraft:hsla_steel_spring",
+    "D": "minecraft:diamond",
+    "S": "rotarycraft:spring_steel_ingot"
+  },
+  "output": {
+    "id": "rotarycraft:bedrock_alloy_spring"
+  },
+  "pattern": [
+    "SDS",
+    "BCB",
+    "SDS"
+  ],
+  "temperature": 1000.0,
+  "timeMultiplier": 4.0
+}

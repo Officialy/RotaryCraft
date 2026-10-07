@@ -1,0 +1,24 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "B": "rotarycraft:bedrock_alloy_ingot",
+    "S": "rotarycraft:hsla_steel_rod"
+  },
+  "output": {
+    "components": {
+      "minecraft:enchantments": {
+        "minecraft:looting": 5,
+        "minecraft:sharpness": 5
+      }
+    },
+    "id": "rotarycraft:bedrock_alloy_sword"
+  },
+  "pattern": [
+    "B",
+    "B",
+    "S"
+  ],
+  "temperature": 1000.0,
+  "timeMultiplier": 4.0
+}

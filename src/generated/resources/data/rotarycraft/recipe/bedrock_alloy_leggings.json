@@ -1,0 +1,22 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "I": "rotarycraft:bedrock_alloy_ingot"
+  },
+  "output": {
+    "components": {
+      "minecraft:enchantments": {
+        "minecraft:fire_protection": 4
+      }
+    },
+    "id": "rotarycraft:bedrock_alloy_leggings"
+  },
+  "pattern": [
+    "III",
+    "I I",
+    "I I"
+  ],
+  "temperature": 1200.0,
+  "timeMultiplier": 4.0
+}

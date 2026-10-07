@@ -1,0 +1,24 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "B": "rotarycraft:bedrock_alloy_ingot",
+    "S": "rotarycraft:hsla_steel_rod"
+  },
+  "output": {
+    "components": {
+      "minecraft:enchantments": {
+        "minecraft:fortune": 5,
+        "minecraft:silk_touch": 1
+      }
+    },
+    "id": "rotarycraft:bedrock_alloy_pickaxe"
+  },
+  "pattern": [
+    "BBB",
+    " S ",
+    " S "
+  ],
+  "temperature": 1000.0,
+  "timeMultiplier": 4.0
+}

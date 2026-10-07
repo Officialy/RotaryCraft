@@ -1,0 +1,22 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "I": "rotarycraft:bedrock_alloy_ingot"
+  },
+  "output": {
+    "components": {
+      "minecraft:enchantments": {
+        "minecraft:projectile_protection": 4,
+        "minecraft:respiration": 3
+      }
+    },
+    "id": "rotarycraft:bedrock_alloy_helmet"
+  },
+  "pattern": [
+    "III",
+    "I I"
+  ],
+  "temperature": 1200.0,
+  "timeMultiplier": 4.0
+}

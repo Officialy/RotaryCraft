@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": "rotarycraft:red_gold_ingot",
+    "R": "rotarycraft:tungsten_ingot",
+    "S": "rotarycraft:hsla_steel_ingot",
+    "c": "rotarycraft:circuit_board"
+  },
+  "pattern": [
+    "SES",
+    "ERE",
+    "ScS"
+  ],
+  "result": {
+    "components": {
+      "minecraft:custom_data": {
+        "upgradeType": "upgrade.tier3"
+      }
+    },
+    "id": "rotarycraft:engine_upgrade"
+  }
+}

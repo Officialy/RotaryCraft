@@ -149,6 +149,8 @@ public final class RotaryGameTests {
         register(event, env, "blast_furnace_reactor_alloy", 80, RotaryGameTests::blastFurnaceReactorAlloy);
         register(event, env, "blast_furnace_hsla_via_menu", 80, RotaryGameTests::blastFurnaceHslaViaMenu);
         register(event, env, "blast_furnace_lava_rock_heat", 40, RotaryGameTests::blastFurnaceLavaRockHeat);
+        register(event, env, "blast_furnace_bedrock_pickaxe", 120, RotaryGameTests::blastFurnaceBedrockPickaxe);
+        register(event, env, "blast_furnace_bedrock_armor", 120, RotaryGameTests::blastFurnaceBedrockArmor);
         register(event, env, "reactor_entry_recipes_load", 40, RotaryGameTests::reactorEntryRecipesLoad);
         register(event, env, "reactor_centrifuge_accepts_rotary_power", 60,
                 RotaryGameTests::reactorCentrifugeAcceptsRotaryPower);
@@ -682,6 +684,49 @@ public final class RotaryGameTests {
             ItemStack output = furnace.getOutputInventory().getStackInSlot(0);
             helper.assertTrue(output.is(RotaryItems.HSLA_STEEL_INGOT.get()) && output.getCount() == 9,
                     "nine iron ingots with coal, gunpowder and sand should make nine HSLA ingots, got " + output);
+        }).thenSucceed();
+    }
+
+    /** RotaryRecipes 1145: "BBB"," S "," S " at 1000 C gives the pickaxe pre-enchanted Silk Touch I + Fortune V. */
+    private static void blastFurnaceBedrockPickaxe(GameTestHelper helper) {
+        helper.setBlock(TEST_POS, RotaryBlocks.BLAST_FURNACE.get());
+        BlockEntityBlastFurnace furnace = helper.getBlockEntity(TEST_POS, BlockEntityBlastFurnace.class);
+        furnace.setTemperature(2000);
+        for (int slot = 1; slot <= 3; slot++)
+            furnace.setItem(slot, new ItemStack(RotaryItems.BEDROCK_ALLOY_INGOT.get()));
+        furnace.setItem(5, new ItemStack(RotaryItems.HSLA_SHAFT.get()));
+        furnace.setItem(8, new ItemStack(RotaryItems.HSLA_SHAFT.get()));
+        helper.startSequence().thenIdle(100).thenExecute(() -> {
+            ItemStack output = furnace.getOutputInventory().getStackInSlot(0);
+            var levels = output.getEnchantments();
+            var lookup = helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+            helper.assertTrue(output.is(RotaryItems.BEDROCK_ALLOY_PICK.get())
+                            && levels.getLevel(lookup.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SILK_TOUCH)) == 1
+                            && levels.getLevel(lookup.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.FORTUNE)) == 5,
+                    "bedrock pickaxe should come out with Silk Touch I and Fortune V, got " + output + " " + levels);
+        }).thenSucceed();
+    }
+
+    /**
+     * Bedrock armor breaks (and hurts its wearer) without every default enchantment, so the blast
+     * recipe must produce exactly those. Chestplate: "I I","III","III" at 1200 C.
+     */
+    private static void blastFurnaceBedrockArmor(GameTestHelper helper) {
+        helper.setBlock(TEST_POS, RotaryBlocks.BLAST_FURNACE.get());
+        BlockEntityBlastFurnace furnace = helper.getBlockEntity(TEST_POS, BlockEntityBlastFurnace.class);
+        furnace.setTemperature(2000);
+        for (int slot = 1; slot <= 9; slot++)
+            if (slot != 2)
+                furnace.setItem(slot, new ItemStack(RotaryItems.BEDROCK_ALLOY_INGOT.get()));
+        helper.startSequence().thenIdle(100).thenExecute(() -> {
+            ItemStack output = furnace.getOutputInventory().getStackInSlot(0);
+            helper.assertTrue(output.is(RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get()),
+                    "eight bedrock ingots in the chestplate shape should make the chestplate, got " + output);
+            var armor = (reika.rotarycraft.items.tools.bedrock.ItemBedrockArmor) output.getItem();
+            var lookup = helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+            for (var entry : armor.getDefaultEnchantments().entrySet())
+                helper.assertTrue(output.getEnchantments().getLevel(lookup.getOrThrow(entry.getKey())) == entry.getValue(),
+                        "crafted chestplate is missing " + entry.getKey() + " " + entry.getValue() + ": " + output.getEnchantments());
         }).thenSucceed();
     }
 

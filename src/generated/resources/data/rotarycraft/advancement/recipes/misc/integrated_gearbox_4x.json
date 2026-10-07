@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_integrated_gearbox": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:integrated_gearbox"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "rotarycraft:integrated_gearbox_4x"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_integrated_gearbox"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "rotarycraft:integrated_gearbox_4x"
+    ]
+  }
+}

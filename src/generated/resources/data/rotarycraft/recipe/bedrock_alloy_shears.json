@@ -1,0 +1,16 @@
+{
+  "type": "rotarycraft:blast_furnace_shaped",
+  "experience": 0.0,
+  "key": {
+    "B": "rotarycraft:bedrock_alloy_ingot"
+  },
+  "output": {
+    "id": "rotarycraft:bedrock_alloy_shears"
+  },
+  "pattern": [
+    " B",
+    "B "
+  ],
+  "temperature": 1000.0,
+  "timeMultiplier": 4.0
+}

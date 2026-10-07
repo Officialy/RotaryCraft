@@ -16,6 +16,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -28,6 +29,7 @@ import org.jspecify.annotations.Nullable;
 import reika.rotarycraft.auxiliary.recipemanagers.*;
 import reika.rotarycraft.items.tools.ItemEngineUpgrade.UpgradeType;
 import reika.rotarycraft.registry.ExtractOres;
+import reika.rotarycraft.items.tools.bedrock.ItemBedrockArmor;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryFluids;
 import reika.rotarycraft.registry.RotaryItems;
@@ -118,10 +120,12 @@ public final class RoCRecipeProvider {
 
     private static final class Recipes extends RecipeProvider {
         private final RecipeOutput out;
+        private final net.minecraft.core.HolderGetter<net.minecraft.world.item.enchantment.Enchantment> enchantments;
 
         Recipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
             super(recipes, advancements);
             this.out = this.output;
+            this.enchantments = recipes.lookup(Registries.ENCHANTMENT);
             TerraformerRecipeData.bootstrap(recipes);
         }
 
@@ -129,6 +133,7 @@ public final class RoCRecipeProvider {
         protected void buildRecipes() {
             ingotChain();
             blastFurnace();
+            blastTools();
             grinder();
             centrifuge();
             lavaMaker();
@@ -735,6 +740,124 @@ public final class RoCRecipeProvider {
                     1100F, 0F, 1.0F, 0, 0, 0, 1, false, false);
         }
 
+        // =====================================================================================
+        // BLAST-FURNACE TOOLS, ARMOR AND UPGRADES (RotaryRecipes addToolItems 1129-1222, 1270).
+        // ItemRegistry.addBlastRecipe / addEnchantedBlastRecipe / addMetaBlastRecipe all went through
+        // RecipesBlastFurnace.add3x3Crafting(output, temperature, speed, 0, pattern...). Speed N
+        // advanced the smelt timer every Nth tick, which is the time multiplier here. Enchanted
+        // outputs carry ItemRegistry.getEnchantedStack's enchantments: the bedrock armor's own
+        // getDefaultEnchantments() (it breaks without them), Silk Touch I + Fortune V on the pickaxe,
+        // Sharpness V + Looting V on the sword. Not here: the grafter (Forestry) and saw (Multipart)
+        // were mod-gated; the sickle and efficiency upgrade wait on unported items (ItemSickleBase,
+        // the water plate).
+        // =====================================================================================
+        private void blastTools() {
+            Ingredient bedIngot = Ingredient.of(RotaryItems.BEDROCK_ALLOY_INGOT.get());
+            Ingredient shaft = Ingredient.of(RotaryItems.HSLA_SHAFT.get());
+            Ingredient steel = Ingredient.of(RotaryItems.HSLA_STEEL_INGOT.get());
+
+            // STRONGCOIL (1129): spring steel round a charged-or-not HSLA spring, diamonds, bedrock dust.
+            blastShaped("bedrock_alloy_spring", ShapedRecipePattern.of(java.util.Map.of(
+                            'S', Ingredient.of(RotaryItems.SPRING_STEEL_INGOT.get()), 'D', Ingredient.of(Items.DIAMOND),
+                            'B', Ingredient.of(RotaryItems.BEDROCK_DUST.get()), 'C', Ingredient.of(RotaryItems.HSLA_STEEL_SPRING.get())),
+                            "SDS", "BCB", "SDS"),
+                    RotaryItems.BEDROCK_ALLOY_SPRING.get(), 1, 1000F, 0F, 4F, 0, 0, 0);
+
+            var B_S = java.util.Map.of('B', bedIngot, 'S', shaft);
+            blastShaped("bedrock_alloy_pickaxe", ShapedRecipePattern.of(B_S, "BBB", " S ", " S "),
+                    enchanted(RotaryItems.BEDROCK_ALLOY_PICK.get(), java.util.Map.of(
+                            Enchantments.SILK_TOUCH, 1, Enchantments.FORTUNE, 5)), 1000F, 0F, 4F, 0, 0, 0);
+            blastShaped("bedrock_alloy_axe", ShapedRecipePattern.of(B_S, "BB", "BS", " S"),
+                    RotaryItems.BEDROCK_ALLOY_AXE.get(), 1, 1000F, 0F, 4F, 0, 0, 0);
+            blastShaped("bedrock_alloy_shovel", ShapedRecipePattern.of(B_S, "B", "S", "S"),
+                    RotaryItems.BEDROCK_ALLOY_SHOVEL.get(), 1, 1000F, 0F, 4F, 0, 0, 0);
+            blastShaped("bedrock_alloy_sword", ShapedRecipePattern.of(B_S, "B", "B", "S"),
+                    enchanted(RotaryItems.BEDROCK_ALLOY_SWORD.get(), java.util.Map.of(
+                            Enchantments.SHARPNESS, 5, Enchantments.LOOTING, 5)), 1000F, 0F, 4F, 0, 0, 0);
+            // Legacy registered both hands ("II"," S"," S" and its mirror); shaped matching mirrors.
+            blastShaped("bedrock_alloy_hoe", ShapedRecipePattern.of(B_S, "BB", " S", " S"),
+                    RotaryItems.BEDROCK_ALLOY_HOE.get(), 1, 1000F, 0F, 4F, 0, 0, 0);
+            blastShaped("bedrock_alloy_shears", ShapedRecipePattern.of(java.util.Map.of('B', bedIngot), " B", "B "),
+                    RotaryItems.BEDROCK_ALLOY_SHEARS.get(), 1, 1000F, 0F, 4F, 0, 0, 0);
+
+            // Armor @1200. The centre "a" is the GATE config's material, default empty: DragonAPI's
+            // ShapedOreRecipe patch skipped null keys, so the shipped shapes are vanilla armor's.
+            var I = java.util.Map.of('I', bedIngot);
+            blastArmor("bedrock_alloy_helmet", RotaryItems.BEDROCK_ALLOY_HELMET.get(), ShapedRecipePattern.of(I, "III", "I I"));
+            blastArmor("bedrock_alloy_boots", RotaryItems.BEDROCK_ALLOY_BOOTS.get(), ShapedRecipePattern.of(I, "I I", "I I"));
+            blastArmor("bedrock_alloy_chestplate", RotaryItems.BEDROCK_ALLOY_CHESTPLATE.get(), ShapedRecipePattern.of(I, "I I", "III", "III"));
+            blastArmor("bedrock_alloy_leggings", RotaryItems.BEDROCK_ALLOY_LEGGINGS.get(), ShapedRecipePattern.of(I, "III", "I I", "I I"));
+
+            // Bedrock drill head (1270): speed 8.
+            blastShaped("bedrock_alloy_drill", ShapedRecipePattern.of(java.util.Map.of('B', bedIngot), "BBB", "BBB", " B "),
+                    RotaryItems.BEDROCK_DRILL.get(), 1, 1000F, 0F, 8F, 0, 0, 0);
+
+            // Magnetostatic tiers 4 and 5 (1214-1215).
+            blastShaped("engine_upgrade_tier4", ShapedRecipePattern.of(java.util.Map.of(
+                            'c', Ingredient.of(RotaryBlocks.COOLING_FIN.get()), 'R', bedIngot, 'S', steel,
+                            'E', Ingredient.of(RotaryItems.TUNGSTEN_INGOT.get())), "cEc", "ERE", "SES"),
+                    upgradeTemplate(UpgradeType.MAGNETOSTATIC4), 1000F, 0F, 4F, 0, 0, 0);
+            blastShaped("engine_upgrade_tier5", ShapedRecipePattern.of(java.util.Map.of(
+                            'R', Ingredient.of(RotaryItems.BEDROCK_ALLOY_GEAR.get()), 'S', steel,
+                            'E', Ingredient.of(RotaryItems.TUNGSTEN_ALLOY_INGOT.get())), "SES", "ERE", "SES"),
+                    upgradeTemplate(UpgradeType.MAGNETOSTATIC5), 1800F, 0F, 8F, 0, 0, 0);
+
+            // Tiers 1-3 are crafting-table recipes in the same block (1210-1212).
+            engineUpgrade(UpgradeType.MAGNETOSTATIC1)
+                    .define('g', Items.GOLD_INGOT).define('G', RotaryItems.IMPELLER.get()).define('R', Items.REDSTONE)
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get()).define('E', RotaryItems.ETHANOL.get())
+                    .pattern("gRg").pattern("RER").pattern("SGS")
+                    .unlockedBy("has_ethanol", has(RotaryItems.ETHANOL.get()))
+                    .save(out, "rotarycraft:engine_upgrade_tier1");
+            engineUpgrade(UpgradeType.MAGNETOSTATIC2)
+                    .define('C', RotaryItems.RED_GOLD_INGOT.get()).define('R', RotaryItems.GOLD_COIL.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get()).define('E', RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE.get())
+                    .pattern("SCS").pattern("ERE").pattern("SCS")
+                    .unlockedBy("has_gold_coil", has(RotaryItems.GOLD_COIL.get()))
+                    .save(out, "rotarycraft:engine_upgrade_tier2");
+            engineUpgrade(UpgradeType.MAGNETOSTATIC3)
+                    .define('c', RotaryItems.CIRCUIT_BOARD.get()).define('R', RotaryItems.TUNGSTEN_INGOT.get())
+                    .define('S', RotaryItems.HSLA_STEEL_INGOT.get()).define('E', RotaryItems.RED_GOLD_INGOT.get())
+                    .pattern("SES").pattern("ERE").pattern("ScS")
+                    .unlockedBy("has_tungsten_ingot", has(RotaryItems.TUNGSTEN_INGOT.get()))
+                    .save(out, "rotarycraft:engine_upgrade_tier3");
+
+            // Integrated gearbox (1222): the blank body is blast-made @1200, speed 2, from steel, two
+            // bedrock rods and a glass pane; each ratio is the blank plus a bedrock gear unit (1224).
+            // The port stores the ratio itself (2/4/8/16) where 1.7.10 used metadata 1-4.
+            blastShaped("integrated_gearbox", ShapedRecipePattern.of(java.util.Map.of(
+                            'S', steel, 's', Ingredient.of(RotaryItems.BEDROCK_ALLOY_SHAFT.get()),
+                            'G', Ingredient.of(Items.GLASS_PANE)), "sSS", "SsS", "SSG"),
+                    RotaryItems.INTEGRATED_GEARBOX.get(), 1, 1200F, 0F, 2F, 0, 0, 0);
+            ItemLike[] units = {RotaryItems.BEDROCK_ALLOY_GEAR_2x.get(), RotaryItems.BEDROCK_ALLOY_GEAR_4x.get(),
+                    RotaryItems.BEDROCK_ALLOY_GEAR_8x.get(), RotaryItems.BEDROCK_ALLOY_GEAR_16x.get()};
+            for (int i = 0; i < units.length; i++) {
+                int ratio = 2 << i;
+                CompoundTag nbt = new CompoundTag();
+                nbt.putInt("ratio", ratio);
+                shapeless(RecipeCategory.MISC, new ItemStackTemplate(RotaryItems.INTEGRATED_GEARBOX.get(), 1,
+                        DataComponentPatch.builder().set(DataComponents.CUSTOM_DATA, CustomData.of(nbt)).build()))
+                        .requires(RotaryItems.INTEGRATED_GEARBOX.get()).requires(units[i])
+                        .unlockedBy("has_integrated_gearbox", has(RotaryItems.INTEGRATED_GEARBOX.get()))
+                        .save(out, "rotarycraft:integrated_gearbox_" + ratio + "x");
+            }
+        }
+
+        private void blastArmor(String name, Item armor, ShapedRecipePattern pattern) {
+            blastShaped(name, pattern, enchanted(armor, ((ItemBedrockArmor) armor).getDefaultEnchantments()),
+                    1200F, 0F, 4F, 0, 0, 0);
+        }
+
+        /** {@code item} with exactly these enchantment levels (Fortune V etc. exceed vanilla's maxima, as in 1.7.10). */
+        private ItemStackTemplate enchanted(ItemLike item,
+                java.util.Map<ResourceKey<net.minecraft.world.item.enchantment.Enchantment>, Integer> levels) {
+            var mutable = new net.minecraft.world.item.enchantment.ItemEnchantments.Mutable(
+                    net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY);
+            levels.forEach((key, level) -> mutable.set(enchantments.getOrThrow(key), level));
+            return new ItemStackTemplate(item.asItem(), 1, DataComponentPatch.builder()
+                    .set(DataComponents.ENCHANTMENTS, mutable.toImmutable()).build());
+        }
+
         /**
          * Emits one shapeless blast-furnace recipe under {@code rotarycraft:&lt;name&gt;}.
          * No advancement is generated — the player obtains the blast furnace from the
@@ -764,8 +887,15 @@ public final class RoCRecipeProvider {
         private void blastShaped(String name, ShapedRecipePattern pattern, ItemLike output, int count,
                                  float temperature, float experience, float timeMultiplier,
                                  int bonusChance, int bonusMin, int bonusMax) {
+            blastShaped(name, pattern, new ItemStackTemplate(output.asItem(), count),
+                    temperature, experience, timeMultiplier, bonusChance, bonusMin, bonusMax);
+        }
+
+        private void blastShaped(String name, ShapedRecipePattern pattern, ItemStackTemplate output,
+                                 float temperature, float experience, float timeMultiplier,
+                                 int bonusChance, int bonusMin, int bonusMax) {
             ShapedBlastFurnaceRecipe recipe = new ShapedBlastFurnaceRecipe(
-                    pattern, new ItemStackTemplate(output.asItem(), count),
+                    pattern, output,
                     temperature, experience, timeMultiplier, false,
                     bonusChance, bonusMin, bonusMax);
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE,
@@ -3101,17 +3231,17 @@ public final class RoCRecipeProvider {
 
         /** Returns a ShapedRecipeBuilder whose result is engine_upgrade with the given upgradeType in CUSTOM_DATA. */
         private ShapedRecipeBuilder engineUpgrade(UpgradeType type) {
-            // 1.21.5 datagen: item components are not bound during data generation, so building a
-            // full ItemStack would NPE ("Components not bound yet"). Instead build an
-            // ItemStackTemplate directly from a DataComponentPatch and pass it to the inherited
-            // shaped(RecipeCategory, ItemStackTemplate) helper.
+            return shaped(RecipeCategory.MISC, upgradeTemplate(type));
+        }
+
+        // 1.21.5 datagen: item components are not bound during data generation, so building a
+        // full ItemStack would NPE ("Components not bound yet"). Instead build an
+        // ItemStackTemplate directly from a DataComponentPatch.
+        private static ItemStackTemplate upgradeTemplate(UpgradeType type) {
             CompoundTag nbt = new CompoundTag();
             nbt.putString("upgradeType", type.desc);
-            DataComponentPatch patch = DataComponentPatch.builder()
-                    .set(DataComponents.CUSTOM_DATA, CustomData.of(nbt))
-                    .build();
-            ItemStackTemplate result = new ItemStackTemplate(RotaryItems.UPGRADE.get(), 1, patch);
-            return shaped(RecipeCategory.MISC, result);
+            return new ItemStackTemplate(RotaryItems.UPGRADE.get(), 1, DataComponentPatch.builder()
+                    .set(DataComponents.CUSTOM_DATA, CustomData.of(nbt)).build());
         }
 
         // =====================================================================================
