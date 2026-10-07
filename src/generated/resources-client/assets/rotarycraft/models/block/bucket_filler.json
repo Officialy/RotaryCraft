@@ -1,6 +1,8 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "rotarycraft:block/bucket_filler"
+    "bottom": "rotarycraft:block/bucketfiller_top",
+    "side": "rotarycraft:block/bucketfiller",
+    "top": "rotarycraft:block/bucketfiller_top"
   }
 }

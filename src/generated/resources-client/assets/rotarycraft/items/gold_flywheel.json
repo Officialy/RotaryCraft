@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/gold_flywheel",
+    "base": "rotarycraft:item/gold_flywheel",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "flywheel"
+      "machine": "flywheel",
+      "variant": "gold_flywheel"
     }
   }
 }

@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:item/sonic_weapon",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "sonicweapon",
+      "variant": "sonic_weapon"
+    }
+  }
+}

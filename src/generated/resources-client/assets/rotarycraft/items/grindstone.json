@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/grindstone",
+    "base": "rotarycraft:item/grindstone",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "grindstone"
+      "machine": "grindstone",
+      "variant": "grindstone"
     }
   }
 }

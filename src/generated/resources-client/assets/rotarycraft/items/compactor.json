@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/compactor",
+    "base": "rotarycraft:item/compactor",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "compactor"
+      "machine": "compactor",
+      "variant": "compactor"
     }
   }
 }

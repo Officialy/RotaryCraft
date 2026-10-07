@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/wood_flywheel",
+    "base": "rotarycraft:item/wood_flywheel",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "flywheel"
+      "machine": "flywheel",
+      "variant": "wood_flywheel"
     }
   }
 }

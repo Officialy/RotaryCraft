@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/fractionator",
+    "base": "rotarycraft:item/fractionator",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "fractionator"
+      "machine": "fractionator",
+      "variant": "fractionator"
     }
   }
 }

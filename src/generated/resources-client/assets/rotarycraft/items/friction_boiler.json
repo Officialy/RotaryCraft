@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/friction_boiler",
+    "base": "rotarycraft:item/friction_boiler",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "boiler"
+      "machine": "boiler",
+      "variant": "friction_boiler"
     }
   }
 }

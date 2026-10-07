@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "rotarycraft:block/pipe/separation/core"
+    "model": "rotarycraft:item/separation"
   }
 }

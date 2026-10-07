@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/gas_tank",
+    "base": "rotarycraft:item/gas_tank",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "gastank"
+      "machine": "gastank",
+      "variant": "gas_tank"
     }
   }
 }

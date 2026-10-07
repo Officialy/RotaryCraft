@@ -1,10 +1,18 @@
 package reika.rotarycraft.test;
 
+import com.google.gson.JsonParser;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.RenderShape;
+import reika.rotarycraft.base.blocks.BlockBasicMachine;
+import reika.rotarycraft.base.blocks.entity.pipe.BlockPipeShell;
+import reika.rotarycraft.registry.RotaryBlocks;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -14,6 +22,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -54,6 +63,50 @@ public class ModelTextureTest {
     /** Any asset that certainly exists, used to locate the asset root. */
     private static final String ANCHOR_ASSET = "assets/rotarycraft/textures/blockentitytex/lamptex.png";
     private static final String ASSET_PREFIX = "assets/rotarycraft/";
+
+    @Test
+    void everyBlockModelTextureResolves() throws IOException {
+        Path models = assetRoot().resolve("models/block");
+        List<String> broken = new ArrayList<>();
+        int checked = 0;
+        try (Stream<Path> walk = Files.walk(models)) {
+            for (Path model : walk.filter(p -> p.toString().endsWith(".json")).toList()) {
+                var json = JsonParser.parseString(Files.readString(model)).getAsJsonObject();
+                if (!json.has("textures")) continue;
+                for (var entry : json.getAsJsonObject("textures").entrySet()) {
+                    String sprite = entry.getValue().getAsString();
+                    if (!sprite.startsWith("rotarycraft:")) continue;
+                    checked++;
+                    String resource = ASSET_PREFIX + "textures/" + sprite.substring("rotarycraft:".length()) + ".png";
+                    if (getClass().getClassLoader().getResource(resource) == null)
+                        broken.add(models.relativize(model) + " (" + entry.getKey() + "): " + sprite);
+                }
+            }
+        }
+        assertTrue(checked > 100, "block model texture scan did not include the generated machine models");
+        assertTrue(broken.isEmpty(), "Block model textures missing from the atlas:\n  " + String.join("\n  ", broken));
+    }
+
+    @Test
+    void modelledMachinesUseLegacySteelDebris() throws IOException {
+        int checked = 0;
+        for (var holder : RotaryBlocks.BLOCKS.getEntries()) {
+            var block = holder.get();
+            if (!(block instanceof BlockBasicMachine) || block instanceof BlockPipeShell
+                    || block.defaultBlockState().getRenderShape() != RenderShape.INVISIBLE) continue;
+            String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
+            String resource = ASSET_PREFIX + "models/block/" + name + ".json";
+            try (var stream = getClass().getClassLoader().getResourceAsStream(resource)) {
+                assertNotNull(stream, name + " has no debris model");
+                var textures = JsonParser.parseString(new String(stream.readAllBytes(), StandardCharsets.UTF_8))
+                        .getAsJsonObject().getAsJsonObject("textures");
+                // cube_all inherits particle=#all. A BER texture or block/<registry id> is incorrect.
+                assertEquals("rotarycraft:block/steel", textures.get("all").getAsString(), name + " debris sprite");
+                checked++;
+            }
+        }
+        assertTrue(checked > 60, "only " + checked + " modelled machine variants were checked");
+    }
 
     @Test
     void everyModelTextureResolves() throws Exception {

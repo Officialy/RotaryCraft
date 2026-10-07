@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/air_cannon",
+    "base": "rotarycraft:item/air_cannon",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "airgun"
+      "machine": "airgun",
+      "variant": "air_cannon"
     }
   }
 }

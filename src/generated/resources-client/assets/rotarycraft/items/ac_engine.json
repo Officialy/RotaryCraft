@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/ac_engine",
+    "base": "rotarycraft:item/ac_engine",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "ac_engine"
+      "machine": "ac_engine",
+      "variant": "ac_engine"
     }
   }
 }

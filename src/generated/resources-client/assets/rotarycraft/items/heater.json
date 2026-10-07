@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/heater",
+    "base": "rotarycraft:item/heater",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "heater"
+      "machine": "heater",
+      "variant": "heater"
     }
   }
 }

@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/extractor",
+    "base": "rotarycraft:item/extractor",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "extractor"
+      "machine": "extractor",
+      "variant": "extractor"
     }
   }
 }

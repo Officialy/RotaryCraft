@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/bedrock_breaker",
+    "base": "rotarycraft:item/bedrock_breaker",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "bedrockbreaker"
+      "machine": "bedrockbreaker",
+      "variant": "bedrock_breaker"
     }
   }
 }

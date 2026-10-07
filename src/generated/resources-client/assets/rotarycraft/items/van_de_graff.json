@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/van_de_graff",
+    "base": "rotarycraft:item/van_de_graff",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "vandegraff"
+      "machine": "vandegraff",
+      "variant": "van_de_graff"
     }
   }
 }

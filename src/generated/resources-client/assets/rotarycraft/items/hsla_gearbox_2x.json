@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/hsla_gearbox_2x",
+    "base": "rotarycraft:item/hsla_gearbox_2x",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "gearbox"
+      "machine": "gearbox",
+      "variant": "hsla_gearbox_2x"
     }
   }
 }

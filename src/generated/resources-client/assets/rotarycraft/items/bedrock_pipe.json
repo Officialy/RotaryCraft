@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "rotarycraft:block/pipe/bedrock_pipe/core"
+    "model": "rotarycraft:item/bedrock_pipe"
   }
 }

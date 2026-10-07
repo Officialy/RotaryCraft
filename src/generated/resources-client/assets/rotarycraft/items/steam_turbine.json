@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/steam_turbine",
+    "base": "rotarycraft:item/steam_turbine",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "steamturbine"
+      "machine": "steamturbine",
+      "variant": "steam_turbine"
     }
   }
 }

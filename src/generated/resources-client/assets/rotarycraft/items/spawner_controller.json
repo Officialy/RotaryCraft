@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/spawner_controller",
+    "base": "rotarycraft:item/spawner_controller",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "spawnercontroller"
+      "machine": "spawnercontroller",
+      "variant": "spawner_controller"
     }
   }
 }

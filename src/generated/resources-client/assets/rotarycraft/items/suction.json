@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "rotarycraft:block/pipe/suction/core"
+    "model": "rotarycraft:item/suction"
   }
 }

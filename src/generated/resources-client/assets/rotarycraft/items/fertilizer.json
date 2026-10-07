@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/fertilizer",
+    "base": "rotarycraft:item/fertilizer",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "fertilizer"
+      "machine": "fertilizer",
+      "variant": "fertilizer"
     }
   }
 }

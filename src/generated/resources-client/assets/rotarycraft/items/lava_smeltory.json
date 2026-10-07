@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/lava_smeltory",
+    "base": "rotarycraft:item/lava_smeltory",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "bigfurnace"
+      "machine": "bigfurnace",
+      "variant": "lava_smeltory"
     }
   }
 }

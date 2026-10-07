@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/fuel_enhancer",
+    "base": "rotarycraft:item/fuel_enhancer",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "fuelenhancer"
+      "machine": "fuelenhancer",
+      "variant": "fuel_enhancer"
     }
   }
 }

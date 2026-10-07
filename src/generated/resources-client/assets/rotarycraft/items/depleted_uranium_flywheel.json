@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/depleted_uranium_flywheel",
+    "base": "rotarycraft:item/depleted_uranium_flywheel",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "flywheel"
+      "machine": "flywheel",
+      "variant": "depleted_uranium_flywheel"
     }
   }
 }

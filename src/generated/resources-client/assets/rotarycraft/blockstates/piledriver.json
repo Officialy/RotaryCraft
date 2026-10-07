@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "rotarycraft:block/piledriver",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "rotarycraft:block/piledriver",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "rotarycraft:block/piledriver"
+    },
+    "facing=south": {
+      "model": "rotarycraft:block/piledriver",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "rotarycraft:block/piledriver",
+      "x": 270
+    },
+    "facing=west": {
+      "model": "rotarycraft:block/piledriver",
+      "y": 270
+    }
+  }
+}

@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/split_belt",
+    "base": "rotarycraft:item/split_belt",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "splitbelt"
+      "machine": "splitbelt",
+      "variant": "split_belt"
     }
   }
 }

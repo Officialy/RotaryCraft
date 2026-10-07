@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/fan",
+    "base": "rotarycraft:item/fan",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "fan"
+      "machine": "fan",
+      "variant": "fan"
     }
   }
 }

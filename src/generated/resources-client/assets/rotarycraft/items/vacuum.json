@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/vacuum",
+    "base": "rotarycraft:item/vacuum",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "vacuum"
+      "machine": "vacuum",
+      "variant": "vacuum"
     }
   }
 }

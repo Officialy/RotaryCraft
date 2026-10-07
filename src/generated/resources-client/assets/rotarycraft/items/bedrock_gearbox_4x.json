@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/bedrock_gearbox_4x",
+    "base": "rotarycraft:item/bedrock_gearbox_4x",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "gearbox"
+      "machine": "gearbox",
+      "variant": "bedrock_gearbox_4x"
     }
   }
 }

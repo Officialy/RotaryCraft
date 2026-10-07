@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/centrifuge",
+    "base": "rotarycraft:item/centrifuge",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "centrifuge"
+      "machine": "centrifuge",
+      "variant": "centrifuge"
     }
   }
 }

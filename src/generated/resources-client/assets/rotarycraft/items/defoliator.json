@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "rotarycraft:item/defoliator",
+    "model": {
+      "type": "rotarycraft:machine",
+      "machine": "defoliator",
+      "variant": "defoliator"
+    }
+  }
+}

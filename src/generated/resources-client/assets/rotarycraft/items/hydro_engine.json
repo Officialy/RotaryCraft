@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/hydro_engine",
+    "base": "rotarycraft:item/hydro_engine",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "hydro_engine"
+      "machine": "hydro_engine",
+      "variant": "hydro_engine"
     }
   }
 }

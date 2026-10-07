@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/reservoir",
+    "base": "rotarycraft:item/reservoir",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "reservoir"
+      "machine": "reservoir",
+      "variant": "reservoir"
     }
   }
 }

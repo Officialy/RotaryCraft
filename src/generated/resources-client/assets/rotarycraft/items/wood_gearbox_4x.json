@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/wood_gearbox_4x",
+    "base": "rotarycraft:item/wood_gearbox_4x",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "gearbox"
+      "machine": "gearbox",
+      "variant": "wood_gearbox_4x"
     }
   }
 }

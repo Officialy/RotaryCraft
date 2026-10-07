@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "rotarycraft:block/pipe/hose/core"
+    "model": "rotarycraft:item/hose"
   }
 }

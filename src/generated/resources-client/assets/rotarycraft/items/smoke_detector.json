@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/smoke_detector",
+    "base": "rotarycraft:item/smoke_detector",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "smokedetector"
+      "machine": "smokedetector",
+      "variant": "smoke_detector"
     }
   }
 }

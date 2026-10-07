@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/sprinkler",
+    "base": "rotarycraft:item/sprinkler",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "sprinkler"
+      "machine": "sprinkler",
+      "variant": "sprinkler"
     }
   }
 }

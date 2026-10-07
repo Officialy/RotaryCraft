@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/multi_clutch",
+    "base": "rotarycraft:item/multi_clutch",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "multiclutch"
+      "machine": "multiclutch",
+      "variant": "multi_clutch"
     }
   }
 }

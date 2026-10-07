@@ -1,6 +1,8 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "rotarycraft:block/particle"
+    "bottom": "rotarycraft:block/steel",
+    "side": "rotarycraft:block/steel",
+    "top": "rotarycraft:block/particle_top"
   }
 }

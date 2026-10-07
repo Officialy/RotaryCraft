@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/splitter",
+    "base": "rotarycraft:item/splitter",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "splitter"
+      "machine": "splitter",
+      "variant": "splitter"
     }
   }
 }

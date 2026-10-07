@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/highgear",
+    "base": "rotarycraft:item/highgear",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "highgear"
+      "machine": "highgear",
+      "variant": "highgear"
     }
   }
 }

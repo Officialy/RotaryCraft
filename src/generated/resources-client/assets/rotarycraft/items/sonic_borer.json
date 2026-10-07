@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/sonic_borer",
+    "base": "rotarycraft:item/sonic_borer",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "sonicborer"
+      "machine": "sonicborer",
+      "variant": "sonic_borer"
     }
   }
 }

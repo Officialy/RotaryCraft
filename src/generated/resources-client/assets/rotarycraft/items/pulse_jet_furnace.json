@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/pulse_jet_furnace",
+    "base": "rotarycraft:item/pulse_jet_furnace",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "pulsejet"
+      "machine": "pulsejet",
+      "variant": "pulse_jet_furnace"
     }
   }
 }

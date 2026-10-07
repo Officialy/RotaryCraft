@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/tungsten_gearbox_2x",
+    "base": "rotarycraft:item/tungsten_gearbox_2x",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "gearbox"
+      "machine": "gearbox",
+      "variant": "tungsten_gearbox_2x"
     }
   }
 }

@@ -56,7 +56,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * 26.1 model + blockstate provider for RotaryCraft.
+ * Minecraft 26.3 model + blockstate provider for RotaryCraft.
  * <p>
  * Vanilla's {@link BlockModelGenerators} keeps every useful single-block helper
  * ({@code createTrivialCube}, {@code registerSimpleItemModel}, etc.) {@code private}, so a
@@ -70,10 +70,8 @@ import java.util.stream.Stream;
  *       model that inherits the block model.</li>
  *   <li>Per non-block item: a flat ({@code item/generated}) model with a single layer0 texture.</li>
  * </ul>
- * Machine items that should render through the {@code rotarycraft:machine} SpecialModelRenderer
- * codec (see {@code RotaryClientExtensions}) can have their generated {@code items/&lt;name&gt;.json}
- * hand-overridden after datagen runs; the default the provider emits is a sensible cube
- * fallback that at least doesn't show as missing.
+ * Machine items use the native special-model codec with generated display transforms and a
+ * registered-block variant, keeping their item poses independent of world block models.
  */
 public class RoCModelProvider extends ModelProvider {
 
@@ -227,9 +225,9 @@ public class RoCModelProvider extends ModelProvider {
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
                         block, orientableMapping("blastfurn_front", "blastfurn_side", "blastfurn_side"), modelOut);
             } else if (block instanceof BlockFermenter) {
-                // legacy static-face fermenter: steel sides, ferm_front / ferm_back, ferm_side top
+                // Legacy fermenter chassis uses steel; there is no ferm_side texture.
                 blockModelId = ModelTemplates.CUBE_ORIENTABLE.create(
-                        block, orientableMapping("ferm_front", "ferm_side", "ferm_side"), modelOut);
+                        block, orientableMapping("ferm_front", "steel", "steel"), modelOut);
             } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockItemFilter) {
                 // V33a BlockIMachine ITEMFILTER icons: filter_top on top, steel base, steel_dark sides.
                 blockModelId = ModelTemplates.CUBE_BOTTOM_TOP.create(
@@ -269,6 +267,18 @@ public class RoCModelProvider extends ModelProvider {
                                 .put(TextureSlot.ALL, placeholder)
                                 .put(TextureSlot.PARTICLE, placeholder),
                         modelOut);
+            } else if (block instanceof BlockRotaryCraftMachine) {
+                blockModelId = machineChassisModel(block, modelOut);
+            } else if (block == RotaryBlocks.DECO.get() || block == RotaryBlocks.BCENGINE.get() || block == RotaryBlocks.BLASTPANE.get()
+                    || block == RotaryBlocks.BEDROCKSLICE.get() || block == RotaryBlocks.DECOTANK.get()) {
+                String sprite = block == RotaryBlocks.DECO.get() || block == RotaryBlocks.BCENGINE.get() ? "steel"
+                        : block == RotaryBlocks.BLASTPANE.get() ? "blastglass"
+                        : block == RotaryBlocks.BEDROCKSLICE.get() ? "bedrock" : "tank/tank_0";
+                blockModelId = ModelTemplates.CUBE_ALL.create(block, TextureMapping.cube(texture(sprite)), modelOut);
+            } else if (block == reika.rotarycraft.registry.RotaryFluids.HSLA_FLUID_BLOCK.get()) {
+                // Fluids render through their fluid extension, but debris still needs an atlas sprite.
+                blockModelId = ModelTemplates.CUBE_ALL.create(block,
+                        TextureMapping.cube(texture("fluid/hsla_still")), modelOut);
             } else {
                 // assets/<modid>/models/block/<name>.json (parent=cube_all, texture=block/<name>).
                 blockModelId = ModelTemplates.CUBE_ALL.create(
@@ -318,10 +328,15 @@ public class RoCModelProvider extends ModelProvider {
             if (asItem != Items.AIR) {
                 MachineRegistry mr = MachineRegistry.getMachineMapping(block);
                 if (mr != null && reika.rotarycraft.client.MachineModels.has(mr)) {
+                    String variant = BuiltInRegistries.BLOCK.getKey(block).getPath();
+                    Identifier itemBase = RoCItemDisplayModels.machine(asItem, modelOut);
                     itemModelOut.accept(asItem, ItemModelUtils.specialModel(
-                            blockModelId,
-                            new MachineItemRenderer.Unbaked(mr.name().toLowerCase(Locale.ROOT))
+                            itemBase,
+                            new MachineItemRenderer.Unbaked(mr.name().toLowerCase(Locale.ROOT), variant)
                     ));
+                } else if (isPipeShell) {
+                    itemModelOut.accept(asItem, ItemModelUtils.plainModel(
+                            RoCItemDisplayModels.pipe(asItem, blockModelId, modelOut)));
                 } else {
                     itemModelOut.accept(asItem, ItemModelUtils.plainModel(blockModelId));
                 }
@@ -345,7 +360,8 @@ public class RoCModelProvider extends ModelProvider {
                 itemModelOut.accept(item, ItemModelUtils.plainModel(Identifier.fromNamespaceAndPath("minecraft", "block/spawner"))); return;
             }
             // assets/<modid>/models/item/<name>.json (parent=item/generated, layer0=item/<name>).
-            Identifier itemModelId = ModelTemplates.FLAT_ITEM.create(
+            Identifier itemModelId = (RoCItemDisplayModels.isHandheldTool(item)
+                    ? ModelTemplates.FLAT_HANDHELD_ITEM : ModelTemplates.FLAT_ITEM).create(
                     ModelLocationUtils.getModelLocation(item),
                     rawIronTexture(item),
                     modelOut);
@@ -353,6 +369,44 @@ public class RoCModelProvider extends ModelProvider {
                     ? ItemModelUtils.tintedModel(itemModelId, new net.minecraft.client.color.item.CustomModelDataSource(0, 0xffffff))
                     : ItemModelUtils.plainModel(itemModelId));
         });
+    }
+
+    /**
+     * V33a BlockModelledMachine.registerBlockIcons used steel for every modelled machine,
+     * including engines and all transmission materials. The BER's texture is not its debris
+     * sprite. A registry-name texture does not exist for these blocks and produces missing-texture
+     * particles even when the BER renders correctly. Static machines retain their original icons.
+     */
+    private static Identifier machineChassisModel(Block block, BiConsumer<Identifier, ModelInstance> output) {
+        String name = BuiltInRegistries.BLOCK.getKey(block).getPath();
+        return switch (name) {
+            case "music_box" -> ModelTemplates.CUBE_ALL.create(block, TextureMapping.cube(texture("musicbox")), output);
+            case "refresher" -> ModelTemplates.CUBE_ALL.create(block, TextureMapping.cube(texture("refresh")), output);
+            case "engine_control_unit" -> ModelTemplates.CUBE_BOTTOM_TOP.create(block,
+                    bottomTopMapping("ecu_top", "steel", "ecu_side"), output);
+            case "self_destruct" -> ModelTemplates.CUBE_BOTTOM_TOP.create(block,
+                    bottomTopMapping("steel", "steel", "destruct"), output);
+            case "particle" -> ModelTemplates.CUBE_BOTTOM_TOP.create(block,
+                    bottomTopMapping("particle_top", "steel", "steel"), output);
+            case "purifier" -> ModelTemplates.CUBE_BOTTOM_TOP.create(block,
+                    bottomTopMapping("purifier", "steel", "steel"), output);
+            case "bucket_filler" -> ModelTemplates.CUBE_BOTTOM_TOP.create(block,
+                    bottomTopMapping("bucketfiller_top", "bucketfiller_top", "bucketfiller"), output);
+            case "filler" -> ModelTemplates.CUBE_BOTTOM_TOP.create(block,
+                    bottomTopMapping("steel", "filler", "steel"), output);
+            case "bus_controller" -> ModelTemplates.CUBE_BOTTOM_TOP.create(block,
+                    bottomTopMapping("steel", "steel", "buscontroller"), output);
+            case "sorter" -> ModelTemplates.CUBE_BOTTOM_TOP.create(block,
+                    bottomTopMapping("sorter_top", "sorter_bottom", "sorter_side"), output);
+            case "drop_processor" -> ModelTemplates.CUBE_ORIENTABLE.create(block,
+                    orientableMapping("drops_front", "steel", "steel"), output);
+            case "power_bus" -> ModelTemplates.CUBE.create(block, new TextureMapping()
+                    .put(TextureSlot.PARTICLE, texture("steel"))
+                    .put(TextureSlot.UP, texture("steel")).put(TextureSlot.DOWN, texture("steel"))
+                    .put(TextureSlot.NORTH, texture("bus_north")).put(TextureSlot.SOUTH, texture("bus_south"))
+                    .put(TextureSlot.EAST, texture("bus_east")).put(TextureSlot.WEST, texture("bus_west")), output);
+            default -> ModelTemplates.CUBE_ALL.create(block, TextureMapping.cube(texture("steel")), output);
+        };
     }
 
     /** V33a bars occupy 0.33..0.67 on the two axes perpendicular to the tunnel. */

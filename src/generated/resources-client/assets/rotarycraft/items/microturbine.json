@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/microturbine",
+    "base": "rotarycraft:item/microturbine",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "micro_turbine"
+      "machine": "micro_turbine",
+      "variant": "microturbine"
     }
   }
 }

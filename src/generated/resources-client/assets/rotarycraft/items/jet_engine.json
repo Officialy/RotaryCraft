@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/jet_engine",
+    "base": "rotarycraft:item/jet_engine",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "jet_engine"
+      "machine": "jet_engine",
+      "variant": "jet_engine"
     }
   }
 }

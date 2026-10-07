@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/belt_hub",
+    "base": "rotarycraft:item/belt_hub",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "belt"
+      "machine": "belt",
+      "variant": "belt_hub"
     }
   }
 }

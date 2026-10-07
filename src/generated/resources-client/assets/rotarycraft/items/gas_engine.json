@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/gas_engine",
+    "base": "rotarycraft:item/gas_engine",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "gas_engine"
+      "machine": "gas_engine",
+      "variant": "gas_engine"
     }
   }
 }

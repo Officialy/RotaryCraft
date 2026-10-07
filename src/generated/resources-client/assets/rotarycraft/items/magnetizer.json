@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/magnetizer",
+    "base": "rotarycraft:item/magnetizer",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "magnetizer"
+      "machine": "magnetizer",
+      "variant": "magnetizer"
     }
   }
 }

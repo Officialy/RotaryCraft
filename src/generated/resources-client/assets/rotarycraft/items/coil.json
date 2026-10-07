@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/coil",
+    "base": "rotarycraft:item/coil",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "coil"
+      "machine": "coil",
+      "variant": "coil"
     }
   }
 }

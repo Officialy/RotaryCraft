@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/pipe_pump",
+    "base": "rotarycraft:item/pipe_pump",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "pipepump"
+      "machine": "pipepump",
+      "variant": "pipe_pump"
     }
   }
 }

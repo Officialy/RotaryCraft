@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/chain_drive",
+    "base": "rotarycraft:item/chain_drive",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "chain"
+      "machine": "chain",
+      "variant": "chain_drive"
     }
   }
 }

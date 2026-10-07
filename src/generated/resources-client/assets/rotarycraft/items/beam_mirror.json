@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/beam_mirror",
+    "base": "rotarycraft:item/beam_mirror",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "beammirror"
+      "machine": "beammirror",
+      "variant": "beam_mirror"
     }
   }
 }

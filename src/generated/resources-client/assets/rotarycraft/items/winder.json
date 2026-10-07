@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/winder",
+    "base": "rotarycraft:item/winder",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "winder"
+      "machine": "winder",
+      "variant": "winder"
     }
   }
 }

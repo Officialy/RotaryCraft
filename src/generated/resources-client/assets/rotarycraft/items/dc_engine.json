@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/dc_engine",
+    "base": "rotarycraft:item/dc_engine",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "dc_engine"
+      "machine": "dc_engine",
+      "variant": "dc_engine"
     }
   }
 }

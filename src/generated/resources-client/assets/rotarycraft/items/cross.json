@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/cross",
+    "base": "rotarycraft:item/cross",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "shaft_cross"
+      "machine": "shaft_cross",
+      "variant": "cross"
     }
   }
 }

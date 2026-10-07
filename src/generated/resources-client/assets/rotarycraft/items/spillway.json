@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/spillway",
+    "base": "rotarycraft:item/spillway",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "spillway"
+      "machine": "spillway",
+      "variant": "spillway"
     }
   }
 }

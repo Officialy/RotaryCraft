@@ -1,10 +1,11 @@
 {
   "model": {
     "type": "minecraft:special",
-    "base": "rotarycraft:block/landmine",
+    "base": "rotarycraft:item/landmine",
     "model": {
       "type": "rotarycraft:machine",
-      "machine": "landmine"
+      "machine": "landmine",
+      "variant": "landmine"
     }
   }
 }

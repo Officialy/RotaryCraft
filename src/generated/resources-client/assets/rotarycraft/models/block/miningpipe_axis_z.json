@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#all"
+        },
+        "east": {
+          "texture": "#all"
+        },
+        "north": {
+          "texture": "#all"
+        },
+        "south": {
+          "texture": "#all"
+        },
+        "up": {
+          "texture": "#all"
+        },
+        "west": {
+          "texture": "#all"
+        }
+      },
+      "from": [
+        5.28,
+        5.28,
+        0.0
+      ],
+      "to": [
+        10.72,
+        10.72,
+        16.0
+      ]
+    }
+  ],
+  "textures": {
+    "all": "rotarycraft:block/minepipe",
+    "particle": "#all"
+  }
+}
