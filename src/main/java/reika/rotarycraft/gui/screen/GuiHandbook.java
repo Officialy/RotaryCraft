@@ -417,7 +417,7 @@ public class GuiHandbook extends Screen {
             return true;
         int j = (width - xSize) / 2 - 2;
         int k = (height - ySize) / 2 - 8;
-        if (event.button() == 0) {
+        if (event.button() == com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT) {
             int dx = (int) event.x() - j;
             int dy = (int) event.y() - k;
             if (HandbookNotifications.instance.newAlerts()) {
@@ -438,7 +438,7 @@ public class GuiHandbook extends Screen {
     public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
         if (super.mouseDragged(event, dx, dy))
             return true;
-        if (event.button() == 0 && this.getEntry().hasMachineRender() && subpage == 0) {
+        if (event.button() == com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT && this.getEntry().hasMachineRender() && subpage == 0) {
             int posX = (width - xSize) / 2;
             int posY = (height - ySize) / 2 - 8;
             int x = posX + 167;

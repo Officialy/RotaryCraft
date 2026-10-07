@@ -43,12 +43,18 @@ public class ContainerBigFurnace extends IOMachineContainer<BlockEntityLavaSmelt
         for (int i = 0; i < te.getNumberInputSlots(); i++) {
             int row = i % 9;
             int col = i / 9;
-            Slot slot = new Slot(player, i + te.getNumberInputSlots(), 8 + row * dx, 72 + col * dy);
-            this.addSlot(slot);
+            this.addSlot(new reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler(
+                    te.itemHandler, i + te.getNumberInputSlots(), 8 + row * dx, 72 + col * dy));
         }
 
 
         this.addPlayerInventoryWithOffset(player, 0, 41);
+
+        // 1.7.10 sent smeltTick as progress bar 0; the cook bar reads it on the client.
+        this.addDataSlot(new net.minecraft.world.inventory.DataSlot() {
+            @Override public int get() { return te.smeltTick; }
+            @Override public void set(int value) { te.smeltTick = value; }
+        });
     }
 
     @Override
@@ -65,11 +71,4 @@ public class ContainerBigFurnace extends IOMachineContainer<BlockEntityLavaSmelt
         ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "tank");
     }
 
-    @Override
-    public void setData(int par1, int par2) {
-        //case 1: te.setLevel(par2); break;
-        if (par1 == 0) {
-            te.smeltTick = par2;
-        }
-    }
 }

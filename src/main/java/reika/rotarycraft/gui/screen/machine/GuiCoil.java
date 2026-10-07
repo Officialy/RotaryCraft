@@ -135,8 +135,7 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
-        inputOmega.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        inputTorque.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        // The EditBoxes are renderable widgets (init); drawing them here as well drew them twice.
     }
 
     @Override

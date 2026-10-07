@@ -31,7 +31,7 @@ public class LandmineContainer extends CoreContainer<BlockEntityLandmine> {
         super(RotaryMenus.LANDMINE.get(), id, inv, te);
         this.landmine = te;
 
-        this.addSlot(new Slot(inv, 0, 80, 34));
+        this.addSlot(ii.slot(0, 80, 34));
 
         this.addSlot(ii.slot(1, 16, 25));
         this.addSlot(ii.slot(2, 34, 25));
@@ -44,11 +44,6 @@ public class LandmineContainer extends CoreContainer<BlockEntityLandmine> {
         this.addSlot(ii.slot(8, 144, 43));
 
         this.addPlayerInventory(inv);
-    }
-
-    @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
     }
 
 }

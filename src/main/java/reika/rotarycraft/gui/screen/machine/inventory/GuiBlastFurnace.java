@@ -28,7 +28,7 @@ public class GuiBlastFurnace extends NonPoweredMachineScreen<BlockEntityBlastFur
 
     public GuiBlastFurnace(ContainerBlastFurnace container, Inventory inv, Component title) {
         super(container, inv, title);
-        blast = (BlockEntityBlastFurnace) inv.player.level().getBlockEntity(container.tile.getBlockPos());
+        blast = (BlockEntityBlastFurnace) container.tile;
     }
 
     @Override

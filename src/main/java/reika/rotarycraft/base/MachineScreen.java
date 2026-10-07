@@ -135,6 +135,17 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
         this.drawHelpTab(j, k);
     }
 
+    /**
+     * The 29-px power-tab bar for {@code value} against its machine minimum, as 1.7.10 computed it
+     * ({@code value * 29 / min}). Machines with several operating points can report a minimum of 0,
+     * which divided by zero; any positive value then fills the bar, as GuiPowerOnlyMachine does.
+     */
+    protected static long powerFrac(long value, long min) {
+        if (min <= 0)
+            return value > 0 ? 29 : 0;
+        return value * 29L / min;
+    }
+
     protected boolean inventoryLabelLeft() {
         return false;
     }

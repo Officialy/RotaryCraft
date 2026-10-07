@@ -47,7 +47,8 @@ public class ContainerWorktable extends ReikaCraftingContainer<BlockEntityWorkta
             }
         }
 
-//        todo this.addSlot(new SlotApprovedItems(te, 18, 6, 53).addItem(RotaryItems.CRAFTPATTERN.get()));
+        this.addSlot(new reika.dragonapi.instantiable.gui.slot.SlotApprovedItems(te, 18, 6, 53)
+                .addItem(reika.rotarycraft.registry.RotaryItems.CRAFT_PATTERN.get()));
 
 		/*
 		dx = 153;

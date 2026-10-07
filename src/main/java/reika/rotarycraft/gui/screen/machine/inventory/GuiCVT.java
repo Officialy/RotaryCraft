@@ -186,9 +186,7 @@ public class GuiCVT extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Con
             else
                 api.drawCenteredStringNoShadow(graphics, font, String.format("(%d)", r == 0 ? 1 : r), j + imageWidth / 2 + 88, k + 31, 0xFF404040);
         }
-
-        if (input != null)
-            input.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        // The EditBox is a renderable widget (init); it is not drawn here a second time.
     }
 
     @Override

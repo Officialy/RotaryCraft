@@ -101,7 +101,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
         if (!level.isClientSide()) {
             for (int var2 = 0; var2 < 9; ++var2) {
                 ItemStack var3 = craftMatrix.getItem(var2);
-                if (var3 != null)
+                if (!var3.isEmpty())
                     player.drop(var3, true, net.minecraft.util.Prediction.SERVER_ONLY);
             }
         }
@@ -114,7 +114,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        ItemStack var3 = null;
+        ItemStack var3 = ItemStack.EMPTY;
         Slot var4 = slots.get(index);
 
         if (var4 != null && var4.hasItem()) {
@@ -123,20 +123,20 @@ public class ContainerHandCraft extends AbstractContainerMenu {
 
             if (index == 0) {
                 if (!this.moveItemStackTo(var5, 10, 46, true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
 
                 var4.onQuickCraft(var5, var3);
             } else if (index >= 10 && index < 37) {
                 if (!this.moveItemStackTo(var5, 37, 46, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (index >= 37 && index < 46) {
                 if (!this.moveItemStackTo(var5, 10, 37, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.moveItemStackTo(var5, 10, 46, false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (var5.getCount() == 0) {
@@ -146,7 +146,7 @@ public class ContainerHandCraft extends AbstractContainerMenu {
             }
 
             if (var5.getCount() == var3.getCount()) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             var4.onTake(player, var5);

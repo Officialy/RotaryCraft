@@ -49,9 +49,11 @@ public class ContainerSorter extends IOMachineContainer<BlockEntitySorting> {
     public void clicked(int slot, int button, ContainerInput type, Player ep) {
         boolean inGUI = slot < BlockEntitySorting.LENGTH * 3 && slot >= 0;
         if (inGUI) {
-            ItemStack held = ep.getMainHandItem();
-            sorter.setMapping(slot, ReikaItemHelper.getSizedItemStack(held, 1));
-//         todo   return held;
+            // 1.7.10: the stack on the cursor (inventory.getItemStack), an empty cursor clearing it.
+            ItemStack held = this.getCarried();
+            sorter.setMapping(slot, held.isEmpty() ? null : ReikaItemHelper.getSizedItemStack(held, 1));
+        } else {
+            super.clicked(slot, button, type, ep);
         }
     }
 

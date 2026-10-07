@@ -39,9 +39,15 @@ public class ReservoirScreen extends NonPoweredMachineScreen<BlockEntityReservoi
             api.drawTooltipAt(pPoseStack, font, String.format("%d/%d", reservoir.getFluidLevel(), BlockEntityReservoir.CAPACITY), pX, pY);
         }
 
-        // 1.21.5: IClientFluidTypeExtensions.getStillTexture() was removed; fluid GUI
-        // overlays now come from the fluid's still-render-type texture atlas sprite.
-        // TODO: rebuild via FluidStack.getFluid().getFluidType() + the new still-sprite API.
+        // 1.7.10 GuiReservoir: the fluid's still icon stretched over the 8-px column, filled from the
+        // bottom (drawn in the foreground layer there, so the panel origin is added here).
+        if (!reservoir.isEmpty()) {
+            int i2 = reservoir.getLiquidScaled(44);
+            int x = imageWidth / 2 - 4;
+            int y = imageHeight / 2 - 13 - i2 + 35;
+            reika.dragonapi.libraries.rendering.ReikaLiquidRenderer.drawFluidIcon(pPoseStack,
+                    reservoir.getFluid().getFluid(), j + x, k + y, 8, i2);
+        }
     }
 
     @Override

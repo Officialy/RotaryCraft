@@ -66,7 +66,9 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
         addRenderableWidget(new Button.Builder(Component.nullToEmpty("Clear Music"), (button) -> actionPerformed(button, 106)).pos(j + 172, k + 185).size( 64, 20).build());
 
         for (int i = 0; i < 16; i++) {
-            ColorButton b = new ColorButton(200 + i, j + 9 + i * 15, k + 95, 12, 12, BlockEntityMusicBox.getColorForChannel(i));
+            int channel = 200 + i;
+            ColorButton b = new ColorButton(channel, j + 9 + i * 15, k + 95, 12, 12,
+                    BlockEntityMusicBox.getColorForChannel(i), button -> actionPerformed(button, channel));
             if (activeChannel == i)
                 b.isSelected = true;
             addRenderableWidget(b);
@@ -89,15 +91,18 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
                 new ItemStack(Blocks.SAND),
                 new ItemStack(Blocks.GLASS)
         };
-//      todo  for (int i = 0; i < 6; i++)
-//            addRenderableWidget(new ItemIconButton(400 + i, j + 152 + 16 * i, k + 53, 0, items[i]));
+        for (int i = 0; i < 6; i++) {
+            int voice = 400 + i;
+            addRenderableWidget(new reika.dragonapi.instantiable.gui.ItemIconButton(voice, j + 152 + 16 * i, k + 53, 0,
+                    items[i], button -> actionPerformed(button, voice)));
+        }
     }
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        super.mouseClicked(event, doubleClick);
+        boolean handled = super.mouseClicked(event, doubleClick);
         input.mouseClicked(event.x(), event.y(), event.button());
-        return super.mouseClicked(event, doubleClick);
+        return handled;
     }
 
     @Override
@@ -149,19 +154,19 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
 
-        stack.blit(RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/musicbuttons.png"), j+imageWidth/2-232/2, k+150, 0, 64, 232, 37, 256, 256);
-
+        // 1.7.10 had the musicbuttons.png strip commented out; the keyboard is all it drew here.
         input.drawKeys(stack);
+    }
 
+    @Override
+    protected void extractLabels(GuiGraphicsExtractor stack, int mouseX, int mouseY) {
+        super.extractLabels(stack, mouseX, mouseY);
         ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Note Length", 51, 42, 0xFF000000);
         ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Instrument", 200, 42, 0xFF000000);
         ReikaGuiAPI.instance.drawCenteredStringNoShadow(stack, font, "Channel Select", imageWidth / 2, 85, 0xFF000000);
-
-        // 26.1: divider line under the "Channel Select" label. Original 1.7 used Tesselator
-        // primitives via stack.pose(); the new pipeline gives us a clean rectangle-fill API
-        // (GuiGraphicsExtractor.fill) which is the standard way to draw 1-px rules in 1.21+.
-        int dividerY = 85 + font.lineHeight + 1;
-        stack.fill(imageWidth / 2 - 60, dividerY, imageWidth / 2 + 60, dividerY + 1, 0xFF202020);
+        // 1.7.10 framed the selected instrument icon (ItemIconButton 400 + voice - 1) in black.
+        int dx = (activeVoice.ordinal() - 1) * 16;
+        stack.outline(152 + dx, 53, 17, 17, 0xff000000);
     }
 
     @Override

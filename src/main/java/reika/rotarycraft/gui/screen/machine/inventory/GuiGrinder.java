@@ -60,17 +60,17 @@ public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrind
         var loc = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/powertab.png");
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j, k + 4, 0, 4, 42, imageHeight - 4, 256, 256);
 
-        long frac = (grin.power * 29L) / grin.MINPOWER;
+        long frac = powerFrac(grin.power, grin.MINPOWER);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 144, 0, 0, (int) frac, 4, 256, 256);
 
-        frac = (int) (grin.omega * 29L) / grin.MINSPEED;
+        frac = powerFrac(grin.omega, grin.MINSPEED);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 84, 0, 0, (int) frac, 4, 256, 256);
 
-        frac = (int) (grin.torque * 29L) / grin.MINTORQUE;
+        frac = powerFrac(grin.torque, grin.MINTORQUE);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 24, 0, 0, (int) frac, 4, 256, 256);

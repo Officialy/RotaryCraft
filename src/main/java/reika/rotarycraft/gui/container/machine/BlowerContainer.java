@@ -26,7 +26,7 @@ public class BlowerContainer extends IOMachineContainer<BlockEntityBlower> {
 
     public BlowerContainer(int id, Inventory playerInv, FriendlyByteBuf byteBuf) {
         super(RotaryMenus.BLOWER.get(), id, playerInv, byteBuf);
-        blower = (BlockEntityBlower) playerInv.player.level().getBlockEntity(byteBuf.readBlockPos());
+        blower = this.tile;
 
         int dy = 18;
         int x = 8;
@@ -44,9 +44,9 @@ public class BlowerContainer extends IOMachineContainer<BlockEntityBlower> {
     public void clicked(int id, int button, ContainerInput type, Player ep) {
         boolean inGUI = id < blower.matchingItems.length && id >= 0;
         if (inGUI) {
-            ItemStack held = ep.getMainHandItem();
-            blower.matchingItems[id] = ReikaItemHelper.getSizedItemStack(held, 1);
-//            return held;
+            // 1.7.10: the stack on the cursor (inventory.getItemStack), an empty cursor clearing it.
+            ItemStack held = this.getCarried();
+            blower.matchingItems[id] = held.isEmpty() ? null : ReikaItemHelper.getSizedItemStack(held, 1);
         } else {
             super.clicked(id, button, type, ep);
         }

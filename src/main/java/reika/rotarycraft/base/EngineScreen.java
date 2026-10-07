@@ -16,13 +16,13 @@ public abstract class EngineScreen<E extends BlockEntityEngine, T extends CoreCo
     protected EngineScreen(T container, Inventory inv, Component c) {
         super(container, inv, c);
         inventory = inv;
-        engine = (BlockEntityEngine) inv.player.level().getBlockEntity(container.tile.getBlockPos());
+        engine = (BlockEntityEngine) container.tile;
     }
 
     protected EngineScreen(T container, Inventory inv, Component c, int imageWidth, int imageHeight) {
         super(container, inv, c, imageWidth, imageHeight);
         inventory = inv;
-        engine = (BlockEntityEngine) inv.player.level().getBlockEntity(container.tile.getBlockPos());
+        engine = (BlockEntityEngine) container.tile;
     }
 
     @Override

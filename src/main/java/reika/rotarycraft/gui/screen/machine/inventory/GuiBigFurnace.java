@@ -42,6 +42,12 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, 
         else if (te.getTemperature() >= 100)
             c = 2;
         api.drawCenteredStringNoShadow(stack, font, te.getTemperature() + "C", imageWidth - 13 - c, 6, 0xFF404040);
+
+        // Panel-relative like 1.7.10's foreground layer (it sat in the untranslated background pass).
+        int j = leftPos;
+        int k = topPos;
+        if (api.isMouseInBox(j + 172, j + 183, k + 17, k + 109, pMouseX, pMouseY))
+            api.drawTooltipAt(stack, font, String.format("%d/%d", te.getLevel(), te.getCapacity()), pMouseX - j, pMouseY - k);
     }
 
     /**
@@ -61,15 +67,9 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, 
             int i2 = te.getLavaScaled(91);
             int x = 173;
             int y = 108 - i2 + 1;
-//       todo     GL11.glColor4f(1, 1, 1, 1);
-//            IIcon ico = Fluids.LAVA.getStillIcon();
-//            ReikaLiquidRenderer.bindFluidTexture(Fluids.LAVA);
-//            this.drawTexturedModelRectFromIcon(x, y, ico, 10, i2);
-        }
-        if (api.isMouseInBox(j + 172, j + 183, k + 17, k + 109, pX, pY)) {
-            int mx = pX;
-            int my = pY;
-            api.drawTooltipAt(poseStack, font, String.format("%d/%d", te.getLevel(), te.getCapacity()), mx - j, my - k);
+            // 1.7.10 drew this in the foreground layer (panel-relative); here the panel origin is added.
+            reika.dragonapi.libraries.rendering.ReikaLiquidRenderer.drawFluidIcon(poseStack,
+                    net.minecraft.world.level.material.Fluids.LAVA, j + x, k + y, 10, i2);
         }
     }
 

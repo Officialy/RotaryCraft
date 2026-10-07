@@ -27,17 +27,17 @@ public class GuiOneSlotScreen<E extends BlockEntityPowerReceiver, T extends Core
         if (recv != null) {
             stack.blit(RenderPipelines.GUI_TEXTURED, POWERTAB, imageWidth + j, k + 4, 0, 4, 42, imageHeight - 4, 256, 256);
 
-            long frac = (recv.power * 29L) / recv.MINPOWER;
+            long frac = powerFrac(recv.power, recv.MINPOWER);
             if (frac > 29)
                 frac = 29;
             stack.blit(RenderPipelines.GUI_TEXTURED, POWERTAB, imageWidth + j + 5, imageHeight + k - 144, 0, 0, (int) frac, 4, 256, 256);
 
-            frac = (int) (recv.omega * 29L) / recv.MINSPEED;
+            frac = powerFrac(recv.omega, recv.MINSPEED);
             if (frac > 29)
                 frac = 29;
             stack.blit(RenderPipelines.GUI_TEXTURED, POWERTAB, imageWidth + j + 5, imageHeight + k - 84, 0, 0, (int) frac, 4, 256, 256);
 
-            frac = (int) (recv.torque * 29L) / recv.MINTORQUE;
+            frac = powerFrac(recv.torque, recv.MINTORQUE);
             if (frac > 29)
                 frac = 29;
             stack.blit(RenderPipelines.GUI_TEXTURED, POWERTAB, imageWidth + j + 5, imageHeight + k - 24, 0, 0, (int) frac, 4, 256, 256);

@@ -68,17 +68,17 @@ public class GuiPulseFurnace extends MachineScreen<BlockEntityPulseFurnace, Cont
         var loc = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/powertab.png");
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j, k + 4, 0, 4, 42, imageHeight - 4, 256, 256);
 
-        long frac = (puls.power * 29L) / puls.MINPOWER;
+        long frac = powerFrac(puls.power, puls.MINPOWER);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 144, 0, 0, (int) frac, 4, 256, 256);
 
-        frac = (puls.omega * 29L) / puls.MINSPEED;
+        frac = powerFrac(puls.omega, puls.MINSPEED);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 84, 0, 0, (int) frac, 4, 256, 256);
 
-        frac = (puls.torque * 29L) / puls.MINTORQUE;
+        frac = powerFrac(puls.torque, puls.MINTORQUE);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 24, 0, 0, (int) frac, 4, 256, 256);

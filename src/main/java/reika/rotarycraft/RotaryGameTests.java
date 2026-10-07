@@ -152,6 +152,7 @@ public final class RotaryGameTests {
         register(event, env, "blast_furnace_bedrock_pickaxe", 120, RotaryGameTests::blastFurnaceBedrockPickaxe);
         register(event, env, "blast_furnace_bedrock_armor", 120, RotaryGameTests::blastFurnaceBedrockArmor);
         register(event, env, "splitter_mode_change_updates_directions", 20, RotaryGameTests::splitterModeChangeUpdatesDirections);
+        register(event, env, "menu_contracts", 20, RotaryGameTests::menuContracts);
         register(event, env, "reactor_entry_recipes_load", 40, RotaryGameTests::reactorEntryRecipesLoad);
         register(event, env, "reactor_centrifuge_accepts_rotary_power", 60,
                 RotaryGameTests::reactorCentrifugeAcceptsRotaryPower);
@@ -749,6 +750,54 @@ public final class RotaryGameTests {
                             && splitter.getWriteDirection2() != null,
                     "split orientation " + orientation + " must have both outputs before any tick");
         }
+        helper.succeed();
+    }
+
+    /**
+     * Menu contracts 26.3 enforces at runtime: quick-move never returns null (doClick dereferences it),
+     * every slot can be read during change broadcasting (GhostSlot had a null inventory), and menus
+     * expose the machine's own slots rather than the player's.
+     */
+    private static void menuContracts(GameTestHelper helper) {
+        var player = helper.makeMockServerPlayerInLevel();
+        var inv = player.getInventory();
+
+        var craft = new reika.rotarycraft.gui.container.ContainerHandCraft(0, inv, player);
+        for (int slot = 0; slot < craft.slots.size(); slot++)
+            helper.assertTrue(craft.quickMoveStack(player, slot) != null, "hand craft quick-move returned null for slot " + slot);
+
+        BlockPos sorterPos = new BlockPos(1, 1, 1);
+        helper.setBlock(sorterPos, RotaryBlocks.SORTER.get());
+        var sorter = new reika.rotarycraft.gui.container.machine.ContainerSorter(0, inv,
+                helper.getBlockEntity(sorterPos, reika.rotarycraft.blockentities.BlockEntitySorting.class));
+        sorter.broadcastChanges();
+        helper.assertTrue(sorter.getSlot(0).getItem().isEmpty() && !sorter.getSlot(0).mayPlace(new ItemStack(Items.STONE)),
+                "ghost slots must read as empty and refuse real items");
+
+        BlockPos blowerPos = new BlockPos(3, 1, 1);
+        helper.setBlock(blowerPos, RotaryBlocks.BLOWER.get());
+        var buf = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+        buf.writeBlockPos(helper.absolutePos(blowerPos));
+        var blower = new reika.rotarycraft.gui.container.machine.BlowerContainer(0, inv, buf);
+        blower.broadcastChanges();
+        helper.assertTrue(buf.readableBytes() == 0, "the blower menu must read its position from the buffer exactly once");
+
+        BlockPos minePos = new BlockPos(1, 1, 3);
+        helper.setBlock(minePos, RotaryBlocks.LANDMINE.get());
+        var mineTile = helper.getBlockEntity(minePos, reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine.class);
+        var mine = new reika.rotarycraft.gui.container.machine.inventory.LandmineContainer(0, inv, mineTile);
+        helper.assertTrue(mine.stillValid(player), "the landmine menu must stay open");
+        helper.assertTrue(mine.getSlot(0).container != inv, "landmine slot 0 must be the landmine's, not the player's hotbar");
+
+        BlockPos furnacePos = new BlockPos(3, 1, 3);
+        helper.setBlock(furnacePos, RotaryBlocks.LAVA_SMELTORY.get());
+        var smeltery = helper.getBlockEntity(furnacePos,
+                reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery.class);
+        var furnace = new reika.rotarycraft.gui.container.machine.inventory.ContainerBigFurnace(0, inv, smeltery);
+        int inputs = smeltery.getNumberInputSlots();
+        for (int i = 0; i < inputs; i++)
+            helper.assertTrue(!(furnace.getSlot(inputs + i).container instanceof net.minecraft.world.entity.player.Inventory),
+                    "big furnace output slot " + i + " must be the smeltery's, not the player's");
         helper.succeed();
     }
 

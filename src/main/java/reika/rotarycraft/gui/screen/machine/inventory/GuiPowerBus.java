@@ -37,7 +37,7 @@ public class GuiPowerBus extends MachineScreen<BlockEntityPowerBus, ContainerPow
 
     public GuiPowerBus(ContainerPowerBus container, Inventory inv, Component title) {
         super(container, inv, title, 176, 166);
-        bus = (BlockEntityPowerBus) inv.player.level().getBlockEntity(container.tile.getBlockPos());
+        bus = (BlockEntityPowerBus) container.tile;
         inventory = inv;
     }
 

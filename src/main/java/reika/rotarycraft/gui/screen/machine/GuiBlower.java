@@ -67,9 +67,11 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
         this.init();
     }
 
+    // 1.7.10 drew these in drawGuiContainerForegroundLayer, whose origin is the panel corner, so the
+    // icon positions and the "- j / - k" tooltip offsets are panel-relative; the background pass is not.
     @Override
-    public void extractBackground(GuiGraphicsExtractor stack, int pX, int pY, float pPartialTick) {
-        super.extractBackground(stack, pX, pY, pPartialTick);
+    protected void extractLabels(GuiGraphicsExtractor stack, int pX, int pY) {
+        super.extractLabels(stack, pX, pY);
         int j = (width - imageWidth) / 2;
         int k = (height - imageHeight) / 2;
 

@@ -70,17 +70,17 @@ public class GuiCentrifuge extends MachineScreen<BlockEntityCentrifuge, Containe
         var loc = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/powertab.png");
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j, k + 4, 0, 4, 42, imageHeight - 4, 256, 256);
 
-        long frac = (cent.power * 29L) / cent.MINPOWER;
+        long frac = powerFrac(cent.power, cent.MINPOWER);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 144, 0, 0, (int) frac, 4, 256, 256);
 
-        frac = (cent.omega * 29L) / cent.MINSPEED;
+        frac = powerFrac(cent.omega, cent.MINSPEED);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 84, 0, 0, (int) frac, 4, 256, 256);
 
-        frac = (cent.torque * 29L) / cent.MINTORQUE;
+        frac = powerFrac(cent.torque, cent.MINTORQUE);
         if (frac > 29)
             frac = 29;
         stack.blit(RenderPipelines.GUI_TEXTURED, loc, imageWidth + j + 5, imageHeight + k - 24, 0, 0, (int) frac, 4, 256, 256);

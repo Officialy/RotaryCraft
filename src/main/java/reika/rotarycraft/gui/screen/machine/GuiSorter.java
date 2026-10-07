@@ -27,9 +27,11 @@ public class GuiSorter extends GuiPowerOnlyMachine<BlockEntitySorting, Container
         inventory = inv;
     }
 
+    // 1.7.10 drew these in drawGuiContainerForegroundLayer, whose origin is the panel corner, so the
+    // icon positions and the "- j / - k" tooltip offsets are panel-relative; the background pass is not.
     @Override
-    public void extractBackground(GuiGraphicsExtractor stack, int pX, int pY, float pPartialTick) {
-        super.extractBackground(stack, pX, pY, pPartialTick);
+    protected void extractLabels(GuiGraphicsExtractor stack, int pX, int pY) {
+        super.extractLabels(stack, pX, pY);
         int dy = 22;
         int x = 8;
         int y = 18;
