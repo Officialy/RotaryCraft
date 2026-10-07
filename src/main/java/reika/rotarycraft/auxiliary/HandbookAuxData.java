@@ -542,7 +542,7 @@ public class HandbookAuxData {
                         if (api.isMouseInBox(x, x+17, y, y+17, mouseX, mouseY)) { // Added mouseX, mouseY
                             int k = 0;
                             for (LuaMethod cur : li) {
-                                if (cur.isDocumented() && cur.isClassInstanceOf(m.getTEClass())) {
+                                if (cur.isDocumented() && m.getTEClass() != null && cur.isClassInstanceOf(m.getTEClass())) {
                                     //ReikaRenderHelper.disableLighting();
                                     String s = cur.getReturnType().displayName+" "+cur.displayName+"("+cur.getArgsAsString()+")";
                                     ri.text(f, s, dx+11, dy+88+k*10, 0xFFFFFFFF); // Changed f.draw to ri.drawString
