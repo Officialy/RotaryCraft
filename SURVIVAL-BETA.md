@@ -679,3 +679,50 @@ and their variant fields plus all six pipe models. Logs: build/item-renderer-fin
 (datagen), build/item-renderer-final-validation.log (JUnit/release), and
 build/item-renderer-artifact-verification.json. Live client visual acceptance, including
 first person and shader-pack rendering, remains outstanding.
+
+
+### RotaryCraft machine sound, wool heat and HUD/tooltips — 2026-10-07
+
+Fix the reported pump distance/re-entry audio, white-wool disappearance at ambient
+heat, DC engine Jade rows and missing machine-item Shift power data on Minecraft
+26.3 / NeoForge 26.3.0.51-beta.
+
+- Replace the pump server five-second sound re-fire with a client tickable loop.
+  Preserve its power/torque/fluid/broken-state gates, original base volume and
+  config modulation; support wool muffling, shutdown/unload, replacement, level
+  changes and sound-manager reload/recovery. Keep spatial linear attenuation.
+- Correct DragonAPI playback: Level.playLocalSound's boolean is distance delay,
+  not attenuation. Construct the sound instance with explicit LINEAR/NONE and no
+  unintended propagation delay. Normalize the negative custom-distance sentinel
+  to vanilla range. RotaryCraft event/broadcast ranges now cover the actual
+  sound asset fade distances (16/24/32/48 blocks; jet startup retains 40).
+- Classify wool, snow and ice by real block identity/tags in environmental heat.
+  White wool's SNOW map colour previously selected snow vaporization even at 29C.
+  Preserve true snow/ice melting and wool ignition at 600C. Use wool tags for
+  muffling so all sixteen colours work and snow does not count as wool.
+- Expose optional thermal state through ThermalTile.hasTemperature(), reusing
+  the engine's existing variant-specific method. DragonAPI owns the sole
+  server-backed engine temperature row; DC and other nonthermal engines have
+  none. Show fuel only on fuel-consuming engines.
+- Register MachineBlockItem to call the existing complete machine tooltip helper,
+  including engine variant data and fuel-engine specialization. Use the 26.3
+  TooltipFlag Shift/all-information hooks, including recipe viewer indexing,
+  rather than a hardcoded left-Shift keyboard query.
+
+Validation: all five new in-world feedback contracts pass (all wool colours at
+29C, real snow/ice melting and hot-wool ignition, wool beside a powered DC engine,
+coloured mufflers, actual registered item tooltips across power machines, pump
+sound operating gates). Full RotaryCraft JUnit passes 27/27, including the actual
+Jade providers and three audio regressions covering every registered sound's
+network range, default-distance sentinel and mono Ogg assets. Both release jars
+assemble; artifact inspection confirms the new/changed classes. Evidence:
+build/rotary-machine-feedback-gametest.log,
+build/rotary-machine-feedback-junit.log and
+build/rotary-machine-feedback-artifacts.json.
+
+Live client listening while walking toward/away from machines, sound reload and
+visual tooltip acceptance remain unverified. No ChromatiCraft implementation or
+port allowlist was changed. Existing renderer/datagen changes were preserved.
+
+Additional baseline validation: both existing pump source-drain GameTests pass
+(2/2, water and lava). Evidence: build/rotary-machine-feedback-pump-parity.log.

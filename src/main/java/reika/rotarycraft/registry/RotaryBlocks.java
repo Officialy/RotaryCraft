@@ -255,7 +255,8 @@ public class RotaryBlocks {
 
     private static <BLOCK extends Block> DeferredBlock<BLOCK> register(final String name, final Supplier<BLOCK> blockFactory) {
         DeferredBlock<BLOCK> block = registerBlockOnly(name, blockFactory);
-        ITEMS.registerSimpleBlockItem(block); // sets the BlockItem's id automatically
+        ITEMS.registerItem(name, properties -> new reika.rotarycraft.items.MachineBlockItem(
+                block.get(), properties.useBlockDescriptionPrefix()));
         return block;
     }
 

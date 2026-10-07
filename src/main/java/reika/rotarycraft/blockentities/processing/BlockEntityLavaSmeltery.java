@@ -95,45 +95,41 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
         return WIDTH * HEIGHT;
     }
 
+    private java.util.Optional<net.minecraft.world.item.crafting.RecipeHolder<net.minecraft.world.item.crafting.SmeltingRecipe>> recipe(ItemStack input) {
+        if (!(level instanceof net.minecraft.server.level.ServerLevel server) || input.isEmpty()) return java.util.Optional.empty();
+        return server.getServer().getRecipeManager().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.SMELTING,
+                new net.minecraft.world.item.crafting.SingleRecipeInput(input), server);
+    }
+
+    private boolean fitsOutput(int slot, ItemStack result) {
+        ItemStack stored = itemHandler.getStackInSlot(slot);
+        return !result.isEmpty() && (stored.isEmpty() || ItemStack.isSameItemSameComponents(stored, result))
+                && (long)stored.getCount() + result.getCount() <= Math.min(getInventoryStackLimit(), result.getMaxStackSize());
+    }
+
     private void smelt() {
-        int n = this.getNumberInputSlots();
+        int n = getNumberInputSlots();
         for (int i = 0; i < n; i++) {
-            ItemStack is = itemHandler.getStackInSlot(i);
-            if (!is.isEmpty()) {
-                ItemStack to = new ItemStack(Items.STONE);// = FurnaceRecipes.smelting().getSmeltingResult(is);
-                if (!to.isEmpty()) {
-                    boolean add = false;
-                    if (itemHandler.getStackInSlot(i + n).isEmpty()) {
-                        itemHandler.setStackInSlot(i + n, to.copy());
-                        add = true;
-                    } else {
-                        if (ReikaItemHelper.areStacksCombinable(to, itemHandler.getStackInSlot(i + n), this.getInventoryStackLimit())) {
-                            add = true;
-                            int count = itemHandler.getStackInSlot(i + n).getCount();
-                            itemHandler.getStackInSlot(i + n).setCount(count + to.getCount());
-                        }
-                    }
-                    if (add)
-                        ReikaInventoryHelper.decrStack(i, itemHandler);
-                }
-            }
+            ItemStack input = itemHandler.getStackInSlot(i);
+            var recipe = recipe(input);
+            if (recipe.isEmpty()) continue;
+            ItemStack result = recipe.get().value().assemble(new net.minecraft.world.item.crafting.SingleRecipeInput(input));
+            if (!fitsOutput(i + n, result)) continue;
+            ItemStack stored = itemHandler.getStackInSlot(i + n);
+            itemHandler.setStackInSlot(i + n, result.copyWithCount(stored.getCount() + result.getCount()));
+            ReikaInventoryHelper.decrStack(i, itemHandler);
+            xp += recipe.get().value().experience();
+            setChanged();
         }
     }
 
     private boolean canSmelt() {
-        if (temperature < SMELT_TEMP)
-            return false;
-        if (power < MINPOWER)
-            return false;
-        int n = this.getNumberInputSlots();
+        if (temperature < SMELT_TEMP || power < MINPOWER) return false;
+        int n = getNumberInputSlots();
         for (int i = 0; i < n; i++) {
-            ItemStack is = itemHandler.getStackInSlot(i);
-            if (!is.isEmpty()) {
-                ItemStack to = new ItemStack(Items.STONE);//FurnaceRecipes.smelting().getSmeltingResult(is);
-                if (!to.isEmpty()) {
-                    return true;
-                }
-            }
+            ItemStack input = itemHandler.getStackInSlot(i);
+            var recipe = recipe(input);
+            if (recipe.isPresent() && fitsOutput(i + n, recipe.get().value().assemble(new net.minecraft.world.item.crafting.SingleRecipeInput(input)))) return true;
         }
         return false;
     }
@@ -148,9 +144,9 @@ public class BlockEntityLavaSmeltery extends InventoriedPowerLiquidReceiver impl
         int Tamb = ReikaWorldHelper.getAmbientTemperatureAt(world, pos);
 
         if (!tank.isEmpty()) {
+            Fluid f = tank.getActualFluid().getFluid();
             tank.removeLiquid(15);
-            FluidStack f = tank.getActualFluid();
-            if (f.equals(Fluids.LAVA))
+            if (f == Fluids.LAVA)
                 Tamb += 600;
 //            else if (f.equals(Fluids.getFluid("pyrotheum")))
 //                Tamb += 1000;

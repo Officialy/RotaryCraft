@@ -39,7 +39,7 @@ public final class BlockFuelEngine extends BlockBasicMachine {
     @Override public void appendHoverText(ItemStack stack, net.minecraft.world.item.Item.TooltipContext context,
             java.util.List<net.minecraft.network.chat.Component> lines, net.minecraft.world.item.TooltipFlag flag) {
         super.appendHoverText(stack, context, lines, flag);
-        if (com.mojang.blaze3d.platform.InputConstants.isKeyDown(com.mojang.blaze3d.platform.InputConstants.KEY_LSHIFT)) {
+        if (flag.hasShiftDown() || flag.shouldDisplayAllInformation()) {
             long[] values = {(long)TileEntityFuelEngine.GEN_OMEGA * TileEntityFuelEngine.GEN_TORQUE,
                     TileEntityFuelEngine.GEN_TORQUE, TileEntityFuelEngine.GEN_OMEGA};
             String[] names = {"power", "torque", "speed"};

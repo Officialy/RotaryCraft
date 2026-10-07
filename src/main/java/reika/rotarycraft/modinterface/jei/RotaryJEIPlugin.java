@@ -130,8 +130,6 @@ public class RotaryJEIPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         try {
-            registration.addRecipes(Magnetizer.TYPE,
-                    List.copyOf(RecipesMagnetizer.getRecipes().getAllRecipes()));
             registration.addRecipes(Composter.TYPE, BlockEntityComposter.getAllCompostables().stream()
                     .filter(stack -> BlockEntityComposter.getCompostValue(stack) > 0)
                     .map(stack -> new Composting(stack.copy(), BlockEntityComposter.getCompostValue(stack)))
@@ -168,6 +166,10 @@ public class RotaryJEIPlugin implements IModPlugin {
                 added.put(type, values);
             }
         };
+
+        var magnetizer = new java.util.ArrayList<>(recipes.byType(RotaryRecipeTypes.MAGNETIZER.get()).stream().map(RecipeHolder::value).toList());
+        magnetizer.addAll(RecipesMagnetizer.getRecipes().getAPIRecipes());
+        tracked.accept(Magnetizer.TYPE, magnetizer);
 
         List<ShapedBlastFurnaceRecipe> shaped = recipes
                 .byType(RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get())

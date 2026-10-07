@@ -114,6 +114,13 @@ public final class RotaryGameTests {
                 Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "default"),
                 new TestEnvironmentDefinition.AllOf(List.of()));
         RotaryAdvancementTests.register(event, env);
+        DragonAPIAuditTests.register(event, env);
+        DragonAPIExtendedAuditTests.register(event, env);
+        register(event, env, "audit_vacuum_item_conservation", 40, RotaryGameTests::auditVacuumItemConservation);
+        register(event, env, "audit_smeltery_real_recipes", 40, RotaryGameTests::auditSmelteryRealRecipes);
+        register(event, env, "audit_handler_decrement", 40, RotaryGameTests::auditHandlerDecrement);
+        register(event, env, "audit_packet_authority", 40, RotaryGameTests::auditPacketAuthority);
+
 
         register(event, env, "fermenter_places", 40,
                 h -> placesAndTicks(h, RotaryBlocks.FERMENTER.get(), BlockEntityFermenter.class));
@@ -139,6 +146,7 @@ public final class RotaryGameTests {
 
         // Engines on their own, with only what each one actually needs.
         register(event, env, "dc_engine_standalone_power", 120, RotaryGameTests::dcEngineStandalonePower);
+        RotaryMachineFeedbackTests.register(event, env);
         register(event, env, "engine_types_declare_consistent_power", 20,
                 RotaryGameTests::engineTypesDeclareConsistentPower);
 
@@ -225,10 +233,10 @@ public final class RotaryGameTests {
         // Real-ME-network tests; only with AE2 in run-gametest/mods (the normal GameTest runtime has none).
         if (reika.dragonapi.ModList.APPENG.isLoaded())
             RotaryAETests.register(event, env);
-        register(event, env, "processing_centrifuge_separates_items", 60, RotaryProcessingTests::centrifugeSeparatesItems);
         // CC: Tweaked peripheral tests; the family run (TestInstance/run/mods) carries the CC jar.
         if (reika.dragonapi.ModList.COMPUTERCRAFT.isLoaded())
             RotaryCCTests.register(event, env);
+        register(event, env, "processing_centrifuge_separates_items", 60, RotaryProcessingTests::centrifugeSeparatesItems);
         register(event, env, "processing_centrifuge_fluid_transactions", 60, RotaryProcessingTests::centrifugeFluidTransactions);
 
         RotaryTerraformerTests.register(event, env);
@@ -1477,6 +1485,96 @@ public final class RotaryGameTests {
         }
         helper.assertTrue(checked == MachineRegistry.machineList.length, "all registered machines must be checked");
         helper.succeed();
+    }
+
+    private static void auditHandlerDecrement(GameTestHelper helper) {
+        var handler = new reika.dragonapi.instantiable.storage.ManagedItemHandler(1);
+        handler.setStackInSlot(0, new ItemStack(Items.IRON_INGOT, 10));
+        ItemStack removed = reika.dragonapi.libraries.ReikaInventoryHelper.decrStackSize(handler, 0, 3);
+        helper.assertTrue(removed.getCount() == 3 && handler.getStackInSlot(0).getCount() == 7, "partial decrement must conserve stored and removed items");
+        helper.succeed();
+    }
+
+    private static void auditVacuumItemConservation(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(3, 1, 3);
+        helper.setBlock(pos, RotaryBlocks.VACUUM.get());
+        var vacuum = helper.getBlockEntity(pos, reika.rotarycraft.blockentities.BlockEntityVacuum.class);
+        var handler = vacuum.getItemHandler();
+        for (int slot = 0; slot < handler.getSlots(); slot++) handler.setStackInSlot(slot, new ItemStack(Items.COBBLESTONE, 64));
+        handler.setStackInSlot(0, new ItemStack(Items.IRON_INGOT, 63));
+        var absolute = helper.absolutePos(pos);
+        var entity = new net.minecraft.world.entity.item.ItemEntity(helper.getLevel(), absolute.getX() + .5, absolute.getY() + .5, absolute.getZ() + .5, new ItemStack(Items.IRON_INGOT, 3));
+        entity.setNoPickUpDelay();
+        helper.getLevel().addFreshEntity(entity);
+        invokeAuditOperation(vacuum, "absorb", new Class<?>[] {net.minecraft.world.level.Level.class, BlockPos.class}, helper.getLevel(), absolute);
+        helper.assertTrue(handler.getStackInSlot(0).getCount() == 64 && entity.isAlive() && entity.getItem().getCount() == 2, "partial pickup must retain the remainder instead of deleting it");
+        handler.setStackInSlot(1, ItemStack.EMPTY);
+        invokeAuditOperation(vacuum, "absorb", new Class<?>[] {net.minecraft.world.level.Level.class, BlockPos.class}, helper.getLevel(), absolute);
+        helper.assertTrue(entity.isRemoved() && handler.getStackInSlot(1).getCount() == 2, "full pickup must store every remaining item");
+        helper.succeed();
+    }
+
+    private static void auditPacketAuthority(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(3, 1, 3);
+        helper.setBlock(pos, RotaryBlocks.HEATER.get());
+        var heater = helper.getBlockEntity(pos, reika.rotarycraft.blockentities.auxiliary.BlockEntityHeater.class);
+        BlockPos absolute = helper.absolutePos(pos);
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.CREATIVE);
+        player.setPos(absolute.getX() + .5, absolute.getY() + .5, absolute.getZ() + .5);
+        var handler = new PacketHandlerCore();
+        var frame = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+        try {
+            frame.writeByte(reika.dragonapi.auxiliary.PacketTypes.DATA.ordinal());
+            frame.writeVarInt(20);
+            frame.writeInt(reika.rotarycraft.registry.PacketRegistry.HEATER.ordinal());
+            frame.writeInt(600);
+            frame.writeInt(absolute.getX()); frame.writeInt(absolute.getY()); frame.writeInt(absolute.getZ());
+            var packet = reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket.decode(frame, handler);
+            handler.handleData(packet, helper.getLevel(), player);
+            helper.assertTrue(heater.setTemperature == 0, "a nearby player without the machine menu cannot change its controls");
+            player.containerMenu = new reika.dragonapi.base.CoreContainer<>(null, 1, player.getInventory(), heater);
+            // Re-decode the same body so the stream starts at its first field.
+            frame.readerIndex(0);
+            handler.handleData(reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket.decode(frame, handler), helper.getLevel(), player);
+            helper.assertTrue(heater.setTemperature == 600, "an authorized nearby menu must retain legitimate control behavior");
+            heater.temperature = 50;
+            var tag = new net.minecraft.nbt.CompoundTag(); tag.putInt("temperature", 999);
+            heater.applySyncTag(tag);
+            helper.assertTrue(heater.temperature == 50, "clientbound NBT synchronization cannot overwrite server state");
+            var input = new java.io.DataInputStream(new java.io.ByteArrayInputStream(new byte[0]));
+            reika.dragonapi.libraries.io.ReikaPacketHelper.updateBlockEntityData(helper.getLevel(), absolute.getX(), absolute.getY(), absolute.getZ(), "temperature", input);
+            helper.assertTrue(heater.temperature == 50 && input.available() == 0, "server field sync must reject before reading or mutating");
+        } catch (java.io.IOException e) { throw new AssertionError(e); }
+        finally { frame.release(); }
+        helper.succeed();
+    }
+
+    private static void auditSmelteryRealRecipes(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(3, 1, 3);
+        helper.setBlock(pos, RotaryBlocks.LAVA_SMELTORY.get());
+        var smeltery = helper.getBlockEntity(pos, reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery.class);
+        var handler = smeltery.getItemHandler();
+        int output = smeltery.getNumberInputSlots();
+        handler.setStackInSlot(0, new ItemStack(Items.RAW_IRON, 2));
+        handler.setStackInSlot(output, new ItemStack(Items.IRON_INGOT, 62));
+        handler.setStackInSlot(1, new ItemStack(Items.STICK, 2));
+        invokeAuditOperation(smeltery, "smelt", new Class<?>[0]);
+        helper.assertTrue(handler.getStackInSlot(0).getCount() == 1 && handler.getStackInSlot(output).getCount() == 63, "smeltery must consume one raw iron for its real smelting output");
+        helper.assertTrue(handler.getStackInSlot(1).getCount() == 2 && handler.getStackInSlot(output + 1).isEmpty(), "non-smeltable inputs must be preserved");
+        handler.setStackInSlot(output, new ItemStack(Items.IRON_INGOT, 64));
+        invokeAuditOperation(smeltery, "smelt", new Class<?>[0]);
+        helper.assertTrue(handler.getStackInSlot(0).getCount() == 1, "full outputs must not consume input");
+        helper.succeed();
+    }
+
+    private static void invokeAuditOperation(Object machine, String name, Class<?>[] signature, Object... args) {
+        try {
+            var method = machine.getClass().getDeclaredMethod(name, signature);
+            method.setAccessible(true);
+            method.invoke(machine, args);
+        } catch (ReflectiveOperationException e) {
+            throw new AssertionError("Unable to exercise machine operation " + name, e);
+        }
     }
 
     private static void registeredMachineTicks(GameTestHelper helper, MachineRegistry machine) {

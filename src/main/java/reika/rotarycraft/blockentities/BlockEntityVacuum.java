@@ -267,20 +267,23 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
         List<ItemEntity> closeitems = world.getEntitiesOfClass(ItemEntity.class, close);
         for (ItemEntity ent : closeitems) {
             if (!ent.hasPickUpDelay()) {
-                ItemStack is = ent.getItem();
-                int targetslot = this.checkForStack(is);
-                if (targetslot != -1) {
-                    if (itemHandler.getStackInSlot(targetslot).isEmpty())
-                        itemHandler.setStackInSlot(targetslot, is.copy());
-                    else
-                        itemHandler.getStackInSlot(targetslot).setCount(is.getCount());
-                    suck = true;
-                } else {
-                    return;
+                ItemStack original = ent.getItem().copy();
+                ItemStack remainder = original.copy();
+                // Merge occupied slots first, then use empty slots. Each insertion commits its actual amount.
+                for (int pass = 0; pass < 2 && !remainder.isEmpty(); pass++) {
+                    for (int slot = 0; slot < itemHandler.getSlots() && !remainder.isEmpty(); slot++) {
+                        if (itemHandler.getStackInSlot(slot).isEmpty() != (pass == 1)) continue;
+                        remainder = itemHandler.insertItem(slot, remainder, false);
+                    }
                 }
-                if (world instanceof ServerLevel sl) ent.kill(sl);
+                int absorbed = original.getCount() - remainder.getCount();
+                if (absorbed == 0) continue;
+                suck = true;
+                if (remainder.isEmpty()) ent.discard();
+                else ent.setItem(remainder);
+                setChanged();
                 world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.1F + 0.5F * DragonAPI.rand.nextFloat(), DragonAPI.rand.nextFloat(), false);
-                NeoForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, is != null ? is.copy() : null));
+                NeoForge.EVENT_BUS.post(new VacuumItemAbsorbEvent(this, original.copyWithCount(absorbed)));
             } else {
                 suck = true;
             }
@@ -294,43 +297,6 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
             world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.BLOCKS, 0.1F, 0.5F * ((DragonAPI.rand.nextFloat() - DragonAPI.rand.nextFloat()) * 0.7F + 1.8F), false);
             NeoForge.EVENT_BUS.post(new VacuumXPAbsorbEvent(this, val));
         }
-    }
-
-    private int checkForStack(ItemStack is) {
-        int target = -1;
-        Item id = is.getItem();
-        //=is.getItemDamage();
-        int size = is.getCount();
-        int firstempty = -1;
-
-        for (int k = 0; k < itemHandler.getSlots(); k++) { //Find first empty slot
-            if (itemHandler.getStackInSlot(k).isEmpty()) {
-                firstempty = k;
-                k = itemHandler.getSlots();
-            }
-        }
-        for (int j = 0; j < itemHandler.getSlots(); j++) {
-            if (!itemHandler.getStackInSlot(j).isEmpty()) {
-                if (ReikaItemHelper.areStacksCombinable(is, itemHandler.getStackInSlot(j), Integer.MAX_VALUE)) {
-                    if (ItemStack.isSameItemSameComponents(is, itemHandler.getStackInSlot(j))) {
-                        if (itemHandler.getStackInSlot(j).getCount() + size <= this.getInventoryStackLimit()) {
-                            target = j;
-                            j = itemHandler.getSlots();
-                        } else {
-                            int diff = is.getMaxStackSize() - itemHandler.getStackInSlot(j).getCount();
-                            int amount = itemHandler.getStackInSlot(j).getCount();
-                            itemHandler.getStackInSlot(j).setCount(amount += diff);
-                            int amount2 = is.getCount();
-                            is.setCount(amount2 -= diff);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (target == -1)
-            target = firstempty;
-        return target;
     }
 
     private AABB getBox(Level world, BlockPos pos) {

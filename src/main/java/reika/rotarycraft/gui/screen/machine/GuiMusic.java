@@ -111,13 +111,13 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
         boolean flag = true;
         if (id < 24000) {
             if (id == 100) {
-                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICSAVE.ordinal() + 1, music);
+                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICSAVE.ordinal(), music);
             } else if (id == 101) {
-                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICREAD.ordinal() + 2, music);
+                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICREAD.ordinal(), music);
             } else if (id == 102) {
                 ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICDEMO.ordinal(), music);
             } else if (id == 103) {
-                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICREST.ordinal(), music, activeChannel, activeType.ordinal(), 0, 0); //rest
+                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICREST.ordinal(), music, activeChannel, activeType.ordinal()); //rest
             } else if (id == 104) {
                 ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICBKSP.ordinal(), music, activeChannel); //bksp
             } else if (id == 105) {

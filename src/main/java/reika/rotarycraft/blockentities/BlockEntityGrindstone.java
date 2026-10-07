@@ -117,6 +117,7 @@ public class BlockEntityGrindstone extends InventoriedPowerLiquidReceiver implem
         stack.setDamageValue(newdmg);
         int repair = ReikaItemHelper.getOrCreateStackTag(stack).getIntOr(NBT_TAG, 0);
         ReikaItemHelper.updateStackTag(stack, __T__ -> __T__.putInt(NBT_TAG, repair - 1));
+        itemHandler.setStackInSlot(0, stack);
     }
 
     public int getMinimumDamageForItem(ItemStack is) {

@@ -28,15 +28,9 @@ import reika.dragonapi.interfaces.blockentity.HasItemHandler;
 public abstract class InventoriedPoweredLiquidIO extends PoweredLiquidIO implements WorldlyContainer, HasItemHandler {
     private final class MachineItemHandler extends ManagedItemHandler {
         private MachineItemHandler() { super(getContainerSize()); }
-        private ItemStack getLiveStack(int slot) { return stacks.get(slot); }
         @Override public boolean isValid(int slot, ItemResource item) { return isItemValidForSlot(slot, item.toStack()); }
         @Override protected int getCapacity(int slot, ItemResource item) { return Math.min(64, super.getCapacity(slot, item)); }
         @Override protected void onContentsChanged(int slot) { setChanged(); }
-        @Override public void deserialize(ValueInput input) {
-            var loaded = input.read(VALUE_IO_KEY, codec);
-            for (int slot = 0; slot < getContainerSize(); slot++)
-                stacks.set(slot, loaded.isPresent() && slot < loaded.get().size() ? loaded.get().get(slot) : ItemStack.EMPTY);
-        }
     }
     private final MachineItemHandler items = new MachineItemHandler();
     private final ResourceHandler<ItemResource> automation = new DelegatingResourceHandler<>(() -> items) {

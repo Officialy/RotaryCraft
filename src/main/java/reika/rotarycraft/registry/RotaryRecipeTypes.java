@@ -26,6 +26,8 @@ public class RotaryRecipeTypes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, RotaryCraft.MODID);
 
 
+    public static final DeferredHolder<RecipeType<?>, RecipeType<reika.rotarycraft.auxiliary.recipemanagers.RecipesMagnetizer.MagnetizerRecipe>> MAGNETIZER = RECIPE_TYPES.register("magnetizer", () -> new RecipeType<>() {});
+
     public static final DeferredHolder<RecipeType<?>, RecipeType<ShapelessBlastFurnaceRecipe>> BLAST_FURNACE_SHAPELESS = RECIPE_TYPES.register("blast_furnace_shapeless", () -> new RecipeType<ShapelessBlastFurnaceRecipe>() {});
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<ShapedBlastFurnaceRecipe>> BLAST_FURNACE_SHAPED = RECIPE_TYPES.register("blast_furnace_shaped", () -> new RecipeType<ShapedBlastFurnaceRecipe>() {});

@@ -176,13 +176,8 @@ public class BlockEntityDropProcessor extends InventoriedPowerReceiver implement
         ArrayList<ItemStack> li = ReikaItemHelper.collateItemList(c);
         if (!li.isEmpty()) {
             ItemStack first = li.remove(0);
-            ItemStack out = itemHandler.getStackInSlot(1);
-            if (out.isEmpty())
-                itemHandler.setStackInSlot(1, first);
-            else if (ItemStack.isSameItemSameComponents(out, first))
-                out.grow(first.getCount());
-            else
-                overflow.add(first);
+            ItemStack remainder = itemHandler.insertItem(1, first, false);
+            if (!remainder.isEmpty()) overflow.add(remainder);
             overflow.addAll(li);
         }
         itemHandler.extractItem(0, 1, false);

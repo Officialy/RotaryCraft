@@ -66,7 +66,6 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
     }
 
     public int duplicationAmount;
-    private int soundtick = 200;
     private int damage = 0;
 
     public BlockEntityPump(BlockPos pos, BlockState state) {
@@ -83,7 +82,6 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
         super.updateBlockEntity();
         if (world.isClientSide())
             return;
-        soundtick++;
         tickcount++;
         this.getIOSides(getBlockState().getValue(BlockRotaryCraftMachine.FACING));
         this.getPower(true);
@@ -111,10 +109,6 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
             //ModLoader.getMinecraftInstance().ingameGUI.addChatMessage(String.format("%d", this.liquidID));
         }
 
-        if (power > MINPOWER && torque >= MINTORQUE && soundtick >= 100) {
-            soundtick = 0;
-            SoundRegistry.PUMP.playSoundAtBlock(world, pos, 0.5F, 1);
-        }
         if (power > MINPOWER && torque >= MINTORQUE)
             this.suckUpMobs(world, pos);
     }
@@ -140,6 +134,13 @@ public class BlockEntityPump extends BlockEntityPowerReceiver implements PipeCon
                 // assignment, matching legacy 1.7 behaviour.
             }
         }
+    }
+
+    /** Mirrors the server's sound gate; the client reads power/damage from the normal sync. */
+    public boolean shouldPlayPumpSound() {
+        return hasLevel() && !isRemoved() && !isShutdown() && !isBroken()
+                && power > MINPOWER && torque >= MINTORQUE
+                && ReikaFluidHelper.lookupFluidForBlock(level.getBlockState(worldPosition.below())) != null;
     }
 
     private void suckUpMobs(Level world, BlockPos pos) {

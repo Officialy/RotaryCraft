@@ -174,6 +174,11 @@ public final class RoCRecipeProvider {
             crystallizer();
             wetterAndDrying();
             frictionHeater();
+            // Original shaft-core recipes: speed-per-microtesla 2; HSLA time factor 2, tungsten factor 1.
+            out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft", "magnetizer/hsla_shaft_core")),
+                    new RecipesMagnetizer.MagnetizerRecipe(Ingredient.of(RotaryItems.HSLA_SHAFT_CORE.get()), 2, 0, 2, false), null);
+            out.accept(ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft", "magnetizer/tungsten_shaft_core")),
+                    new RecipesMagnetizer.MagnetizerRecipe(Ingredient.of(RotaryItems.TUNGSTEN_ALLOY_SHAFT_CORE.get()), 1, 0, 2, false), null);
             extractor();
             extractorSmelting();
             fermenter();

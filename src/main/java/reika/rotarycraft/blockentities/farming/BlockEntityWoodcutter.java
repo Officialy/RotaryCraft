@@ -277,6 +277,7 @@ public class BlockEntityWoodcutter extends InventoriedPowerReceiver implements E
                 else if (ItemStack.isSameItemSameComponents(slot, todrop) && slot.getCount() < slot.getMaxStackSize()) {
                     int add = Math.min(todrop.getCount(), slot.getMaxStackSize() - slot.getCount());
                     slot.grow(add);
+                    itemHandler.setStackInSlot(0, slot);
                     todrop.shrink(add);
                     if (todrop.isEmpty())
                         continue;

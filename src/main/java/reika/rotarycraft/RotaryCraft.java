@@ -81,6 +81,7 @@ public class RotaryCraft extends DragonAPIMod {
     }
 
     public RotaryCraft(final IEventBus modEventBus, final ModContainer modContainer) {
+        if (reika.rotarycraft.auxiliary.PipeDebugLog.ENABLED) reika.dragonapi.auxiliary.BlockEntityDiagnostics.setSink(reika.rotarycraft.auxiliary.PipeDebugLog::event);
         this.startTiming(LoadProfiler.LoadPhase.PRELOAD);
         instance = this;
 
@@ -100,9 +101,9 @@ public class RotaryCraft extends DragonAPIMod {
         // V33a TileEntityAutoCrafter was an AE grid host; AE2 sees it through DragonAPI's grid-node-host capability.
         reika.dragonapi.modinteract.AEHooks.registerGridHost(RotaryBlockEntities.CRAFTER);
         reika.dragonapi.modinteract.AEHooks.registerGridHost(RotaryBlockEntities.ITEMFILTER);
-        RotaryRecipeSync.register();
         // 1.7.10 CommonProxy: the ComputerCraft peripheral methods (DragonAPI CCHooks exposes them to computers).
         reika.dragonapi.modinteract.lua.LuaMethod.registerMethods("reika.rotarycraft.modinterface.lua");
+        RotaryRecipeSync.register();
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
             modEventBus.addListener(this::clientSetup);
             modEventBus.addListener(this::registerScreens);

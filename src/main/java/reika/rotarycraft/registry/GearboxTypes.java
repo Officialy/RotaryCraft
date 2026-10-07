@@ -229,11 +229,13 @@ public enum GearboxTypes {
     }
 
     public ItemStack getGearboxItem(int ratio) {
-        //return this.getGearboxItemByIndex(ReikaMathLibrary.logbase2(ratio) - 1);
-
-        ItemStack is = MachineRegistry.GEARBOX.getBlockState().getBlock().asItem().getDefaultInstance();
-        is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().putString("type", this.name());
-        return is;
+        if (ratio != 2 && ratio != 4 && ratio != 8 && ratio != 16) throw new IllegalArgumentException("Invalid gearbox ratio: " + ratio);
+        String materialId = this == STEEL ? "hsla" : name().toLowerCase(Locale.ROOT);
+        Identifier id = Identifier.fromNamespaceAndPath("rotarycraft", materialId + "_gearbox_" + ratio + "x");
+        var block = BuiltInRegistries.BLOCK.getOptional(id).orElseThrow(() -> new IllegalArgumentException("Gearbox is not registered: " + id));
+        ItemStack stack = new ItemStack(block);
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.putString("type", name()));
+        return stack;
     }
 
     public String getLocalizedGearboxName(int ratio) {

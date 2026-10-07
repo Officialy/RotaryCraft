@@ -189,8 +189,10 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
         ItemStack out = itemHandler.getStackInSlot(2);
         if (out.isEmpty())
             itemHandler.setStackInSlot(2, product.copy());
-        else if (ItemStack.isSameItemSameComponents(out, product))
-            out.setCount(Math.min(out.getMaxStackSize(), out.getCount() + product.getCount()));
+        else if (ItemStack.isSameItemSameComponents(out, product)) {
+            out.grow(product.getCount());
+            itemHandler.setStackInSlot(2, out);
+        }
         else {
             fermenterCookTime = 0;
             return;

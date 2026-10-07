@@ -7,13 +7,11 @@ import java.util.ArrayList;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 
@@ -21,9 +19,7 @@ import static reika.rotarycraft.RotaryCraft.MODID;
 
 public class SplitterModel extends RotaryModelBase {
 
-    // 1.21.5 port fix: legacy splitter texture lives at {@code transmission/splittertex.png}
-    // (the renderer used to pick the file via {@code bindTextureByName}); the port had stubbed
-    // it to the cross-shaft texture which obviously looked nothing like a splitter.
+    // Original junction artwork; the bedrock variant is selected by the block renderer.
     public static final Identifier TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(MODID, "textures/blockentitytex/transmission/splittertex.png");
 
     private final ModelPart shape1;
@@ -52,10 +48,16 @@ public class SplitterModel extends RotaryModelBase {
     private final ModelPart shape4a;
     private final ModelPart shape5;
     private final ModelPart shape12a;
-    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
+    private final ModelPart shape12b;
+    private final boolean mirroredBend;
 
     public SplitterModel(ModelPart modelPart) {
+        this(modelPart, false);
+    }
+
+    protected SplitterModel(ModelPart modelPart, boolean mirroredBend) {
         super(modelPart, RenderTypes::entityCutout);
+        this.mirroredBend = mirroredBend;
 
         this.shape1 = modelPart.getChild("shape1");
         this.shape3 = modelPart.getChild("shape3");
@@ -83,177 +85,187 @@ public class SplitterModel extends RotaryModelBase {
         this.shape4a = modelPart.getChild("shape4a");
         this.shape5 = modelPart.getChild("shape5");
         this.shape12a = modelPart.getChild("shape12a");
+        this.shape12b = mirroredBend ? modelPart.getChild("shape12b") : null;
     }
 
     public static LayerDefinition createLayer() {
+        return createLayer(false);
+    }
+
+    /** The opposite V33a bend shares its frame and inline shafts, with mirrored UVs. */
+    protected static LayerDefinition createLayer(boolean mirroredBend) {
         var definition = new MeshDefinition();
         var root = definition.getRoot();
 
         root.addOrReplaceChild("shape1",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape3",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(48, 1)
                         .addBox(0, 0, 0, 1, 15, 16),
                 PartPose.offsetAndRotation(7, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape13",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(0, 27)
                         .addBox(0, 0, 0, 6, 2, 2),
                 PartPose.offsetAndRotation(2.5F, 16, -1.4F, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape12",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(0, 27)
                         .addBox(0, 0, 0, 6, 2, 2),
                 PartPose.offsetAndRotation(2.5F, 15, -1, 0, 0, 0));
 
         root.addOrReplaceChild("shape15",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(0, 24)
                         .addBox(0, 0, 0, 2, 2, 6),
-                PartPose.offsetAndRotation(0, 14.5F, -8.5F, 0, 0, 0.7853982F));
+                PartPose.offsetAndRotation(0, 14.5F, mirroredBend ? 2.5F : -8.5F, 0, 0, 0.7853982F));
 
         root.addOrReplaceChild("shape14",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(0, 24)
                         .addBox(0, 0, 0, 2, 2, 6),
-                PartPose.offsetAndRotation(-1, 15, -8.5F, 0, 0, 0));
+                PartPose.offsetAndRotation(-1, 15, mirroredBend ? 2.5F : -8.5F, 0, 0, 0));
 
         root.addOrReplaceChild("shape17",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(118, 15)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(2, 16, -2.8F, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape16",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(118, 15)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(2, 14, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape19",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(83, 26)
                         .addBox(0, 0, 0, 4, 4, 1),
-                PartPose.offsetAndRotation(0, 13.2F, -3, 0, 0, 0.7853982F));
+                PartPose.offsetAndRotation(0, 13.2F, mirroredBend ? 2 : -3, 0, 0, 0.7853982F));
 
         root.addOrReplaceChild("shape18",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(83, 26)
                         .addBox(0, 0, 0, 4, 4, 1),
-                PartPose.offsetAndRotation(-2, 14, -3, 0, 0, 0));
+                PartPose.offsetAndRotation(-2, 14, mirroredBend ? 2 : -3, 0, 0, 0));
 
         root.addOrReplaceChild("shape21",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(107, 19)
                         .addBox(0, 0, 0, 1, 6, 6),
                 PartPose.offsetAndRotation(3, 16, -4.2F, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape20",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(107, 19)
                         .addBox(0, 0, 0, 1, 6, 6),
                 PartPose.offsetAndRotation(3, 13, -3, 0, 0, 0));
 
         root.addOrReplaceChild("shape23",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(83, 17)
                         .addBox(0, 0, 0, 6, 6, 1),
-                PartPose.offsetAndRotation(0, 11.7F, -4, 0, 0, 0.7853982F));
+                PartPose.offsetAndRotation(0, 11.7F, mirroredBend ? 3 : -4, 0, 0, 0.7853982F));
 
         root.addOrReplaceChild("shape22",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(83, 17)
                         .addBox(0, 0, 0, 6, 6, 1),
-                PartPose.offsetAndRotation(-3, 13, -4, 0, 0, 0));
+                PartPose.offsetAndRotation(-3, 13, mirroredBend ? 3 : -4, 0, 0, 0));
 
         root.addOrReplaceChild("shape2",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(68, 0)
                         .addBox(0, 0, 0, 14, 15, 1),
-                PartPose.offsetAndRotation(-7, 8, -8, 0, 0, 0));
+                PartPose.offsetAndRotation(-7, 8, mirroredBend ? 7 : -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape6",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(0, 20)
                         .addBox(0, 0, 0, 14, 1, 1),
-                PartPose.offsetAndRotation(-7, 8, 7, 0, 0, 0));
+                PartPose.offsetAndRotation(-7, 8, mirroredBend ? -8 : 7, 0, 0, 0));
 
         root.addOrReplaceChild("shape3a",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(48, 1)
                         .addBox(0, 0, 0, 1, 15, 16),
                 PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("shape13a",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(0, 27)
                         .addBox(0, 0, 0, 6, 2, 2),
                 PartPose.offsetAndRotation(-8.5F, 16, -1.4F, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape17a",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(96, 23)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(-3, 16, -2.8F, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape21a",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(101, 0)
                         .addBox(0, 0, 0, 1, 6, 6),
                 PartPose.offsetAndRotation(-4, 16, -4.2F, 0.7853982F, 0, 0));
 
         root.addOrReplaceChild("shape16a",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(96, 23)
                         .addBox(0, 0, 0, 1, 4, 4),
                 PartPose.offsetAndRotation(-3, 14, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape20a",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(101, 0)
                         .addBox(0, 0, 0, 1, 6, 6),
                 PartPose.offsetAndRotation(-4, 13, -3, 0, 0, 0));
 
         root.addOrReplaceChild("shape4",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(118, 0)
                         .addBox(0, 0, 0, 1, 9, 4),
                 PartPose.offsetAndRotation(-6, 14, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape4a",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(118, 0)
                         .addBox(0, 0, 0, 1, 9, 4),
                 PartPose.offsetAndRotation(5, 14, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape5",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(18, 26)
                         .addBox(0, 0, 0, 10, 1, 4),
                 PartPose.offsetAndRotation(-5, 22, -2, 0, 0, 0));
 
         root.addOrReplaceChild("shape12a",
-                CubeListBuilder.create()
+                CubeListBuilder.create().mirror(true)
                         .texOffs(0, 27)
                         .addBox(0, 0, 0, 6, 2, 2),
                 PartPose.offsetAndRotation(-8.5F, 15, -1, 0, 0, 0));
 
+        if (mirroredBend) {
+            // Preserve ModelSplitter2's additional overlapping inline shaft segment.
+            root.addOrReplaceChild("shape12b",
+                    CubeListBuilder.create().mirror(true).texOffs(0, 27).addBox(0, 0, 0, 6, 2, 2),
+                    PartPose.offset(-8.5F, 15, -1));
+        }
         return LayerDefinition.create(definition, 128, 32);
     }
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-        // 26.1 port mirrors the legacy ModelSplitter#renderAll layout (upstream/master):
-        //   static housing → 3 rotating shaft groups (right X+phi, left X-phi, top Z+phi).
-        // If the splitter failed the conditions list (li.get(0) == true), all three shaft
-        // groups stay static so the user can see the "broken" frame.
+        // V33a: fixed housing and three rotating shaft groups; the opposite bend reverses
+        // the Z-axis group's rotation. Failed junctions retain only the housing.
         boolean fail = conditions != null && !conditions.isEmpty()
                 && conditions.get(0) instanceof Boolean b && b;
 
@@ -291,6 +303,7 @@ public class SplitterModel extends RotaryModelBase {
         stack.rotate(xp.rotationDegrees(-phi));
         stack.translate(0, -1, 0);
         shape12a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        if (shape12b != null) shape12b.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape20a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape16a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape17a.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
@@ -301,7 +314,7 @@ public class SplitterModel extends RotaryModelBase {
         // --- Top shaft: rotate +phi around Z axis ------------------------------------------
         stack.pushPose();
         stack.translate(0, 1, 0);
-        stack.rotate(zp.rotationDegrees(phi));
+        stack.rotate(zp.rotationDegrees(mirroredBend ? -phi : phi));
         stack.translate(0, -1, 0);
         shape15.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape18.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);

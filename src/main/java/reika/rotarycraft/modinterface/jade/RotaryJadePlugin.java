@@ -192,24 +192,16 @@ public class RotaryJadePlugin implements IWailaPlugin {
                 tooltip.add(Component.literal("Power: ").withStyle(ChatFormatting.GRAY)
                         .append(Component.literal(MachinePowerTooltip.formatPower(p)).withStyle(ChatFormatting.GOLD)));
             }
-            tooltip.add(Component.literal("Temp: ").withStyle(ChatFormatting.GRAY)
-                    .append(Component.literal(eng.getTemperature() + " °C").withStyle(tempColour(eng.getTemperature(), eng.getMaxTemperature()))));
+            // DragonAPI's thermal provider owns the temperature row, using server data and
+            // hasTemperature(). Nonthermal engines (DC, AC, wind, hydro) have no such row.
 
             int fuel = eng.getFuelLevel();
-            if (fuel >= 0) {
+            if (eng.getEngineType().burnsFuel() && fuel >= 0) {
                 tooltip.add(Component.literal("Fuel: ").withStyle(ChatFormatting.GRAY)
                         .append(Component.literal(fuel + " mB").withStyle(ChatFormatting.YELLOW)));
             }
         }
 
-        private static ChatFormatting tempColour(int t, int max) {
-            if (max <= 0) return ChatFormatting.WHITE;
-            double frac = (double) t / max;
-            if (frac > 0.95) return ChatFormatting.RED;
-            if (frac > 0.75) return ChatFormatting.YELLOW;
-            if (t < 0)        return ChatFormatting.AQUA;
-            return ChatFormatting.WHITE;
-        }
     }
 
     // ------------------------------------------------------------------------------------

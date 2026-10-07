@@ -291,7 +291,7 @@ final class RotaryDefoliatorTests {
             for (var pos : List.of(h.absolutePos(TARGET), h.absolutePos(TARGET))) { out.writeInt(pos.getX()); out.writeInt(pos.getY()); out.writeInt(pos.getZ()); }
             var packet = new reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket(bytes.toByteArray()); packet.init(reika.dragonapi.auxiliary.PacketTypes.DATA, reika.dragonapi.libraries.io.ReikaPacketHelper.getPipeline(RotaryCraft.packetChannel));
             var buffer = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
-            try { packet.encode(buffer); var decoded = reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket.decode(buffer); new PacketHandlerCore().handleData(decoded, h.getLevel(), player); }
+            try { packet.encode(buffer); var decoded = reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket.decode(buffer, new PacketHandlerCore()); new PacketHandlerCore().handleData(decoded, h.getLevel(), player); }
             finally { buffer.release(); }
             h.assertTrue(tile.getLiquidLevel() == 1 && h.getBlockState(TARGET).is(Blocks.OAK_LOG), "client effect packet cannot trigger server decay or spend chemical");
         } catch (java.io.IOException error) { throw new IllegalStateException(error); }

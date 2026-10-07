@@ -174,7 +174,7 @@ final class RotarySonicWeaponTests {
             packet.init(reika.dragonapi.auxiliary.PacketTypes.DATA, reika.dragonapi.libraries.io.ReikaPacketHelper.getPipeline(RotaryCraft.packetChannel));
             var buffer = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
             try {
-                packet.encode(buffer); var decoded = reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket.decode(buffer);
+                packet.encode(buffer); var decoded = reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket.decode(buffer, new PacketHandlerCore());
                 new PacketHandlerCore().handleData(decoded, h.getLevel(), player);
             } finally { buffer.release(); }
             h.assertTrue(m.setvolume == value, "actual channel encode/decode and server handler must deliver all 64 volume bits");

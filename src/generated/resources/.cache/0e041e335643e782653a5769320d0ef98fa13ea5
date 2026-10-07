@@ -1,4 +1,4 @@
-// 26.3	2026-10-07T13:00:30.1466788	Registries for reloadable
+// 26.3	2026-10-07T19:35:10.7198216	Registries for reloadable
 0cfacfc4a62e49dcc82a6be2d844cb0ebaa64388 data/rotarycraft/advancement/bedrockbreaker.json
 9c19431e2df447f18b8ed68ecaf7af898c3f0fd9 data/rotarycraft/advancement/bedrockshaft.json
 6c25c0128f864161b5d58da57ba2093221b85fb0 data/rotarycraft/advancement/bedrocktools.json
@@ -1299,6 +1299,8 @@ ec912eeb0f27399f03441abd5f342a9260188bbd data/rotarycraft/recipe/lens.json
 2fe2706ff872e970371728ecfad2a521393bf613 data/rotarycraft/recipe/light_bridge.json
 f5ebce60bb0be396321c6b0f04a22585b6680565 data/rotarycraft/recipe/line_builder.json
 a4449377daa01c0528c8bd85435eb0c57613ac8e data/rotarycraft/recipe/magnetizer.json
+86eabc64a41cac947dc72900308da1f931258e6b data/rotarycraft/recipe/magnetizer/hsla_shaft_core.json
+ff52dd7a907d278c240beaf135a4a263fb4ec312 data/rotarycraft/recipe/magnetizer/tungsten_shaft_core.json
 81a05d9e2ef8baae5d2822f5bab8497c5568ccd9 data/rotarycraft/recipe/microturbine.json
 af8783a4e5c69307afa5729bf188c0e799c2cbca data/rotarycraft/recipe/mirror.json
 aabd7eee2bb646c2fb3e76214256e7a42a0cfbc4 data/rotarycraft/recipe/mirror_panel.json

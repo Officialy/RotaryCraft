@@ -95,9 +95,8 @@ public enum SoundRegistry implements CustomDistanceSound {
     private static final HashMap<String, SoundRegistry> soundNames = new HashMap<>();
 
     static {
-        // Register all sound events. Sounds with a custom audible distance (e.g. the jet at 40
-        // blocks) need a fixed-range event — createVariableRangeEvent caps the range at 16 for
-        // any volume <= 1, which silently swallowed the long-range engines.
+        // Keep network delivery at least as wide as the sound asset's attenuation distance.
+        // These event ranges also control vanilla server sound broadcasts.
         for (SoundRegistry sound : values()) {
             SOUND_EVENT_MAP.put(sound, SOUND_EVENTS.register(sound.eventName, () -> {
                 Identifier id = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, sound.eventName);
@@ -269,8 +268,11 @@ public enum SoundRegistry implements CustomDistanceSound {
     @Override
     public float getAudibleDistance() {
         return switch (this) {
-            case JET, JETSTART -> 40;
-            default -> -1;
+            case ELECTRIC, WIND, STEAM, CAR, HYDRO -> 24;
+            case MICRO -> 32;
+            case JET -> 48;
+            case JETSTART -> 40;
+            default -> 16;
         };
     }
 }

@@ -98,7 +98,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     public static void addGrindableSeed(ItemStack seed, float factor) {
-        if (!lockedSeeds.contains(seed))
+        if (lockedSeeds.stream().noneMatch(key -> key.match(seed)))
             grindableSeeds.put(seed, Mth.clamp(factor, 0, 0.75F));
     }
 
@@ -111,7 +111,7 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     }
 
     public static void removeGrindableSeed(ItemStack seed) {
-        if (!lockedSeeds.contains(seed))
+        if (lockedSeeds.stream().noneMatch(key -> key.match(seed)))
             grindableSeeds.remove(seed);
     }
 

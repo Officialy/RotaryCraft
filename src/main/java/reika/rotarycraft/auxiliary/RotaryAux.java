@@ -119,7 +119,7 @@ public class RotaryAux {
 
     public static boolean isMufflingBlock(Level world, BlockPos pos) {
         BlockState b = world.getBlockState(pos);
-        return b.getMapColor(world, pos) == MapColor.WOOL;//  || b == todo Block.getBlockFromName("Rockwool");
+        return b.is(net.minecraft.tags.BlockTags.WOOL); // CHROMA-PORT: optional rockwool integration.
     }
 
     public static boolean isNextToIce(Level world, BlockPos pos) {

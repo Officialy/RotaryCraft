@@ -26,6 +26,7 @@ public final class RotaryRecipeSync {
 
     private static void onDatapackSync(OnDatapackSyncEvent event) {
         event.sendRecipes(
+                RotaryRecipeTypes.MAGNETIZER.get(),
                 net.minecraft.world.item.crafting.RecipeType.SMELTING,
                 RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get(),
                 RotaryRecipeTypes.BLAST_FURNACE_SHAPELESS.get(),
@@ -54,6 +55,7 @@ public final class RotaryRecipeSync {
 
         private static void register() {
             NeoForge.EVENT_BUS.addListener(Client::onRecipesReceived);
+            NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) -> currentRecipes = null);
         }
 
         private static void onRecipesReceived(net.neoforged.neoforge.client.event.RecipesReceivedEvent event) {

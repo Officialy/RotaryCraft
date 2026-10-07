@@ -466,7 +466,7 @@ public class RotaryBlockEntities {
             RegisterCapabilitiesEvent event, BlockEntityType<T> type) {
         event.registerBlockEntity(
                 Capabilities.Item.BLOCK, type,
-                (be, side) -> be instanceof HasItemHandler h ? h.getAutomationItemHandler()
+                (be, side) -> be instanceof HasItemHandler h ? h.getAutomationItemHandler(side)
                         : be instanceof WorldlyContainer wc ? new WorldlyContainerWrapper(wc, side) : null);
         event.registerBlockEntity(
                 Capabilities.Fluid.BLOCK, type,

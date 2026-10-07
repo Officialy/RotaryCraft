@@ -27,7 +27,10 @@ public class BlankContainer<T extends BlockEntityBase> extends CoreContainer<T> 
 
     @Override
     public boolean stillValid(Player player) {
-        return player.distanceToSqr(Vec3.atCenterOf(tile.getBlockPos())) <= 16;
+        return tile != null && !tile.isRemoved() && tile.getLevel() == player.level()
+                && player.level().hasChunkAt(tile.getBlockPos())
+                && player.level().getBlockEntity(tile.getBlockPos()) == tile
+                && player.distanceToSqr(Vec3.atCenterOf(tile.getBlockPos())) <= 16;
     }
 
     @Override

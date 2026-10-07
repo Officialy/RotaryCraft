@@ -148,10 +148,10 @@ public final class RotaryAdditionalJEICategories {
 
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder, MagnetizerRecipe recipe, IFocusGroup focuses) {
-            builder.addSlot(RecipeIngredientRole.INPUT, 1, 9).addItemStack(recipe.input.copy())
+            builder.addSlot(RecipeIngredientRole.INPUT, 1, 9).addIngredients(recipe.input)
                     .addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.translatable(
                             "jei.rotarycraft.magnetizer_input", recipe.minSpeed)));
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 77, 9).addItemStack(recipe.input.copy())
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 77, 9).addIngredients(recipe.input)
                     .addRichTooltipCallback((view, tooltip) -> tooltip.add(Component.translatable(
                             "jei.rotarycraft.magnetizer_output", recipe.speedPerMicroTesla)));
         }

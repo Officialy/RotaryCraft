@@ -61,11 +61,11 @@ public class PacketHandlerCore implements PacketHandler {
             PacketRegistry.MUSICPARTICLE, PacketRegistry.SLIDE, PacketRegistry.SPARKLOC,
             PacketRegistry.CRAFTPATTERNMODE, PacketRegistry.CRAFTPATTERNLIMIT);
 
-    protected PacketRegistry pack;
-
     private static final Random rand = new Random();
 
     public void handleData(PacketObj packet, Level world, Player ep) {
+        PacketRegistry pack = null;
+        if (!world.isClientSide() && packet.getType().isClientboundOnly()) return;
         DataInputStream inputStream = packet.getDataIn();
         int control;
         int len;
@@ -164,7 +164,7 @@ public class PacketHandlerCore implements PacketHandler {
                 case PREFIXED:
                     control = inputStream.readInt();
                     pack = PacketRegistry.getEnum(control);
-                    len = inputStream.readInt();
+                    len = reika.dragonapi.libraries.io.PacketValidation.readIntCount(inputStream);
                     data = new int[len];
                     for (int i = 0; i < len; i++)
                         data[i] = inputStream.readInt();
@@ -202,17 +202,36 @@ public class PacketHandlerCore implements PacketHandler {
                 y = inputStream.readInt();
                 z = inputStream.readInt();
             }
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException | IndexOutOfBoundsException e) {
             e.printStackTrace();
             return;
         }
-        // 1.7.10 → 1.21.5: the legacy port had a blanket `if (te == null) return;` here, which
+        // 1.7.10 → 26.3: the legacy port had a blanket `if (te == null) return;` here, which
         // silently dropped the packets in NO_TILE_NEEDED — they address the world or the player, not
         // a machine. Every other packet does need the block entity, so a null one means the machine
         // is gone and there is nothing to apply; drop those quietly. Letting the per-case casts NPE
         // instead (as this used to) is not viable: screens re-send while they are open, so a machine
         // destroyed with its GUI up threw once per tick and spammed the log and the player's chat.
-        BlockEntity te = world.getBlockEntity(new BlockPos(x, y, z));
+        if (pack == null || (!pack.isLongPacket() && data.length != pack.numInts)) return;
+        if (!validValues(pack, data)) return;
+        boolean clientEffect = switch (pack) {
+            case POWERSYNC, FERTILIZER, FRIDGEBREAK, GRAVELGUN, DEFOLIATOR, MUSICPARTICLE, SPARKLOC -> true;
+            default -> false;
+        };
+        if (clientEffect != world.isClientSide()) return;
+        BlockPos target = new BlockPos(x, y, z);
+        boolean needsTarget = clientEffect || !NO_TILE_NEEDED.contains(pack);
+        if (needsTarget && !world.hasChunkAt(target)) return;
+        BlockEntity te = needsTarget ? world.getBlockEntity(target) : null;
+        if (!clientEffect && !NO_TILE_NEEDED.contains(pack)
+                && !reika.dragonapi.libraries.io.PacketValidation.hasMenu(ep, world, target, te)) return;
+        if (pack == PacketRegistry.SLIDE && !(ep.getMainHandItem().getItem() instanceof reika.rotarycraft.items.ItemSlide)) return;
+        if ((pack == PacketRegistry.CRAFTPATTERNMODE || pack == PacketRegistry.CRAFTPATTERNLIMIT)
+                && (!(ep.getMainHandItem().getItem() instanceof reika.rotarycraft.items.tools.ItemCraftPattern)
+                    || !(ep.containerMenu instanceof reika.rotarycraft.gui.container.ContainerCraftingPattern)
+                    || !ep.containerMenu.stillValid(ep))) return;
+        if (pack == PacketRegistry.CRAFTPATTERNMODE && (data[0] < 0 || data[0] >= reika.rotarycraft.items.tools.ItemCraftPattern.RecipeMode.list.length)) return;
+        if (pack == PacketRegistry.CRAFTPATTERNLIMIT && Math.abs((long)data[0]) > 64) return;
         if (te == null && !NO_TILE_NEEDED.contains(pack))
             return;
         try {
@@ -472,7 +491,8 @@ public class PacketHandlerCore implements PacketHandler {
                     break;
                 case SLIDE: {
                     ItemStack is = ep.getMainHandItem();
-                    is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().putString("file", stringdata);
+                    String file = stringdata;
+                    CustomData.update(DataComponents.CUSTOM_DATA, is, tag -> tag.putString("file", file));
                     break;
                 }
                 case POWERBUS: {
@@ -487,6 +507,9 @@ public class PacketHandlerCore implements PacketHandler {
                     break;
                 case BLOWERWHITELIST:
                     ((BlockEntityBlower) te).isWhitelist = !((BlockEntityBlower) te).isWhitelist;
+                    break;
+                case BLOWERMETA:
+                    ((BlockEntityBlower) te).checkMeta = !((BlockEntityBlower) te).checkMeta;
                     break;
                 case BLOWERNBT:
                     ((BlockEntityBlower) te).checkNBT = !((BlockEntityBlower) te).checkNBT;
@@ -505,9 +528,6 @@ public class PacketHandlerCore implements PacketHandler {
                     break;*/
                 case FILTERSETTING:
                     ((reika.rotarycraft.blockentities.BlockEntityItemFilter) te).setDataFromClient(NBT);
-                    break;
-                case BLOWERMETA:
-                    ((BlockEntityBlower) te).checkMeta = !((BlockEntityBlower) te).checkMeta;
                     break;
                 case CRAFTERCRAFT:
                     ((reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter) te).triggerCraftingCycle(data[0]);
@@ -570,6 +590,28 @@ public class PacketHandlerCore implements PacketHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static boolean validValues(PacketRegistry packet, int[] data) {
+        return switch (packet) {
+            case BEVEL -> BlockEntityBevelGear.getDirectionMap().containsKey(data[0]);
+            case GPR -> data[0] >= -1 && data[0] <= 1;
+            case SPAWNERTIMER -> data[0] >= -1;
+            case DETECTOR, HEATER, CVTTARGET, COILSPEED, COILTORQUE, CONTAINMENT -> data[0] >= 0;
+            case CVTRATIO -> data[0] != Integer.MIN_VALUE;
+            case POWERBUS, DISTRIBCLUTCH -> data[0] >= 0 && data[0] < 4;
+            case PARTICLES -> data[0] >= 0 && data[0] < ReikaParticleHelper.particleList.length;
+            case MUSICNOTE -> data[0] >= 0 && data[0] < 64 && data[1] >= 0 && data[1] < 16
+                    && data[2] >= 0 && data[2] < BlockEntityMusicBox.NoteLength.values().length
+                    && data[3] >= 0 && data[3] < BlockEntityMusicBox.Instrument.values().length;
+            case MUSICREST -> data[0] >= 0 && data[0] < 16 && data[1] >= 0 && data[1] < BlockEntityMusicBox.NoteLength.values().length;
+            case MUSICBKSP, MUSICCLEARCH -> data[0] >= 0 && data[0] < 16;
+            case CRAFTERCRAFT -> data[0] >= 0 && data[0] < reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.SIZE;
+            case CRAFTERTHRESH -> data[0] >= 0 && data[0] < reika.rotarycraft.blockentities.processing.BlockEntityAutoCrafter.SIZE && data[1] >= 0;
+            case MULTISIDE -> data[0] >= 0 && data[0] < 6 && data[1] >= 0 && data[1] < 6;
+            case CANNONFIRINGVALS -> (data[0] == 0 && data[2] >= 0 && data[3] >= 0 || data[0] == 1) && data[4] >= 0;
+            default -> true;
+        };
     }
 
     public static void sendPowerSyncPacket(BlockEntityIOMachine iotile, ServerPlayer ep) {

@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
@@ -438,8 +437,8 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
     }
 
     public final boolean isMuffled(Level world, BlockPos pos) {
-        if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())).getMapColor(world, pos) == MapColor.WOOL) {// || this.getMachine(Direction.UP) == MachineRegistry.ECU) {
-            if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getMapColor(world, pos) == MapColor.WOOL)// || this.getMachine(Direction.DOWN) == MachineRegistry.ECU)
+        if (RotaryAux.isMufflingBlock(world, pos.above())) {// || this.getMachine(Direction.UP) == MachineRegistry.ECU) {
+            if (RotaryAux.isMufflingBlock(world, pos.below()))// || this.getMachine(Direction.DOWN) == MachineRegistry.ECU)
                 return true;
         }
         for (int i = 0; i < 6; i++) {
@@ -449,8 +448,7 @@ public abstract class BlockEntityEngine extends BlockEntityInventoryIOMachine im
                 int dy = pos.getY() + dir.getStepY();
                 int dz = pos.getZ() + dir.getStepZ();
                 if ((dir != write.getOpposite() && dir != write) || dir == Direction.UP) {
-                    Block b = world.getBlockState(new BlockPos(dx, dy, dz)).getBlock();
-                    if (b.defaultBlockState().getMapColor(world, pos) != MapColor.WOOL)
+                    if (!RotaryAux.isMufflingBlock(world, new BlockPos(dx, dy, dz)))
                         return false;
                 }
             }

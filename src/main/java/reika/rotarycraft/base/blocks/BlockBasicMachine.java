@@ -9,7 +9,6 @@
  ******************************************************************************/
 package reika.rotarycraft.base.blocks;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -145,6 +144,8 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             else if (be instanceof BlockEntityEngine en) omega = en.omega;
             if (be instanceof BlockEntityEngine en)
                 EngineSoundManager.tick(en);
+            if (be instanceof reika.rotarycraft.blockentities.production.BlockEntityPump pump)
+                reika.rotarycraft.sound.PumpSoundManager.tick(pump);
             if (DEBUG_CLIENT_PHI_TICKER && lvl.getGameTime() % 20 == 0) {
                 RotaryCraft.LOGGER.info(
                         "[clientPhiTicker] " + beClass.getSimpleName() + " @ " + pos
@@ -815,7 +816,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         return true;
     }
 
-    // 1.21.5: Block.appendHoverText removed; tooltips are now on Item. Kept as a helper for BlockItem subclass wiring.
+    // MachineBlockItem bridges this helper into the Minecraft 26.3 item tooltip API.
     public void appendHoverText(ItemStack is, Item.TooltipContext ctx, List<Component> li, TooltipFlag flag) {
         MachineRegistry m = MachineRegistry.getMachineMapping(Block.byItem(is.getItem()));
         if (m == null) {
@@ -856,7 +857,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
             boolean minp = !p.hasNoDirectMinPower();
             boolean mint = !p.hasNoDirectMinTorque();
             boolean mins = !p.hasNoDirectMinSpeed();
-            if (InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)) {
+            if (flag.hasShiftDown() || flag.shouldDisplayAllInformation()) {
                 if (minp)
                     li.add(Component.literal(String.format("Minimum Power: %.3f %sW", ReikaMathLibrary.getThousandBase(pow), ReikaEngLibrary.getSIPrefix(pow))));
                 if (mint)
@@ -877,7 +878,7 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
         if (m.isEngine()) {
             EngineType type = m.getEngineType();
-            if (InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)) {
+            if (flag.hasShiftDown() || flag.shouldDisplayAllInformation()) {
                 double power = type.getPower();
                 double speed = type.getSpeed();
                 double torque = type.getTorque();

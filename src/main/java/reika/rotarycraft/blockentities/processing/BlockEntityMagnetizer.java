@@ -86,7 +86,7 @@ public class BlockEntityMagnetizer extends InventoriedPowerReceiver
 
         ItemStack is = itemHandler.getStackInSlot(0);
         if (!is.isEmpty()) {
-            MagnetizerRecipe r = RecipesMagnetizer.getRecipes().getRecipe(is);
+            MagnetizerRecipe r = RecipesMagnetizer.getRecipes().getRecipe(level, is);
             if (r != null && this.canRunRecipe(r))
                 this.magnetize(r);
         }
@@ -94,7 +94,7 @@ public class BlockEntityMagnetizer extends InventoriedPowerReceiver
 
     private boolean hasRecipe() {
         ItemStack is = itemHandler.getStackInSlot(0);
-        return !is.isEmpty() && RecipesMagnetizer.getRecipes().getRecipe(is) != null;
+        return !is.isEmpty() && RecipesMagnetizer.getRecipes().getRecipe(level, is) != null;
     }
 
     private boolean canRunRecipe(MagnetizerRecipe r) {
@@ -115,6 +115,7 @@ public class BlockEntityMagnetizer extends InventoriedPowerReceiver
         if (current < max) {
             tag.putInt("magnet", current + 1);
             is.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, cd -> CustomData.of(tag));
+            itemHandler.setStackInSlot(0, is);
         }
     }
 

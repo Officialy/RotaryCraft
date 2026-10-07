@@ -103,8 +103,10 @@ public class BlockEntityCrystallizer extends InventoriedPowerLiquidReceiver impl
         ItemStack slot = itemHandler.getStackInSlot(0);
         if (slot.isEmpty())
             itemHandler.setStackInSlot(0, toMake);
-        else
+        else {
             slot.grow(toMake.getCount());
+            itemHandler.setStackInSlot(0, slot);
+        }
         tank.removeLiquid(r.getConsumption());
         this.setChanged();
     }

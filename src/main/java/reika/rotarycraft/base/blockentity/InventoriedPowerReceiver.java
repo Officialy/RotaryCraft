@@ -24,11 +24,6 @@ public abstract class InventoriedPowerReceiver extends BlockEntityPowerReceiver 
 
     public ManagedItemHandler itemHandler = new ManagedItemHandler(getContainerSize()) {
         @Override protected void onContentsChanged(int slot) { setChanged(); }
-        @Override public void deserialize(ValueInput input) {
-            var loaded = input.read(VALUE_IO_KEY, codec);
-            for (int slot = 0; slot < getContainerSize(); slot++)
-                stacks.set(slot, loaded.isPresent() && slot < loaded.get().size() ? loaded.get().get(slot) : ItemStack.EMPTY);
-        }
     };
 
     public InventoriedPowerReceiver(BlockEntityType<?> type, BlockPos pos, BlockState state) {
