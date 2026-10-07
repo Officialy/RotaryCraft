@@ -69,6 +69,8 @@ public class ShapelessBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusY
     }
 
     public int getMainCount() { return mainCount; }
+    /** Legacy matchNumberExactly: the grid must hold exactly {@link #getMainCount()} items, not a multiple. */
+    public boolean isExactCount() { return exactCount; }
     public boolean requiresEmptyOutput() { return requiresEmptyOutput; }
 
     public float getOperatingTemperature() {

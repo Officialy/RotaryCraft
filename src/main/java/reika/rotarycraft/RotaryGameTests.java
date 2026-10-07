@@ -147,6 +147,8 @@ public final class RotaryGameTests {
         register(event, env, "blast_furnace_diamond_gear", 80, RotaryGameTests::blastFurnaceDiamondGear);
         register(event, env, "blast_furnace_bedrock_alloy", 80, RotaryGameTests::blastFurnaceBedrockAlloy);
         register(event, env, "blast_furnace_reactor_alloy", 80, RotaryGameTests::blastFurnaceReactorAlloy);
+        register(event, env, "blast_furnace_hsla_via_menu", 80, RotaryGameTests::blastFurnaceHslaViaMenu);
+        register(event, env, "blast_furnace_lava_rock_heat", 40, RotaryGameTests::blastFurnaceLavaRockHeat);
         register(event, env, "reactor_entry_recipes_load", 40, RotaryGameTests::reactorEntryRecipesLoad);
         register(event, env, "reactor_centrifuge_accepts_rotary_power", 60,
                 RotaryGameTests::reactorCentrifugeAcceptsRotaryPower);
@@ -656,6 +658,51 @@ public final class RotaryGameTests {
             helper.assertTrue(furnace.getItem(BlockEntityBlastFurnace.CENTER_ADDITIVE).isEmpty(),
                     "bedrock alloy did not consume all four dust");
         }).thenSucceed();
+    }
+
+    /**
+     * The player-facing path: the menu's lower/upper additive slots must fill the BE indices every
+     * recipe reads (11/14). They once filled 10/11, so HSLA never matched while additive-free coke did.
+     */
+    private static void blastFurnaceHslaViaMenu(GameTestHelper helper) {
+        helper.setBlock(TEST_POS, RotaryBlocks.BLAST_FURNACE.get());
+        BlockEntityBlastFurnace furnace = helper.getBlockEntity(TEST_POS, BlockEntityBlastFurnace.class);
+        var player = helper.makeMockServerPlayerInLevel();
+        var menu = new reika.rotarycraft.gui.container.machine.inventory.ContainerBlastFurnace(0, player.getInventory(), furnace);
+        menu.getSlot(0).set(new ItemStack(Items.COAL, 4));
+        menu.getSlot(11).set(new ItemStack(Items.GUNPOWDER, 4));
+        menu.getSlot(14).set(new ItemStack(Items.SAND, 4));
+        for (int slot = 1; slot <= 9; slot++)
+            menu.getSlot(slot).set(new ItemStack(Items.IRON_INGOT));
+        helper.assertTrue(furnace.getItem(BlockEntityBlastFurnace.LOWER_ADDITIVE).is(Items.GUNPOWDER)
+                        && furnace.getItem(BlockEntityBlastFurnace.UPPER_ADDITIVE).is(Items.SAND),
+                "menu slots 11/14 must fill the lower/upper additive indices the recipes read");
+        furnace.setTemperature(2000);
+        helper.startSequence().thenIdle(60).thenExecute(() -> {
+            ItemStack output = furnace.getOutputInventory().getStackInSlot(0);
+            helper.assertTrue(output.is(RotaryItems.HSLA_STEEL_INGOT.get()) && output.getCount() == 9,
+                    "nine iron ingots with coal, gunpowder and sand should make nine HSLA ingots, got " + output);
+        }).thenSucceed();
+    }
+
+    /** GeoStrata's molten lava rock below the furnace is a lava heat source (EnvironmentalHeatSource). */
+    private static void blastFurnaceLavaRockHeat(GameTestHelper helper) {
+        var lavaRock = BuiltInRegistries.BLOCK.getOptional(Identifier.parse("geostrata:lava_rock")).orElse(null);
+        if (lavaRock == null) {
+            helper.succeed();
+            return;
+        }
+        helper.setBlock(TEST_POS.below(), lavaRock);
+        helper.setBlock(TEST_POS, RotaryBlocks.BLAST_FURNACE.get());
+        BlockEntityBlastFurnace furnace = helper.getBlockEntity(TEST_POS, BlockEntityBlastFurnace.class);
+        var pos = helper.absolutePos(TEST_POS);
+        int start = furnace.getTemperature();
+        // Each ambient update moves the temperature 2 C toward ambient + 600 while far below it.
+        for (int update = 0; update < 100; update++)
+            furnace.updateTemperature(helper.getLevel(), pos);
+        helper.assertTrue(furnace.getTemperature() >= start + 190,
+                "lava rock below should drive the furnace toward ambient + 600 C; went " + start + " -> " + furnace.getTemperature());
+        helper.succeed();
     }
 
     private static void blastFurnaceReactorAlloy(GameTestHelper helper) {

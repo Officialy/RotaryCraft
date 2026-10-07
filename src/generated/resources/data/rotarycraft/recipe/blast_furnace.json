@@ -2,14 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "F": "minecraft:furnace",
-    "I": "minecraft:iron_ingot",
-    "S": "minecraft:stone"
+    "B": "minecraft:stone_bricks",
+    "r": "minecraft:redstone"
   },
   "pattern": [
-    "SIS",
-    "IFI",
-    "SIS"
+    "BBB",
+    "BrB",
+    "BBB"
   ],
   "result": {
     "id": "rotarycraft:blast_furnace"

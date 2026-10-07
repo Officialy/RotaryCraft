@@ -645,14 +645,15 @@ public final class RoCRecipeProvider {
                     new ItemStackTemplate(RotaryItems.BEDROCK_ALLOY_INGOT.get()),
                     BEDROCKTEMP, 0F, 1.0F, 0, 0, 0, 1, true, false);
 
-            // Bedrock bearing (RecipesBlastFurnace add3x3Crafting): the faithful shaped recipe —
-            // a ring of bedrock dust around a steel bearing, smelted in the blast furnace @ 1000°.
+            // Bedrock bearing (RotaryRecipes 1038, add3x3Crafting): a ring of bedrock dust around a
+            // steel bearing @ 1000°, speed 2. Legacy speed N advanced the smelt timer every Nth tick,
+            // which the time multiplier reproduces (the gear and rod below are speed 2 as well).
             Ingredient dust = Ingredient.of(RotaryItems.BEDROCK_DUST.get());
             Ingredient brng = Ingredient.of(RotaryItems.HSLA_STEEL_BEARING.get());
             blastShaped("bedrock_alloy_bearing",
                     ShapedRecipePattern.of(java.util.Map.of('D', dust, 'B', brng), "DDD", "DBD", "DDD"),
                     RotaryItems.BEDROCK_ALLOY_BEARING.get(), 1,
-                    1000F, 0F, 1.0F, 0, 0, 0);
+                    1000F, 0F, 2.0F, 0, 0, 0);
 
             blastShaped("diamond_gear",
                     ShapedRecipePattern.of(java.util.Map.of(
@@ -1851,15 +1852,15 @@ public final class RoCRecipeProvider {
                     .unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
                     .save(out);
 
-            // BLAST_FURNACE: the entrypoint to the HSLA-steel age. Without a recipe the user
-            // can't make HSLA ingots, which blocks every other engine/gearbox/shaft beyond
-            // the wooden tier. Build pattern: stone walls + iron core + furnace base.
+            // BLAST_FURNACE (RotaryRecipes.getBlastFurnaceIngredients): "BaB","brc","BdB", stone
+            // bricks round redstone. a-d are GATEBLAST's gating materials, which default (gating off)
+            // to stone bricks too, so the shipped recipe is eight stone bricks round one redstone.
+            // The earlier stone/iron/furnace shape was invented.
             shaped(RecipeCategory.REDSTONE, RotaryBlocks.BLAST_FURNACE.get())
-                    .define('S', Items.STONE)
-                    .define('I', Items.IRON_INGOT)
-                    .define('F', Items.FURNACE)
-                    .pattern("SIS").pattern("IFI").pattern("SIS")
-                    .unlockedBy("has_furnace", has(Items.FURNACE))
+                    .define('B', Items.STONE_BRICKS)
+                    .define('r', Items.REDSTONE)
+                    .pattern("BBB").pattern("BrB").pattern("BBB")
+                    .unlockedBy("has_stone_bricks", has(Items.STONE_BRICKS))
                     .save(out);
 
             // CYLINDER (RotaryRecipes 955): "SSS","S S","SSS" — a steel-ingot ring, output 2.

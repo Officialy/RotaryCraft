@@ -6,6 +6,14 @@
 package reika.rotarycraft.modinterface.jei;
 
 import mezz.jei.api.IModPlugin;
+import java.util.Optional;
+import reika.rotarycraft.blockentities.production.BlockEntityBlastFurnace;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import mezz.jei.api.runtime.IIngredientManager;
+import mezz.jei.api.ingredients.ITypedIngredient;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -68,7 +76,7 @@ public class RotaryJEIPlugin implements IModPlugin {
         IGuiHelper gui = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(
                 new BlastFurnaceShapedCategory(gui),
-                new BlastFurnaceShapelessCategory(gui),
+                new BlastFurnaceShapelessCategory(gui, registration.getJeiHelpers().getIngredientManager()),
                 new PulseFurnaceCategory(gui),
                 new GrinderCategory(gui),
                 new CentrifugeCategory(gui),
@@ -274,8 +282,28 @@ public class RotaryJEIPlugin implements IModPlugin {
     }
 
     // =========================================================================
-    // Blast Furnace — shaped (3×3 grid of ingredients, like crafting)
+    // Blast Furnace. Both categories reproduce V33a's NEI BlastFurnaceHandler: the furnace GUI
+    // (blastfurngui.png, from 5,11) with the thermometer, the required temperature beneath it, the
+    // grid at 57,6, the output at 143,24 and, for alloying, the three additives where the GUI keeps
+    // them plus one "name: xN (chance%)" line each and the bonus output.
     // =========================================================================
+    private static final Identifier BLAST_GUI =
+            Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/blastfurngui.png");
+    private static final int BLAST_WIDTH = 166;
+    private static final int BLAST_GUI_HEIGHT = 70;
+
+    private static void drawBlastFurnace(GuiGraphicsExtractor graphics, float temperature) {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BLAST_GUI, 0, 0, 5, 11, BLAST_WIDTH, BLAST_GUI_HEIGHT, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BLAST_GUI, 6, 17, 176, 44, 11, 43, 256, 256);
+        var font = Minecraft.getInstance().font;
+        String text = String.format("%dC", Math.round(temperature));
+        graphics.text(font, text, Math.max(0, 11 - font.width(text) / 2), 61, 0xff000000, false);
+    }
+
+    private static ItemStack displayStack(Ingredient ingredient) {
+        return ingredient.items().findFirst().map(h -> h.value().getDefaultInstance()).orElse(ItemStack.EMPTY);
+    }
+
     public static final class BlastFurnaceShapedCategory
             implements IRecipeCategory<ShapedBlastFurnaceRecipe> {
 
@@ -290,59 +318,127 @@ public class RotaryJEIPlugin implements IModPlugin {
 
         @Override public RecipeType<ShapedBlastFurnaceRecipe> getRecipeType() { return TYPE; }
         @Override public Component getTitle() { return Component.translatable("machine.blastfurnace"); }
-        // JEI 29.x: getBackground() removed — size is declared by getWidth()/getHeight() instead
-        @Override public int getWidth()  { return 116; }
-        @Override public int getHeight() { return 60; }
+        @Override public int getWidth()  { return BLAST_WIDTH; }
+        @Override public int getHeight() { return BLAST_GUI_HEIGHT; }
         @Override public IDrawable getIcon() { return icon; }
 
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder,
                               ShapedBlastFurnaceRecipe recipe,
                               IFocusGroup focuses) {
-            List<Ingredient> ings = recipe.getIngredients();
-            for (int i = 0; i < Math.min(ings.size(), 9); i++) {
-                int col = i % 3, row = i / 3;
-                builder.addSlot(RecipeIngredientRole.INPUT, 1 + col * 18, 1 + row * 18)
-                       .addIngredients(ings.get(i));
-            }
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 98, 21)
-                   .addItemStack(recipe.getOutput());
+            // Place each cell where the pattern puts it; the flat ingredient list drops the gaps.
+            var pattern = recipe.getPattern();
+            var cells = pattern.ingredients();
+            for (int row = 0; row < pattern.height(); row++)
+                for (int col = 0; col < pattern.width(); col++) {
+                    var cell = cells.get(col + row * pattern.width());
+                    if (cell.isPresent())
+                        builder.addSlot(RecipeIngredientRole.INPUT, 57 + col * 18, 6 + row * 18)
+                                .add(cell.get());
+                }
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 143, 24).add(recipe.getOutput());
+        }
+
+        @Override
+        public void draw(ShapedBlastFurnaceRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics,
+                         double mouseX, double mouseY) {
+            drawBlastFurnace(graphics, recipe.getOperatingTemperature());
         }
     }
 
-    // =========================================================================
-    // Blast Furnace — shapeless (up to 9 unordered ingredients)
-    // =========================================================================
     public static final class BlastFurnaceShapelessCategory
             implements IRecipeCategory<ShapelessBlastFurnaceRecipe> {
 
         public static final RecipeType<ShapelessBlastFurnaceRecipe> TYPE =
                 RecipeType.create(RotaryCraft.MODID, "blast_furnace_shapeless", ShapelessBlastFurnaceRecipe.class);
+        private static final int LINE = 11;
 
         private final IDrawable icon;
+        private final IIngredientManager ingredients;
 
-        public BlastFurnaceShapelessCategory(IGuiHelper gui) {
+        public BlastFurnaceShapelessCategory(IGuiHelper gui, IIngredientManager ingredients) {
             this.icon = gui.createDrawableItemStack(MachineRegistry.BLASTFURNACE.getCraftedProduct());
+            this.ingredients = ingredients;
         }
 
         @Override public RecipeType<ShapelessBlastFurnaceRecipe> getRecipeType() { return TYPE; }
         @Override public Component getTitle() { return Component.translatable("machine.blastfurnace"); }
-        @Override public int getWidth()  { return 116; }
-        @Override public int getHeight() { return 60; }
+        @Override public int getWidth()  { return BLAST_WIDTH; }
+        // The GUI plus up to three additive lines and the bonus line.
+        @Override public int getHeight() { return BLAST_GUI_HEIGHT + 2 + 4 * LINE; }
         @Override public IDrawable getIcon() { return icon; }
+
+        /** V33a BlastRecipe.getValidInputNumbers: the batch sizes the grid accepts. */
+        private static List<Integer> batchSizes(ShapelessBlastFurnaceRecipe recipe) {
+            List<Integer> sizes = new java.util.ArrayList<>();
+            int per = recipe.getMainCount();
+            for (int n = per; n <= 9; n += per)
+                if (n == per || !recipe.isExactCount())
+                    sizes.add(n);
+            return sizes;
+        }
 
         @Override
         public void setRecipe(IRecipeLayoutBuilder builder,
                               ShapelessBlastFurnaceRecipe recipe,
                               IFocusGroup focuses) {
-            List<Ingredient> ings = recipe.getIngredients();
-            for (int i = 0; i < Math.min(ings.size(), 9); i++) {
-                int col = i % 3, row = i / 3;
-                builder.addSlot(RecipeIngredientRole.INPUT, 1 + col * 18, 1 + row * 18)
-                       .addIngredients(ings.get(i));
+            // NEI cycled the batch size: n main items in the grid (column-major) and the n / mainCount
+            // products they make. Every slot carries one frame per batch size, empty where that batch
+            // leaves the cell bare, so JEI's shared cycle keeps the grid and the output in step.
+            List<Integer> sizes = batchSizes(recipe);
+            ItemStack main = displayStack(recipe.getIngredients().getFirst());
+            for (int col = 0; col < 3; col++)
+                for (int row = 0; row < 3; row++) {
+                    int cell = col * 3 + row;
+                    List<Optional<ITypedIngredient<?>>> frames = new java.util.ArrayList<>();
+                    boolean used = false;
+                    for (int size : sizes) {
+                        boolean filled = cell < size;
+                        used |= filled;
+                        frames.add(filled ? ingredients.createTypedIngredient(VanillaTypes.ITEM_STACK, main)
+                                .map(t -> (ITypedIngredient<?>) t) : Optional.empty());
+                    }
+                    if (used)
+                        builder.addSlot(RecipeIngredientRole.INPUT, 57 + col * 18, 6 + row * 18)
+                                .addOptionalTypedIngredients(frames);
+                }
+            List<ItemStack> outputs = new java.util.ArrayList<>();
+            for (int size : sizes) {
+                ItemStack out = recipe.getOutput();
+                out.setCount(out.getCount() * (recipe.getMainCount() > 1 ? size / recipe.getMainCount() : size));
+                outputs.add(out);
             }
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 98, 21)
-                   .addItemStack(recipe.getOutput());
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 143, 24).addItemStacks(outputs);
+            for (ShapelessBlastFurnaceRecipe.Additive additive : recipe.getAdditives()) {
+                int y = switch (additive.slot()) {
+                    case BlockEntityBlastFurnace.UPPER_ADDITIVE -> 5;
+                    case BlockEntityBlastFurnace.LOWER_ADDITIVE -> 43;
+                    default -> 24;
+                };
+                builder.addSlot(RecipeIngredientRole.INPUT, 21, y).add(additive.ingredient());
+            }
+        }
+
+        @Override
+        public void draw(ShapelessBlastFurnaceRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics,
+                         double mouseX, double mouseY) {
+            drawBlastFurnace(graphics, recipe.getOperatingTemperature());
+            var font = Minecraft.getInstance().font;
+            int y = BLAST_GUI_HEIGHT + 2;
+            // NEI order: primary (centre), secondary (lower), tertiary (upper).
+            for (int slot : new int[] {BlockEntityBlastFurnace.CENTER_ADDITIVE,
+                    BlockEntityBlastFurnace.LOWER_ADDITIVE, BlockEntityBlastFurnace.UPPER_ADDITIVE})
+                for (ShapelessBlastFurnaceRecipe.Additive additive : recipe.getAdditives())
+                    if (additive.slot() == slot) {
+                        String line = String.format("%s: x%d (%.1f%%)",
+                                displayStack(additive.ingredient()).getHoverName().getString(),
+                                additive.count(), 100 * additive.chance());
+                        graphics.text(font, line, 21, y, 0xff000000, false);
+                        y += LINE;
+                    }
+            if (!recipe.getAdditives().isEmpty() || recipe.bonusChance() > 0)
+                graphics.text(font, "Bonus output: " + (recipe.bonusChance() > 0
+                        ? recipe.bonusChance() / 100F + "x" : "None"), 21, y, 0xff000000, false);
         }
     }
 

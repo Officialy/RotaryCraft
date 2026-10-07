@@ -186,10 +186,29 @@ public class BlockEntityBlastFurnace extends InventoriedRCBlockEntity
                     TagValueInput.create(ProblemReporter.DISCARDING, registries, rawOut.get());
             outputInv.deserialize(nested);
         }
+        migrateMisplacedAdditives();
         temperature    = input.getIntOr("temp", 0);
         progress       = input.getIntOr("progress", 0);
         storedXP       = input.getFloatOr("xp", 0);
         leaveLastItem  = input.getBooleanOr("leaveLast", false);
+    }
+
+    /**
+     * The container once filled the lower/upper additive slots at internal indices 10/11 instead of
+     * 11/14. Index 10 is otherwise unused (the outputs live in their own handler), so anything there
+     * is a stranded lower additive: shift the old pair up rather than leave it unreachable.
+     */
+    private void migrateMisplacedAdditives() {
+        if (itemHandler.getStackInSlot(10).isEmpty())
+            return;
+        if (itemHandler.getStackInSlot(UPPER_ADDITIVE).isEmpty()) {
+            itemHandler.setStackInSlot(UPPER_ADDITIVE, itemHandler.getStackInSlot(LOWER_ADDITIVE));
+            itemHandler.setStackInSlot(LOWER_ADDITIVE, ItemStack.EMPTY);
+        }
+        if (itemHandler.getStackInSlot(LOWER_ADDITIVE).isEmpty()) {
+            itemHandler.setStackInSlot(LOWER_ADDITIVE, itemHandler.getStackInSlot(10));
+            itemHandler.setStackInSlot(10, ItemStack.EMPTY);
+        }
     }
 
     /* --------------------------------------------------------------------- */

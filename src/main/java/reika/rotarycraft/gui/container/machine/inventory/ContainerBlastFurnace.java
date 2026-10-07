@@ -63,8 +63,10 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
                 reika.rotarycraft.registry.RotaryAdvancements.MAKESTEEL.triggerAchievement(playerInv.player);
         }));
 
-        // Slot 11: lower additive (still internal inventory)
-        this.addSlot(ii.slot(slot++, 26, 54));
+        // Slot 11: lower additive. The internal index must be the BE's, not the running counter:
+        // the outputs moved to their own handler, so the counter stood at 10 here and the
+        // additives landed in 10/11 while every recipe reads 11/14 (HSLA could not match).
+        this.addSlot(ii.slot(BlockEntityBlastFurnace.LOWER_ADDITIVE, 26, 54));
 
         // Slot 12: upper output - use outputInv slot 1
         this.addSlot(new ResultSlotItemHandler(blast.getOutputInventory(), 1, 148, 17, stack -> {
@@ -78,8 +80,8 @@ public class ContainerBlastFurnace extends CoreContainer<BlockEntityBlastFurnace
                 reika.rotarycraft.registry.RotaryAdvancements.MAKESTEEL.triggerAchievement(playerInv.player);
         }));
 
-        // Slot 14: upper additive (still internal inventory)
-        this.addSlot(ii.slot(slot++, 26, 16));
+        // Slot 14: upper additive
+        this.addSlot(ii.slot(BlockEntityBlastFurnace.UPPER_ADDITIVE, 26, 16));
 
         // recipe pattern (accepts only blank Craft Pattern item) - slot 15
         this.addSlot(new SlotApprovedItems(te, BlockEntityBlastFurnace.PATTERN_SLOT, 123, 53)

@@ -79,6 +79,11 @@ public class ShapedBlastFurnaceRecipe implements Recipe<RecipeInput>, IBonusYiel
         return pattern.ingredients().stream().flatMap(java.util.Optional::stream).toList();
     }
 
+    /** The grid with its empty cells, for displays that must place each ingredient where it goes. */
+    public net.minecraft.world.item.crafting.ShapedRecipePattern getPattern() {
+        return pattern;
+    }
+
     public float getExperience() {
         return experience;
     }
