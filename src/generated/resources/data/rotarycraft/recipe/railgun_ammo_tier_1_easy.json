@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "rotarycraft:railgun_difficulty",
+      "difficulty": 1
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "p": "#minecraft:planks",
+    "s": {
+      "neoforge:ingredient_type": "rotarycraft:railgun_ammo",
+      "tier": 0
+    }
+  },
+  "pattern": [
+    "p  ",
+    " s ",
+    "  p"
+  ],
+  "result": {
+    "components": {
+      "rotarycraft:railgun_power": 1
+    },
+    "count": 16,
+    "id": "rotarycraft:railgun_ammo"
+  }
+}

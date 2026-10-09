@@ -1,6 +1,33 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "rotarycraft:item/railgun_ammo"
+    "type": "minecraft:range_dispatch",
+    "entries": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "rotarycraft:item/railgun_ammo_1"
+        },
+        "threshold": 7.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "rotarycraft:item/railgun_ammo_2"
+        },
+        "threshold": 10.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "rotarycraft:item/railgun_ammo_3"
+        },
+        "threshold": 13.0
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "rotarycraft:item/railgun_ammo"
+    },
+    "property": "rotarycraft:railgun_power"
   }
 }

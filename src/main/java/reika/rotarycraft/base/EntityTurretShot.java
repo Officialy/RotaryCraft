@@ -73,7 +73,7 @@ public abstract class EntityTurretShot extends Fireball implements IEntityWithCo
     protected abstract void applyAttackEffectsToEntity(Level world, Entity el);
 
 
-    protected final DamageSource getDamageSource() {
+    protected DamageSource getDamageSource() {
         if (gun == null || !gun.hasLevel())
             return damageSources().generic();
         return new TurretDamage(gun);

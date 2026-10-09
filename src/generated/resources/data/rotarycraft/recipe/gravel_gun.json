@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "a": "rotarycraft:hsla_steel_ingot",
+    "c": "minecraft:chest",
+    "d": "minecraft:dispenser",
+    "g": "rotarycraft:hsla_steel_gear",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " d ",
+    "gcg",
+    "sas"
+  ],
+  "result": {
+    "id": "rotarycraft:gravel_gun"
+  }
+}

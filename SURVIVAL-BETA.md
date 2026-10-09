@@ -726,3 +726,36 @@ port allowlist was changed. Existing renderer/datagen changes were preserved.
 
 Additional baseline validation: both existing pump source-drain GameTests pass
 (2/2, water and lava). Evidence: build/rotary-machine-feedback-pump-parity.log.
+
+
+### 2026-10-08 — RC19 railgun ammunition, flight, terrain, recipes and rendering
+
+Full original railgun slice restored against RotaryCraft b2288638f7f4703bb4555f72a2b86f72407cc2ae
+on Minecraft 26.3 / NeoForge 26.3.0.51-beta. All sixteen ammunition tiers preserve mass/torque/
+damage and strongest-affordable selection. Native slug and shell factories replace null/stationary
+behavior; both registered entities retain source flight/impact, native save/tracking identity,
+extension hooks, effects/equipment, knockback and achievements. Data-generated terrain families,
+native saved fatigue, authorization/loaded-chunk guards, original recursive/high-tier radii and
+both configuration gates retain source behavior. Repeated entity damage inside the old terrain
+loop is corrected to one application per impacted entity.
+
+Recipes use actual original shapes/materials and exact-tier component ingredients. Conditional
+upgrade definitions preserve yields 16/8/2 with the original medium fallback, admitting sixteen
+slug recipes per difficulty; the original shell recipe yields sixteen. The synced handbook
+retains component-bearing ingredient displays. Four original atlas sprite groups and the original
+eight-plane projectile render use native generated models and deferred rendering. Full contract,
+modern corrections and optional-integration boundary: docs/railgun-port.md; art provenance:
+docs/asset-recovery.md.
+
+Validation: 60 native railgun regressions, 69 family unit tests, final client/server datagen and
+both release jars pass. Final disposable native client checks all sixteen typed/legacy models,
+registered slug/shell geometry, synced handbook inputs and actual tier-thirteen complex spawn
+tracking; preceding turbine/gear/dropper checks also pass. All 2182 PNGs decode, seven recovered
+sprites match original pixels, and required recipes/models/textures/damage tags/classes ship in
+the jar without archived assets, TestInstance or JUnit code. Evidence from workspace root:
+build/railgun-gametest.log, build/railgun-final-validation.log (1m 50s),
+build/railgun-final-datagen.log and build/railgun-artifact-verification.json.
+
+RC19 is complete. Thirteen missing-machine ports remain as previously listed. Actual remote-client
+and Iris/Distant Horizons/shader acceptance remain open; integrated checks do not satisfy them.
+Other missing-texture warnings remain. This and preceding backlog batches are uncommitted/unpushed.

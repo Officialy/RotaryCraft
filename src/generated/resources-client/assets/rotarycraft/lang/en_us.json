@@ -896,6 +896,7 @@
   "item.rotarycraft.radiator": "Radiator",
   "item.rotarycraft.railgun_accelerator": "Railgun Accelerator",
   "item.rotarycraft.railgun_ammo": "Railgun Ammo",
+  "item.rotarycraft.railgun_ammo.mass": "%s kg Railgun Ammunition",
   "item.rotarycraft.range_finder": "Range Finder",
   "item.rotarycraft.raw_iron_dust": "Raw Iron Dust",
   "item.rotarycraft.raw_iron_slurry": "Raw Iron Slurry",

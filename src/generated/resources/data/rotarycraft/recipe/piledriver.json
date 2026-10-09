@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "D": "rotarycraft:drillhead_iron",
+    "F": "rotarycraft:tungsten_alloy_flywheel_core",
+    "G": "rotarycraft:hsla_steel_gear_8x",
+    "P": "rotarycraft:hsla_steel_plate",
+    "g": "rotarycraft:hsla_steel_rod"
+  },
+  "pattern": [
+    "PGP",
+    "gFg",
+    "PDP"
+  ],
+  "result": {
+    "id": "rotarycraft:piledriver"
+  }
+}

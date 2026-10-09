@@ -142,6 +142,9 @@ public class RotaryModelLayers {
     public static final ModelLayerLocation MAGNETIZER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "magnetizer"), "main");
 
     public static void init(IEventBus bus) {
+        bus.addListener((net.neoforged.neoforge.client.event.RegisterRangeSelectItemModelPropertyEvent event) ->
+                event.register(Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "railgun_power"),
+                        reika.rotarycraft.renders.item.RailgunPowerProperty.CODEC));
         bus.addListener(RotaryModelLayers::registerEntityRenderers);
         bus.addListener(RotaryModelLayers::registerLayerDefinitions);
         bus.addListener(RotaryModelLayers::registerPictureInPictureRenderers);
@@ -155,6 +158,7 @@ public class RotaryModelLayers {
         event.registerEntityRenderer(RotaryEntities.DISCHARGE.get(), reika.rotarycraft.renders.RenderDischarge::new);
         event.registerEntityRenderer(RotaryEntities.SHOCKWAVE.get(), reika.rotarycraft.renders.RenderSonicShot::new);
         event.registerEntityRenderer(RotaryEntities.RAILGUN.get(), reika.rotarycraft.renders.RenderRailGunShot::new);
+        event.registerEntityRenderer(RotaryEntities.EXPLOSIVE_SHELL.get(), reika.rotarycraft.renders.RenderRailGunShot::new);
         event.registerEntityRenderer(RotaryEntities.FREEZEGUN.get(), reika.rotarycraft.renders.RenderTurretShot::new);
         event.registerEntityRenderer(RotaryEntities.FLAKSHOT.get(), reika.rotarycraft.renders.RenderTurretShot::new);
         event.registerEntityRenderer(RotaryEntities.GATLING.get(), reika.rotarycraft.renders.RenderTurretShot::new);

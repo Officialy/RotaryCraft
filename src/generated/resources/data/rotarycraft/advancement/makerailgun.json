@@ -1,0 +1,36 @@
+{
+  "parent": "rotarycraft:pcb",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:railgun"
+          }
+        ],
+        "player": {
+          "type": "rotarycraft:advancements_enabled"
+        }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.makerailgun.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "rotarycraft:railgun"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.makerailgun.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

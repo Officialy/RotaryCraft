@@ -33,6 +33,10 @@ public class RotaryEntities {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, RotaryCraft.MODID);
 
+    public static final DeferredHolder<EntityType<?>, EntityType<reika.rotarycraft.entities.EntityExplosiveShell>> EXPLOSIVE_SHELL =
+            registerEntityType("explosive_shell", () -> EntityType.Builder.<reika.rotarycraft.entities.EntityExplosiveShell>of(
+                    reika.rotarycraft.entities.EntityExplosiveShell::new, MobCategory.MISC).sized(.3F, .3F).fireImmune().clientTrackingRange(8));
+
     public static final DeferredHolder<EntityType<?>, EntityType<EntityRailGunShot>> RAILGUN = registerEntityType("railgun_shot", () -> EntityType.Builder.<EntityRailGunShot>of(EntityRailGunShot::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(8));
 
     public static final DeferredHolder<EntityType<?>, EntityType<EntityFreezeGunShot>> FREEZEGUN = registerEntityType("freezegun_shot", () -> EntityType.Builder.<EntityFreezeGunShot>of(EntityFreezeGunShot::new, MobCategory.MISC).sized(0.3F, 0.3F).clientTrackingRange(8));

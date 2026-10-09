@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": "rotarycraft:hsla_steel_plate",
+    "I": "rotarycraft:impeller",
+    "P": "rotarycraft:fluid_pipe",
+    "S": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "P P",
+    "SPS",
+    "BIB"
+  ],
+  "result": {
+    "id": "rotarycraft:defoliator"
+  }
+}

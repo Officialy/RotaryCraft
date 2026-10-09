@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "c": "rotarycraft:screen",
+    "n": "rotarycraft:sonar_unit",
+    "r": "rotarycraft:radar_unit",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " nr",
+    "scs",
+    " s "
+  ],
+  "result": {
+    "id": "rotarycraft:motion_tracker"
+  }
+}

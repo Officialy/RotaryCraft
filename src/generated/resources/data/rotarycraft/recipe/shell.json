@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "n": "rotarycraft:nitrate",
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    " s ",
+    "sns",
+    " s "
+  ],
+  "result": {
+    "count": 16,
+    "id": "rotarycraft:shell"
+  }
+}

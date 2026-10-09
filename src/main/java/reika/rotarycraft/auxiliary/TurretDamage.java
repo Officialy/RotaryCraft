@@ -20,32 +20,25 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class TurretDamage extends CustomStringDamageSource {
 
     private final Player player;
-    private final BlockEntity tile;
 
     public TurretDamage(BlockEntityAimedCannon te) {
-//        this(te, te.getPlacer());
-        this(te, null);
+        this(te, te.getPlacer());
     }
 
     public TurretDamage(BlockEntityAimedCannon te, Player ep) {
-        super(CustomStringDamageSource.resolve(te.getLevel(), RotaryDamageTypes.MACHINE), "found themselves in high-powered crosshairs");
-        player = ep;
-        tile = te;
+        this(te.getLevel(), ep);
     }
 
-  /*  @Override
-    public boolean isProjectile() {
-        return true;
-    }*/
+    public TurretDamage(net.minecraft.world.level.Level level, Player ep) {
+        super(CustomStringDamageSource.resolve(level, RotaryDamageTypes.TURRET), "found themselves in high-powered crosshairs");
+        player = ep;
+    }
+
+    // Projectile and unblockable behavior is encoded in the generated native damage-type tags.
 
     @Override
     public Entity getEntity() {
         return player;
-    }
-
-//    @Override
-    public boolean isUnblockable() {
-        return true;
     }
 
 }

@@ -1,0 +1,3220 @@
+{
+  "values": {
+    "#minecraft:wool": {
+      "hits": -1
+    },
+    "geostrata:basalt_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:basalt_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:basalt_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:basalt_cobble"
+    },
+    "geostrata:gneiss_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2
+    },
+    "geostrata:gneiss_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:gneiss_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:gneiss_cobble"
+    },
+    "geostrata:granite_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3
+    },
+    "geostrata:granite_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granite_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:granite_cobble"
+    },
+    "geostrata:granulite_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:granulite_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:granulite_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:granulite_cobble"
+    },
+    "geostrata:hornfel_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3
+    },
+    "geostrata:hornfel_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:hornfel_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 3,
+      "product": "geostrata:hornfel_cobble"
+    },
+    "geostrata:limestone_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1
+    },
+    "geostrata:limestone_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:limestone_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:limestone_cobble"
+    },
+    "geostrata:marble_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:marble_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:marble_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:marble_cobble"
+    },
+    "geostrata:migmatite_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:migmatite_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:migmatite_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:migmatite_cobble"
+    },
+    "geostrata:onyx_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:onyx_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:onyx_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:onyx_cobble"
+    },
+    "geostrata:opal_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:opal_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:opal_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:opal_cobble"
+    },
+    "geostrata:peridotite_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2
+    },
+    "geostrata:peridotite_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:peridotite_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:peridotite_cobble"
+    },
+    "geostrata:pumice_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:pumice_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:pumice_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:pumice_cobble"
+    },
+    "geostrata:quartz_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:quartz_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:quartz_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:quartz_cobble"
+    },
+    "geostrata:sandstone_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:sandstone_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:sandstone_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:sandstone_cobble"
+    },
+    "geostrata:schist_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2
+    },
+    "geostrata:schist_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:schist_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": 2,
+      "product": "geostrata:schist_cobble"
+    },
+    "geostrata:shale_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1
+    },
+    "geostrata:shale_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:shale_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "hits": -1,
+      "product": "geostrata:shale_cobble"
+    },
+    "geostrata:slate_brick": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_centered": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_cobble": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ]
+    },
+    "geostrata:slate_connected2_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_connected_connected": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_cubed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_embossed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_engraved": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_etched": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_fan": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_fitted": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_inscribed": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_lined": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_mossy": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_pillar": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_raised": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_round": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_smooth": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_spiral": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "geostrata:slate_tile": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "geostrata"
+        }
+      ],
+      "product": "geostrata:slate_cobble"
+    },
+    "minecraft:bedrock": {
+      "keep": true
+    },
+    "minecraft:glass": {
+      "hits": -4
+    },
+    "minecraft:glowstone": {
+      "hits": -3
+    },
+    "minecraft:netherrack": {
+      "hits": -2
+    },
+    "minecraft:obsidian": {
+      "hits": 5
+    },
+    "minecraft:stone": {
+      "product": "minecraft:cobblestone"
+    },
+    "minecraft:stone_bricks": {
+      "product": "minecraft:cracked_stone_bricks"
+    },
+    "rotarycraft:miningpipe": {
+      "keep": true,
+      "properties": {
+        "shape": "junction"
+      }
+    },
+    "rotarycraft:shield": {
+      "keep": true
+    }
+  }
+}

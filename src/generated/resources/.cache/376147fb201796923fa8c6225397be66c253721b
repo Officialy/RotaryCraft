@@ -1,4 +1,4 @@
-// 26.3	2026-10-05T16:08:05.3382224	Tags for minecraft:block mod id rotarycraft
+// 26.3	2026-10-08T20:10:04.7765773	Tags for minecraft:block mod id rotarycraft
 bff9a6a04c277f7a4b6541f415f15850fd0eae97 data/c/tags/block/glass_blocks.json
 ce33fe8e60b6faaf22fc500f726a3496944ae405 data/c/tags/block/glass_blocks/hardened.json
 4c5dda38b438bb999673b335b0f5139e7d1d260f data/c/tags/block/glass_panes.json
@@ -10,3 +10,7 @@ ec2eb9dd388042dbfced2b895bea36acbb5486b1 data/minecraft/tags/block/blocks_motion
 5f4f6db7ba74047c173fea91fc233993ebfbad98 data/minecraft/tags/block/washed_away_by_fluids.json
 063835a4798b950acb33523b63e75e5547f7e213 data/rotarycraft/tags/block/defoliator_targets.json
 0187254394e95836359b0ba835e1ccb23af428f7 data/rotarycraft/tags/block/pile_driver_fragile.json
+894d0a83a768b5a9efafedc3ec7f76ea53862ba0 data/rotarycraft/tags/block/railgun_fragile.json
+e4622e46e26d12ed9d2a4fe7e53fec311d05cde3 data/rotarycraft/tags/block/railgun_plants.json
+0e5f7a9b6d884e973bd55f76196eb1f163582b90 data/rotarycraft/tags/block/railgun_sediment.json
+4b6d776f0aebe15ce62d51b5030a073c06035e47 data/rotarycraft/tags/block/railgun_wood.json

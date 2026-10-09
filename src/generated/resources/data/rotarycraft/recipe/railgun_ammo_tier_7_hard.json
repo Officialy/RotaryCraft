@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "rotarycraft:railgun_difficulty",
+      "difficulty": 3
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "p": "minecraft:iron_ingot",
+    "s": {
+      "neoforge:ingredient_type": "rotarycraft:railgun_ammo",
+      "tier": 6
+    }
+  },
+  "pattern": [
+    "p  ",
+    " s ",
+    "  p"
+  ],
+  "result": {
+    "components": {
+      "rotarycraft:railgun_power": 7
+    },
+    "count": 2,
+    "id": "rotarycraft:railgun_ammo"
+  }
+}

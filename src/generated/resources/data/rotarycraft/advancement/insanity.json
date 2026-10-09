@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:extractor",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.insanity.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "rotarycraft:extractor"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.insanity.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

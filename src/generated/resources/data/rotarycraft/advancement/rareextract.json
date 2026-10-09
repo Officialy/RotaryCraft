@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:extractor",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.rareextract.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "rotarycraft:mod_platinum_flakes"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.rareextract.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:borer",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.cutknot.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "rotarycraft:hsla_steel_drill"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.cutknot.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,6 +27,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * power-receiver wiring, and recipe serializer/type registration.
  */
 public class RegistryIntegrityTest {
+    @Test
+    void tungstenFlywheelMaterialCannotBeUsedAsAChargedCoil() {
+        assertSame(reika.rotarycraft.registry.RotaryItems.TUNGSTEN_ALLOY_SPRING,
+                reika.rotarycraft.registry.Flywheels.TUNGSTEN.getRawMaterial());
+        var material = reika.rotarycraft.registry.RotaryItems.TUNGSTEN_ALLOY_SPRING.get();
+        assertFalse(material instanceof reika.rotarycraft.api.interfaces.TensionStorage,
+                "V33a COMPACTS metadata 12 is a crafting material, not windable tension storage");
+    }
 
     /**
      * EngineType ordinals are persisted in BlockEntity NBT ("type"), so reordering

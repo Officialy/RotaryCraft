@@ -39,7 +39,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 /**
- * 26.1 recipe data provider for RotaryCraft.
+ * 26.3 recipe data provider for RotaryCraft.
  * <p>
  * Recipes are transcribed FAITHFULLY from the 1.7.10 source — every pattern, ingredient
  * count, and output size comes directly from {@code reika.rotarycraft.RotaryRecipes} (kept
@@ -131,6 +131,7 @@ public final class RoCRecipeProvider {
 
         @Override
         protected void buildRecipes() {
+            railgunAmmunition();
             ingotChain();
             blastFurnace();
             blastTools();
@@ -195,6 +196,37 @@ public final class RoCRecipeProvider {
             toolItems();
             armor();
             handheldDevices();
+        }
+
+        /** V33a RotaryRecipes: three base slugs, then fifteen exact-tier upgrades. */
+        private void railgunAmmunition() {
+            shaped(RecipeCategory.COMBAT, RotaryItems.SHELL.get(), 16).pattern(" s ").pattern("sns").pattern(" s ")
+                    .define('s', RotaryItems.HSLA_STEEL_INGOT.get()).define('n', RotaryItems.NITRATE.get())
+                    .unlockedBy("has_nitrate", has(RotaryItems.NITRATE.get())).save(out);
+            for (int tier = 0; tier < 16; tier++) for (int difficulty = 1; difficulty <= 3; difficulty++) {
+                int count = tier == 0 ? 3 : difficulty == 1 ? 16 : difficulty == 2 ? 8 : 2;
+                var result = new ItemStackTemplate(RotaryItems.RAILGUN_AMMO.get(), count,
+                        DataComponentPatch.builder().set(reika.rotarycraft.registry.RotaryDataComponents.RAILGUN_POWER.get(), tier).build());
+                var recipe = shaped(RecipeCategory.COMBAT, result);
+                if (tier == 0) recipe.pattern("ss ").pattern("s  ").define('s', RotaryItems.HSLA_STEEL_INGOT.get());
+                else {
+                    String[] pattern = switch (tier % 3) {
+                        case 1 -> new String[]{"p  ", " s ", "  p"};
+                        case 2 -> new String[]{"p p", " s ", "p p"};
+                        default -> new String[]{"ppp", "psp", "ppp"};
+                    };
+                    for (String row : pattern) recipe.pattern(row);
+                    recipe.define('s', new RailgunAmmoIngredient(tier - 1).toVanilla());
+                    if (tier <= 3) recipe.define('p', ItemTags.PLANKS);
+                    else recipe.define('p', tier <= 6 ? Items.STONE : tier <= 9 ? Items.IRON_INGOT
+                            : tier <= 12 ? Items.GOLD_INGOT : RotaryItems.BEDROCK_ALLOY_INGOT.get());
+                }
+                String suffix = tier == 0 || difficulty == 2 ? "" : difficulty == 1 ? "_easy" : "_hard";
+                recipe.unlockedBy("has_hsla_ingot", has(RotaryItems.HSLA_STEEL_INGOT.get()))
+                        .save(tier == 0 ? out : out.withConditions(new RailgunDifficultyCondition(difficulty)),
+                                "rotarycraft:railgun_ammo_tier_" + tier + suffix);
+                if (tier == 0) break;
+            }
         }
 
         // Grinder recipes (consumed by BlockEntityGrinder via RotaryRecipeTypes.GRINDER).

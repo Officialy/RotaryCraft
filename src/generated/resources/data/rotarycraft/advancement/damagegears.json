@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:steelshaft",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.damagegears.description"
+    },
+    "icon": {
+      "id": "rotarycraft:hsla_steel_gear_2x"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.damagegears.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

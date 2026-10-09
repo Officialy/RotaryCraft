@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:pcb",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.borer.description"
+    },
+    "icon": {
+      "id": "rotarycraft:borer"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.borer.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

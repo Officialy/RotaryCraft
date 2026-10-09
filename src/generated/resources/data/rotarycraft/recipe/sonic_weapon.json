@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "p": "rotarycraft:hsla_steel_plate",
+    "s": "rotarycraft:sonar_unit",
+    "t": "rotarycraft:turbine"
+  },
+  "pattern": [
+    "psp",
+    "sts",
+    "psp"
+  ],
+  "result": {
+    "id": "rotarycraft:sonic_weapon"
+  }
+}

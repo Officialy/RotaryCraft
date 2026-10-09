@@ -287,8 +287,11 @@ public class HandbookAuxData {
             }
         }
         else if (h == HandbookRegistry.RAILGUNAMMO) {
-            // TODO 1.21.5: client-side full-recipe iteration removed; restore once a port exists.
-            List<Recipe<?>> li = Collections.emptyList();
+            var recipes = reika.dragonapi.client.SyncedRecipeLookup.recipes();
+            if (recipes == null) return;
+            List<Recipe<?>> li = new ArrayList<>();
+            for (var recipe : recipes.byType(net.minecraft.world.item.crafting.RecipeType.CRAFTING))
+                if (reika.dragonapi.libraries.ReikaRecipeHelper.getRecipeOutput(recipe.value()).is(RotaryItems.RAILGUN_AMMO.get())) li.add(recipe.value());
             api.drawCustomRecipeList(ri, f, li, dx+72, dy+18, dx+162, dy+32);
         }
         else if (h == HandbookRegistry.BEDTOOLS) {

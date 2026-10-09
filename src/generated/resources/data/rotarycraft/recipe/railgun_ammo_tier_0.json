@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "s": "rotarycraft:hsla_steel_ingot"
+  },
+  "pattern": [
+    "ss ",
+    "s  "
+  ],
+  "result": {
+    "components": {
+      "rotarycraft:railgun_power": 0
+    },
+    "count": 3,
+    "id": "rotarycraft:railgun_ammo"
+  }
+}

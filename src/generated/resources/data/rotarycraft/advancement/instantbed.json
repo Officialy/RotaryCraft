@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:bedrockbreaker",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.instantbed.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "rotarycraft:bedrock_breaker"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.instantbed.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

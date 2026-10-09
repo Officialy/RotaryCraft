@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:jetengine",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.gigawatt.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:redstone_block"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.gigawatt.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

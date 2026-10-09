@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:gravelgun",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.doublekill.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "minecraft:arrow"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.doublekill.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

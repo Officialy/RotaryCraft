@@ -8,6 +8,9 @@ import reika.rotarycraft.RotaryCraft;
 
 public class RotaryDamageTypes {
 
+    public static final ResourceKey<DamageType> TURRET = ResourceKey.create(
+            Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "turret"));
+
     public static final ResourceKey<DamageType> MACHINE = ResourceKey.create(
             Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "machine"));
 }

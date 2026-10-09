@@ -10,8 +10,7 @@ public abstract class ItemRailgunAmmoBase extends ItemBasic implements RailGunAm
         super(RotaryItems.itemProperties(), 16);
     }
 
-    public RailGunAmmoType getAmmo(ItemStack is, int pwr) {
-        return null;
-    }
+    @Override
+    public abstract RailGunAmmoType getAmmo(ItemStack is, int pwr);
 
 }

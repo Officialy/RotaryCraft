@@ -1,0 +1,11 @@
+{
+  "values": [
+    "#minecraft:logs",
+    "#minecraft:planks",
+    "#minecraft:wooden_fences",
+    "#minecraft:wool",
+    "#minecraft:wooden_doors",
+    "minecraft:crafting_table",
+    "minecraft:netherrack"
+  ]
+}

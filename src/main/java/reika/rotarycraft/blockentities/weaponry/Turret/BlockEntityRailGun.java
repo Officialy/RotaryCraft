@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.base.blockentity.BlockEntityInventoriedCannon;
@@ -25,12 +24,14 @@ import reika.rotarycraft.entities.EntityRailGunShot;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
-import reika.rotarycraft.registry.RotaryItems;
+import reika.rotarycraft.api.interfaces.RailGunAmmo;
+import reika.rotarycraft.api.interfaces.TargetEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * The Rail Gun is an inventoried auto-turret that fires hypervelocity slugs ({@link EntityRailGunShot})
- * at the nearest valid target, consuming a piece of rail-gun ammo per shot. The slug's power (and thus
- * damage + impact blast) scales with the input torque. Built on the shared inventoried-turret base.
+ * at the nearest valid target, consuming a piece of rail-gun ammo per shot. Ammunition sets mass and impact damage; torque determines affordability. Built on the shared inventoried-turret base.
  */
 public class BlockEntityRailGun extends BlockEntityInventoriedCannon {
 
@@ -78,7 +79,7 @@ public class BlockEntityRailGun extends BlockEntityInventoriedCannon {
 
     @Override
     public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
-        return stack.getItem() == RotaryItems.RAILGUN_AMMO.get();
+        return stack.getItem() instanceof RailGunAmmo;
     }
 
     // ==== Container ====
@@ -124,20 +125,35 @@ public class BlockEntityRailGun extends BlockEntityInventoriedCannon {
         return !isRemoved() && player.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) <= 64;
     }
 
-    @Override
-    public boolean hasAmmo() {
-        return ReikaInventoryHelper.locateInInventory(RotaryItems.RAILGUN_AMMO.get(), itemHandler) >= 0;
+    private int selectedAmmoSlot() {
+        int selected = -1;
+        RailGunAmmo.RailGunAmmoType best = null;
+        for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+            ItemStack stack = itemHandler.getStackInSlot(slot);
+            if (stack.isEmpty() || !(stack.getItem() instanceof RailGunAmmo ammo)) continue;
+            var type = ammo.getAmmo(stack);
+            if (type != null && torque >= type.getRequiredTorque() && (best == null || type.compareTo(best) > 0)) {
+                selected = slot;
+                best = type;
+            }
+        }
+        return selected;
     }
-
-    @Override
-    public void fire(Level world, double[] xyz) {
-        int slot = ReikaInventoryHelper.locateInInventory(RotaryItems.RAILGUN_AMMO.get(), itemHandler);
-        if (slot < 0)
-            return;
-        ReikaInventoryHelper.decrStack(slot, itemHandler);
-        int pw = Math.max(1, ReikaMathLibrary.logbase2(Math.max(1, torque)));
-        BlockPos vpos = BlockPos.containing(xyz[0], xyz[1], xyz[2]);
-        world.addFreshEntity(new EntityRailGunShot(world, worldPosition, vpos, this, pw));
+    @Override public boolean hasAmmo() { return selectedAmmoSlot() >= 0; }
+    @Override public void fire(Level world, double[] xyz) {
+        if (world.isClientSide() || power < MINPOWER) return;
+        int slot = selectedAmmoSlot();
+        if (slot < 0) return;
+        Vec3 delta = new Vec3(xyz[0], xyz[1], xyz[2]).subtract(Vec3.atLowerCornerOf(worldPosition));
+        if (delta.lengthSqr() < 1e-12 || !Double.isFinite(delta.lengthSqr())) return;
+        Vec3 direction = delta.normalize();
+        Vec3 position = new Vec3(worldPosition.getX() + .5 + direction.x, getFiringPositionY(direction.y),
+                worldPosition.getZ() + .5 + direction.z);
+        ItemStack stack = itemHandler.getStackInSlot(slot);
+        var type = ((RailGunAmmo)stack.getItem()).getAmmo(stack);
+        Entity shot = type.getProjectileEntity(world, position, direction.scale(4), this);
+        // Do not destroy ammunition if a third-party type cannot create or admit its projectile.
+        if (shot != null && world.addFreshEntity(shot)) itemHandler.extractItem(slot, 1, false);
     }
 
     @Override
@@ -147,7 +163,9 @@ public class BlockEntityRailGun extends BlockEntityInventoriedCannon {
 
     @Override
     protected boolean isValidTarget(Entity ent) {
-        return ent instanceof LivingEntity le && this.isMobOrUnlistedPlayer(le);
+        if (!ent.isAlive()) return false;
+        if (ent instanceof TargetEntity target) return target.shouldTarget(this, getPlacerID());
+        return ent instanceof LivingEntity le && le.getHealth() > 0 && this.isMobOrUnlistedPlayer(le);
     }
 
     @Override
@@ -181,6 +199,8 @@ public class BlockEntityRailGun extends BlockEntityInventoriedCannon {
         xyzb[3] = 1;
         return xyzb;
     }
+
+    public Entity getClosestMob() { return closestMob; }
 
     @Override
     public int getRange() {

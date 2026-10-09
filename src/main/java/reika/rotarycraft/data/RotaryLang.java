@@ -16,7 +16,7 @@ import java.util.Set;
  * Iterates over the mod's DeferredRegisters and emits a humanised name for each block / item
  * (e.g. {@code wood_flywheel} → {@code "Wood Flywheel"}). Tab labels are added on top.
  * <p>
- * 1.21.5 / NeoForge 26.x: {@code LanguageProvider} now takes a {@link PackOutput} directly
+ * Minecraft 26.3: {@code LanguageProvider} takes a {@link PackOutput} directly
  * (no DataGenerator wrapper) and lives at {@code net.neoforged.neoforge.common.data.LanguageProvider}.
  */
 public class RotaryLang extends LanguageProvider {
@@ -79,6 +79,7 @@ public class RotaryLang extends LanguageProvider {
         add("rcmachinemachine.terraformer", "Terraformer");
         add("gui.rotarycraft.terraformer_status", "%s cells; %s mB water");
         add("item.rotarycraft.tile_selector_linked", "Linked selector to machine at %s");
+        add("item.rotarycraft.railgun_ammo.mass", "%s kg Railgun Ammunition");
         add("item.rotarycraft.tile_selector_selected", "Selected biome cell at %s");
         add("gui.rotarycraft.fuel_engine.fuel", "Fuel: %s / 24000 mB");
         add("gui.rotarycraft.mob_radar.range", "%s m");

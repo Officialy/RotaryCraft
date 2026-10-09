@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:jetengine",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.lightfall.description"
+    },
+    "icon": {
+      "id": "rotarycraft:light_bridge"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.lightfall.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

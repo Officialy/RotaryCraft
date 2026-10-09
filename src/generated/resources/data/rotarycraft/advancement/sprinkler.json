@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:pump",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.sprinkler.description"
+    },
+    "icon": {
+      "id": "rotarycraft:sprinkler"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.sprinkler.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

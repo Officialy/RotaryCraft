@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.extractor.description"
+    },
+    "icon": {
+      "id": "rotarycraft:gold_flakes"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.extractor.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

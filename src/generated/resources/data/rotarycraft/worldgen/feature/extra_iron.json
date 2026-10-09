@@ -1,0 +1,7 @@
+{
+  "type": "rotarycraft:extra_iron",
+  "base_count": 10,
+  "max_y": 67,
+  "min_y": 4,
+  "size": 10
+}

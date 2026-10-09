@@ -1,0 +1,35 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:circuit_board"
+          }
+        ],
+        "player": {
+          "type": "rotarycraft:advancements_enabled"
+        }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.pcb.description"
+    },
+    "icon": {
+      "id": "rotarycraft:circuit_board"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.pcb.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -8,7 +8,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import reika.rotarycraft.RotaryCraft;
 
 /**
- * 1.21.5 datagen entry point for RotaryCraft.
+ * Minecraft 26.3 datagen entry point for RotaryCraft.
  * <p>
  * NeoForge 26.x split {@link GatherDataEvent} into {@link GatherDataEvent.Client} and
  * {@link GatherDataEvent.Server}. Client-side providers (block-/item-models, lang) attach
@@ -32,7 +32,18 @@ public final class RoCDataProviders {
 
     @SubscribeEvent
     public static void onGatherServer(GatherDataEvent.Server event) {
-        event.createWorldRegistryObjects(RoCWorldGenProvider.buildRegistrySet());
+        event.createWorldRegistryObjects(RoCWorldGenProvider.buildRegistrySet().add(Registries.DAMAGE_TYPE, context ->
+                context.register(reika.rotarycraft.registry.RotaryDamageTypes.TURRET,
+                        new net.minecraft.world.damagesource.DamageType("turret", net.minecraft.world.damagesource.DamageScaling.NEVER, .1F))));
+        event.createProvider((output, lookup) -> new net.minecraft.data.tags.DamageTypeTagsProvider(
+                output, event.getWorldLookupProvider(), RotaryCraft.MODID) {
+            @Override protected void addTags(net.minecraft.core.HolderLookup.Provider registries) {
+                var type = reika.rotarycraft.registry.RotaryDamageTypes.TURRET;
+                tag(net.minecraft.tags.DamageTypeTags.BYPASSES_ARMOR).add(type);
+                tag(net.minecraft.tags.DamageTypeTags.BYPASSES_SHIELD).add(type);
+                tag(net.minecraft.tags.DamageTypeTags.IS_PROJECTILE).add(type);
+            }
+        });
         event.createProvider(RoCWorldGenProvider::new);
         event.createProvider(RoCLootModifierProvider::new);
         // Recipes, loot tables, and advancements are reloadable registries in 26.3.

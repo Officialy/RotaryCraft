@@ -29,5 +29,11 @@ public final class RotaryDataComponents {
                     .persistent(ScaleChestContents.CODEC)
                     .networkSynchronized(ScaleChestContents.STREAM_CODEC));
 
+    /** Original railgun metadata 0..15; persistence and tracking use the same tier identity. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RAILGUN_POWER =
+            COMPONENTS.registerComponentType("railgun_power", b -> b
+                    .persistent(com.mojang.serialization.Codec.intRange(0, 15))
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+
     private RotaryDataComponents() {}
 }

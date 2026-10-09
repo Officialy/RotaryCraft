@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:makesteel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.gravelgun.description"
+    },
+    "icon": {
+      "id": "rotarycraft:gravel_gun"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.gravelgun.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:bedrockbreaker",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.bedrocktools.description"
+    },
+    "icon": {
+      "id": "rotarycraft:bedrock_alloy_pickaxe"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.bedrocktools.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

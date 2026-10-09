@@ -147,6 +147,18 @@ public class RotaryCraft extends DragonAPIMod {
 
         RotaryRecipeTypes.RECIPE_TYPES.register(modEventBus);
         RotaryRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+        reika.rotarycraft.auxiliary.recipemanagers.RailgunAmmoIngredient.TYPES.register(modEventBus);
+        reika.rotarycraft.data.RailgunDifficultyCondition.TYPES.register(modEventBus);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(
+                (net.neoforged.neoforge.event.level.BlockEvent.NeighborNotifyEvent event) -> {
+                    if (event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)
+                        RailgunBlockDamage.get(level).forgetChanged(level, event.getPos());
+                });
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(
+                (net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent event) -> {
+                    if (event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)
+                        RailgunBlockDamage.get(level).forget(event.getPos());
+                });
 
 //   todo     ReikaJavaLibrary.initClass(HandbookRegistry.class);
         ReikaJavaLibrary.initClass(SoundRegistry.class);

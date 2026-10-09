@@ -86,7 +86,8 @@ public class RotaryItems {
     public static final DeferredItem<Item> RED_GOLD_INGOT = reg("red_gold_ingot", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> WORM_GEAR = reg("worm_gear", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> HSLA_STEEL_SPRING = reg("hsla_steel_spring", ItemCoil::new);
-    public static final DeferredItem<Item> TUNGSTEN_ALLOY_SPRING = reg("tungsten_alloy_spring", ItemCoil::new);
+    // V33a ItemStacks.springtungsten is COMPACTS metadata 12: a stackable tungsten-alloy material, not a charged coil.
+    public static final DeferredItem<Item> TUNGSTEN_ALLOY_SPRING = reg("tungsten_alloy_spring", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> BEDROCK_ALLOY_SPRING = reg("bedrock_alloy_spring", ItemCoil::new);
     public static final DeferredItem<Item> HEAT_RAY_BARREL = reg("heat_ray_barrel", () -> new Item(itemProperties()));
     public static final DeferredItem<Item> HEAT_RAY_CORE = reg("heat_ray_core", () -> new Item(itemProperties()));

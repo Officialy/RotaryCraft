@@ -1,0 +1,35 @@
+{
+  "parent": "rotarycraft:steelshaft",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:cvt"
+          }
+        ],
+        "player": {
+          "type": "rotarycraft:advancements_enabled"
+        }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.cvt.description"
+    },
+    "icon": {
+      "id": "rotarycraft:cvt"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.cvt.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "rotarycraft:damagegears",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "rotarycraft:diamond_gearbox_8x"
+          }
+        ],
+        "player": {
+          "type": "rotarycraft:advancements_enabled"
+        }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.diamondgears.description"
+    },
+    "icon": {
+      "id": "rotarycraft:diamond_gearbox_8x"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.diamondgears.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

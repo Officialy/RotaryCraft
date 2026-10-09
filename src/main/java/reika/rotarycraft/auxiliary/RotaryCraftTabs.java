@@ -146,7 +146,7 @@ public class RotaryCraftTabs {
             event.accept(RotaryItems.GOLD_COIL.get());
             event.accept(RotaryItems.HIGH_TEMPERATURE_COMBUSTOR.get());
             event.accept(RotaryItems.SPRING_STEEL_INGOT.get());
-            event.accept(RotaryItems.RAILGUN_AMMO.get());
+            for (int tier = 0; tier < 16; tier++) event.accept(reika.rotarycraft.items.ItemRailGunAmmo.stack(tier));
             event.accept(RotaryItems.TARGET.get());
             event.accept(RotaryItems.SLIDE.get());
             event.accept(RotaryItems.SHELL.get());

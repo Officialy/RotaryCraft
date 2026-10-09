@@ -1,4 +1,4 @@
-// 26.3	2026-10-07T14:07:55.240112	Model Definitions - rotarycraft
+// 26.3	2026-10-08T20:09:45.5398035	Model Definitions - rotarycraft
 f8a25e5cd83b08aad4c45621a8ece222635e462b assets/rotarycraft/blockstates/aa_gun.json
 272ee6475e831be15a30565f6f47e1f3bf31c0df assets/rotarycraft/blockstates/ac_engine.json
 3fbab489acbd809dad821b50050c3c4acab389de assets/rotarycraft/blockstates/aerosolizer.json
@@ -914,7 +914,7 @@ a1f79af4c2724fa5f2b4f7a53e4d3778713a5095 assets/rotarycraft/items/quartz_solutio
 8d9f94459d8314dc89fff040fc101626887ad3e7 assets/rotarycraft/items/radiator.json
 897612eddd1750e16f639e78221a8d5895552320 assets/rotarycraft/items/railgun.json
 86652f66e9824cd644c9651e5f93a0dc63ca4ab5 assets/rotarycraft/items/railgun_accelerator.json
-35898f670ad5aa8c0ab02b15fda2097fcda0ae37 assets/rotarycraft/items/railgun_ammo.json
+ca5c2fbd2466072509e299052bbe027bb430b5da assets/rotarycraft/items/railgun_ammo.json
 3e110baac62a34f6052adcf2cf1437f865137c2c assets/rotarycraft/items/range_finder.json
 29cc25117922f40b35e9f4b7e6befa40289b1ba4 assets/rotarycraft/items/raw_iron_dust.json
 e0e7aa4d9dc0ac9422e1906cd00abeaca8996bf5 assets/rotarycraft/items/raw_iron_slurry.json
@@ -1893,6 +1893,9 @@ c6828713d047dce0765bb6b8c1fc5d1111ea28fc assets/rotarycraft/models/item/radar_un
 cf7e40fd5e6a0501f17921fc2abf5854817cb88a assets/rotarycraft/models/item/radiator.json
 fef4f4543efb674f1891177823ad8d8b6752cf8f assets/rotarycraft/models/item/railgun_accelerator.json
 8b96e99f9bcce3e51cdff519f0ef984b87f52a88 assets/rotarycraft/models/item/railgun_ammo.json
+77cdc43a1c45671f3d57afc04ddd07e0b449e410 assets/rotarycraft/models/item/railgun_ammo_1.json
+14b623c7286d631b335fd6ef19a5cd94837ac726 assets/rotarycraft/models/item/railgun_ammo_2.json
+f3e2f6faead553e1fbf958547e3af686baf20891 assets/rotarycraft/models/item/railgun_ammo_3.json
 9f815a757deb462fcbbf854a5312850a8fbcd014 assets/rotarycraft/models/item/range_finder.json
 f9a363c9856d00bbb9584cdafb0e22388446ae5d assets/rotarycraft/models/item/raw_iron_dust.json
 1b124adac39c233eb89268032cfbb304ceb4ef64 assets/rotarycraft/models/item/raw_iron_slurry.json

@@ -1,0 +1,32 @@
+{
+  "values": {
+    "minecraft:ender_dragon": "minecraft:the_end",
+    "twilightforest:hydra": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "twilightforest"
+        }
+      ],
+      "neoforge:value": "twilightforest:twilight_forest"
+    },
+    "twilightforest:naga": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "twilightforest"
+        }
+      ],
+      "neoforge:value": "twilightforest:twilight_forest"
+    },
+    "twilightforest:ur_ghast": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "twilightforest"
+        }
+      ],
+      "neoforge:value": "twilightforest:twilight_forest"
+    }
+  }
+}

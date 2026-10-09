@@ -1,0 +1,14 @@
+{
+  "values": [
+    "#minecraft:leaves",
+    "#minecraft:flowers",
+    "#minecraft:saplings",
+    "#minecraft:flower_pots",
+    "minecraft:sugar_cane",
+    "minecraft:lily_pad",
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:cobweb",
+    "minecraft:cactus"
+  ]
+}

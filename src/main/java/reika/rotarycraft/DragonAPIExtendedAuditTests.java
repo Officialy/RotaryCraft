@@ -19,10 +19,75 @@ import reika.rotarycraft.registry.RotaryBlocks;
 final class DragonAPIExtendedAuditTests {
     private static final BlockPos POS = new BlockPos(4, 1, 4);
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
+        DragonAPIBlockArrayTests.register(event, environment);
+        RotaryGameTests.register(event, environment, "dragonapi_extended_dropper", 80, DragonAPIExtendedAuditTests::dropper);
         RotaryGameTests.register(event, environment, "dragonapi_extended_world", 40, DragonAPIExtendedAuditTests::world);
         RotaryGameTests.register(event, environment, "dragonapi_extended_items", 40, DragonAPIExtendedAuditTests::items);
         RotaryGameTests.register(event, environment, "dragonapi_extended_menu", 40, DragonAPIExtendedAuditTests::menu);
         RotaryGameTests.register(event, environment, "dragonapi_extended_resources", 40, DragonAPIExtendedAuditTests::resources);
+        RotaryGameTests.register(event, environment, "dragonapi_lua_enchantments", 40, DragonAPIExtendedAuditTests::luaEnchantments);
+    }
+
+    private static void luaEnchantments(GameTestHelper h) {
+        var enchantments = h.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+        var sharpness = enchantments.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SHARPNESS);
+        var unbreaking = enchantments.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.UNBREAKING);
+        var stack = new ItemStack(Items.IRON_SWORD, 2); stack.enchant(sharpness, 3);
+        var stored = new net.minecraft.world.item.enchantment.ItemEnchantments.Mutable(net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY);
+        stored.set(unbreaking, 2); stack.set(DataComponents.STORED_ENCHANTMENTS, stored.toImmutable());
+        var custom = new CompoundTag(); custom.putString("owner", "retained");
+        stack.set(DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.of(custom));
+        var before = stack.copy();
+        var output = new reika.dragonapi.instantiable.io.LuaBlock.ItemStackLuaBlock("item", null,
+                new reika.dragonapi.instantiable.io.LuaBlock.LuaBlockDatabase());
+        output.write(stack, true); var map = output.asHashMap();
+        h.assertTrue("minecraft:iron_sword".equals(map.get("item_id")) && (int)map.get("stack_size") == 2,
+                "Lua item export must use the registry ID, not its translation key");
+        var components = (Map<?, ?>)map.get("components");
+        h.assertTrue(Map.of("minecraft:sharpness", 3).equals(components.get("minecraft:enchantments"))
+                && Map.of("minecraft:unbreaking", 2).equals(components.get("minecraft:stored_enchantments")),
+                "Native applied/stored components retain separate registry identities and levels");
+        h.assertTrue(Map.of("owner", "retained").equals(map.get("nbt"))
+                && ItemStack.isSameItemSameComponents(stack, before) && stack.getCount() == before.getCount(),
+                "Export must conserve custom data and leave its source stack unchanged");
+        var tag = new CompoundTag(); var list = new net.minecraft.nbt.ListTag(); var old = new CompoundTag();
+        old.putShort("id", (short)16); old.putShort("lvl", (short)3); list.add(old); tag.put("ench", list);
+        var legacy = new reika.dragonapi.instantiable.io.LuaBlock.NBTLuaBlock("nbt", null,
+                new reika.dragonapi.instantiable.io.LuaBlock.LuaBlockDatabase(), tag, true, h.getLevel().registryAccess());
+        h.assertTrue(legacy.asHashMap().get("Enchantments").equals(List.of(
+                net.minecraft.world.item.enchantment.Enchantment.getFullname(sharpness, 3).getString()))
+                && ((List<?>)legacy.asHashMap().get("ench")).size() == 1,
+                "Explicit native registry resolves legacy names without discarding original entries");
+        h.succeed();
+    }
+    private static void dropper(GameTestHelper h) {
+        var level = h.getLevel(); var pos = net.minecraft.world.phys.Vec3.atCenterOf(h.absolutePos(POS));
+        var player = DragonAPIAuditTests.player(h); player.setPos(pos);
+        level.getChunkSource().move(player);
+        var item = new net.minecraft.world.entity.item.ItemEntity(level, pos.x, pos.y, pos.z, new ItemStack(Items.DIAMOND));
+        item.setNoGravity(true); item.setPickUpDelay(200);
+        h.assertTrue(!reika.dragonapi.libraries.io.PacketValidation.canRequestItemDropper(player, level, item), "unspawned IDs must be denied");
+        level.addFreshEntity(item);
+        reika.dragonapi.libraries.registry.ReikaItemHelper.setDropper(item, player);
+        h.assertTrue(player.getUUID().toString().equals(reika.dragonapi.libraries.registry.ReikaItemHelper.getDropperId(item)), "dropper is read from persistent entity data");
+        h.assertTrue(reika.dragonapi.libraries.registry.ReikaItemHelper.getDropper(item) == player, "online dropper lookup resolves the native player");
+        h.succeedWhen(() -> {
+            player.connection.chunkSender.onChunkBatchReceivedByClient(64);
+            player.connection.chunkSender.sendNextChunks(player);
+            level.getChunkSource().move(player);
+            h.assertTrue(level.getChunkSource().chunkMap.getPlayersWatching(item).contains(player), "native item tracking must be established");
+            h.assertTrue(reika.dragonapi.libraries.io.PacketValidation.canRequestItemDropper(player, level, item), "a tracking player may read metadata without being the item's owner");
+            var offline = java.util.UUID.randomUUID(); item.getPersistentData().putString("dropper", offline.toString());
+            h.assertTrue(offline.toString().equals(reika.dragonapi.libraries.registry.ReikaItemHelper.getDropperId(item)) && reika.dragonapi.libraries.registry.ReikaItemHelper.getDropper(item) == null, "offline ownership remains valid metadata");
+            item.getPersistentData().putString("dropper", "1-1-1-1-1");
+            h.assertTrue(reika.dragonapi.libraries.registry.ReikaItemHelper.getDropperId(item) == null, "malformed legacy UUID aliases must not be returned");
+            item.setItem(ItemStack.EMPTY);
+            h.assertTrue(!reika.dragonapi.libraries.io.PacketValidation.canRequestItemDropper(player, level, item), "empty entities must be denied");
+            item.setItem(new ItemStack(Items.DIAMOND)); player.setPos(pos.add(200,0,0));
+            h.assertTrue(!reika.dragonapi.libraries.io.PacketValidation.canRequestItemDropper(player, level, item), "a stale tracker outside the distance limit must be denied");
+            player.setPos(pos); item.discard();
+            h.assertTrue(!reika.dragonapi.libraries.io.PacketValidation.canRequestItemDropper(player, level, item), "removed entities must be denied");
+        });
     }
     private static void world(GameTestHelper h) {
         var level = h.getLevel(); var pos = h.absolutePos(POS);

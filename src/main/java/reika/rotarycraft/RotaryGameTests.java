@@ -114,6 +114,7 @@ public final class RotaryGameTests {
                 Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "default"),
                 new TestEnvironmentDefinition.AllOf(List.of()));
         RotaryAdvancementTests.register(event, env);
+        RotaryRailgunTests.register(event, env);
         DragonAPIAuditTests.register(event, env);
         DragonAPIExtendedAuditTests.register(event, env);
         register(event, env, "audit_vacuum_item_conservation", 40, RotaryGameTests::auditVacuumItemConservation);

@@ -356,6 +356,22 @@ public class RoCModelProvider extends ModelProvider {
             // already emitted in the block pass — ModelProvider's ItemInfoCollector rejects
             // duplicate keys (e.g. `canola_seeds` exists both as a Block and as a separate Item).
             if (blockItemsHandled.contains(item)) return;
+            if (item == RotaryItems.RAILGUN_AMMO.get()) {
+                var models = new java.util.ArrayList<net.minecraft.client.renderer.item.ItemModel.Unbaked>();
+                for (int group = 0; group < 4; group++) {
+                    String name = "railgun_ammo" + (group == 0 ? "" : "_" + group);
+                    Identifier id = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "item/" + name);
+                    models.add(ItemModelUtils.plainModel(ModelTemplates.FLAT_ITEM.create(id,
+                            new TextureMapping().put(TextureSlot.LAYER0, new Material(id)), modelOut)));
+                }
+                itemModelOut.accept(item, new net.minecraft.client.renderer.item.RangeSelectItemModel.Unbaked(
+                        java.util.Optional.empty(), new reika.rotarycraft.renders.item.RailgunPowerProperty(), 1,
+                        java.util.List.of(new net.minecraft.client.renderer.item.RangeSelectItemModel.Entry(7, models.get(1)),
+                                new net.minecraft.client.renderer.item.RangeSelectItemModel.Entry(10, models.get(2)),
+                                new net.minecraft.client.renderer.item.RangeSelectItemModel.Entry(13, models.get(3))),
+                        java.util.Optional.of(models.getFirst())));
+                return;
+            }
             if (item instanceof reika.rotarycraft.items.ItemSpawner) {
                 itemModelOut.accept(item, ItemModelUtils.plainModel(Identifier.fromNamespaceAndPath("minecraft", "block/spawner"))); return;
             }

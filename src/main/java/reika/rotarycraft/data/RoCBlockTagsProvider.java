@@ -18,6 +18,11 @@ import reika.rotarycraft.registry.RotaryBlocks;
  */
 public class RoCBlockTagsProvider extends BlockTagsProvider {
 
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> RAILGUN_PLANTS = rotary("railgun_plants");
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> RAILGUN_FRAGILE = rotary("railgun_fragile");
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> RAILGUN_WOOD = rotary("railgun_wood");
+    public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> RAILGUN_SEDIMENT = rotary("railgun_sediment");
+
     public static final net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> PILE_DRIVER_FRAGILE =
             net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK,
                     net.minecraft.resources.Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "pile_driver_fragile"));
@@ -31,6 +36,25 @@ public class RoCBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        var plants = tag(RAILGUN_PLANTS).addTag(BlockTags.LEAVES).addTag(BlockTags.FLOWERS)
+                .addTag(BlockTags.SAPLINGS).addTag(BlockTags.FLOWER_POTS);
+        var fragileRail = tag(RAILGUN_FRAGILE).addTag(BlockTags.SIGNS);
+        var wood = tag(RAILGUN_WOOD).addTag(BlockTags.LOGS).addTag(BlockTags.PLANKS)
+                .addTag(BlockTags.WOODEN_FENCES).addTag(BlockTags.WOOL).addTag(BlockTags.WOODEN_DOORS);
+        var sediment = tag(RAILGUN_SEDIMENT).addTag(BlockTags.SAND);
+        for (var block : new net.minecraft.world.level.block.Block[]{net.minecraft.world.level.block.Blocks.SUGAR_CANE,
+                net.minecraft.world.level.block.Blocks.LILY_PAD, net.minecraft.world.level.block.Blocks.BROWN_MUSHROOM,
+                net.minecraft.world.level.block.Blocks.RED_MUSHROOM, net.minecraft.world.level.block.Blocks.COBWEB,
+                net.minecraft.world.level.block.Blocks.CACTUS}) plants.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
+        for (var block : new net.minecraft.world.level.block.Block[]{net.minecraft.world.level.block.Blocks.GLASS,
+                net.minecraft.world.level.block.Blocks.GLASS_PANE, net.minecraft.world.level.block.Blocks.GLOWSTONE,
+                net.minecraft.world.level.block.Blocks.BROWN_MUSHROOM_BLOCK, net.minecraft.world.level.block.Blocks.RED_MUSHROOM_BLOCK,
+                net.minecraft.world.level.block.Blocks.LADDER}) fragileRail.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
+        for (var block : new net.minecraft.world.level.block.Block[]{net.minecraft.world.level.block.Blocks.CRAFTING_TABLE,
+                net.minecraft.world.level.block.Blocks.NETHERRACK}) wood.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
+        for (var block : new net.minecraft.world.level.block.Block[]{net.minecraft.world.level.block.Blocks.GRAVEL,
+                net.minecraft.world.level.block.Blocks.CLAY, net.minecraft.world.level.block.Blocks.SOUL_SAND})
+            sediment.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
         var fragile = tag(PILE_DRIVER_FRAGILE).addTag(BlockTags.SAPLINGS);
         for (var block : new net.minecraft.world.level.block.Block[]{net.minecraft.world.level.block.Blocks.GLASS, net.minecraft.world.level.block.Blocks.GLASS_PANE,
                 net.minecraft.world.level.block.Blocks.GLOWSTONE, net.minecraft.world.level.block.Blocks.CACTUS, net.minecraft.world.level.block.Blocks.SUGAR_CANE,
@@ -80,5 +104,10 @@ public class RoCBlockTagsProvider extends BlockTagsProvider {
     private static net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> common(String path) {
         return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK,
                 net.minecraft.resources.Identifier.fromNamespaceAndPath("c", path));
+    }
+
+    private static net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> rotary(String path) {
+        return net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                net.minecraft.resources.Identifier.fromNamespaceAndPath(RotaryCraft.MODID, path));
     }
 }

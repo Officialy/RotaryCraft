@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:jetfuel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.mrads32.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "rotarycraft:angular_transducer"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.mrads32.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

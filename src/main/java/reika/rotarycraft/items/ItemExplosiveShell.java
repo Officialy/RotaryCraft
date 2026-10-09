@@ -4,7 +4,9 @@ import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.base.ItemRailgunAmmoBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.phys.Vec3;
+import reika.rotarycraft.entities.EntityExplosiveShell;
+import reika.rotarycraft.blockentities.weaponry.Turret.BlockEntityRailGun;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -30,8 +32,13 @@ public class ItemExplosiveShell extends ItemRailgunAmmoBase {
 
         @Override
         public Entity getProjecBlockEntity(Level world, BlockPos pos, BlockPos vpos, BlockEntity railgun) {
-            //return new EntityExplosiveShell(world, pos, vpos, (BlockEntityRailGun) railgun);
-            return new PrimedTnt(world, pos.getX(), pos.getY(), pos.getZ(), null);
+            return getProjectileEntity(world, Vec3.atCenterOf(pos), Vec3.atCenterOf(vpos).subtract(Vec3.atCenterOf(pos)).normalize().scale(4), railgun);
+        }
+
+        @Override
+        public Entity getProjectileEntity(Level world, Vec3 position, Vec3 velocity, BlockEntity railgun) {
+            if (!(railgun instanceof BlockEntityRailGun gun)) throw new IllegalArgumentException("An explosive shell needs its firing cannon");
+            return new EntityExplosiveShell(world, position, velocity, gun);
         }
 
         @Override

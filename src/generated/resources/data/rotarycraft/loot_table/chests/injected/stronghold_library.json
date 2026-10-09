@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "rotarycraft:chest_tier",
+            "tier": 3
+          },
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 1,
+              "min": 1
+            }
+          },
+          "name": "rotarycraft:angular_transducer",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 100
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 10,
+        "min": 2
+      }
+    }
+  ],
+  "random_sequence": "rotarycraft:chests/injected/stronghold_library"
+}

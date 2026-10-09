@@ -1,0 +1,26 @@
+{
+  "parent": "rotarycraft:jetfuel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.netherheatray.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "rotarycraft:heat_ray"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.netherheatray.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

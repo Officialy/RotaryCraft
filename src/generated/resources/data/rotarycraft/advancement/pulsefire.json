@@ -1,0 +1,25 @@
+{
+  "parent": "rotarycraft:jetfuel",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.rotarycraft.pulsefire.description"
+    },
+    "icon": {
+      "id": "rotarycraft:pulse_jet_furnace"
+    },
+    "title": {
+      "translate": "advancements.rotarycraft.pulsefire.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
