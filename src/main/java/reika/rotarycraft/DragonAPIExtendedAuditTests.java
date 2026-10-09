@@ -20,6 +20,7 @@ final class DragonAPIExtendedAuditTests {
     private static final BlockPos POS = new BlockPos(4, 1, 4);
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         DragonAPIBlockArrayTests.register(event, environment);
+        DragonAPIRecursiveBreakerTests.register(event, environment);
         RotaryGameTests.register(event, environment, "dragonapi_extended_dropper", 80, DragonAPIExtendedAuditTests::dropper);
         RotaryGameTests.register(event, environment, "dragonapi_extended_world", 40, DragonAPIExtendedAuditTests::world);
         RotaryGameTests.register(event, environment, "dragonapi_extended_items", 40, DragonAPIExtendedAuditTests::items);
