@@ -11,7 +11,8 @@ package reika.rotarycraft.items;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.CompoundTag;
+import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -43,23 +44,21 @@ public class ItemDisk extends ItemRotaryTool implements MusicDataItem {
     }
 
     @Override
-    public MusicScore getMusic(ItemStack is) {
-        MusicScore mus = new MusicScore(16);
-        int[] pos = new int[16];
-        for (int i = 0; i < 16; i++) {
-            if (is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains("ch" + i)) {
-                ListTag li = is.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getListOrEmpty("ch" + i);
-//                for (int k = 0; k < li.size(); k++) {
-//                    CompoundTag nbt = li.getCompoundOrEmpty(k);
-//                    //ReikaJavaLibrary.pConsole(i+":"+k+":"+nbt, Dist.DEDICATED_SERVER);
-//                    BlockEntityMusicBox.Note n = BlockEntityMusicBox.Note.load(nbt);
-//                    if (!n.isRest())
-//                        mus.addNote(pos[i], i, n.getMusicKey(), n.voice.MIDIvalue, 128, n.getTickLength(), !n.voice.isPitched());
-//                    pos[i] += n.getTickLength();
-//                }
+    public MusicScore getMusic(ItemStack stack) {
+        MusicScore score = new MusicScore(16);
+        CompoundTag data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        for (int channel = 0; channel < score.countTracks(); channel++) {
+            ListTag track = data.getListOrEmpty("ch" + channel);
+            int time = 0;
+            for (int index = 0; index < track.size(); index++) {
+                BlockEntityMusicBox.Note note = BlockEntityMusicBox.Note.load(track.getCompoundOrEmpty(index));
+                if (!note.isRest()) {
+                    score.addNote(time, channel, note.getMusicKey(), note.voice().MIDIvalue,
+                            128, note.getTickLength(), !note.voice().isPitched());
+                }
+                time += note.getTickLength();
             }
         }
-        return mus;
+        return score;
     }
-
 }

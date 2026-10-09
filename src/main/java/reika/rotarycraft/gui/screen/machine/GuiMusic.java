@@ -85,7 +85,7 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
 
         ItemStack[] items = {
                 new ItemStack(Blocks.GRASS_BLOCK),
-//          todo      new ItemStack(Blocks.planks),
+                new ItemStack(Blocks.OAK_PLANKS),
                 new ItemStack(Blocks.NETHER_PORTAL),
                 new ItemStack(Blocks.STONE),
                 new ItemStack(Blocks.SAND),
@@ -101,8 +101,7 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         boolean handled = super.mouseClicked(event, doubleClick);
-        input.mouseClicked(event.x(), event.y(), event.button());
-        return handled;
+        return handled || input.mouseClicked(event.x(), event.y(), event.button());
     }
 
     @Override
@@ -146,8 +145,7 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
     /**
      * Draw the background layer for the GuiContainer (everything behind the items)
      */
-    // 1.21.5: Screen.extractBackground is public; GuiGraphicsExtractor.pose() returns
-    // Matrix3x2fStack rather than PoseStack so the line-drawing helpers need a port.
+    // 26.3: draw the keyboard through native screen extraction.
     @Override
     public void extractBackground(GuiGraphicsExtractor stack, int par2, int par3, float par1) {
         super.extractBackground(stack, par2, par3, par1);
@@ -181,7 +179,7 @@ public class GuiMusic extends GuiNonPoweredMachine<BlockEntityMusicBox, MusicCon
 
     @Override
     public void onKeyPressed(PianoKeyboard.PianoKey key) {
-        this.actionPerformed(key, 0); //todo id
+        this.actionPerformed(key, key.note);
     }
 
     @Override

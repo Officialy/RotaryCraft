@@ -295,7 +295,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     }
 
     private void dispatchTrack(MusicScore mus) {
-        //ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEAR.ordinal(), this); todo noteblock packets
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEAR.ordinal(), this);
         for (int i = 0; i < mus.countTracks(); i++) {
             ScoreTrack track = mus.getTrack(i);
             if (track == null)
