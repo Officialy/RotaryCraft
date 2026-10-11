@@ -21,6 +21,7 @@ final class DragonAPIExtendedAuditTests {
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         DragonAPIBlockArrayTests.register(event, environment);
         DragonAPIBlockArrayComputerTests.register(event, environment);
+        DragonAPIMachineBlockTests.register(event, environment);
         DragonAPIRecursiveBreakerTests.register(event, environment);
         DragonAPITreeBreakerTests.register(event, environment);
         DragonAPIFlammabilityTests.register(event, environment);

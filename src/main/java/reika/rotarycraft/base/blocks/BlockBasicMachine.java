@@ -17,6 +17,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -30,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -89,6 +91,23 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
 
     public BlockBasicMachine(BlockBehaviour.Properties properties) {
         super(properties.strength(4, 15));
+    }
+
+    @Override
+    protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof reika.dragonapi.base.BlockEntityBase tile && tile.isUnMineable())
+            return 0;
+        MachineRegistry machine = MachineRegistry.getMachineMapping(this);
+        if (machine == null || !machine.isPipe())
+            return super.getDestroyProgress(state, player, level, pos);
+
+        // Read the synced setting during mining: configs load after block registration.
+        // Pipe hardness was independent of machine hardness in the original implementation.
+        float hardness = Mth.clamp(ConfigRegistry.PIPEHARDNESS.getFloat(), 0F, 1F);
+        if (hardness == 0F)
+            return 1F;
+        return super.getDestroyProgress(state, player, level, pos)
+                * state.getDestroySpeed(level, pos) / hardness;
     }
 
     /**
@@ -235,6 +254,12 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         // events (place / break / connect) rather than every-tick, so the log-IO cost won't
         // taint the per-tick measurements.
         PipeDebugLog.maybeDumpStats();
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        InteractionResult result = this.useItemOn(ItemStack.EMPTY, state, level, pos, player, InteractionHand.MAIN_HAND, hit);
+        return result == InteractionResult.FAIL ? InteractionResult.PASS : result;
     }
 
     /**
