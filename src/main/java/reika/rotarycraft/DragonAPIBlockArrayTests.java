@@ -20,6 +20,8 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import reika.dragonapi.instantiable.data.blockstruct.FilledBlockArray;
+import reika.dragonapi.instantiable.data.blockstruct.BlockArray;
+import reika.dragonapi.instantiable.data.immutable.BlockBox;
 import reika.dragonapi.instantiable.data.blockstruct.SlicedBlockBlueprint;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
 import reika.dragonapi.interfaces.BlockCheck;
@@ -31,6 +33,99 @@ final class DragonAPIBlockArrayTests {
         RotaryGameTests.register(event, environment, "dragonapi_arrays_blueprint", 40, DragonAPIBlockArrayTests::blueprint);
         RotaryGameTests.register(event, environment, "dragonapi_arrays_entities", 40, DragonAPIBlockArrayTests::entities);
         RotaryGameTests.register(event, environment, "dragonapi_arrays_fluid", 40, DragonAPIBlockArrayTests::fluid);
+        RotaryGameTests.register(event, environment, "dragonapi_arrays_callback_depth", 40, DragonAPIBlockArrayTests::callbackDepth);
+        RotaryGameTests.register(event, environment, "dragonapi_arrays_callback_bounds", 40, DragonAPIBlockArrayTests::callbackBounds);
+        RotaryGameTests.register(event, environment, "dragonapi_arrays_callback_predecessor", 40, DragonAPIBlockArrayTests::callbackPredecessor);
+    }
+
+    private static void callbackDepth(GameTestHelper h) {
+        BlockPos root = h.absolutePos(new BlockPos(2, 2, 2));
+        BlockArray array = new BlockArray(); array.maxDepth = 20000;
+        int[] calls = {0};
+        array.recursiveAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                root.getX(), root.getY(), root.getZ(), root.getX() + 19999, root.getY(), root.getZ(),
+                (world, position, from) -> {
+                    h.assertTrue(from.equals(root), "historical recursive callback receives its fixed origin");
+                    calls[0]++; return true;
+                });
+        h.assertTrue(array.getSize() == 20000 && calls[0] == 20000 && !array.isOverflowing()
+                && array.hasBlock(root.offset(19999, 0, 0)), "twenty-thousand-cell search completes without consuming the Java stack");
+        array.clear(); array.maxDepth = 2;
+        array.addBlockCoordinate(root); array.addBlockCoordinate(root.east());
+        array.recursiveAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                root.getX(), root.getY(), root.getZ(), root.getX() + 3, root.getY(), root.getZ() + 3,
+                (world, position, from) -> true);
+        h.assertTrue(array.getSize() == 6 && array.hasBlock(root.east(2)) && !array.hasBlock(root.east(3)),
+                "shortest-hop depth is inclusive and existing membership does not block traversal");
+        h.succeed();
+    }
+
+    private static void callbackBounds(GameTestHelper h) {
+        BlockPos root = h.absolutePos(new BlockPos(3, 2, 3));
+        BlockArray array = new BlockArray(); array.extraSpread = true; array.maxDepth = 1;
+        array.bounds = new BlockBox(root.getX() - 1, root.getY(), root.getZ() - 1,
+                root.getX() + 1, root.getY(), root.getZ() + 1);
+        array.iterativeAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                root.getX() - 3, root.getY(), root.getZ() - 3, root.getX() + 3, root.getY(), root.getZ() + 3,
+                (world, position, from) -> {
+                    h.assertTrue(array.bounds.isBlockInside(position), "rejected bounds never reach the callback"); return true;
+                });
+        h.assertTrue(array.getSize() == 9, "diagonal spread admits all eight in-bounds neighbors at one hop");
+        array.clear(); array.taxiCabDistance = true;
+        array.recursiveAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                root.getX() - 3, root.getY(), root.getZ() - 3, root.getX() + 3, root.getY(), root.getZ() + 3,
+                (world, position, from) -> true);
+        h.assertTrue(array.getSize() == 5, "taxicab limit excludes diagonal positions independently of hop depth");
+        array.clear(); array.bounds = BlockBox.infinity(); array.clampToChunkLoad = true;
+        BlockPos unloaded = root.offset(4096, 0, 4096);
+        array.recursiveAddCallbackWithBounds(h.getLevel(), unloaded.getX(), unloaded.getY(), unloaded.getZ(),
+                unloaded.getX(), unloaded.getY(), unloaded.getZ(), unloaded.getX(), unloaded.getY(), unloaded.getZ(),
+                (world, position, from) -> { h.fail("unloaded target reached callback"); return true; });
+        h.assertTrue(array.isEmpty() && h.getLevel().getChunkSource().getChunkNow(unloaded.getX() >> 4, unloaded.getZ() >> 4) == null,
+                "loaded-chunk clamp does not force-load chunks");
+        array.clampToChunkLoad = false;
+        array.iterativeAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                root.getX() + 1, root.getY(), root.getZ(), root.getX(), root.getY(), root.getZ(),
+                (world, position, from) -> { h.fail("inverted bounds reached callback"); return true; });
+        h.assertTrue(array.isEmpty(), "inverted bounds return an empty search");
+        BlockPos aboveWorld = new BlockPos(root.getX(), h.getLevel().getMaxY() + 1, root.getZ());
+        array.recursiveAddCallbackWithBounds(h.getLevel(), aboveWorld.getX(), aboveWorld.getY(), aboveWorld.getZ(),
+                aboveWorld.getX(), aboveWorld.getY(), aboveWorld.getZ(), aboveWorld.getX(), aboveWorld.getY(), aboveWorld.getZ(),
+                (world, position, from) -> { h.fail("invalid world position reached callback"); return true; });
+        h.assertTrue(array.isEmpty(), "native world height rejects targets before invoking the callback");
+        IllegalArgumentException failure = new IllegalArgumentException("propagation cause");
+        try {
+            array.recursiveAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                    root.getX(), root.getY(), root.getZ(), root.getX(), root.getY(), root.getZ(),
+                    (world, position, from) -> { throw failure; });
+            h.fail("propagation error was swallowed");
+        } catch (IllegalArgumentException actual) {
+            h.assertTrue(actual == failure && array.isEmpty(), "callback errors propagate unchanged without overflow recovery");
+        }
+        h.succeed();
+    }
+
+    private static void callbackPredecessor(GameTestHelper h) {
+        BlockPos root = h.absolutePos(new BlockPos(2, 2, 2));
+        var condition = (reika.dragonapi.instantiable.data.blockstruct.AbstractSearch.PropagationCondition)
+                (world, position, from) -> position.equals(root) || position.equals(from.east());
+        BlockArray array = new BlockArray(); array.addBlockCoordinate(root.east());
+        array.iterativeAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                root.getX(), root.getY(), root.getZ(), root.getX() + 5, root.getY(), root.getZ(), condition);
+        h.assertTrue(array.getSize() == 6 && array.hasBlock(root.east(5)), "iterative callback retains the actual edge predecessor");
+        array.clear();
+        array.recursiveAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                root.getX(), root.getY(), root.getZ(), root.getX() + 5, root.getY(), root.getZ(), condition);
+        h.assertTrue(array.getSize() == 2 && !array.hasBlock(root.east(2)), "recursive-name compatibility retains origin-relative callbacks");
+        array.clear(); array.maxDepth = 2;
+        BlockPos east = root.east(), south = root.south(), corner = east.south();
+        array.iterativeAddCallbackWithBounds(h.getLevel(), root.getX(), root.getY(), root.getZ(),
+                root.getX(), root.getY(), root.getZ(), corner.getX(), root.getY(), corner.getZ(),
+                (world, position, from) -> position.equals(root) || position.equals(east) || position.equals(south)
+                        || (position.equals(corner) && from.equals(south)));
+        h.assertTrue(array.getSize() == 4 && array.hasBlock(corner),
+                "a rejected edge does not prevent later admission from a valid predecessor");
+        h.succeed();
     }
 
     private static void rotation(GameTestHelper h) {
