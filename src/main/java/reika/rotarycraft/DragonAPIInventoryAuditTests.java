@@ -13,6 +13,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -21,6 +26,7 @@ import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
+import reika.dragonapi.libraries.ReikaPlayerAPI;
 import reika.rotarycraft.blockentities.BlockEntityItemCannon;
 import reika.rotarycraft.registry.RotaryBlocks;
 
@@ -35,6 +41,99 @@ final class DragonAPIInventoryAuditTests {
         RotaryGameTests.register(event, environment, "dragonapi_inventory_spill", 40, DragonAPIInventoryAuditTests::spill);
         RotaryGameTests.register(event, environment, "dragonapi_inventory_last_block", 40, DragonAPIInventoryAuditTests::lastBlock);
         RotaryGameTests.register(event, environment, "dragonapi_inventory_cannon", 40, DragonAPIInventoryAuditTests::cannon);
+        RotaryGameTests.register(event, environment, "dragonapi_player_transfer_arrays", 40, DragonAPIInventoryAuditTests::transferArrays);
+        RotaryGameTests.register(event, environment, "dragonapi_player_transfer_containers", 40, DragonAPIInventoryAuditTests::transferContainers);
+    }
+
+    private static void transferArrays(GameTestHelper h) {
+        var player = h.makeMockPlayer(GameType.SURVIVAL);
+        var source = player.getInventory();
+        ItemStack offered = named(10);
+        source.setItem(0, offered);
+        source.setItem(1, new ItemStack(Items.DIAMOND, 3));
+        source.setItem(2, new ItemStack(Items.IRON_SWORD, 2));
+        source.setItem(35, named(5));
+        player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+        player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.DIAMOND, 7));
+        ItemStack[] destination = {named(60), null, ItemStack.EMPTY, ItemStack.EMPTY};
+        int before = source.getTimesChanged();
+        ReikaPlayerAPI.transferInventoryToChest(player, destination);
+        h.assertTrue(destination[0].getCount() == 64 && destination[1].getCount() == 11
+                && ItemStack.isSameItemSameComponents(destination[0], destination[1])
+                && destination[2].getCount() == 3 && !destination[2].has(DataComponents.CUSTOM_NAME)
+                && destination[3].is(Items.IRON_SWORD) && destination[3].getCount() == 1,
+                "main slots merge equal components, retain distinct components and respect nonstackable capacity");
+        h.assertTrue(source.getItem(0).isEmpty() && source.getItem(1).isEmpty() && source.getItem(35).isEmpty()
+                && source.getItem(2).is(Items.IRON_SWORD) && source.getItem(2).getCount() == 1
+                && player.getItemBySlot(EquipmentSlot.HEAD).is(Items.DIAMOND_HELMET)
+                && player.getItemBySlot(EquipmentSlot.OFFHAND).getCount() == 7,
+                "only the accepted amount leaves main storage; equipment/offhand remain equipped");
+        h.assertTrue(offered.getCount() == 10 && source.getTimesChanged() == before + 1,
+                "transfer writes back the source without mutating a detached input and marks its native inventory dirty");
+        ReikaPlayerAPI.transferInventoryToChest(player, destination);
+        ReikaPlayerAPI.transferInventoryToChest(player, new ItemStack[0]);
+        h.assertTrue(source.getItem(2).getCount() == 1 && destination[3].getCount() == 1
+                && source.getTimesChanged() == before + 1, "repeated blocked and zero-capacity transfers conserve leftovers");
+        source.setItem(0, named(10)); source.setItem(1, new ItemStack(Items.DIAMOND, 5));
+        ItemStack[] limited = {named(63), new ItemStack(Items.DIAMOND, 64)};
+        ReikaPlayerAPI.transferInventoryToChest(player, limited);
+        h.assertTrue(limited[0].getCount() == 64 && limited[1].getCount() == 64
+                && source.getItem(0).getCount() == 9 && source.getItem(1).getCount() == 5
+                && source.getItem(2).getCount() == 1, "partial capacity cannot discard later stacks or mismatched components");
+        ItemStack[] roomy = new ItemStack[6];
+        ReikaPlayerAPI.transferInventoryToChest(player, roomy);
+        h.assertTrue(roomy[0].getCount() == 9 && roomy[1].getCount() == 5 && roomy[2].getCount() == 1
+                && ReikaInventoryHelper.countEmptySlots(roomy) == 3
+                && player.getItemBySlot(EquipmentSlot.HEAD).is(Items.DIAMOND_HELMET)
+                && player.getItemBySlot(EquipmentSlot.OFFHAND).getCount() == 7,
+                "spare destination capacity must not unequip armor or offhand items");
+        h.succeed();
+    }
+
+    private static void transferContainers(GameTestHelper h) {
+        var player = h.makeMockPlayer(GameType.SURVIVAL);
+        var source = player.getInventory();
+        h.setBlock(POS, Blocks.CHEST);
+        var chest = h.getBlockEntity(POS, ChestBlockEntity.class);
+        for (int slot = 0; slot < chest.getContainerSize(); slot++) chest.setItem(slot, new ItemStack(Items.COBBLESTONE, 64));
+        chest.setItem(0, named(63)); chest.setItem(1, ItemStack.EMPTY);
+        source.setItem(0, named(10)); source.setItem(1, new ItemStack(Items.DIAMOND, 5));
+        ReikaPlayerAPI.transferInventoryToChest(player, chest);
+        h.assertTrue(chest.getItem(0).getCount() == 64 && chest.getItem(1).getCount() == 9
+                && ItemStack.isSameItemSameComponents(chest.getItem(0), chest.getItem(1))
+                && source.getItem(0).isEmpty() && source.getItem(1).getCount() == 5,
+                "actual native chest receives only fitting components and retains blocked source stacks");
+        int[] changes = {0};
+        var filtered = new SimpleContainer(2) {
+            @Override public ItemStack getItem(int slot) { return super.getItem(slot).copy(); }
+            @Override public int getMaxStackSize(ItemStack stack) { return stack.has(DataComponents.CUSTOM_NAME) ? 3 : 8; }
+            @Override public boolean canPlaceItem(int slot, ItemStack stack) { return slot == 1 && stack.is(Items.DIAMOND); }
+            @Override public void setChanged() { super.setChanged(); changes[0]++; }
+        };
+        source.setItem(1, ItemStack.EMPTY); source.setItem(0, named(5)); filtered.setItem(1, named(2));
+        changes[0] = 0;
+        ReikaPlayerAPI.transferInventoryToChest(player, filtered);
+        h.assertTrue(filtered.getItem(0).isEmpty() && filtered.getItem(1).getCount() == 3
+                && source.getItem(0).getCount() == 4 && changes[0] > 0,
+                "component-dependent capacity, slot filters and snapshot-backed writes retain native behavior");
+        filtered.setItem(1, ItemStack.EMPTY); source.setItem(0, new ItemStack(Items.DIAMOND, 20));
+        int unchanged = changes[0];
+        h.assertTrue(ReikaInventoryHelper.addToInventoryWithLeftover(source.getItem(0), filtered, true) == 12
+                && filtered.getItem(1).isEmpty() && changes[0] == unchanged, "native container capacity simulation is read-only");
+        ReikaPlayerAPI.transferInventoryToChest(player, filtered);
+        h.assertTrue(filtered.getItem(1).getCount() == 8 && source.getItem(0).getCount() == 12,
+                "native transfer retains exact remainder after resource-specific capacity");
+        int dirty = source.getTimesChanged();
+        ReikaPlayerAPI.transferInventoryToChest(player, source);
+        h.assertTrue(source.getItem(0).getCount() == 12 && source.getTimesChanged() == dirty,
+                "transferring into the same player inventory cannot consume or duplicate it");
+        boolean rejected = java.util.concurrent.CompletableFuture.supplyAsync(() -> {
+            try { ReikaPlayerAPI.transferInventoryToChest(player, filtered); return false; }
+            catch (IllegalStateException expected) { return expected.getMessage().contains("owning server thread"); }
+        }).join();
+        h.assertTrue(rejected && source.getItem(0).getCount() == 12 && filtered.getItem(1).getCount() == 8,
+                "off-thread requests fail before touching either inventory");
+        h.succeed();
     }
 
     private static ItemStack named(int count) {
