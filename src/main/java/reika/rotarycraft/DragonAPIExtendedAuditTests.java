@@ -20,6 +20,7 @@ final class DragonAPIExtendedAuditTests {
     private static final BlockPos POS = new BlockPos(4, 1, 4);
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         DragonAPIBlockArrayTests.register(event, environment);
+        DragonAPIBlockArrayComputerTests.register(event, environment);
         DragonAPIRecursiveBreakerTests.register(event, environment);
         DragonAPITreeBreakerTests.register(event, environment);
         DragonAPIFlammabilityTests.register(event, environment);
