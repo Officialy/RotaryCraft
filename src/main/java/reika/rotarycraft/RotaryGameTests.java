@@ -118,6 +118,7 @@ public final class RotaryGameTests {
         DragonAPIAuditTests.register(event, env);
         DragonAPIExtendedAuditTests.register(event, env);
         DragonAPIInventoryAuditTests.register(event, env);
+        DragonAPITickFailureAuditTests.register(event, env);
         DragonAPIRegistrationAuditTests.register(event, env);
         register(event, env, "audit_vacuum_item_conservation", 40, RotaryGameTests::auditVacuumItemConservation);
         register(event, env, "audit_smeltery_real_recipes", 40, RotaryGameTests::auditSmelteryRealRecipes);
