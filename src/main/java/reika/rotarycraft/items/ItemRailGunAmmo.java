@@ -24,7 +24,7 @@ import reika.rotarycraft.registry.RotaryDataComponents;
 import reika.rotarycraft.registry.RotaryItems;
 
 /** All sixteen V33a masses; torque only decides which existing stack the cannon can fire. */
-public final class ItemRailGunAmmo extends ItemRailgunAmmoBase {
+public final class ItemRailGunAmmo extends ItemRailgunAmmoBase implements reika.dragonapi.interfaces.LegacyItemData {
     private static final BasicRailGunAmmo[] TYPES = java.util.stream.IntStream.range(0, 16)
             .mapToObj(BasicRailGunAmmo::new).toArray(BasicRailGunAmmo[]::new);
 
@@ -34,6 +34,13 @@ public final class ItemRailGunAmmo extends ItemRailgunAmmoBase {
         Integer tier = stack.get(RotaryDataComponents.RAILGUN_POWER.get());
         // Old port stacks used vanilla DAMAGE as metadata, not durability. Typed data wins when present.
         return Math.clamp(tier != null ? tier : stack.getOrDefault(DataComponents.DAMAGE, 0), 0, 15);
+    }
+    @Override public void migrateLegacyComponents(ItemStack stack) {
+        if (stack.has(DataComponents.DAMAGE)) {
+            if (!stack.has(RotaryDataComponents.RAILGUN_POWER.get()))
+                stack.set(RotaryDataComponents.RAILGUN_POWER.get(), power(stack));
+            stack.remove(DataComponents.DAMAGE);
+        }
     }
     public static ItemStack stack(int power) {
         ItemStack stack = RotaryItems.RAILGUN_AMMO.get().getDefaultInstance();

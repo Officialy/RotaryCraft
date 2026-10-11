@@ -20,7 +20,7 @@ import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.RotaryItems;
 
 
-public abstract class ItemChargedTool extends ItemRotaryTool {
+public abstract class ItemChargedTool extends ItemRotaryTool implements reika.dragonapi.interfaces.ItemVariantProvider {
 
     public ItemChargedTool() {
         this(RotaryItems.itemProperties());
@@ -51,4 +51,8 @@ public abstract class ItemChargedTool extends ItemRotaryTool {
         return super.getName(is).toString();
     }
 
+    @Override public net.minecraft.core.component.DataComponentMap getKeyVariantComponents(ItemStack stack) {
+        return net.minecraft.core.component.DataComponentMap.builder()
+                .set(net.minecraft.core.component.DataComponents.DAMAGE, stack.getDamageValue()).build();
+    }
 }

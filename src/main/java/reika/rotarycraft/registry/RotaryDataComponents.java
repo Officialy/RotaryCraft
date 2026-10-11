@@ -15,9 +15,10 @@ public final class RotaryDataComponents {
 
     /** Persistent family identity for datapack-defined custom extract stacks and ingredients. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<net.minecraft.resources.Identifier>> EXTRACT_FAMILY =
-            COMPONENTS.registerComponentType("extract_family", b -> b
+            COMPONENTS.register("extract_family", () -> reika.dragonapi.instantiable.data.ItemKeyComponents.variant(
+                    DataComponentType.<net.minecraft.resources.Identifier>builder()
                     .persistent(net.minecraft.resources.Identifier.CODEC)
-                    .networkSynchronized(net.minecraft.resources.Identifier.STREAM_CODEC));
+                    .networkSynchronized(net.minecraft.resources.Identifier.STREAM_CODEC).build(), null));
 
     /**
      * Inventory of a harvested Scaleable Chest. Network-synced as well as persistent: creative
@@ -31,9 +32,10 @@ public final class RotaryDataComponents {
 
     /** Original railgun metadata 0..15; persistence and tracking use the same tier identity. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RAILGUN_POWER =
-            COMPONENTS.registerComponentType("railgun_power", b -> b
+            COMPONENTS.register("railgun_power", () -> reika.dragonapi.instantiable.data.ItemKeyComponents.variant(
+                    DataComponentType.<Integer>builder()
                     .persistent(com.mojang.serialization.Codec.intRange(0, 15))
-                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT).build(), 0));
 
     private RotaryDataComponents() {}
 }

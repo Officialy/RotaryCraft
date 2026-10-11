@@ -15,7 +15,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import reika.rotarycraft.api.interfaces.TensionStorage;
 import reika.rotarycraft.base.ItemBasic;
 import reika.rotarycraft.registry.RotaryItems;
-public final class ItemCoil extends ItemBasic implements TensionStorage {
+public final class ItemCoil extends ItemBasic implements TensionStorage, reika.dragonapi.interfaces.ItemVariantProvider {
     public static final int MAX_CHARGE = 32000;
     private int tension;
     public ItemCoil() { super(RotaryItems.itemProperties().component(DataComponents.MAX_DAMAGE, MAX_CHARGE + 1).component(DataComponents.DAMAGE, 0), 1); }
@@ -37,4 +37,8 @@ public final class ItemCoil extends ItemBasic implements TensionStorage {
     @Override public int getPowerScale(ItemStack stack) { return stack.is(RotaryItems.BEDROCK_ALLOY_SPRING.get()) ? 4 : 1; }
     @Override public boolean isBreakable(ItemStack stack) { return !stack.is(RotaryItems.BEDROCK_ALLOY_SPRING.get()); }
     @Override public int setTension(int value) { return tension = value; }
+    @Override public net.minecraft.core.component.DataComponentMap getKeyVariantComponents(ItemStack stack) {
+        return net.minecraft.core.component.DataComponentMap.builder()
+                .set(net.minecraft.core.component.DataComponents.DAMAGE, getCharge(stack)).build();
+    }
 }
