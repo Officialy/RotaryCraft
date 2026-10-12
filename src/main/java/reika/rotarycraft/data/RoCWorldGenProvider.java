@@ -23,7 +23,7 @@ public final class RoCWorldGenProvider implements DataProvider {
     private final PackOutput.PathProvider paths;
     public RoCWorldGenProvider(PackOutput output) { paths=output.createPathProvider(PackOutput.Target.DATA_PACK,"neoforge/biome_modifier"); }
     public static RegistrySetBuilder buildRegistrySet() {
-        return new RegistrySetBuilder().add(Registries.FEATURE,c -> c.register(ResourceKey.create(Registries.FEATURE,ID),new ExtraIronGenerator(10,10,4,67)))
+        return new RegistrySetBuilder().add(Registries.FEATURE,c -> c.register(ResourceKey.create(Registries.FEATURE,ID),new ExtraIronGenerator(10,10,-60,67)))
                 .add(Registries.PLACED_FEATURE,c -> c.register(ResourceKey.create(Registries.PLACED_FEATURE,ID),new PlacedFeature(c.lookup(Registries.FEATURE).getOrThrow(ResourceKey.create(Registries.FEATURE,ID)),List.of())));
     }
     @Override public CompletableFuture<?> run(CachedOutput cache) {

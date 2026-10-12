@@ -34,8 +34,10 @@ public record ExtraIronGenerator(int baseCount, int size, int minY, int maxY) im
     @Override public boolean place(WorldGenLevel world, ChunkGenerator generator, RandomSource random, BlockPos origin) {
         int passes=passes(ConfigRegistry.EXTRAIRON.getFloat()); boolean placed=false;
         for (int i=0;i<passes;i++) {
-            int x=origin.getX()+random.nextInt(16),z=origin.getZ()+random.nextInt(16),y=minY+random.nextInt(maxY-minY+1);
-            placed |= LegacyOreVeins.place(world,random,Blocks.IRON_ORE.defaultBlockState(),size,0,x,y,z);
+            int x=origin.getX()+random.nextInt(16),z=origin.getZ()+random.nextInt(16);
+            int y=reika.dragonapi.libraries.level.WorldgenHeight.randomBetween(world,random,minY,maxY);
+            placed |= LegacyOreVeins.place(world,random,Blocks.IRON_ORE.defaultBlockState(),
+                    Blocks.DEEPSLATE_IRON_ORE.defaultBlockState(),size,0,x,y,z);
         }
         return placed;
     }
