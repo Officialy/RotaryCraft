@@ -59,7 +59,7 @@ final class DragonAPIPacketIdTests {
         }
     }
     private static void frames(GameTestHelper h) {
-        h.assertTrue(reika.dragonapi.libraries.io.CustomNetworkBridge.PROTOCOL_VERSION.equals("2.1.0"),"byte-identical migration retains the negotiated protocol version");
+        h.assertTrue(reika.dragonapi.libraries.io.CustomNetworkBridge.PROTOCOL_VERSION.equals("2.2.0"),"dimension schema migration negotiates protocol 2.2");
         FriendlyByteBuf bytes=new FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
         var handler=new reika.dragonapi.APIPacketHandler();
         var pipe=new reika.dragonapi.libraries.io.PacketPipeline(RotaryCraft.getInstance(),"stable-id-audit",handler);
