@@ -122,6 +122,7 @@ public final class RotaryGameTests {
         DragonAPIPacketPipelineTests.register(event, env);
         DragonAPICompoundSyncTests.register(event, env);
         DragonAPITankSyncTests.register(event, env);
+        DragonAPIPacketIdTests.register(event, env);
         DragonAPIExtendedAuditTests.register(event, env);
         DragonAPIInventoryAuditTests.register(event, env);
         DragonAPITickFailureAuditTests.register(event, env);
@@ -1534,9 +1535,9 @@ public final class RotaryGameTests {
         var handler = new PacketHandlerCore();
         var frame = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
         try {
-            frame.writeByte(reika.dragonapi.auxiliary.PacketTypes.DATA.ordinal());
+            frame.writeByte(reika.dragonapi.auxiliary.PacketTypes.DATA.wireId());
             frame.writeVarInt(20);
-            frame.writeInt(reika.rotarycraft.registry.PacketRegistry.HEATER.ordinal());
+            frame.writeInt(reika.rotarycraft.registry.PacketRegistry.HEATER.wireId());
             frame.writeInt(600);
             frame.writeInt(absolute.getX()); frame.writeInt(absolute.getY()); frame.writeInt(absolute.getZ());
             var packet = reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket.decode(frame, handler);

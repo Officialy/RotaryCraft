@@ -106,7 +106,7 @@
 //            }
 //        }
 //        if (packet)
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DISTRIBCLUTCHPOWER.ordinal(), clutch, selected[0], selected[1], selected[2], selected[3]);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DISTRIBCLUTCHPOWER.wireId(), clutch, selected[0], selected[1], selected[2], selected[3]);
 //    }
 //
 //    private int parseInt(GuiTextField g) {
@@ -126,7 +126,7 @@
 //        if (button.id < 4) {
 //            enabled[button.id] = !enabled[button.id];
 //            this.initGui();
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DISTRIBCLUTCH.ordinal(), clutch, button.id, enabled[button.id] ? 1 : 0);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DISTRIBCLUTCH.wireId(), clutch, button.id, enabled[button.id] ? 1 : 0);
 //        }
 //    }
 //

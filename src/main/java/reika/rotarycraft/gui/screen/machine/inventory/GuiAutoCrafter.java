@@ -55,7 +55,7 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine<BlockEntityAutoCrafter, 
                 int dy = i < 9 ? var6 + 13 : var6 + 75;
                 int slot = i;
                 this.addRenderableWidget(new ImagedGuiButton(i, dx, dy, 18, 4, 176, 6, this.getTextureIdentifier(),
-                        b -> ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTERCRAFT.ordinal(), crafter, slot)));
+                        b -> ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTERCRAFT.wireId(), crafter, slot)));
             }
         }
 
@@ -83,7 +83,7 @@ public class GuiAutoCrafter extends GuiPowerOnlyMachine<BlockEntityAutoCrafter, 
 
     private void onTyped(String s) {
         if (selectedSlot >= 0 && text != null && text.isFocused()) {
-            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTERTHRESH.ordinal(), crafter, selectedSlot, Math.max(0, ReikaJavaLibrary.safeIntParse(s)));
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTERTHRESH.wireId(), crafter, selectedSlot, Math.max(0, ReikaJavaLibrary.safeIntParse(s)));
         }
     }
 

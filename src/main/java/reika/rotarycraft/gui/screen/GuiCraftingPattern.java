@@ -66,7 +66,7 @@ public class GuiCraftingPattern extends AbstractContainerScreen<ContainerCraftin
             RecipeMode next = ItemCraftPattern.getMode(this.getItem()).next();
             ItemCraftPattern.setMode(this.getItem(), next);
             menu.clearRecipe();
-            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.ordinal(), next.ordinal());
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNMODE.wireId(), next.ordinal());
         }
     }
 
@@ -76,7 +76,7 @@ public class GuiCraftingPattern extends AbstractContainerScreen<ContainerCraftin
         if (amt > 1 && ItemCraftPattern.getStackInputLimit(this.getItem()) == 1)
             amt--;
         ItemCraftPattern.changeStackLimit(this.getItem(), amt);
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNLIMIT.ordinal(), amt);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CRAFTPATTERNLIMIT.wireId(), amt);
     }
 
     @Override

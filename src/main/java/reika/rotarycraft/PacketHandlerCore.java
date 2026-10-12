@@ -611,9 +611,9 @@ public class PacketHandlerCore implements PacketHandler {
     public static void sendPowerSyncPacket(BlockEntityIOMachine iotile, ServerPlayer ep) {
         int[] data = ReikaJavaLibrary.splitLong(iotile.power);
         if (ep != null) {
-            ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.ordinal(), iotile, ep, iotile.torque, iotile.omega, data[0], data[1]);
+            ReikaPacketHelper.sendDataPacket(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.wireId(), iotile, ep, iotile.torque, iotile.omega, data[0], data[1]);
         } else {
-            ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.ordinal(), iotile, 64, iotile.torque, iotile.omega, data[0], data[1]);
+            ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.POWERSYNC.wireId(), iotile, 64, iotile.torque, iotile.omega, data[0], data[1]);
         }
     }
 }

@@ -287,7 +287,7 @@ final class RotaryDefoliatorTests {
     private static void packet(GameTestHelper h) {
         var tile = machine(h); fill(tile, RotaryFluids.POISON.get(), 1); h.setBlock(TARGET, Blocks.OAK_LOG); var player = h.makeMockServerPlayer(GameType.SURVIVAL);
         try {
-            var bytes = new java.io.ByteArrayOutputStream(); var out = new java.io.DataOutputStream(bytes); out.writeInt(PacketRegistry.DEFOLIATOR.ordinal());
+            var bytes = new java.io.ByteArrayOutputStream(); var out = new java.io.DataOutputStream(bytes); out.writeInt(PacketRegistry.DEFOLIATOR.wireId());
             for (var pos : List.of(h.absolutePos(TARGET), h.absolutePos(TARGET))) { out.writeInt(pos.getX()); out.writeInt(pos.getY()); out.writeInt(pos.getZ()); }
             var packet = new reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket(bytes.toByteArray()); packet.init(reika.dragonapi.auxiliary.PacketTypes.DATA, reika.dragonapi.libraries.io.ReikaPacketHelper.getPipeline(RotaryCraft.packetChannel));
             var buffer = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());

@@ -46,7 +46,7 @@ public class GuiBlastFurnace extends NonPoweredMachineScreen<BlockEntityBlastFur
 
     protected void actionPerformed(Button b) {
         blast.leaveLastItem = !blast.leaveLastItem;
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BLASTLEAVEONE.ordinal(), blast, blast.leaveLastItem ? 1 : 0);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BLASTLEAVEONE.wireId(), blast, blast.leaveLastItem ? 1 : 0);
         this.init();
     }
 

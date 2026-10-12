@@ -110,7 +110,7 @@
 //        if (button.id < 24000) {
 //            ReikaParticleHelper p = particles.get(button.id);
 //            int particle = p.ordinal();
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.PARTICLES.ordinal(), tile, particle);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.PARTICLES.wireId(), tile, particle);
 //        }
 //    }
 //

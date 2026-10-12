@@ -54,7 +54,7 @@ final class DragonAPICompoundSyncTests {
         } finally { input.release(); }
     }
     private static void hType(FriendlyByteBuf input) {
-        if(input.readUnsignedByte()!=reika.dragonapi.auxiliary.PacketTypes.BE_NBT_SYNC.ordinal())throw new AssertionError("existing sync category");
+        if(input.readUnsignedByte()!=reika.dragonapi.auxiliary.PacketTypes.BE_NBT_SYNC.wireId())throw new AssertionError("existing sync category");
         int size=input.readVarInt();if(size!=input.readableBytes())throw new AssertionError("existing sync framing");
     }
     private static final class Capture extends CompoundSyncPacket {

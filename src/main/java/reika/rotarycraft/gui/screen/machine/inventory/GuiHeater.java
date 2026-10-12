@@ -87,12 +87,12 @@
 //        if (!(input.getText().matches("^[0-9 ]+$"))) {
 //            temperature = 0;
 //            input.deleteFromCursor(-1);
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.ordinal(), heater, temperature);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.wireId(), heater, temperature);
 //            return;
 //        }
 //        temperature = ReikaJavaLibrary.safeIntParse(input.getText());
 //        if (temperature >= 0)
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.ordinal(), heater, temperature);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.HEATER.wireId(), heater, temperature);
 //        heater.setTemperature = temperature;
 //
 //    }

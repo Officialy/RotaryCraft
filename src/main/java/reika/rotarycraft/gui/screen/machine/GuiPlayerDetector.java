@@ -67,12 +67,12 @@
 //        if (!(input.getText().matches("^[0-9 ]+$"))) {
 //            range = 0;
 //            input.deleteFromCursor(-1);
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.ordinal(), playerdetector, range);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.wireId(), playerdetector, range);
 //            return;
 //        }
 //        range = ReikaJavaLibrary.safeIntParse(input.getText());
 //        if (range >= 0)
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.ordinal(), playerdetector, range);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.DETECTOR.wireId(), playerdetector, range);
 //    }
 //
 //    @Override

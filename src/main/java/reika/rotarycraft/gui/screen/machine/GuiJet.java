@@ -55,7 +55,7 @@
 //
 //        if (b.id == 0 && jet != null && jet.canAfterBurn()) {
 //            burn = !burn;
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.AFTERBURN.ordinal(), eng, burn ? 1 : 0);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.AFTERBURN.wireId(), eng, burn ? 1 : 0);
 //            jet.setBurnerActive(burn);
 //            this.initGui();
 //        }

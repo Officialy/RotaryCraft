@@ -262,7 +262,7 @@ public class BlockEntityRefrigerator extends InventoriedPowerLiquidProducer impl
             for (LivingEntity e : li) {
                 e.hurt(RotaryCraft.freezeDamage.get(level), hearts * 2);
             }
-            ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.FRIDGEBREAK.ordinal(), this, 24);
+            ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.FRIDGEBREAK.wireId(), this, 24);
         }
     }
 

@@ -626,7 +626,7 @@ public class BlockEntityJetEngine extends BlockEntityEngine implements NBTMachin
         if (FMLEnvironment.getDist() == Dist.DEDICATED_SERVER) {
             int chance1 = fuel.getFluidLevel() < FUELCAP / 12 ? 10 : (fuel.getFluidLevel() < FUELCAP / 4 ? 20 : 40);
             if (DragonAPI.rand.nextInt(chance1) == 0) {
-                ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.MODID, PacketRegistry.ENGINEBACKFIRE.ordinal(), this, 64);
+                ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.MODID, PacketRegistry.ENGINEBACKFIRE.wireId(), this, 64);
                 this.backFire(world, pos);
             }
         }

@@ -58,7 +58,7 @@
 //    protected void actionPerformed(Button button) {
 //        super.actionPerformed(button);
 //        if (button.id == 0)
-//            ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.VACUUMXP.ordinal(), vac, PacketTarget.server);
+//            ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.VACUUMXP.wireId(), vac, PacketTarget.server);
 //    }
 //
 //    /**

@@ -149,7 +149,7 @@ public class GuiItemFilter extends GuiPowerOnlyMachine<BlockEntityItemFilter, Co
         nbt.putInt("posX", tile.getBlockPos().getX());
         nbt.putInt("posY", tile.getBlockPos().getY());
         nbt.putInt("posZ", tile.getBlockPos().getZ());
-        ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.ordinal(), nbt, PacketTarget.server);
+        ReikaPacketHelper.sendNBTPacket(RotaryCraft.packetChannel, PacketRegistry.FILTERSETTING.wireId(), nbt, PacketTarget.server);
     }
 
     @Override

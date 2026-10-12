@@ -271,7 +271,7 @@ public abstract class BlockEntityPiping extends RotaryCraftBlockEntity implement
 
         if (this.getPressure() > this.getMaxPressure()) {
             if (world.isClientSide()) {
-//                ReikaPacketHelper.sendUpdatePacket(DragonAPI.packetChannel, PacketIDs.EXPLODE.ordinal(), this, PacketDistributor.PacketTarget.SERVER);
+//                ReikaPacketHelper.sendUpdatePacket(DragonAPI.packetChannel, PacketIDs.EXPLODE.wireId(), this, PacketDistributor.PacketTarget.SERVER);
             } else {
                 this.overpressure(world, pos);
             }

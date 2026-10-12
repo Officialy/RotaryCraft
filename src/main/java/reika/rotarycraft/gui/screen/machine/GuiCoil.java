@@ -72,13 +72,13 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
         if (!omegaText.isEmpty() && !(omegaText.matches("^[0-9 ]+$"))) {
             omega = 0;
             inputOmega.setValue(omegaText.substring(0, Math.max(0, omegaText.length() - 1)));
-            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.ordinal(), coil, omega);
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.wireId(), coil, omega);
             valid1 = false;
         }
         if (!torqueText.isEmpty() && !(torqueText.matches("^[0-9 ]+$"))) {
             torque = 0;
             inputTorque.setValue(torqueText.substring(0, Math.max(0, torqueText.length() - 1)));
-            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.ordinal(), coil, torque);
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.wireId(), coil, torque);
             valid2 = false;
         }
         if (!valid1 && !valid2)
@@ -91,7 +91,7 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
                     omega = max;
                     inputOmega.setValue(String.valueOf(max));
                 }
-                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.ordinal(), coil, omega);
+                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILSPEED.wireId(), coil, omega);
             }
         }
         if (valid2) {
@@ -102,7 +102,7 @@ public class GuiCoil extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Bl
                     torque = max;
                     inputTorque.setValue(String.valueOf(max));
                 }
-                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.ordinal(), coil, torque);
+                ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.COILTORQUE.wireId(), coil, torque);
             }
         }
     }

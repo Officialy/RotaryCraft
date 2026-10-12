@@ -182,7 +182,7 @@
 //                ps.material = material;
 //                ps.otherShaft = new WorldLocation(this);
 //                otherShaft = new WorldLocation(age, dx, dy, dz);
-//                ReikaPacketHelper.sendUpdatePacket(DragonAPI.packetChannel, PacketIDs.TILEDELETE.ordinal(), ps, new PacketTarget.RadiusTarget(this, 32));
+//                ReikaPacketHelper.sendUpdatePacket(DragonAPI.packetChannel, PacketIDs.TILEDELETE.wireId(), ps, new PacketTarget.RadiusTarget(this, 32));
 //            }
 //        } else if (m == MachineRegistry.PORTALSHAFT) {
 //            BlockEntityPortalShaft te = (BlockEntityPortalShaft) age.getBlockEntity(dx, dy, dz);

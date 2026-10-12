@@ -130,9 +130,9 @@
 //            //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
 //            int b = 0;
 //            if (tile instanceof BlockEntityLaunchCannon)
-//                b = PacketRegistry.CANNONFIRINGVALS.ordinal();
+//                b = PacketRegistry.CANNONFIRINGVALS.wireId();
 //            if (tile instanceof BlockEntityItemCannon)
-//                b = PacketRegistry.ITEMCANNON.ordinal();
+//                b = PacketRegistry.ITEMCANNON.wireId();
 //            //ReikaJavaLibrary.pConsole("Sending packet number "+b+" Type "+PacketRegistry.getEnum(b));
 //            outputStream.writeInt(b);
 //            if (targetMode) {

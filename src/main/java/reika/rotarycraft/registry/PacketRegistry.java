@@ -12,91 +12,94 @@ package reika.rotarycraft.registry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 
-public enum PacketRegistry {
+public enum PacketRegistry implements reika.dragonapi.interfaces.PacketId {
 
-    BORER(1),
-    BORERDROPS(),
-    BORERTOGGLEALL(),
-    BORERRESET(),
-    BEVEL(1),
-    SPLITTERMODE(1),
-    SPAWNERTIMER(1),
-    DETECTOR(1),
-    HEATER(1),
-    CVTMODE(),
-    CVTRATIO(1),
-    CVTTARGET(1),
-    CVTREDSTONESTATE(1),
-    CANNONFIRINGVALS(5),
-    SONICPITCH(),
-    SONICVOLUME(),
-    FORCE(1),
-    CHEST(1),
-    COILSPEED(1),
-    COILTORQUE(1),
-    MUSICNOTE(4),
-    MUSICSAVE(),
-    MUSICREAD(),
-    MUSICDEMO(),
-    MUSICREST(2),
-    MUSICBKSP(1),
-    MUSICCLEARCH(1),
-    MUSICCLEAR(),
-    VACUUMXP(),
-    WINDERTOGGLE(),
-    PROJECTOR(),
-    CONTAINMENT(1),
-    ITEMCANNON(4),
-    MIRROR(),
-    SAFEPLAYER(),
-    ENGINEBACKFIRE(),
-    MUSICPARTICLE(),
-    MULTISIDE(2),
-    TERRAFORMER(1),
-    CONVERTERPOWER(1),
-    CONVERTERREDSTONE(),
-    FERTILIZER(),
-    GRAVELGUN(),
-    SLIDE(),
-    POWERBUS(1),
-    PARTICLES(1),
-    BLOWERWHITELIST(),
-    BLOWERMETA(),
-    BLOWERNBT(),
-    BLOWEROREDICT(),
-    DEFOLIATOR(3),
-    GPR(1),
-    CRAFTERCRAFT(1),
-    CRAFTERTHRESH(2),
-    CRAFTERMODE(),
-    POWERSYNC(4),
-    AFTERBURN(1),
-    CRAFTPATTERNMODE(1),
-    CRAFTPATTERNLIMIT(1),
-    FILTERSETTING(),
-    SPRINKLER(4),
-    BLASTLEAVEONE(1),
-    EMPEFFECT(),
-    SPARKLOC(5),
-    DISTRIBCLUTCH(2),
-    DISTRIBCLUTCHPOWER(4),
-    FRIDGEBREAK(),
+    BORER(0, 1),
+    BORERDROPS(1),
+    BORERTOGGLEALL(2),
+    BORERRESET(3),
+    BEVEL(4, 1),
+    SPLITTERMODE(5, 1),
+    SPAWNERTIMER(6, 1),
+    DETECTOR(7, 1),
+    HEATER(8, 1),
+    CVTMODE(9),
+    CVTRATIO(10, 1),
+    CVTTARGET(11, 1),
+    CVTREDSTONESTATE(12, 1),
+    CANNONFIRINGVALS(13, 5),
+    SONICPITCH(14),
+    SONICVOLUME(15),
+    FORCE(16, 1),
+    CHEST(17, 1),
+    COILSPEED(18, 1),
+    COILTORQUE(19, 1),
+    MUSICNOTE(20, 4),
+    MUSICSAVE(21),
+    MUSICREAD(22),
+    MUSICDEMO(23),
+    MUSICREST(24, 2),
+    MUSICBKSP(25, 1),
+    MUSICCLEARCH(26, 1),
+    MUSICCLEAR(27),
+    VACUUMXP(28),
+    WINDERTOGGLE(29),
+    PROJECTOR(30),
+    CONTAINMENT(31, 1),
+    ITEMCANNON(32, 4),
+    MIRROR(33),
+    SAFEPLAYER(34),
+    ENGINEBACKFIRE(35),
+    MUSICPARTICLE(36),
+    MULTISIDE(37, 2),
+    TERRAFORMER(38, 1),
+    CONVERTERPOWER(39, 1),
+    CONVERTERREDSTONE(40),
+    FERTILIZER(41),
+    GRAVELGUN(42),
+    SLIDE(43),
+    POWERBUS(44, 1),
+    PARTICLES(45, 1),
+    BLOWERWHITELIST(46),
+    BLOWERMETA(47),
+    BLOWERNBT(48),
+    BLOWEROREDICT(49),
+    DEFOLIATOR(50, 3),
+    GPR(51, 1),
+    CRAFTERCRAFT(52, 1),
+    CRAFTERTHRESH(53, 2),
+    CRAFTERMODE(54),
+    POWERSYNC(55, 4),
+    AFTERBURN(56, 1),
+    CRAFTPATTERNMODE(57, 1),
+    CRAFTPATTERNLIMIT(58, 1),
+    FILTERSETTING(59),
+    SPRINKLER(60, 4),
+    BLASTLEAVEONE(61, 1),
+    EMPEFFECT(62),
+    SPARKLOC(63, 5),
+    DISTRIBCLUTCH(64, 2),
+    DISTRIBCLUTCHPOWER(65, 4),
+    FRIDGEBREAK(66),
     ;
 
-    private static final PacketRegistry[] list = values();
+    private final int wireId;
+    private static final java.util.Map<Integer, PacketRegistry> BY_ID = reika.dragonapi.interfaces.PacketId.index(values());
+    @Override public int wireId() { return wireId; }
+
+
 
     public final int numInts;
 
-    PacketRegistry() {
-        this(0);
-    }
+    PacketRegistry(int id) { this(id, 0); }
 
-    PacketRegistry(int len) {
+    PacketRegistry(int id, int len) {
+        wireId = id;
         numInts = len;
     }
 
     public static PacketRegistry getEnum(int index) {
-        return list[index];
+        return reika.dragonapi.interfaces.PacketId.lookup(BY_ID, index);
     }
 
     public boolean isLongPacket() {

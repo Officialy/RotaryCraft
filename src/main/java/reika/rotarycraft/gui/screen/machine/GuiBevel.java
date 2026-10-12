@@ -113,7 +113,7 @@ public class GuiBevel extends NonPoweredMachineScreen<BlockEntityBevelGear, Blan
         this.getDirectionFromIO();
         this.init();
         bevel.direction = posn;
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.ordinal(), bevel, posn);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.BEVEL.wireId(), bevel, posn);
         bevel.setChanged();
     }
 

@@ -48,7 +48,7 @@ public class WinderScreen extends GuiOneSlotScreen<BlockEntityWinder, WinderCont
     }
 
     protected void actionPerformed(Button button) {
-        ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.WINDERTOGGLE.ordinal(), winder, PacketTarget.server);
+        ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.WINDERTOGGLE.wireId(), winder, PacketTarget.server);
         input = !input;
         this.init();
     }

@@ -65,7 +65,7 @@
 //            return;
 //        } else
 //            file = input.getText();
-//        ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SLIDE.ordinal(), file);
+//        ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SLIDE.wireId(), file);
 //    }
 //
 //    @Override

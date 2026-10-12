@@ -61,7 +61,7 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
 
     protected void actionPerformed(int id) {
         if (id >= 0 && id < controls.length) {
-            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PACKETS[id].ordinal(), tile);
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PACKETS[id].wireId(), tile);
             controls[id] = !controls[id];
         }
         this.init();

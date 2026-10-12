@@ -83,7 +83,7 @@ public class GuiCVT extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Con
         if (buttonTimer > 0)
             return;
         buttonTimer = 8;
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTMODE.ordinal(), cvt);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTMODE.wireId(), cvt);
         mode = mode.next();
         this.rebuildWidgets();
     }
@@ -96,7 +96,7 @@ public class GuiCVT extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Con
         int v = Math.abs(cvt.getRatio());
         if (v == 0)
             v = 1;
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTRATIO.ordinal(), cvt, reduction ? -v : v);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTRATIO.wireId(), cvt, reduction ? -v : v);
         this.rebuildWidgets();
     }
 
@@ -104,7 +104,7 @@ public class GuiCVT extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Con
         if (buttonTimer > 0)
             return;
         buttonTimer = 8;
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTREDSTONESTATE.ordinal(), cvt, on ? 1 : 0);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTREDSTONESTATE.wireId(), cvt, on ? 1 : 0);
     }
 
     @Override
@@ -132,9 +132,9 @@ public class GuiCVT extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Con
         if (val == 0)
             return;
         if (mode == CVTMode.AUTO) {
-            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTTARGET.ordinal(), cvt, val);
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTTARGET.wireId(), cvt, val);
         } else if (mode == CVTMode.MANUAL) {
-            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTRATIO.ordinal(), cvt, reduction ? -val : val);
+            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CVTRATIO.wireId(), cvt, reduction ? -val : val);
         }
     }
 

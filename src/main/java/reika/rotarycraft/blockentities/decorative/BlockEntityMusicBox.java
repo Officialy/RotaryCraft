@@ -200,7 +200,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
         if (!n.isRest()) {
             for (int i = 0; i < 3; i++)
                 n.play(level, worldPosition);
-            ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.ordinal(), this, new PacketTarget.RadiusTarget(this, 32));
+            ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.MUSICPARTICLE.wireId(), this, new PacketTarget.RadiusTarget(this, 32));
         }
         playDelay[channel] = n.length.tickLength;
         playIndex[channel]++;
@@ -295,7 +295,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
     }
 
     private void dispatchTrack(MusicScore mus) {
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEAR.ordinal(), this);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICCLEAR.wireId(), this);
         for (int i = 0; i < mus.countTracks(); i++) {
             ScoreTrack track = mus.getTrack(i);
             if (track == null)
@@ -493,7 +493,7 @@ public class BlockEntityMusicBox extends BlockEntityPowerReceiver implements Bre
 
 
     public void sendNote(int pitch, int channel, NoteLength len, Instrument voice) {
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICNOTE.ordinal(), this, pitch, channel, len.ordinal(), voice.ordinal());
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MUSICNOTE.wireId(), this, pitch, channel, len.ordinal(), voice.ordinal());
     }
 
     /**

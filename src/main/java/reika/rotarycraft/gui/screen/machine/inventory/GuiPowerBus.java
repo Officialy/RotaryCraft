@@ -55,7 +55,7 @@ public class GuiPowerBus extends MachineScreen<BlockEntityPowerBus, ContainerPow
     }
 
     private void toggleMode(int side) {
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.ordinal(), bus, side);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.wireId(), bus, side);
     }
 
     @Override

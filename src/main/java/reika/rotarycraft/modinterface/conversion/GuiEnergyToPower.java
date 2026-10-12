@@ -62,10 +62,10 @@
 //		super.actionPerformed(b);
 //		PacketTarget pt = PacketTarget.server;
 //		if (b.id == 4) {
-//			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.CONVERTERREDSTONE.ordinal(), engine, pt);
+//			ReikaPacketHelper.sendUpdatePacket(RotaryCraft.packetChannel, PacketRegistry.CONVERTERREDSTONE.wireId(), engine, pt);
 //		}
 //		else if (b.id < 24000) {
-//			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CONVERTERPOWER.ordinal(), engine, b.id == 3 ? 1 : 0);
+//			ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CONVERTERPOWER.wireId(), engine, b.id == 3 ? 1 : 0);
 //		}
 //		this.initGui();
 //	}

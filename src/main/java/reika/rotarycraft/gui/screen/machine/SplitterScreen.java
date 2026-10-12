@@ -66,7 +66,7 @@
 //        mode = button.getMessage().getContents().contains("1:31 Bend") ? -32 : button.getMessage().getContents().contains("1:15 Bend") ? -16 :
 //                button.getMessage().getContents().contains("1:7 Bend") ? -8 : button.getMessage().getContents().contains("1:3 Bend") ? -4 : 1;
 //
-////        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPLITTERMODE.ordinal(), splitter, mode);
+////        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPLITTERMODE.wireId(), splitter, mode);
 //
 ////        this.updateScreen();
 //        this.updateMode(mode);

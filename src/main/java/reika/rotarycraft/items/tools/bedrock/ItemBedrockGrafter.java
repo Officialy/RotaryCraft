@@ -72,7 +72,7 @@ public class ItemBedrockGrafter extends ItemRotaryTool {// implements IToolGraft
 //                                        b2.dropBlockAsItem(level, dx, dy, dz, 1);
 //                                        b2.removedByPlayer(level, ep, dx, dy, dz, false);
 //                                        ReikaSoundHelper.playBreakSound(level, dx, dy, dz, b2);
-//                                        ReikaPacketHelper.sendDataPacketWithRadius(DragonAPI.packetChannel, PacketIDs.BREAKPARTICLES.ordinal(), level, dx, dy, dz, 24, Block.getId(b2));
+//                                        ReikaPacketHelper.sendDataPacketWithRadius(DragonAPI.packetChannel, PacketIDs.BREAKPARTICLES.wireId(), level, dx, dy, dz, 24, Block.getId(b2));
 //                                    }
 //                                }
 //                            }

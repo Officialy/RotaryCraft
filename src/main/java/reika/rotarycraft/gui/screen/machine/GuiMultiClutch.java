@@ -54,7 +54,7 @@
 //        if (b.id < 16) {
 //            int side = multi.getNextSideForState(b.id);
 //            multi.setSideOfState(b.id, side);
-//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MULTISIDE.ordinal(), multi, b.id, side);
+//            ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.MULTISIDE.wireId(), multi, b.id, side);
 //        }
 //        this.initGui();
 //    }

@@ -25,7 +25,7 @@ public final class GuiSonic extends GuiPowerOnlyMachine<BlockEntitySonicWeapon, 
         volume.setValue(Integer.toString(BlockEntitySonicWeapon.decibelsFromVolume(menu.tile.setvolume)));
         volume.setResponder(text -> {
             if (!updating && text.matches("[0-9]{1,3}")) ReikaPacketHelper.sendLongDataPacket(RotaryCraft.packetChannel,
-                    PacketRegistry.SONICVOLUME.ordinal(), menu.tile, BlockEntitySonicWeapon.volumeFromDecibels(Integer.parseInt(text)));
+                    PacketRegistry.SONICVOLUME.wireId(), menu.tile, BlockEntitySonicWeapon.volumeFromDecibels(Integer.parseInt(text)));
         });
         addRenderableWidget(volume);
     }

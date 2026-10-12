@@ -133,7 +133,7 @@ public final class BlockEntityDefoliator extends PoweredLiquidReceiver implement
             entity.addEffect(new MobEffectInstance(MobEffects.POISON, 50, 3)); entity.hurtServer(server, entity.damageSources().generic(), .5F);
         }
         // Effects are centered on the target and do not require a loaded machine block entity.
-        ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.ordinal(), server, target, 64, target.getX(), target.getY(), target.getZ());
+        ReikaPacketHelper.sendDataPacketWithRadius(RotaryCraft.packetChannel, PacketRegistry.DEFOLIATOR.wireId(), server, target, 64, target.getX(), target.getY(), target.getZ());
         tank.removeLiquid(1); setChanged(); return true;
     }
     public static void onBlockBreak(Level world, BlockPos target) {

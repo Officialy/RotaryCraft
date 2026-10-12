@@ -75,7 +75,7 @@ public class GuiSpawnerController extends GuiPowerOnlyMachine<BlockEntitySpawner
             }
             dat = Math.max(0, delay);
         }
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPAWNERTIMER.ordinal(), spawner, dat);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.SPAWNERTIMER.wireId(), spawner, dat);
     }
 
     @Override

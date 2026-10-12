@@ -82,7 +82,7 @@
 //            return;
 //        }
 //        activePlayer = playerList.getEntryAtRelativeIndex(button.id);
-//        ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SAFEPLAYER.ordinal(), activePlayer, te);
+//        ReikaPacketHelper.sendStringPacket(RotaryCraft.packetChannel, PacketRegistry.SAFEPLAYER.wireId(), activePlayer, te);
 //        rawData.remove(button.id);
 //        this.initGui();
 //    }

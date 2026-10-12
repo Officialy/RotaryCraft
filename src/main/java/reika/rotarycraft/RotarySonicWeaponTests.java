@@ -168,7 +168,7 @@ final class RotarySonicWeaponTests {
         long value = 123456789012345L;
         try {
             var bytes = new java.io.ByteArrayOutputStream(); var out = new java.io.DataOutputStream(bytes);
-            out.writeInt(PacketRegistry.SONICVOLUME.ordinal()); out.writeLong(value);
+            out.writeInt(PacketRegistry.SONICVOLUME.wireId()); out.writeLong(value);
             out.writeInt(m.getBlockPos().getX()); out.writeInt(m.getBlockPos().getY()); out.writeInt(m.getBlockPos().getZ());
             var packet = new reika.dragonapi.libraries.io.ReikaPacketHelper.DataPacket(bytes.toByteArray());
             packet.init(reika.dragonapi.auxiliary.PacketTypes.DATA, reika.dragonapi.libraries.io.ReikaPacketHelper.getPipeline(RotaryCraft.packetChannel));

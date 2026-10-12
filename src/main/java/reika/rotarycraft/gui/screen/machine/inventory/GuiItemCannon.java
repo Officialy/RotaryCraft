@@ -99,7 +99,7 @@
 //        DataOutputStream outputStream = new DataOutputStream(bos);
 //        try {
 //            //ModLoader.getMinecraftInstance().thePlayer.addChatMessage(String.valueOf(drops));
-//            outputStream.writeInt(PacketRegistry.ITEMCANNON.ordinal());
+//            outputStream.writeInt(PacketRegistry.ITEMCANNON.wireId());
 //            outputStream.writeInt(target.dimensionID);
 //            outputStream.writeInt(target.xCoord);
 //            outputStream.writeInt(target.yCoord);

@@ -65,7 +65,7 @@ public class GuiGPR extends NonPoweredMachineScreen<BlockEntityGPR, BlankContain
     }
 
     private void sendShift(int amt) {
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.ordinal(), gpr, amt);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.GPR.wireId(), gpr, amt);
         gpr.shift(gpr.getGuiDirection(), amt); //optimistic local update; the server sync corrects it
     }
 

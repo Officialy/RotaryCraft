@@ -53,7 +53,7 @@ public class GuiScaleChest extends MachineScreen<BlockEntityScaleableChest, Cont
         int target = page + dir;
         if (target < 0 || target >= chest.getMaxPage() || target == page)
             return;
-        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CHEST.ordinal(), chest, target);
+        ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.CHEST.wireId(), chest, target);
         //the server re-opens the menu on the new page, which rebuilds this screen
     }
 
