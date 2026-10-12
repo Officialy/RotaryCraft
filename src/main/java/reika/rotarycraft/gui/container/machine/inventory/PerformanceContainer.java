@@ -13,7 +13,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.neoforged.fml.loading.FMLLoader;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.engine.BlockEntityPerformanceEngine;
@@ -54,8 +53,8 @@ public class PerformanceContainer extends IOMachineContainer<BlockEntityPerforma
             //icrafting.sendProgressBarUpdate(this, 3, Engine.getFuelLevel());
             icrafting.sendProgressBarUpdate(this, 4, Engine.additives);
         }*/
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, engine, "water");
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, engine, "fuel");
+        this.syncTank(RotaryCraft.packetChannel, "water");
+        this.syncTank(RotaryCraft.packetChannel, "fuel");
     }
 
     @Override

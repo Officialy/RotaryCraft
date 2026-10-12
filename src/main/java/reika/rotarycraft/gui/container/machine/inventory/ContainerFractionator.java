@@ -11,7 +11,6 @@ package reika.rotarycraft.gui.container.machine.inventory;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.production.BlockEntityFractionator;
@@ -57,8 +56,8 @@ public class ContainerFractionator extends IOMachineContainer<BlockEntityFractio
     public void broadcastChanges() {
         super.broadcastChanges();
         // Sync both tanks so the GUI's input/output fuel bars stay live with the server.
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, fct, "input");
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, fct, "output");
+        this.syncTank(RotaryCraft.packetChannel, "input");
+        this.syncTank(RotaryCraft.packetChannel, "output");
     }
 
     @Override

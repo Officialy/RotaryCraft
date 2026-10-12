@@ -13,7 +13,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 
 import reika.dragonapi.instantiable.gui.ArmorSlot;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityFillingStation;
@@ -51,6 +50,6 @@ public class ContainerFillingStation extends IOMachineContainer<BlockEntityFilli
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, tile, "tank");
+        this.syncTank(RotaryCraft.packetChannel, "tank");
     }
 }

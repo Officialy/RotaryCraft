@@ -12,7 +12,6 @@ package reika.rotarycraft.gui.container.machine;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -54,7 +53,7 @@ public class SteamContainer extends IOMachineContainer<BlockEntitySteamEngine> {
     @Override
     public void sendAllDataToRemote() {
         super.sendAllDataToRemote();
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, steam, "water");
+        this.syncTank(RotaryCraft.packetChannel, "water");
     }
 
     @Override

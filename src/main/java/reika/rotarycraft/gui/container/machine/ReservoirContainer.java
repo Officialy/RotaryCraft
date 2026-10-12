@@ -11,9 +11,7 @@ package reika.rotarycraft.gui.container.machine;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.fml.loading.FMLEnvironment;
 import reika.dragonapi.base.CoreContainer;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.blockentities.storage.BlockEntityReservoir;
 import reika.rotarycraft.registry.RotaryMenus;
@@ -38,9 +36,7 @@ public class ReservoirContainer extends CoreContainer<BlockEntityReservoir> {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        if (FMLEnvironment.getDist().isDedicatedServer()) {
-            ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, reservoir, "tank");
-        }
+        this.syncTank(RotaryCraft.packetChannel, "tank");
 
     }
 

@@ -13,7 +13,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 
 import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.processing.BlockEntityExtractor;
@@ -57,7 +56,7 @@ public class ContainerExtractor extends IOMachineContainer<BlockEntityExtractor>
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, extractor, "tank");
+        this.syncTank(RotaryCraft.packetChannel, "tank");
     }
 
     @Override

@@ -11,7 +11,6 @@ package reika.rotarycraft.gui.container.machine;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.base.blockentity.BlockEntityEngine;
@@ -36,7 +35,7 @@ public class ContainerJet extends IOMachineContainer<BlockEntityEngine> {
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, engine, "fuel");
+        this.syncTank(RotaryCraft.packetChannel, "fuel");
     }
 
 }

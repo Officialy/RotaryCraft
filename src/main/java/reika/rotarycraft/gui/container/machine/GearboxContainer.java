@@ -11,7 +11,6 @@ package reika.rotarycraft.gui.container.machine;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
@@ -48,7 +47,7 @@ public class GearboxContainer extends IOMachineContainer<BlockEntityGearbox> {
             icrafting.sendProgressBarUpdate(this, 4, gearbox.torque);
         }*/
 
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, gearbox, "tank");
+        this.syncTank(RotaryCraft.packetChannel, "tank");
     }
 
     @Override

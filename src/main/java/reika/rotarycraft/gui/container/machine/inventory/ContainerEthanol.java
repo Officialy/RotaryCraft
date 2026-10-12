@@ -12,7 +12,6 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.engine.BlockEntityGasEngine;
@@ -45,7 +44,7 @@ public class ContainerEthanol extends IOMachineContainer<BlockEntityGasEngine> {
     public void broadcastChanges() {
         super.broadcastChanges();
 
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, engine, "fuel");
+        this.syncTank(RotaryCraft.packetChannel, "fuel");
     }
 
 }

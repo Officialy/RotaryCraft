@@ -13,7 +13,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 
 import reika.dragonapi.instantiable.gui.slot.ResultSlotItemHandler;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
@@ -41,9 +40,9 @@ public class ContainerPulseFurnace extends IOMachineContainer<BlockEntityPulseFu
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, pulseFurnace, "water");
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, pulseFurnace, "fuel");
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, pulseFurnace, "accel");
+        this.syncTank(RotaryCraft.packetChannel, "water");
+        this.syncTank(RotaryCraft.packetChannel, "fuel");
+        this.syncTank(RotaryCraft.packetChannel, "accel");
     }
 
     @Override

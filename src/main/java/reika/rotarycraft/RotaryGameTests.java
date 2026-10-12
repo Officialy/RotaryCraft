@@ -121,6 +121,7 @@ public final class RotaryGameTests {
         DragonAPIKeyedStackTests.register(event, env);
         DragonAPIPacketPipelineTests.register(event, env);
         DragonAPICompoundSyncTests.register(event, env);
+        DragonAPITankSyncTests.register(event, env);
         DragonAPIExtendedAuditTests.register(event, env);
         DragonAPIInventoryAuditTests.register(event, env);
         DragonAPITickFailureAuditTests.register(event, env);

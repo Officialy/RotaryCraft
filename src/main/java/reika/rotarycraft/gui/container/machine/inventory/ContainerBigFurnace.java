@@ -12,7 +12,6 @@ package reika.rotarycraft.gui.container.machine.inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
-import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.IOMachineContainer;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
@@ -68,7 +67,7 @@ public class ContainerBigFurnace extends IOMachineContainer<BlockEntityLavaSmelt
             //icrafting.sendProgressBarUpdate(this, 1, te.getLevel());
         }*/
 
-        ReikaPacketHelper.sendTankSyncPacket(RotaryCraft.packetChannel, te, "tank");
+        this.syncTank(RotaryCraft.packetChannel, "tank");
     }
 
 }
