@@ -116,6 +116,7 @@ public final class RotaryGameTests {
         RotaryAdvancementTests.register(event, env);
         RotaryRailgunTests.register(event, env);
         DragonAPIAuditTests.register(event, env);
+        DragonAPIChunkTrackerTests.register(event, env);
         DragonAPICatalogueTests.register(event, env);
         DragonAPIOreCatalogueTests.register(event, env);
         DragonAPIKeyedStackTests.register(event, env);
