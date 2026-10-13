@@ -27,6 +27,7 @@ final class DragonAPIAuditTests {
         RotaryGameTests.register(event, environment, "dragonapi_audit_lua_placer", 40, DragonAPIAuditTests::placer);
         RotaryGameTests.register(event, environment, "dragonapi_audit_keys_breakability", 40, DragonAPIAuditTests::keys);
         RotaryGameTests.register(event, environment, "dragonapi_audit_commands", 40, DragonAPIAuditTests::commands);
+        RotaryGameTests.register(event, environment, "dragonapi_audit_event_profiler", 40, DragonAPIAuditTests::eventProfiler);
         RotaryGameTests.register(event, environment, "dragonapi_audit_protection", 40, DragonAPIAuditTests::protection);
         RotaryGameTests.register(event, environment, "dragonapi_audit_components", 40, DragonAPIAuditTests::components);
         RotaryGameTests.register(event, environment, "dragonapi_audit_disconnect", 40, DragonAPIAuditTests::disconnect);
@@ -92,6 +93,35 @@ final class DragonAPIAuditTests {
         h.assertTrue(ReikaBlockHelper.isUnbreakable(h.getLevel(), h.absolutePos(POS), Blocks.BEDROCK, player), "ordinary bedrock must be unbreakable");
         h.setBlock(POS, Blocks.STONE);
         h.assertTrue(!ReikaBlockHelper.isUnbreakable(h.getLevel(), h.absolutePos(POS), Blocks.STONE, player), "ordinary stone must remain breakable");
+        h.succeed();
+    }
+
+    private static void eventProfiler(GameTestHelper h) {
+        var bus = net.neoforged.neoforge.common.NeoForge.EVENT_BUS;
+        h.assertTrue(bus instanceof reika.dragonapi.auxiliary.trackers.ProfilingEventBus,
+                "the actual NeoForge game bus must install native listener instrumentation");
+        var calls = new java.util.concurrent.atomic.AtomicInteger();
+        java.util.function.Consumer<reika.dragonapi.instantiable.event.SetBlockEvent.Post> listener = event -> calls.incrementAndGet();
+        bus.addListener(reika.dragonapi.instantiable.event.SetBlockEvent.Post.class, listener);
+        var server = h.getLevel().getServer();
+        var dispatcher = server.getCommands().getDispatcher();
+        try {
+            reika.dragonapi.auxiliary.trackers.EventProfiler.finishProfiling();
+            dispatcher.execute("profileevent enable reika.dragonapi.instantiable.event.SetBlockEvent$Post", server.createCommandSourceStack());
+            h.setBlock(POS, Blocks.GOLD_BLOCK);
+            var report = reika.dragonapi.auxiliary.trackers.EventProfiler.snapshot();
+            h.assertTrue(report.running() && report.eventFires() > 0 && calls.get() > 0,
+                    "real chunk mutation must be measured through the game bus without explicit timing hooks");
+            h.assertTrue(report.handlers().stream().mapToLong(reika.dragonapi.auxiliary.trackers.EventProfiler.EventProfile::getFireCount).sum() >= calls.get()
+                    && report.totalHandlerTime() > 0, "the actual callback must have nonzero elapsed time and calls");
+            dispatcher.execute("profileevent display", server.createCommandSourceStack());
+            dispatcher.execute("profileevent disable", server.createCommandSourceStack());
+            long finishedFires = reika.dragonapi.auxiliary.trackers.EventProfiler.snapshot().eventFires();
+            bus.unregister(listener); int finishedCalls = calls.get(); h.setBlock(POS, Blocks.IRON_BLOCK);
+            h.assertTrue(calls.get() == finishedCalls && reika.dragonapi.auxiliary.trackers.EventProfiler.snapshot().eventFires() == finishedFires,
+                    "stopping must restore native listener identity for unregister and retain the completed report");
+        } catch (com.mojang.brigadier.exceptions.CommandSyntaxException error) { throw new IllegalStateException(error); }
+        finally { reika.dragonapi.auxiliary.trackers.EventProfiler.finishProfiling(); bus.unregister(listener); }
         h.succeed();
     }
 
