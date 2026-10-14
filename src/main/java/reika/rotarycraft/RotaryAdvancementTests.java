@@ -33,6 +33,7 @@ final class RotaryAdvancementTests {
         RotaryGameTests.register(event, env, "advancement_full_inventory", 40, RotaryAdvancementTests::fullInventory);
         RotaryGameTests.register(event, env, "advancement_handbook_use", 40, RotaryAdvancementTests::book);
         RotaryGameTests.register(event, env, "advancement_bonus_chest_injection", 40, RotaryAdvancementTests::bonusChest);
+        RotaryGameTests.register(event, env, "advancement_mineshaft_tool_injection", 40, RotaryAdvancementTests::mineshaftTools);
         RotaryGameTests.register(event, env, "advancement_gravel_gun_charge", 40, RotaryAdvancementTests::gunCharge);
         RotaryGameTests.register(event, env, "advancement_gravel_gun_hit", 40, RotaryAdvancementTests::gunHit);
         RotaryGameTests.register(event, env, "advancement_blast_result", 40, RotaryAdvancementTests::blastResult);
@@ -136,7 +137,25 @@ final class RotaryAdvancementTests {
                 }
             }
         }
-        h.assertTrue(steel > 0 && steel < 100, "the modifier must add occasional steel to the actual vanilla bonus table");
+        // 1.7.10 drew 10 items from a pool of 64 vanilla + 6 steel: ~0.86 steel stacks per chest, ~439 over 512.
+        h.assertTrue(steel > 350 && steel < 530, "bonus steel must keep its 1.7.10 rate, got " + steel);
+        h.succeed();
+    }
+
+    private static void mineshaftTools(GameTestHelper h) {
+        var table = h.getLevel().getServer().reloadableRegistries().getLootTable(BuiltInLootTables.ABANDONED_MINESHAFT);
+        var params = new LootParams.Builder(h.getLevel()).withParameter(LootContextParams.ORIGIN,
+                Vec3.atCenterOf(h.absolutePos(BlockPos.ZERO))).create(LootContextParamSets.CHEST);
+        int screwdrivers = 0, meters = 0;
+        for (int seed = 1; seed <= 2048; seed++) {
+            for (var stack : table.getRandomItems(params, seed)) {
+                if (stack.is(RotaryItems.SCREWDRIVER.get())) screwdrivers++;
+                if (stack.is(RotaryItems.ANGULAR_TRANSDUCER.get())) meters++;
+            }
+        }
+        // Weight 1 of 80 vanilla + 86 RotaryCraft, 3-6 draws: ~2.7% of chests each, ~56 over 2048.
+        h.assertTrue(screwdrivers > 25 && screwdrivers < 95, "mineshaft screwdriver rate, got " + screwdrivers);
+        h.assertTrue(meters > 25 && meters < 95, "mineshaft angular transducer rate, got " + meters);
         h.succeed();
     }
 

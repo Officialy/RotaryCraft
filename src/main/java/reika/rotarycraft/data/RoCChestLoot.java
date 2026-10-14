@@ -15,26 +15,49 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import reika.rotarycraft.registry.RotaryItems;
 
-/** Every live V33a RotaryChests entry, with its original tier, count and weight. */
+/**
+ * Every live V33a RotaryChests entry, with its original tier, count and weight.
+ *
+ * <p>In 1.7.10 these entries were merged into the location's single {@code ChestGenHooks} pool, and the
+ * chest drew {@code getCount()} items from the merged list. Each subtable reproduces that exactly for
+ * RotaryCraft's items: it rolls the 1.7.10 chest's own count, and its empty entry weighs what the
+ * 1.7.10 vanilla pool did, so every item keeps its original per-roll chance of
+ * {@code weight / (vanilla + RotaryCraft)} and its original expected count per chest.
+ *
+ * <p>Both columns are read from Forge 10.13.4.1614: the rolls are {@code addInfo}'s min/max as
+ * {@code getCount} uses them ({@code min + nextInt(max - min)}, so the max is exclusive), and the
+ * vanilla weight is the sum of the vanilla content array plus the enchanted book {@code init()} adds
+ * (weight 1, or 2 in the library). Do not swap these for the 26.x vanilla roll counts and a flat
+ * filler: that made the bonus-chest steel ten times rarer and mineshaft tools about five times rarer.
+ */
 public record RoCChestLoot(LootTableSubProvider.Context context) implements LootTableSubProvider {
     public enum Location {
-        BONUS(BuiltInLootTables.SPAWN_BONUS_CHEST, 1, 1),
-        DUNGEON(BuiltInLootTables.SIMPLE_DUNGEON, 1, 3),
-        MINESHAFT(BuiltInLootTables.ABANDONED_MINESHAFT, 1, 1),
-        STRONGHOLD_HALLWAY(BuiltInLootTables.STRONGHOLD_CORRIDOR, 2, 3),
-        STRONGHOLD_CROSSING(BuiltInLootTables.STRONGHOLD_CROSSING, 1, 4),
-        STRONGHOLD_LIBRARY(BuiltInLootTables.STRONGHOLD_LIBRARY, 2, 10),
-        VILLAGE(BuiltInLootTables.VILLAGE_WEAPONSMITH, 3, 8);
+        /** BONUS_CHEST: WorldServer.bonusChestContent, count 10. */
+        BONUS(BuiltInLootTables.SPAWN_BONUS_CHEST, 10, 10, 64),
+        /** DUNGEON_CHEST: WorldGenDungeons contents + book, count 8. */
+        DUNGEON(BuiltInLootTables.SIMPLE_DUNGEON, 8, 8, 120),
+        /** MINESHAFT_CORRIDOR: mineshaftChestContents + book, addInfo 3..7. */
+        MINESHAFT(BuiltInLootTables.ABANDONED_MINESHAFT, 3, 6, 80),
+        /** STRONGHOLD_CORRIDOR: ChestCorridor.strongholdChestContents + book, addInfo 2..4. */
+        STRONGHOLD_HALLWAY(BuiltInLootTables.STRONGHOLD_CORRIDOR, 2, 3, 99),
+        /** STRONGHOLD_CROSSING: RoomCrossing contents + book, addInfo 1..5. */
+        STRONGHOLD_CROSSING(BuiltInLootTables.STRONGHOLD_CROSSING, 1, 4, 62),
+        /** STRONGHOLD_LIBRARY: Library contents + book (weight 2), addInfo 1..5. */
+        STRONGHOLD_LIBRARY(BuiltInLootTables.STRONGHOLD_LIBRARY, 1, 4, 44),
+        /** VILLAGE_BLACKSMITH: House2 contents, addInfo 3..9. */
+        VILLAGE(BuiltInLootTables.VILLAGE_WEAPONSMITH, 3, 8, 94);
 
         public final ResourceKey<LootTable> target;
         public final ResourceKey<LootTable> subtable;
         private final int minRolls;
         private final int maxRolls;
+        private final int vanillaWeight;
 
-        Location(ResourceKey<LootTable> target, int minRolls, int maxRolls) {
+        Location(ResourceKey<LootTable> target, int minRolls, int maxRolls, int vanillaWeight) {
             this.target = target;
             this.minRolls = minRolls;
             this.maxRolls = maxRolls;
+            this.vanillaWeight = vanillaWeight;
             subtable = ResourceKey.create(Registries.LOOT_TABLE,
                     Identifier.fromNamespaceAndPath("rotarycraft", "chests/injected/" + name().toLowerCase(Locale.ROOT)));
         }
@@ -81,9 +104,8 @@ public record RoCChestLoot(LootTableSubProvider.Context context) implements Loot
                     add(pool, 2, RotaryItems.IRON_SCRAP.get(), 1, 8, 30);
                 }
             }
-            // Same modern additive-pool convention as ChromaChestLoot: weight 100 for no extra loot.
-            // Original relative weights/counts survive; the old flat vanilla denominator no longer exists.
-            pool.add(EmptyLootItem.emptyItem().setWeight(100));
+            // Stands in for the 1.7.10 vanilla entries these weights were drawn against; see the class doc.
+            pool.add(EmptyLootItem.emptyItem().setWeight(location.vanillaWeight));
             context.accept(location.subtable, LootTable.lootTable().withPool(pool));
         }
     }
