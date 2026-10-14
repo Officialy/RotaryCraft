@@ -27,6 +27,7 @@ final class DragonAPIAuditTests {
         RotaryGameTests.register(event, environment, "dragonapi_audit_lua_placer", 40, DragonAPIAuditTests::placer);
         RotaryGameTests.register(event, environment, "dragonapi_audit_keys_breakability", 40, DragonAPIAuditTests::keys);
         RotaryGameTests.register(event, environment, "dragonapi_audit_commands", 40, DragonAPIAuditTests::commands);
+        RotaryGameTests.register(event, environment, "dragonapi_audit_chat_formatting", 40, DragonAPIAuditTests::chatFormatting);
         RotaryGameTests.register(event, environment, "dragonapi_audit_event_profiler", 40, DragonAPIAuditTests::eventProfiler);
         RotaryGameTests.register(event, environment, "dragonapi_audit_protection", 40, DragonAPIAuditTests::protection);
         RotaryGameTests.register(event, environment, "dragonapi_audit_components", 40, DragonAPIAuditTests::components);
@@ -133,11 +134,36 @@ final class DragonAPIAuditTests {
             h.assertTrue(dispatcher.execute("profileevent enable java.lang.String", server.createCommandSourceStack()) == 1, "invalid event classes must report a status without a raw exception");
             h.assertTrue(dispatcher.execute("profileevent disable", server.createCommandSourceStack()) == 1, "disable must be reachable");
             var player = player(h);
+            h.assertTrue(dispatcher.execute("guide", server.createCommandSourceStack().withEntity(player)) == 1, "guide stack must be created after registry binding");
+            boolean translatedGuide = false;
+            for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
+                var name = player.getInventory().getItem(slot).get(net.minecraft.core.component.DataComponents.CUSTOM_NAME);
+                if (name != null && name.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents contents
+                        && contents.getKey().equals("item.dragonapi.guide.name")) translatedGuide = true;
+            }
+            h.assertTrue(translatedGuide, "guide name must retain its translation key for the receiving client");
             h.assertTrue(dispatcher.execute("biomepng seed \"-1,0,1\" 2 1 0 false", server.createCommandSourceStack().withEntity(player)) == 3, "seed/list and actual range/resolution must reach map generation");
+            h.assertTrue(BiomeMapCommand.processCommand(server.createCommandSourceStack(),
+                    new String[]{player.getScoreboardName(), "1", "1"}) == 1,
+                    "console map target must consume the player argument before range/resolution");
             h.assertTrue(dispatcher.execute("entitylist dedicated_server", server.createCommandSourceStack()) == 1, "entity registry dump must support console");
+            h.assertTrue(dispatcher.execute("entitylist invalid", server.createCommandSourceStack()) == 0, "invalid side must report command failure");
+            h.assertTrue(dispatcher.execute("entitylist client", server.createCommandSourceStack()) == 0, "client dump must reject a console source");
             h.assertTrue(dispatcher.getRoot().getChild("checker").getChild("enable").getChild("mod") != null, "checker requires a real mod argument");
         } catch (com.mojang.brigadier.exceptions.CommandSyntaxException error) { throw new IllegalStateException(error); }
         h.assertTrue(BiomeMapCommand.parseSeeds("-3--1,5").equals(List.of(-3L, -2L, -1L, 5L)), "negative seed ranges must parse correctly");
+        h.succeed();
+    }
+
+    private static void chatFormatting(GameTestHelper h) {
+        // These helpers format before their client-side delivery guard. The old specifiers
+        // throw for a nonempty stack, integer coordinates, and block output respectively.
+        var level = h.getLevel();
+        reika.dragonapi.libraries.io.ReikaChatHelper.writeItemStack(level, new ItemStack(Items.STONE, 3));
+        reika.dragonapi.libraries.io.ReikaChatHelper.writeItemStack(level, null);
+        reika.dragonapi.libraries.io.ReikaChatHelper.writeCoords(level, h.absolutePos(POS));
+        reika.dragonapi.libraries.io.ReikaChatHelper.writeBlockAtCoords(level, h.absolutePos(POS));
+        reika.dragonapi.libraries.io.ReikaChatHelper.writeLocalString("command.dragonapi.entitylist.header");
         h.succeed();
     }
 
