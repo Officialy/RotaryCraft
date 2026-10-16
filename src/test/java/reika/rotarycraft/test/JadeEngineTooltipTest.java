@@ -25,8 +25,8 @@ class JadeEngineTooltipTest {
         engine.torque = 4;
         engine.omega = 256;
         var rows = tooltip(engine);
-        assertTrue(rows.stream().anyMatch(s -> s.startsWith("Power:")), rows.toString());
-        assertTrue(rows.stream().noneMatch(s -> s.startsWith("Temp") || s.startsWith("Fuel:")), rows.toString());
+        assertTrue(rows.stream().map(Component::getString).anyMatch(s -> s.startsWith("Power:")), rows.toString());
+        assertTrue(rows.stream().noneMatch(text -> isTemperature(text) || text.getString().startsWith("Fuel:")), rows.toString());
     }
 
     @Test
@@ -34,12 +34,20 @@ class JadeEngineTooltipTest {
         var engine = new BlockEntitySteamEngine(BlockPos.ZERO, RotaryBlocks.STEAM_ENGINE.get().defaultBlockState());
         engine.setTemperature(123);
         var rows = tooltip(engine);
-        assertEquals(List.of("Temperature: 123°C"), rows.stream().filter(s -> s.startsWith("Temp")).toList());
-        assertTrue(rows.stream().anyMatch(s -> s.startsWith("Fuel:")), rows.toString());
+        var temperatures = rows.stream().filter(JadeEngineTooltipTest::isTemperature).toList();
+        assertEquals(1, temperatures.size(), rows.toString());
+        var contents = (net.minecraft.network.chat.contents.TranslatableContents) temperatures.getFirst().getContents();
+        assertArrayEquals(new Object[]{123}, contents.getArgs(), "Temperature must come from server data and remain a translation argument");
+        assertTrue(rows.stream().map(Component::getString).anyMatch(s -> s.startsWith("Fuel:")), rows.toString());
+    }
+
+    private static boolean isTemperature(Component text) {
+        return text.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents contents
+                && contents.getKey().equals("tooltip.dragonapi.temperature");
     }
 
     @SuppressWarnings("unchecked")
-    private static List<String> tooltip(net.minecraft.world.level.block.entity.BlockEntity engine) {
+    private static List<Component> tooltip(net.minecraft.world.level.block.entity.BlockEntity engine) {
         var dataProviders = new ArrayList<IServerDataProvider<BlockAccessor>>();
         var components = new ArrayList<IBlockComponentProvider>();
         var common = proxy(IWailaCommonRegistration.class, (name, args) -> {
@@ -63,10 +71,10 @@ class JadeEngineTooltipTest {
             default -> null;
         });
         dataProviders.forEach(provider -> provider.appendServerData(data, accessor));
-        var rows = new ArrayList<String>();
+        var rows = new ArrayList<Component>();
         var tooltip = proxy(ITooltip.class, (name, args) -> {
             if (name.equals("add") && args != null && args.length > 0 && args[0] instanceof Component text)
-                rows.add(text.getString());
+                rows.add(text);
             return null;
         });
         components.stream().filter(provider -> provider.getUid().equals(ThermalTileJadePlugin.UID)

@@ -155,6 +155,25 @@ final class DragonAPIAuditTests {
             h.assertTrue(dispatcher.execute("entitylist dedicated_server", server.createCommandSourceStack()) == 1, "entity registry dump must support console");
             h.assertTrue(dispatcher.execute("entitylist invalid", server.createCommandSourceStack()) == 0, "invalid side must report command failure");
             h.assertTrue(dispatcher.execute("entitylist client", server.createCommandSourceStack()) == 0, "client dump must reject a console source");
+            h.assertTrue(dispatcher.execute("getuuid", server.createCommandSourceStack().withEntity(player)) == 1, "UUID lookup supports an entity source");
+            try {
+                dispatcher.execute("getuuid", server.createCommandSourceStack());
+                h.fail("UUID lookup from console must fail with a command syntax exception");
+            } catch (com.mojang.brigadier.exceptions.CommandSyntaxException expected) {}
+            boolean previousDebug = reika.dragonapi.DragonAPI.debugtest;
+            try {
+                try {
+                    dispatcher.execute("debugtest", server.createCommandSourceStack().withPermission(net.minecraft.server.permissions.PermissionSet.NO_PERMISSIONS));
+                    h.fail("An unprivileged source must not toggle global debug mode");
+                } catch (com.mojang.brigadier.exceptions.CommandSyntaxException expected) {}
+                h.assertTrue(reika.dragonapi.DragonAPI.debugtest == previousDebug, "Rejected debug command must not mutate state");
+                h.assertTrue(dispatcher.execute("debugtest", server.createCommandSourceStack()) == 1, "Authorized console can toggle debug mode");
+                h.assertTrue(reika.dragonapi.DragonAPI.debugtest != previousDebug, "Authorized debug command must toggle state");
+            } finally { reika.dragonapi.DragonAPI.debugtest = previousDebug; }
+            h.assertTrue(BiomeMapCommand.processCommand(server.createCommandSourceStack().withEntity(player),
+                    new String[]{"no-number", "1"}) == 0, "Invalid numeric map arguments must report failure");
+            h.assertTrue(BiomeMapCommand.processCommand(server.createCommandSourceStack().withEntity(player),
+                    new String[]{"1", "1", "-1"}) == 0, "Negative grid size must report failure");
             h.assertTrue(dispatcher.getRoot().getChild("checker").getChild("enable").getChild("mod") != null, "checker requires a real mod argument");
         } catch (com.mojang.brigadier.exceptions.CommandSyntaxException error) { throw new IllegalStateException(error); }
         h.assertTrue(BiomeMapCommand.parseSeeds("-3--1,5").equals(List.of(-3L, -2L, -1L, 5L)), "negative seed ranges must parse correctly");
