@@ -131,8 +131,14 @@ final class DragonAPIAuditTests {
         var dispatcher = server.getCommands().getDispatcher();
         try {
             h.assertTrue(dispatcher.execute("profileevent display", server.createCommandSourceStack()) == 1, "profiling display must support console before profiling starts");
-            h.assertTrue(dispatcher.execute("profileevent enable java.lang.String", server.createCommandSourceStack()) == 1, "invalid event classes must report a status without a raw exception");
+            h.assertTrue(dispatcher.execute("profileevent enable java.lang.String", server.createCommandSourceStack()) == 0, "invalid event classes must report a status without a raw exception");
             h.assertTrue(dispatcher.execute("profileevent disable", server.createCommandSourceStack()) == 1, "disable must be reachable");
+            h.assertTrue(reika.dragonapi.command.EventProfilerCommand.processCommand(server.createCommandSourceStack(), new String[0]) == 0,
+                    "missing profiler action must return failure");
+            h.assertTrue(dispatcher.execute("reikapregen start 0 64 0 0", server.createCommandSourceStack()) == 1, "bounded population must start from the command");
+            for (String action : List.of("status", "pause", "resume", "cancel"))
+                h.assertTrue(dispatcher.execute("reikapregen " + action, server.createCommandSourceStack()) >= 1,
+                        "bounded population command must support " + action);
             var player = player(h);
             h.assertTrue(dispatcher.execute("guide", server.createCommandSourceStack().withEntity(player)) == 1, "guide stack must be created after registry binding");
             boolean translatedGuide = false;
