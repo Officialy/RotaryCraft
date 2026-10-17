@@ -32,10 +32,10 @@ public final class RoCDataProviders {
 
     @SubscribeEvent
     public static void onGatherServer(GatherDataEvent.Server event) {
-        event.createWorldRegistryObjects(RoCWorldGenProvider.buildRegistrySet().add(Registries.DAMAGE_TYPE, context ->
+        event.getDefaultPackGenerator().createWorldRegistryObjects(RoCWorldGenProvider.buildRegistrySet().add(Registries.DAMAGE_TYPE, context ->
                 context.register(reika.rotarycraft.registry.RotaryDamageTypes.TURRET,
                         new net.minecraft.world.damagesource.DamageType("turret", net.minecraft.world.damagesource.DamageScaling.NEVER, .1F))));
-        event.createProvider((output, lookup) -> new net.minecraft.data.tags.DamageTypeTagsProvider(
+        event.createProvider((output, _) -> new net.minecraft.data.tags.DamageTypeTagsProvider(
                 output, event.getWorldLookupProvider(), RotaryCraft.MODID) {
             @Override protected void addTags(net.minecraft.core.HolderLookup.Provider registries) {
                 var type = reika.rotarycraft.registry.RotaryDamageTypes.TURRET;
@@ -48,7 +48,7 @@ public final class RoCDataProviders {
         event.createProvider(RoCLootModifierProvider::new);
         // Recipes, loot tables, and advancements are reloadable registries in 26.3.
         // The recipe bootstrap also writes recipe unlock advancements into ADVANCEMENT.
-        event.createReloadableRegistryObjects(new RegistrySetBuilder()
+        event.getDefaultPackGenerator().createReloadableRegistryObjects(new RegistrySetBuilder()
                 .add(RoCRecipeProvider.bootstrap())
                 .add(Registries.LOOT_TABLE, new RoCLootProvider())
                 .add(Registries.ADVANCEMENT, new RoCAdvancementProvider()));
