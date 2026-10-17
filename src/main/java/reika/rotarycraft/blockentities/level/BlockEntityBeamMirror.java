@@ -147,7 +147,7 @@ public class BlockEntityBeamMirror extends RotaryCraftBlockEntity implements Ran
         int time = (int) (level.getDefaultClockTime() % 24000);
         if (time > 13500 && time < 22500)
             return 0;
-        double r = ReikaMathLibrary.doubpow(2, 7 * ReikaWorldHelper.getSunIntensity(level, true, 0));
+        double r = ReikaMathLibrary.doubpow(2, 7 * ReikaWorldHelper.getSunIntensity(level, worldPosition, true, 0));
         //ReikaJavaLibrary.pConsole(r);
         int ir = (int) r;
         if (ir > this.getMaxRange())

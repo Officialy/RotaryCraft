@@ -55,8 +55,18 @@ public class SolarPlant {
     //private final SolarSkyCache skyCache = new SolarSkyCache();
     private final HashMap<BlockPos, Integer> mirrorLevels = new HashMap<>();
 
+    private final BlockPos sunlightPosition;
+
+    public SolarPlant() {
+        this(BlockPos.ZERO);
+    }
+
+    private SolarPlant(BlockPos position) {
+        sunlightPosition = position.immutable();
+    }
+
     public static SolarPlant build(Level world, BlockPos pos) {
-        SolarPlant p = new SolarPlant();
+        SolarPlant p = new SolarPlant(pos);
         HashMap<BlockPos, ImmutablePair<Integer, Integer>> towerLocations = new HashMap<>();
         ArrayList<BlockPos> li = new ArrayList<>();
         // The legacy SOLAR block held both machine types; the modern port gives each its own block.
@@ -184,7 +194,7 @@ public class SolarPlant {
             return 0;
         //if (world.hasNoSky)
         //    return 0;
-        double sun = ReikaWorldHelper.getSunIntensity(world, true, 0) * 0.8F + 0.2F;
+        double sun = ReikaWorldHelper.getSunIntensity(world, sunlightPosition, true, 0) * 0.8F + 0.2F;
         // MOD-PORT: PlanetDimensionHandler can scale this when supported planet dimensions land.
         if (sun > 0.21) {
             return (int) (15 * sun);
