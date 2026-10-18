@@ -34,6 +34,20 @@ final class DragonAPIExtendedAuditTests {
         RotaryGameTests.register(event, environment, "dragonapi_extended_menu", 40, DragonAPIExtendedAuditTests::menu);
         RotaryGameTests.register(event, environment, "dragonapi_extended_resources", 40, DragonAPIExtendedAuditTests::resources);
         RotaryGameTests.register(event, environment, "dragonapi_lua_enchantments", 40, DragonAPIExtendedAuditTests::luaEnchantments);
+        RotaryGameTests.register(event, environment, "dragonapi_crafting_recipe_sync", 40, DragonAPIExtendedAuditTests::craftingRecipeSync);
+    }
+
+    private static void craftingRecipeSync(GameTestHelper helper) {
+        var sync = new net.neoforged.neoforge.event.OnDatapackSyncEvent(helper.getLevel().getServer().getPlayerList(), null);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(sync);
+        helper.assertTrue(sync.getRecipeTypesToSend().contains(net.minecraft.world.item.crafting.RecipeType.CRAFTING),
+                "the registered sync listener must request handbook crafting data without relying on a recipe viewer");
+        var recipes = helper.getLevel().getServer().getRecipeManager().recipeMap();
+        var payload = net.neoforged.neoforge.network.payload.RecipeContentPayload.create(sync.getRecipeTypesToSend(), recipes);
+        long count = payload.recipes().stream().filter(holder -> holder.value().getType() == net.minecraft.world.item.crafting.RecipeType.CRAFTING
+                && reika.dragonapi.libraries.ReikaRecipeHelper.getRecipeOutput(holder.value()).is(reika.rotarycraft.registry.RotaryItems.RAILGUN_AMMO.get())).count();
+        helper.assertTrue(count == 16, "native requested-type payload must include all sixteen railgun crafting recipes");
+        helper.succeed();
     }
 
     private static void luaEnchantments(GameTestHelper h) {

@@ -50,7 +50,18 @@ final class DragonAPISideAuditTests {
         reika.dragonapi.libraries.io.ReikaChatHelper.clearChat();
         reika.dragonapi.libraries.io.ReikaChatHelper.writeComponent(net.minecraft.network.chat.Component.literal("D14 dedicated guard"));
         reika.dragonapi.libraries.io.ReikaSoundHelper.playClientSound(net.minecraft.sounds.SoundEvents.FIRE_EXTINGUISH, 0, 0, 0, 1, 1, true);
+        var vertices = new reika.dragonapi.instantiable.rendering.TessellatorVertexList();
+        vertices.addVertexWithUVColor(1, 2, 3, .25, .75, 0x123456);
+        var captured = vertices.snapshot();
+        vertices.offset(10, 20, 30);
+        var emitted = new java.util.ArrayList<reika.dragonapi.instantiable.rendering.TessellatorVertexList.VertexData>();
+        vertices.render(emitted::add);
+        helper.assertTrue(captured.getFirst().x() == 1 && emitted.getFirst().x() == 11
+                && emitted.getFirst().color() == 0x123456 && emitted.getFirst().u() == .25,
+                "common geometry snapshots/explicit sinks must work without client rendering classes");
         for (Class<?> type : java.util.List.of(Proportionality.class, Spline.class,
+                reika.dragonapi.instantiable.rendering.TessellatorVertexList.class,
+                reika.dragonapi.instantiable.rendering.TessellatorVertexList.TessellatorVertex.class,
                 reika.dragonapi.instantiable.data.CircularDivisionRenderer.class,
                 reika.dragonapi.instantiable.io.SyncPacket.class,
                 reika.dragonapi.instantiable.io.ControlledConfig.class,

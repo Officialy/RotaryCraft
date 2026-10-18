@@ -26,6 +26,8 @@ public final class RotaryRecipeSync {
 
     private static void onDatapackSync(OnDatapackSyncEvent event) {
         event.sendRecipes(
+                // The handbook/worktable also reads native crafting recipes through SyncedRecipeLookup.
+                net.minecraft.world.item.crafting.RecipeType.CRAFTING,
                 RotaryRecipeTypes.MAGNETIZER.get(),
                 net.minecraft.world.item.crafting.RecipeType.SMELTING,
                 RotaryRecipeTypes.BLAST_FURNACE_SHAPED.get(),
