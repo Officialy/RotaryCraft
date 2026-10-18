@@ -51,6 +51,22 @@ final class DragonAPISideAuditTests {
         reika.dragonapi.libraries.io.ReikaChatHelper.writeComponent(net.minecraft.network.chat.Component.literal("D14 dedicated guard"));
         reika.dragonapi.libraries.io.ReikaSoundHelper.playClientSound(net.minecraft.sounds.SoundEvents.FIRE_EXTINGUISH, 0, 0, 0, 1, 1, true);
         var vertices = new reika.dragonapi.instantiable.rendering.TessellatorVertexList();
+        if (reika.dragonapi.ModList.GEOSTRATA.isLoaded()) {
+            try {
+                var geometry=Class.forName("reika.geostrata.auxiliary.OceanSpikeGeometry");
+                helper.assertTrue(geometry.getDeclaredMethods().length>0, "spike geometry metadata must not resolve client rendering types");
+                var getShape=geometry.getMethod("getCrystalShape",int.class,int.class,int.class);
+                long fingerprint=1125899906842597L;
+                for(int x=0;x<4;x++) for(int y=0;y<4;y++) for(int z=0;z<4;z++) {
+                    var quad=(reika.dragonapi.instantiable.rendering.RotatedQuad)getShape.invoke(null,x,y,z);
+                    for(int i=0;i<4;i++) {
+                        fingerprint=fingerprint*31+Double.doubleToLongBits(quad.getPosX(i));
+                        fingerprint=fingerprint*31+Double.doubleToLongBits(quad.getPosZ(i));
+                    }
+                }
+                reika.dragonapi.DragonAPI.LOGGER.info("OCEAN_SPIKE_GEOMETRY_SERVER_FINGERPRINT: {}",Long.toHexString(fingerprint));
+            } catch(ReflectiveOperationException failure) { throw new IllegalStateException("Common spike geometry failed dedicated reflection",failure); }
+        }
         vertices.addVertexWithUVColor(1, 2, 3, .25, .75, 0x123456);
         var captured = vertices.snapshot();
         vertices.offset(10, 20, 30);
