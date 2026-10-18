@@ -26,6 +26,7 @@ final class DragonAPIExtendedAuditTests {
         DragonAPITreeBreakerTests.register(event, environment);
         DragonAPIFlammabilityTests.register(event, environment);
         DragonAPISunlightTests.register(event, environment);
+        DragonAPISideAuditTests.register(event, environment);
         RotaryGameTests.register(event, environment, "dragonapi_extended_dropper", 80, DragonAPIExtendedAuditTests::dropper);
         RotaryGameTests.register(event, environment, "dragonapi_extended_world", 40, DragonAPIExtendedAuditTests::world);
         RotaryGameTests.register(event, environment, "dragonapi_extended_items", 40, DragonAPIExtendedAuditTests::items);
