@@ -72,11 +72,11 @@ final class RotaryProgressionTests {
     private static final String[] CHAIN = {
             // --- Tier 0: get into the mod at all
             "handbook",
-            "worktable",
             "blast_furnace",
 
-            // --- Tier 1: steel, the material everything else is built from
+            // --- Tier 1: the vanilla-crafted blast furnace makes steel before the steel worktable.
             "hsla_steel_from_charcoal",
+            "worktable",
             "hsla_steel_plate",
             "hsla_steel_rod",
             "reservoir",

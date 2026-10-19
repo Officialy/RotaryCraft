@@ -130,6 +130,7 @@ public final class RotaryGameTests {
         DragonAPIInventoryAuditTests.register(event, env);
         DragonAPITickFailureAuditTests.register(event, env);
         DragonAPIRegistrationAuditTests.register(event, env);
+        DragonAPIMockPlayerTests.register(event, env);
         register(event, env, "audit_vacuum_item_conservation", 40, RotaryGameTests::auditVacuumItemConservation);
         register(event, env, "audit_smeltery_real_recipes", 40, RotaryGameTests::auditSmelteryRealRecipes);
         register(event, env, "audit_handler_decrement", 40, RotaryGameTests::auditHandlerDecrement);
@@ -697,7 +698,7 @@ public final class RotaryGameTests {
     private static void blastFurnaceHslaViaMenu(GameTestHelper helper) {
         helper.setBlock(TEST_POS, RotaryBlocks.BLAST_FURNACE.get());
         BlockEntityBlastFurnace furnace = helper.getBlockEntity(TEST_POS, BlockEntityBlastFurnace.class);
-        var player = helper.makeMockServerPlayerInLevel();
+        var player = reika.dragonapi.test.GameTestPlayers.joinedCreative(helper);
         var menu = new reika.rotarycraft.gui.container.machine.inventory.ContainerBlastFurnace(0, player.getInventory(), furnace);
         menu.getSlot(0).set(new ItemStack(Items.COAL, 4));
         menu.getSlot(11).set(new ItemStack(Items.GUNPOWDER, 4));
@@ -785,7 +786,7 @@ public final class RotaryGameTests {
      * expose the machine's own slots rather than the player's.
      */
     private static void menuContracts(GameTestHelper helper) {
-        var player = helper.makeMockServerPlayerInLevel();
+        var player = reika.dragonapi.test.GameTestPlayers.joinedCreative(helper);
         var inv = player.getInventory();
 
         var craft = new reika.rotarycraft.gui.container.ContainerHandCraft(0, inv, player);
@@ -812,8 +813,11 @@ public final class RotaryGameTests {
         helper.setBlock(minePos, RotaryBlocks.LANDMINE.get());
         var mineTile = helper.getBlockEntity(minePos, reika.rotarycraft.blockentities.weaponry.BlockEntityLandmine.class);
         var mine = new reika.rotarycraft.gui.container.machine.inventory.LandmineContainer(0, inv, mineTile);
+        player.setPos(net.minecraft.world.phys.Vec3.atCenterOf(helper.absolutePos(minePos)));
         helper.assertTrue(mine.stillValid(player), "the landmine menu must stay open");
         helper.assertTrue(mine.getSlot(0).container != inv, "landmine slot 0 must be the landmine's, not the player's hotbar");
+        player.setPos(player.getX()+20,player.getY(),player.getZ());
+        helper.assertTrue(!mine.stillValid(player), "a distant player must lose landmine menu access");
 
         BlockPos furnacePos = new BlockPos(3, 1, 3);
         helper.setBlock(furnacePos, RotaryBlocks.LAVA_SMELTORY.get());

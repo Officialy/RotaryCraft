@@ -43,9 +43,9 @@ dependencies {
     }
 }
 
-// Test-only foreign steel fixture. This resource source set is never packaged in the release jar.
-// It exercises the real common-tag integration without requiring a third-party steel mod.
-if (gradle.startParameter.taskNames.any { it.toLowerCase(Locale.ROOT).contains('rungametest') }) {
+// Test-only tags and recipes exercise foreign materials, extractor stages and fuel conversions.
+// The separate resource source set is never packaged in the release jar.
+if (gradle.startParameter.taskNames.any { it.toLowerCase(Locale.ROOT).contains('gametest') }) {
     sourceSets {
         gameTestFixtures {
             resources.srcDir 'src/gametest/resources'

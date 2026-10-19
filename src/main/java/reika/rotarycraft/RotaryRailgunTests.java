@@ -177,7 +177,7 @@ final class RotaryRailgunTests {
         h.assertTrue(h.getEntities(EntityTypes.ITEM,IMPACT,2).stream().anyMatch(i -> i.getItem().is(Items.DIAMOND)) && mob.getDeltaMovement().equals(new Vec3(.8,0,0)), "equipment drops and momentum scales with mass tier"); h.succeed();
     }
     private static void player(GameTestHelper h) {
-        var player = h.makeMockServerPlayerInLevel(); player.setGameMode(GameType.SURVIVAL); player.setPos(Vec3.atCenterOf(h.absolutePos(IMPACT)));
+        var player = reika.dragonapi.test.GameTestPlayers.joinedCreative(h); player.setGameMode(GameType.SURVIVAL); player.setPos(Vec3.atCenterOf(h.absolutePos(IMPACT)));
         player.setItemSlot(EquipmentSlot.HEAD,new ItemStack(Items.DIAMOND_HELMET));
         slug(h,gun(h),0).onHit(null); h.assertTrue(player.getItemBySlot(EquipmentSlot.HEAD).is(Items.DIAMOND_HELMET), "players keep armor"); h.getLevel().getServer().getPlayerList().remove(player); h.succeed();
     }

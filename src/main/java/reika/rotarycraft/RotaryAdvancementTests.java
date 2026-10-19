@@ -44,7 +44,7 @@ final class RotaryAdvancementTests {
     }
 
     private static ServerPlayer player(GameTestHelper h) {
-        return h.makeMockServerPlayerInLevel(); // Includes the real PlayerLoggedInEvent and a packet connection.
+        return reika.dragonapi.test.GameTestPlayers.joinedCreative(h); // Includes the real PlayerLoggedInEvent and a packet connection.
     }
 
     static boolean done(ServerPlayer player, RotaryAdvancements entry) {
@@ -210,6 +210,7 @@ final class RotaryAdvancementTests {
         };
         var connection = new net.minecraft.network.Connection(net.minecraft.network.protocol.PacketFlow.SERVERBOUND);
         new io.netty.channel.embedded.EmbeddedChannel(connection);
+        net.neoforged.neoforge.network.registration.NetworkRegistry.configureMockConnection(connection);
         h.getLevel().getServer().getPlayerList().placeNewPlayer(connection, player, cookie);
         net.minecraft.world.level.GameType.SURVIVAL.updatePlayerAbilities(player.getAbilities());
         player.connection.markClientLoaded();

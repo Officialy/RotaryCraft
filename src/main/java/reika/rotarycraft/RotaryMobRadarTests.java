@@ -212,10 +212,18 @@ final class RotaryMobRadarTests {
     private static void sync(GameTestHelper h) {
         var radar = powered(h); var jammer = new JammingCow(h.getLevel()); jammer.setPos(Vec3.atCenterOf(radar.getBlockPos()));
         h.getLevel().addFreshEntity(jammer); tick(h, radar);
-        var client = new BlockEntityMobRadar(radar.getBlockPos(), radar.getBlockState());
-        client.applySyncTag(radar.saveWithoutMetadata(h.getLevel().registryAccess()));
-        h.assertTrue(client.getContacts().equals(radar.getContacts()) && client.isJammed() && client.power == radar.power, "periodic sync must deliver contacts, power and static without client entity tracking");
-        jammer.discard(); tick(h, radar); client.applySyncTag(radar.saveWithoutMetadata(h.getLevel().registryAccess()));
-        h.assertTrue(!client.isJammed() && client.getContacts().stream().noneMatch(c -> c.entityId() == jammer.getId()), "sync must remove stale contacts and jam state"); h.succeed();
+        var packet=(net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket)radar.getUpdatePacket();
+        var tag=packet.getTag();
+        h.assertTrue(tag.getBooleanOr("jam",false) && tag.getLongOr("power",-1)==radar.power
+                && tag.getListOrEmpty("radarContacts").size()==radar.getContacts().size(),
+                "the native update payload must include scanned contacts, jam state and mechanics");
+        var denied=tag.copy(); denied.putLong("power",0); denied.putBoolean("jam",false);
+        long power=radar.power; radar.applySyncTag(denied);
+        h.assertTrue(radar.power==power && radar.isJammed(),"client sync entry point must not mutate server state");
+        jammer.discard(); tick(h, radar);
+        tag=((net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket)radar.getUpdatePacket()).getTag();
+        h.assertTrue(!tag.getBooleanOr("jam",true) && tag.getListOrEmpty("radarContacts").stream()
+                .noneMatch(value->value instanceof net.minecraft.nbt.CompoundTag contact && contact.getIntOr("id",-1)==jammer.getId()),
+                "the next native update must remove stale contacts and jam state"); h.succeed();
     }
 }

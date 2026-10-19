@@ -189,8 +189,12 @@ final class RotarySonicWeaponTests {
         var saved = m.saveWithoutMetadata(h.getLevel().registryAccess()); var restored = new BlockEntitySonicWeapon(m.getBlockPos(), m.getBlockState());
         restored.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, h.getLevel().registryAccess(), saved));
         h.assertTrue(restored.getLevel() == null && restored.setvolume == m.setvolume && restored.setpitch == m.setpitch && restored.power == m.power, "detached save must retain original long keys and power");
-        var client = new BlockEntitySonicWeapon(m.getBlockPos(), m.getBlockState()); client.applySyncTag(saved);
-        h.assertTrue(client.setvolume == m.setvolume && client.setpitch == m.setpitch && client.torque == m.torque, "block sync must preserve full-width requests and mechanics"); h.succeed();
+        var sync=((net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket)m.getUpdatePacket()).getTag();
+        h.assertTrue(sync.getLongOr("setvolume",-1)==m.setvolume && sync.getLongOr("setfrequency",-1)==m.setpitch
+                && sync.getIntOr("torque",-1)==m.torque && sync.getLongOr("power",-1)==m.power,
+                "native update payload must preserve full-width requests and mechanics");
+        var denied=sync.copy(); denied.putLong("setvolume",1); m.applySyncTag(denied);
+        h.assertTrue(m.setvolume==987654321098765L,"client sync entry point must not change server requests"); h.succeed();
     }
     private static void legacy(GameTestHelper h) {
         var m = machine(h); var saved = m.saveWithoutMetadata(h.getLevel().registryAccess()); saved.remove("setfrequency"); saved.remove("setvolume");

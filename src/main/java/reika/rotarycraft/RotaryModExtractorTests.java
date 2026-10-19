@@ -1,5 +1,7 @@
 package reika.rotarycraft;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.Unpooled;
 import java.util.*;
@@ -151,14 +153,18 @@ final class RotaryModExtractorTests {
     }
     private static void taggedExternal(GameTestHelper h) {
         var recipe = tagged(ModExtractOres.TIN); var input = new SingleRecipeInput(new ItemStack(ModExtractOres.TIN.stage(3)));
-        h.assertTrue(recipe.assemble(input).is(Items.IRON_NUGGET), "furnace output must use installed tagged products rather than creating a second incompatible material");
+        var expected=recipe.assemble(input);
+        h.assertTrue(expected.is(recipe.resultTag()) && !expected.is(ModExtractOres.TIN.product())
+                && !BuiltInRegistries.ITEM.getKey(expected.getItem()).getNamespace().equals(RotaryCraft.MODID)
+                && expected.getCount()==ModExtractOres.TIN.dropCount,
+                "furnace output must use an installed tagged foreign product with the original yield");
         var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), h.getLevel().registryAccess());
         try {
             TaggedSmeltingRecipe.STREAM_CODEC.encode(buf, recipe);
             var copy = (TaggedSmeltingRecipe)TaggedSmeltingRecipe.STREAM_CODEC.decode(buf);
-            h.assertTrue(copy.fallback().item().equals(recipe.fallback().item()) && copy.resultTag().equals(recipe.resultTag()) && copy.assemble(input).is(Items.IRON_NUGGET), "tagged smelting sync must retain fallback and resolve tagged output");
+            h.assertTrue(copy.fallback().item().equals(recipe.fallback().item()) && copy.resultTag().equals(recipe.resultTag()) && ItemStack.matches(copy.assemble(input),expected), "tagged smelting sync must retain fallback and resolve tagged output");
         } finally { buf.release(); }
-        furnace(h, input.item(), new ItemStack(Items.IRON_NUGGET));
+        furnace(h, input.item(), expected);
     }
     private static void taggedFallback(GameTestHelper h) {
         var ore = ModExtractOres.DILITHIUM; var recipe = tagged(ore);

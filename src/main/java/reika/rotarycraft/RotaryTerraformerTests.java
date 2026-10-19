@@ -181,7 +181,7 @@ final class RotaryTerraformerTests {
     }
     private static void selector(GameTestHelper h) {
         var tile = machine(h,recipe(h,"plains_to_forest"),false);
-        var player = h.makeMockServerPlayerInLevel();
+        var player = reika.dragonapi.test.GameTestPlayers.joinedCreative(h);
         var stack = new ItemStack(RotaryItems.TILE_SELECTOR.get()); player.setItemInHand(InteractionHand.MAIN_HAND,stack);
         var item = stack.getItem();
         java.util.function.Consumer<BlockPos> click = p -> item.useOn(new UseOnContext(player,InteractionHand.MAIN_HAND,new BlockHitResult(Vec3.atCenterOf(p),Direction.UP,p,false)));
@@ -219,7 +219,7 @@ final class RotaryTerraformerTests {
         h.assertTrue(tile.getItem(0).getCount()==2 && tile.getLiquidLevel()==24000,"blocked automation cannot change contents"); h.succeed();
     }
     private static void menu(GameTestHelper h) {
-        var tile=machine(h,recipe(h,"plains_to_forest"),false); var player=h.makeMockServerPlayerInLevel(); player.setPos(Vec3.atCenterOf(h.absolutePos(MACHINE)));
+        var tile=machine(h,recipe(h,"plains_to_forest"),false); var player=reika.dragonapi.test.GameTestPlayers.joinedCreative(h); player.setPos(Vec3.atCenterOf(h.absolutePos(MACHINE)));
         var menu=new ContainerTerraformer(7,player.getInventory(),tile); player.containerMenu=menu;
         h.assertTrue(menu.slots.size()==90 && MachineRegistry.TERRAFORMER.hasGui(),"machine must expose the original 54+36 inventory screen");
         var biomes=h.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
