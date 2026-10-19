@@ -7,22 +7,14 @@ import java.util.ArrayList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import reika.rotarycraft.base.RotaryModelBase;
 
-import java.util.ArrayList;
 
 import static reika.rotarycraft.RotaryCraft.MODID;
 
@@ -48,7 +40,7 @@ public class BevelModel extends RotaryModelBase {
     private final ModelPart shape4;
     private final ModelPart shape5;
     private final ModelPart shape6;
-    // 1.21.5: Model already declares a protected `root`; removed shadowing field.
+
 
     public BevelModel(ModelPart modelPart) {
         super(modelPart, RenderTypes::entityCutout);
@@ -77,6 +69,7 @@ public class BevelModel extends RotaryModelBase {
     public static LayerDefinition createLayer() {
         var definition = new MeshDefinition();
         var root = definition.getRoot();
+        // Legacy mirror flags were assigned after addBox; ModelBox geometry is unmirrored.
 
         root.addOrReplaceChild("shape1",
                 CubeListBuilder.create()
@@ -191,18 +184,18 @@ public class BevelModel extends RotaryModelBase {
 
     @Override
     public void renderAll(PoseStack stack, VertexConsumer tex, int packedLightIn, BlockEntity te, ArrayList<?> conditions, float phi, float theta) {
-//        if (LODModelPart.allowCompiling) {
-//            this.renderList(te);
-//        }
-//        else {
+        renderParts(stack, tex, packedLightIn, phi);
+    }
+    /** Renders from captured animation data without retaining a live block entity. */
+    public void renderParts(PoseStack stack, VertexConsumer tex, int packedLightIn, float phi) {
             shape1.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape2.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape3.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape4.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape5.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
             shape6.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-//        }
 
+        stack.pushPose();
         stack.translate(0, 1, 0);
         stack.rotate(Axis.ZP.rotationDegrees(phi));
         stack.translate(0, -1, 0);
@@ -212,10 +205,9 @@ public class BevelModel extends RotaryModelBase {
         shape19.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape22.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape23.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.translate(0, 1, 0);
-        stack.rotate(Axis.ZN.rotationDegrees(phi));
-        stack.translate(0, -1, 0);
+        stack.popPose();
 
+        stack.pushPose();
         stack.translate(0, 1, 0);
         stack.rotate(Axis.XN.rotationDegrees(phi));
         stack.translate(0, -1, 0);
@@ -225,9 +217,7 @@ public class BevelModel extends RotaryModelBase {
         shape17.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape20.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         shape21.render(stack, tex, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-        stack.translate(0, 1, 0);
-        stack.rotate(Axis.XP.rotationDegrees(phi));
-        stack.translate(0, -1, 0);
+        stack.popPose();
     }
     @Override
     public Identifier getTexture() {

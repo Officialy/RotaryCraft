@@ -6,20 +6,22 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.world.entity.EquipmentSlot;
+import reika.rotarycraft.registry.RotaryItems;
+import java.util.List;
+import java.util.ArrayList;
 
-import reika.dragonapi.libraries.rendering.ReikaRenderHelper;
+import reika.rotarycraft.auxiliary.MachineFaceOverlay;
 import reika.rotarycraft.auxiliary.IORenderer;
 import reika.rotarycraft.base.RotaryTERenderer;
-import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
 import reika.rotarycraft.blockentities.transmission.BlockEntityBevelGear;
 import reika.rotarycraft.models.animated.BevelModel;
 import reika.rotarycraft.registry.ConfigRegistry;
@@ -33,7 +35,44 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         bevelModel = new BevelModel(context.bakeLayer(RotaryModelLayers.BEVEL));
     }
 
-    public void renderBlockEntityBevelAt(PoseStack stack, BlockEntityBevelGear tile, VertexConsumer bufferSource, int light) {
+    public static final class BevelRenderState extends BlockEntityRenderState {
+        public boolean inWorld, modelAllowed, faceNumbers;
+        public int direction, faceAlpha;
+        public float phi;
+        public List<IORenderer.Connection> connections = List.of();
+    }
+    @Override public BevelRenderState createRenderState() { return new BevelRenderState(); }
+
+    @Override public void extractRenderState(BlockEntityBevelGear tile, BlockEntityRenderState base,
+            float partialTick, Vec3 cameraPosition, ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+        super.extractRenderState(tile, base, partialTick, cameraPosition, breakProgress);
+        var state = (BevelRenderState)base;
+        state.inWorld = tile.isInWorld();
+        state.modelAllowed = !state.inWorld || doRenderModel(new PoseStack(), tile);
+        state.direction = tile.direction;
+        state.phi = tile.phi;
+        state.faceAlpha = state.inWorld ? tile.iotick : 0;
+        state.faceNumbers = state.faceAlpha > 64 && ConfigRegistry.COLORBLIND.getState();
+        var connections = new ArrayList<IORenderer.Connection>();
+        if (state.inWorld) {
+            var player = Minecraft.getInstance().player;
+            // Preserve the original goggles refresh and face-marker-before-IO ordering.
+            if (player != null && player.getItemBySlot(EquipmentSlot.HEAD).is(RotaryItems.IO_GOGGLES.get())) tile.iotick = 512;
+            if (tile.iotick > 0) {
+                for (var d : new net.minecraft.core.Direction[]{tile.getWriteDirection(), tile.getWriteDirection2()})
+                    if (d != null) connections.add(IORenderer.Connection.capture(d.getStepX(), d.getStepY(), d.getStepZ(), tile.iotick, false));
+                for (var d : new net.minecraft.core.Direction[]{tile.getReadDirection(), tile.getReadDirection2(), tile.getReadDirection3(), tile.getReadDirection4()})
+                    if (d != null) connections.add(IORenderer.Connection.capture(d.getStepX()+tile.getPointingOffsetX(),
+                            d.getStepY()+tile.getPointingOffsetY(), d.getStepZ()+tile.getPointingOffsetZ(), tile.iotick, true));
+            }
+        }
+        state.connections = List.copyOf(connections);
+    }
+
+    public void renderBlockEntityBevelAt(PoseStack stack, BlockEntityBevelGear tile, VertexConsumer vertices, int light) {
+        renderModel(stack, vertices, light, tile.direction, tile.phi, tile.isInWorld());
+    }
+    public void renderModel(PoseStack stack, VertexConsumer bufferSource, int light, int direction, float phi, boolean inWorld) {
         stack.pushPose();
 
         stack.translate(0.5, 1.5, 0.5);
@@ -44,7 +83,8 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
         int rotationZ = 0;
         int dir = 1;
 
-        switch (tile.direction) {
+        if (!inWorld) rotationY = 90;
+        else switch (direction) {
             case 0 -> rotationY = 90;
             case 1 -> rotationY = 180;
             case 2 -> rotationY = 270;
@@ -80,41 +120,30 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
 
 
         VertexConsumer vertexconsumer = bufferSource;
-        bevelModel.renderAll(stack, vertexconsumer, light, tile, null, tile.phi * dir);
+        bevelModel.renderParts(stack, vertexconsumer, light, phi * dir);
         stack.popPose();
     }
 
-    // 1.21.5: render -> submit. Bevel gears use exactly one RenderType (entityCutout with the
-    // bevel texture) regardless of which of the 24 mounting orientations is active, so one
-    // submitCustomGeometry call covers the model. Pose is snapshotted because the lambda runs
-    // after the outer PoseStack may have been popped.
     @Override
-    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
-        Level level = Minecraft.getInstance().level;
-        if (level == null) return;
-        BlockEntity be = level.getBlockEntity(state.blockPos);
-        if (!(be instanceof BlockEntityBevelGear tile)) return;
-        if (!this.doRenderModel(poseStack, tile)) return;
-
-        PoseStack snapped = new PoseStack();
-        snapped.last().set(poseStack.last());
-
-        RenderType rt = RenderTypes.entityCutout(BevelModel.TEXTURE_LOCATION);
-        int light = state.lightCoords;
-        collector.submitCustomGeometry(poseStack, rt, (pose, vc) -> {
-            renderBlockEntityBevelAt(snapped, tile, vc, light);
+    public void submit(BlockEntityRenderState base, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        var state = (BevelRenderState)base;
+        int direction = state.direction, light = state.lightCoords;
+        float phi = state.phi;
+        boolean inWorld = state.inWorld;
+        if (state.modelAllowed) collector.submitCustomGeometry(poseStack, RenderTypes.entityCutout(BevelModel.TEXTURE_LOCATION), (pose, vertices) -> {
+            var captured = new PoseStack(); captured.last().set(pose);
+            renderModel(captured, vertices, light, direction, phi, inWorld);
         });
-        // IO arrows for the bevel's read/write directions (debugFilledBox quads).
-        if (tile.isInWorld()) {
-            IORenderer.renderIO(poseStack, collector, tile, tile.getBlockPos());
+        if (inWorld) {
+            // The source's compass call was disabled; retain its geometry without enabling it.
+            if (state.faceNumbers) renderFaceNumbers(poseStack, collector);
+            else MachineFaceOverlay.submit(poseStack, collector, state.faceAlpha);
+            for (var connection : state.connections) connection.submit(poseStack, collector);
         }
-        // Face numbers / compass still TODO (need separate per-RT submissions).
     }
 
-    private void renderFaceNumbers(PoseStack stack, BlockEntityBevelGear tile, double x, double y, double z, SubmitNodeCollector collector) {
+    private void renderFaceNumbers(PoseStack stack, SubmitNodeCollector collector) {
         stack.pushPose();
-        stack.translate(x, y, z);
-        ReikaRenderHelper.disableLighting();
 
         float scale = 0.0625f;
         double d = 0.53;
@@ -142,25 +171,17 @@ public class RenderBevel extends RotaryTERenderer<BlockEntityBevelGear> {
             stack.translate(d, 0.28, l);
             stack.scale(scale, scale, scale);
 
-            // 26.2: Font.drawInBatch removed; in-world text is submitted via the feature pipeline.
-            collector.submitText(stack, 0, 0,
+            collector.submitText(stack, -Minecraft.getInstance().font.width(String.valueOf(i))/2.0F, 0,
                     FormattedCharSequence.forward(String.valueOf(i), Style.EMPTY),
-                    false, Font.DisplayMode.NORMAL, 15728880, 0xFFFFFF, 0, 0);
+                    false, Font.DisplayMode.NORMAL, 15728880, 0xFFFFFFFF, 0, 0);
 
             stack.popPose();
         }
 
-        ReikaRenderHelper.enableLighting();
         stack.popPose();
     }
 
-    private void renderCompass(BlockEntity tile, double x, double y, double z, VertexConsumer bufferSource, PoseStack stack) {
-        // TODO: Port to 26.1 rendering API (Tesselator.getBuilder() + begin() + vertex().color().endVertex() + end() all removed)
+    private void renderCompass(PoseStack stack, SubmitNodeCollector collector, int alpha) {
+        MachineFaceOverlay.submitCompass(stack, collector, alpha);
     }
-
-    private void addLine(Object buffer, Object pose, float x1, float y1, float z1, float x2, float y2, float z2, int[] rgb, float alpha) {
-        // TODO: Port to 26.1 rendering API
-    }
-
 }
-

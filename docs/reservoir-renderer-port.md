@@ -116,3 +116,11 @@ by `build/d06-reservoir-proof.json`, with file hashes. Subsequent runs cannot
 overwrite those pinned copies. Play VM/program arguments still match their prior
 SHA-256 hashes. Approval-service quota interruption was resolved after its stated
 reset; no verification or checkpoint action is left pending for that reason.
+
+
+Correction during the bevel source audit: the five legacy mirror=true field
+assignments occur after ModelBox construction; compiled groups explicitly clear
+mirror before copying. The modern CubeListBuilder.mirror() additions in the
+previous checkpoint were incorrect and have been removed. All other reservoir
+geometry, lighting and tint contracts remain as documented. The final bevel
+client run rechecks the reservoir meshes and actual world rendering.

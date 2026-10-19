@@ -32,13 +32,9 @@ import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import reika.dragonapi.extras.shader.IrisCompat;
 
 /**
- * 26.1: registers custom {@link RenderPipeline}s used by RotaryCraft renderers.
- *
- * <p>Currently exposes {@link #NO_DEPTH_FILLED_BOX}, a clone of vanilla
- * {@code DEBUG_FILLED_BOX} with the depth test relaxed to {@link CompareOp#ALWAYS}.
- * The IO renderer uses it so the input/output overlay cubes stay visible even when the
- * neighbour they sit on top of is occluded by the machine block itself — that's why the
- * user couldn't see N/E IO faces from typical camera angles before this was added.</p>
+ * Explicit per-draw pipelines for untextured overlays and screen-space heat haze.
+ * IO fill and lines retain depth testing and native improved-transparency support.
+ * Separate no-depth types remain available for draws that explicitly require them.
  */
 public final class RotaryRenderPipelines {
 
@@ -46,7 +42,7 @@ public final class RotaryRenderPipelines {
 
     /**
      * Same builder as vanilla {@code DEBUG_FILLED_BOX} (translucent blend, position+color
-     * quads pipeline, depth WRITE disabled), but with depth TEST set to {@link CompareOp#ALWAYS}
+     * quads pipeline, depth WRITE disabled), but with depth TEST set to {@link CompareOp#ALWAYS_PASS}
      * so the cube draws regardless of what's already in the depth buffer.
      */
     public static final RenderPipeline NO_DEPTH_FILLED_BOX = RenderPipeline.builder()
@@ -120,6 +116,7 @@ public final class RotaryRenderPipelines {
     public static final RenderType IO_BOX_TYPE = RenderType.create(
             "rotarycraft_io_box",
             RenderSetup.builder(IO_BOX)
+                    .setOitPipelines(RenderPipelines.OIT_DEBUG_FILLED_BOX)
                     .sortOnUpload()
                     .setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
                     .createRenderSetup()
@@ -143,7 +140,7 @@ public final class RotaryRenderPipelines {
 
     public static final RenderType IO_LINES_TYPE = RenderType.create(
             "rotarycraft_io_lines",
-            RenderSetup.builder(IO_LINES).createRenderSetup()
+            RenderSetup.builder(IO_LINES).setOitPipelines(RenderPipelines.OIT_LINES_TRANSLUCENT).createRenderSetup()
     );
 
     /**

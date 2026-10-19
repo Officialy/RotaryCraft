@@ -34,7 +34,7 @@ public class ReservoirModel extends RotaryModelBase {
     private final ModelPart pz;
     private final ModelPart px;
     private final ModelPart bottom;
-    // Native Model owns the root; each authored part retains its original mirroring.
+    // Native Model owns the root; original ModelBox geometry is baked before the legacy mirror field is assigned.
 
     public ReservoirModel(ModelPart modelPart) {
         super(modelPart, RenderTypes::entityCutout);
@@ -52,31 +52,31 @@ public class ReservoirModel extends RotaryModelBase {
         var root = definition.getRoot();
 
         root.addOrReplaceChild("mx",
-                CubeListBuilder.create().mirror()
+                CubeListBuilder.create()
                         .texOffs(56, 0)
                         .addBox(0, 0, 0, 1, 16, 16),
                 PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("mz",
-                CubeListBuilder.create().mirror()
+                CubeListBuilder.create()
                         .texOffs(56, 0)
                         .addBox(0, 0, 0, 1, 16, 16),
                 PartPose.offsetAndRotation(7, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("pz",
-                CubeListBuilder.create().mirror()
+                CubeListBuilder.create()
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 16, 1),
                 PartPose.offsetAndRotation(-8, 8, 7, 0, 0, 0));
 
         root.addOrReplaceChild("px",
-                CubeListBuilder.create().mirror()
+                CubeListBuilder.create()
                         .texOffs(0, 0)
                         .addBox(0, 0, 0, 16, 16, 1),
                 PartPose.offsetAndRotation(-8, 8, -8, 0, 0, 0));
 
         root.addOrReplaceChild("bottom",
-                CubeListBuilder.create().mirror()
+                CubeListBuilder.create()
                         .texOffs(0, 46)
                         .addBox(0, 0, 0, 16, 1, 16),
                 PartPose.offsetAndRotation(-8, 23, -8, 0, 0, 0));

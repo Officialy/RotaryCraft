@@ -200,6 +200,17 @@ public abstract class IORenderer {
     /*  Per-direction helpers (color and dispatch)                             */
     /* ----------------------------------------------------------------------- */
 
+    /** Immutable IO geometry captured during block-entity extraction. */
+    public record Connection(float x, float y, float z, int alpha, int rgb) {
+        public static Connection capture(float x, float y, float z, int alpha, boolean input) {
+            boolean colorblind = ConfigRegistry.COLORBLIND.getState();
+            return new Connection(x, y, z, alpha, input ? (colorblind ? 0xffffff : 0x00ff00) : (colorblind ? 0 : 0xff0000));
+        }
+        public void submit(PoseStack stack, SubmitNodeCollector collector) {
+            renderBox(stack, collector, x, y, z, new int[]{rgb>>16&255, rgb>>8&255, rgb&255, alpha});
+        }
+    }
+
     private static void renderOut(PoseStack matrixStack, SubmitNodeCollector collector, float x, float y, float z, int a) {
         int[] color = {255, 0, 0, a};
         if (ConfigRegistry.COLORBLIND.getState()) color[0] = 0;
@@ -221,7 +232,7 @@ public abstract class IORenderer {
 
     /**
      * Emits one translucent unit cube at local offset {@code (ox, oy, oz)} (in block coordinates,
-     * relative to the BE's origin) with the given RGBA. Uses {@link RenderTypes#debugFilledBox}
+     * relative to the BE's origin) with the given RGBA. Uses {@link RotaryRenderPipelines#IO_BOX_TYPE}
      * which is a quads-mode RenderType taking position + color and no texture — exactly the
      * right primitive for a flat translucent overlay box.
      *
