@@ -630,14 +630,14 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
     }
 
 
-    public int getFluidRenderColor() {
-        FluidStack fs = tank.getFluid();
-        if (fs.isEmpty())
-            return 0xffffff;
-        // 1.21.5: IClientFluidTypeExtensions.getTintColor() removed; FluidStack no longer carries
-        // arbitrary CUSTOM_DATA the way ItemStack does. Return white until we wire up a
-        // proper component-based render-color override.
-        return 0xffffff;
+    /** Model tint replaces the original fluid-block colour multiplier; component override retains legacy renderColor. */
+    public int getFluidRenderColor(int modelTint) {
+        FluidStack stack=tank.getFluid();
+        if(stack.isEmpty()) return 0xffffff;
+        if(level!=null && stack.getFluidType().canBePlacedInLevel(level,worldPosition,stack)) return modelTint;
+        var data=stack.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
+                net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
+        return data.getIntOr("renderColor",modelTint);
     }
 
     public void applyFluidEffectsToEntity(LivingEntity e) {

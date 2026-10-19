@@ -43,6 +43,8 @@ final class DragonAPITankSyncTests {
         RotaryGameTests.register(event,env,"dragonapi_tank_base_refresh",40,DragonAPITankSyncTests::base);
         RotaryGameTests.register(event,env,"dragonapi_tank_fluid_state",40,DragonAPITankSyncTests::fluids);
         RotaryGameTests.register(event,env,"dragonapi_tank_direction_thread",40,DragonAPITankSyncTests::guards);
+        RotaryGameTests.register(event,env,"reservoir_render_color_components",40,DragonAPITankSyncTests::colorComponents);
+        RotaryGameTests.register(event,env,"reservoir_render_color_world",40,DragonAPITankSyncTests::colorWorld);
     }
     private static BlockEntityReservoir tile(GameTestHelper h) {
         BlockPos pos=h.absolutePos(new BlockPos(4,1,4));h.getLevel().setBlock(pos,RotaryBlocks.RESERVOIR.get().defaultBlockState(),3);
@@ -115,6 +117,26 @@ final class DragonAPITankSyncTests {
         h.assertTrue(tank.getFluidAmount()==200&&CustomData.of(data).equals(tank.getFluid().get(DataComponents.CUSTOM_DATA)),"same-fluid and legacy level-only updates preserve existing components");
         TankSyncData.apply(tank,0,"");h.assertTrue(tank.isEmpty(),"empty update clears tank");
         try{TankSyncData.apply(tank,200,"");h.fail("level-only update invented fluid");}catch(IllegalArgumentException expected){}
+        h.succeed();
+    }
+    private static void colorComponents(GameTestHelper h) {
+        var detached=new BlockEntityReservoir(BlockPos.ZERO,RotaryBlocks.RESERVOIR.get().defaultBlockState());
+        var data=new CompoundTag(); data.putInt("renderColor",0x123456);
+        var fluid=new FluidStack(Fluids.WATER,400); fluid.set(DataComponents.CUSTOM_DATA,CustomData.of(data));
+        TankSyncData.tank(detached,"tank").setFluid(fluid);
+        h.assertTrue(detached.getFluidRenderColor(0xabcdef)==0x123456,"component color must survive outside world rendering");
+        TankSyncData.tank(detached,"tank").setFluid(new FluidStack(Fluids.WATER,400));
+        h.assertTrue(detached.getFluidRenderColor(0xabcdef)==0xabcdef,"registered model tint must replace invented fallback colors");
+        detached.setEmpty();
+        h.assertTrue(detached.getFluidRenderColor(0xabcdef)==0xffffff,"empty fluid retains original white color");
+        h.succeed();
+    }
+    private static void colorWorld(GameTestHelper h) {
+        var reservoir=tile(h); var data=new CompoundTag(); data.putInt("renderColor",0x123456);
+        var fluid=new FluidStack(Fluids.WATER,400); fluid.set(DataComponents.CUSTOM_DATA,CustomData.of(data));
+        TankSyncData.tank(reservoir,"tank").setFluid(fluid);
+        h.assertTrue(reservoir.getFluidRenderColor(0xabcdef)==0xabcdef,"in-world placeable fluid uses supplied native biome tint before component override");
+        h.assertTrue(CustomData.of(data).equals(reservoir.getFluid().get(DataComponents.CUSTOM_DATA)),"reading visual color must not consume component data");
         h.succeed();
     }
     private static void guards(GameTestHelper h) {
