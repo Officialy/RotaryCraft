@@ -25,10 +25,11 @@ public class ContainerLavaMaker extends IOMachineContainer<BlockEntityLavaMaker>
 
     public ContainerLavaMaker(int id, Inventory inv, BlockEntityLavaMaker te) {
         super(RotaryMenus.LAVAMAKER.get(), id, inv, te);
+        // 1.7.10 ContainerRockMelter: 26+18*col, 17+18*row - where lavamakergui.png draws the grid.
         for (int i = 0; i < 9; i++) {
             int col = i % 3;
             int row = i / 3;
-            this.addSlot(te.getFeedHandler().slot(i, 44 + col * 18, 17 + row * 18));
+            this.addSlot(te.getFeedHandler().slot(i, 26 + col * 18, 17 + row * 18));
         }
         this.addPlayerInventory(inv);
     }

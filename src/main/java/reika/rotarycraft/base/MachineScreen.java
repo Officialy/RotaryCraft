@@ -1,7 +1,10 @@
 package reika.rotarycraft.base;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -180,6 +183,19 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
     }
 
     protected abstract void drawPowerTab(GuiGraphicsExtractor stack, int j, int k);
+
+    /**
+     * What this screen draws outside its declared {@code imageWidth}: the handbook tab on the left
+     * and, for powered machines, the 42-px power tab on the right. JEI is told about these so its
+     * item list and bookmarks stay clear of them.
+     */
+    public List<Rect2i> getExtraAreas() {
+        List<Rect2i> li = new ArrayList<>();
+        li.add(new Rect2i(leftPos - 17, topPos + 4, 18, imageHeight - 8));
+        if (tile instanceof BlockEntityPowerReceiver)
+            li.add(new Rect2i(leftPos + imageWidth, topPos + 4, 42, imageHeight - 4));
+        return li;
+    }
 
     /**
      * The "?" on the handbook tab. Labels are extracted after the widgets, so it lands on top of

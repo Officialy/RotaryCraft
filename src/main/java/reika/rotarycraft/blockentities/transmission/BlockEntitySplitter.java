@@ -778,7 +778,7 @@ public class BlockEntitySplitter extends BlockEntityTransmissionMachine implemen
                 pwr.addAll(in);
             }
             if (read2 != null) {
-                PowerSourceList in = PowerSourceList.getAllFrom(getLevel(), read2, new BlockPos(worldPosition.getX() + read.getStepX(), worldPosition.getY() + read.getStepY(), worldPosition.getZ() + read.getStepZ()), this, caller);
+                PowerSourceList in = PowerSourceList.getAllFrom(getLevel(), read2, new BlockPos(worldPosition.getX() + read2.getStepX(), worldPosition.getY() + read2.getStepY(), worldPosition.getZ() + read2.getStepZ()), this, caller);
                 pwr.addAll(in);
             }
             return pwr;

@@ -9,19 +9,19 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
+import reika.dragonapi.libraries.rendering.ReikaLiquidRenderer;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.base.MachineScreen;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaMaker;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerLavaMaker;
 
-/** Rock-melter GUI: 3x3 feed grid + a temperature readout. */
+/** Rock-melter GUI (1.7.10 GuiRockMelter): 3x3 feed grid + the product tank gauge. */
 public class GuiLavaMaker extends MachineScreen<BlockEntityLavaMaker, ContainerLavaMaker> {
 
     private final BlockEntityLavaMaker lava;
@@ -32,19 +32,26 @@ public class GuiLavaMaker extends MachineScreen<BlockEntityLavaMaker, ContainerL
         inventory = inv;
     }
 
+    /** 1.7.10 GuiRockMelter: the product tank fills the gauge at (134, 9..73), 64 px tall. */
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partial) {
         super.extractBackground(graphics, mouseX, mouseY, partial);
-        int j = (Minecraft.getInstance().getWindow().getGuiScaledWidth() - imageWidth) / 2;
-        int k = (Minecraft.getInstance().getWindow().getGuiScaledHeight() - imageHeight) / 2;
+        int j = (width - imageWidth) / 2;
+        int k = (height - imageHeight) / 2;
+        if (lava.getFluidLevel() <= 0)
+            return;
+        int frac = lava.getFluidLevel() * 64 / lava.getCapacity();
+        ReikaLiquidRenderer.drawFluidIcon(graphics, lava.getContainedFluid(), j + 134, k + 73 - frac + 1, 16, frac);
+        if (api.isMouseInBox(j + 133, j + 151, k + 9, k + 75, mouseX, mouseY)) {
+            String sg = String.format("%s: %d/%d mB", lava.getContainedFluid().getFluidType().getDescription().getString(),
+                    lava.getFluidLevel(), lava.getCapacity());
+            graphics.setTooltipForNextFrame(font, Component.literal(sg), mouseX, mouseY);
+        }
+    }
 
-        // Temperature bar on the left (fills toward red as it heats).
-        int h = lava.getTemperatureScaled(48);
-        int col = 0xFF000000 | (Math.min(255, 60 + h * 4) << 16);
-        if (h > 0)
-            graphics.fill(j + 18, k + 65 - h, j + 26, k + 65, col);
-        if (api.isMouseInBox(j + 18, j + 26, k + 17, k + 65, mouseX, mouseY))
-            graphics.setTooltipForNextFrame(font, Component.literal(lava.getTemperature() + "C"), mouseX, mouseY);
+    @Override
+    protected boolean inventoryLabelLeft() {
+        return true;
     }
 
     @Override

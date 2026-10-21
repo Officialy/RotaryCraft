@@ -19,9 +19,12 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
+import reika.rotarycraft.auxiliary.PowerSourceList;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
+import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
+import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerGrinder;
 import reika.rotarycraft.registry.RotaryBlocks;
 
@@ -147,6 +150,38 @@ final class RotaryMachineInteractionTests {
         helper.assertTrue(!heater.canTakeItemThroughFace(0, new ItemStack(Items.COAL), Direction.DOWN), "heater fuel is not extractable");
         helper.assertTrue(breeder.canPlaceItem(0, new ItemStack(Items.WHEAT)), "auto breeder must take wheat");
         helper.assertTrue(!breeder.canPlaceItem(0, new ItemStack(Items.DIRT)), "auto breeder must refuse dirt");
+        helper.succeed();
+    }
+
+    /**
+     * A merging splitter whose input faces a shaft that also reads from the splitter (neither feeds
+     * the other). 1.7.10 only walks a neighbour that writes into the asker; the port walked it anyway,
+     * splitter -> shaft -> splitter, until the stack overflowed and took the server down.
+     */
+    static void splitterFacingShaftInputTerminates(GameTestHelper helper) {
+        BlockPos sp = RotaryPowerTests.at(3, 4);
+        BlockPos sh = RotaryPowerTests.at(4, 4);
+        helper.setBlock(sp, RotaryBlocks.SPLITTER.get());
+        RotaryPowerTests.place(helper, 4, 4, RotaryBlocks.HSLA_SHAFT.get(), Direction.EAST);
+        var splitter = helper.getBlockEntity(sp, BlockEntitySplitter.class);
+        var shaft = helper.getBlockEntity(sh, BlockEntityShaft.class);
+        splitter.setIoside(0); // merge: reads EAST (the shaft) + NORTH, writes WEST
+        boolean aimed = false;
+        for (Direction d : Direction.Plane.HORIZONTAL) {
+            shaft.getIOSides(helper.getLevel(), helper.absolutePos(sh), d);
+            if (shaft.isReadingFrom(splitter)) {
+                aimed = true;
+                break;
+            }
+        }
+        helper.assertTrue(aimed, "no shaft facing reads from the splitter");
+        // The walk reached this splitter from another merger upstream, so neither the splitter nor
+        // the shaft is the caller and the self-check never stops it; only the IO direction check does.
+        helper.setBlock(RotaryPowerTests.at(1, 1), RotaryBlocks.SPLITTER.get());
+        var upstream = helper.getBlockEntity(RotaryPowerTests.at(1, 1), BlockEntitySplitter.class);
+        PowerSourceList sources = splitter.getPowerSources(null, upstream);
+        helper.assertTrue(!sources.isErrored(), "splitter <-> shaft source walk overflowed the stack");
+        helper.assertTrue(sources.isEmpty(), "a shaft reading from the splitter is not a power source, got " + sources);
         helper.succeed();
     }
 

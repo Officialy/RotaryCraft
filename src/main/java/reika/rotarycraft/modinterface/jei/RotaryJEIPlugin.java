@@ -7,9 +7,13 @@ package reika.rotarycraft.modinterface.jei;
 
 import mezz.jei.api.IModPlugin;
 import java.util.Optional;
+import reika.rotarycraft.base.MachineScreen;
 import reika.rotarycraft.blockentities.production.BlockEntityBlastFurnace;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -69,6 +73,17 @@ public class RotaryJEIPlugin implements IModPlugin {
 
     @Override
     public Identifier getPluginUid() { return UID; }
+
+    /** Machine GUIs draw their handbook and power tabs outside imageWidth; keep JEI's overlay off them. */
+    @Override
+    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+        registration.addGenericGuiContainerHandler(MachineScreen.class, new IGuiContainerHandler<MachineScreen<?, ?>>() {
+            @Override
+            public List<Rect2i> getGuiExtraAreas(MachineScreen<?, ?> screen) {
+                return screen.getExtraAreas();
+            }
+        });
+    }
 
     // -------------------------------------------------------------------------
     @Override

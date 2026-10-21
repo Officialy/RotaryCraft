@@ -22,6 +22,7 @@ import reika.rotarycraft.api.power.PowerGenerator;
 import reika.rotarycraft.api.power.PowerTracker;
 import reika.rotarycraft.api.power.ShaftMerger;
 import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
+import reika.rotarycraft.base.blockentity.BlockEntityIOMachine;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,7 +73,16 @@ public class PowerSourceList implements PowerTracker {
             // transducer reported "Power is being received from: [None]" even when a DC engine
             // was wired one shaft away. Drop the dead wrapper so the dispatch order is just
             // PowerSourceTracker (transmitter — recurse) → PowerGenerator (real source — add).
-            if (tile instanceof PowerSourceTracker) {
+            // 1.7.10: an IO machine is only a source path when it writes into io and does not read
+            // from it. Walking every neighbour regardless sent a splitter and the machine beside it
+            // into each other until the stack overflowed (engine + shaft junction crash).
+            if (tile instanceof BlockEntityIOMachine te) {
+                if (!te.isWritingTo(io) && !te.isWritingTo2(io))
+                    return pwr;
+                if (te.isReadingFrom(io) || te.isReadingFrom2(io) || te.isReadingFrom3(io) || te.isReadingFrom4(io))
+                    return pwr;
+                pwr.addAll(te.getPowerSources(io, caller));
+            } else if (tile instanceof PowerSourceTracker) {
                 pwr.addAll(((PowerSourceTracker) tile).getPowerSources(io, caller));
             } else if (tile instanceof PowerGenerator) {
                 pwr.addSource((PowerGenerator) tile);
@@ -91,8 +101,13 @@ public class PowerSourceList implements PowerTracker {
             return pwr;
         } catch (StackOverflowError e) {
             //e.printStackTrace();
-            RotaryCraft.LOGGER.error("PowerSourceList SOE @ " + pwr + ", called from " + caller + "!");
             pwr.errored = true;
+            // Still deep in the overflowed stack: log4j's own recursion bookkeeping can throw here,
+            // and that escaped as a "Ticking block entity" crash. The error flag is what matters.
+            try {
+                RotaryCraft.LOGGER.error("PowerSourceList SOE @ " + pwr + ", called from " + caller + "!");
+            } catch (Throwable ignored) {
+            }
             //fail(pwr, caller, world, pos);
             return pwr;
         }
@@ -150,6 +165,11 @@ public class PowerSourceList implements PowerTracker {
     public PowerSourceList addSource(PowerGenerator te) {
         engines.add(new PowerWrapper(te));
         return this;
+    }
+
+    /** True when the walk overflowed the stack (a source loop the IO checks failed to cut). */
+    public boolean isErrored() {
+        return errored;
     }
 
     public boolean isLooping() {

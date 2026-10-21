@@ -235,6 +235,7 @@ public final class RotaryGameTests {
         register(event, env, "machine_shift_click_follows_slot_rules", 20, RotaryMachineInteractionTests::machineShiftClickFollowsSlotRules);
         register(event, env, "machine_spills_inventory_on_break", 20, RotaryMachineInteractionTests::machineSpillsInventoryOnBreak);
         register(event, env, "machine_automation_follows_sided_rules", 20, RotaryMachineInteractionTests::automationFollowsSidedRules);
+        register(event, env, "splitter_facing_shaft_input_terminates", 20, RotaryMachineInteractionTests::splitterFacingShaftInputTerminates);
 
         register(event, env, "unpowered_drying_stacks_output", 460, RotaryUnpoweredTests::dryingStacksOutput);
         register(event, env, "unpowered_drying_backpressure", 460, RotaryUnpoweredTests::dryingBackpressure);
