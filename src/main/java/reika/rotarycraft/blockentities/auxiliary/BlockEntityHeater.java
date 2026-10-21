@@ -239,10 +239,15 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
         return MachineRegistry.HEATER;
     }
 
-    //@Override
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return false;
+    }
+
+    @Override
     public boolean isItemValidForSlot(int slot, ItemStack is) {
-        //return FurnaceBlockEntity.getItemBurnTime(is) > 0;
-        return true;
+        // 1.7.10 TileEntityFurnace.getItemBurnTime(is) > 0; 26.3 furnace fuel is the COOKING_FUEL component.
+        return is.has(net.minecraft.core.component.DataComponents.COOKING_FUEL);
     }
 
     @Override

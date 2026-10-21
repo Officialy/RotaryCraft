@@ -13,7 +13,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -24,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.common.Tags;
 
 import reika.dragonapi.instantiable.ItemMatch;
 import reika.dragonapi.instantiable.storage.ManagedItemHandler;
@@ -265,11 +270,14 @@ public class BlockEntityIgniter extends InventoriedPowerReceiver implements Temp
     // --- fuel enum -----------------------------------------------------------
 
     public enum IgnitionFuel {
-        WOOD(400, "plankWood", "logWood"),
+        // 1.7.10 ore names -> item tags. "a/b" was one matcher taking either; separate matchers must
+        // ALL be present: wood = planks or logs, thermite = aluminium dust + (iron ingot or iron dust).
+        WOOD(400, ItemMatch.anyOf(ItemTags.PLANKS, ItemTags.LOGS)),
         COAL(600, Items.COAL),
         BLAZE(800, Items.BLAZE_POWDER),
         LAVA(1200, Items.LAVA_BUCKET),
-        THERMITE(2500, "dustAluminum", "ingotIron");
+        THERMITE(2500, ItemMatch.anyOf(TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "dusts/aluminum"))),
+                ItemMatch.anyOf(Tags.Items.INGOTS_IRON, TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "dusts/iron"))));
 
         public static final IgnitionFuel[] fuelList = values();
 
@@ -279,7 +287,7 @@ public class BlockEntityIgniter extends InventoriedPowerReceiver implements Temp
         IgnitionFuel(int t, Object... matchers) {
             temperature = t;
             for (Object o : matchers)
-                items.add(ItemMatch.createFromObject(o));
+                items.add(o instanceof ItemMatch m ? m : ItemMatch.createFromObject(o));
         }
 
         /** Highest-temperature fuel whose required items are ALL present in the handler; null if none. */

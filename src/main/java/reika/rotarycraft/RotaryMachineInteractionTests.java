@@ -11,12 +11,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
+import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerGrinder;
@@ -70,12 +73,81 @@ final class RotaryMachineInteractionTests {
         helper.succeed();
     }
 
-    private static int playerSlot(GameTestHelper helper, ContainerGrinder menu, ServerPlayer player, int inventorySlot) {
+    private static int playerSlot(GameTestHelper helper, AbstractContainerMenu menu, ServerPlayer player, int inventorySlot) {
         for (Slot s : menu.slots)
             if (s.container == player.getInventory() && s.getContainerSlot() == inventorySlot)
                 return s.index;
         helper.fail("menu has no slot for player inventory slot " + inventorySlot);
         return -1;
+    }
+
+    /**
+     * Every InventoriedPowerReceiver is a WorldlyContainer now, so menus shift-click by each machine's
+     * 1.7.10 isItemValidForSlot: igniter fuel and aerosolizer potions go in, dirt stays put.
+     */
+    static void machineShiftClickFollowsSlotRules(GameTestHelper helper) {
+        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        assertShiftClick(helper, player, RotaryBlocks.IGNITER.get(), 2, new ItemStack(Items.COAL, 8));
+        assertShiftClick(helper, player, RotaryBlocks.AEROSOLIZER.get(), 4, new ItemStack(Items.POTION));
+        helper.succeed();
+    }
+
+    private static void assertShiftClick(GameTestHelper helper, ServerPlayer player, Block block, int x, ItemStack accepted) {
+        RotaryPowerTests.place(helper, x, 4, block, Direction.EAST);
+        var machine = helper.getBlockEntity(RotaryPowerTests.at(x, 4), InventoriedPowerReceiver.class);
+        AbstractContainerMenu menu = machine.createMenu(0, player.getInventory(), player);
+        helper.assertTrue(menu != null, block + " has no menu");
+        player.getInventory().setItem(9, accepted.copy());
+        player.getInventory().setItem(10, new ItemStack(Items.DIRT, 5));
+        menu.quickMoveStack(player, playerSlot(helper, menu, player, 9));
+        menu.quickMoveStack(player, playerSlot(helper, menu, player, 10));
+        int moved = 0;
+        for (int i = 0; i < machine.getContainerSize(); i++) {
+            ItemStack in = machine.getItem(i);
+            helper.assertTrue(in.isEmpty() || in.is(accepted.getItem()), block + " accepted " + in + " into slot " + i);
+            moved += in.getCount();
+        }
+        helper.assertTrue(moved == accepted.getCount(), block + " took " + moved + " of " + accepted);
+        helper.assertTrue(player.getInventory().getItem(10).getCount() == 5, block + " must leave the dirt in the player inventory");
+        player.getInventory().clearContent();
+    }
+
+    /** Breaking a machine spills its inventory beside its own item, as BlockTEBase.breakBlock did. */
+    static void machineSpillsInventoryOnBreak(GameTestHelper helper) {
+        BlockPos pos = RotaryPowerTests.at(3, 4);
+        RotaryPowerTests.place(helper, 3, 4, RotaryBlocks.IGNITER.get(), Direction.EAST);
+        helper.getBlockEntity(pos, InventoriedPowerReceiver.class).setItem(0, new ItemStack(Items.COAL, 10));
+        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_PICKAXE));
+        helper.assertTrue(player.gameMode.destroyBlock(helper.absolutePos(pos)), "survival player failed to break the igniter");
+        int coal = 0;
+        boolean machine = false;
+        for (ItemEntity e : helper.getEntities(EntityTypes.ITEM, pos, 2)) {
+            if (e.getItem().is(Items.COAL))
+                coal += e.getItem().getCount();
+            machine |= e.getItem().is(RotaryBlocks.IGNITER.get().asItem());
+        }
+        helper.assertTrue(coal == 10, "broken igniter spilled " + coal + " coal, expected 10");
+        helper.assertTrue(machine, "broken igniter must still drop itself");
+        helper.succeed();
+    }
+
+    /** Automation sees the 1.7.10 sided rules: InertIInv hides every slot, insertion follows isItemValidForSlot. */
+    static void automationFollowsSidedRules(GameTestHelper helper) {
+        RotaryPowerTests.place(helper, 2, 4, RotaryBlocks.WOODCUTTER.get(), Direction.EAST);
+        RotaryPowerTests.place(helper, 4, 4, RotaryBlocks.HEATER.get(), Direction.EAST);
+        RotaryPowerTests.place(helper, 6, 4, RotaryBlocks.AUTOBREEDER.get(), Direction.EAST);
+        var cutter = helper.getBlockEntity(RotaryPowerTests.at(2, 4), InventoriedPowerReceiver.class);
+        var heater = helper.getBlockEntity(RotaryPowerTests.at(4, 4), InventoriedPowerReceiver.class);
+        var breeder = helper.getBlockEntity(RotaryPowerTests.at(6, 4), InventoriedPowerReceiver.class);
+        helper.assertTrue(cutter.getSlotsForFace(Direction.UP).length == 0, "woodcutter (InertIInv) must expose no slots");
+        helper.assertTrue(!cutter.canPlaceItemThroughFace(0, new ItemStack(Items.OAK_SAPLING), Direction.UP), "woodcutter must refuse automation");
+        helper.assertTrue(heater.canPlaceItemThroughFace(0, new ItemStack(Items.COAL), Direction.UP), "heater must take furnace fuel");
+        helper.assertTrue(!heater.canPlaceItemThroughFace(0, new ItemStack(Items.DIRT), Direction.UP), "heater must refuse non-fuel");
+        helper.assertTrue(!heater.canTakeItemThroughFace(0, new ItemStack(Items.COAL), Direction.DOWN), "heater fuel is not extractable");
+        helper.assertTrue(breeder.canPlaceItem(0, new ItemStack(Items.WHEAT)), "auto breeder must take wheat");
+        helper.assertTrue(!breeder.canPlaceItem(0, new ItemStack(Items.DIRT)), "auto breeder must refuse dirt");
+        helper.succeed();
     }
 
     /** Breaking a lubricated gearbox and placing it back keeps its lubricant and wear. */

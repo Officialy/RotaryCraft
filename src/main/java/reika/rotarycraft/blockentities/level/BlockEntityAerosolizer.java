@@ -493,12 +493,16 @@ public class BlockEntityAerosolizer extends InventoriedPowerReceiver implements 
 
     
 
-//    @Override
-//    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-//        return itemstack.getItem() == Items.GLASS_BOTTLE;
-//    }
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return itemstack.getItem() == Items.GLASS_BOTTLE;
+    }
 
-    //    @Override
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        return this.isItemValid(slot, stack);
+    }
+
     public boolean isItemValid(int slot,  ItemStack stack) {
         return stack.getItem() == Items.POTION;
     }

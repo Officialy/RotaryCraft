@@ -12,6 +12,7 @@ package reika.rotarycraft.blockentities.weaponry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
+import reika.dragonapi.libraries.ReikaFluidHelper;
 import reika.dragonapi.libraries.ReikaInventoryHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaPhysicsHelper;
@@ -30,6 +32,7 @@ import reika.dragonapi.libraries.registry.ReikaParticleHelper;
 import reika.rotarycraft.base.blockentity.BlockEntityLaunchCannon;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
+import reika.rotarycraft.registry.RotaryItems;
 
 public class BlockEntityBlockCannon extends BlockEntityLaunchCannon {
 
@@ -198,12 +201,17 @@ public class BlockEntityBlockCannon extends BlockEntityLaunchCannon {
         return 1000;
     }
 
-//    @Override
-//    public boolean isItemValid(int slot,  ItemStack is) {
-//        if (ReikaItemHelper.isBlock(is))
-//            return true;
-//        return RotaryItems.SPAWNER.matchItem(is) || FluidContainerRegistry.getFluidForFilledItem(is) != null;
-//    }
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack is) {
+        if (is.getItem() instanceof BlockItem)
+            return true;
+        return is.is(RotaryItems.SPAWNER.get()) || !ReikaFluidHelper.getFluidForItem(is).isEmpty();
+    }
+
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return false;
+    }
 
     @Override
     public int getContainerSize() {

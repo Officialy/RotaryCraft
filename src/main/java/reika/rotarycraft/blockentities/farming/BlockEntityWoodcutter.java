@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import reika.dragonapi.instantiable.data.blockstruct.TreeReader;
 import reika.dragonapi.instantiable.data.immutable.BlockKey;
+import reika.dragonapi.interfaces.blockentity.InertIInv;
 import reika.dragonapi.libraries.ReikaEnchantmentHelper;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -64,11 +65,11 @@ import reika.rotarycraft.registry.RotaryItems;
  * <p>26.2 port notes: tree identity is tag-driven through TreeReader (legacy TreeType/ModWoodList
  * gone) so any correctly-tagged tree works; the slime-tree jam and TwilightForest/dye-tree special
  * cases are gated out (mods not ported -- {@code wet()}/jam kept for the Wettable contract). The
- * non-INSTACUT mode lets unsupported tree blocks fall as in 1.7.10. The legacy
- * InertIInv/ProcessingMachine markers are not ported (no GUI; slot 0 is machine-managed).</p>
+ * non-INSTACUT mode lets unsupported tree blocks fall as in 1.7.10. Slot 0 is machine-managed:
+ * {@link InertIInv} hides it from automation, as in 1.7.10 (the ProcessingMachine marker is not ported).</p>
  */
 public class BlockEntityWoodcutter extends InventoriedPowerReceiver implements EnchantableMachine,
-        DamagingContact, Wettable, MultiOperational, ConditionalOperation {
+        DamagingContact, Wettable, MultiOperational, ConditionalOperation, InertIInv {
 
     private static final int MAX_JAM = 20;
 

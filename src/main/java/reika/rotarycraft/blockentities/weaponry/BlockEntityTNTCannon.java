@@ -258,7 +258,12 @@ public class BlockEntityTNTCannon extends BlockEntityLaunchCannon {
         return MachineRegistry.TNTCANNON;
     }
 
-    //    @Override
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return false;
+    }
+
+    @Override
     public boolean isItemValidForSlot(int slot, ItemStack is) {
         return ReikaItemHelper.matchStackWithBlock(is, Blocks.TNT.defaultBlockState());
     }

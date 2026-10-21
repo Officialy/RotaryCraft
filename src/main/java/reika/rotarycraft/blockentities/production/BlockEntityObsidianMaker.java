@@ -434,4 +434,14 @@ public class BlockEntityObsidianMaker extends InventoriedPowerReceiver implement
     public boolean hasATank() {
         return false;
     }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack is) {
+        return false;
+    }
+
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return true;
+    }
 }

@@ -92,6 +92,18 @@ public class BlockEntityMagnetizer extends InventoriedPowerReceiver
         }
     }
 
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return j == 0;
+    }
+
+    /** One coil at a time unless the recipe allows stacking (1.7.10 rule). */
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack is) {
+        MagnetizerRecipe rec = RecipesMagnetizer.getRecipes().getRecipe(level, is);
+        return rec != null && ((itemHandler.getStackInSlot(0).isEmpty() && is.getCount() == 1) || rec.allowStacking);
+    }
+
     private boolean hasRecipe() {
         ItemStack is = itemHandler.getStackInSlot(0);
         return !is.isEmpty() && RecipesMagnetizer.getRecipes().getRecipe(level, is) != null;

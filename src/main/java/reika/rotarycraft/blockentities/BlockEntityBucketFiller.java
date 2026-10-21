@@ -160,12 +160,31 @@ public class BlockEntityBucketFiller extends InventoriedPowerReceiver implements
         tank.writeToNBT(tag);
     }
 
-//    @Override
-//    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-//        if (filling)
-//            return j == 0 && FluidContainerRegistry.isFilledContainer(itemstack);
-//        return j == 0 && FluidContainerRegistry.isEmptyContainer(itemstack);
-//    }
+    /** 1.7.10 FluidContainerRegistry.isContainer: anything exposing an item fluid handler. */
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack is) {
+        return fluidContainer(is) != null;
+    }
+
+    /** Finished containers leave through the bottom: filled ones while filling, empty ones while draining. */
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        ResourceHandler<FluidResource> h = fluidContainer(itemstack);
+        if (h == null || j != 0)
+            return false;
+        return filling == holdsFluid(h);
+    }
+
+    private static ResourceHandler<FluidResource> fluidContainer(ItemStack is) {
+        return is.isEmpty() ? null : ItemAccess.forStack(is.copyWithCount(1)).getCapability(Capabilities.Fluid.ITEM);
+    }
+
+    private static boolean holdsFluid(ResourceHandler<FluidResource> h) {
+        for (int i = 0; i < h.size(); i++)
+            if (!h.getResource(i).isEmpty() && h.getAmountAsLong(i) > 0)
+                return true;
+        return false;
+    }
 
     @Override
     public boolean canConnectToPipe(MachineRegistry m) {

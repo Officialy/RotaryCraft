@@ -215,6 +215,7 @@ public class BlockEntityItemCannon extends InventoriedPowerReceiver implements D
 
     @Override public ManagedItemHandler getItemHandler() { return itemHandler; }
     @Override public boolean isEmpty() { return ReikaInventoryHelper.isEmpty(itemHandler); }
+    @Override public boolean isItemValidForSlot(int slot, ItemStack is) { return true; }
     @Override public ItemStack getItem(int slot) { return itemHandler.getLiveStack(slot); }
     @Override public ItemStack removeItem(int slot, int amount) { return itemHandler.extractItem(slot, amount, false); }
     @Override public ItemStack removeItemNoUpdate(int slot) { return removeItem(slot, getItem(slot).getCount()); }

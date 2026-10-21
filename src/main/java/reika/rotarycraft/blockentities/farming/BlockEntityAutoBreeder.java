@@ -9,11 +9,17 @@
  ******************************************************************************/
 package reika.rotarycraft.blockentities.farming;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
@@ -140,7 +146,34 @@ public class BlockEntityAutoBreeder extends InventoriedPowerReceiver implements 
     }
 
     public boolean isItemValidForSlot(int slot, ItemStack is) {
-        return true;
+        if (level == null || is.isEmpty())
+            return false;
+        for (Animal probe : feedProbes(level))
+            if (probe.isFood(is))
+                return true;
+        return false;
+    }
+
+    /**
+     * 1.7.10 accepted only items in its class->feed registry. That registry is each animal's own
+     * {@code isFood} now, so one unspawned instance of every registered animal type answers "does
+     * anything eat this", per level (instances hold their level).
+     */
+    private static final Map<Level, List<Animal>> FEED_PROBES = new WeakHashMap<>();
+
+    private static List<Animal> feedProbes(Level level) {
+        return FEED_PROBES.computeIfAbsent(level, l -> {
+            List<Animal> li = new ArrayList<>();
+            for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
+                try {
+                    if (type.create(l, EntitySpawnReason.LOAD) instanceof Animal a)
+                        li.add(a);
+                } catch (RuntimeException ignored) {
+                    // A mod animal that cannot be built off-world simply isn't consulted.
+                }
+            }
+            return li;
+        });
     }
 
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {

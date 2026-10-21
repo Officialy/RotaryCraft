@@ -214,6 +214,12 @@ public class BlockEntityLineBuilder extends InventoriedPowerReceiver implements 
         return Math.max(64, ConfigRegistry.LINEBUILDER.getValue());
     }
 
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack is) {
+        return true;
+    }
+
+    @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
         return false;
     }

@@ -415,4 +415,14 @@ public class BlockEntityVacuum extends InventoriedPowerReceiver implements Range
     public boolean hasATank() {
         return false;
     }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack is) {
+        return true;
+    }
+
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return true;
+    }
 }
