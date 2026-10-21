@@ -192,9 +192,15 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
     public List<Rect2i> getExtraAreas() {
         List<Rect2i> li = new ArrayList<>();
         li.add(new Rect2i(leftPos - 17, topPos + 4, 18, imageHeight - 8));
-        if (tile instanceof BlockEntityPowerReceiver)
-            li.add(new Rect2i(leftPos + imageWidth, topPos + 4, 42, imageHeight - 4));
+        Rect2i tab = this.getPowerTabArea();
+        if (tab != null)
+            li.add(tab);
         return li;
+    }
+
+    /** Screen-space bounds of the power tab drawPowerTab paints, or null when there is none. */
+    protected Rect2i getPowerTabArea() {
+        return tile instanceof BlockEntityPowerReceiver ? new Rect2i(leftPos + imageWidth, topPos + 4, 42, imageHeight - 4) : null;
     }
 
     /**

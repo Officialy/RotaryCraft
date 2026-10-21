@@ -30,6 +30,8 @@ public class ContainerAutoBreeder extends IOMachineContainer<BlockEntityAutoBree
             int row = i / 9;
             this.addSlot(te.getFeedHandler().slot(i, 8 + col * 18, 18 + row * 18));
         }
-        this.addPlayerInventoryWithOffset(inv, 0, 14);
+        // 1.7.10 ran the breeder through ContainerBasicStorage: player rows at 103 + (rows - 4) * 18,
+        // i.e. this far below the standard 84, to sit under the cut-down basicstorage panel.
+        this.addPlayerInventoryWithOffset(inv, 0, 19 + (te.getContainerSize() / 9 - 4) * 18);
     }
 }

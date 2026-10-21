@@ -15,6 +15,10 @@ import reika.rotarycraft.registry.RotaryBlocks;
 
 /** Vanilla equipment categories and the original material integration entries. */
 public class RoCItemTagsProvider extends ItemTagsProvider {
+    public static final TagKey<Item> FERMENTER_RAINBOW_LEAVES = own("fermenter/rainbow_leaves");
+    public static final TagKey<Item> FERMENTER_RAINBOW_SAPLINGS = own("fermenter/rainbow_saplings");
+    public static final TagKey<Item> FERMENTER_DYE_LEAVES = own("fermenter/dye_leaves");
+    public static final TagKey<Item> FERMENTER_DYE_PLANTS = own("fermenter/dye_plants");
     public static final TagKey<Item> MOTION_TRACKERS = own("motion_trackers");
     public static final TagKey<Item> STEEL_INGOTS = TagKey.create(Registries.ITEM,
             Identifier.fromNamespaceAndPath("c", "ingots/steel"));
@@ -44,6 +48,13 @@ public class RoCItemTagsProvider extends ItemTagsProvider {
         // HSLA is deliberately not interchangeable with ordinary steel (HSLADICT defaults off).
         // A datapack may opt in; keeping this tag empty also lets the purifier load without other mods.
         tag(STEEL_INGOTS);
+        tag(FERMENTER_RAINBOW_LEAVES).addOptional(net.minecraft.resources.ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("chromaticraft", "rainbow_leaves")));
+        tag(FERMENTER_RAINBOW_SAPLINGS).addOptional(net.minecraft.resources.ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("chromaticraft", "rainbow_sapling")));
+        for (var color : net.minecraft.world.item.DyeColor.values()) {
+            tag(FERMENTER_DYE_LEAVES).addOptional(net.minecraft.resources.ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("chromaticraft", "dye_leaves_" + color.getName())));
+            tag(FERMENTER_DYE_PLANTS).addOptional(net.minecraft.resources.ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("chromaticraft", "dye_sapling_" + color.getName())));
+            tag(FERMENTER_DYE_PLANTS).addOptional(net.minecraft.resources.ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("chromaticraft", "dye_flower_" + color.getName())));
+        }
         tag(MOTION_TRACKERS).add(RotaryItems.MOTION.getKey());
         add(ItemTags.PICKAXES, RotaryItems.HSLA_STEEL_PICKAXE.get(), RotaryItems.BEDROCK_ALLOY_PICK.get());
         add(ItemTags.AXES, RotaryItems.HSLA_STEEL_AXE.get(), RotaryItems.BEDROCK_ALLOY_AXE.get());

@@ -12,6 +12,9 @@ package reika.rotarycraft.blockentities.processing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -21,6 +24,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 
 import reika.rotarycraft.auxiliary.recipemanagers.DryingBedRecipe;
 import reika.rotarycraft.base.blockentity.InventoriedRCFluidReceiver;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerDryingBed;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -196,4 +200,8 @@ public class BlockEntityDryingBed extends InventoriedRCFluidReceiver {
         timer = NBT.getIntOr("timer", 0);
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerDryingBed(id, inv, this);
+    }
 }

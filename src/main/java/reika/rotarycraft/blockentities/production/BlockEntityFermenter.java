@@ -37,6 +37,12 @@ import reika.rotarycraft.auxiliary.recipemanagers.FermenterRecipe;
 import reika.rotarycraft.base.blockentity.InventoriedPowerLiquidReceiver;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerFermenter;
 import reika.rotarycraft.registry.DurationRegistry;
+import reika.rotarycraft.registry.ConfigRegistry;
+import reika.rotarycraft.base.blocks.BlockRotaryCraftMachine;
+import reika.rotarycraft.modinterface.jei.RotaryRecipeSync;
+import reika.dragonapi.instantiable.storage.SlotFilteredItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -74,11 +80,13 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
         ItemStack input = itemHandler.getStackInSlot(1);
         if (catalyst.isEmpty() || input.isEmpty() || !this.hasWater())
             return ItemStack.EMPTY;
-        if (level == null || level.getServer() == null)
+        if (!ConfigRegistry.enableFermenterYeast() && catalyst.is(Items.SUGAR))
             return ItemStack.EMPTY;
+        var recipes = RotaryRecipeSync.getRecipes(level);
+        if (recipes == null) return ItemStack.EMPTY;
         FermenterRecipe.FermenterInput in = new FermenterRecipe.FermenterInput(catalyst, input);
-        return level.getServer().getRecipeManager()
-                .getRecipeFor(RotaryRecipeTypes.FERMENTER.get(), in, level)
+        return recipes.byType(RotaryRecipeTypes.FERMENTER.get()).stream()
+                .filter(h -> h.value().matches(in, level)).findFirst()
                 .map(h -> h.value().assemble(in).copy())
                 .orElse(ItemStack.EMPTY);
     }
@@ -115,6 +123,7 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
         super.updateBlockEntity();
         temperaturetick++;
         tickcount++;
+        read = getBlockState().getValue(BlockRotaryCraftMachine.FACING).getOpposite();
         this.getPower(false);
 
         if (temperaturetick >= 20) {
@@ -210,6 +219,7 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
                 ReikaInventoryHelper.decrStack(0, itemHandler);
         }
         tank.removeLiquid(CONSUME_WATER);
+        setChanged();
     }
 
     @Override
@@ -286,15 +296,31 @@ public class BlockEntityFermenter extends InventoriedPowerLiquidReceiver impleme
         return MachineRegistry.FERMENTER;
     }
 
+    /** Redstone selects automation inputs; manually supplied recipe pairs still process as in 1.7.10. */
+    public boolean isSludgeMode() {
+        return !ConfigRegistry.enableFermenterYeast() || level != null && level.hasNeighborSignal(worldPosition);
+    }
+
     @Override
-    public boolean isItemValidForSlot(int i, ItemStack is) {
-        if (i >= 2)
-            return false;
-        // slot 0 = catalyst (sugar or yeast), slot 1 = feedstock (dirt or plant matter);
-        // the recipe pairing is validated at process time, this just keeps the slots sane
-        if (i == 0)
-            return is.is(Items.SUGAR) || is.is(RotaryItems.YEAST.get());
-        return true;
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        return isItemValidForMode(slot, stack, isSludgeMode());
+    }
+
+    public boolean isItemValidForMode(int slot, ItemStack stack, boolean sludge) {
+        if (stack.isEmpty() || slot < 0 || slot >= 2) return false;
+        if (slot == 0) return stack.is(sludge ? RotaryItems.YEAST.get() : Items.SUGAR);
+        if (!sludge) return stack.is(Items.DIRT);
+        var recipes = RotaryRecipeSync.getRecipes(level);
+        if (recipes == null) return false;
+        ItemStack catalyst = new ItemStack(RotaryItems.YEAST.get());
+        return recipes.byType(RotaryRecipeTypes.FERMENTER.get()).stream().anyMatch(holder ->
+                holder.value().matches(new FermenterRecipe.FermenterInput(catalyst, stack), level));
+    }
+
+    @Override
+    public ResourceHandler<ItemResource> getAutomationItemHandler() {
+        return new SlotFilteredItemHandler(itemHandler,
+                (slot, resource) -> isItemValidForSlot(slot, resource.toStack()), slot -> slot == 2);
     }
 
     @Override

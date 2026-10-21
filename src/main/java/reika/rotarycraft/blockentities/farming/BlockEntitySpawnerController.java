@@ -15,6 +15,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,6 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
+import reika.rotarycraft.gui.container.machine.ContainerSpawnerController;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -209,4 +213,8 @@ public class BlockEntitySpawnerController extends BlockEntityPowerReceiver imple
         return this.areConditionsMet() ? "Operational" : "No Spawner Below";
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerSpawnerController(id, inv, this);
+    }
 }

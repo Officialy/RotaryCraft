@@ -9,74 +9,85 @@
  ******************************************************************************/
 package reika.rotarycraft.gui.screen.machine.inventory;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-
+import reika.dragonapi.instantiable.gui.ImagedGuiButton;
 import reika.dragonapi.libraries.io.ReikaPacketHelper;
 import reika.rotarycraft.RotaryCraft;
-import reika.rotarycraft.base.MachineScreen;
+import reika.rotarycraft.base.NonPoweredMachineScreen;
 import reika.rotarycraft.blockentities.transmission.BlockEntityPowerBus;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerPowerBus;
 import reika.rotarycraft.registry.PacketRegistry;
 
 /**
- * Power bus GUI: one gear slot per horizontal side with a speed/torque mode toggle next to each
- * (legacy POWERBUS packet), plus the per-side output readout.
+ * 1.7.10 GuiPowerBus: the 220x220 "bus" panel with a gear slot on each usable side, a tinted square
+ * marking each side's slot (sides facing another bus block or the hub are painted over with panel
+ * texture), and a speed/torque toggle button beside each slot.
  */
-public class GuiPowerBus extends MachineScreen<BlockEntityPowerBus, ContainerPowerBus> {
+public class GuiPowerBus extends NonPoweredMachineScreen<BlockEntityPowerBus, ContainerPowerBus> {
 
-    private static final Direction[] SIDES = {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
-    private static final int[] SLOT_X = {80, 80, 44, 116};
-    private static final int[] SLOT_Y = {13, 57, 35, 35};
+    private static final int[] SLOT_X = {101, 101, 65, 137};
+    private static final int[] SLOT_Y = {32, 104, 68, 68};
 
     private final BlockEntityPowerBus bus;
 
     public GuiPowerBus(ContainerPowerBus container, Inventory inv, Component title) {
-        super(container, inv, title, 176, 166);
-        bus = (BlockEntityPowerBus) container.tile;
+        super(container, inv, title, 220, 220);
+        bus = container.tile;
         inventory = inv;
     }
 
     @Override
-    public void init() {
+    protected void init() {
         super.init();
-        int j = (width - imageWidth) / 2;
-        int k = (height - imageHeight) / 2;
+        int j = (width - imageWidth) / 2 - 2;
+        int k = (height - imageHeight) / 2 - 12;
+        Identifier file = Identifier.fromNamespaceAndPath(RotaryCraft.MODID, "textures/screen/buttons.png");
+        int[] dx = {j + 103, j + 103, j + 49, j + 139 + 18};
+        int[] dy = {k + 26, k + 134, k + 66 + 18 - 4, k + 66 + 18 - 4};
         for (int i = 0; i < 4; i++) {
+            Direction dir = Direction.values()[i + 2];
+            int u = bus.isSideSpeedMode(dir) ? 54 : 36;
             final int id = i;
-            // Mode toggle beside each side slot: speed mode multiplies speed, torque mode torque.
-            addRenderableWidget(Button.builder(Component.literal("x"), b -> this.toggleMode(id))
-                    .bounds(j + SLOT_X[i] + 18, k + SLOT_Y[i], 12, 12).build());
+            if (bus.canHaveItemInSlot(dir))
+                addRenderableWidget(new ImagedGuiButton(i, dx[i], dy[i], 18, 18, u, 36, file, b -> this.toggleMode(id)));
         }
     }
 
+    /** 1.7.10 flipped the side locally for the button art and sent the same toggle to the server. */
     private void toggleMode(int side) {
+        Direction dir = Direction.values()[side + 2];
+        bus.setMode(dir, !bus.isSideSpeedMode(dir));
         ReikaPacketHelper.sendPacketToServer(RotaryCraft.packetChannel, PacketRegistry.POWERBUS.wireId(), bus, side);
+        this.rebuildWidgets();
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partial) {
-        super.extractBackground(graphics, mouseX, mouseY, partial);
-        int j = (Minecraft.getInstance().getWindow().getGuiScaledWidth() - imageWidth) / 2;
-        int k = (Minecraft.getInstance().getWindow().getGuiScaledHeight() - imageHeight) / 2;
-
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractLabels(graphics, mouseX, mouseY);
         for (int i = 0; i < 4; i++) {
-            Direction dir = SIDES[i];
-            String mode = bus.isSideSpeedMode(dir) ? "Spd" : "Trq";
-            api.drawCenteredStringNoShadow(graphics, font, mode, j + SLOT_X[i] + 24, k + SLOT_Y[i] + 13, 0xff404040);
+            Direction dir = Direction.values()[i + 2];
+            int dx = SLOT_X[i];
+            int dy = SLOT_Y[i];
+            if (bus.canHaveItemInSlot(dir))
+                graphics.fill(dx, dy, dx + 18, dy + 18, getColorForSide(dir));
+            else
+                graphics.blit(RenderPipelines.GUI_TEXTURED, this.getTextureIdentifier(), dx, dy, 8, 8, 18, 18, 256, 256);
         }
-        api.drawCenteredStringNoShadow(graphics, font,
-                bus.getInputPower() + "W over " + bus.getTotalOutputSidesDisplay() + " sides",
-                j + imageWidth / 2, k + 76, 0xff404040);
     }
 
-    // The bus is not a standard shaft receiver; the input readout replaces the power tab.
-    @Override
-    protected void drawPowerTab(GuiGraphicsExtractor stack, int j, int k) {
+    private static int getColorForSide(Direction dir) {
+        return switch (dir) {
+            case EAST -> 0x44ffff00;
+            case NORTH -> 0x440000ff;
+            case SOUTH -> 0x44ff0000;
+            case WEST -> 0x4400ff00;
+            default -> 0x44ffffff;
+        };
     }
 
     @Override

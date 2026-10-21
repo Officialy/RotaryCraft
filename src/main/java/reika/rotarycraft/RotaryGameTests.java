@@ -236,6 +236,7 @@ public final class RotaryGameTests {
         register(event, env, "machine_spills_inventory_on_break", 20, RotaryMachineInteractionTests::machineSpillsInventoryOnBreak);
         register(event, env, "machine_automation_follows_sided_rules", 20, RotaryMachineInteractionTests::automationFollowsSidedRules);
         register(event, env, "splitter_facing_shaft_input_terminates", 20, RotaryMachineInteractionTests::splitterFacingShaftInputTerminates);
+        register(event, env, "machine_registered_menus_open", 20, RotaryMachineInteractionTests::registeredMenusOpen);
 
         register(event, env, "unpowered_drying_stacks_output", 460, RotaryUnpoweredTests::dryingStacksOutput);
         register(event, env, "unpowered_drying_backpressure", 460, RotaryUnpoweredTests::dryingBackpressure);
@@ -288,6 +289,12 @@ public final class RotaryGameTests {
         register(event, env, "distiller_hose_to_reservoir", 60, RotaryDistilleryTests::pipes);
         register(event, env, "distiller_survival_break", 40, RotaryDistilleryTests::survivalBreak);
         register(event, env, "distiller_recipe_network_roundtrip", 40, RotaryDistilleryTests::recipeRoundTrip);
+
+        register(event, env, "fermenter_yeast", 60, RotaryFermenterTests::yeast);
+        register(event, env, "fermenter_steam_power", 160, RotaryFermenterTests::steamPower);
+        register(event, env, "fermenter_automation", 40, RotaryFermenterTests::automation);
+        register(event, env, "fermenter_menu", 40, RotaryFermenterTests::menu);
+        register(event, env, "fermenter_plants", 60, RotaryFermenterTests::plants);
 
         register(event, env, "purifier_batch", 60, RotaryPurifierTests::batch);
         register(event, env, "purifier_partial_batch", 60, RotaryPurifierTests::partialBatch);

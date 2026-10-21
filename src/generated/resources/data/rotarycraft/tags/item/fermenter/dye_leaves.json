@@ -1,0 +1,68 @@
+{
+  "values": [
+    {
+      "id": "chromaticraft:dye_leaves_white",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_orange",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_magenta",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_light_blue",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_yellow",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_lime",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_pink",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_gray",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_light_gray",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_cyan",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_purple",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_blue",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_brown",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_green",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_red",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_leaves_black",
+      "required": false
+    }
+  ]
+}

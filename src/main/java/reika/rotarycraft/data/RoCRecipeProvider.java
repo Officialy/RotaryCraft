@@ -563,13 +563,30 @@ public final class RoCRecipeProvider {
         // Fermenter (RotaryRecipeTypes.FERMENTER): sugar+dirt → yeast, yeast+plant matter → sludge.
         private void fermenter() {
             ferment("yeast", Ingredient.of(Items.SUGAR), Ingredient.of(Items.DIRT), new ItemStackTemplate(RotaryItems.YEAST.get()));
-            Ingredient plants = Ingredient.of(
+            // PlantMaterials/MulchMaterials yields from the original source, rather than one
+            // sludge for every plant. Tags keep ChromatiCraft integration optional and reloadable.
+            ferment("sludge", Ingredient.of(RotaryItems.YEAST.get()), Ingredient.of(
                     Items.OAK_SAPLING, Items.SPRUCE_SAPLING, Items.BIRCH_SAPLING, Items.JUNGLE_SAPLING,
-                    Items.ACACIA_SAPLING, Items.DARK_OAK_SAPLING, Items.OAK_LEAVES, Items.SPRUCE_LEAVES,
-                    Items.BIRCH_LEAVES, Items.JUNGLE_LEAVES, Items.ACACIA_LEAVES, Items.DARK_OAK_LEAVES,
-                    Items.SHORT_GRASS, Items.TALL_GRASS, Items.FERN, Items.LARGE_FERN, Items.VINE,
-                    Items.LILY_PAD, Items.SUGAR_CANE, Items.POTATO, Items.DANDELION, Items.POPPY);
-            ferment("sludge", Ingredient.of(RotaryItems.YEAST.get()), plants, new ItemStackTemplate(RotaryItems.SLUDGE.get()));
+                    Items.ACACIA_SAPLING, Items.DARK_OAK_SAPLING, Items.LILY_PAD, Items.SUGAR_CANE,
+                    Items.POTATO, Items.DANDELION, Items.POPPY, Items.BLUE_ORCHID, Items.ALLIUM,
+                    Items.AZURE_BLUET, Items.RED_TULIP, Items.ORANGE_TULIP, Items.WHITE_TULIP,
+                    Items.PINK_TULIP, Items.OXEYE_DAISY, RotaryItems.SAWDUST.get()),
+                    new ItemStackTemplate(RotaryItems.SLUDGE.get()));
+            ferment("sludge_leaves_and_grass", Ingredient.of(RotaryItems.YEAST.get()), Ingredient.of(
+                    Items.OAK_LEAVES, Items.SPRUCE_LEAVES, Items.BIRCH_LEAVES, Items.JUNGLE_LEAVES,
+                    Items.ACACIA_LEAVES, Items.DARK_OAK_LEAVES, Items.SHORT_GRASS, Items.TALL_GRASS,
+                    Items.FERN, Items.LARGE_FERN, Items.VINE), new ItemStackTemplate(RotaryItems.SLUDGE.get(), 2));
+            fermentPlantTag("rainbow_leaves", RoCItemTagsProvider.FERMENTER_RAINBOW_LEAVES, 16);
+            fermentPlantTag("rainbow_saplings", RoCItemTagsProvider.FERMENTER_RAINBOW_SAPLINGS, 8);
+            fermentPlantTag("dye_leaves", RoCItemTagsProvider.FERMENTER_DYE_LEAVES, 2);
+            fermentPlantTag("dye_plants", RoCItemTagsProvider.FERMENTER_DYE_PLANTS, 1);
+        }
+
+        private void fermentPlantTag(String name, TagKey<Item> tag, int count) {
+            FermenterRecipe recipe = new FermenterRecipe(Ingredient.of(RotaryItems.YEAST.get()), Ingredient.of(items.getOrThrow(tag)),
+                    new ItemStackTemplate(RotaryItems.SLUDGE.get(), count));
+            out.withConditions(NeoForgeConditions.not(NeoForgeConditions.tagEmpty(tag))).accept(
+                    ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("rotarycraft", "fermenter/" + name)), recipe, null);
         }
 
         private void ferment(String name, Ingredient catalyst, Ingredient input, ItemStackTemplate output) {

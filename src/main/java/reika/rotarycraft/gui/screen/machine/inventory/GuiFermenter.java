@@ -38,15 +38,33 @@ public class GuiFermenter extends MachineScreen<BlockEntityFermenter, ContainerF
         int j = (scaledWidth - imageWidth) / 2;
         int k = (scaleHeight - imageHeight) / 2;
 
-        int i1 = ferm.getCookProgressScaled(48);
+        int i1 = menu.getCookProgressScaled(48);
         poseStack.blit(RenderPipelines.GUI_TEXTURED, getTextureIdentifier(), j + 79, k + 34, 176, 14, i1 + 1, 16, 256, 256);
 
-        int i2 = ferm.getTemperatureScaled(54);
+        int i2 = Math.clamp(ferm.getTemperatureScaled(54), 0, 54);
         poseStack.blit(RenderPipelines.GUI_TEXTURED, getTextureIdentifier(), j + 24, k + 70 - i2, 177, 86 - i2, 9, i2, 256, 256);
 
+        int waterHeight = Math.clamp(ferm.getWaterScaled(16), 0, 16);
+        if (waterHeight > 0)
+            reika.dragonapi.libraries.rendering.ReikaLiquidRenderer.drawFluidIcon(poseStack,
+                    net.minecraft.world.level.material.Fluids.WATER, j + 55, k + 51 - waterHeight, 16, waterHeight);
+        if (api.isMouseInBox(j + 54, j + 72, k + 34, k + 52, mouseX, mouseY))
+            poseStack.setTooltipForNextFrame(font, Component.literal("Water: " + ferm.getLiquidLevel() + "/" + ferm.CAPACITY + " mB"), mouseX, mouseY);
+
         if (api.isMouseInBox(j + 23, j + 33, k + 16, k + 70, mouseX, mouseY)) {
-            api.drawTooltipAt(poseStack, font, String.format("%dC", ferm.getTemperature()), mouseX, mouseY);
+            poseStack.setTooltipForNextFrame(font, Component.literal(String.format("%dC", ferm.getTemperature())), mouseX, mouseY);
         }
+    }
+
+    @Override
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractLabels(graphics, mouseX, mouseY);
+        var target = menu.isSludgeMode() ? reika.rotarycraft.registry.RotaryItems.SLUDGE.get()
+                : reika.rotarycraft.registry.RotaryItems.YEAST.get();
+        graphics.item(target.getDefaultInstance(), 154, 6);
+        graphics.text(font, "Target", 119, 10, 0xFF000000, false);
+        if (api.isMouseInBox(leftPos + 154, leftPos + 170, topPos + 6, topPos + 22, mouseX, mouseY))
+            graphics.setTooltipForNextFrame(font, Component.literal("This controls automation. Redstone selects sludge."), mouseX, mouseY);
     }
 
     @Override

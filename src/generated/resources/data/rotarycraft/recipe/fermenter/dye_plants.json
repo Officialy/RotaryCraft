@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "rotarycraft:fermenter/dye_plants"
+      }
+    }
+  ],
+  "type": "rotarycraft:fermenter",
+  "catalyst": "rotarycraft:yeast",
+  "input": "#rotarycraft:fermenter/dye_plants",
+  "output": {
+    "id": "rotarycraft:sludge"
+  }
+}

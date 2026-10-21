@@ -12,6 +12,9 @@ package reika.rotarycraft.blockentities.transmission;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,6 +25,7 @@ import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.api.interfaces.ComplexIO;
 import reika.rotarycraft.api.power.ShaftMerger;
 import reika.rotarycraft.auxiliary.ShaftPowerBus;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerPowerBus;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.auxiliary.PowerSourceList;
 import reika.rotarycraft.auxiliary.interfaces.PowerSourceTracker;
@@ -364,5 +368,10 @@ public class BlockEntityPowerBus extends BlockEntityInventoryIOMachine implement
     public void getAllOutputs(Collection<BlockEntity> c, Direction dir) {
         if (dir == read)
             c.add(getAdjacentBlockEntity(write));
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerPowerBus(id, inv, this);
     }
 }

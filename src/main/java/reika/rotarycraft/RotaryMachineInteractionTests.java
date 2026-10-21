@@ -21,12 +21,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import reika.rotarycraft.auxiliary.PowerSourceList;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
+import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.blockentities.processing.BlockEntityGrinder;
 import reika.rotarycraft.blockentities.transmission.BlockEntityGearbox;
 import reika.rotarycraft.blockentities.transmission.BlockEntityShaft;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
 import reika.rotarycraft.gui.container.machine.inventory.ContainerGrinder;
 import reika.rotarycraft.registry.RotaryBlocks;
+import reika.rotarycraft.registry.RotaryMenus;
 
 /**
  * Player-facing machine behaviour ported from 1.7.10's block/inventory plumbing: the grinder's
@@ -182,6 +184,45 @@ final class RotaryMachineInteractionTests {
         PowerSourceList sources = splitter.getPowerSources(null, upstream);
         helper.assertTrue(!sources.isErrored(), "splitter <-> shaft source walk overflowed the stack");
         helper.assertTrue(sources.isEmpty(), "a shaft reading from the splitter is not a power source, got " + sources);
+        helper.succeed();
+    }
+
+    /**
+     * Machines whose menus and screens were registered but whose block entities never created a menu,
+     * so right-clicking opened nothing. Each must now hand out its own menu type with its 1.7.10 slots
+     * (machine slots + the 36 player slots), and quick-move must be safe on every slot.
+     */
+    static void registeredMenusOpen(GameTestHelper helper) {
+        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
+        Object[][] cases = {
+                {RotaryBlocks.BLOWER.get(), RotaryMenus.BLOWER.get(), 18},
+                {RotaryBlocks.DROPS.get(), RotaryMenus.DROPS.get(), 2},
+                {RotaryBlocks.COMPACTOR.get(), RotaryMenus.COMPACTOR.get(), 5},
+                {RotaryBlocks.WETTER.get(), RotaryMenus.WETTER.get(), 1},
+                {RotaryBlocks.DRYING.get(), RotaryMenus.DRYING.get(), 1},
+                {RotaryBlocks.SPAWNERCONTROLLER.get(), RotaryMenus.SPAWNERCONTROLLER.get(), -1},
+                {RotaryBlocks.POWERBUS.get(), RotaryMenus.POWERBUS.get(), 4},
+                {RotaryBlocks.CRYSTALLIZER.get(), RotaryMenus.CRYSTALLIZER.get(), 2},
+                {RotaryBlocks.AUTOBREEDER.get(), RotaryMenus.AUTOBREEDER.get(), 18},
+                {RotaryBlocks.HEATER.get(), RotaryMenus.HEATER.get(), 18},
+        };
+        int x = 1;
+        for (Object[] c : cases) {
+            Block block = (Block) c[0];
+            BlockPos pos = new BlockPos(x, 1, 1);
+            x += 2;
+            helper.setBlock(pos, block);
+            var be = helper.getBlockEntity(pos, RotaryCraftBlockEntity.class);
+            AbstractContainerMenu menu = be.createMenu(0, player.getInventory(), player);
+            helper.assertTrue(menu != null, block + " still creates no menu");
+            helper.assertTrue(menu.getType() == c[1], block + " opened " + menu.getType() + ", not its registered menu");
+            int machineSlots = (Integer) c[2];
+            if (machineSlots >= 0)
+                helper.assertTrue(menu.slots.size() == machineSlots + 36,
+                        block + " has " + menu.slots.size() + " slots, expected " + machineSlots + " + 36 player slots");
+            for (int i = 0; i < menu.slots.size(); i++)
+                helper.assertTrue(menu.quickMoveStack(player, i) != null, block + " quick-move returned null for slot " + i);
+        }
         helper.succeed();
     }
 

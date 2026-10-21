@@ -36,7 +36,7 @@ public final class RoCDataProviders {
                 context.register(reika.rotarycraft.registry.RotaryDamageTypes.TURRET,
                         new net.minecraft.world.damagesource.DamageType("turret", net.minecraft.world.damagesource.DamageScaling.NEVER, .1F))));
         event.createProvider((output, _) -> new net.minecraft.data.tags.DamageTypeTagsProvider(
-                output, event.getWorldLookupProvider(), RotaryCraft.MODID) {
+                output, event.getDefaultPackGenerator().getWorldLookupProvider(), RotaryCraft.MODID) {
             @Override protected void addTags(net.minecraft.core.HolderLookup.Provider registries) {
                 var type = reika.rotarycraft.registry.RotaryDamageTypes.TURRET;
                 tag(net.minecraft.tags.DamageTypeTags.BYPASSES_ARMOR).add(type);

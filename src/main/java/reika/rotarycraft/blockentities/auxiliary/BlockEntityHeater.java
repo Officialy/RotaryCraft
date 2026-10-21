@@ -13,6 +13,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -33,6 +36,7 @@ import reika.rotarycraft.api.interfaces.ThermalMachine;
 import reika.rotarycraft.auxiliary.interfaces.DiscreteFunction;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerHeater;
 import reika.rotarycraft.registry.DurationRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -331,4 +335,8 @@ public class BlockEntityHeater extends InventoriedPowerReceiver implements Tempe
         return 18;
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerHeater(id, inv, this);
+    }
 }

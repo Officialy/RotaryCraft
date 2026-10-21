@@ -18,6 +18,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -38,6 +41,7 @@ import reika.dragonapi.libraries.registry.ReikaItemHelper;
 import reika.rotarycraft.RotaryConfig;
 import reika.rotarycraft.base.blockentity.BlockEntityPowerReceiver;
 
+import reika.rotarycraft.gui.container.machine.BlowerContainer;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -494,4 +498,8 @@ public class BlockEntityBlower extends BlockEntityPowerReceiver {
         }
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new BlowerContainer(id, inv, this);
+    }
 }

@@ -1,0 +1,18 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "rotarycraft:fermenter/rainbow_saplings"
+      }
+    }
+  ],
+  "type": "rotarycraft:fermenter",
+  "catalyst": "rotarycraft:yeast",
+  "input": "#rotarycraft:fermenter/rainbow_saplings",
+  "output": {
+    "count": 8,
+    "id": "rotarycraft:sludge"
+  }
+}

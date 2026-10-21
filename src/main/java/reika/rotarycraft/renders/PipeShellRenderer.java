@@ -10,9 +10,7 @@
 package reika.rotarycraft.renders;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -26,7 +24,7 @@ import org.joml.Matrix4f;
  * {@code PipeBodyRenderer.doRenderFace} pass. The shell is NOT a 3D box: it is a hollow frame of
  * FLAT quads at the six shell planes (2px and 14px). Each unconnected face is a 12x12 plate made
  * of 2px strips of the pipe's base texture around an 8x8 glass window; a frame strip along an
- * edge is only drawn when BOTH faces meeting at that edge are unconnected. Connected sides open
+ * edge opens into glass when the perpendicular side is connected. Connected sides open
  * into a flat-walled arm: 2px corner strips running to the block face with glass continuing over
  * the middle, so the glass reads as one continuous window down a pipe run.
  *
@@ -42,7 +40,7 @@ public final class PipeShellRenderer {
     }
 
     /** One flat axis-aligned quad: the face it renders toward, its bounds and UVs, all in px (0-16). */
-    private record Rect(Direction face, float x1, float y1, float z1, float x2, float y2, float z2,
+    record Rect(Direction face, float x1, float y1, float z1, float x2, float y2, float z2,
                         float u1, float v1, float u2, float v2) {
     }
 
@@ -55,50 +53,86 @@ public final class PipeShellRenderer {
         };
     }
 
-    /**
-     * The 12 frame edges: a pair of perpendicular flat strips meeting at the shared shell edge,
-     * drawn only when both adjoining faces are unconnected. Horizontal strips span the full 2..14;
-     * strips along the vertical edges span only 4..12 (the corners belong to the horizontal pair),
-     * so a closed face tiles with no overlap and no holes.
-     */
-    private record Edge(Direction a, Direction b, Rect r1, Rect r2) {
+    /** Immutable geometry for each of the 64 connection masks; never allocate it per frame. */
+    record Geometry(List<Rect> frame, List<Rect> glass) {
     }
 
-    private static final Edge[] EDGES = {
-            new Edge(Direction.UP, Direction.NORTH, strip(Direction.UP, 2, 14, 2, 14, 14, 4), strip(Direction.NORTH, 2, 12, 2, 14, 14, 2)),
-            new Edge(Direction.UP, Direction.SOUTH, strip(Direction.UP, 2, 14, 12, 14, 14, 14), strip(Direction.SOUTH, 2, 12, 14, 14, 14, 14)),
-            new Edge(Direction.UP, Direction.WEST, strip(Direction.UP, 2, 14, 4, 4, 14, 12), strip(Direction.WEST, 2, 12, 2, 2, 14, 14)),
-            new Edge(Direction.UP, Direction.EAST, strip(Direction.UP, 12, 14, 4, 14, 14, 12), strip(Direction.EAST, 14, 12, 2, 14, 14, 14)),
-            new Edge(Direction.DOWN, Direction.NORTH, strip(Direction.DOWN, 2, 2, 2, 14, 2, 4), strip(Direction.NORTH, 2, 2, 2, 14, 4, 2)),
-            new Edge(Direction.DOWN, Direction.SOUTH, strip(Direction.DOWN, 2, 2, 12, 14, 2, 14), strip(Direction.SOUTH, 2, 2, 14, 14, 4, 14)),
-            new Edge(Direction.DOWN, Direction.WEST, strip(Direction.DOWN, 2, 2, 4, 4, 2, 12), strip(Direction.WEST, 2, 2, 2, 2, 4, 14)),
-            new Edge(Direction.DOWN, Direction.EAST, strip(Direction.DOWN, 12, 2, 4, 14, 2, 12), strip(Direction.EAST, 14, 2, 2, 14, 4, 14)),
-            new Edge(Direction.NORTH, Direction.WEST, strip(Direction.NORTH, 2, 4, 2, 4, 12, 2), strip(Direction.WEST, 2, 4, 2, 2, 12, 4)),
-            new Edge(Direction.NORTH, Direction.EAST, strip(Direction.NORTH, 12, 4, 2, 14, 12, 2), strip(Direction.EAST, 14, 4, 2, 14, 12, 4)),
-            new Edge(Direction.SOUTH, Direction.WEST, strip(Direction.SOUTH, 2, 4, 14, 4, 12, 14), strip(Direction.WEST, 2, 4, 12, 2, 12, 14)),
-            new Edge(Direction.SOUTH, Direction.EAST, strip(Direction.SOUTH, 12, 4, 14, 14, 12, 14), strip(Direction.EAST, 14, 4, 12, 14, 12, 14)),
-    };
-
-    /** Arm corner strips per connected direction: 8 quads running from the shell edge to the block face. */
-    private static final Map<Direction, Rect[]> ARMS = new EnumMap<>(Direction.class);
-
-    /** Glass cap window per unconnected direction: 8x8 pane at the shell plane, 1/8-inset UVs. */
-    private static final Map<Direction, Rect> CAPS = new EnumMap<>(Direction.class);
-
-    /** Glass arm panes per connected direction: 4 panes running from the cap edge to the block face. */
-    private static final Map<Direction, Rect[]> ARM_GLASS = new EnumMap<>(Direction.class);
+    private static final Geometry[] GEOMETRY = new Geometry[64];
 
     static {
-        for (Direction d : Direction.values()) {
-            ARMS.put(d, armStrips(d));
-            ARM_GLASS.put(d, armGlass(d));
+        for (int mask = 0; mask < GEOMETRY.length; mask++)
+            GEOMETRY[mask] = buildGeometry(mask);
+    }
+
+    static Geometry geometry(int mask) {
+        return GEOMETRY[mask];
+    }
+
+    private static boolean connected(int mask, Direction d) {
+        return (mask & (1 << d.ordinal())) != 0;
+    }
+
+    private static Geometry buildGeometry(int mask) {
+        List<Rect> frame = new ArrayList<>();
+        List<Rect> glass = new ArrayList<>();
+        for (Direction face : Direction.values()) {
+            if (connected(mask, face)) {
+                frame.addAll(List.of(armStrips(face)));
+                glass.addAll(List.of(armGlass(face)));
+                continue;
+            }
+            // Tile the core face once. A closed perpendicular side contributes a frame border;
+            // a connected one extends the window instead. In particular, a corner belongs to
+            // either remaining border, or to glass when both perpendicular sides are connected.
+            // The old fixed edge strips lost corners when a neighbouring border disappeared;
+            // drawing every border instead put steel across the glass connection panes.
+            Direction lowU = face.getAxis() == Direction.Axis.X ? Direction.NORTH : Direction.WEST;
+            Direction highU = lowU.getOpposite();
+            Direction lowV = face.getAxis() == Direction.Axis.Y ? Direction.NORTH : Direction.DOWN;
+            Direction highV = lowV.getOpposite();
+            float[] edges = {2, 4, 12, 14};
+            for (int u = 0; u < 3; u++) {
+                for (int v = 0; v < 3; v++) {
+                    Rect r = faceRect(face, edges[u], edges[v], edges[u + 1], edges[v + 1]);
+                    boolean border = u == 0 && !connected(mask, lowU)
+                            || u == 2 && !connected(mask, highU)
+                            || v == 0 && !connected(mask, lowV)
+                            || v == 2 && !connected(mask, highV);
+                    if (border) {
+                        frame.add(strip(face, r.x1(), r.y1(), r.z1(), r.x2(), r.y2(), r.z2()));
+                    } else {
+                        float u1 = glassStart(u), u2 = glassEnd(u);
+                        float v1 = glassStart(v), v2 = glassEnd(v);
+                        // Side-face texture v runs down, opposite to the in-plane y coordinate.
+                        if (face.getAxis() != Direction.Axis.Y) {
+                            v1 = v == 0 ? 8 : v == 1 ? 2 : 5;
+                            v2 = v == 0 ? 11 : v == 1 ? 14 : 8;
+                        }
+                        glass.add(new Rect(face, r.x1(), r.y1(), r.z1(), r.x2(), r.y2(), r.z2(),
+                                u1, v1, u2, v2));
+                    }
+                }
+            }
         }
-        CAPS.put(Direction.UP, new Rect(Direction.UP, 4, 14, 4, 12, 14, 12, 2, 2, 14, 14));
-        CAPS.put(Direction.DOWN, new Rect(Direction.DOWN, 4, 2, 4, 12, 2, 12, 2, 2, 14, 14));
-        CAPS.put(Direction.NORTH, new Rect(Direction.NORTH, 4, 4, 2, 12, 12, 2, 2, 2, 14, 14));
-        CAPS.put(Direction.SOUTH, new Rect(Direction.SOUTH, 4, 4, 14, 12, 12, 14, 2, 2, 14, 14));
-        CAPS.put(Direction.WEST, new Rect(Direction.WEST, 2, 4, 4, 2, 12, 12, 2, 2, 14, 14));
-        CAPS.put(Direction.EAST, new Rect(Direction.EAST, 14, 4, 4, 14, 12, 12, 2, 2, 14, 14));
+        return new Geometry(List.copyOf(frame), List.copyOf(glass));
+    }
+
+    private static float glassStart(int segment) {
+        return segment == 0 ? 11 : 2;
+    }
+
+    private static float glassEnd(int segment) {
+        return segment == 2 ? 5 : 14;
+    }
+
+    /** In-plane coordinates are x/z on Y faces, x/y on Z faces, and z/y on X faces. */
+    private static Rect faceRect(Direction face, float a, float b, float c, float d) {
+        float plane = face.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 14 : 2;
+        return switch (face.getAxis()) {
+            case Y -> new Rect(face, a, plane, b, c, plane, d, 0, 0, 0, 0);
+            case Z -> new Rect(face, a, b, plane, c, d, plane, 0, 0, 0, 0);
+            case X -> new Rect(face, plane, b, a, plane, d, c, 0, 0, 0, 0);
+        };
     }
 
     private static Rect[] armStrips(Direction d) {
@@ -142,12 +176,15 @@ public final class PipeShellRenderer {
 
     private static Rect[] armGlass(Direction d) {
         boolean positive = d.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-        float a = positive ? 12 : 0;
-        float b = positive ? 16 : 4;
-        // Each block draws its half of the pane bridging the joint, sampling the matching half of
-        // the inset cap texture so the glass tiles seamlessly into the neighbour's own pane.
-        float r0 = positive ? 2 : 8;
-        float r1 = positive ? 8 : 14;
+        float a = positive ? 14 : 0;
+        float b = positive ? 16 : 2;
+        // Only the portion outside the core belongs to the arm. The core face tiles cover
+        // 2..14 already; drawing 0..4 / 12..16 here would overlap them at every connection.
+        // Keep the corresponding subrange of the legacy half-pane UVs.
+        float r0 = positive ? 5 : 8;
+        float r1 = positive ? 8 : 11;
+        float verticalV1 = positive ? 2 : 11;
+        float verticalV2 = positive ? 5 : 14;
         return switch (d.getAxis()) {
             case X -> new Rect[]{ // run axis is x = u on all four faces
                     new Rect(Direction.UP, a, 14, 4, b, 14, 12, r0, 2, r1, 14),
@@ -156,10 +193,10 @@ public final class PipeShellRenderer {
                     new Rect(Direction.SOUTH, a, 4, 14, b, 12, 14, r0, 2, r1, 14),
             };
             case Y -> new Rect[]{ // run axis is y = v on all four faces
-                    new Rect(Direction.WEST, 2, a, 4, 2, b, 12, 2, r0, 14, r1),
-                    new Rect(Direction.EAST, 14, a, 4, 14, b, 12, 2, r0, 14, r1),
-                    new Rect(Direction.NORTH, 4, a, 2, 12, b, 2, 2, r0, 14, r1),
-                    new Rect(Direction.SOUTH, 4, a, 14, 12, b, 14, 2, r0, 14, r1),
+                    new Rect(Direction.WEST, 2, a, 4, 2, b, 12, 2, verticalV1, 14, verticalV2),
+                    new Rect(Direction.EAST, 14, a, 4, 14, b, 12, 2, verticalV1, 14, verticalV2),
+                    new Rect(Direction.NORTH, 4, a, 2, 12, b, 2, 2, verticalV1, 14, verticalV2),
+                    new Rect(Direction.SOUTH, 4, a, 14, 12, b, 14, 2, verticalV1, 14, verticalV2),
             };
             case Z -> new Rect[]{ // run axis is z: u on the side faces, v on top/bottom
                     new Rect(Direction.UP, 4, 14, a, 12, 14, b, 2, r0, 14, r1),
@@ -179,28 +216,15 @@ public final class PipeShellRenderer {
     public static void emitShell(Matrix4f m, VertexConsumer vc, boolean[] conn,
                                  TextureAtlasSprite shell, TextureAtlasSprite glass,
                                  int shellTint, int light, int overlay) {
-        // Each edge carries two perpendicular strips: r1 lies on face a, r2 on face b. A strip is part
-        // of ITS face's border, so it must be drawn whenever THAT face is a cap (unconnected) --
-        // independently of the other face. Gating both on "a AND b unconnected" dropped a cap face's
-        // border strip along any edge shared with a CONNECTED face, leaving 4 gaps per connected side
-        // (one on each of the four perpendicular cap faces). The arm strips sit beyond the shell plane
-        // (x/y/z 14..16 or 0..2) so they never overlap these shell-plane border strips.
-        for (Edge e : EDGES) {
-            if (!conn[e.a().ordinal()])
-                rect(m, vc, e.r1(), shell, shellTint, light, overlay);
-            if (!conn[e.b().ordinal()])
-                rect(m, vc, e.r2(), shell, shellTint, light, overlay);
-        }
+        int mask = 0;
         for (Direction d : Direction.values()) {
-            if (conn[d.ordinal()]) {
-                for (Rect r : ARMS.get(d))
-                    rect(m, vc, r, shell, shellTint, light, overlay);
-                for (Rect r : ARM_GLASS.get(d))
-                    rect(m, vc, r, glass, GLASS_TINT, light, overlay);
-            } else {
-                rect(m, vc, CAPS.get(d), glass, GLASS_TINT, light, overlay);
-            }
+            if (conn[d.ordinal()]) mask |= 1 << d.ordinal();
         }
+        Geometry geometry = geometry(mask);
+        for (Rect r : geometry.frame())
+            rect(m, vc, r, shell, shellTint, light, overlay);
+        for (Rect r : geometry.glass())
+            rect(m, vc, r, glass, GLASS_TINT, light, overlay);
     }
 
     private static void rect(Matrix4f m, VertexConsumer vc, Rect r, TextureAtlasSprite spr,

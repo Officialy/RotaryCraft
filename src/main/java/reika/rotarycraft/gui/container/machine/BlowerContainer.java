@@ -25,7 +25,11 @@ public class BlowerContainer extends IOMachineContainer<BlockEntityBlower> {
     private final BlockEntityBlower blower;
 
     public BlowerContainer(int id, Inventory playerInv, FriendlyByteBuf byteBuf) {
-        super(RotaryMenus.BLOWER.get(), id, playerInv, byteBuf);
+        this(id, playerInv, (BlockEntityBlower) playerInv.player.level().getBlockEntity(byteBuf.readBlockPos()));
+    }
+
+    public BlowerContainer(int id, Inventory playerInv, BlockEntityBlower te) {
+        super(RotaryMenus.BLOWER.get(), id, playerInv, te);
         blower = this.tile;
 
         int dy = 18;

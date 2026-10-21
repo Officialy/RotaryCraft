@@ -22,6 +22,9 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -32,6 +35,7 @@ import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.RangedEffect;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerAutoBreeder;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -234,4 +238,8 @@ public class BlockEntityAutoBreeder extends InventoriedPowerReceiver implements 
         return this.areConditionsMet() ? "Operational" : "No Feed Items";
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerAutoBreeder(id, inv, this);
+    }
 }

@@ -12,6 +12,9 @@ package reika.rotarycraft.blockentities.processing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +25,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.rotarycraft.auxiliary.recipemanagers.WetterRecipe;
 import reika.rotarycraft.base.blockentity.InventoriedPowerLiquidReceiver;
+import reika.rotarycraft.gui.container.machine.ContainerWetter;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
 import reika.rotarycraft.registry.RotaryBlocks;
@@ -209,4 +213,8 @@ public class BlockEntityWetter extends InventoriedPowerLiquidReceiver {
         tick = NBT.getIntOr("tick", 0);
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerWetter(id, inv, this);
+    }
 }

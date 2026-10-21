@@ -1,0 +1,132 @@
+{
+  "values": [
+    {
+      "id": "chromaticraft:dye_sapling_white",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_white",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_orange",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_orange",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_magenta",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_magenta",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_light_blue",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_light_blue",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_yellow",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_yellow",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_lime",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_lime",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_pink",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_pink",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_gray",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_gray",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_light_gray",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_light_gray",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_cyan",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_cyan",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_purple",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_purple",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_blue",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_blue",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_brown",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_brown",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_green",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_green",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_red",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_red",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_sapling_black",
+      "required": false
+    },
+    {
+      "id": "chromaticraft:dye_flower_black",
+      "required": false
+    }
+  ]
+}

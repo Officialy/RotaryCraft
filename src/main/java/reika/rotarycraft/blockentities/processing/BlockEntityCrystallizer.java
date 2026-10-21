@@ -12,6 +12,9 @@ package reika.rotarycraft.blockentities.processing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -26,6 +29,7 @@ import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.MultiOperational;
 import reika.rotarycraft.auxiliary.recipemanagers.CrystallizerRecipe;
 import reika.rotarycraft.base.blockentity.InventoriedPowerLiquidReceiver;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerCrystallizer;
 import reika.rotarycraft.registry.DurationRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -290,4 +294,8 @@ public class BlockEntityCrystallizer extends InventoriedPowerLiquidReceiver impl
         return this.areConditionsMet() ? "Operational" : "No Liquid";
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerCrystallizer(id, inv, this);
+    }
 }

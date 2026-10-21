@@ -2,6 +2,7 @@ package reika.rotarycraft.base;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import reika.dragonapi.base.CoreContainer;
@@ -20,5 +21,10 @@ public abstract class NonPoweredMachineScreen<E extends RotaryCraftBlockEntity, 
     @Override
     protected void drawPowerTab(GuiGraphicsExtractor stack, int j, int k) {
 
+    }
+
+    @Override
+    protected Rect2i getPowerTabArea() {
+        return null;
     }
 }

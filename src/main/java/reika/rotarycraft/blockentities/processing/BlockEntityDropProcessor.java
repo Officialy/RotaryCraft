@@ -21,7 +21,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -37,6 +39,7 @@ import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
 import reika.rotarycraft.auxiliary.interfaces.EnchantableMachine;
 import reika.rotarycraft.auxiliary.interfaces.MultiOperational;
 import reika.rotarycraft.base.blockentity.InventoriedPowerReceiver;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerDropProcessor;
 import reika.rotarycraft.registry.DurationRegistry;
 import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlockEntities;
@@ -384,4 +387,8 @@ public class BlockEntityDropProcessor extends InventoriedPowerReceiver implement
 
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerDropProcessor(id, inv, this);
+    }
 }

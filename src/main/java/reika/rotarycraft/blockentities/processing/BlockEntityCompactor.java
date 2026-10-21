@@ -11,6 +11,9 @@ package reika.rotarycraft.blockentities.processing;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.nbt.CompoundTag;
@@ -25,6 +28,7 @@ import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.RotaryAux;
+import reika.rotarycraft.gui.container.machine.inventory.ContainerCompactor;
 import reika.rotarycraft.registry.ConfigRegistry;
 import reika.rotarycraft.registry.RotaryItems;
 import reika.rotarycraft.auxiliary.interfaces.ConditionalOperation;
@@ -483,4 +487,8 @@ public class BlockEntityCompactor extends InventoriedPowerReceiver implements Te
         return this.areConditionsMet() ? "Operational" : "Invalid or Missing Items";
     }
 
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+        return new ContainerCompactor(id, inv, this);
+    }
 }

@@ -25,7 +25,7 @@ public class ContainerDryingBed extends CoreContainer<BlockEntityDryingBed> {
 
     public ContainerDryingBed(int id, Inventory inv, BlockEntityDryingBed te) {
         super(RotaryMenus.DRYING.get(), id, inv, te);
-        this.addSlot(te.itemHandler.slot(0, 80, 35));
+        this.addSlot(te.itemHandler.slot(0, 125, 35)); // 1.7.10 ContainerDryingBed: output at (125, 35)
         this.addPlayerInventory(inv);
     }
 }
