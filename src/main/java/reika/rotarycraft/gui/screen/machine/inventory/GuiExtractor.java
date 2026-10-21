@@ -51,7 +51,7 @@ public class GuiExtractor extends MachineScreen<BlockEntityExtractor, ContainerE
         poseStack.blit(RenderPipelines.GUI_TEXTURED, getTextureIdentifier(), j + 137, k + 34, 176, 48, 10, i4, 256, 256);
 
         if (ConfigRegistry.EXTRACTORMAINTAIN.getState() && api.isMouseInBox(j + 25, j + 43, k + 33, k + 51, mouseX, mouseY)) {
-            api.drawTooltipAt(poseStack, font, String.format("Drill Status: %d%%", ext.getDrillLifeScaled(100)), mouseX, mouseY);
+            poseStack.setTooltipForNextFrame(font, Component.literal(String.format("Drill Status: %d%%", ext.getDrillLifeScaled(100))), mouseX, mouseY);
         }
     }
 

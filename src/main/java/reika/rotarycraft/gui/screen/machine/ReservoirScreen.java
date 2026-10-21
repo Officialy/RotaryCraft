@@ -36,7 +36,7 @@ public class ReservoirScreen extends NonPoweredMachineScreen<BlockEntityReservoi
         int k = (height - imageHeight) / 2;
 
         if (api.isMouseInBox(j + 83, j + 92, k + 25, k + 70, pX, pY)) {
-            api.drawTooltipAt(pPoseStack, font, String.format("%d/%d", reservoir.getFluidLevel(), BlockEntityReservoir.CAPACITY), pX, pY);
+            pPoseStack.setTooltipForNextFrame(font, Component.literal(String.format("%d/%d", reservoir.getFluidLevel(), BlockEntityReservoir.CAPACITY)), pX, pY);
         }
 
         // 1.7.10 GuiReservoir: the fluid's still icon stretched over the 8-px column, filled from the

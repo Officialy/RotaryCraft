@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -50,7 +51,7 @@ import reika.rotarycraft.registry.*;
 
 import java.util.Collection;
 
-public class BlockEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, MultiOperational, ConditionalOperation, DamagingContact, EnchantableMachine, HasFluidResourceHandler {
+public class BlockEntityGrinder extends InventoriedPowerReceiver implements PipeConnector, MultiOperational, ConditionalOperation, DamagingContact, EnchantableMachine, HasFluidResourceHandler, WorldlyContainer {
 
     public static final int MAXLUBE = 4000;
     private static final int MIN_LUBE_PRODUCTION = DifficultyEffects.CANOLA.getAverageAmount();
@@ -430,6 +431,31 @@ public class BlockEntityGrinder extends InventoriedPowerReceiver implements Pipe
     @Override
     public boolean hasATank() {
         return false;
+    }
+
+    // ==== WorldlyContainer: 1.7.10's InventoriedPowerReceiver was an ISidedInventory. Being a
+    // Container is what lets CoreContainer shift-click into the grinder, and what makes vanilla's
+    // preRemoveSideEffects spill the inventory when the block is broken, as breakBlock did. ====
+
+    @Override public boolean canPlaceItem(int slot, ItemStack stack) { return this.isItemValidForSlot(slot, stack); }
+    @Override public int[] getSlotsForFace(Direction side) { return new int[] {0, 1, 2}; }
+    @Override public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction side) { return this.canPlaceItem(slot, stack); }
+    @Override public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) { return this.canExtractItem(slot, stack, side.ordinal()); }
+    @Override public int getMaxStackSize() { return this.getInventoryStackLimit(); }
+    @Override public boolean isEmpty() {
+        for (int slot = 0; slot < this.getContainerSize(); slot++)
+            if (!this.getItem(slot).isEmpty())
+                return false;
+        return true;
+    }
+    @Override public ItemStack getItem(int slot) { return itemHandler.getStackInSlot(slot); }
+    @Override public ItemStack removeItem(int slot, int count) { return itemHandler.extractItem(slot, count, false); }
+    @Override public ItemStack removeItemNoUpdate(int slot) { return this.removeItem(slot, this.getItem(slot).getCount()); }
+    @Override public void setItem(int slot, ItemStack stack) { this.setInventorySlotContents(slot, stack); }
+    @Override public boolean stillValid(Player player) { return this.isPlayerAccessible(player); }
+    @Override public void clearContent() {
+        for (int slot = 0; slot < this.getContainerSize(); slot++)
+            this.setItem(slot, ItemStack.EMPTY);
     }
 
     @Override

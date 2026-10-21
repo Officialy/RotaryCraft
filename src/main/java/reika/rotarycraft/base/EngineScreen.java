@@ -35,6 +35,7 @@ public abstract class EngineScreen<E extends BlockEntityEngine, T extends CoreCo
         if (engine.getEngineType().burnsFuel()) {
             int j = (width - imageWidth) / 2;
             int k = (height - imageHeight) / 2;
+            super.extractLabels(stack, pMouseX, pMouseY);
             // 1.21.5: Screen#renderTooltip(GuiGraphics, int, int) was renamed/removed; tooltip extraction now via extractTooltip pipeline.
             int dx = this.getFuelBarXPos();
             int dy = this.getFuelBarYPos();
@@ -50,7 +51,7 @@ public abstract class EngineScreen<E extends BlockEntityEngine, T extends CoreCo
                 else if (time < 60)
                     color = ChatFormatting.YELLOW.toString();
                 String sg = String.format("%sFuel: %s", color, ReikaDateHelper.getSecondsAsClock(time));
-                api.drawTooltipAt(stack, minecraft.font, sg, pMouseX - j, pMouseY - k);
+                stack.setTooltipForNextFrame(minecraft.font, Component.literal(sg), pMouseX, pMouseY);
             }
         }
     }

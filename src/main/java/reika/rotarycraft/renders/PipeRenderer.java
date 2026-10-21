@@ -286,17 +286,19 @@ public class PipeRenderer extends RotaryTERenderer<BlockEntityPiping> {
     }
 
     /**
-     * Approximate ARGB tint per fluid (full alpha; the translucent RenderType handles blend).
-     * Matches the {@code RenderReservoir.fluidTint} palette so the visual identity of each
-     * fluid stays consistent across all three (pipe, reservoir, GUI tooltips).
+     * ARGB tint per fluid (full alpha; the translucent RenderType handles blend). 1.7.10 drew the
+     * fluid icon untinted, and lava and RotaryCraft's own fluid sprites (see {@link #stillTextureId})
+     * already carry their colour, so those stay white: multiplying the yellow lubricant sprite by
+     * an amber tint is what turned hose lube orange. Only fluids drawn with the grayscale vanilla
+     * {@code water_still} sprite need a colour here.
      */
     private static int fluidTint(Fluid f) {
         if (f == Fluids.WATER || f == Fluids.FLOWING_WATER) return 0xFF3050E0;
-        if (f == Fluids.LAVA  || f == Fluids.FLOWING_LAVA)  return 0xFFE04010;
-        if (f == RotaryFluids.JET_FUEL.get())               return 0xFF60A000;
-        if (f == RotaryFluids.ETHANOL.get())                return 0xFFF0F050;
-        if (f == RotaryFluids.LUBRICANT.get())              return 0xFFC08020;
-        if (f == RotaryFluids.HSLA_FLUID.get())             return 0xFFE04010;
+        if (f == Fluids.LAVA  || f == Fluids.FLOWING_LAVA)  return 0xFFFFFFFF;
+        if (f == RotaryFluids.JET_FUEL.get())               return 0xFFFFFFFF;
+        if (f == RotaryFluids.ETHANOL.get())                return 0xFFFFFFFF;
+        if (f == RotaryFluids.LUBRICANT.get())              return 0xFFFFFFFF;
+        if (f == RotaryFluids.HSLA_FLUID.get())             return 0xFFFFFFFF;
         if (f == RotaryFluids.LIQUID_NITROGEN.get())        return 0xFFA0E0F0;
         if (f == RotaryFluids.POISON.get())                 return 0xFFA030F0;
         if (f == RotaryFluids.STEAM.get())                  return 0xC0E0E0E0;

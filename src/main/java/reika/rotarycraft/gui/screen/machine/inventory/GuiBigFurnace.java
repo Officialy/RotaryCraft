@@ -47,7 +47,7 @@ public class GuiBigFurnace extends GuiPowerOnlyMachine<BlockEntityLavaSmeltery, 
         int j = leftPos;
         int k = topPos;
         if (api.isMouseInBox(j + 172, j + 183, k + 17, k + 109, pMouseX, pMouseY))
-            api.drawTooltipAt(stack, font, String.format("%d/%d", te.getLevel(), te.getCapacity()), pMouseX - j, pMouseY - k);
+            stack.setTooltipForNextFrame(font, Component.literal(String.format("%d/%d", te.getLevel(), te.getCapacity())), pMouseX, pMouseY);
     }
 
     /**

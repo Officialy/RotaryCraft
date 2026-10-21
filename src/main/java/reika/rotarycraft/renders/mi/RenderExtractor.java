@@ -12,6 +12,8 @@ package reika.rotarycraft.renders.mi;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+
+import java.util.ArrayList;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
@@ -37,8 +39,14 @@ public class RenderExtractor extends RotaryTERenderer<BlockEntityExtractor> {
         stack.rotate(Axis.YP.rotationDegrees(f + 180));
         stack.rotate(Axis.ZP.rotationDegrees(180));
 
+        // 1.7.10 drew the body in render pass 0 and Shape5 in pass 1 (makeListFrom(pass == 1)); the
+        // BER has a single pass, so it draws both halves.
         VertexConsumer vertexconsumer = bufferSource;
-        model.renderAll(stack, vertexconsumer, light, tile, null, -tile.phi, 0);
+        ArrayList<Boolean> pass = new ArrayList<>();
+        pass.add(false);
+        model.renderAll(stack, vertexconsumer, light, tile, pass, -tile.phi, 0);
+        pass.set(0, true);
+        model.renderAll(stack, vertexconsumer, light, tile, pass, -tile.phi, 0);
         stack.popPose();
     }
 

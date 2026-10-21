@@ -86,16 +86,16 @@ public class GuiBlower extends GuiPowerOnlyMachine<BlockEntityBlower, BlowerCont
         }
 
         if (api.isMouseInBox(j + 25, j + 43, k + 64, k + 82, pX, pY)) {
-            api.drawTooltipAt(stack, font, controls[0] ? "Whitelist" : "Blacklist", pX - j + 50, pY - k);
+            stack.setTooltipForNextFrame(font, Component.literal(controls[0] ? "Whitelist" : "Blacklist"), pX + 50, pY);
         }
         if (api.isMouseInBox(j + 25 + 36, j + 43 + 36, k + 64, k + 82, pX, pY)) {
-            api.drawTooltipAt(stack, font, controls[1] ? "Use Metadata" : "Ignore Metadata", pX - j + 80, pY - k);
+            stack.setTooltipForNextFrame(font, Component.literal(controls[1] ? "Use Metadata" : "Ignore Metadata"), pX + 80, pY);
         }
         if (api.isMouseInBox(j + 25 + 36 * 2, j + 43 + 36 * 2, k + 64, k + 82, pX, pY)) {
-            api.drawTooltipAt(stack, font, controls[2] ? "Use NBT" : "Ignore NBT", pX - j, pY - k);
+            stack.setTooltipForNextFrame(font, Component.literal(controls[2] ? "Use NBT" : "Ignore NBT"), pX, pY);
         }
         if (api.isMouseInBox(j + 25 + 36 * 3, j + 43 + 36 * 3, k + 64, k + 82, pX, pY)) {
-            api.drawTooltipAt(stack, font, controls[3] ? "Match Exact" : "Use Ore Dictionary", pX - j, pY - k);
+            stack.setTooltipForNextFrame(font, Component.literal(controls[3] ? "Match Exact" : "Use Ore Dictionary"), pX, pY);
         }
     }
 

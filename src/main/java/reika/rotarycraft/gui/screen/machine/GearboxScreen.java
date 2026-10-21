@@ -39,33 +39,33 @@ public class GearboxScreen extends NonPoweredMachineScreen<BlockEntityGearbox, G
 
         // foreground read-outs (legacy drawGuiContainerForegroundLayer, gui-relative coords offset by j,k)
         String s = gbx.isLiving() ? "Mana" : "Lubricant";
-        stack.text(font, s, j + 5, k + 12, 0xFF404040);
+        stack.text(font, s, j + 5, k + 12, 0xFF404040, false);
 
-        stack.text(font, "Damage:", j + 68, k + 60, 0xFF000000);
+        stack.text(font, "Damage:", j + 68, k + 60, 0xFF000000, false);
         int damage = gbx.getDamagePercent();
         if (damage < 10)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFF00FF00);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFF00FF00, false);
         if (damage < 25 && damage >= 10)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFF55FF00);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFF55FF00, false);
         if (damage < 50 && damage >= 25)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFFFF00);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFFFF00, false);
         if (damage < 80 && damage >= 50)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFF5500);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFF5500, false);
         if (damage >= 80)
-            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFF0000);
+            stack.text(font, String.format("%5d%s", damage, "%"), j + 122, k + 60, 0xFFFF0000, false);
 
-        stack.text(font, "Ratio:", j + 80, k + 24, 0xFF000000);
-        stack.text(font, "Mode:", j + 80, k + 36, 0xFF000000);
-        stack.text(font, "Power:", j + 74, k + 48, 0xFF000000);
+        stack.text(font, "Ratio:", j + 80, k + 24, 0xFF000000, false);
+        stack.text(font, "Mode:", j + 80, k + 36, 0xFF000000, false);
+        stack.text(font, "Power:", j + 74, k + 48, 0xFF000000, false);
 
-        stack.text(font, String.format("%5d ", gbx.getRatio()), j + 127, k + 24, 0xFF000000);
+        stack.text(font, String.format("%5d ", gbx.getRatio()), j + 127, k + 24, 0xFF000000, false);
         if (gbx.reduction)
-            stack.text(font, "Torque", j + 115, k + 36, 0xFF000000);
+            stack.text(font, "Torque", j + 115, k + 36, 0xFF000000, false);
         else
-            stack.text(font, " Speed", j + 115, k + 36, 0xFF000000);
+            stack.text(font, " Speed", j + 115, k + 36, 0xFF000000, false);
 
         String pw = RotaryAux.formatPower(gbx.power);
-        stack.text(font, pw, j + 150 - font.width(pw), k + 48, 0xFF000000);
+        stack.text(font, pw, j + 150 - font.width(pw), k + 48, 0xFF000000, false);
 
     }
 

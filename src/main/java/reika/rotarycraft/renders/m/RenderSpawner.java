@@ -13,6 +13,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -42,7 +44,10 @@ public class RenderSpawner extends RotaryTERenderer<BlockEntitySpawnerController
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.rotate(Axis.ZP.rotationDegrees(180));
-        model.renderAll(stack, vc, light, te, null, te.phi, 0);
+        // 1.7.10: makeListFrom(isValidLocation(...)) in world - the model shows its "invalid" state from it.
+        ArrayList<Boolean> conditions = new ArrayList<>();
+        conditions.add(te.getLevel() == null || te.isValidLocation(te.getLevel(), te.getBlockPos()));
+        model.renderAll(stack, vc, light, te, conditions, te.phi, 0);
         stack.popPose();
     }
 }

@@ -41,7 +41,7 @@ public class GuiFillingStation extends GuiPowerOnlyMachine<BlockEntityFillingSta
             graphics.fill(j + 82, k + 87 - h, j + 94, k + 87, FUEL_COLOR);
         }
         if (api.isMouseInBox(j + 81, j + 94, k + 20, k + 87, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, String.format("%d/%d mB", fillingStation.getFluidLevel(), BlockEntityFillingStation.CAPACITY), mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(String.format("%d/%d mB", fillingStation.getFluidLevel(), BlockEntityFillingStation.CAPACITY)), mouseX, mouseY);
     }
 
     @Override

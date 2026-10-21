@@ -53,9 +53,9 @@ public class GuiCentrifuge extends MachineScreen<BlockEntityCentrifuge, Containe
 
         if (api.isMouseInBox(j + 151, j + 168, k + 7, k + 78, mouseX, mouseY)) {
             if (cent.getFluidLevel() > 0)
-                api.drawTooltipAt(poseStack, font, String.format("%d/%d mB", cent.getFluidLevel(), BlockEntityCentrifuge.CAPACITY), mouseX, mouseY);
+                poseStack.setTooltipForNextFrame(font, Component.literal(String.format("%d/%d mB", cent.getFluidLevel(), BlockEntityCentrifuge.CAPACITY)), mouseX, mouseY);
             else
-                api.drawTooltipAt(poseStack, font, String.format("0/%d mB", BlockEntityCentrifuge.CAPACITY), mouseX, mouseY);
+                poseStack.setTooltipForNextFrame(font, Component.literal(String.format("0/%d mB", BlockEntityCentrifuge.CAPACITY)), mouseX, mouseY);
         }
     }
 

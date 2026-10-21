@@ -44,14 +44,14 @@ public class GuiGrinder extends MachineScreen<BlockEntityGrinder, ContainerGrind
         int i3 = 0;
         if (i2 != 0)
             i3 = 1;
-        poseStack.blit(RenderPipelines.GUI_TEXTURED, getTextureIdentifier(), j + 24, scaleHeight / 2 + k - 7 - i2, 176, 126 - i2, 8, i2, 256, 256);
+        poseStack.blit(RenderPipelines.GUI_TEXTURED, getTextureIdentifier(), j + 24, imageHeight / 2 + k - 7 - i2, 176, 126 - i2, 8, i2, 256, 256);
 
 
         //foreground
-        poseStack.text(font, "Lubricant", j + 5, k + 11, 0xFF404040);
+        poseStack.text(font, "Lubricant", j + 5, k + 11, 0xFF404040, false);
 
         if (api.isMouseInBox(j + 23, j + 32, k + 20, k + 76, mouseX, mouseY)) {
-            api.drawTooltipAt(poseStack, font, String.format("%d/%d", grin.getFluidLevel(), BlockEntityGrinder.MAXLUBE), mouseX, mouseY);
+            poseStack.setTooltipForNextFrame(font, Component.literal(String.format("%d/%d", grin.getFluidLevel(), BlockEntityGrinder.MAXLUBE)), mouseX, mouseY);
         }
     }
 

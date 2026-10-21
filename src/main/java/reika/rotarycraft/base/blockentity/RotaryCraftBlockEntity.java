@@ -11,12 +11,16 @@ package reika.rotarycraft.base.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -33,6 +37,7 @@ import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaThermoHelper;
 import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.api.interfaces.BasicMachine;
+import reika.rotarycraft.auxiliary.interfaces.NBTMachine;
 import reika.rotarycraft.registry.MachineRegistry;
 
 public abstract class RotaryCraftBlockEntity extends BlockEntityBase
@@ -152,5 +157,30 @@ public abstract class RotaryCraftBlockEntity extends BlockEntityBase
   @Override
   public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
     return null;
+  }
+
+  /**
+   * 1.7.10 {@code harvestBlock} set an {@link NBTMachine}'s item tag to {@code getTagsToWriteToStack()}
+   * (gearbox lube/damage, reservoir fluid, engine tier...) and the placers fed it back through
+   * {@code setDataFromItemStackTag}. The item tag is {@link DataComponents#CUSTOM_DATA} now; the
+   * block loot table copies it from here on a player harvest.
+   */
+  @Override
+  protected void collectImplicitComponents(DataComponentMap.Builder components) {
+    super.collectImplicitComponents(components);
+    if (this instanceof NBTMachine nbt) {
+      CompoundTag tag = nbt.getTagsToWriteToStack();
+      if (tag != null && !tag.isEmpty())
+        components.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+    }
+  }
+
+  @Override
+  protected void applyImplicitComponents(DataComponentGetter components) {
+    super.applyImplicitComponents(components);
+    if (this instanceof NBTMachine nbt) {
+      CustomData data = components.get(DataComponents.CUSTOM_DATA);
+      nbt.setDataFromItemStackTag(data != null ? data.copyTag() : null);
+    }
   }
 }

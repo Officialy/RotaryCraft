@@ -34,6 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import reika.dragonapi.ModList;
 import reika.dragonapi.libraries.ReikaEnchantmentHelper;
+import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.java.ReikaArrayHelper;
 import reika.dragonapi.libraries.registry.ReikaItemHelper;
@@ -104,6 +105,10 @@ public class ItemBedrockArmor extends ItemRotaryArmor {
                 }
             }
         }
+    }
+
+    public static boolean isWearingFullSuitOf(LivingEntity e) {
+        return ReikaEntityHelper.isEntityWearingFullSuitOf(e, (ItemStack is) -> isValidBedrockArmorItem(is));
     }
 
     public static boolean isValidBedrockArmorItem(ItemStack is) {

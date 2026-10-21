@@ -56,11 +56,11 @@ public class GuiPulseFurnace extends MachineScreen<BlockEntityPulseFurnace, Cont
 
         // Tooltips: fuel / temperature / oxygen columns.
         if (api.isMouseInBox(j + 90, j + 96, k + 15, k + 68, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, String.format("%d/%d", puls.getFuel(), BlockEntityPulseFurnace.MAXFUEL), mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(String.format("%d/%d", puls.getFuel(), BlockEntityPulseFurnace.MAXFUEL)), mouseX, mouseY);
         if (api.isMouseInBox(j + 20, j + 30, k + 15, k + 70, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, String.format("%dC", puls.temperature), mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(String.format("%dC", puls.temperature)), mouseX, mouseY);
         if (api.isMouseInBox(j + 159, j + 165, k + 15, k + 68, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, String.format("%d/%d", puls.getAccelerant(), puls.getAccelerantCapacity()), mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(String.format("%d/%d", puls.getAccelerant(), puls.getAccelerantCapacity())), mouseX, mouseY);
     }
 
     @Override

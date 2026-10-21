@@ -105,22 +105,22 @@ public class GuiFractionator extends GuiPowerOnlyMachine<BlockEntityFractionator
 
         // Tooltip on the jet-fuel output bar — shows current / max.
         if (api.isMouseInBox(j + 150, j + 159, k + 15, k + 70, mouseX, mouseY)) {
-            api.drawTooltipAt(stack, font,
-                    String.format("Jet Fuel: %d / %d mB", fct.getOutputLevel(), BlockEntityFractionator.CAPACITY),
-                    mouseX - j, mouseY - k);
+            stack.setTooltipForNextFrame(font,
+                    Component.literal(String.format("Jet Fuel: %d / %d mB", fct.getOutputLevel(), BlockEntityFractionator.CAPACITY)),
+                    mouseX, mouseY);
         }
         // Tooltip on the ethanol input bar.
         if (api.isMouseInBox(j + 123, j + 132, k + 15, k + 70, mouseX, mouseY)) {
-            api.drawTooltipAt(stack, font,
-                    String.format("Ethanol: %d / %d mB", fct.getInputLevel(), fct.getInputCapacity()),
-                    mouseX - j, mouseY - k);
+            stack.setTooltipForNextFrame(font,
+                    Component.literal(String.format("Ethanol: %d / %d mB", fct.getInputLevel(), fct.getInputCapacity())),
+                    mouseX, mouseY);
         }
         // Tooltip on the pressure bar.
         if (api.isMouseInBox(j + 133, j + 136, k + 15, k + 70, mouseX, mouseY)) {
-            api.drawTooltipAt(stack, font,
-                    String.format("Pressure: %d / %d kPa  (yield ×%.2f)", fct.getPressure(),
-                            BlockEntityFractionator.MAX_PRESSURE, fct.getYieldRatio()),
-                    mouseX - j, mouseY - k);
+            stack.setTooltipForNextFrame(font,
+                    Component.literal(String.format("Pressure: %d / %d kPa  (yield ×%.2f)", fct.getPressure(),
+                            BlockEntityFractionator.MAX_PRESSURE, fct.getYieldRatio())),
+                    mouseX, mouseY);
         }
     }
 

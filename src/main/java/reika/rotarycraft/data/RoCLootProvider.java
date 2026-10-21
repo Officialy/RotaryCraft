@@ -1,6 +1,8 @@
 package reika.rotarycraft.data;
 
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -23,7 +25,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import reika.rotarycraft.auxiliary.interfaces.NBTMachine;
 import reika.rotarycraft.base.blocks.CanolaBlock;
+import reika.rotarycraft.registry.MachineRegistry;
 import reika.rotarycraft.registry.RotaryBlocks;
 import reika.rotarycraft.registry.RotaryDataComponents;
 import reika.rotarycraft.registry.RotaryItems;
@@ -46,6 +50,8 @@ import java.util.Set;
  *   <li>{@link RotaryBlocks#SCALECHEST} drops itself carrying its inventory, but only when a
  *       player harvests it (V33a's {@code harvestBlock} wrote the inventory to the item; its
  *       {@code getDrops}, used by explosions, returned a bare chest).</li>
+ *   <li>{@link NBTMachine} machines (gearboxes, reservoir, jet engine...) likewise copy their
+ *       {@code CUSTOM_DATA} item tag onto the drop on a player harvest.</li>
  *   <li>{@link RotaryBlocks#CANOLA} uses {@link #createCropDrops}; faithful to legacy
  *       {@code BlockCanola}, which dropped only canola seeds (more when fully grown).</li>
  *   <li>Item-less blocks ({@code BEDROCK}, {@code BEDROCKSLICE}, the fluid blocks registered
@@ -81,7 +87,9 @@ public final class RoCLootProvider extends LootTableProvider {
                             RotaryItems.CANOLA_SEEDS.get(),
                             isMaxAge));
                 } else if (block == RotaryBlocks.SCALECHEST.get()) {
-                    this.add(block, this.createScaleChestDrop(block));
+                    this.add(block, this.createPlayerHarvestDrop(block, RotaryDataComponents.SCALE_CHEST_CONTENTS.get()));
+                } else if (isNBTMachine(block)) {
+                    this.add(block, this.createPlayerHarvestDrop(block, DataComponents.CUSTOM_DATA));
                 } else if (block instanceof reika.rotarycraft.base.blocks.entity.BlockMiningPipe || block.asItem() == Items.AIR) {
                     // Item-less blocks (bedrock, bedrock slice, fluid blocks) drop nothing.
                     this.add(block, noDrop());
@@ -92,19 +100,28 @@ public final class RoCLootProvider extends LootTableProvider {
         }
 
         /**
-         * The chest item, with the inventory copied onto it when the breaker is a player. An
+         * The machine item carrying {@code component} copied off its block entity, but only when the
+         * breaker is a player. V33a wrote the scale chest's inventory and an NBTMachine's
+         * {@code getTagsToWriteToStack} (gearbox lube/damage, reservoir fluid...) in
+         * {@code harvestBlock}; its {@code getDrops}, used by explosions, returned a bare machine. An
          * explosion's loot context carries the exploding entity (creeper, TNT) as {@code this}, or
-         * none, and the flicker self-destruct passes no block entity at all: both drop a bare chest.
+         * none, and the flicker self-destruct passes no block entity at all: both drop a bare item.
          */
-        private LootTable.Builder createScaleChestDrop(Block block) {
+        private LootTable.Builder createPlayerHarvestDrop(Block block, DataComponentType<?> component) {
             HolderGetter<EntityType<?>> entityTypes = this.output.lookup(Registries.ENTITY_TYPE);
             return LootTable.lootTable().withPool(this.applyExplosionCondition(block, LootPool.lootPool()
                     .setRolls(ContextIntProviders.exactly(1))
                     .add(LootItem.lootTableItem(block)
                             .apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
-                                    .include(RotaryDataComponents.SCALE_CHEST_CONTENTS.get())
+                                    .include(component)
                                     .when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
                                             EntityPredicate.Builder.entity().of(entityTypes, EntityTypes.PLAYER)))))));
+        }
+
+        /** Machines whose block entity is an {@link NBTMachine} (legacy {@code hasNBTVariants}). */
+        private static boolean isNBTMachine(Block block) {
+            MachineRegistry m = MachineRegistry.getMachineMapping(block);
+            return m != null && m.hasNBTVariants();
         }
 
         @Override

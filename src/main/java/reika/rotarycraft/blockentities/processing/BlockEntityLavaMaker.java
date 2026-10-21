@@ -48,6 +48,8 @@ public class BlockEntityLavaMaker extends InventoriedPowerLiquidProducer impleme
 
     private int temperature = AMBIENT;
     private long energy;
+    /** Client copy of {@link #hasStone()}; the feed inventory itself only reaches clients on full syncs. */
+    private boolean stoneVisible;
 
     public BlockEntityLavaMaker(BlockPos pos, BlockState state) {
         super(RotaryBlockEntities.LAVAMAKER.get(), pos, state);
@@ -99,6 +101,16 @@ public class BlockEntityLavaMaker extends InventoriedPowerLiquidProducer impleme
     }
 
     public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+        return false;
+    }
+
+    /** Whether anything is waiting to melt; the renderer draws the stone charge inside the drum while true. */
+    public boolean hasStone() {
+        if (level != null && level.isClientSide())
+            return stoneVisible;
+        for (int i = 0; i < this.getContainerSize(); i++)
+            if (!itemHandler.getStackInSlot(i).isEmpty())
+                return true;
         return false;
     }
 
@@ -268,6 +280,7 @@ public class BlockEntityLavaMaker extends InventoriedPowerLiquidProducer impleme
         super.readSyncTag(NBT);
         temperature = NBT.getIntOr("temp", AMBIENT);
         energy = NBT.getLongOr("energy", 0L);
+        stoneVisible = NBT.getBooleanOr("stone", false);
     }
 
     @Override
@@ -275,6 +288,7 @@ public class BlockEntityLavaMaker extends InventoriedPowerLiquidProducer impleme
         super.writeSyncTag(NBT);
         NBT.putInt("temp", temperature);
         NBT.putLong("energy", energy);
+        NBT.putBoolean("stone", this.hasStone());
     }
 
     @Override

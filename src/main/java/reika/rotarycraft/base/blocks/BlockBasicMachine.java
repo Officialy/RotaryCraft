@@ -15,13 +15,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -55,6 +59,7 @@ import reika.dragonapi.interfaces.blockentity.PlaceNotification;
 import reika.dragonapi.libraries.ReikaEntityHelper;
 import reika.dragonapi.libraries.io.ReikaChatHelper;
 import reika.dragonapi.libraries.io.ReikaSoundHelper;
+import reika.dragonapi.libraries.java.ReikaRandomHelper;
 import reika.dragonapi.libraries.level.ReikaWorldHelper;
 import reika.dragonapi.libraries.mathsci.ReikaEngLibrary;
 import reika.dragonapi.libraries.mathsci.ReikaMathLibrary;
@@ -64,6 +69,7 @@ import reika.rotarycraft.RotaryCraft;
 import reika.rotarycraft.auxiliary.PipeDebugLog;
 import reika.rotarycraft.auxiliary.RotaryAux;
 import reika.rotarycraft.auxiliary.interfaces.CachedConnection;
+import reika.rotarycraft.auxiliary.interfaces.DamagingContact;
 import reika.rotarycraft.auxiliary.interfaces.EnchantableMachine;
 import reika.rotarycraft.auxiliary.interfaces.PressureTE;
 import reika.rotarycraft.auxiliary.interfaces.TemperatureTE;
@@ -73,6 +79,7 @@ import reika.rotarycraft.base.blockentity.RotaryCraftBlockEntity;
 import reika.rotarycraft.blockentities.auxiliary.BlockEntityMirror;
 import reika.rotarycraft.blockentities.decorative.BlockEntityMusicBox;
 import reika.rotarycraft.blockentities.level.BlockEntityFloodlight;
+import reika.rotarycraft.blockentities.processing.BlockEntityCentrifuge;
 import reika.rotarycraft.blockentities.processing.BlockEntityLavaSmeltery;
 import reika.rotarycraft.blockentities.processing.BlockEntityPulseFurnace;
 import reika.rotarycraft.blockentities.production.BlockEntityFermenter;
@@ -82,6 +89,7 @@ import reika.rotarycraft.blockentities.storage.BlockEntityScaleableChest;
 import reika.rotarycraft.blockentities.surveying.BlockEntityCaveFinder;
 import reika.rotarycraft.blockentities.transmission.BlockEntityAdvancedGear;
 import reika.rotarycraft.blockentities.transmission.BlockEntitySplitter;
+import reika.rotarycraft.items.tools.bedrock.ItemBedrockArmor;
 import reika.rotarycraft.registry.*;
 import reika.rotarycraft.sound.EngineSoundManager;
 
@@ -254,6 +262,43 @@ public abstract class BlockBasicMachine extends BlockRotaryCraftMachine {
         // events (place / break / connect) rather than every-tick, so the log-IO cost won't
         // taint the per-tick measurements.
         PipeDebugLog.maybeDumpStats();
+    }
+
+    /**
+     * Port of 1.7.10 {@code BlockBasicMultiTE.onEntityCollidedWithBlock}: reservoir fluid effects,
+     * the centrifuge's fling, {@link DamagingContact} machines (grinder, woodcutter) and heat
+     * damage. Only blocks whose shape lets an entity into their cell (the grinder's 13/16 top)
+     * ever reach this, exactly as with the legacy collision box.
+     */
+    @Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity e, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+        MachineRegistry m = MachineRegistry.getMachine(level, pos);
+        if (m == null || !(level.getBlockEntity(pos) instanceof RotaryCraftBlockEntity tile))
+            return;
+        if (m == MachineRegistry.RESERVOIR && tile instanceof BlockEntityReservoir tr && e instanceof LivingEntity le && !level.isClientSide()) {
+            tr.applyFluidEffectsToEntity(le);
+        }
+        if (m == MachineRegistry.CENTRIFUGE && tile instanceof BlockEntityCentrifuge tr) {
+            if (tr.omega > 0 && level.isClientSide()) {
+                e.push(ReikaRandomHelper.getRandomPlusMinus(0, 1), 0.1, ReikaRandomHelper.getRandomPlusMinus(0, 1));
+            }
+        }
+        if (!(level instanceof ServerLevel world) || e instanceof ItemEntity || e instanceof ExperienceOrb)
+            return;
+        if (e instanceof LivingEntity le && ItemBedrockArmor.isWearingFullSuitOf(le))
+            return;
+        if (tile instanceof DamagingContact dg) {
+            int dmg = dg.getContactDamage();
+            if (dg.canDealDamage() && dmg > 0)
+                e.hurtServer(world, dg.getDamageType(), dmg);
+        }
+        if (m.dealsHeatDamage(e) && tile instanceof TemperatureTE te) {
+            int dmg = te.getThermalDamage();
+            if (dmg > 0) {
+                e.hurtServer(world, RotaryCraft.heatDamage.get(level), dmg);
+                e.igniteForSeconds(6);
+            }
+        }
     }
 
     @Override

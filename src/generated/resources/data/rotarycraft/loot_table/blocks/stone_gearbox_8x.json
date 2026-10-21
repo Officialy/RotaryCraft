@@ -8,6 +8,20 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:copy_components",
+            "condition": {
+              "type": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "minecraft:entity_type": "minecraft:player"
+              }
+            },
+            "include": [
+              "minecraft:custom_data"
+            ],
+            "source": "block_entity"
+          },
           "name": "rotarycraft:stone_gearbox_8x"
         }
       ],

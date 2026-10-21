@@ -229,6 +229,10 @@ public final class RotaryGameTests {
         register(event, env, "scale_chest_unharvested_drops_bare_chest", 40, RotaryStorageTests::unharvestedDropsBareChest);
         register(event, env, "scale_chest_unpowered_stays_shut", 40, RotaryStorageTests::unpoweredChestStaysShut);
 
+        register(event, env, "grinder_damages_standing_entity", 60, RotaryMachineInteractionTests::grinderDamagesStandingEntity);
+        register(event, env, "grinder_shift_click_insert", 20, RotaryMachineInteractionTests::grinderShiftClickInsert);
+        register(event, env, "gearbox_harvest_keeps_lubricant", 40, RotaryMachineInteractionTests::gearboxHarvestKeepsLubricant);
+
         register(event, env, "unpowered_drying_stacks_output", 460, RotaryUnpoweredTests::dryingStacksOutput);
         register(event, env, "unpowered_drying_backpressure", 460, RotaryUnpoweredTests::dryingBackpressure);
         register(event, env, "unpowered_drying_save_reload", 460, RotaryUnpoweredTests::dryingSaveReload);

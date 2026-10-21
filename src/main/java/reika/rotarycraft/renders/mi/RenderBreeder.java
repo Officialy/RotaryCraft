@@ -13,8 +13,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import reika.rotarycraft.base.RotaryTERenderer;
@@ -42,7 +46,25 @@ public class RenderBreeder extends RotaryTERenderer<BlockEntityAutoBreeder> {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.rotate(Axis.ZP.rotationDegrees(180));
-        model.renderAll(stack, vc, light, te, null, te.phi, 0);
+        model.renderAll(stack, vc, light, te, this.getConditions(te), te.phi, 0);
         stack.popPose();
+    }
+
+    /** 1.7.10 getConditions: wheat always shown, then carrot / porkchop / fish / seeds by what the breeder holds. */
+    private ArrayList<Boolean> getConditions(BlockEntityAutoBreeder te) {
+        ArrayList<Boolean> vals = new ArrayList<>();
+        vals.add(true);
+        vals.add(hasItem(te, Items.CARROT));
+        vals.add(hasItem(te, Items.PORKCHOP));
+        vals.add(hasItem(te, Items.COD));
+        vals.add(hasItem(te, Items.WHEAT_SEEDS));
+        return vals;
+    }
+
+    private static boolean hasItem(BlockEntityAutoBreeder te, Item item) {
+        for (int i = 0; i < te.getContainerSize(); i++)
+            if (te.itemHandler.getStackInSlot(i).is(item))
+                return true;
+        return false;
     }
 }

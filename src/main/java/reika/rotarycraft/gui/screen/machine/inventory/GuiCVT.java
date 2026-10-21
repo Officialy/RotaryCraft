@@ -175,7 +175,7 @@ public class GuiCVT extends NonPoweredMachineScreen<BlockEntityAdvancedGear, Con
             graphics.fill(j + 186, k + 137 - h, j + 202, k + 137, LUBE_COLOR);
         }
         if (api.isMouseInBox(j + 185, j + 202, k + 88, k + 149, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, String.format("Lubricant: %d/%d", cvt.getLubricant(), LUBE_CAPACITY), mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(String.format("Lubricant: %d/%d", cvt.getLubricant(), LUBE_CAPACITY)), mouseX, mouseY);
 
         // Manual mode: show the belt-limited maximum ratio (red when the requested ratio exceeds it).
         if (mode == CVTMode.MANUAL) {

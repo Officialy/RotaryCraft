@@ -44,7 +44,7 @@ public class GuiLavaMaker extends MachineScreen<BlockEntityLavaMaker, ContainerL
         if (h > 0)
             graphics.fill(j + 18, k + 65 - h, j + 26, k + 65, col);
         if (api.isMouseInBox(j + 18, j + 26, k + 17, k + 65, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, lava.getTemperature() + "C", mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(lava.getTemperature() + "C"), mouseX, mouseY);
     }
 
     @Override

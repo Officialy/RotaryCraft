@@ -686,7 +686,11 @@ public class BlockEntityReservoir extends RotaryCraftBlockEntity implements Pipe
         }
         FluidStack f = ReikaNBTHelper.getFluidFromNBT(NBT);
         int level = NBT.getIntOr("lvl", 0);
-        tank.setContents(level, f.getFluid());
+        // An empty reservoir's tag carries only "cover" (getTagsToWriteToStack returns before the fluid).
+        if (f.isEmpty() || level <= 0)
+            tank.empty();
+        else
+            tank.setContents(level, f.getFluid());
 
         isCovered = NBT.getBooleanOr("cover", false);
     }

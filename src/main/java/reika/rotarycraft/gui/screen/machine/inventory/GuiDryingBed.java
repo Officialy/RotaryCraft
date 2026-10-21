@@ -39,7 +39,7 @@ public class GuiDryingBed extends NonPoweredMachineScreen<BlockEntityDryingBed, 
         if (h > 0)
             graphics.fill(j + 18, k + 70 - h, j + 26, k + 70, 0xFF3060d0);
         if (api.isMouseInBox(j + 18, j + 26, k + 16, k + 70, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, bed.getFluidLevel() + "/" + bed.getCapacity() + " mB", mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(bed.getFluidLevel() + "/" + bed.getCapacity() + " mB"), mouseX, mouseY);
     }
 
     @Override

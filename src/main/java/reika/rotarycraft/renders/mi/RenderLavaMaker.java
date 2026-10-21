@@ -13,6 +13,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -34,7 +36,11 @@ public class RenderLavaMaker extends RotaryTERenderer<BlockEntityLavaMaker> {
         stack.pushPose();
         stack.translate(0.5F, 1.5F, 0.5F);
         stack.rotate(Axis.ZP.rotationDegrees(180));
-        model.renderAll(stack, vc, light, tile, null, tile.phi, 0);
+        // 1.7.10 passed makeListFrom(hasStone()) - the model draws the stone charge from it - and
+        // spun the paddles with -phi.
+        ArrayList<Boolean> conditions = new ArrayList<>();
+        conditions.add(tile.hasStone());
+        model.renderAll(stack, vc, light, tile, conditions, -tile.phi, 0);
         stack.popPose();
     }
 

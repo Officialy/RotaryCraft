@@ -42,7 +42,7 @@ public class GuiIgniter extends MachineScreen<BlockEntityIgniter, ContainerIgnit
         if (h > 0)
             graphics.fill(j + 6, k + 62 - h, j + 12, k + 62, col);
         if (api.isMouseInBox(j + 6, j + 12, k + 22, k + 62, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, ign.getTemperature() + "C", mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(ign.getTemperature() + "C"), mouseX, mouseY);
     }
 
     @Override

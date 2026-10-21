@@ -49,6 +49,15 @@ public class RenderCentrifuge extends RotaryTERenderer<BlockEntityCentrifuge> {
         return CentrifugeModel.TEXTURE_LOCATION;
     }
 
+    /**
+     * centrifugetex.png's glass panes are fully transparent (alpha is strictly 0 or 255); 1.7.10's
+     * default alpha test cut them out, so the solid pipeline painted them as opaque grey.
+     */
+    @Override
+    protected boolean useEntityCutout() {
+        return true;
+    }
+
     @Override
     protected void renderModel(PoseStack stack, BlockEntity be, VertexConsumer vc, int light) {
         if (be instanceof BlockEntityCentrifuge cent)

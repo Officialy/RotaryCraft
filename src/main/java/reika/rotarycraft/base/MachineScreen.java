@@ -129,10 +129,10 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
 
         if (tile instanceof Container && this.labelInventory()) {
             int dx = this.inventoryLabelLeft() ? 8 : imageWidth - 58;
-            stack.text(Minecraft.getInstance().font, I18n.get("container.inventory"), dx, (imageHeight - 96) + 3, 0xFF404040);
+            stack.text(Minecraft.getInstance().font, I18n.get("container.inventory"), dx, (imageHeight - 96) + 3, 0xFF404040, false);
         }
 
-        this.drawHelpTab(j, k);
+        this.drawHelpTab(stack, j, k);
     }
 
     /**
@@ -181,8 +181,12 @@ public abstract class MachineScreen<E extends RotaryCraftBlockEntity, T extends 
 
     protected abstract void drawPowerTab(GuiGraphicsExtractor stack, int j, int k);
 
-    public void drawHelpTab(int j, int k) {
-//      todo  Minecraft.getInstance().font.draw(new PoseStack(), "?", -10, imageHeight / 2 - 4, 0xffffff);
+    /**
+     * The "?" on the handbook tab. Labels are extracted after the widgets, so it lands on top of
+     * the plain grey {@link ImagedGuiButton} body that {@link #init} adds along the left edge.
+     */
+    public void drawHelpTab(GuiGraphicsExtractor stack, int j, int k) {
+        stack.text(font, "?", -10, imageHeight / 2 - 4, 0xFFFFFFFF, false);
     }
 
 //    @Override

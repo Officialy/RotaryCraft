@@ -49,14 +49,14 @@ public class GuiCompactor extends MachineScreen<BlockEntityCompactor, ContainerC
         if (i2 > 0)
             graphics.fill(j + 118, k + 70 - i2, j + 127, k + 70, col);
         if (api.isMouseInBox(j + 118, j + 127, k + 16, k + 70, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, comp.getTemperature() + "C / " + BlockEntityCompactor.REQTEMP + "C", mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(comp.getTemperature() + "C / " + BlockEntityCompactor.REQTEMP + "C"), mouseX, mouseY);
 
         int i3 = comp.getPressureScaled(54);
         int col2 = 0xFF000000 | Math.min(255, 60 + i3 * 4);
         if (i3 > 0)
             graphics.fill(j + 147, k + 70 - i3, j + 151, k + 70, col2);
         if (api.isMouseInBox(j + 147, j + 151, k + 16, k + 70, mouseX, mouseY))
-            api.drawTooltipAt(graphics, font, comp.getPressure() + " kPa / " + BlockEntityCompactor.REQPRESS + " kPa", mouseX, mouseY);
+            graphics.setTooltipForNextFrame(font, Component.literal(comp.getPressure() + " kPa / " + BlockEntityCompactor.REQPRESS + " kPa"), mouseX, mouseY);
     }
 
     @Override
